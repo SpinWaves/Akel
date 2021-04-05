@@ -3,6 +3,7 @@
 // UPDATED : 05/04/2021
 
 #include <Renderer/renderer.h>
+#include <Platform/platform.h>
 
 namespace AE
 {
@@ -28,7 +29,7 @@ namespace AE
         if(_type == OpenGL)
             SDL_GL_SwapWindow(_window);
     }
-    void Context::enableVerticalSync(bool enabled)
+    void Context::setVerticalSync(bool enabled)
     {
         if(_type == OpenGL)
             SDL_GL_SetSwapInterval(enabled);

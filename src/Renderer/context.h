@@ -6,7 +6,6 @@
 #define __CONTEXT__
 
 #include <AEpch.h>
-#include <Platform/platform.h>
 #include <Utils/utils.h>
 
 namespace AE
@@ -24,7 +23,7 @@ namespace AE
 
             void init(SDL_Window* window, ContextType type);
             void SwapBuffers();
-            void enableVerticalSync(bool enabled);
+            void setVerticalSync(bool enabled);
             bool isCreated();
             void destroy();
 
