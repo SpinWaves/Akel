@@ -1,12 +1,13 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 03/04/2021
+// UPDATED : 05/04/2021
 
 #ifndef __WINDOW__
 #define __WINDOW__
 
 #include <AEpch.h>
 #include <Core/core.h>
+#include <Renderer/renderer.h>
 
 #define AE_WINDOW_OPENGL             SDL_WINDOW_OPENGL
 #define AE_WINDOW_FULLSCREEN         SDL_WINDOW_FULLSCREEN
@@ -39,26 +40,30 @@ namespace AE
             void create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t flags);
 
             // Setters
-            inline void setTitle(std::string title);
-            inline void setFlags(uint32_t flags);
-            inline void setPosition(uint16_t x, uint16_t y);
-            inline void setSize(uint16_t width, uint16_t height);
+            void setTitle(std::string title);
+            void setFlags(uint32_t flags);
+            void setPosition(uint16_t x, uint16_t y);
+            void setSize(uint16_t width, uint16_t height);
             void setIcon(SDL_Surface* image);
             void setIcon(std::string imagePath);
             
             // Getters
-            inline std::string getTitle();
-            inline uint32_t getFlags();
-            inline uint16_t getPositionX();
-            inline uint16_t getPositionY();
-            inline uint16_t getSizeW();
-            inline uint16_t getSizeH();
+            std::string getTitle();
+            uint32_t getFlags();
+            uint16_t getPositionX();
+            uint16_t getPositionY();
+            uint16_t getSizeW();
+            uint16_t getSizeH();
+
+            void initTypeWindowContext();
+            void SwapBuffers();
 
             void destroy();
 
             virtual ~Window();
         
         private:
+            Context _context;
             SDL_Window* _window;
 
             std::string _title;

@@ -8,5 +8,7 @@
 #include <Platform/platform.h>
 #include <Core/core.h>
 #include <Maths/maths.h>
+#include <Renderer/renderer.h>
+#include <Utils/utils.h>
 
 #endif // __ATLAS_ENGINE__

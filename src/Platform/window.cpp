@@ -1,12 +1,13 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 03/04/2021
+// UPDATED : 05/04/2021
 
 #include <Platform/window.h>
 
 namespace AE
 {
-    Window::Window() {}
+    Window::Window() : _context()
+    {}
 
     void Window::create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t flags)
     {
@@ -81,9 +82,21 @@ namespace AE
     }
 
 
+    void Window::initTypeWindowContext()
+    {
+        if(_flags == AE_WINDOW_OPENGL)
+            _context.init(_window, OpenGL);
+    }
+    void Window::SwapBuffers()
+    {
+        _context.SwapBuffers();
+    }
+
 
     void Window::destroy()
     {
+        if(_context.isCreated())
+            _context.destroy();
         SDL_DestroyWindow(_window);
     }
 
