@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 03/04/2021
-// UPDATED : 03/04/2021
+// UPDATED : 06/04/2021
 
 #ifndef __LOG__
 #define __LOG__
@@ -21,9 +21,11 @@ namespace AE::Core
     {
         public:
             static void report(enum LogType type, std::string message, std::string path);
+            static std::string getLog(std::string key) { return _logger[key]; }
 
         private:
             static std::string getTime(enum LogType type, std::string path);
+            static std::map<std::string, std::string> _logger;
     };
 }
 

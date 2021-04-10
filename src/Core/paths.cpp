@@ -10,7 +10,7 @@ namespace AE::Core
     std::string getMainDirPath()
     {
         std::string mainPath;
-        for(auto& dirs: std::filesystem::recursive_directory_iterator(path))
+        for(auto& dirs : std::filesystem::recursive_directory_iterator(path))
         {
             mainPath = dirs.path().string();
             std::size_t found = mainPath.rfind("AtlasEngine.h");

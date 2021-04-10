@@ -82,14 +82,15 @@ namespace AE
     }
 
 
-    void Window::initTypeWindowContext()
+    void Window::initTypeWindowRenderer()
     {
         if(_flags == AE_WINDOW_OPENGL)
-            _context.init(_window, OpenGL);
+            _context.init(_window);
     }
     void Window::SwapBuffers()
     {
-        _context.SwapBuffers();
+        if(_flags == AE_WINDOW_OPENGL)
+            _context.SwapBuffers();
     }
 
 

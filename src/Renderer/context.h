@@ -9,19 +9,13 @@
 #include <Utils/utils.h>
 
 namespace AE
-{
-    enum ContextType
-    {
-        OpenGL,
-        Vulkan
-    };
-    
+{    
     class Context
     {
         public:
             Context();
 
-            void init(SDL_Window* window, ContextType type);
+            void init(SDL_Window* window);
             void SwapBuffers();
             void setVerticalSync(bool enabled);
             bool isCreated();
@@ -30,7 +24,6 @@ namespace AE
             virtual ~Context();
         
         private:
-            ContextType _type;
             SDL_Window* _window;
             SDL_GLContext _glcontext;
     };

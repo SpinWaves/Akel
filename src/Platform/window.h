@@ -55,7 +55,7 @@ namespace AE
             uint16_t getSizeW();
             uint16_t getSizeH();
 
-            void initTypeWindowContext();
+            void initTypeWindowRenderer();
             void SwapBuffers();
 
             void destroy();
