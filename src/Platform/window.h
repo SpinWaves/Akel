@@ -55,7 +55,7 @@ namespace AE
             uint16_t getSizeW();
             uint16_t getSizeH();
 
-            void initTypeWindowRenderer();
+            void initWindowRenderer();
             void SwapBuffers();
 
             void destroy();
@@ -64,6 +64,7 @@ namespace AE
         
         private:
             Context _context;
+            Instance _instance;
             SDL_Window* _window;
 
             std::string _title;

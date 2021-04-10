@@ -11,7 +11,7 @@ namespace AE
     void Instance::init(SDL_Window* window)
     {
         if(enableValidationLayers && !checkValidationLayerSupport())
-            std::cout << bg_green << "les validations layers sont activées mais ne sont pas disponibles!" << bg_def << std::endl;
+            std::cout << bg_red << "les validations layers sont activées mais ne sont pas disponibles!" << bg_def << std::endl;
 
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -44,7 +44,9 @@ namespace AE
         createInfo.enabledLayerCount = 0;
 
         if(vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
-            throw std::runtime_error("failed to create instance!");
+            std::cout << bg_red << "failed to create instance!" << bg_def << std::endl;
+        else
+            std::cout << bg_green << "Instance created successfully" << bg_def << std::endl;
     }
 
     bool Instance::checkValidationLayerSupport()
@@ -72,5 +74,15 @@ namespace AE
                 return false;
         }
         return true;
+    }
+
+    void Instance::destroy()
+    {
+        vkDestroyInstance(instance, nullptr);
+    }
+
+    Instance::~Instance()
+    {
+        destroy();
     }
 }

@@ -19,6 +19,7 @@ namespace AE
         GLuint GLEWerr = glewInit();
         if(GLEW_OK != GLEWerr)
             messageBox(FATAL_ERROR, "Can't init GLEW", std::string(reinterpret_cast<AE_text>(glewGetErrorString(GLEWerr))));
+        std::cout << bg_green << "GL context created successfully" << bg_def << std::endl;
     }
     void Context::SwapBuffers()
     {
