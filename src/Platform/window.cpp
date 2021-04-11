@@ -6,7 +6,7 @@
 
 namespace AE
 {
-    Window::Window() : _context(), _instance()
+    Window::Window() : Context(), Instance()
     {}
 
     void Window::create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t flags)
@@ -85,22 +85,22 @@ namespace AE
     void Window::initWindowRenderer()
     {
         if(_flags & AE_WINDOW_OPENGL)
-            _context.init(_window);
+            Context::init(_window);
         if(_flags & AE_WINDOW_VULKAN)
-            _instance.init(_window);
+            Instance::init(_window);
     }
-    void Window::SwapBuffers()
+    void Window::update()
     {
         if(_flags & AE_WINDOW_OPENGL)
-            _context.SwapBuffers();
+            Context::SwapBuffers();
     }
 
 
     void Window::destroy()
     {
-        if(_context.isCreated())
-            _context.destroy();
-        _instance.destroy();
+        if(Context::isCreated())
+            Context::destroy();
+        Instance::destroy();
         SDL_DestroyWindow(_window);
     }
 

@@ -32,7 +32,7 @@
 
 namespace AE
 {
-    class Window
+    class Window : public Context, public Instance
     {
         public:
             Window();
@@ -56,15 +56,13 @@ namespace AE
             uint16_t getSizeH();
 
             void initWindowRenderer();
-            void SwapBuffers();
+            void update();
 
             void destroy();
 
             virtual ~Window();
         
         private:
-            Context _context;
-            Instance _instance;
             SDL_Window* _window;
 
             std::string _title;

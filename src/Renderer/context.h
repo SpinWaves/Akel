@@ -18,6 +18,7 @@ namespace AE
             void init(SDL_Window* window);
             void SwapBuffers();
             void setVerticalSync(bool enabled);
+            void clearRendering();
             bool isCreated();
             void destroy();
 
