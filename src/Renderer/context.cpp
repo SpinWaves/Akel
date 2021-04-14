@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/04/2021
-// UPDATED : 05/04/2021
+// UPDATED : 12/04/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -19,7 +19,12 @@ namespace AE
         GLuint GLEWerr = glewInit();
         if(GLEW_OK != GLEWerr)
             messageBox(FATAL_ERROR, "Can't init GLEW", std::string(reinterpret_cast<AE_text>(glewGetErrorString(GLEWerr))));
-        std::cout << bg_green << "GL context created successfully" << bg_def << std::endl;
+
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, int(std::stof(Core::SoftInfo::getGLinfo()))); // Init opengl with driver version
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, int(std::stof(Core::SoftInfo::getGLinfo()) - int(std::stof(Core::SoftInfo::getGLinfo()))));
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+        std::cout << bg_green << "GL context created successfully with version : " << Core::SoftInfo::getGLinfo() << bg_def << std::endl;
     }
     void Context::SwapBuffers()
     {

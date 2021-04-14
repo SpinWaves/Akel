@@ -27,11 +27,10 @@ build-int/Debug-linux-/instance.o: src/Renderer/instance.cpp \
  libs/include/SDL2/SDL_ttf.h libs/include/GL/glew.h \
  libs/include/vulkan/vulkan.h libs/include/vulkan/vk_platform.h \
  libs/include/vulkan/vulkan_core.h libs/include/SDL2/SDL_vulkan.h \
- src/Utils/utils.h src/Utils/consoleOut.h src/Renderer/instance.h \
- src/Platform/platform.h src/Platform/window.h src/Core/core.h \
- src/Core/log.h src/Core/paths.h src/Core/softwareInfo.h \
- src/Platform/messageBox.h src/Platform/input.h \
- src/Platform/inputScanCode.h
+ src/Utils/utils.h src/Utils/consoleOut.h src/Core/core.h src/Core/log.h \
+ src/Core/paths.h src/Core/softwareInfo.h src/Renderer/instance.h \
+ src/Platform/platform.h src/Platform/window.h src/Platform/messageBox.h \
+ src/Platform/input.h src/Platform/inputScanCode.h
 
 src/Renderer/renderer.h:
 
@@ -151,12 +150,6 @@ src/Utils/utils.h:
 
 src/Utils/consoleOut.h:
 
-src/Renderer/instance.h:
-
-src/Platform/platform.h:
-
-src/Platform/window.h:
-
 src/Core/core.h:
 
 src/Core/log.h:
@@ -164,6 +157,12 @@ src/Core/log.h:
 src/Core/paths.h:
 
 src/Core/softwareInfo.h:
+
+src/Renderer/instance.h:
+
+src/Platform/platform.h:
+
+src/Platform/window.h:
 
 src/Platform/messageBox.h:
 

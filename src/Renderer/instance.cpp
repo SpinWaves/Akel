@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 10/04/2021
-// UPDATED : 10/04/2021
+// UPDATED : 12/04/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -11,7 +11,7 @@ namespace AE
     void Instance::init(SDL_Window* window)
     {
         if(enableValidationLayers && !checkValidationLayerSupport())
-            std::cout << bg_red << "les validations layers sont activées mais ne sont pas disponibles!" << bg_def << std::endl;
+            messageBox(ERROR, "Vulkan layers are not availble", SDL_GetError());
 
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -30,12 +30,12 @@ namespace AE
         else
             createInfo.enabledLayerCount = 0;
 
-            createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         createInfo.pApplicationInfo = &appInfo;
 
         uint32_t extensionCount;
         SDL_Vulkan_GetInstanceExtensions(window, &extensionCount, nullptr);
-        std::vector<const char *> extensionNames(extensionCount);
+        std::vector<const char*> extensionNames(extensionCount);
         SDL_Vulkan_GetInstanceExtensions(window, &extensionCount, extensionNames.data());
 
         createInfo.enabledExtensionCount = extensionNames.size();
@@ -44,7 +44,7 @@ namespace AE
         createInfo.enabledLayerCount = 0;
 
         if(vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
-            std::cout << bg_red << "failed to create instance!" << bg_def << std::endl;
+            messageBox(FATAL_ERROR, "Can't init Vulkan instance", SDL_GetError());
         else
             std::cout << bg_green << "Instance created successfully" << bg_def << std::endl;
     }

@@ -1,12 +1,13 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/04/2021
-// UPDATED : 05/04/2021
+// UPDATED : 12/04/2021
 
 #ifndef __CONTEXT__
 #define __CONTEXT__
 
 #include <AEpch.h>
 #include <Utils/utils.h>
+#include <Core/core.h>
 
 namespace AE
 {    

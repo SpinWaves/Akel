@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 03/04/2021
-// UPDATED : 03/04/2021
+// UPDATED : 11/04/2021
 
 #include <Core/core.h>
 
@@ -37,6 +37,7 @@ namespace AE::Core
             default: break;
         }
         path.append(date);
+        path.append(".log");
 
         return path;
     }
