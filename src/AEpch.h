@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 12/04/2021
+// UPDATED : 14/04/2021
 
 #ifndef __AE_PCH__
 #define __AE_PCH__
@@ -14,6 +14,9 @@
 
 #include <vulkan/vulkan.h> // Vulkan
 #include <SDL2/SDL_vulkan.h>
+
+#include <glm/glm.hpp>          // APIs maths
+#include <glm/gtc/type_ptr.hpp>
 
 #include <string>
 #include <filesystem>

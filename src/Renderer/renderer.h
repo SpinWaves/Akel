@@ -7,5 +7,6 @@
 
 #include <Renderer/context.h>
 #include <Renderer/instance.h>
+#include <Renderer/OpenGL/OpenGL.h>
 
 #endif // __RENDERER__
