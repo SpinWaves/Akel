@@ -1,36 +1,46 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 14/04/2021
+// UPDATED : 15/04/2021
 
 #ifndef __AE_PCH__
 #define __AE_PCH__
 
+// SDL2
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h> // SDL2
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
-#include <GL/glew.h>    // OpenGL
+// OpenGL
+#include <GL/glew.h>
 
-#include <vulkan/vulkan.h> // Vulkan
+// Vulkan
+#include <vulkan/vulkan.h>
 #include <SDL2/SDL_vulkan.h>
 
-#include <glm/glm.hpp>          // APIs maths
+// APIs' maths
+#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <string>
 #include <filesystem>
+
+// Memory
+#include <string>
 #include <map>
 #include <vector>
 #include <array>
+#include <new>
 
-#include <iostream>     // Streams
+// Streams
+#include <iostream>
 #include <fstream>
 
+// C-libs
 #include <cstdint>
 #include <cstring>
-#include <cstdlib>      // C-libs
+#include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <cerrno>
 
 #endif // __AE_PCH__

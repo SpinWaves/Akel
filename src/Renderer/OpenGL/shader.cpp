@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 14/04/2021
+// UPDATED : 15/04/2021
 
 #include <Renderer/renderer.h>
 #include <Core/core.h>
@@ -19,8 +19,8 @@ namespace AE::GL
         if(!program) 
             messageBox(ERROR, "Unable to create a shader program", SDL_GetError());
 
-        genShader(LoadSourceShader(vertexFile), GL_VERTEX_SHADER); 
-        genShader(LoadSourceShader(fragmentFile), GL_FRAGMENT_SHADER);
+        genShader(LoadSourceShader(vertexFile).c_str(), GL_VERTEX_SHADER); 
+        genShader(LoadSourceShader(fragmentFile).c_str(), GL_FRAGMENT_SHADER);
 
         glLinkProgram(program); 
         glValidateProgram(program); 
@@ -95,41 +95,27 @@ namespace AE::GL
     }
 
 
-    char* Shader::LoadSourceShader(AE_text filename)
+    std::string Shader::LoadSourceShader(AE_text filename)
     {
-        char *src = NULL;  
-        FILE *fp = NULL;    
-        long long SIZE;    
-        long i;            
+        std::string src;         
         _filename = filename;
 
-
-        fp = fopen(filename, "r");
-        if(fp == NULL) 
+        std::ifstream file(filename, std::ios::in);
+        if(!file) 
         {
-            messageBox(ERROR, "Unable to open a shader code", SDL_GetError());
+            messageBox(ERROR, "Unable to open a shader code", std::string(strerror(errno)));
             return NULL;
         }
 
-        fseek(fp, 0, SEEK_END);
-        SIZE = ftell(fp);
-
-        rewind(fp);
-
-        src = new char[SIZE + 1];
-        if(src == NULL)
+        char c;
+        while(file.get(c))
         {
-            fclose(fp);
-            messageBox(ERROR, "Memory allocation error for a shader", SDL_GetError());
-            return NULL;
+            src.push_back(c);
         }
 
-        for(i = 0; i < SIZE; i++)
-            src[i] = fgetc(fp);
+        src.push_back('\0'); 
 
-        src[SIZE] = '\0'; 
-
-        fclose(fp); 
+        file.close();
         std::cout << filename << " : ";
         return src;
     }
@@ -157,10 +143,13 @@ namespace AE::GL
 
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logsize);
 
-            log = new char[logsize + 1];
-            if(!log)
+            try
             {
-                messageBox(ERROR, "Memory allocation error for a shader error", SDL_GetError());
+                log = new char[logsize + 1];
+            }
+            catch(const std::bad_alloc& e)
+            {
+                messageBox(ERROR, "Memory allocation error for a shader error", e.what());
                 glDeleteShader(shader);
                 return;
             }
@@ -169,10 +158,10 @@ namespace AE::GL
 
             glGetShaderInfoLog(shader, logsize, &logsize, log);
 
-            std::string _error = "Shader compilation error : ";
-            _error.append(_filename);
+            std::string error = "Shader compilation error : ";
+            error.append(_filename);
 
-            messageBox(ERROR, _error, log);
+            messageBox(ERROR, error, log);
 
             delete[] log;
 

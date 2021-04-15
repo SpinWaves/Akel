@@ -37,7 +37,7 @@ namespace AE::GL
             GLuint program;
 
         private:
-            char* LoadSourceShader(AE_text filename);
+            std::string LoadSourceShader(AE_text filename);
             void genShader(AE_text source, int type);
 
             int shader;
