@@ -21,11 +21,9 @@ namespace AE::Core
     {
         public:
             static void report(enum LogType type, std::string message, std::string path);
-            static std::string getLog(std::string key) { return _logger[key]; }
 
         private:
             static std::string getTime(enum LogType type, std::string path);
-            static std::map<std::string, std::string> _logger;
     };
 }
 

@@ -169,13 +169,12 @@ namespace AE::GL
 
             return;
         }
+        glAttachShader(program, shader);
 
         if(type == 35633 && shader)
             std::cout << "Vertex shader made with success" << std::endl;
         if(type == 35632 && shader)
             std::cout << "Fragment shader made with success" << std::endl << std::endl;
-
-        glAttachShader(program, shader);
     }
 
     Shader::~Shader()

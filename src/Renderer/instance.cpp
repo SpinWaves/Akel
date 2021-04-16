@@ -78,7 +78,8 @@ namespace AE
 
     void Instance::destroy()
     {
-        vkDestroyInstance(instance, nullptr);
+        if(instance)
+            vkDestroyInstance(instance, nullptr);
     }
 
     Instance::~Instance()

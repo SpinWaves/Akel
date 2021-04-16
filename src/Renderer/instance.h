@@ -24,7 +24,7 @@ namespace AE
         public:
             void init(SDL_Window* window);
             void destroy();
-            ~Instance();
+            virtual ~Instance();
         
         private:
             bool checkValidationLayerSupport();

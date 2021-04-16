@@ -47,7 +47,8 @@ namespace AE
     }
     void Context::destroy()
     {
-        SDL_GL_DeleteContext(_glcontext);
+        if(_glcontext)
+            SDL_GL_DeleteContext(_glcontext);
     }
 
     Context::~Context()
