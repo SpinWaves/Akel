@@ -1,21 +1,18 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 16/04/2021
+// UPDATED : 18/04/2021
 
 #include <Platform/platform.h>
 
 namespace AE
 {
-    Window::Window() : Context(), Instance()
-    {}
+    Window::Window() : Context(), Instance() {}
 
     void Window::create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height, windowType type)
     {
         _title = title;
-        _posx = x;
-        _posy = y;
-        _width = width;
-        _height = height;
+        _position.SET(x, y);
+        _size.SET(width, height);
 
         switch(type)
         {
@@ -55,35 +52,92 @@ namespace AE
     }
 
     // ================ Setters ================ //
+    void Window::setSetting(windowSetting setting, const char* value)
+    {
+        switch(setting)
+        {
+            case title: SDL_SetWindowTitle(_window, value); break;
+            case icon: _icon = IMG_Load(value); SDL_SetWindowIcon(_window, _icon); break;
 
-    void Window::setTitle(std::string title)
-    {
-        _title = std::move(title);
+            default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
+        }
     }
-    void Window::setFlags(uint32_t flags)
+
+    void Window::setSetting(windowSetting setting, bool value)
     {
-        _flags = flags;
+        switch(setting)
+        {
+            case fullscreen:
+            {
+                if(value)
+                    SDL_SetWindowFullscreen(_window, SDL_TRUE);
+                else
+                    SDL_SetWindowFullscreen(_window, SDL_FALSE);
+                break;
+            }
+            case border:
+            {
+                if(value)
+                    SDL_SetWindowBordered(_window, SDL_TRUE);
+                else
+                    SDL_SetWindowBordered(_window, SDL_FALSE);
+                break;
+            }
+            case resizable:
+            {
+                if(value)
+                    SDL_SetWindowResizable(_window, SDL_TRUE);
+                else
+                    SDL_SetWindowResizable(_window, SDL_FALSE);
+                break;
+            }
+            case visible:
+            {
+                if(value)
+                    SDL_ShowWindow(_window);
+                else
+                    SDL_HideWindow(_window);
+                break;
+            }
+
+            default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
+        }
     }
-    void Window::setPosition(uint16_t x, uint16_t y)
+
+    void Window::setSetting(windowSetting setting, float value)
     {
-        _posx = x;
-        _posy = y;
+        switch(setting)
+        {
+            case brightness: SDL_SetWindowBrightness(_window, value); break;
+            case opacity: SDL_SetWindowOpacity(_window, value); break;
+
+            default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
+        }
     }
-    void Window::setSize(uint16_t width, uint16_t height)
+
+    void Window::setSetting(windowSetting setting, int x, int y)
     {
-        _width = width;
-        _height = height;
+        switch(setting)
+        {
+            case position:
+            {
+                _position.SET(x, y);
+                SDL_SetWindowPosition(_window, x, y);
+                break;
+            }
+            case dimensions:
+            {
+                _size.SET(x, y);
+                SDL_SetWindowSize(_window, x, y);
+                break;
+            }
+            case maximumSize: SDL_SetWindowMaximumSize(_window, x, y); break;
+            case minimumSize: SDL_SetWindowMinimumSize(_window, x, y); break;
+
+            default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
+        }
     }
-    void Window::setIcon(SDL_Surface* image)
-    {
-        _icon = image;
-        SDL_SetWindowIcon(_window, _icon);
-    }
-    void Window::setIcon(std::string imagePath)
-    {
-        _icon = IMG_Load(imagePath.c_str());
-        SDL_SetWindowIcon(_window, _icon);
-    }
+    
 
     // ================ Getters ================ //
 
@@ -95,21 +149,13 @@ namespace AE
     {
         return _flags;
     }
-    uint16_t Window::getPositionX()
+    Maths::Vec2<uint16_t> Window::getPosition()
     {
-        return _posx;
+        return _position;
     }
-    uint16_t Window::getPositionY()
+    Maths::Vec2<uint16_t> Window::getSize()
     {
-        return _posy;
-    }
-    uint16_t Window::getSizeW()
-    {
-        return _width;
-    }
-    uint16_t Window::getSizeH()
-    {
-        return _height;
+        return _size;
     }
 
 

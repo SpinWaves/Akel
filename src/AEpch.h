@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 15/04/2021
+// UPDATED : 18/04/2021
 
 #ifndef __AE_PCH__
 #define __AE_PCH__
@@ -23,10 +23,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <filesystem>
+#include <typeinfo>
+#include <type_traits>
 
 // Memory
 #include <string>
 #include <map>
+#include <functional>
 #include <vector>
 #include <array>
 #include <new>

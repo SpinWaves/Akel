@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 16/04/2021
+// UPDATED : 18/04/2021
 
 #ifndef __WINDOW__
 #define __WINDOW__
@@ -8,6 +8,8 @@
 #include <AEpch.h>
 #include <Core/core.h>
 #include <Renderer/renderer.h>
+#include <Maths/maths.h>
+#include <Platform/messageBox.h>
 
 enum windowType
 {
@@ -15,6 +17,22 @@ enum windowType
     AE_WINDOW_VULKAN,
     AE_WINDOW_POP_UP,
     AE_WINDOW_AUTO_TYPE
+};
+
+enum windowSetting
+{
+    title,
+    dimensions,
+    position,
+    fullscreen,
+    border,
+    brightness,
+    opacity,
+    resizable,
+    visible,
+    maximumSize,
+    minimumSize,
+    icon
 };
 
 namespace AE
@@ -26,21 +44,17 @@ namespace AE
 
             void create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height, windowType type = AE_WINDOW_AUTO_TYPE);
 
-            // Setters
-            void setTitle(std::string title);
-            void setFlags(uint32_t flags);
-            void setPosition(uint16_t x, uint16_t y);
-            void setSize(uint16_t width, uint16_t height);
-            void setIcon(SDL_Surface* image);
-            void setIcon(std::string imagePath);
+            // Setters            
+            void setSetting(windowSetting setting, const char* value);
+            void setSetting(windowSetting setting, bool value);
+            void setSetting(windowSetting setting, float value);
+            void setSetting(windowSetting setting, uint16_t x, uint16_t y);
             
             // Getters
             std::string getTitle();
             uint32_t getFlags();
-            uint16_t getPositionX();
-            uint16_t getPositionY();
-            uint16_t getSizeW();
-            uint16_t getSizeH();
+            Maths::Vec2<uint16_t> getPosition();
+            Maths::Vec2<uint16_t> getSize();
 
             void initWindowRenderer();
             void update();
@@ -53,11 +67,8 @@ namespace AE
             SDL_Window* _window;
 
             std::string _title;
-            
-            uint16_t _width;
-            uint16_t _height;
-            uint16_t _posx;
-            uint16_t _posy;
+            Maths::Vec2<uint16_t> _position;
+            Maths::Vec2<uint16_t> _size;
 
             uint32_t _flags;
 
