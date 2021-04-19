@@ -29,6 +29,7 @@ namespace AE
     void Context::SwapBuffers()
     {
         SDL_GL_SwapWindow(_window);
+        clearRendering();
     }
     void Context::setVerticalSync(bool enabled)
     {

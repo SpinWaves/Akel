@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 18/04/2021
+// UPDATED : 19/04/2021
 
 #include <Platform/platform.h>
 
@@ -62,48 +62,26 @@ namespace AE
             default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
         }
     }
-
     void Window::setSetting(windowSetting setting, bool value)
     {
+        SDL_bool pass;
+        if(value) pass = SDL_TRUE;
+        else      pass = SDL_FALSE;
+
         switch(setting)
         {
-            case fullscreen:
-            {
-                if(value)
-                    SDL_SetWindowFullscreen(_window, SDL_TRUE);
-                else
-                    SDL_SetWindowFullscreen(_window, SDL_FALSE);
-                break;
-            }
-            case border:
-            {
-                if(value)
-                    SDL_SetWindowBordered(_window, SDL_TRUE);
-                else
-                    SDL_SetWindowBordered(_window, SDL_FALSE);
-                break;
-            }
-            case resizable:
-            {
-                if(value)
-                    SDL_SetWindowResizable(_window, SDL_TRUE);
-                else
-                    SDL_SetWindowResizable(_window, SDL_FALSE);
-                break;
-            }
+            case fullscreen: SDL_SetWindowFullscreen(_window, pass); break;
+            case border:     SDL_SetWindowBordered(_window, pass); break; 
+            case resizable:  SDL_SetWindowResizable(_window, pass); break; 
             case visible:
             {
-                if(value)
-                    SDL_ShowWindow(_window);
-                else
-                    SDL_HideWindow(_window);
+                if(value) SDL_ShowWindow(_window);
+                else      SDL_HideWindow(_window);
                 break;
             }
-
             default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
         }
     }
-
     void Window::setSetting(windowSetting setting, float value)
     {
         switch(setting)
@@ -114,23 +92,12 @@ namespace AE
             default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
         }
     }
-
-    void Window::setSetting(windowSetting setting, int x, int y)
+    void Window::setSetting(windowSetting setting, uint16_t x, uint16_t y)
     {
         switch(setting)
         {
-            case position:
-            {
-                _position.SET(x, y);
-                SDL_SetWindowPosition(_window, x, y);
-                break;
-            }
-            case dimensions:
-            {
-                _size.SET(x, y);
-                SDL_SetWindowSize(_window, x, y);
-                break;
-            }
+            case position:    _position.SET(x, y); SDL_SetWindowPosition(_window, x, y);  break; 
+            case dimensions:  _size.SET(x, y); SDL_SetWindowSize(_window, x, y); break;
             case maximumSize: SDL_SetWindowMaximumSize(_window, x, y); break;
             case minimumSize: SDL_SetWindowMinimumSize(_window, x, y); break;
 
@@ -140,7 +107,6 @@ namespace AE
     
 
     // ================ Getters ================ //
-
     std::string Window::getTitle()
     {
         return _title;
