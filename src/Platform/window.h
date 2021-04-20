@@ -10,6 +10,7 @@
 #include <Renderer/renderer.h>
 #include <Maths/maths.h>
 #include <Platform/messageBox.h>
+#include <Utils/utils.h>
 
 enum windowType
 {
@@ -45,7 +46,7 @@ namespace AE
             void create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height, windowType type = AE_WINDOW_AUTO_TYPE);
 
             // Setters            
-            void setSetting(windowSetting setting, const char* value);
+            void setSetting(windowSetting setting, AE_text value);
             void setSetting(windowSetting setting, bool value);
             void setSetting(windowSetting setting, float value);
             void setSetting(windowSetting setting, uint16_t x, uint16_t y);
