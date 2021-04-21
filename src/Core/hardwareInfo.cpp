@@ -6,28 +6,6 @@
 
 namespace AE::Core
 {
-    void CopyRegToBuff(uint32_t Reg, char* Buff)
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            Buff[i] = Reg & 0xFF;
-            Reg >>= 8;
-        }		
-    }
-
-    //Calls CPUID subfunction 0 to retrieve vendor ID string in ebx, edx, ecx.
-    std::string GetVendorID(uint32_t ebx, uint32_t ecx, uint32_t edx)
-    {
-        char VendorID[13];
-        memset(VendorID, 0, sizeof(VendorID));
-        CopyRegToBuff(ebx, VendorID);
-        CopyRegToBuff(edx, VendorID + 4);
-        CopyRegToBuff(ecx, VendorID + 8);
-        
-        return std::string(VendorID); 
-    }
-
-
     std::string HardInfo::getCPUinfo()
     {
         CPUInfo cinfo;
