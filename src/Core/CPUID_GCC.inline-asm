@@ -1,0 +1,16 @@
+// This file is a part of AtlasEngine
+// CREATED : 19/04/2021
+// UPDATED : 21/04/2021
+
+// ================ FOR GCC COMPILATION ================ //
+
+/* Used to get informations from the CPU */
+
+"cpuid" 
+: "=a" (regs[0]), 
+  "=b" (regs[1]), 
+  "=c" (regs[2]), 
+  "=d" (regs[3])
+             
+: "a" (funcId), 
+  "c" (subFuncId)

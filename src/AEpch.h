@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 19/04/2021
+// UPDATED : 21/04/2021
 
 #ifndef __AE_PCH__
 #define __AE_PCH__
@@ -45,5 +45,6 @@
 #include <cmath>
 #include <cerrno>
 #include <cstdio>
+#include <cstring>
 
 #endif // __AE_PCH__

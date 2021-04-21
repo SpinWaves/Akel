@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 03/04/2021
-// UPDATED : 19/04/2021
+// UPDATED : 21/04/2021
 
 #ifndef __CORE__
 #define __CORE__
@@ -9,5 +9,6 @@
 #include <Core/paths.h>
 #include <Core/softwareInfo.h>
 #include <Core/hardwareInfo.h>
+#include <Core/cpu.h>
 
 #endif // __CORE__
