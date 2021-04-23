@@ -1,8 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 21/04/2021
-// UPDATED : 21/04/2021
-
-// Code from https://gist.github.com/9prady9/a5e1e8bdbc9dc58b3349
+// UPDATED : 22/04/2021
 
 #include <Core/core.h>
 
@@ -23,6 +21,23 @@ namespace AE::Core
                 #include "CPUID_MSVC.asm"
             }
         #endif
+    }
+
+    uint32_t& CPUID::EAX() 
+    {
+        return regs[0];
+    }
+    uint32_t& CPUID::EBX() 
+    {
+        return regs[1];
+    }
+    uint32_t& CPUID::ECX() 
+    {
+        return regs[2];
+    }
+    uint32_t& CPUID::EDX() 
+    {
+        return regs[3];
     }
 
 

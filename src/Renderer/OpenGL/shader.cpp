@@ -10,7 +10,7 @@ namespace AE::GL
 {
     Shader::Shader(AE_text vertexFile, AE_text fragmentFile)
     {
-        std::string getter = Core::SoftInfo::getGLinfo();
+        std::string getter = Core::getGLinfo();
         if(std::stof(getter) < 2.0)
             messageBox(FATAL_ERROR, "Your version of OpenGL does not support shaders", std::string("You have OpenGL version : " + getter));
 

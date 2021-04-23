@@ -31,9 +31,7 @@ namespace AE
             
             case AE_WINDOW_AUTO_TYPE:
             {
-                uint32_t extensionCount = 0;
-                vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-                if(extensionCount != 0)
+                if(Core::isVulkanSupported())
                     _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN;
                 else
                     _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;

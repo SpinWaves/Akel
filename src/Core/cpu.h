@@ -1,8 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 21/04/2021
-// UPDATED : 21/04/2021
-
-// Code from https://gist.github.com/9prady9/a5e1e8bdbc9dc58b3349
+// UPDATED : 22/04/2021
 
 #ifndef __CPU__
 #define __CPU__
@@ -16,10 +14,10 @@ namespace AE::Core
         public:
             CPUID(unsigned funcId, unsigned subFuncId);
 
-            const uint32_t &EAX() const {return regs[0];}
-            const uint32_t &EBX() const {return regs[1];}
-            const uint32_t &ECX() const {return regs[2];}
-            const uint32_t &EDX() const {return regs[3];}
+            uint32_t &EAX();
+            uint32_t &EBX();
+            uint32_t &ECX();
+            uint32_t &EDX();
         
         private:
             uint32_t regs[4];
@@ -57,7 +55,6 @@ namespace AE::Core
             static const uint32_t LVL_TYPE  = 0x0000FF00;
             static const uint32_t LVL_CORES = 0x0000FFFF;
 
-            // Attributes
             std::string _VendorId;
             std::string _ModelName;
             int _NumSMT;
