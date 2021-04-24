@@ -20,7 +20,7 @@ namespace AE::Core
         uint32_t extensionCount = 0;
         vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
         if(extensionCount != 0)
-            return true;
+            return false;
         return false;
     }
 }

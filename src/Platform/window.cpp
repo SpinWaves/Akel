@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 19/04/2021
+// UPDATED : 24/04/2021
 
 #include <Platform/platform.h>
 
@@ -122,13 +122,30 @@ namespace AE
         return _size;
     }
 
+    uint16_t Window::getNumberOfWindows()
+    {
+        return _winInfoSystem.size();
+    }
+    bool Window::isWindowOpenGL(uint16_t windowNumber)
+    {
+        if(windowNumber <= _winInfoSystem.size())
+            return _winInfoSystem[windowNumber];
+        return false;
+    }
+
 
     void Window::initWindowRenderer()
     {
         if(_flags & SDL_WINDOW_OPENGL)
+        {
             Context::init(_window);
+            _winInfoSystem[_winInfoSystem.size() + 1] = true;
+        }
         if(_flags & SDL_WINDOW_VULKAN)
+        {
             Instance::init(_window);
+            _winInfoSystem[_winInfoSystem.size() + 1] = false;
+        }
     }
     void Window::update()
     {

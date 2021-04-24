@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 23/04/2021
-// UPDATED : 23/04/2021
+// UPDATED : 24/04/2021
 
 #ifndef __GPU__
 #define __GPU__
@@ -14,8 +14,10 @@ namespace AE::Core
         public:
             GPU();
 
-            uint8_t getNumberOfDevices();
+            uint32_t getNumberOfDevices();
             std::string getModelName();
+            std::string getVendorName();
+            uint32_t getVulkanVersion();
 
             ~GPU();
 
@@ -27,6 +29,7 @@ namespace AE::Core
             bool useVulkan;
             SDL_Window* _tempoWin;
             SDL_GLContext _context;
+            std::map <uint32_t, std::string> vendors;
     };
 }
 

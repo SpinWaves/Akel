@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 18/04/2021
+// UPDATED : 24/04/2021
 
 #ifndef __WINDOW__
 #define __WINDOW__
@@ -63,6 +63,9 @@ namespace AE
             void destroy();
 
             virtual ~Window();
+
+            static uint16_t getNumberOfWindows();
+            static bool isWindowOpenGL(uint16_t windowNumber);
         
         private:
             SDL_Window* _window;
@@ -74,6 +77,8 @@ namespace AE
             uint32_t _flags;
 
             SDL_Surface* _icon;
+
+            inline static std::map<uint16_t, bool> _winInfoSystem;
     };
 }
 
