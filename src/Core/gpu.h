@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 23/04/2021
-// UPDATED : 24/04/2021
+// UPDATED : 27/04/2021
 
 #ifndef __GPU__
 #define __GPU__
@@ -18,6 +18,8 @@ namespace AE::Core
             std::string getModelName();
             std::string getVendorName();
             uint32_t getVulkanVersion();
+            float getGLSLversion();
+            float getOpenGLversion();
 
             ~GPU();
 
@@ -26,10 +28,10 @@ namespace AE::Core
             uint32_t _deviceCount = 0;
             VkInstance _instance;
             VkPhysicalDeviceProperties _deviceProperties;
-            bool useVulkan;
+            bool useVulkan = false;
             SDL_Window* _tempoWin;
             SDL_GLContext _context;
-            std::map <uint32_t, std::string> vendors;
+            std::map<uint32_t, std::string> vendors;
     };
 }
 

@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/04/2021
-// UPDATED : 14/04/2021
+// UPDATED : 27/04/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -18,13 +18,15 @@ namespace AE
         
         GLuint GLEWerr = glewInit();
         if(GLEW_OK != GLEWerr)
-            messageBox(FATAL_ERROR, "Can't init GLEW", std::string(reinterpret_cast<AE_text>(glewGetErrorString(GLEWerr))));
+            messageBox(FATAL_ERROR, "Can't init GLEW", AE_CATCH_GL_CONTEXT_CREATION);
+        
+        Core::GPU gpuinfo;
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, int(std::stof(Core::getGLinfo()))); // Init opengl with driver version
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, int(std::stof(Core::getGLinfo()) - int(std::stof(Core::getGLinfo()))));
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, int(gpuinfo.getOpenGLversion())); // Init opengl with driver version
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 10 * (gpuinfo.getOpenGLversion() - int(gpuinfo.getOpenGLversion())));
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-        std::cout << bg_green << "GL context created successfully with version : " << Core::getGLinfo() << bg_def << std::endl;
+        std::cout << bg_green << "OpenGL context created successfully with version : " << gpuinfo.getOpenGLversion() << bg_def << std::endl;
     }
     void Context::SwapBuffers()
     {
@@ -37,8 +39,8 @@ namespace AE
     }
     void Context::clearRendering()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(1.0, 1.0, 1.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
     bool Context::isCreated()
     {

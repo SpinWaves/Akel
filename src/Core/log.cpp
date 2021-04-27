@@ -1,14 +1,10 @@
 // This file is a part of AtlasEngine
 // CREATED : 03/04/2021
-// UPDATED : 11/04/2021
+// UPDATED : 25/04/2021
 
 #include <Core/core.h>
+#include <Utils/utils.h>
 
-void TERMINATE()
-{
-    std::cout << "EXIT FAILURE: emergency abortion program" << std::endl;
-    abort();
-}
 
 namespace AE::Core
 {
@@ -22,6 +18,12 @@ namespace AE::Core
             std::set_terminate(TERMINATE);
             std::terminate();
         }
+    }
+
+    void log::TERMINATE()
+    {
+        std::cout << bg_red << "EXIT FAILURE: emergency abortion program" << bg_def << std::endl;
+        abort();
     }
 
     std::string log::getTime(enum LogType type, std::string path)

@@ -1,9 +1,10 @@
 // This file is a part of AtlasEngine
 // CREATED : 23/04/2021
-// UPDATED : 24/04/2021
+// UPDATED : 27/04/2021
 
 #include <Core/core.h>
 #include <Platform/platform.h>
+#include <Utils/utils.h>
 
 namespace AE::Core
 {
@@ -24,7 +25,7 @@ namespace AE::Core
             createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 
             if(vkCreateInstance(&createInfo, nullptr, &_instance) != VK_SUCCESS)
-                messageBox(FATAL_ERROR, "Unable to get GPU info", SDL_GetError());
+                messageBox(ERROR, "Unable to get GPU info", AE_CATCH_VK_INSTANCE_CREATION);
             else
             {
                 useVulkan = true;
@@ -34,62 +35,74 @@ namespace AE::Core
                 vkGetPhysicalDeviceProperties(_devices[0], &_deviceProperties);
             }
         }
-        else
+        bool isAlreadyOpenGLContext = false;
+        uint16_t wins = Window::getNumberOfWindows();
+        for(int i = 0; i < wins; i++)
         {
-            bool isAlreadyOpenGLContext = false;
-            uint16_t wins = Window::getNumberOfWindows();
-            for(int i = 0; i < wins; i++)
+            if(Window::isWindowOpenGL(i))
             {
-                if(Window::isWindowOpenGL(i))
-                {
-                    isAlreadyOpenGLContext = true;
-                    break;
-                }
-                    
+                isAlreadyOpenGLContext = true;
+                break;
             }
-            if(!isAlreadyOpenGLContext)
+        }
+        if(!isAlreadyOpenGLContext)
+        {
+            _tempoWin = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL);
+            if(!_tempoWin)
+                messageBox(ERROR, "Unable to get GPU info", SDL_GetError());
+            else
             {
-                _tempoWin = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL);
-                if(!_tempoWin)
+                _context = SDL_GL_CreateContext(_tempoWin);
+                if(!_context)
                     messageBox(ERROR, "Unable to get GPU info", SDL_GetError());
-                else
-                {
-                    useVulkan = false;
-                    _context = SDL_GL_CreateContext(_tempoWin);
-                    if(!_context)
-                        messageBox(ERROR, "Unable to get GPU info", SDL_GetError());
-                    GLuint GLEWerr = glewInit();
-                    if(GLEW_OK != GLEWerr)
-                        messageBox(ERROR, "Unable to get GPU info", std::string(reinterpret_cast<AE_text>(glewGetErrorString(GLEWerr))));
-                }
+                GLuint GLEWerr = glewInit();
+                if(GLEW_OK != GLEWerr)
+                    messageBox(ERROR, "Unable to get GPU info", AE_CATCH_GL_CONTEXT_CREATION);
             }
         }
     }
 
     uint32_t GPU::getNumberOfDevices()
     {
-        return _deviceCount;
+        if(isVulkanSupported())
+            return _deviceCount;
+        messageBox(ERROR, "Unable to get GPU info", AE_CATCH_NUM_DEVICES_INFO);
+        return 0;
     }
 
     std::string GPU::getModelName()
     {
         if(useVulkan)
             return std::string(_deviceProperties.deviceName);
-        return std::string(reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
+        return std::string(reinterpret_cast<AE_text>(glGetString(GL_RENDERER)));
     }
 
     std::string GPU::getVendorName()
     {
         if(useVulkan)
             return vendors[_deviceProperties.vendorID];
-        return std::string(reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
+        if(_context)
+            return std::string(reinterpret_cast<AE_text>(glGetString(GL_VENDOR)));
+        messageBox(ERROR, "Unable to get GPU info", AE_CATCH_GPU_VENDOR_INFO);
+        return "ERROR";
     }
 
     uint32_t GPU::getVulkanVersion()
     {
         if(useVulkan)
             return _deviceProperties.apiVersion;
+        messageBox(ERROR, "Unable to get GPU info", AE_CATCH_VK_VERSION_INFO);
         return 0;
+    }
+
+    float GPU::getGLSLversion()
+    {
+        return std::stof(std::string(reinterpret_cast<AE_text>(glGetString(GL_SHADING_LANGUAGE_VERSION))));
+    }
+
+    float GPU::getOpenGLversion()
+    {
+        return std::stof(std::string(reinterpret_cast<AE_text>(glGetString(GL_VERSION))));
     }
 
     GPU::~GPU()

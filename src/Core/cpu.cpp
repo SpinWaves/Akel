@@ -1,8 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 21/04/2021
-// UPDATED : 22/04/2021
+// UPDATED : 27/04/2021
 
 #include <Core/core.h>
+#include <Platform/platform.h>
 
 #define MAX_INTEL_TOP_LVL 4
 
@@ -18,7 +19,7 @@ namespace AE::Core
         #else   // MSVC or BORLANDC
             __asm
             {
-                #include "CPUID_MSVC.asm"
+                #include "CPUID_MSVC.inline-asm"
             }
         #endif
     }
@@ -123,7 +124,7 @@ namespace AE::Core
                 _NumCores = _NumLogCpus = 1;
         } 
         else
-            std::cout << "Unexpected vendor id" << std::endl;
+            messageBox(ERROR, "Unable to get CPU info", AE_CATCH_CPU_VENDOR_INFO);
 
         for(int i = 0x80000002; i < 0x80000005; i++)
         {

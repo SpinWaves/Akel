@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 24/04/2021
+// UPDATED : 27/04/2021
 
 #include <Platform/platform.h>
 
@@ -13,6 +13,7 @@ namespace AE
         _title = title;
         _position.SET(x, y);
         _size.SET(width, height);
+        SDL_Init(SDL_INIT_VIDEO);
 
         switch(type)
         {
@@ -38,7 +39,7 @@ namespace AE
                 break;
             }
 
-            default: messageBox(FATAL_ERROR, "Unable to create a window", "Bad type"); break;
+            default: messageBox(FATAL_ERROR, "Unable to create a window", AE_CATCH_WIN_TYPE); break;
         }
  
         _window = SDL_CreateWindow(title.c_str(), x, y, width, height, _flags);
@@ -57,7 +58,7 @@ namespace AE
             case title: SDL_SetWindowTitle(_window, value); break;
             case icon: _icon = IMG_Load(value); SDL_SetWindowIcon(_window, _icon); break;
 
-            default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
+            default: messageBox(ERROR, "Unable to modify window's parameter", AE_CATCH_WIN_SETTING); break;
         }
     }
     void Window::setSetting(windowSetting setting, bool value)
@@ -77,7 +78,7 @@ namespace AE
                 else      SDL_HideWindow(_window);
                 break;
             }
-            default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
+            default: messageBox(ERROR, "Unable to modify window's parameter", AE_CATCH_WIN_SETTING); break;
         }
     }
     void Window::setSetting(windowSetting setting, float value)
@@ -87,7 +88,7 @@ namespace AE
             case brightness: SDL_SetWindowBrightness(_window, value); break;
             case opacity: SDL_SetWindowOpacity(_window, value); break;
 
-            default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
+            default: messageBox(ERROR, "Unable to modify window's parameter", AE_CATCH_WIN_SETTING); break;
         }
     }
     void Window::setSetting(windowSetting setting, uint16_t x, uint16_t y)
@@ -99,7 +100,7 @@ namespace AE
             case maximumSize: SDL_SetWindowMaximumSize(_window, x, y); break;
             case minimumSize: SDL_SetWindowMinimumSize(_window, x, y); break;
 
-            default: messageBox(ERROR, "Unable to modify window's parameter", "No such setting"); break;
+            default: messageBox(ERROR, "Unable to modify window's parameter", AE_CATCH_WIN_SETTING); break;
         }
     }
     

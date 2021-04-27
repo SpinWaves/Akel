@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 03/04/2021
-// UPDATED : 04/04/2021
+// UPDATED : 25/04/2021
 
 #include <Core/core.h>
 
@@ -20,7 +20,7 @@ namespace AE::Core
                 return mainPath;
             }
         }
-        return "Main path not found ";
+        return "Main path not found";
     }
 
     std::string getAssetsDirPath()

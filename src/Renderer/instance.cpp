@@ -1,17 +1,18 @@
 // This file is a part of AtlasEngine
 // CREATED : 10/04/2021
-// UPDATED : 14/04/2021
+// UPDATED : 27/04/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
 #include <Utils/utils.h>
+#include <Core/core.h>
 
 namespace AE
 {
     void Instance::init(SDL_Window* window)
     {
         if(enableValidationLayers && !checkValidationLayerSupport())
-            messageBox(ERROR, "Vulkan layers are not availble", SDL_GetError());
+            messageBox(ERROR, "Vulkan layers are not availble", "Vulkan error");
 
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -44,7 +45,7 @@ namespace AE
         createInfo.enabledLayerCount = 0;
 
         if(vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
-            messageBox(FATAL_ERROR, "Can't init Vulkan instance", SDL_GetError());
+            messageBox(FATAL_ERROR, "Can't init Vulkan instance", AE_CATCH_VK_INSTANCE_CREATION);
         else
             std::cout << bg_green << "Instance created successfully" << bg_def << std::endl;
     }

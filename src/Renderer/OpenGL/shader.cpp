@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 15/04/2021
+// UPDATED : 27/04/2021
 
 #include <Renderer/renderer.h>
 #include <Core/core.h>
@@ -10,9 +10,9 @@ namespace AE::GL
 {
     Shader::Shader(AE_text vertexFile, AE_text fragmentFile)
     {
-        std::string getter = Core::getGLinfo();
-        if(std::stof(getter) < 2.0)
-            messageBox(FATAL_ERROR, "Your version of OpenGL does not support shaders", std::string("You have OpenGL version : " + getter));
+        Core::GPU gpuinfo;
+        if(gpuinfo.getOpenGLversion() < 2.0)
+            messageBox(FATAL_ERROR, "Your version of OpenGL does not support shaders", AE_CATCH_GL_SHADER_COMPATIBILITY);
 
         program = glCreateProgram();
 
@@ -103,7 +103,7 @@ namespace AE::GL
         std::ifstream file(filename, std::ios::in);
         if(!file) 
         {
-            messageBox(ERROR, "Unable to open a shader code", std::string(strerror(errno)));
+            messageBox(ERROR, "Unable to open a shader code", AE_CATCH_GL_SHADER_OPEN_SOURCE);
             return NULL;
         }
 
