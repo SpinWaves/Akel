@@ -107,14 +107,11 @@ namespace AE::Core
 
     GPU::~GPU()
     {
-        if(isVulkanSupported())
+        if(_instance)
             vkDestroyInstance(_instance, nullptr);
-        else
-        {
-            if(_context)
-                SDL_GL_DeleteContext(_context);
-            if(_tempoWin)
-                SDL_DestroyWindow(_tempoWin);
-        }
+        if(_context)
+            SDL_GL_DeleteContext(_context);
+        if(_tempoWin)
+            SDL_DestroyWindow(_tempoWin);
     }
 }

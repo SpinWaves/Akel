@@ -42,7 +42,7 @@ namespace AE::Core
     }
 
 
-    CPUInfo::CPUInfo()
+    CPU::CPU()
     {
         CPUID cpuID0(0, 0);
         uint32_t HFS = cpuID0.EAX();
@@ -137,55 +137,55 @@ namespace AE::Core
     
     }
 
-    std::string CPUInfo::vendor() 
+    std::string CPU::vendor() 
     { 
         return _VendorId;
     }
-    std::string CPUInfo::model()
+    std::string CPU::model()
     { 
         return _ModelName;
     }
-    int CPUInfo::cores()
+    int CPU::cores()
     { 
         return _NumCores;   
     }
-    float CPUInfo::cpuSpeedInMHz()      
+    float CPU::cpuSpeedInMHz()      
     { 
         return _CPUMHz;     
     }
-    bool CPUInfo::isSSE()              
+    bool CPU::isSSE()              
     { 
         return _IsSSE;      
     }
-    bool CPUInfo::isSSE2()             
+    bool CPU::isSSE2()             
     { 
         return _IsSSE2;     
     }
-    bool CPUInfo::isSSE3()             
+    bool CPU::isSSE3()             
     { 
         return _IsSSE3;     
     }
-    bool CPUInfo::isSSE41()            
+    bool CPU::isSSE41()            
     { 
         return _IsSSE41;   
     }
-    bool CPUInfo::isSSE42()            
+    bool CPU::isSSE42()            
     { 
         return _IsSSE42;    
     }
-    bool CPUInfo::isAVX()              
+    bool CPU::isAVX()              
     { 
         return _IsAVX;     
     }
-    bool CPUInfo::isAVX2()             
+    bool CPU::isAVX2()             
     { 
         return _IsAVX2;     
     }
-    bool CPUInfo::isHyperThreaded()    
+    bool CPU::isHyperThreaded()    
     { 
         return _IsHTT;      
     }
-    int CPUInfo::logicalCpus()        
+    int CPU::logicalCpus()        
     { 
         return _NumLogCpus; 
     }

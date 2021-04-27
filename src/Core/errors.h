@@ -16,12 +16,13 @@
 // GLOBAL
 #define AE_CATCH_GL_CONTEXT_CREATION        std::string("OpenGL context : " + std::string(reinterpret_cast<AE_text>(glewGetErrorString(GLEWerr))))
 
-// VK INSTANCE
+// VK
 #define AE_CATCH_VK_INSTANCE_CREATION       "Vulkan instance : unable to create vulkan instance"
 
-// GL CONTEXT
+// GL
 #define AE_CATCH_GL_SHADER_COMPATIBILITY    std::string("You have OpenGL version : " + std::to_string(gpuinfo.getOpenGLversion()))
 #define AE_CATCH_GL_SHADER_OPEN_SOURCE      std::string(strerror(errno))
+#define AE_CATCH_GL_BUFFER_GENERATION       std::string(reinterpret_cast<AE_text>(glewGetErrorString(glIsBuffer(_buffer))))
 
 // WINDOW
 #define AE_CATCH_WIN_TYPE                   "Window type : bad window type"

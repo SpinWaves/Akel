@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 21/04/2021
-// UPDATED : 22/04/2021
+// UPDATED : 27/04/2021
 
 #ifndef __CPU__
 #define __CPU__
@@ -23,10 +23,10 @@ namespace AE::Core
             uint32_t regs[4];
     };
 
-    class CPUInfo 
+    class CPU
     {
         public:
-            CPUInfo();
+            CPU();
 
             std::string vendor();
             std::string model();

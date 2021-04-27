@@ -1,9 +1,10 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 14/04/2021
+// UPDATED : 27/04/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
+#include <Core/core.h>
 
 namespace AE::GL
 {
@@ -18,7 +19,7 @@ namespace AE::GL
         deleteBuffer();
         glGenBuffers(1, &_buffer);
         if(glIsBuffer(_buffer) != GL_TRUE)
-            messageBox(ERROR, "Unable to generate a Buffer", std::string(reinterpret_cast<AE_text>(glewGetErrorString(glIsBuffer(_buffer)))));
+            messageBox(ERROR, "Unable to generate a Buffer", AE_CATCH_GL_BUFFER_GENERATION);
     }
 
     void Buffer::bindBuffer()
