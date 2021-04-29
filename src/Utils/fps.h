@@ -17,6 +17,8 @@ namespace AE
 			void update();
 			int getFPS();
 			int getTicks();
+			void printFPS();
+			void printTicks();
 			~CounterFPS();	
         
 		private:
@@ -28,7 +30,8 @@ namespace AE
 			uint32_t elapsed_time;
 			uint32_t timer;
 			long long before;			
-			long long now;	
+			long long now;
+			bool second_passed = false;	
     };		
 }
 
