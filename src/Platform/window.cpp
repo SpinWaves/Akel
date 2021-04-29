@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 27/04/2021
+// UPDATED : 29/04/2021
 
 #include <Platform/platform.h>
 
@@ -14,6 +14,7 @@ namespace AE
         _position.SET(x, y);
         _size.SET(width, height);
         SDL_Init(SDL_INIT_VIDEO);
+		atexit(exit);
 
         switch(type)
         {
@@ -158,12 +159,12 @@ namespace AE
     void Window::destroy()
     {
         Context::destroy();
+        SDL_FreeSurface(_icon);
         Instance::destroy();
         SDL_DestroyWindow(_window);
     }
 
     Window::~Window()
     {
-        SDL_FreeSurface(_icon);
     }
 }
