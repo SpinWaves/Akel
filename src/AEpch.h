@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 24/04/2021
+// UPDATED : 29/04/2021
 
 #ifndef __AE_PCH__
 #define __AE_PCH__
@@ -24,6 +24,7 @@
 
 // System
 #include <filesystem>
+#include <chrono>
 
 // Memory
 #include <string>
