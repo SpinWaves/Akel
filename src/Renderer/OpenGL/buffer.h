@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 14/04/2021
+// UPDATED : 30/04/2021
 
 #ifndef __BUFFER__
 #define __BUFFER__
@@ -19,8 +19,15 @@ namespace AE::GL
             void bindBuffer();
             void unbindBuffer();
             void setSize(GLsizeiptr SIZE);
-            void pushData(int start, std::vector<float> &data);
-            void deleteBuffer();
+
+			template <typename T = float>
+            void pushData(int start, std::vector<T> &data)
+			{
+				if(glIsBuffer(_buffer) == GL_TRUE)
+					glBufferSubData(_type, start, data.size(), data.data());
+		    }
+           
+		   void deleteBuffer();
 
             virtual ~Buffer();
 

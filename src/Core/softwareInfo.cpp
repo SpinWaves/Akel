@@ -9,9 +9,9 @@ namespace AE::Core
     bool isVulkanSupported()
     {
         VkInstance instance;
-	VkInstanceCreateInfo createInfo{};
-	createInfo.enabledLayerCount = 0;
-	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO; 
+	    VkInstanceCreateInfo createInfo{};
+	    createInfo.enabledLayerCount = 0;
+	    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO; 
         if(vkCreateInstance(&createInfo, nullptr, &instance) == VK_SUCCESS)
             return true;
         return false;

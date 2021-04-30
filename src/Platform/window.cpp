@@ -49,7 +49,9 @@ namespace AE
 
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
-    }
+    	
+		initWindowRenderer();
+	}
 
     // ================ Setters ================ //
     void Window::setSetting(windowSetting setting, const char* value)

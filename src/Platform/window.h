@@ -57,7 +57,6 @@ namespace AE
             Maths::Vec2<uint16_t> getPosition();
             Maths::Vec2<uint16_t> getSize();
 
-            void initWindowRenderer();
             void update();
 
             void destroy();
@@ -79,6 +78,8 @@ namespace AE
             SDL_Surface* _icon;
 
             inline static std::map<uint16_t, bool> _winInfoSystem;
+            
+			void initWindowRenderer();
     };
 }
 

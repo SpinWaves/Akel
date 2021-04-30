@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 27/04/2021
+// UPDATED : 30/04/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -19,8 +19,11 @@ namespace AE::GL
         deleteBuffer();
         glGenBuffers(1, &_buffer);
         if(glIsBuffer(_buffer) != GL_TRUE)
+		{
+			GLenum err;
             messageBox(ERROR, "Unable to generate a Buffer", AE_CATCH_GL_BUFFER_GENERATION);
-    }
+    	}
+	}
 
     void Buffer::bindBuffer()
     {
@@ -37,12 +40,6 @@ namespace AE::GL
     {
         if(glIsBuffer(_buffer) == GL_TRUE)
             glBufferData(_type, SIZE, 0, GL_STATIC_DRAW);
-    }
-
-    void Buffer::pushData(int start, std::vector<float> &data)
-    {
-        if(glIsBuffer(_buffer) == GL_TRUE)
-            glBufferSubData(_type, start, data.size(), data.data());
     }
 
     void Buffer::deleteBuffer()

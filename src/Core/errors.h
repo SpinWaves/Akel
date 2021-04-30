@@ -22,7 +22,7 @@
 // GL
 #define AE_CATCH_GL_SHADER_COMPATIBILITY    std::string("You have OpenGL version : " + std::to_string(gpuinfo.getOpenGLversion()))
 #define AE_CATCH_GL_SHADER_OPEN_SOURCE      std::string(strerror(errno))
-#define AE_CATCH_GL_BUFFER_GENERATION       std::string(reinterpret_cast<AE_text>(glewGetErrorString(glIsBuffer(_buffer))))
+#define AE_CATCH_GL_BUFFER_GENERATION       std::string(reinterpret_cast<AE_text>(glewGetErrorString(err)))
 
 // WINDOW
 #define AE_CATCH_WIN_TYPE                   "Window type : bad window type"
