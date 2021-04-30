@@ -3,6 +3,7 @@
 // UPDATED : 30/04/2021
 
 #include <Core/core.h>
+#include <Utils/utils.h>
 
 namespace AE::Core
 {
@@ -19,13 +20,26 @@ namespace AE::Core
 
     void printEngineInfo()
     {
-        std::cout << "          _   _           ______             _             " << std::endl;
-        std::cout << "     /\\  | | | |         |  ____|           (_)            " << std::endl;
-        std::cout << "    /  \\ | |_| | __ _ ___| |__   _ __   __ _ _ _ __   ___  " << std::endl;
-        std::cout << "   / /\\ \\| __| |/ _` / __|  __| | '_ \\ / _` | | '_ \\ / _ \\ " << std::endl;
-        std::cout << "  / ____ \\ |_| | (_| \\__ \\ |____| | | | (_| | | | | |  __/ " << std::endl;
-        std::cout << " /_/    \\_\\__|_|\\__,_|___/______|_| |_|\\__, |_|_| |_|\\___| " << std::endl;
-        std::cout << "                                        __/ |              " << std::endl;
-        std::cout << "                                       |___/               " << std::endl;
-    }
+        std::cout  << bold
+		<< "          _   _           ______             _             "		 << std::endl
+        << "     /\\  | | | |         |  ____|           (_)            "		 << std::endl
+        << "    /  \\ | |_| | __ _ ___| |__   _ __   __ _ _ _ __   ___  "		 << std::endl
+        << "   / /\\ \\| __| |/ _` / __|  __| | '_ \\ / _` | | '_ \\ / _ \\ "	 << std::endl
+        << "  / ____ \\ |_| | (_| \\__ \\ |____| | | | (_| | | | | |  __/ "		 << std::endl
+        << " /_/    \\_\\__|_|\\__,_|___/______|_| |_|\\__, |_|_| |_|\\___| "	 << std::endl
+        << "                                        __/ |              "		 << std::endl
+        << "                                       |___/               "		 << std::endl
+    	<< "By Malo DAVID - 2021" 												 << std::endl
+		<< "AtlasEngine is a game engine made for fun by a young french man in his bedroom" << std::endl
+		<< "Its name was inspired by ATLAS and P-Body from Portal2 " << bold_off << std::endl;
+	}
+
+	void printEngineCodeInfo()
+	{
+		std::cout << bold
+		<< "Language : C++ (C++17)" << std::endl
+		<< "Graphics : Vulkan, OpenGL" << std::endl
+		<< "Window : SDL2" << std::endl
+		<< "Sounds : SDL_mixer" << bold_off << std::endl;
+	}
 }

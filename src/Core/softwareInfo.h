@@ -11,6 +11,7 @@ namespace AE::Core
 {
         bool isVulkanSupported();
         void printEngineInfo();
+		void printEngineCodeInfo();
 }
 
 #endif // __SOFTWARE_INFO__
