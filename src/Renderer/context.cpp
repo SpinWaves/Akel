@@ -20,19 +20,18 @@ namespace AE
         if(GLEW_OK != GLEWerr)
             messageBox(FATAL_ERROR, "Can't init GLEW", AE_CATCH_GL_CONTEXT_CREATION);
         
-        Core::GPU* gpuinfo = new Core::GPU;
+        Core::GPU gpuinfo;
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, int(gpuinfo->getOpenGLversion())); // Init opengl with driver version
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 10 * (gpuinfo->getOpenGLversion() - int(gpuinfo->getOpenGLversion())));
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, int(gpuinfo.getOpenGLversion())); // Init opengl with driver version
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 10 * (gpuinfo.getOpenGLversion() - int(gpuinfo.getOpenGLversion())));
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-        std::cout << bg_green << "OpenGL context created successfully with version : " << gpuinfo->getOpenGLversion() << bg_def << std::endl;
-		delete gpuinfo;
+        std::cout << bg_green << "OpenGL context created successfully with version : " << gpuinfo.getOpenGLversion() << bg_def << std::endl;
     }
-    void Context::SwapBuffers()
-    {
-        clearRendering();
-    }
+	void Context::setVerticalSync(bool enabled)
+	{
+		SDL_GL_SetSwapInterval(enabled);
+	}
     void Context::clearRendering()
     {
 		SDL_GL_MakeCurrent(_window, _glcontext);
