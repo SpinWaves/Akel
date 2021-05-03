@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/04/2021
-// UPDATED : 12/04/2021
+// UPDATED : 03/05/2021
 
 #ifndef __CONTEXT__
 #define __CONTEXT__
@@ -17,7 +17,6 @@ namespace AE
             Context();
 
             void init(SDL_Window* window);
-            void SwapBuffers();
             void setVerticalSync(bool enabled);
             void clearRendering();
             bool isCreated();

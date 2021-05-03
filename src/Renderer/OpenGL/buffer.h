@@ -1,12 +1,13 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 30/04/2021
+// UPDATED : 03/05/2021
 
 #ifndef __BUFFER__
 #define __BUFFER__
 
 #include <AEpch.h>
 #include <Utils/utils.h>
+#include <Platform/platform.h>
 
 namespace AE::GL
 {
@@ -23,16 +24,15 @@ namespace AE::GL
 			template <typename T = float>
             void pushData(int start, std::vector<T> &data)
 			{
-				if(glIsBuffer(_buffer) == GL_TRUE)
-					glBufferSubData(_type, start, data.size(), data.data());
-		    }
+				glBufferSubData(_type, start, data.size(), data.data());
+			}
            
 		   void deleteBuffer();
 
-            virtual ~Buffer();
+           virtual ~Buffer();
 
         private:
-            GLuint _buffer = 0;
+            GLuint _buffer = NULL;
             GLenum _type;
     };
 }
