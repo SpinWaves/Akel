@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 30/04/2021
-// UPDATED : 30/04/2021
+// UPDATED : 04/05/2021
 
 #include <Renderer/renderer.h>
 
@@ -20,7 +20,7 @@ namespace AE::GL
 		//  v2------v3
 
 		// vertex position array
-		float vertices[72] = {
+		std::array<float, 72> const vertices {
 			 1.0, 1.0, 1.0,  -1.0, 1.0, 1.0,  -1.0,-1.0, 1.0,  1.0,-1.0, 1.0, // top
 			 1.0, 1.0, 1.0,   1.0,-1.0, 1.0,   1.0,-1.0,-1.0,  1.0, 1.0,-1.0, // back
 			 1.0, 1.0, 1.0,   1.0, 1.0,-1.0,  -1.0, 1.0,-1.0, -1.0, 1.0, 1.0, // left
@@ -30,7 +30,7 @@ namespace AE::GL
 		};
 
 		// normal array
-		float normales[72] = {
+		std::array<float, 72> const normales {
 				 0, 0, 1,   0, 0, 1,   0, 0, 1,   0, 0, 1,  // top
 				 1, 0, 0,   1, 0, 0,   1, 0, 0,   1, 0, 0,  // back
 				 0, 1, 0,   0, 1, 0,   0, 1, 0,   0, 1, 0,  // left
@@ -39,7 +39,7 @@ namespace AE::GL
 				 0, 0,-1,   0, 0,-1,   0, 0,-1,   0, 0,-1   // bottom
 		};
 
-		float couleurs[] = {
+		std::array<float, 96> const couleurs {
 				 0, 1, 0, 1,   0, 1, 0, 1,   0, 1, 0, 1,   0, 1, 0, 1,  // top
 				 1, 0, 1, 1,   1, 0, 1, 1,   1, 0, 1, 1,   1, 0, 1, 1,  // back
 				 0, 0, 1, 1,   0, 0, 1, 1,   0, 0, 1, 1,   0, 0, 1, 1,  // left
@@ -50,7 +50,7 @@ namespace AE::GL
 
 		// index array for glDrawElements()
 		// A cube requires 36 indices = 6 sides * 2 tris * 3 verts
-		unsigned int indices[36] = {
+		std::array<unsigned int, 36> indices {
 			 0,  1,  2,   2,  3,  0,    // top
 			 4,  5,  6,   6,  7,  4,    // back
 			 8,  9, 10,  10, 11,  8,    // left

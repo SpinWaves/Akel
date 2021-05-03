@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 04/04/2021
+// UPDATED : 04/05/2021
 
 #ifndef __INPUT__
 #define __INPUT__
@@ -45,10 +45,10 @@ namespace AE
 
         private:
             SDL_Event evenements;
-            bool _touchesDOWN[AE_NUM_SCANCODES];
-            bool _boutonsSourisDOWN[8];
-            bool _touchesUP[AE_NUM_SCANCODES];
-            bool _boutonsSourisUP[8];
+            std::array<bool, AE_NUM_SCANCODE> _touchesDOWN;
+            std::array<bool, 8> _boutonsSourisDOWN;
+            std::array<bool, AE_NUM_SCANCODE> _touchesUP;
+            std::array<bool, 8> _boutonsSourisUP;
 
             std::string _text_input_string = " ";
 
