@@ -69,7 +69,7 @@ namespace AE::Core
         {
             if(HFS >= 11)
             {
-                for (int lvl = 0; lvl < MAX_INTEL_TOP_LVL; lvl++)
+                for(int lvl = 0; lvl < MAX_INTEL_TOP_LVL; lvl++)
                 {
                         CPUID cpuID4(0x0B, lvl);
                         uint32_t currLevel = (LVL_TYPE & cpuID4.ECX()) >> 8;

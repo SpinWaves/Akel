@@ -35,7 +35,9 @@ namespace AE
     void Context::clearRendering()
     {
 		SDL_GL_MakeCurrent(_window, _glcontext);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+     	glDepthMask(GL_TRUE);
+        glColorMask(1, 1, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(1.0, 1.0, 1.0, 1.0);
     }
     bool Context::isCreated()

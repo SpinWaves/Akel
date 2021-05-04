@@ -25,6 +25,7 @@
 // System
 #include <filesystem>
 #include <chrono>
+#include <algorithm>
 
 // Memory
 #include <string>

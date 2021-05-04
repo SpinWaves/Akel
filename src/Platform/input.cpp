@@ -56,13 +56,13 @@ namespace AE
                 break;
 
                 case SDL_MOUSEBUTTONDOWN: 
-                    _boutonSouris[1][evenements.button.button] = true;
-                    _boutonSouris[0][evenements.button.button] = false;
+                    _boutonsSouris[1][evenements.button.button] = true;
+                    _boutonsSouris[0][evenements.button.button] = false;
                 break;
 
                 case SDL_MOUSEBUTTONUP: 
-                    _boutonSouris[1][evenements.button.button] = false;
-                    _boutonSouris[0][evenements.button.button] = true;
+                    _boutonsSouris[1][evenements.button.button] = false;
+                    _boutonsSouris[0][evenements.button.button] = true;
                 break;
 
                 case SDL_TEXTINPUT: 
@@ -102,8 +102,8 @@ namespace AE
     bool Input::getInMouse(const Uint8 bouton, enum ButtonACTION type) const
     {
         if(type == DOWN) 
-            return _boutonSouris[1][bouton];
-        return _boutonSouris[0][bouton]; 
+            return _boutonsSouris[1][bouton];
+        return _boutonsSouris[0][bouton]; 
     }
 
     bool Input::getMovMouse() const
