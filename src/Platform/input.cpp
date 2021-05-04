@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 04/04/2021
+// UPDATED : 04/05/2021
 
 #include <Platform/platform.h>
 
@@ -15,13 +15,13 @@ namespace AE
 
         for(int i = 0; i < SDL_NUM_SCANCODES; i++)
         {
-            _touchesUP[i] = false;
-            _touchesDOWN[i] = false;
+            _touches[0][i] = false;
+            _touches[1][i] = false;
             if(i < 8)
-            {
-                _boutonsSourisUP[i] = false;
-                _boutonsSourisDOWN[i] = false;
-            }
+			{
+                _boutonsSouris[0][i] = false;
+                _boutonsSouris[1][i] = false;
+			}
         }
     }
 
@@ -32,9 +32,9 @@ namespace AE
 
         for(int i = 0; i < SDL_NUM_SCANCODES; i++)
         {
-            _touchesUP[i] = false;
+            _touches[0][i] = false;
             if(i < 8)
-                _boutonsSourisUP[i] = false;
+                _boutonsSouris[0][i] = false;
         }
 
         while(SDL_PollEvent(&evenements))
@@ -45,24 +45,24 @@ namespace AE
             switch(evenements.type) 
             {
                 case SDL_KEYDOWN: 
-                    _touchesDOWN[evenements.key.keysym.scancode] = true;
-                    _touchesUP[evenements.key.keysym.scancode] = false;
+                    _touches[1][evenements.key.keysym.scancode] = true;
+                    _touches[0][evenements.key.keysym.scancode] = false;
                 break;
 
 
                 case SDL_KEYUP: 
-                    _touchesDOWN[evenements.key.keysym.scancode] = false;
-                    _touchesUP[evenements.key.keysym.scancode] = true;
+                    _touches[1][evenements.key.keysym.scancode] = false;
+                    _touches[0][evenements.key.keysym.scancode] = true;
                 break;
 
                 case SDL_MOUSEBUTTONDOWN: 
-                    _boutonsSourisDOWN[evenements.button.button] = true;
-                    _boutonsSourisUP[evenements.button.button] = false;
+                    _boutonSouris[1][evenements.button.button] = true;
+                    _boutonSouris[0][evenements.button.button] = false;
                 break;
 
                 case SDL_MOUSEBUTTONUP: 
-                    _boutonsSourisDOWN[evenements.button.button] = false;
-                    _boutonsSourisUP[evenements.button.button] = true;
+                    _boutonSouris[1][evenements.button.button] = false;
+                    _boutonSouris[0][evenements.button.button] = true;
                 break;
 
                 case SDL_TEXTINPUT: 
@@ -95,15 +95,15 @@ namespace AE
     bool Input::getInKey(const SDL_Scancode touche, enum ButtonACTION type) const
     {
         if(type == DOWN)
-            return _touchesDOWN[touche];
-        return _touchesUP[touche];
+            return _touches[1][touche];
+        return _touches[0][touche];
     }
 
     bool Input::getInMouse(const Uint8 bouton, enum ButtonACTION type) const
     {
         if(type == DOWN) 
-            return _boutonsSourisDOWN[bouton];
-        return _boutonsSourisUP[bouton]; 
+            return _boutonSouris[1][bouton];
+        return _boutonSouris[0][bouton]; 
     }
 
     bool Input::getMovMouse() const

@@ -45,10 +45,8 @@ namespace AE
 
         private:
             SDL_Event evenements;
-            std::array<bool, AE_NUM_SCANCODE> _touchesDOWN;
-            std::array<bool, 8> _boutonsSourisDOWN;
-            std::array<bool, AE_NUM_SCANCODE> _touchesUP;
-            std::array<bool, 8> _boutonsSourisUP;
+            std::array<std::array<bool, 2>, AE_NUM_SCANCODES> _touches; // 0 = UP, 1 = DOWN
+            std::array<std::array<bool, 2>, 8> _boutonsSouris;		   // 0 = UP, 1 = DOWN
 
             std::string _text_input_string = " ";
 
