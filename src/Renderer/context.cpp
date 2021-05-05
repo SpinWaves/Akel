@@ -1,9 +1,10 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/04/2021
-// UPDATED : 04/05/2021
+// UPDATED : 05/05/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
+#include <Utils/utils.h>
 
 namespace AE
 {

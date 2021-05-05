@@ -17,6 +17,5 @@
 #include <Utils/consoleOut.h>
 #include <Utils/fps.h>
 #include <Utils/camera.h>
-#include <Utils/BasicShapes/OpenGL/cube.h>
 
 #endif // __UTILS__

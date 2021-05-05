@@ -9,4 +9,6 @@
 #include <Renderer/OpenGL/buffer.h>
 #include <Renderer/OpenGL/matrixes.h>
 
+#include <Renderer/OpenGL/BasicShapes/cube.h>
+
 #endif // __AE_OPENGL__

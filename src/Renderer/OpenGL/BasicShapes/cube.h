@@ -6,7 +6,7 @@
 #define __CUBE__
 
 #include <AEpch.h>
-#include <Renderer/OpenGL/OpenGL.h>
+#include <Renderer/renderer.h>
 
 namespace AE::GL
 {
