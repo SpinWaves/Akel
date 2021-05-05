@@ -1,8 +1,8 @@
 // This file is a part of AtlasEngine
 // CREATED : 30/04/2021
-// UPDATED : 04/05/2021
+// UPDATED : 05/05/2021
 
-#include <Renderer/renderer.h>
+#include <Utils/utils.h>
 
 namespace AE::GL
 {
@@ -76,7 +76,7 @@ namespace AE::GL
 
 		_nOffset = _vertices.size();
 		_cOffset = _nOffset + _normales.size();
-
+/*
 		_vbo.bindBuffer();
 		_vbo.setSize(_vertices.size() + _normales.size() + _couleurs.size());
 		_vbo.pushData(0, _vertices);
@@ -88,6 +88,34 @@ namespace AE::GL
 		_ibo.setSize(_indices.size());
 		_ibo.pushData(0, _indices);
 		_ibo.unbindBuffer();
+*/
+		if(glIsBuffer(_vboID) == GL_TRUE) glDeleteBuffers(1, &_vboID);
+		if(glIsBuffer(_iboID) == GL_TRUE) glDeleteBuffers(1, &_iboID);
+
+		// Génération de l'ID
+		glGenBuffers(1, &_vboID);
+
+		// Verrouillage du VBO
+		glBindBuffer(GL_ARRAY_BUFFER, _vboID);
+		// Allocation de la mémoire vidéo
+		glBufferData(GL_ARRAY_BUFFER, _vertices.size() + _normales.size() + _couleurs.size(), 0, GL_STATIC_DRAW);
+		// Transfert des données
+		glBufferSubData(GL_ARRAY_BUFFER, 0, _vertices.size(), &_vertices[0]);                                                                   // copy verts at offset 0
+		glBufferSubData(GL_ARRAY_BUFFER, _vertices.size(), _normales.size(), &_normales[0]);                                                   // copy norms after verts
+		glBufferSubData(GL_ARRAY_BUFFER, _vertices.size() + _normales.size(), _couleurs.size(), &_couleurs[0]);                               // copy cols after norms
+		// Déverrouillage du VBO
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glGenBuffers(1, &_iboID);
+		// Verouillage de l'IBO
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _iboID);
+		// Allocation de la mémoire vidéo
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size(), &_indices[0], GL_STATIC_DRAW);
+		// Dévérouillage de l'IBO
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		if(glIsBuffer(_vboID) != GL_TRUE || glIsBuffer(_iboID) != GL_TRUE)
+			messageBox(ERROR, "nope dude", std::string(reinterpret_cast<const char*>(glewGetErrorString(glIsBuffer(_iboID)))));
 	}
 
 	void Cube::setColor(int red, int green, int blue)
@@ -117,8 +145,11 @@ namespace AE::GL
 		glEnableVertexAttribArray(2);
 		glEnableVertexAttribArray(3);
 
-        _vbo.bindBuffer();
-		_ibo.bindBuffer();
+        //_vbo.bindBuffer();
+		//_ibo.bindBuffer();
+/*		
+		glBindBuffer(GL_ARRAY_BUFFER, _vboID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _iboID);
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
         glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)_cOffset); // Passing info to shader
@@ -127,8 +158,17 @@ namespace AE::GL
         // finally draw a cube with glDrawRangeElements()
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0);
 
-        _vbo.unbindBuffer();
-        _ibo.unbindBuffer();
+        //_vbo.unbindBuffer();
+        //_ibo.unbindBuffer();
+		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+*/
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, &_vertices[0]);
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, &_couleurs[0]);
+        glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, &_normales[0]);
+
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, &_indices[0]);
 
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);	// Disable shader's attributes
@@ -139,6 +179,10 @@ namespace AE::GL
 	{
 		_vbo.deleteBuffer();
 		_ibo.deleteBuffer();
+
+		glDeleteBuffers(1, &_vboID);
+		glDeleteBuffers(1, &_iboID);
+
 	}
 }
 

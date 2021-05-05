@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/04/2021
-// UPDATED : 29/04/2021
+// UPDATED : 05/05/2021
 
 #ifndef __UTILS__
 #define __UTILS__
@@ -15,6 +15,8 @@
 #define AE_text const char*
 
 #include <Utils/consoleOut.h>
-#include <Utils/fps.h> 
+#include <Utils/fps.h>
+#include <Utils/camera.h>
+#include <Utils/BasicShapes/OpenGL/cube.h>
 
 #endif // __UTILS__

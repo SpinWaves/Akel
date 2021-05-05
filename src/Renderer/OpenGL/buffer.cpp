@@ -1,9 +1,10 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 03/05/2021
+// UPDATED : 05/05/2021
 
 #include <Renderer/renderer.h>
 #include <Core/core.h>
+#include <Utils/utils.h>
 
 namespace AE::GL
 {

@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 03/05/2021
+// UPDATED : 04/05/2021
 
 #include <Platform/platform.h>
 
@@ -153,7 +153,7 @@ namespace AE
     }
     void Window::update()
     {
-        if(_flags & AE_WINDOW_OPENGL)
+        if(_flags & SDL_WINDOW_OPENGL)
 		{
         	SDL_GL_SwapWindow(_window);
             Context::clearRendering();

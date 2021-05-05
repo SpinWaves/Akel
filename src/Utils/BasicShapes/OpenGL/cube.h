@@ -1,12 +1,12 @@
 // This file is a part of AtlasEngine
 // CREATED : 30/04/2021
-// UPDATED : 30/04/2021
+// UPDATED : 05/05/2021
 
 #ifndef __CUBE__
 #define __CUBE__
 
 #include <AEpch.h>
-#include <Renderer/renderer.h>
+#include <Renderer/OpenGL/OpenGL.h>
 
 namespace AE::GL
 {
@@ -25,6 +25,9 @@ namespace AE::GL
 		private:
 			Buffer _vbo;
 			Buffer _ibo;
+			
+			GLuint _vboID;
+			GLuint _iboID;
 
 			int _SIZE;
 
