@@ -11,6 +11,8 @@
 
 namespace AE
 {
+	class Input;
+
 	class Camera
 	{
 		public:
