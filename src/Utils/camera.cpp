@@ -5,6 +5,10 @@
 #include <Utils/utils.h>
 #include <Renderer/renderer.h>
 
+#ifndef M_PI
+#define M_PI 3.141592653589793
+#endif
+
 namespace AE
 {
 	Camera::Camera(int pos_x, int pos_y, int pos_z)
@@ -22,17 +26,22 @@ namespace AE
 		_position.SET(pos_x, pos_y, pos_z);
 	}
 
-	void Camera::OnMouseMotion(Input &input)
-	{
-		_theta -= input.getXRel() * _sensivity;
-		_phi -= input.getYRel() * _sensivity;
-		VectorsFromAngles();
-	}
-
-
 	void Camera::update(Input &input)
 	{
 		_movement.SET(0, 0, 0);
+
+		if(_grabMouse)
+		{
+			_theta -= input.getXRel() * _sensivity;
+			_phi -= input.getYRel() * _sensivity;
+			VectorsFromAngles();
+		}
+
+		if(input.getInKey(AE_KEY_F1, UP))
+		{
+			_grabMouse = _grabMouse? SDL_FALSE : SDL_TRUE;
+			SDL_SetRelativeMouseMode(_grabMouse);
+		}
 
 		realspeed = (input.getInKey(AE_KEY_EXECUTE))? 10 * _speed : _speed;
 
@@ -41,7 +50,7 @@ namespace AE
 		if(input.getInKey(AE_KEY_A) || input.getInKey(AE_KEY_LEFT))   		_movement += _left.DirectCopy();
 		if(input.getInKey(AE_KEY_D) || input.getInKey(AE_KEY_RIGHT))  		_movement += _left.DirectCopy().NEGATE();
 		if(input.getInKey(AE_KEY_LSHIFT) || input.getInKey(AE_KEY_RSHIFT))	_movement -= _up;
-		if(input.getInKey(AE_KEY_SPACE))										_movement += _up;
+		if(input.getInKey(AE_KEY_SPACE))									_movement += _up;
 
 		Move(_movement.X, _movement.Y, _movement.Z);     //update
 	}

@@ -18,8 +18,6 @@ namespace AE
 		public:
 			Camera(int pos_x, int pos_y, int pos_z);
 
-			void OnMouseMotion(Input &input);
-
 			void update(Input &input);
 			void setPosition(int pos_x, int pos_y, int pos_z);
 
@@ -33,6 +31,8 @@ namespace AE
 			double _phi;
 
 			double realspeed;
+			
+			SDL_bool _grabMouse = SDL_FALSE;
 
 			void VectorsFromAngles();
 			void Move(double x, double y, double z);
