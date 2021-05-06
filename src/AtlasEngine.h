@@ -10,5 +10,6 @@
 #include <Maths/maths.h>
 #include <Renderer/renderer.h>
 #include <Utils/utils.h>
+#include <Modules/modules.h>
 
 #endif // __ATLAS_ENGINE__
