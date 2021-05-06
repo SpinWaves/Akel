@@ -23,5 +23,38 @@ namespace AE
 		{"/*", mtml_token::begin_long_comment},
 		{"*/", mtml_token::end_long_comment}
 	};
+
+	Token::Token(std::variant<mtml_token, std::string> value, size_t line, size_t index)
+	{
+		_value = std::move(value);
+		_line = line;
+		_index = index;
+	}
+
+	bool Token::isString()
+	{
+		return std::holds_alternative<std::string>(_value);
+	}
+	bool Token::isKeyword()
+	{	
+		return std::holds_alternative<mtml_token>(_value);
+	}
+
+	std::string getString()
+	{
+		return std::get<std::string>(_value);
+	}
+	mtml_token getReservedToken()
+	{
+		return std::get<mtml_token>(_value);
+	}
+	size_t Token::getLine()
+	{
+		return _line;
+	}
+	size_t Token::getIndex()
+	{
+		return _index;
+	}
 }
 
