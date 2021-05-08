@@ -6,15 +6,15 @@
 #define __STREAM_STACK__
 
 #include <AEpch.h>
-#include <Modules/eltm/token.h>
+#include <Modules/ELTM/token.h>
 
 namespace AE
 {
 	class StreamStack
 	{
 		public:
-			StreamStack();
 			void tokenize(const char* file);
+			Token getToken(int line, int index);
 
 		private:
 			std::vector<Token> _tokens;

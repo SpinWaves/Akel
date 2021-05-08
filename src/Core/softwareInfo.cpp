@@ -36,10 +36,10 @@ namespace AE::Core
 
 	void printEngineCodeInfo()
 	{
-		std::cout << bold
+		std::cout
 		<< "Language : C++ (C++17)" << std::endl
 		<< "Graphics : Vulkan, OpenGL" << std::endl
 		<< "Window : SDL2" << std::endl
-		<< "Sounds : SDL_mixer" << bold_off << std::endl;
+		<< "Sounds : SDL_mixer" << std::endl;
 	}
 }
