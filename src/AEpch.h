@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 04/05/2021
+// UPDATED : 07/05/2021
 
 #ifndef __AE_PCH__
 #define __AE_PCH__
@@ -32,6 +32,7 @@
 #include <map>
 #include <vector>
 #include <array>
+#include <variant>
 
 // Streams
 #include <iostream>
