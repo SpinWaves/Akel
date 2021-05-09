@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 08/05/2021
+// UPDATED : 09/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
@@ -9,7 +9,7 @@
 
 namespace AE
 {
-	enum struct eltm_token
+	enum eltm_token
 	{
 		kw_set,
 		kw_import,
@@ -27,25 +27,6 @@ namespace AE
 		assign
 	};
 
-
-	const std::map<std::string, eltm_token> keyword_token
-	{
-		{"set", eltm_token::kw_set},
-		{"=", eltm_token::assign},
-		{"get", eltm_token::kw_get},
-
-		{"import", eltm_token::kw_import},
-
-		{"begin", eltm_token::kw_begin},
-		{"end", eltm_token::kw_end},
-
-		{"module", eltm_token::kw_module},
-
-		{"//", eltm_token::basic_comment},
-		{"/*", eltm_token::begin_long_comment},
-		{"*/", eltm_token::end_long_comment}
-	};
-
 	class Token
 	{
 		public:
@@ -58,6 +39,25 @@ namespace AE
 			eltm_token getReservedToken();
 			size_t getLine();
 			size_t getIndex();
+			
+
+			static inline std::map<std::string, eltm_token> keyword_token
+			{
+				{"set", kw_set},
+				{"=", assign},
+				{"get", kw_get},
+
+				{"import", kw_import},
+
+				{"begin", kw_begin},
+				{"end", kw_end},
+
+				{"module", kw_module},
+
+				{"//", basic_comment},
+				{"/*", begin_long_comment},
+				{"*/", end_long_comment}
+			};
 
 		private:
 			std::variant<eltm_token, std::string> _value;

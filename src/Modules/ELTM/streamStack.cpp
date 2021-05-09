@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 08/05/2021
-// UPDATED : 08/05/2021
+// UPDATED : 09/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -9,9 +9,10 @@ namespace AE
 	void StreamStack::tokenize(const char* file)
 	{
 		std::string data;
+		eltm_token kw;
 		int c = 0;
-		long line_count = 0;
-		long long index_count = 0;
+		unsigned long line_count = 0;
+		unsigned long index_count = 0;
 		std::ifstream getter(file, std::ios::binary);
 		if(getter)
 		{
@@ -23,7 +24,9 @@ namespace AE
 					line_count++;
 					index_count = 0;
 				}
-				if(keyword_token.count(data))
+				if(Token::keyword_token.count(data))
+					_tokens.push_back(Token(Token::keyword_token[std::move(data)], line_count, index_count));
+				else
 					_tokens.push_back(Token(std::move(data), line_count, index_count));
 				data.clear();
 				index_count++;
@@ -31,7 +34,7 @@ namespace AE
 			getter.close();
 		}
 		else
-			std::cout << "eltm error" << std::endl;
+			std::cout << "eltm error : can't open " << file  << std::endl;
 	}
 
 	Token StreamStack::getToken(int line, int index)
