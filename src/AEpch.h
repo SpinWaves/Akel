@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 07/05/2021
+// UPDATED : 11/05/2021
 
 #ifndef __AE_PCH__
 #define __AE_PCH__
@@ -37,6 +37,7 @@
 // Streams
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 // C-libs
 #include <cstdint>

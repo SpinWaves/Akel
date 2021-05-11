@@ -14,9 +14,9 @@ There is a short example of it's use :
 
 	set YourID = your text
 	set ID2 = (this is
-			   a very
-			   very long
-			   text)
+				a very
+				very long
+				text)
 	set something = get(ID2)	// get() is used to get text from another ID
 
 	begin module moduleName
