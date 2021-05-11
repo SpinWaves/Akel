@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 09/05/2021
+// UPDATED : 11/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
@@ -24,7 +24,9 @@ namespace AE
 		end_long_comment,
 
 		kw_get,
-		assign
+		assign,
+
+		error
 	};
 
 	class Token

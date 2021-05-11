@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 06/05/2021
-// UPDATED : 08/05/2021
+// UPDATED : 11/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -24,11 +24,15 @@ namespace AE
 
 	std::string Token::getString()
 	{
-		return std::get<std::string>(_value);
+		if(isString())
+			return std::get<std::string>(_value);
+		return "Error : this token isn't a string";
 	}
 	eltm_token Token::getReservedToken()
 	{
-		return std::get<eltm_token>(_value);
+		if(isKeyword())
+			return std::get<eltm_token>(_value);
+		return error;
 	}
 	size_t Token::getLine()
 	{

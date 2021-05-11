@@ -4,33 +4,33 @@ There is a short example of it's use :
 
 ===========================================================
 
-// comment
-/*
-   Long
-   Comment
-*/
+	// comment
+	/*
+	   Long
+	   Comment
+	*/
 
-import someFile.tm
+	import someFile.tm
 
-set YourID = your text
-set ID2 = (this is
-		   a very
-		   very long
-		   text)
-set something = get(ID2)	// get() is used to get text from another ID
+	set YourID = your text
+	set ID2 = (this is
+			   a very
+			   very long
+			   text)
+	set something = get(ID2)	// get() is used to get text from another ID
 
-begin module moduleName
+	begin module moduleName
 
-	set yay = bla bla bla
-	set ouh = get(something)
+		set yay = bla bla bla
+		set ouh = get(something)
 
-end module
+	end module
 
 ============================================================
 
 In your C++ project :
 
-AE::ELTM::createContext context("file.tm');
-std::string text = context.getText("YourID"); // return "your text" in std::string
-std::cout << context.getText("moduleName.yay") << std::endl;
+	AE::ELTM::createContext context("file.tm');
+	std::string text = context.getText("YourID"); // return "your text" in std::string
+	std::cout << context.getText("moduleName.yay") << std::endl;
 

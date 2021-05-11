@@ -21,9 +21,11 @@ namespace AE
 				c = getter.peek();
 				if(c == '\n')
 				{
+					std::cout << std::endl;
 					line_count++;
 					index_count = 0;
 				}
+				std::cout << data;
 				if(Token::keyword_token.count(data))
 					_tokens.push_back(Token(Token::keyword_token[std::move(data)], line_count, index_count));
 				else
