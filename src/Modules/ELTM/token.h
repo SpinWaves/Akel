@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 11/05/2021
+// UPDATED : 12/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
@@ -42,7 +42,6 @@ namespace AE
 			size_t getLine();
 			size_t getIndex();
 			
-
 			static inline std::map<std::string, eltm_token> keyword_token
 			{
 				{"set", kw_set},
