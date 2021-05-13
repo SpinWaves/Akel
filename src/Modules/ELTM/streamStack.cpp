@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 08/05/2021
-// UPDATED : 12/05/2021
+// UPDATED : 13/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -20,6 +20,7 @@ namespace AE
 				std::istringstream iss(line);
 				while(iss >> data)
 				{
+					std::cout << data << " ";
 					if(Token::keyword_token.count(data))
 						_tokens.push_back(Token(Token::keyword_token[std::move(data)], line_count, index_count));
 					else
@@ -27,6 +28,7 @@ namespace AE
 					data.clear();
 					index_count++;
 				}
+				std::cout << std::endl;
 				line_count++;
 				index_count = 0;
 			}
@@ -38,18 +40,19 @@ namespace AE
 
 	Token StreamStack::getToken(int line, int index)
 	{
-		int returner = -1;
+		int returner = 0;
 		for(int i = 0; i < _tokens.size(); i++)
 		{
+			std::cout << _tokens[i].getLine() << "	" << _tokens[i].getIndex() << std::endl;
 			if(_tokens[i].getLine() == line && _tokens[i].getIndex() == index)
 			{
 				returner = i;
 				break;
 			}
 		}
-		if(returner > _tokens.size() || returner < 0)
+		if(returner > _tokens.size())
 		{
-			std::cout << "eltm error" << std::endl;
+			std::cout << "eltm error, out of bounds" << std::endl;
 			return Token("error", 0, 0);
 		}
 		return _tokens[returner];

@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 12/05/2021
+// UPDATED : 13/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
@@ -13,7 +13,7 @@ namespace AE
 	{
 		kw_set,
 		kw_import,
-		
+
 		kw_begin,
 		kw_end,
 		
@@ -25,7 +25,7 @@ namespace AE
 
 		kw_get,
 		assign,
-
+		
 		error
 	};
 
@@ -57,7 +57,7 @@ namespace AE
 
 				{"//", basic_comment},
 				{"/*", begin_long_comment},
-				{"*/", end_long_comment}
+				{"*/", end_long_comment},
 			};
 
 		private:

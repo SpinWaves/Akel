@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 12/05/2021
+// UPDATED : 13/05/2021
 
-#ifndef __CONTEXT__
-#define __CONTEXT__
+#ifndef __ELTM_CONTEXT__
+#define __ELTM_CONTEXT__
 
 #include <AEpch.h>
 
@@ -23,5 +23,5 @@ namespace AE
 	};
 }
 
-#endif // __CONTEXT__
+#endif // __ELTM_CONTEXT__
 
