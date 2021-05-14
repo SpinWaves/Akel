@@ -6,10 +6,12 @@
 
 namespace AE
 {
-	ELTMerrors::ELTMerrors(std::string message, size_t line)
+	ELTMerrors::ELTMerrors(std::string message, std::string file, std::string caller, size_t line)
 	{
 		_message = std::move(message);
 		_line = line;
+		_file = file;
+		_caller = caller;
 	}
 
 	const char* ELTMerrors::what()
@@ -22,24 +24,34 @@ namespace AE
 		return _line;
 	}
 
-	ELTMerrors syntax_error(std::string message, size_t line)
+	std::string ELTMerrors::file()
 	{
-		std::string _message = std::string("ELTM syntax error, line : " + std::to_string(line) + " ");
-		_message += message;
-		return ELTMerrors(std::move(_message), line);
+		return _file;
 	}
-	ELTMerrors file_not_found_error(std::string message, size_t line)
+	
+	std::string ELTMerrors::caller()
 	{
-		std::string _message = std::string("ELTM error, line : " + std::_tostring(line) + " \"");
+		return _caller;
+	}
+
+	ELTMerrors syntax_error(std::string message, std::string file, size_t line)
+	{
+		std::string _message = std::string("ELTM syntax error, file : " + file + ", line : " + std::to_string(line) + " ");
+		_message += message;
+		return ELTMerrors(std::move(_message), file, nullptr, line);
+	}
+	ELTMerrors file_not_found_error(std::string message, std::string file, size_t line)
+	{
+		std::string _message = std::string("ELTM error, file : " + file + ", line : " + std::to_string(line) +"  \"");
 		_message += message;
 		_message += "\" file not found";
-		return ELTMerrors(std::move(_message), line);
+		return ELTMerrors(std::move(_message), file, nullptr, line);
 	}
-	ELTMerrors context_error(std::string message, size_t line)
+	ELTMerrors context_error(std::string message, std::string file, std::string caller, size_t line)
 	{
-		std::string _message = std::string("ELTM context error, line : " + std::to_string(line) + ", ");
+		std::string _message = std::string("ELTM context error, file : " + file + ", line : " + std::to_string(line) + ", in function " + caller + ", ");
 		_message += message;
-		return ELTMerrors(std::move(_message), line);
+		return ELTMerrors(std::move(_message), file, caller, line);
 	}
 }
 

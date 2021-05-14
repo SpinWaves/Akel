@@ -22,13 +22,6 @@ namespace AE
 		return std::holds_alternative<eltm_token>(_value);
 	}
 
-	std::string Token::getString()
-	{
-		if(isString())
-			return std::get<std::string>(_value);
-		ELTMerrors error = context_error("token : this token is not a string", 0);
-		return error.what();
-	}
 	eltm_token Token::getReservedToken()
 	{
 		if(isKeyword())

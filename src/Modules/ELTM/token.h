@@ -1,11 +1,13 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 13/05/2021
+// UPDATED : 14/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
 
 #include <AEpch.h>
+#include <Modules/ELTM/ELTMerrors.h>
+#include <Utils/utils.h>
 
 namespace AE
 {
@@ -37,7 +39,14 @@ namespace AE
 			bool isString();
 			bool isKeyword();
 			
-			std::string getString();
+			std::string getString(std::string file, std::string caller, size_t line)
+			{
+				if(isString())
+					return std::get<std::string>(_value);
+				ELTMerrors error = context_error("token : this token is not a string", file, caller, line);
+				std::cout << red << error.what() << def << std::endl;
+				return "error";
+			}
 			eltm_token getReservedToken();
 			size_t getLine();
 			size_t getIndex();
@@ -65,6 +74,9 @@ namespace AE
 			size_t _line;
 			size_t _index;
 	};
+
+	#undef getString
+	#define getString() getString(__FILE__, __FUNCTION__, __LINE__)
 }
 
 #endif // __ELTM_TOKEN__

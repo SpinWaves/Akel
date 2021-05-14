@@ -39,13 +39,5 @@ namespace AE
 		std::cout << texts["test"] << std::endl;
 		return true;
 	}
-
-	std::string ELTMcontext::getText(std::string ID)
-	{
-		if(texts.count(ID))
-			return texts[ID];
-		ELTMerrors error = context_error("undefined ID", 0);
-		return error.what();
-	}
 }
 
