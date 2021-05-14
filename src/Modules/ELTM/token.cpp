@@ -22,12 +22,6 @@ namespace AE
 		return std::holds_alternative<eltm_token>(_value);
 	}
 
-	eltm_token Token::getReservedToken()
-	{
-		if(isKeyword())
-			return std::get<eltm_token>(_value);
-		return error;
-	}
 	size_t Token::getLine()
 	{
 		return _line;

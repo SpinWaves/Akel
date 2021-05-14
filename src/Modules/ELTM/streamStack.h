@@ -56,7 +56,6 @@ namespace AE
 				int returner = 0;
 				for(int i = 0; i < _tokens.size(); i++)
 				{
-					std::cout << _tokens[i].getLine() << "	" << _tokens[i].getIndex() << std::endl;
 					if(_tokens[i].getLine() == line && _tokens[i].getIndex() == index)
 					{
 						returner = i;

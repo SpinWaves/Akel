@@ -36,21 +36,6 @@ namespace AE
 		public:
 			Token(std::variant<eltm_token, std::string> value, size_t line, size_t index);
 
-			bool isString();
-			bool isKeyword();
-			
-			std::string getString(std::string file, std::string caller, size_t line)
-			{
-				if(isString())
-					return std::get<std::string>(_value);
-				ELTMerrors error = context_error("token : this token is not a string", file, caller, line);
-				std::cout << red << error.what() << def << std::endl;
-				return "error";
-			}
-			eltm_token getReservedToken();
-			size_t getLine();
-			size_t getIndex();
-			
 			static inline std::map<std::string, eltm_token> keyword_token
 			{
 				{"set", kw_set},
@@ -69,6 +54,28 @@ namespace AE
 				{"*/", end_long_comment},
 			};
 
+			bool isString();
+			bool isKeyword();
+			
+			std::string getString(std::string file, std::string caller, size_t line)
+			{
+				if(isString())
+					return std::get<std::string>(_value);
+				ELTMerrors error = context_error("token : this token is not a string", file, caller, line);
+				std::cout << red << error.what() << def << std::endl;
+				return "error";
+			}
+			eltm_token getReservedToken(std::string file, std::string caller, size_t line)
+			{
+				if(isKeyword())
+					return std::get<eltm_token>(_value);
+				ELTMerrors func_error = context_error("token : this token is not a reserved token", file, caller, line);
+				std::cout << red << func_error.what() << def << std::endl;
+				return error;
+			}
+			size_t getLine();
+			size_t getIndex();
+			
 		private:
 			std::variant<eltm_token, std::string> _value;
 			size_t _line;
@@ -77,6 +84,8 @@ namespace AE
 
 	#undef getString
 	#define getString() getString(__FILE__, __FUNCTION__, __LINE__)
+	#undef getReservedToken
+	#define getReservedToken() getReservedToken(__FILE__, __FUNCTION__, __LINE__)
 }
 
 #endif // __ELTM_TOKEN__
