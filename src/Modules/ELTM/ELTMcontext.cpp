@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 13/05/2021
+// UPDATED : 14/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -44,7 +44,8 @@ namespace AE
 	{
 		if(texts.count(ID))
 			return texts[ID];
-		return "Error : ID undefined";
+		ELTMerrors error = context_error("undefined ID", 0);
+		return error.what();
 	}
 }
 

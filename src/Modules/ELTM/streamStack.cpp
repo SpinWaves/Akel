@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 08/05/2021
-// UPDATED : 13/05/2021
+// UPDATED : 14/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -35,7 +35,10 @@ namespace AE
 			getter.close();
 		}
 		else
-			std::cout << "eltm error : can't open " << file  << std::endl;
+		{
+			ELTMerrors error = file_not_found_error(file, 0);
+			std::cout << error.what() << std::endl;
+		}
 	}
 
 	Token StreamStack::getToken(int line, int index)
@@ -52,8 +55,9 @@ namespace AE
 		}
 		if(returner > _tokens.size())
 		{
-			std::cout << "eltm error, out of bounds" << std::endl;
-			return Token("error", 0, 0);
+			ELTMerrors error = context_error("token getter out of bounds", 0);
+			std::cout << error.what() << std::endl;
+			return Token(error.what(), 0, 0);
 		}
 		return _tokens[returner];
 	}

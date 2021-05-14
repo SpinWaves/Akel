@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 06/05/2021
-// UPDATED : 11/05/2021
+// UPDATED : 14/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -26,7 +26,8 @@ namespace AE
 	{
 		if(isString())
 			return std::get<std::string>(_value);
-		return "Error : this token isn't a string";
+		ELTMerrors error = context_error("token : this token is not a string", 0);
+		return error.what();
 	}
 	eltm_token Token::getReservedToken()
 	{
