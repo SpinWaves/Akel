@@ -6,34 +6,35 @@
 
 namespace AE
 {
-	ELTMcontext::ELTMcontext() : stream()
+	ELTMcontext::ELTMcontext() : _stream()
 	{}
 
 	bool ELTMcontext::newContext(const char* file)
 	{
-		stream.tokenize(file);
+		_stream.tokenize(file);
 		std::string text;
-		for(int i = 0; i <= stream.getLineNumber(); i++)
+		for(int i = 0; i <= _stream.getLineNumber(); i++)
 		{
-			if(stream.getToken(i, 0).isKeyword())
+			if(_stream.getToken(i, 0).isKeyword())
 			{
-				switch(stream.getToken(i, 0).getReservedToken())
+				switch(_stream.getToken(i, 0).getReservedToken())
 				{
 					case kw_set:
 					{
-						if(stream.getToken(i, 2).getReservedToken() == assign)
+						if(_stream.getToken(i, 2).getReservedToken() == assign)
 						{
-							for(int j = 3; j <= stream.getLineIndexNumber(i); j++)
+							for(int j = 3; j <= _stream.getLineIndexNumber(i); j++)
 							{
-								text += stream.getToken(i, j).getString();
+								text += _stream.getToken(i, j).getString();
 								text += " ";
 							}
-							texts[stream.getToken(i, 1).getString()] = text;
+							_texts[_stream.getToken(i, 1).getString()] = text;
 						}
 						else
 						{
-							ELTMerrors error = syntax_error("missing \"=\" after ID declaration", file, stream.getToken(i, 0).getLine()+1);
+							ELTMerrors error = syntax_error("missing \"=\" after ID declaration", file, _stream.getToken(i, 0).getLine()+1);
 							std::cout << red << error.what() << def << std::endl;
+							_isError = true;
 							return false;
 						}
 						break;
@@ -43,6 +44,7 @@ namespace AE
 				}
 			}
 		}
+		_isError = false;
 		return true;
 	}
 }
