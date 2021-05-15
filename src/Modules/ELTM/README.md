@@ -37,3 +37,4 @@ const ele = syntaxHighlighter('AE::ELTMcontext context;
 		std::string text = context.getText("YourID"); // return "your text" in std::string
 		std::cout << context.getText("moduleName.yay") << std::endl;'
 	}, 'cpp', { ...opts, highlightMode: true });
+
