@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 07/05/2021
-// UPDATED : 14/05/2021
+// UPDATED : 15/05/2021
 
 #ifndef __STREAM_STACK__
 #define __STREAM_STACK__
@@ -18,7 +18,7 @@ namespace AE
 			{
 				std::string data;
 				std::string line;
-				unsigned long line_count = 0;
+				_lines = 0;
 				unsigned long index_count = 0;
 				std::ifstream getter(source, std::ios::binary);
 				if(getter)
@@ -30,14 +30,14 @@ namespace AE
 						{
 							std::cout << data << " ";
 							if(Token::keyword_token.count(data))
-								_tokens.push_back(Token(Token::keyword_token[std::move(data)], line_count, index_count));
+								_tokens.push_back(Token(Token::keyword_token[std::move(data)], _lines, index_count));
 							else
-								_tokens.push_back(Token(std::move(data), line_count, index_count));
+								_tokens.push_back(Token(std::move(data), _lines, index_count));
 							data.clear();
 							index_count++;
 						}
 						std::cout << std::endl;
-						line_count++;
+						_lines++;
 						index_count = 0;
 					}
 					getter.close();
@@ -73,9 +73,11 @@ namespace AE
 			
 			int getTokenNumber();
 			int getLineIndexNumber(int line);
+			int getLineNumber();
 
 		private:
 			std::vector<Token> _tokens;
+			int _lines;
 	};
 
 	#undef tokenize

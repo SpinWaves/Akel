@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 08/05/2021
-// UPDATED : 14/05/2021
+// UPDATED : 15/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -23,6 +23,11 @@ namespace AE
 	int StreamStack::getTokenNumber()
 	{
 		return _tokens.size();
+	}
+
+	int StreamStack::getLineNumber()
+	{
+		return _lines;
 	}
 }
 

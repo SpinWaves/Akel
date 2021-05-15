@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 14/05/2021
+// UPDATED : 15/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -13,30 +13,36 @@ namespace AE
 	{
 		stream.tokenize(file);
 		std::string text;
-		for(int i = 0; i < stream.getTokenNumber(); i++)
+		for(int i = 0; i <= stream.getLineNumber(); i++)
 		{
-			for(int j = 0; j < stream.getLineIndexNumber(i); j++)
+			if(stream.getToken(i, 0).isKeyword())
 			{
-				if(stream.getToken(i, j).isKeyword())
+				switch(stream.getToken(i, 0).getReservedToken())
 				{
-					switch(stream.getToken(i, j).getReservedToken())
+					case kw_set:
 					{
-						case kw_set:
-							std::cout << stream.getToken(i, stream.getLineIndexNumber(i)).getString() << std::endl;
-							for(int k = 3; k < stream.getLineIndexNumber(i); k++)
+						if(stream.getToken(i, 2).getReservedToken() == assign)
+						{
+							for(int j = 3; j <= stream.getLineIndexNumber(i); j++)
 							{
-								text.append(stream.getToken(i, k).getString());
-							//	std::cout << stream.getToken(i, k).getString() << std::endl;
+								text += stream.getToken(i, j).getString();
+								text += " ";
 							}
-							texts[stream.getToken(i, j+1).getString()] = text;
+							texts[stream.getToken(i, 1).getString()] = text;
+						}
+						else
+						{
+							ELTMerrors error = syntax_error("missing \"=\" after ID declaration", file, stream.getToken(i, 0).getLine()+1);
+							std::cout << red << error.what() << def << std::endl;
+							return false;
+						}
 						break;
-
-						default: break;
 					}
+
+					default: break;
 				}
 			}
 		}
-		std::cout << texts["test"] << std::endl;
 		return true;
 	}
 }
