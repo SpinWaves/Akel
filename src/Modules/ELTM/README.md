@@ -30,7 +30,10 @@ There is a short example of it's use :
 
 In your C++ project :
 
-	AE::ELTMcontext context("file.tm');
-	std::string text = context.getText("YourID"); // return "your text" in std::string
-	std::cout << context.getText("moduleName.yay") << std::endl;
+	AE::ELTMcontext context;
+	if(context.newContext("file.tm") == true)	// AE::ELTMcontext::newContext return true or false in case of good execution or error in your ELTM file
+	{
+		std::string text = context.getText("YourID"); // return "your text" in std::string
+		std::cout << context.getText("moduleName.yay") << std::endl;
+	}
 
