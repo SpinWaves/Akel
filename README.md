@@ -11,48 +11,50 @@ Developed mainly on Linux, AtlasEngine is, however, cross-platform and can be us
 
 * Start by clonning the repo in your project's folder `git clone https://github.com.Kbz-8/AtlasEngine`.
 * <details> <summary>Create a "premake5.lua" file in your project's directory, here's an example of what it might look like if your AtlasEnigne folder is in the same directory as your premake5.lua file: </summary>
+        
         ```lua
         
-        include "./AtlasEngine/vendor/premake/premake_customization/solution_items.lua"
+                include "./AtlasEngine/vendor/premake/premake_customization/solution_items.lua"
 
-        workspace "test"
-          startproject "AtlasEngine"
-          startproject "engineTester"
+                workspace "test"
+                  startproject "AtlasEngine"
+                  startproject "engineTester"
 
-          configurations
-          {
-            "Debug",
-            "Release"
-          }
+                  configurations
+                  {
+                    "Debug",
+                    "Release"
+                  }
 
-          solution_items ".editorconfig"
+                  solution_items ".editorconfig"
 
-          flags "MultiProcessorCompile"
-          outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+                  flags "MultiProcessorCompile"
+                  outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-        include "AtlasEngine"
+                include "AtlasEngine"
 
-        project "engineTester"
-          kind "WindowedApp"
-          language "C++"
-          cppdialect "C++17"
-          staticruntime "on"
-          icon "%{prj.location}/AtlasEngine/src/assets/logo.png"
+                project "engineTester"
+                  kind "WindowedApp"
+                  language "C++"
+                  cppdialect "C++17"
+                  staticruntime "on"
+                  icon "%{prj.location}/AtlasEngine/src/assets/logo.png"
 
-          targetdir ("%{prj.location}")
-          objdir ("%{prj.location}/bin-int/" .. outputdir)
+                  targetdir ("%{prj.location}")
+                  objdir ("%{prj.location}/bin-int/" .. outputdir)
 
-          files {"**.cpp", "**.hpp", "**.h", "**.c""}
+                  files {"**.cpp", "**.hpp", "**.h", "**.c""}
 
-          libdirs "./AtlasEngine/build/Debug-linux-"
-          links "AtlasEngine"
+                  libdirs "./AtlasEngine/build/Debug-linux-"
+                  links "AtlasEngine"
 
-          includedirs 
-          {
-            "%{prj.location}/AtlasEngine/src",
-            "%{prj.location}/AtlasEngine/libs/include"
-          }
-      ```
+                  includedirs 
+                  {
+                    "%{prj.location}/AtlasEngine/src",
+                    "%{prj.location}/AtlasEngine/libs/include"
+                  }
+        ```
+        
    </details>
 * <details> <summary>Use the "premake5" executable provided in "vendor/premake/bin" (choose carefully according to your system (32bits, 64bits)), then launch it in the same folder as your premake5.lua file with the right option depending on how you compile your project :</summary>
     
