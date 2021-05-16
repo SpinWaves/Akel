@@ -9,8 +9,8 @@ A graphical interface (like Unity or UnrealEngine) will soon be in development, 
 # Getting started
 Developed mainly on Linux, AtlasEngine is, however, cross-platform and can be used on Windows, although it has not been tested on this OS (no information about MacOS, I have to find out). It is used with Premake5. GCC 9 is required because it uses C++17 features. Dependencies are provided (SDL2, OpenGL, Vulkan, GML) with the code.
 
-* Start by clonning the repo in your project's folder 'git clone https://github.com.Kbz-8/AtlasEngine'.
-* Create a "premake5.lua" file in your project's directory, here's an example of what it might look like if your AtlasEnigne folder is in the same directory as your premake5.lua file:
+* Start by clonning the repo in your project's folder '''git clone https://github.com.Kbz-8/AtlasEngine'''.
+* <details> <summary>Create a "premake5.lua" file in your project's directory, here's an example of what it might look like if your AtlasEnigne folder is in the same directory as your premake5.lua file: </summary>
 
         include "./AtlasEngine/vendor/premake/premake_customization/solution_items.lua"
 
@@ -51,3 +51,4 @@ Developed mainly on Linux, AtlasEngine is, however, cross-platform and can be us
             "%{prj.location}/AtlasEngine/src",
             "%{prj.location}/AtlasEngine/libs/include"
           }
+   </details>
