@@ -11,7 +11,7 @@ Developed mainly on Linux, AtlasEngine is, however, cross-platform and can be us
 
 * Start by clonning the repo in your project's folder `git clone https://github.com.Kbz-8/AtlasEngine`.
 * <details> <summary>Create a "premake5.lua" file in your project's directory, here's an example of what it might look like if your AtlasEnigne folder is in the same directory as your premake5.lua file: </summary>
-    ```lua
+        ```lua
         
         include "./AtlasEngine/vendor/premake/premake_customization/solution_items.lua"
 
