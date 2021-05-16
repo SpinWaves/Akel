@@ -75,13 +75,12 @@ Developed mainly on Linux, AtlasEngine is, however, cross-platform and can be us
 * Enjoy or cry depending on if it compiles correctly or if there are 400 errors
 
 # AtlasEngine useful features
-* Text management language [ELTM] (https://github.com/Kbz-8/AtlasEngine/tree/main/src/Modules/ELTM)
+* Text management language [ELTM](https://github.com/Kbz-8/AtlasEngine/tree/main/src/Modules/ELTM)
 * Simple but efficient error management system 
 * System information retrieval
-        * CPU infos (hardware and software)
-        * GPU infos (hardware and software)
+  * CPU infos (hardware and software)
+  * GPU infos (hardware and software)
 * Rendering system with Vulkan or OpenGL (depending on what your system supports)
 
 ### Contact
 bilbo.sacquet@orange.fr
-
