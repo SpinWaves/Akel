@@ -35,4 +35,5 @@ In your C++ project :
 	{
 		std::string text = context.getText("YourID"); // return "your text" in std::string
 		std::cout << context.getText("moduleName.yay") << std::endl;
+	}
 
