@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 07/05/2021
-// UPDATED : 15/05/2021
+// UPDATED : 17/05/2021
 
 #ifndef __STREAM_STACK__
 #define __STREAM_STACK__
@@ -18,8 +18,9 @@ namespace AE
 			{
 				std::string data;
 				std::string line;
-				_lines = 0;
-				unsigned long index_count = 0;
+				std::vector<int> tempo;
+				int line_count = 0;
+				int index_count = 0;
 				std::ifstream getter(source, std::ios::binary);
 				if(getter)
 				{
@@ -28,17 +29,18 @@ namespace AE
 						std::istringstream iss(line);
 						while(iss >> data)
 						{
-							std::cout << data << " ";
 							if(Token::keyword_token.count(data))
-								_tokens.push_back(Token(Token::keyword_token[std::move(data)], _lines, index_count));
+								_tokens.push_back(Token(Token::keyword_token[std::move(data)], _lines_indexes.size(), index_count));
 							else
-								_tokens.push_back(Token(std::move(data), _lines, index_count));
+								_tokens.push_back(Token(std::move(data), _lines_indexes.size(), index_count));
 							data.clear();
 							index_count++;
+							tempo.push_back(index_count);
 						}
-						std::cout << std::endl;
-						_lines++;
+						line_count++;
+						_lines_indexes[line_count] = tempo;
 						index_count = 0;
+						tempo.clear();
 					}
 					getter.close();
 				}
@@ -77,7 +79,7 @@ namespace AE
 
 		private:
 			std::vector<Token> _tokens;
-			int _lines;
+			std::map<int, std::vector<int>> _lines_indexes;
 	};
 
 	#undef tokenize

@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 13/05/2021
-// UPDATED : 15/05/2021
+// UPDATED : 17/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -52,6 +52,11 @@ namespace AE
 		std::string _message = std::string("ELTM context error, file: " + file + ", line: " + std::to_string(line) + ", in function: " + caller + ", ");
 		_message += message;
 		return ELTMerrors(std::move(_message), file, caller, line);
+	}
+	ELTMerrors already_declared_error(std::string message, std::string file, size_t line)
+	{
+		std::string _message = std::string("ELTM error, file: " + file + ", line: " + std::to_string(line) + ", \"" + message + "\" is already declared in this scope");
+		return ELTMerrors(std::move(_message), file, "", line);
 	}
 }
 

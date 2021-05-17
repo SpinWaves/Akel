@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 15/05/2021
+// UPDATED : 17/05/2021
 
 #ifndef __ELTM_CONTEXT__
 #define __ELTM_CONTEXT__
@@ -31,12 +31,15 @@ namespace AE
 				std::cout << red << error.what() << def << std::endl;
 				return "error";
 			}
+			bool setID(int line);
 
 		private:
 			bool _isError = false;
 			std::map<std::string, std::string> _texts;
 			std::map<std::string, std::map<std::string, std::string>> _modules;
 			StreamStack _stream;
+			const char* _file;
+			std::map<std::string, ELTMcontext> _imports;
 	};
 
 	#undef getText
