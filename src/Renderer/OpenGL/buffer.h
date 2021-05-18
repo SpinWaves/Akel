@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 05/05/2021
+// UPDATED : 18/05/2021
 
 #ifndef __BUFFER__
 #define __BUFFER__
@@ -31,7 +31,7 @@ namespace AE::GL
            virtual ~Buffer();
 
         private:
-            GLuint _buffer = NULL;
+            GLuint _buffer = 0;
             GLenum _type;
     };
 }

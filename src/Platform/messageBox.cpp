@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 03/04/2021
-// UPDATED : 04/04/2021
+// UPDATED : 18/05/2021
 
 #include <Platform/platform.h>
 
@@ -8,7 +8,7 @@ namespace AE
 {
     void messageBox(enum LogType type, std::string message, std::string logReport)
     {
-        SDL_MessageBoxButtonData buttons[] = {{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "ok"}, {NULL, 0, "Plus de détails"}};
+        SDL_MessageBoxButtonData buttons[] = {{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "ok"}, {0, 0, "Plus de détails"}};
 
         const SDL_MessageBoxColorScheme colorScheme = {
             { /* .colors (.r, .g, .b) */

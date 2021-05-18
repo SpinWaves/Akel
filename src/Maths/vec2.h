@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 04/04/2021
+// UPDATED : 18/05/2021
 
 #ifndef __VEC2__
 #define __VEC2__
@@ -47,7 +47,11 @@ namespace AE::Maths
 
         Vec2 & operator*= (const T a);
         Vec2 operator* (const T a)const;
-        friend Vec2 operator* (const T a, const Vec2 & v);
+        friend Vec2 operator* (const T a, const Vec2 & v)
+		{
+			return Vec2<T>(v.X*a, v.Y*a);
+		}
+
         Vec2 & operator* (const Vec2 &v);
 
         Vec2 & operator/= (const T a);
@@ -74,7 +78,11 @@ namespace AE::Maths
 
         Vec2 SET(T x, T y);
 
-        friend std::ostream & operator<<(std::ostream& target, const Vec2& source);
+        friend std::ostream & operator<<(std::ostream& target, const Vec2& source)
+		{
+			target << source.X << ", " << source.Y;
+			return target;
+		}
 
         Vec2 NEGATE();
         Vec2 NEGATEprecisely(bool x, bool y);
@@ -217,13 +225,7 @@ namespace AE::Maths
         t *= a;
         return t;
     }
-
-    template <class T>
-    Vec2<T> operator* (const T a, const Vec2<T> & v)
-    {
-        return Vec2<T>(v.X*a, v.Y*a);
-    }
-
+    
     template <class T>
     Vec2<T> & Vec2<T>::operator* (const Vec2<T> &v)
     {
@@ -363,13 +365,6 @@ namespace AE::Maths
         Y = y;
 
         return *this;
-    }
-
-    template <class T>
-    std::ostream & operator<<(std::ostream& target, const Vec2<T>& source)
-    {
-        target << source.X << ", " << source.Y;
-        return target;
     }
 
     template <class T>

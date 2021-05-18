@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 04/04/2021
+// UPDATED : 18/05/2021
 
 #ifndef __VEC4__
 #define __VEC4__
@@ -50,7 +50,11 @@ namespace AE::Maths
 
         Vec4 & operator*= (const T a);
         Vec4 operator* (const T a)const;
-        friend Vec4 operator* (const T a,const Vec4 & v);
+        friend Vec4 operator* (const T a,const Vec4 & v)
+		{
+			return Vec4<T>(v.X*a, v.Y*a, v.Z*a, v.W*a);
+		}
+
         Vec4 & operator* (const Vec4 &v);
 
         Vec4 & operator/= (const T a);
@@ -77,7 +81,11 @@ namespace AE::Maths
 
         Vec4 SET(T x, T y, T z, T w);
 
-        friend std::ostream& operator<< <T> (std::ostream&, const Vec4&);
+        friend std::ostream& operator<<(std::ostream& target, const Vec4& source)
+		{
+        	return target << source.X << ", " << source.Y << ", " << source.Z << ", " << source.W;
+    	}
+
 
         Vec4 NEGATE();
         Vec4 NEGATEprecisely(bool x, bool y, bool z, bool w);
@@ -224,11 +232,6 @@ namespace AE::Maths
         return t;
     }
     template <class T>
-    Vec4<T> operator* (const T a, const Vec4<T>& v)
-    {
-        return Vec4<T>(v.X*a, v.Y*a, v.Z*a, v.W*a);
-    }
-    template <class T>
     Vec4<T> & Vec4<T>::operator* (const Vec4<T> &v)
     {
         X *= v.X;
@@ -368,11 +371,6 @@ namespace AE::Maths
         Z = z;
         W = w;
         return *this;
-    }
-    template <class T>
-    std::ostream& operator<<(std::ostream& target, const Vec4<T>& source)
-    {
-        return target << source.X << ", " << source.Y << ", " << source.Z << ", " << source.W;
     }
     template <class T>
     Vec4<T> Vec4<T>::NEGATE()

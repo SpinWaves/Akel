@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 07/05/2021
-// UPDATED : 17/05/2021
+// UPDATED : 18/05/2021
 
 #ifndef __STREAM_STACK__
 #define __STREAM_STACK__
@@ -18,11 +18,13 @@ namespace AE
 			{
 				std::string data;
 				std::string line;
+				_tokens.clear();
+				_lines_indexes.clear();
 				std::vector<int> tempo;
 				int line_count = 0;
 				int index_count = 0;
-				std::ifstream getter(source, std::ios::binary);
-				if(getter)
+				std::ifstream getter(source, std::ifstream::in);
+				if(getter.is_open())
 				{
 					while(std::getline(getter, line))
 					{
@@ -30,9 +32,9 @@ namespace AE
 						while(iss >> data)
 						{
 							if(Token::keyword_token.count(data))
-								_tokens.push_back(Token(Token::keyword_token[std::move(data)], _lines_indexes.size(), index_count));
+								_tokens.push_back(Token(Token::keyword_token[std::move(data)], line_count, index_count));
 							else
-								_tokens.push_back(Token(std::move(data), _lines_indexes.size(), index_count));
+								_tokens.push_back(Token(std::move(data), line_count, index_count));
 							data.clear();
 							index_count++;
 							tempo.push_back(index_count);
@@ -48,7 +50,7 @@ namespace AE
 				{
 					std::string message = source;
 					message.append(" file not found");
-					ELTMerrors error = context_error(message, file, caller, line_error);
+					ELTMerrors error = context_error(std::move(message), file, caller, line_error);
 					std::cout << red << error.what() << def << std::endl;
 				}
 			}

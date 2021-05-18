@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 17/05/2021
+// UPDATED : 18/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -92,6 +92,7 @@ namespace AE
 		{
 			for(int j = 3; j <= _stream.getLineIndexNumber(line); j++)
 			{
+				std::cout << _stream.getToken(line, j).getString() << std::endl;
 				text += _stream.getToken(line, j).getString();
 				text += " ";
 			}

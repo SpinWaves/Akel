@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 23/04/2021
+// UPDATED : 18/05/2021
 
 #include <Renderer/renderer.h>
 
@@ -31,6 +31,7 @@ namespace AE::GL
 
             default: break;
         }
+		return glm::mat4(0.0f);
     }
 
     glm::mat4 Matrixes::getCurrentMatrix()
@@ -43,6 +44,7 @@ namespace AE::GL
 
             default: break;
         }
+		return glm::mat4(0.0f);
     }
 
     void Matrixes::lookAt(float pos_x, float pos_y, float pos_z, float target_x, float target_y, float target_z, float up_x, float up_y, float up_z)
