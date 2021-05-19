@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 13/05/2021
-// UPDATED : 17/05/2021
+// UPDATED : 19/05/2021
 
 #ifndef __ELTM_ERRORS__
 #define __ELTM_ERRORS__
@@ -18,11 +18,16 @@ namespace AE
 			std::string file();
 			std::string caller();
 
+			static void activate(bool activate);
+			static bool is_active();
+
 		private:
 			size_t _line;
 			std::string _file;
 			std::string _caller;
 			std::string _message;
+
+			inline static bool _activate = true;
 	};
 
 	ELTMerrors syntax_error(std::string message, std::string file, size_t line);

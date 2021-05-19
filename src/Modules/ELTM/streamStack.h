@@ -33,9 +33,9 @@ namespace AE
 						while(iss >> data)			// get word after word of the line
 						{
 							if(Token::keyword_token.count(data))
-								tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(data)], line_count, index_count)));
+								tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(data)]));
 							else
-								tempo.push_back(std::make_pair(index_count, Token(std::move(data), line_count, index_count)));
+								tempo.push_back(std::make_pair(index_count, Token(std::move(data))));
 							data.clear();
 							index_count++;
 						}

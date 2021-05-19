@@ -16,70 +16,80 @@ namespace AE
 		std::string import_file;
 		for(int i = 0; i < _stream.getLineNumber(); i++)
 		{
-			if(_stream.getToken(i, 0).isKeyword())
+			if(!_comment)
 			{
-				switch(_stream.getToken(i, 0).getReservedToken())
+				if(_stream.getToken(i, 0).isKeyword())
 				{
-					case kw_set:
+					switch(_stream.getToken(i, 0).getReservedToken())
 					{
-						if(_stream.getToken(i, 1).isString())
+						case kw_set:
 						{
-							if(_texts.count(_stream.getToken(i, 1).getString()))
+							if(_stream.getToken(i, 1).isString())
 							{
-								ELTMerrors error = already_declared_error(_stream.getToken(i, 1).getString(), file, i + 1);
+								if(_texts.count(_stream.getToken(i, 1).getString()))
+								{
+									ELTMerrors error = already_declared_error(_stream.getToken(i, 1).getString(), file, i + 1);
+									std::cout << red << error.what() << def << std::endl;
+									_isError = true;
+									return false;
+								}
+								if(!setID(i))
+									return false;
+							}
+							else
+							{				
+								ELTMerrors error = syntax_error("ID name cannot be a keyword", file, i + 1);
 								std::cout << red << error.what() << def << std::endl;
 								_isError = true;
 								return false;
 							}
-							if(!setID(i))
-								return false;
+							break;
 						}
-						else
-						{				
-							ELTMerrors error = syntax_error("ID name cannot be a keyword", file, i + 1);
-							std::cout << red << error.what() << def << std::endl;
-							_isError = true;
-							return false;
-						}
-						break;
-					}
-					case kw_import:
-					{
-						if(_stream.getToken(i, 1).isString())
+						case kw_import:
 						{
-							ELTMcontext newFile;
-							_imports[_stream.getToken(i, 1).getString()] = newFile;
-							if(!_imports[_stream.getToken(i, 1).getString()].newContext(_stream.getToken(i, 1).getString().c_str()))
+							if(_stream.getToken(i, 1).isString())
 							{
+								ELTMcontext newFile;
+								_imports.push_back(newFile);
+								if(!_imports.back().newContext(_stream.getToken(i, 1).getString().c_str()))
+								{
+									_isError = true;
+									return false;
+								}
+							}
+							else
+							{
+								ELTMerrors error = syntax_error("file name cannot be a keyword", file, i + 1);
+								std::cout << red << error.what() << def << std::endl;
 								_isError = true;
 								return false;
 							}
+							break;
 						}
-						else
+						case basic_comment:
 						{
-							ELTMerrors error = syntax_error("file name cannot be a keyword", file, i + 1);
-							std::cout << red << error.what() << def << std::endl;
-							_isError = true;
-							return false;
+							_comment = true;	
+							break;
 						}
-						break;
-					}
 
-					default: break;
+						default: break;
+					}
+				}
+				else 
+				{
+					if(!_texts.count(_stream.getToken(i, 0).getString()))
+					{
+						ELTMerrors error = syntax_error(std::string("segmentation fault : undefined ID \"" + _stream.getToken(i, 0).getString()), file, i + 1);
+						std::cout << red << error.what() << def << std::endl;
+						_isError = true;
+						return false;
+					}
+					if(!setID(i))
+						return false;
 				}
 			}
 			else
-			{
-				if(!_texts.count(_stream.getToken(i, 0).getString()))
-				{
-					ELTMerrors error = syntax_error(std::string("segmentation fault : undefined ID \"" + _stream.getToken(i, 0).getString()), file, i + 1);
-					std::cout << red << error.what() << def << std::endl;
-					_isError = true;
-					return false;
-				}
-				if(!setID(i))
-					return false;
-			}
+				_comment = false;
 		}
 		_isError = false;
 		return true;
@@ -92,8 +102,13 @@ namespace AE
 		{
 			for(int j = 3; j < _stream.getLineIndexNumber(line); j++)
 			{
-				text += _stream.getToken(line, j).getString();
-				text += " ";
+				if(_stream.getToken(line, j).isString())
+				{
+					if(_stream.getToken(line, j).getString().find("//") != std::string::npos)
+
+					text += _stream.getToken(line, j).getString();
+					text += " ";
+				}
 			}
 			_texts[_stream.getToken(line, 1).getString()] = text;
 		}

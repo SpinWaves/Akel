@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 13/05/2021
-// UPDATED : 17/05/2021
+// UPDATED : 19/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -32,6 +32,15 @@ namespace AE
 	std::string ELTMerrors::caller()
 	{
 		return _caller;
+	}
+
+	void ELTMerrors::activate(bool activate)
+	{
+		_activate = activate;
+	}
+	bool ELTMerrors::is_active()
+	{
+		return _activate;
 	}
 
 	ELTMerrors syntax_error(std::string message, std::string file, size_t line)

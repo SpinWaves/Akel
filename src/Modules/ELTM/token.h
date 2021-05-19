@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 14/05/2021
+// UPDATED : 19/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
@@ -34,7 +34,7 @@ namespace AE
 	class Token
 	{
 		public:
-			Token(std::variant<eltm_token, std::string> value, size_t line, size_t index);
+			Token(std::variant<eltm_token, std::string> value);
 
 			static inline std::map<std::string, eltm_token> keyword_token
 			{
@@ -51,7 +51,7 @@ namespace AE
 
 				{"//", basic_comment},
 				{"/*", begin_long_comment},
-				{"*/", end_long_comment},
+				{"*/", end_long_comment}
 			};
 
 			bool isString();
@@ -61,6 +61,9 @@ namespace AE
 			{
 				if(isString())
 					return std::get<std::string>(_value);
+				if(!_activateKw)
+				{
+				}
 				ELTMerrors error = context_error("token : this token is not a string", file, caller, line);
 				std::cout << red << error.what() << def << std::endl;
 				return "error";
@@ -73,13 +76,32 @@ namespace AE
 				std::cout << red << func_error.what() << def << std::endl;
 				return error;
 			}
-			size_t getLine();
-			size_t getIndex();
+
+			static bool isKwActivate();
+			static void activateKw(bool enable = true);
 			
 		private:
 			std::variant<eltm_token, std::string> _value;
-			size_t _line;
-			size_t _index;
+
+			inline static bool _activateKw = true;
+
+			std::map<eltm_token, std::string> _keyword_token_reversed
+			{
+				{kw_set, "set"},
+				{assign, "="},
+				{kw_get, "get"},
+
+				{kw_import, "import"},
+
+				{kw_begin, "begin"},
+				{kw_end, "end"},
+
+				{kw_module, "module"},
+
+				{basic_comment, "//"},
+				{begin_long_comment, "/*"},
+				{end_long_comment, "*/"}
+			};
 	};
 
 	#undef getString

@@ -1,16 +1,14 @@
 // This file is a part of AtlasEngine
 // CREATED : 06/05/2021
-// UPDATED : 14/05/2021
+// UPDATED : 19/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
 namespace AE
 {
-	Token::Token(std::variant<eltm_token, std::string> value, size_t line, size_t index)
+	Token::Token(std::variant<eltm_token, std::string> value)
 	{
 		_value = std::move(value);
-		_line = line;
-		_index = index;
 	}
 
 	bool Token::isString()
@@ -22,13 +20,13 @@ namespace AE
 		return std::holds_alternative<eltm_token>(_value);
 	}
 
-	size_t Token::getLine()
+	bool Token::isKwActivate()
 	{
-		return _line;
+		return _activateKw;
 	}
-	size_t Token::getIndex()
+	void Token::activateKw(bool enable)
 	{
-		return _index;
+		_activateKw = enable;
 	}
 }
 
