@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 07/05/2021
-// UPDATED : 18/05/2021
+// UPDATED : 19/05/2021
 
 #ifndef __STREAM_STACK__
 #define __STREAM_STACK__
@@ -16,33 +16,36 @@ namespace AE
 		public:
 			void tokenize(const char* source, std::string file, std::string caller, size_t line_error)
 			{
+				_tokens.clear();
+
 				std::string data;
 				std::string line;
-				_tokens.clear();
-				_lines_indexes.clear();
-				std::vector<int> tempo;
 				int line_count = 0;
 				int index_count = 0;
+				std::vector<std::pair<int, Token>> tempo;
+
 				std::ifstream getter(source, std::ifstream::in);
 				if(getter.is_open())
 				{
-					while(std::getline(getter, line))
-					{
+					while(std::getline(getter, line)) // get entire line from file
+					{	
 						std::istringstream iss(line);
-						while(iss >> data)
+						while(iss >> data)			// get word after word of the line
 						{
 							if(Token::keyword_token.count(data))
-								_tokens.push_back(Token(Token::keyword_token[std::move(data)], line_count, index_count));
+								tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(data)], line_count, index_count)));
 							else
-								_tokens.push_back(Token(std::move(data), line_count, index_count));
+								tempo.push_back(std::make_pair(index_count, Token(std::move(data), line_count, index_count)));
 							data.clear();
 							index_count++;
-							tempo.push_back(index_count);
 						}
-						line_count++;
-						_lines_indexes[line_count] = tempo;
-						index_count = 0;
-						tempo.clear();
+						if(!tempo.empty())
+						{
+							_tokens[line_count] = tempo; // push tokens with indexes in _tokens at line number
+							line_count++;
+							index_count = 0;
+							tempo.clear();
+						}
 					}
 					getter.close();
 				}
@@ -57,22 +60,17 @@ namespace AE
 
 			Token getToken(int line, int index, std::string file, std::string caller, size_t line_error)
 			{
-				int returner = 0;
-				for(int i = 0; i < _tokens.size(); i++)
+				if(_tokens.count(line))
 				{
-					if(_tokens[i].getLine() == line && _tokens[i].getIndex() == index)
+					for(auto const elem : _tokens[line])	// for the std::vector, for loop is needed
 					{
-						returner = i;
-						break;
+						if(std::get<0>(elem) == index) // elem is a std::pair from the std::vector
+							return std::get<1>(elem); // return the Token from the std::pair
 					}
 				}
-				if(returner > _tokens.size())
-				{
-					ELTMerrors error = context_error("token getter out of bounds", file, caller, line_error);
-					std::cout << red << error.what() << def << std::endl;
-					return Token(error.what(), 0, 0);
-				}
-				return _tokens[returner];
+				ELTMerrors error = context_error("token getter out of bounds", file, caller, line_error);
+				std::cout << red << error.what() << def << std::endl;
+				return Token("error", 0, 0);
 			}
 			
 			int getTokenNumber();
@@ -80,8 +78,21 @@ namespace AE
 			int getLineNumber();
 
 		private:
-			std::vector<Token> _tokens;
-			std::map<int, std::vector<int>> _lines_indexes;
+			std::unordered_map<int, std::vector<std::pair<int, Token>>> _tokens;
+			/*
+				_tokens architecture :
+				line0	index0 Token
+						index1 Token
+						index2 Token
+
+				line1   index0 Token 
+						index1 Token
+				
+				line2	index0 Token
+						index1 Token
+						index2 Token
+					  ...
+			*/
 	};
 
 	#undef tokenize

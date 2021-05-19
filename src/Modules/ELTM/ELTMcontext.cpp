@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 18/05/2021
+// UPDATED : 19/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -14,7 +14,7 @@ namespace AE
 		_file = file;
 		_stream.tokenize(file);
 		std::string import_file;
-		for(int i = 0; i <= _stream.getLineNumber(); i++)
+		for(int i = 0; i < _stream.getLineNumber(); i++)
 		{
 			if(_stream.getToken(i, 0).isKeyword())
 			{
@@ -45,7 +45,7 @@ namespace AE
 					}
 					case kw_import:
 					{
-					if(_stream.getToken(i, 1).isString())
+						if(_stream.getToken(i, 1).isString())
 						{
 							ELTMcontext newFile;
 							_imports[_stream.getToken(i, 1).getString()] = newFile;
@@ -90,9 +90,8 @@ namespace AE
 		std::string text;
 		if(_stream.getToken(line, 2).getReservedToken() == assign)
 		{
-			for(int j = 3; j <= _stream.getLineIndexNumber(line); j++)
+			for(int j = 3; j < _stream.getLineIndexNumber(line); j++)
 			{
-				std::cout << _stream.getToken(line, j).getString() << std::endl;
 				text += _stream.getToken(line, j).getString();
 				text += " ";
 			}

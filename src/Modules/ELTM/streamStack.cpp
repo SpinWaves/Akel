@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 08/05/2021
-// UPDATED : 17/05/2021
+// UPDATED : 19/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -8,17 +8,22 @@ namespace AE
 {
 	int StreamStack::getLineIndexNumber(int line)
 	{
-		return _lines_indexes[line].size();
+		return _tokens[line].size();
 	}
 
 	int StreamStack::getTokenNumber()
 	{
-		return _tokens.size();
+		int returner = 0;
+		for(int i = 0; i < _tokens.size(); i++)
+		{
+			returner += _tokens[i].size();
+		}
+		return returner;
 	}
 
 	int StreamStack::getLineNumber()
 	{
-		return _lines_indexes.size();
+		return _tokens.size();
 	}
 }
 
