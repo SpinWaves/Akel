@@ -48,12 +48,18 @@ namespace AE
 
 		private:
 			bool _isError = false;
+			
 			std::map<std::string, std::string> _texts;
 			std::map<std::string, std::map<std::string, std::string>> _modules;
+			std::vector<ELTMcontext> _imports;
+			
 			StreamStack _stream;
 			const char* _file;
-			std::vector<ELTMcontext> _imports;
-			inline static std::array<bool, 2> _comments;
+
+			std::array<bool, 2> _comments;
+			size_t _last_line_long_comment = 0;
+
+			bool _long_text = false;
 	};
 
 	#undef getText

@@ -7,7 +7,10 @@
 namespace AE
 {
 	ELTMcontext::ELTMcontext() : _stream()
-	{}
+	{
+		_comments[0] = false;
+		_comments[1] = false;
+	}
 
 	bool ELTMcontext::newContext(const char* file)
 	{
@@ -67,7 +70,10 @@ namespace AE
 							break;
 						}
 						case basic_comment: _comments[0] = true; break;
-						case begin_long_comment: _comments[1] = true; break;
+						case begin_long_comment: _comments[1] = true; _last_line_long_comment = i;  break;
+						
+						case begin_long_text: _long_text = true; break;
+						case end_long_text: _long_text = false; break;
 
 						default: break;
 					}
@@ -97,6 +103,11 @@ namespace AE
 			}
 
 		}
+		if(_comments[1])
+		{
+			ELTMwarning warning = no_end("long comment (/*)", file, _last_line_long_comment);
+			std::cout << magenta << warning.what() << def << std::endl;
+		}
 		_isError = false;
 		return true;
 	}
@@ -110,6 +121,8 @@ namespace AE
 			Token::activateKw(false);
 			for(int j = 3; j < _stream.getLineIndexNumber(line); j++)
 			{
+							/* ============ Comment management ============ */
+				// Check comment keywords that are lonely
 				if(_stream.getToken(line, j).getString() == "___ELTM_TOKEN_COMMENT_BASIC_CODE___")
 					_comments[0] = true;
 				if(_stream.getToken(line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_BEGIN_CODE___")
@@ -118,6 +131,8 @@ namespace AE
 				if(!_comments[0] && !_comments[1])
 				{
 					text += _stream.getToken(line, j).getString();
+
+					// Check comment keywords that are inside words (bla bla//comment) for example
 					if((found = text.find("//")) != std::string::npos)
 					{
 						text.erase(found, text.size());
@@ -126,19 +141,18 @@ namespace AE
 					if((found = text.find("/*")) != std::string::npos)
 					{
 						if(text.find("*/") != std::string::npos)
-							text.erase(found, text.find("*/"));
+							text.erase(found, text.find("*/")); // No need to set _comment[1] to false because it wasn't turned to true
 						else
 						{
 							text.erase(found, text.size());
 							_comments[1] = true;
+							_last_line_long_comment = line;
 						}
 					}
 					text += " ";
 				}
-				if(_stream.getToken(line, j).getString().find("*/") != std::string::npos && _comments[1])
-						_comments[1] = false;
-
-				if(_stream.getToken(line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_END_CODE___")
+				// Check end long comment keywords that are lonely and thoses inside words
+				if(_stream.getToken(line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_END_CODE___" || _stream.getToken(line, j).getString().find("*/") != std::string::npos && _comments[1])
 					_comments[1] = false;
 			}
 			_texts[_stream.getToken(line, 1).getString()] = text;

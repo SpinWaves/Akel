@@ -27,6 +27,9 @@ namespace AE
 
 		kw_get,
 		assign,
+
+		begin_long_text,
+		end_long_text,
 		
 		error
 	};
@@ -51,7 +54,9 @@ namespace AE
 
 				{"//", basic_comment},
 				{"/*", begin_long_comment},
-				{"*/", end_long_comment}
+				{"*/", end_long_comment},
+				{"(", begin_long_text},
+				{")", end_long_text}
 			};
 
 			bool isString();
@@ -62,21 +67,16 @@ namespace AE
 				if(isString())
 					return std::get<std::string>(_value);
 
-				// Comments management 
+				// Comment management
 				switch(std::get<eltm_token>(_value))
 				{
-					case basic_comment:
-						return "___ELTM_TOKEN_COMMENT_BASIC_CODE___";
-
-					case begin_long_comment:
-						return "___ELTM_TOKEN_COMMENT_LONG_BEGIN_CODE___";
-
-					case end_long_comment:
-						return "___ELTM_TOKEN_COMMENT_LONG_END_CODE___";
+					case basic_comment: return "___ELTM_TOKEN_COMMENT_BASIC_CODE___";
+					case begin_long_comment: return "___ELTM_TOKEN_COMMENT_LONG_BEGIN_CODE___";
+					case end_long_comment: return "___ELTM_TOKEN_COMMENT_LONG_END_CODE___";
 
 					default: break;
 				}
-				
+
 				if(!_activateKw)
 					return _keyword_token_reversed[std::get<eltm_token>(_value)];
 
