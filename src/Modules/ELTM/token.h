@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 19/05/2021
+// UPDATED : 20/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
@@ -61,9 +61,25 @@ namespace AE
 			{
 				if(isString())
 					return std::get<std::string>(_value);
-				if(!_activateKw)
+
+				// Comments management 
+				switch(std::get<eltm_token>(_value))
 				{
+					case basic_comment:
+						return "___ELTM_TOKEN_COMMENT_BASIC_CODE___";
+
+					case begin_long_comment:
+						return "___ELTM_TOKEN_COMMENT_LONG_BEGIN_CODE___";
+
+					case end_long_comment:
+						return "___ELTM_TOKEN_COMMENT_LONG_END_CODE___";
+
+					default: break;
 				}
+				
+				if(!_activateKw)
+					return _keyword_token_reversed[std::get<eltm_token>(_value)];
+
 				ELTMerrors error = context_error("token : this token is not a string", file, caller, line);
 				std::cout << red << error.what() << def << std::endl;
 				return "error";
@@ -88,7 +104,6 @@ namespace AE
 			std::map<eltm_token, std::string> _keyword_token_reversed
 			{
 				{kw_set, "set"},
-				{assign, "="},
 				{kw_get, "get"},
 
 				{kw_import, "import"},
@@ -97,10 +112,6 @@ namespace AE
 				{kw_end, "end"},
 
 				{kw_module, "module"},
-
-				{basic_comment, "//"},
-				{begin_long_comment, "/*"},
-				{end_long_comment, "*/"}
 			};
 	};
 

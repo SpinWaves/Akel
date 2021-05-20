@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 07/05/2021
-// UPDATED : 19/05/2021
+// UPDATED : 20/05/2021
 
 #ifndef __STREAM_STACK__
 #define __STREAM_STACK__
@@ -33,7 +33,7 @@ namespace AE
 						while(iss >> data)			// get word after word of the line
 						{
 							if(Token::keyword_token.count(data))
-								tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(data)]));
+								tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(data)])));
 							else
 								tempo.push_back(std::make_pair(index_count, Token(std::move(data))));
 							data.clear();
@@ -70,7 +70,7 @@ namespace AE
 				}
 				ELTMerrors error = context_error("token getter out of bounds", file, caller, line_error);
 				std::cout << red << error.what() << def << std::endl;
-				return Token("error", 0, 0);
+				return Token("error");
 			}
 			
 			int getTokenNumber();

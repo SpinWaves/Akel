@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 19/05/2021
+// UPDATED : 20/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -16,7 +16,7 @@ namespace AE
 		std::string import_file;
 		for(int i = 0; i < _stream.getLineNumber(); i++)
 		{
-			if(!_comment)
+			if(!_comments[0] && !_comments[1])
 			{
 				if(_stream.getToken(i, 0).isKeyword())
 				{
@@ -66,11 +66,8 @@ namespace AE
 							}
 							break;
 						}
-						case basic_comment:
-						{
-							_comment = true;	
-							break;
-						}
+						case basic_comment: _comments[0] = true; break;
+						case begin_long_comment: _comments[1] = true; break;
 
 						default: break;
 					}
@@ -88,8 +85,17 @@ namespace AE
 						return false;
 				}
 			}
-			else
-				_comment = false;
+			if(_comments[0])
+				_comments[0] = false;
+			if(_comments[1])
+			{
+				if(_stream.getToken(i, 0).isKeyword())
+				{
+					if(_stream.getToken(i, 0).getReservedToken() == end_long_comment)
+						_comments[1] = false;
+				}
+			}
+
 		}
 		_isError = false;
 		return true;
@@ -98,19 +104,45 @@ namespace AE
 	bool ELTMcontext::setID(int line)
 	{
 		std::string text;
+		size_t found;
 		if(_stream.getToken(line, 2).getReservedToken() == assign)
 		{
+			Token::activateKw(false);
 			for(int j = 3; j < _stream.getLineIndexNumber(line); j++)
 			{
-				if(_stream.getToken(line, j).isString())
-				{
-					if(_stream.getToken(line, j).getString().find("//") != std::string::npos)
+				if(_stream.getToken(line, j).getString() == "___ELTM_TOKEN_COMMENT_BASIC_CODE___")
+					_comments[0] = true;
+				if(_stream.getToken(line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_BEGIN_CODE___")
+					_comments[1] = true;
 
+				if(!_comments[0] && !_comments[1])
+				{
 					text += _stream.getToken(line, j).getString();
+					if((found = text.find("//")) != std::string::npos)
+					{
+						text.erase(found, text.size());
+						_comments[0] = true;
+					}
+					if((found = text.find("/*")) != std::string::npos)
+					{
+						if(text.find("*/") != std::string::npos)
+							text.erase(found, text.find("*/"));
+						else
+						{
+							text.erase(found, text.size());
+							_comments[1] = true;
+						}
+					}
 					text += " ";
 				}
+				if(_stream.getToken(line, j).getString().find("*/") != std::string::npos && _comments[1])
+						_comments[1] = false;
+
+				if(_stream.getToken(line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_END_CODE___")
+					_comments[1] = false;
 			}
 			_texts[_stream.getToken(line, 1).getString()] = text;
+			Token::activateKw();
 		}
 		else
 		{

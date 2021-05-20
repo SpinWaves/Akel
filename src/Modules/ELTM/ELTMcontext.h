@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 19/05/2021
+// UPDATED : 20/05/2021
 
 #ifndef __ELTM_CONTEXT__
 #define __ELTM_CONTEXT__
@@ -53,7 +53,7 @@ namespace AE
 			StreamStack _stream;
 			const char* _file;
 			std::vector<ELTMcontext> _imports;
-			bool _comment = false;
+			inline static std::array<bool, 2> _comments;
 	};
 
 	#undef getText
