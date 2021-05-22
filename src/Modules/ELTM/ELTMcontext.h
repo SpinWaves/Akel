@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 20/05/2021
+// UPDATED : 21/05/2021
 
 #ifndef __ELTM_CONTEXT__
 #define __ELTM_CONTEXT__
@@ -44,7 +44,7 @@ namespace AE
 				}
 				return "error";
 			}
-			bool setID(int line);
+			bool setID();
 
 		private:
 			bool _isError = false;
@@ -59,7 +59,8 @@ namespace AE
 			std::array<bool, 2> _comments;
 			size_t _last_line_long_comment = 0;
 
-			bool _long_text = false;
+			size_t _long_text = 0;
+			size_t _line = 0;
 	};
 
 	#undef getText
