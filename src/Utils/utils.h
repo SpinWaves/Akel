@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/04/2021
-// UPDATED : 05/05/2021
+// UPDATED : 23/05/2021
 
 #ifndef __UTILS__
 #define __UTILS__
@@ -17,5 +17,7 @@
 #include <Utils/consoleOut.h>
 #include <Utils/fps.h>
 #include <Utils/camera.h>
+
+#include <Utils/Containers/containers.h>
 
 #endif // __UTILS__

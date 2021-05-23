@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 07/05/2021
-// UPDATED : 20/05/2021
+// UPDATED : 23/05/2021
 
 #ifndef __STREAM_STACK__
 #define __STREAM_STACK__
@@ -19,9 +19,11 @@ namespace AE
 				_tokens.clear();
 
 				std::string data;
+				std::string subData;
 				std::string line;
 				int line_count = 0;
 				int index_count = 0;
+				size_t found = 0;
 				std::vector<std::pair<int, Token>> tempo;
 
 				std::ifstream getter(source, std::ifstream::in);
@@ -30,13 +32,25 @@ namespace AE
 					while(std::getline(getter, line)) // get entire line from file
 					{	
 						std::istringstream iss(line);
-						while(iss >> data)			// get word after word of the line
+						while(iss >> data)			// get word after word from the line
 						{
-							if(Token::keyword_token.count(data))
+							/*for(auto const elem : Token::keyword_token)
+							{
+								if((found = data.find(elem) != std::string::npos)
+								{
+									subData = data;
+									if(found == 0)
+									{
+										subData.erase(subData.begin() + found, subData.end());
+										tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(subData)])));
+										index_count++;
+									}
+								}
+							}*/
+							if(Token::keyword_token.have(data))
 								tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(data)])));
 							else
 								tempo.push_back(std::make_pair(index_count, Token(std::move(data))));
-							data.clear();
 							index_count++;
 						}
 						if(!tempo.empty())

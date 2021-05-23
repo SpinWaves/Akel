@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 22/05/2021
+// UPDATED : 23/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -126,9 +126,10 @@ namespace AE
 
 		if(_stream.getToken(_line, 2).getReservedToken() == assign)
 		{
+			int currentLine = _line;
 			Token::activateKw(false);
 			
-			for(; long_text && _line < _stream.getLineNumber(); _line++)
+			for(;_line < _stream.getLineNumber(); _line++)
 			{
 				for(int j = 3; j < _stream.getLineIndexNumber(_line); j++)
 				{
@@ -167,6 +168,7 @@ namespace AE
 						if(text.find("(") != std::string::npos)
 							long_text = true;
 						text += " ";
+						std::cout << long_text << std::endl;
 					}
 					// Check end long comment keywords that are lonely and thoses inside words
 					if((_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_END_CODE___" || _stream.getToken(_line, j).getString().find("*/") != std::string::npos) && _comments[1])
@@ -175,8 +177,10 @@ namespace AE
 					if((_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_LONG_TEXT_END_CODE___" || _stream.getToken(_line, j).getString().find(")") != std::string::npos) && long_text)
 						long_text = false;
 				}
+				if(!long_text)
+					break;
 			}
-			_texts[_stream.getToken(_line, 1).getString()] = text;
+			_texts[_stream.getToken(currentLine, 1).getString()] = text;
 			Token::activateKw();
 		}
 		else
