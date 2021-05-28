@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 23/05/2021
+// UPDATED : 27/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -80,7 +80,7 @@ namespace AE
 				else 
 				{
 					Token::activateKw(false); 
-					if(_stream.getToken(_line, 0).getString().find("//") != std::string::npos)
+					if(_stream.getToken(_line, 0).getString() == "___ELTM_TOKEN_COMMENT_BASIC_CODE___")
 					{
 						_comments[0] = true;
 						Token::activateKw();
@@ -133,7 +133,6 @@ namespace AE
 			{
 				for(int j = 3; j < _stream.getLineIndexNumber(_line); j++)
 				{
-					// Check comment keywords that are lonely
 					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_BASIC_CODE___")
 						_comments[0] = true;
 					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_BEGIN_CODE___")
@@ -142,39 +141,15 @@ namespace AE
 					if(_stream.getToken(_line, 3).getString() == "___ELTM_TOKEN_LONG_TEXT_BEGIN_CODE___")
 						long_text = true;
 
-
 					if(!_comments[0] && !_comments[1])
 					{
 						text += _stream.getToken(_line, j).getString();
-
-						// Check comment keywords that are inside words (bla bla//comment) for example
-						if((found = text.find("//")) != std::string::npos)
-						{
-							text.erase(found, text.size());
-							_comments[0] = true;
-						}
-						if((found = text.find("/*")) != std::string::npos)
-						{
-							if(text.find("*/") != std::string::npos)
-								text.erase(found, text.find("*/")); // No need to set _comment[1] to false because it wasn't turned to true
-							else
-							{
-								text.erase(found, text.size());
-								_comments[1] = true;
-								_last_line_long_comment = _line;
-							}
-						}
-
-						if(text.find("(") != std::string::npos)
-							long_text = true;
 						text += " ";
-						std::cout << long_text << std::endl;
 					}
-					// Check end long comment keywords that are lonely and thoses inside words
-					if((_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_END_CODE___" || _stream.getToken(_line, j).getString().find("*/") != std::string::npos) && _comments[1])
+					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_END_CODE___" && _comments[1])
 						_comments[1] = false;
 
-					if((_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_LONG_TEXT_END_CODE___" || _stream.getToken(_line, j).getString().find(")") != std::string::npos) && long_text)
+					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_LONG_TEXT_END_CODE___" && long_text)
 						long_text = false;
 				}
 				if(!long_text)

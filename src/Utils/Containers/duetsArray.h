@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 23/05/2021
-// UPDATED : 24/05/2021
+// UPDATED : 27/05/2021
 
 #ifndef __DUETS_ARRAY__
 #define __DUETS_ARRAY__
@@ -21,10 +21,11 @@ namespace AE
 
 	default_t const DEFAULT = default_t(); // universal default value (int thing = DEFAULT;, std::vector<std::string> other = DEFAULT;)
 
+
 	template <typename __first, typename __second>
 	class duets_array
 	{
-		typedef std::pair<__first, __second> __type;
+		using __type = std::pair<__first, __second>;
 		#define __mv std::move
 
 		public:
@@ -62,6 +63,12 @@ namespace AE
 						return _array[i].first;
 				}
 				return _fDefault;
+			}
+			constexpr const __type& operator[](int index) noexcept
+			{
+				if(index < _array.size())
+						return _array[index];
+				return _dDefault;
 			}
 			constexpr const __second& at(__first duet) noexcept
 			{
@@ -130,10 +137,20 @@ namespace AE
 				return false;
 			}
 
+			friend std::ostream& operator<<(std::ostream& target, const duets_array& source)
+			{
+				for(int i = 0; i < source.size(); i++)
+				{
+					target << source[i].first << "	" << source[i].second << std::endl;;
+				}
+				return target;
+			}
+
 		private:
 			std::vector<__type> _array;
 			const __first _fDefault = DEFAULT;
 			const __second _sDefault = DEFAULT;
+			const __type _dDefault = DEFAULT;
 	};
 }
 

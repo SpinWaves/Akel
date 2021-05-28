@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 19/05/2021
+// UPDATED : 26/05/2021
 
 #ifndef __AE_PCH__
 #define __AE_PCH__
@@ -35,6 +35,7 @@
 #include <variant>
 #include <unordered_map>
 #include <memory> // std::shared_ptr
+#include <initializer_list>
 
 // Streams
 #include <iostream>

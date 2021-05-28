@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 07/05/2021
-// UPDATED : 23/05/2021
+// UPDATED : 27/05/2021
 
 #ifndef __STREAM_STACK__
 #define __STREAM_STACK__
@@ -30,23 +30,20 @@ namespace AE
 				if(getter.is_open())
 				{
 					while(std::getline(getter, line)) // get entire line from file
-					{	
-						std::istringstream iss(line);
+					{
+						// Check for keywords that are inside words (like : set test=bla bla bla)
+						subData = line;
+						for(int i = 0; i < Token::mixable_keywords_token.size(); i++)
+						{
+							if((found = subData.find(Token::mixable_keywords_token[i].second)) != std::string::npos)
+							{
+								subData.insert(subData.begin() + found + Token::mixable_keywords_token[i].second.length(), ' ');
+								subData.insert(subData.begin() + found, ' ');
+							}
+						}
+						std::istringstream iss(subData);
 						while(iss >> data)			// get word after word from the line
 						{
-							/*for(auto const elem : Token::keyword_token)
-							{
-								if((found = data.find(elem) != std::string::npos)
-								{
-									subData = data;
-									if(found == 0)
-									{
-										subData.erase(subData.begin() + found, subData.end());
-										tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(subData)])));
-										index_count++;
-									}
-								}
-							}*/
 							if(Token::keyword_token.have(data))
 								tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(data)])));
 							else

@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 23/05/2021
+// UPDATED : 24/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
@@ -52,6 +52,17 @@ namespace AE
 
 				{kw_module, "module"},
 
+				{basic_comment, "//"},
+				{begin_long_comment, "/*"},
+				{end_long_comment, "*/"},
+				{begin_long_text, "("},
+				{end_long_text, ")"}
+			};
+
+			static inline duets_array<eltm_token, std::string> mixable_keywords_token
+			{
+				{kw_get, "get"},
+				{assign, "="},
 				{basic_comment, "//"},
 				{begin_long_comment, "/*"},
 				{end_long_comment, "*/"},
