@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 28/05/2021
+// UPDATED : 29/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -54,13 +54,14 @@ namespace AE
 						{
 							if(_stream.getToken(_line, 1).isString())
 							{
-								ELTMcontext newFile;
-								_imports.push_back(newFile);
-								if(!_imports.back().newContext(_stream.getToken(_line, 1).getString().c_str()))
+								int currentLine = _line;
+								if(!newContext(_stream.getToken(_line, 1).getString().c_str()))
 								{
 									_isError = true;
 									return false;
 								}
+								_file = file;
+								_line = currentLine;
 							}
 							else
 							{
@@ -88,7 +89,7 @@ namespace AE
 					else if(!_texts.count(_stream.getToken(_line, 0).getString()))
 					{
 						Token::activateKw();
-						ELTMerrors error = syntax_error(std::string("segmentation fault : undefined ID or keyword \"" + _stream.getToken(_line, 0).getString() + "\""), file, _line + 1);
+						ELTMerrors error = simple_error(std::string("undefined ID or keyword \"" + _stream.getToken(_line, 0).getString() + "\""), file, _line + 1);
 						std::cout << red << error.what() << def << std::endl;
 						_isError = true;
 						return false;
@@ -124,6 +125,8 @@ namespace AE
 		size_t found;
 		bool long_text = false;
 		int assignPos = 0;
+		bool getText = false;
+
 		if(isNewID)
 			assignPos = 2;
 		else
@@ -140,15 +143,18 @@ namespace AE
 				for(;j < _stream.getLineIndexNumber(_line); j++)
 				{
 					// Comment check
-					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_BASIC_CODE___")
+					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[basic_comment])
 						_comments[0] = true;
-					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_BEGIN_CODE___")
+					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[begin_long_comment])
 						_comments[1] = true;
-					
+
 					if(!_comments[0] && !_comments[1])
 					{
+						if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[kw_get] && _stream.getToken(_line, j+1).getString() == Token::mixable_keywords_token[begin_long_text])
+							getText = true;
+
 						// Long text begin check
-						if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_LONG_TEXT_BEGIN_CODE___")
+						if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[begin_long_text] && !getText)
 						{
 							if(j != assignPos + 1)
 							{
@@ -160,16 +166,43 @@ namespace AE
 							else
 								long_text = true;
 						}
-						else if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_LONG_TEXT_END_CODE___" && long_text) // Check for long text end
+						else if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[end_long_text] && long_text) // Check for long text end
 							long_text = false;
 						else
 						{
-							text += _stream.getToken(_line, j).getString();
-							text += " ";
+							if(getText)
+							{
+								if(_stream.getToken(_line, j + 3).getString() == Token::mixable_keywords_token[end_long_text])
+								{
+									if(_texts.count(_stream.getToken(_line, j + 2).getString()))
+									{
+										text = _texts[_stream.getToken(_line, j + 2).getString()];
+										break;
+									}
+
+									ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
+									std::cout << red << error.what() << def << std::endl;
+									_isError = true;
+									return false;
+								}
+								else
+								{
+									ELTMerrors error = simple_error("get ID begun without end", _file, _line + 1);
+									std::cout << red << error.what() << def << std::endl;
+									_isError = true;
+									return false;
+								}
+							}
+							else
+							{
+								// Get text needed
+								text += _stream.getToken(_line, j).getString();
+								text += " ";
+							}
 						}
 					}
 
-					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_END_CODE___" && _comments[1])
+					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[end_long_comment] && _comments[1])
 						_comments[1] = false;
 				}
 
@@ -192,6 +225,10 @@ namespace AE
 			std::cout << red << error.what() << def << std::endl;
 			_isError = true;
 			return false;
+		}
+		for(auto elem : _texts)
+		{
+			std::cout << elem.first << "	" << elem.second << std::endl;
 		}
 		return true;
 	}

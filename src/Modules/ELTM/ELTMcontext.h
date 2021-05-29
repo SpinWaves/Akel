@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 28/05/2021
+// UPDATED : 29/05/2021
 
 #ifndef __ELTM_CONTEXT__
 #define __ELTM_CONTEXT__
@@ -27,21 +27,9 @@ namespace AE
 
 				if(_texts.count(ID))
 					return _texts[ID];
-				for(ELTMcontext& elem : _imports)
-				{
-					ELTMerrors::activate(false);
-					if(elem.getText(ID, __LINE__, __FILE__, __FUNCTION__) != "error")
-					{
-						ELTMerrors::activate(true);
-						return elem.getText(ID, __LINE__, __FILE__, __FUNCTION__);
-					}
-					ELTMerrors::activate(true);
-				}
-				if(ELTMerrors::is_active())
-				{
-					ELTMerrors error = context_error(std::string("undefined ID : " + ID), file, function, line);
-					std::cout << red << error.what() << def << std::endl;
-				}
+				
+				ELTMerrors error = context_error(std::string("undefined ID : " + ID), file, function, line);
+				std::cout << red << error.what() << def << std::endl;
 				return "error";
 			}
 
@@ -52,7 +40,6 @@ namespace AE
 			
 			std::map<std::string, std::string> _texts;
 			std::map<std::string, std::map<std::string, std::string>> _modules;
-			std::vector<ELTMcontext> _imports;
 			
 			StreamStack _stream;
 			const char* _file;

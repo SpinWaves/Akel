@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 13/05/2021
-// UPDATED : 19/05/2021
+// UPDATED : 29/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -43,6 +43,12 @@ namespace AE
 		return _activate;
 	}
 
+	ELTMerrors simple_error(std::string message, std::string file, size_t line)
+	{
+		std::string _message = std::string("ELTM error, file: " + file + ", line: " + std::to_string(line) + ", ");
+		_message += message;
+		return ELTMerrors(std::move(_message), file, "", line);
+	}
 	ELTMerrors syntax_error(std::string message, std::string file, size_t line)
 	{
 		std::string _message = std::string("ELTM syntax error, file: " + file + ", line: " + std::to_string(line) + ", ");
