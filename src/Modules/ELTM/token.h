@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 24/05/2021
+// UPDATED : 28/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
@@ -78,10 +78,11 @@ namespace AE
 				if(isString())
 					return std::get<std::string>(_value);
 
-				// Comment management
 				switch(std::get<eltm_token>(_value))
 				{
+					// Comment management
 					case basic_comment: return "___ELTM_TOKEN_COMMENT_BASIC_CODE___";
+
 					case begin_long_comment: return "___ELTM_TOKEN_COMMENT_LONG_BEGIN_CODE___";
 					case end_long_comment: return "___ELTM_TOKEN_COMMENT_LONG_END_CODE___";
 

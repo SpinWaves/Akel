@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 27/05/2021
+// UPDATED : 28/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -38,7 +38,7 @@ namespace AE
 									_isError = true;
 									return false;
 								}
-								if(!setID())
+								if(!setID(true))
 									return false;
 							}
 							else
@@ -93,7 +93,7 @@ namespace AE
 						_isError = true;
 						return false;
 					}
-					if(!setID())
+					if(!setID(false))
 						return false;
 				}
 			}
@@ -118,45 +118,73 @@ namespace AE
 		return true;
 	}
 
-	bool ELTMcontext::setID()
+	bool ELTMcontext::setID(bool isNewID)
 	{
 		std::string text;
 		size_t found;
 		bool long_text = false;
+		int assignPos = 0;
+		if(isNewID)
+			assignPos = 2;
+		else
+			assignPos = 1;
+		int j = assignPos + 1;
 
-		if(_stream.getToken(_line, 2).getReservedToken() == assign)
+		if(_stream.getToken(_line, assignPos).getReservedToken() == assign)
 		{
 			int currentLine = _line;
 			Token::activateKw(false);
 			
-			for(;_line < _stream.getLineNumber(); _line++)
+			while(_line < _stream.getLineNumber())
 			{
-				for(int j = 3; j < _stream.getLineIndexNumber(_line); j++)
+				for(;j < _stream.getLineIndexNumber(_line); j++)
 				{
+					// Comment check
 					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_BASIC_CODE___")
 						_comments[0] = true;
 					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_BEGIN_CODE___")
 						_comments[1] = true;
-
-					if(_stream.getToken(_line, 3).getString() == "___ELTM_TOKEN_LONG_TEXT_BEGIN_CODE___")
-						long_text = true;
-
+					
 					if(!_comments[0] && !_comments[1])
 					{
-						text += _stream.getToken(_line, j).getString();
-						text += " ";
+						// Long text begin check
+						if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_LONG_TEXT_BEGIN_CODE___")
+						{
+							if(j != assignPos + 1)
+							{
+								ELTMerrors error = syntax_error("long text key \"(\" needs to be at the begenning of a text", _file, _line + 1);
+								std::cout << red << error.what() << def << std::endl;
+								_isError = true;
+								return false;
+							}
+							else
+								long_text = true;
+						}
+						else if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_LONG_TEXT_END_CODE___" && long_text) // Check for long text end
+							long_text = false;
+						else
+						{
+							text += _stream.getToken(_line, j).getString();
+							text += " ";
+						}
 					}
+
 					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_COMMENT_LONG_END_CODE___" && _comments[1])
 						_comments[1] = false;
-
-					if(_stream.getToken(_line, j).getString() == "___ELTM_TOKEN_LONG_TEXT_END_CODE___" && long_text)
-						long_text = false;
 				}
+
 				if(!long_text)
 					break;
+				_line++;
+				j = 0;
 			}
-			_texts[_stream.getToken(currentLine, 1).getString()] = text;
+			_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;
 			Token::activateKw();
+			if(long_text)
+			{
+				ELTMwarning warning = no_end("long text (\"(\")", _file, currentLine + 1);
+				std::cout << magenta << warning.what() << def << std::endl;
+			}
 		}
 		else
 		{

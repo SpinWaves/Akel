@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 07/05/2021
-// UPDATED : 27/05/2021
+// UPDATED : 28/05/2021
 
 #ifndef __STREAM_STACK__
 #define __STREAM_STACK__

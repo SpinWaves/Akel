@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 21/05/2021
+// UPDATED : 28/05/2021
 
 #ifndef __ELTM_CONTEXT__
 #define __ELTM_CONTEXT__
@@ -44,9 +44,10 @@ namespace AE
 				}
 				return "error";
 			}
-			bool setID();
 
 		private:
+			bool setID(bool isNewID);
+
 			bool _isError = false;
 			
 			std::map<std::string, std::string> _texts;
