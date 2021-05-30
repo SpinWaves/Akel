@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 12/05/2021
-// UPDATED : 29/05/2021
+// UPDATED : 30/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -54,14 +54,13 @@ namespace AE
 						{
 							if(_stream.getToken(_line, 1).isString())
 							{
-								int currentLine = _line;
-								if(!newContext(_stream.getToken(_line, 1).getString().c_str()))
+								ELTMcontext newFile;
+								_imports.push_back(newFile);
+								if(!_imports.back().newContext(_stream.getToken(_line, 1).getString().c_str()))
 								{
 									_isError = true;
 									return false;
 								}
-								_file = file;
-								_line = currentLine;
 							}
 							else
 							{
@@ -225,10 +224,6 @@ namespace AE
 			std::cout << red << error.what() << def << std::endl;
 			_isError = true;
 			return false;
-		}
-		for(auto elem : _texts)
-		{
-			std::cout << elem.first << "	" << elem.second << std::endl;
 		}
 		return true;
 	}
