@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 29/05/2021
+// UPDATED : 30/05/2021
 
 #ifndef __ELTM_TOKEN__
 #define __ELTM_TOKEN__
@@ -30,7 +30,7 @@ namespace AE
 
 		begin_long_text,
 		end_long_text,
-		
+
 		error
 	};
 

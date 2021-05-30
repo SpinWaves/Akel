@@ -16,7 +16,7 @@ namespace AE
 		public:
 			ELTMcontext();
 			bool newContext(const char* file);
-			std::string getText(std::string ID, size_t line, std::string file, std::string function)
+			static std::string getText(std::string ID, size_t line, std::string file, std::string function)
 			{
 				if(_isError)
 				{
@@ -27,23 +27,51 @@ namespace AE
 
 				if(_texts.count(ID))
 					return _texts[ID];
+				
+				std::string moduleName = "";
+				std::string moduleID = "";
+				size_t found = 0;
+
+				if((found = ID.find(".")) != std::string::npos)
+				{
+					moduleName.append(ID, 0, found);
+					if(_modules.count(moduleName))
+					{
+						moduleID.append(ID, found + 1, ID.length());
+						if(_modules[moduleName].count(moduleID))
+							return _modules[moduleName][moduleID];
+					}
+					else
+					{
+						ELTMerrors error = context_error(std::string("undefined module name : " + moduleName), file, function, line);
+						std::cout << red << error.what() << def << std::endl;
+						return "error";
+					}
+				}
 
 				ELTMerrors error = context_error(std::string("undefined ID : " + ID), file, function, line);
 				std::cout << red << error.what() << def << std::endl;
 				return "error";
 			}
 
+			const char* getFile()
+			{
+				return _file;
+			}
+
 		private:
 			bool setID(bool isNewID);
 
-			bool _isError = false;
+			static inline bool _isError = false;
 			
-			static inline std::map<std::string, std::string> _texts;
-			std::map<std::string, std::map<std::string, std::string>> _modules;
+			static inline std::unordered_map<std::string, std::string> _texts;
+			static inline std::unordered_map<std::string, std::unordered_map<std::string, std::string>> _modules;
 			std::vector<ELTMcontext> _imports;
 			
 			StreamStack _stream;
 			const char* _file;
+
+			std::string _lastModuleName = "";
 
 			std::array<bool, 2> _comments;
 			size_t _last_line_long_comment = 0;
