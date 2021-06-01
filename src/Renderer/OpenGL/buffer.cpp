@@ -8,40 +8,40 @@
 
 namespace AE::GL
 {
-    Buffer::Buffer(GLenum type)
-    {
-        _type = type;
-    }
+Buffer::Buffer(GLenum type)
+{
+	_type = type;
+}
 
-	void Buffer::generate()
-	{
-		deleteBuffer();
-		glGenBuffers(1, &_buffer);
-	}
+void Buffer::generate()
+{
+	deleteBuffer();
+	glGenBuffers(1, &_buffer);
+}
 
-    void Buffer::bindBuffer()
-    {
-    	glBindBuffer(_type, _buffer);
-    }
+void Buffer::bindBuffer()
+{
+	glBindBuffer(_type, _buffer);
+}
 
-    void Buffer::unbindBuffer()
-    {
-        glBindBuffer(_type, 0);
-    }
+void Buffer::unbindBuffer()
+{
+	glBindBuffer(_type, 0);
+}
 
-    void Buffer::setSize(GLsizeiptr SIZE)
-    {
-    	glBufferData(_type, SIZE, 0, GL_STATIC_DRAW);
-    }
+void Buffer::setSize(GLsizeiptr SIZE)
+{
+	glBufferData(_type, SIZE, 0, GL_STATIC_DRAW);
+}
 
-    void Buffer::deleteBuffer()
-    {
-        if(glIsBuffer(_buffer) == GL_TRUE)
-            glDeleteBuffers(1, &_buffer);
-    }
+void Buffer::deleteBuffer()
+{
+	if(glIsBuffer(_buffer) == GL_TRUE)
+		glDeleteBuffers(1, &_buffer);
+}
 
-    Buffer::~Buffer()
-    {
-        deleteBuffer();
-    }
+Buffer::~Buffer()
+{
+	deleteBuffer();
+}
 }
