@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 05/05/2021
+// UPDATED : 01/06/2021
 
 #include <Utils/utils.h>
 #include <Renderer/renderer.h>
@@ -82,6 +82,8 @@ namespace AE
 	void Camera::look()
 	{
 		_target = _position + _direction;
+
+		std::cout << _target.X << "		" << _target.Y << "		" << _target.Z << std::endl;
 
 		GL::Matrixes::MatrixMode(AE_VIEW_MATRIX);
 		GL::Matrixes::LoadIdentity();

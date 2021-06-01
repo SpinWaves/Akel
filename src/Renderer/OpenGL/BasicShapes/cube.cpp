@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 30/04/2021
-// UPDATED : 05/05/2021
+// UPDATED : 01/06/2021
 
 #include <Utils/utils.h>
 
@@ -142,7 +142,6 @@ namespace AE::GL
 
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);  // Enable shader's attributes
-		glEnableVertexAttribArray(2);
 		glEnableVertexAttribArray(3);
 
         //_vbo.bindBuffer();
@@ -173,6 +172,7 @@ namespace AE::GL
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);	// Disable shader's attributes
 		glDisableVertexAttribArray(3);
+
 	}
 
 	Cube::~Cube()
