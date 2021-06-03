@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 03/04/2021
-// UPDATED : 04/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __PATHS__
-#define __PATHS__
+#ifndef __AE_PATHS__
+#define __AE_PATHS__
 
 #include <AEpch.h>
 
@@ -14,4 +14,4 @@ namespace AE::Core
     std::string getLogsDirPath();
 }
 
-#endif // __PATHS__
+#endif // __AE_PATHS__

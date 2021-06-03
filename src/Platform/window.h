@@ -1,15 +1,15 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 24/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __WINDOW__
-#define __WINDOW__
+#ifndef __AE_WINDOW__
+#define __AE_WINDOW__
 
 #include <AEpch.h>
 #include <Core/core.h>
 #include <Renderer/renderer.h>
 #include <Maths/maths.h>
-#include <Platform/messageBox.h>
+#include <Platform/input.h>
 #include <Utils/utils.h>
 
 enum windowType
@@ -36,9 +36,14 @@ enum windowSetting
     icon
 };
 
+enum windowComponents
+{
+	INPUTS
+};
+
 namespace AE
 {
-    class Window : public Context, public Instance
+    class Window : public Context, public Instance, public Input
     {
         public:
             Window();
@@ -50,7 +55,9 @@ namespace AE
             void setSetting(windowSetting setting, bool value);
             void setSetting(windowSetting setting, float value);
             void setSetting(windowSetting setting, uint16_t x, uint16_t y);
-            
+
+			void activateComponent(windowComponents component, bool activate);
+
             // Getters
             std::string getTitle();
             uint32_t getFlags();
@@ -73,6 +80,11 @@ namespace AE
             Maths::Vec2<uint16_t> _position;
             Maths::Vec2<uint16_t> _size;
 
+			std::unordered_map<windowComponents, bool> _components
+			{
+				{INPUTS, true},		// Inputs are activated by default
+			};
+
             uint32_t _flags;
 
             SDL_Surface* _icon;
@@ -83,4 +95,4 @@ namespace AE
     };
 }
 
-#endif // __WINDOW__
+#endif // __AE_WINDOW__

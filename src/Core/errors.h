@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 27/04/2021
-// UPDATED : 03/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __ERRORS__
-#define __ERRORS__
+#ifndef __AE_ERRORS__
+#define __AE_ERRORS__
 
 // GPU
 #define AE_CATCH_VK_VERSION_INFO            "Vulkan version : this information can only be obtained by vulkan"
@@ -27,4 +27,4 @@
 #define AE_CATCH_WIN_TYPE                   "Window type : bad window type"
 #define AE_CATCH_WIN_SETTING                "Window setting : no such setting"
 
-#endif // __ERRORS__
+#endif // __AE_ERRORS__

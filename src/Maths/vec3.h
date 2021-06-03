@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 18/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __VEC3__
-#define __VEC3__
+#ifndef __AE_VEC3__
+#define __AE_VEC3__
 
 #include <AEpch.h>
 
@@ -29,6 +29,7 @@ namespace AE::Maths
         Vec3(T x,T y,T z);
         Vec3(const Vec3 & v);
         Vec3(const Vec3 & from, const Vec3 & to);
+		Vec3(std::initializer_list<T> args);
 
         Vec3 & operator= (const Vec3 & v);
 
@@ -126,6 +127,38 @@ namespace AE::Maths
         Y = to.Y - from.Y;
         Z = to.Z - from.Z;
     }
+
+	template <class T>
+	Vec3<T>::Vec3(std::initializer_list<T> args)
+	{
+		if(args.size() < 4)
+		{
+			switch(args.size())
+			{
+				case 1:
+					X = *std::move(args.begin());
+					Y = 0;
+					Z = 0;
+				break;
+
+				case 2:		
+					X = *std::move(args.begin());
+					Y = *std::move(args.begin() + 1);
+					Z = 0;
+				break;
+
+				case 3:
+					X = *std::move(args.begin());
+					Y = *std::move(args.begin() + 1);
+					Z = *std::move(args.begin() + 2);
+				break;
+
+				default: break;
+			}
+		}
+		else
+			std::cout << "Vec3 initializer contains too much arguments" << std::endl;
+	}
 
     template <class T>
     Vec3<T> & Vec3<T>::operator= (const Vec3<T> & v)
@@ -462,4 +495,4 @@ namespace AE::Maths
     }
 }
 
-#endif // __VEC3__
+#endif // __AE_VEC3__

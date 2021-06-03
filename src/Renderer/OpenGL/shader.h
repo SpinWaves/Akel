@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 14/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __GL_SHADER__
-#define __GL_SHADER__
+#ifndef __AE_GL_SHADER__
+#define __AE_GL_SHADER__
 
 #include <Maths/maths.h>
 #include <AEpch.h>
@@ -46,4 +46,4 @@ namespace AE::GL
     };
 }
 
-#endif // __GL_SHADER__
+#endif // __AE_GL_SHADER__

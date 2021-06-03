@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/04/2021
-// UPDATED : 23/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __UTILS__
-#define __UTILS__
+#ifndef __AE_UTILS__
+#define __AE_UTILS__
 
 /* shortcuts for variable types */
 #define AE_uint unsigned int
@@ -20,4 +20,4 @@
 
 #include <Utils/Containers/containers.h>
 
-#endif // __UTILS__
+#endif // __AE_UTILS__

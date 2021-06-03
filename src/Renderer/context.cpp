@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/04/2021
-// UPDATED : 05/05/2021
+// UPDATED : 02/01/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -41,7 +41,7 @@ namespace AE
     {
 		SDL_GL_MakeCurrent(_window, _glcontext);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     }
     bool Context::isCreated()
     {

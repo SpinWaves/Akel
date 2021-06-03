@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 18/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __VEC2__
-#define __VEC2__
+#ifndef __AE_VEC2__
+#define __AE_VEC2__
 
 #include <AEpch.h>
 
@@ -28,6 +28,7 @@ namespace AE::Maths
         Vec2(T x, T y);
         Vec2(const Vec2 & v);
         Vec2(const Vec2 & from, const Vec2 & to);
+		Vec2(std::initializer_list<T> args);
 
         Vec2 & operator= (const Vec2 & v);
 
@@ -119,6 +120,31 @@ namespace AE::Maths
         X = to.X - from.X;
         Y = to.Y - from.Y;
     }
+
+	template <class T>
+	Vec2<T>::Vec2(std::initializer_list<T> args)
+	{
+		if(args.size() < 3)
+		{
+			switch(args.size())
+			{
+				case 1:
+					X = *std::move(args.begin());
+					Y = 0;
+				break;
+
+				case 2:		
+					X = *std::move(args.begin());
+					Y = *std::move(args.begin() + 1);
+				break;
+
+				default: break;
+			}
+		}
+		else
+			std::cout << "Vec2 initializer contains too much arguments" << std::endl;
+	}
+
 
     template <class T>
     Vec2<T> & Vec2<T>::operator= (const Vec2<T> & v)
@@ -391,4 +417,4 @@ namespace AE::Maths
     }
 }
 
-#endif // __VEC2__
+#endif // __AE_VEC2__

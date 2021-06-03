@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 07/05/2021
-// UPDATED : 29/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __STREAM_STACK__
-#define __STREAM_STACK__
+#ifndef __AE_STREAM_STACK__
+#define __AE_STREAM_STACK__
 
 #include <AEpch.h>
 #include <Modules/ELTM/token.h>
@@ -112,5 +112,5 @@ namespace AE
 	#define getToken(line, index) getToken(line, index, __FILE__, __FUNCTION__, __LINE__)
 }
 
-#endif // __STREAM_STACK__
+#endif // __AE_STREAM_STACK__
 

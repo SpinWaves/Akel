@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 05/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __CAMERA__
-#define __CAMERA__ 
+#ifndef __AE_CAMERA__
+#define __AE_CAMERA__ 
 
 #include <AEpch.h>
 #include <Platform/platform.h>
@@ -12,13 +12,15 @@
 namespace AE
 {
 	class Input;
+	class Window;
 
-	class Camera
+	class Camera3D
 	{
 		public:
-			Camera(int pos_x, int pos_y, int pos_z);
+			Camera3D(int pos_x, int pos_y, int pos_z);
 
 			void update(Input &input);
+			void update(Window &win);
 			void setPosition(int pos_x, int pos_y, int pos_z);
 
 			void look();
@@ -48,4 +50,4 @@ namespace AE
 	};
 }
 
-#endif // __CAMERA__
+#endif // __AE_CAMERA__

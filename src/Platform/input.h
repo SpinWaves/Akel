@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 04/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __INPUT__
-#define __INPUT__
+#ifndef __AE_INPUT__
+#define __AE_INPUT__
 
 #include <AEpch.h>
 #include <Platform/inputScanCode.h>
@@ -61,4 +61,4 @@ namespace AE
     };
 }
 
-#endif // __INPUT__
+#endif // __AE_INPUT__

@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 23/05/2021
-// UPDATED : 27/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __DUETS_ARRAY__
-#define __DUETS_ARRAY__
+#ifndef __AE_DUETS_ARRAY__
+#define __AE_DUETS_ARRAY__
 
 #include <AEpch.h>
 
@@ -154,5 +154,5 @@ namespace AE
 	};
 }
 
-#endif // __DUETS_ARRAY__
+#endif // __AE_DUETS_ARRAY__
 

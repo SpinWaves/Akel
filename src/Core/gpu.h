@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 23/04/2021
-// UPDATED : 27/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __GPU__
-#define __GPU__
+#ifndef __AE_GPU__
+#define __AE_GPU__
 
 #include <AEpch.h>
 
@@ -35,4 +35,4 @@ namespace AE::Core
     };
 }
 
-#endif // __GPU__
+#endif // __AE_GPU__

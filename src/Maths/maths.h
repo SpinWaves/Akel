@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 04/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __MATH__
-#define __MATH__
+#ifndef __AE_MATH__
+#define __AE_MATH__
 
 #include <Maths/vec2.h>
 #include <Maths/vec3.h>
@@ -17,4 +17,4 @@ namespace AE::Maths
     bool rand_probability(double proba);
 }
 
-#endif // __MATH__
+#endif // __AE_MATH__

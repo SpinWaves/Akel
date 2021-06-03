@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 23/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __MATRIXES__
-#define __MATRIXES__
+#ifndef __AE_MATRIXES__
+#define __AE_MATRIXES__
 
 #include <AEpch.h>
 
@@ -41,4 +41,4 @@ namespace AE::GL
     };
 }
 
-#endif // __MATRIXES__
+#endif // __AE_MATRIXES__

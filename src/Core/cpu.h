@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 21/04/2021
-// UPDATED : 27/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __CPU__
-#define __CPU__
+#ifndef __AE_CPU__
+#define __AE_CPU__
 
 #include <AEpch.h>
 
@@ -72,4 +72,4 @@ namespace AE::Core
     };
 }
 
-#endif // __CPU__
+#endif // __AE_CPU__

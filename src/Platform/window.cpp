@@ -1,12 +1,12 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 04/05/2021
+// UPDATED : 02/06/2021
 
 #include <Platform/platform.h>
 
 namespace AE
 {
-    Window::Window() : Context(), Instance() {}
+    Window::Window() : Context(), Instance(), Input() {}
 
     void Window::create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height, windowType type)
     {
@@ -106,6 +106,11 @@ namespace AE
             default: messageBox(ERROR, "Unable to modify window's parameter", AE_CATCH_WIN_SETTING); break;
         }
     }
+
+	void Window::activateComponent(windowComponents component, bool activate)
+	{
+		_components[component] = activate;
+	}
     
 
     // ================ Getters ================ //
@@ -158,6 +163,8 @@ namespace AE
         	SDL_GL_SwapWindow(_window);
             Context::clearRendering();
 		}
+		if(_components[INPUTS])
+			Input::update();
     }
 
 

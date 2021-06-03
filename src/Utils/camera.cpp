@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 01/06/2021
+// UPDATED : 02/06/2021
 
 #include <Utils/utils.h>
 #include <Renderer/renderer.h>
@@ -11,7 +11,7 @@
 
 namespace AE
 {
-	Camera::Camera(int pos_x, int pos_y, int pos_z)
+	Camera3D::Camera3D(int pos_x, int pos_y, int pos_z)
 	{
 		_position.SET(pos_x, pos_y, pos_z);
 		_phi = -79;
@@ -21,12 +21,12 @@ namespace AE
 		_sensivity = 0.6;
 	}
 
-	void Camera::setPosition(int pos_x, int pos_y, int pos_z)
+	void Camera3D::setPosition(int pos_x, int pos_y, int pos_z)
 	{
 		_position.SET(pos_x, pos_y, pos_z);
 	}
 
-	void Camera::update(Input &input)
+	void Camera3D::update(Input &input)
 	{
 		_movement.SET(0, 0, 0);
 
@@ -42,6 +42,11 @@ namespace AE
 			_grabMouse = _grabMouse? SDL_FALSE : SDL_TRUE;
 			SDL_SetRelativeMouseMode(_grabMouse);
 		}
+		if(!_grabMouse && input.getInMouse(1, UP))
+		{
+			_grabMouse = SDL_TRUE;
+			SDL_SetRelativeMouseMode(SDL_TRUE);
+		}
 
 		realspeed = (input.getInKey(AE_KEY_EXECUTE))? 10 * _speed : _speed;
 
@@ -55,15 +60,50 @@ namespace AE
 		Move(_movement.X, _movement.Y, _movement.Z);     //update
 	}
 
+	void Camera3D::update(Window &win)
+	{
+		_movement.SET(0, 0, 0);
 
-	void Camera::Move(double x, double y, double z)
+		if(_grabMouse)
+		{
+			_theta -= win.getXRel() * _sensivity;
+			_phi -= win.getYRel() * _sensivity;
+			VectorsFromAngles();
+		}
+
+		if(win.getInKey(AE_KEY_F1, UP))
+		{
+			_grabMouse = _grabMouse? SDL_FALSE : SDL_TRUE;
+			SDL_SetRelativeMouseMode(_grabMouse);
+		}
+		if(!_grabMouse && win.getInMouse(1, UP))
+		{
+			_grabMouse = SDL_TRUE;
+			SDL_SetRelativeMouseMode(SDL_TRUE);
+		}
+
+		realspeed = (win.getInKey(AE_KEY_EXECUTE))? 10 * _speed : _speed;
+
+		if(win.getInKey(AE_KEY_W) || win.getInKey(AE_KEY_UP))  			_movement += _forward.DirectCopy().NEGATE();
+		if(win.getInKey(AE_KEY_S) || win.getInKey(AE_KEY_DOWN))   		_movement += _forward.DirectCopy();
+		if(win.getInKey(AE_KEY_A) || win.getInKey(AE_KEY_LEFT))   		_movement += _left.DirectCopy();
+		if(win.getInKey(AE_KEY_D) || win.getInKey(AE_KEY_RIGHT))  		_movement += _left.DirectCopy().NEGATE();
+		if(win.getInKey(AE_KEY_LSHIFT) || win.getInKey(AE_KEY_RSHIFT))	_movement -= _up;
+		if(win.getInKey(AE_KEY_SPACE))									_movement += _up;
+
+		Move(_movement.X, _movement.Y, _movement.Z);     //update
+	}
+
+
+
+	void Camera3D::Move(double x, double y, double z)
 	{
 		_position.X += x * realspeed;
 		_position.Y += y * realspeed;
 		_position.Z += z * realspeed;
 	}
 
-	void Camera::VectorsFromAngles()
+	void Camera3D::VectorsFromAngles()
 	{
 		_phi = _phi > 89 ? 89 : _phi;
 		_phi = _phi < -89 ? -89 : _phi;
@@ -79,11 +119,9 @@ namespace AE
 		_forward.normalize();
 	}
 
-	void Camera::look()
+	void Camera3D::look()
 	{
 		_target = _position + _direction;
-
-		std::cout << _target.X << "		" << _target.Y << "		" << _target.Z << std::endl;
 
 		GL::Matrixes::MatrixMode(AE_VIEW_MATRIX);
 		GL::Matrixes::LoadIdentity();

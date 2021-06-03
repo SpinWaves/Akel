@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 30/04/2021
-// UPDATED : 05/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __CUBE__
-#define __CUBE__
+#ifndef __AE_CUBE__
+#define __AE_CUBE__
 
 #include <AEpch.h>
 #include <Renderer/renderer.h>
@@ -47,5 +47,5 @@ namespace AE::GL
 	};
 }
 
-#endif // __CUBE__
+#endif // __AE_CUBE__
 

@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 05/05/2021
-// UPDATED : 30/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __ELTM_TOKEN__
-#define __ELTM_TOKEN__
+#ifndef __AE_ELTM_TOKEN__
+#define __AE_ELTM_TOKEN__
 
 #include <AEpch.h>
 #include <Modules/ELTM/ELTMerrors.h>
@@ -108,5 +108,5 @@ namespace AE
 	#define getReservedToken() getReservedToken(__FILE__, __FUNCTION__, __LINE__)
 }
 
-#endif // __ELTM_TOKEN__
+#endif // __AE_ELTM_TOKEN__
 

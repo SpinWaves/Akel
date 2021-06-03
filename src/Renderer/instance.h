@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 10/04/2021
-// UPDATED : 12/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __INSTANCE__
-#define __INSTANCE__
+#ifndef __AE_INSTANCE__
+#define __AE_INSTANCE__
 
 #include <AEpch.h>
 
@@ -32,4 +32,4 @@ namespace AE
     };
 }
 
-#endif // __INSTANCE__
+#endif // __AE_INSTANCE__

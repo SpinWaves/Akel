@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 12/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __INPUT_SCANCODE__
-#define __INPUT_SCANCODE__
+#ifndef __AE_INPUT_SCANCODE__
+#define __AE_INPUT_SCANCODE__
 
 #include <AEpch.h>
 
@@ -253,4 +253,4 @@
 
 #define AE_NUM_SCANCODES    SDL_NUM_SCANCODES
 
-#endif // __INPUT_SCANCODE__
+#endif // __AE_INPUT_SCANCODE__

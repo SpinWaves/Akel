@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 03/04/2021
-// UPDATED : 25/04/2021
+// UPDATED : 03/06/2021
 
-#ifndef __LOG__
-#define __LOG__
+#ifndef __AE_LOG__
+#define __AE_LOG__
 
 #include <AEpch.h>
 
@@ -28,4 +28,4 @@ namespace AE::Core
     };
 }
 
-#endif // __LOG__
+#endif // __AE_LOG__

@@ -11,6 +11,7 @@
 #include <Renderer/renderer.h>
 #include <Utils/utils.h>
 #include <Modules/modules.h>
+#include <Graphics/graphics.h>
 
 #endif // __ATLAS_ENGINE__
 

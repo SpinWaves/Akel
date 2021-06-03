@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 13/05/2021
-// UPDATED : 29/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __ELTM_ERRORS__
-#define __ELTM_ERRORS__
+#ifndef __AE_ELTM_ERRORS__
+#define __AE_ELTM_ERRORS__
 
 #include <AEpch.h>
 
@@ -37,5 +37,4 @@ namespace AE
 	ELTMerrors already_declared_error(std::string message, std::string file, size_t line);
 }
 
-#endif // __ELTM_ERRORS__
-
+#endif // __AE_ELTM_ERRORS__

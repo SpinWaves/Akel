@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 14/04/2021
-// UPDATED : 31/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __BUFFER__
-#define __BUFFER__
+#ifndef __AE_BUFFER__
+#define __AE_BUFFER__
 
 #include <AEpch.h>
 #include <Platform/platform.h>
@@ -36,5 +36,5 @@ namespace AE::GL
     };
 }
 
-#endif // __BUFFER__
+#endif // __AE_BUFFER__
 

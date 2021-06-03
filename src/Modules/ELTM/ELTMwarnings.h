@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 20/05/2021
-// UPDATED : 20/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __ELTM_WARNING__
-#define __ELTM_WARNING__
+#ifndef __AE_ELTM_WARNING__
+#define __AE_ELTM_WARNING__
 
 #include <AEpch.h>
 
@@ -28,5 +28,5 @@ namespace AE
 	ELTMwarning no_end(std::string message, std::string file, size_t line); 
 }
 
-#endif // 
+#endif // __AE_ELTM_WARNING__
 

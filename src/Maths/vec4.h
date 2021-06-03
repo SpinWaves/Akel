@@ -1,9 +1,9 @@
 // This file is a part of AtlasEngine
 // CREATED : 04/04/2021
-// UPDATED : 18/05/2021
+// UPDATED : 03/06/2021
 
-#ifndef __VEC4__
-#define __VEC4__
+#ifndef __AE_VEC4__
+#define __AE_VEC4__
 
 #include <AEpch.h>
 
@@ -31,6 +31,7 @@ namespace AE::Maths
         Vec4(T x,T y,T z, T w);
         Vec4(const Vec4 & v);
         Vec4(const Vec4 & from, const Vec4 & to);
+		Vec4(std::initializer_list<T> args);
 
         Vec4 & operator= (const Vec4 & v);
 
@@ -126,6 +127,48 @@ namespace AE::Maths
         Z = to.Z - from.Z;
         W = to.W - from.W;
     }
+	template <class T>
+	Vec4<T>::Vec4(std::initializer_list<T> args)
+	{
+		if(args.size() < 5)
+		{
+			switch(args.size())
+			{
+				case 1:
+					X = *std::move(args.begin());
+					Y = 0;
+					Z = 0;
+					W = 0;
+				break;
+
+				case 2:		
+					X = *std::move(args.begin());
+					Y = *std::move(args.begin() + 1);
+					Z = 0;
+					W = 0;
+				break;
+
+				case 3:
+					X = *std::move(args.begin());
+					Y = *std::move(args.begin() + 1);
+					Z = *std::move(args.begin() + 2);
+					W = 0;
+				break;
+
+				case 4:
+					X = *std::move(args.begin());
+					Y = *std::move(args.begin() + 1);
+					Z = *std::move(args.begin() + 2);
+					W = *std::move(args.begin() + 3);
+				break;
+
+				default: break;
+			}
+		}
+		else
+			std::cout << "Vec4 initializer contains too much arguments" << std::endl;
+	}
+
     template <class T>
     Vec4<T> & Vec4<T>::operator= (const Vec4<T> & v)
     {
@@ -397,4 +440,4 @@ namespace AE::Maths
     }
 }
 
-#endif // __VEC4__
+#endif // __AE_VEC4__
