@@ -80,7 +80,7 @@ Developed mainly on Linux, AtlasEngine is, however, cross-platform and can be us
 * System information retrieval
   * CPU infos (hardware and software)
   * GPU infos (hardware and software)
-* Rendering system with Vulkan or OpenGL (depending on what your system supports)
+* Rendering system with Vulkan
 
 ### Contact
 bilbo.sacquet@orange.fr
