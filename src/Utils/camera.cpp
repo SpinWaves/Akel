@@ -123,9 +123,7 @@ namespace AE
 	{
 		_target = _position + _direction;
 
-		GL::Matrixes::MatrixMode(AE_VIEW_MATRIX);
-		GL::Matrixes::LoadIdentity();
-		GL::Matrixes::lookAt(_position.X, _position.Y, _position.Z, _target.X, _target.Y, _target.Z, 0, 1, 0);
+		// matrixes
 	}
 }
 

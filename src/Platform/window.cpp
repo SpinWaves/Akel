@@ -1,14 +1,14 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 02/06/2021
+// UPDATED : 05/06/2021
 
 #include <Platform/platform.h>
 
 namespace AE
 {
-    Window::Window() : Context(), Instance(), Input() {}
+    Window::Window() : Instance(), Input() {}
 
-    void Window::create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height, windowType type)
+    void Window::create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height)
     {
         _title = title;
         _position.SET(x, y);
@@ -16,32 +16,7 @@ namespace AE
         SDL_Init(SDL_INIT_VIDEO);
 		atexit(exit);
 
-        switch(type)
-        {
-            case AE_WINDOW_OPENGL: _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL; break;
-            case AE_WINDOW_VULKAN: _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN; break;
-            
-            case AE_WINDOW_POP_UP:
-            {
-                #ifdef _WIN32
-                    _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_POPUP_MENU | SDL_WINDOW_BORDERLESS; // Because windows sucks and need it
-                #else
-                    _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_POPUP_MENU;
-                #endif
-                break;
-            }
-            
-            case AE_WINDOW_AUTO_TYPE:
-            {
-                if(Core::isVulkanSupported())
-                    _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN;
-                else
-                    _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
-                break;
-            }
-
-            default: messageBox(FATAL_ERROR, "Unable to create a window", AE_CATCH_WIN_TYPE); break;
-        }
+        _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN;
  
         _window = SDL_CreateWindow(title.c_str(), x, y, width, height, _flags);
         if(!_window)
@@ -49,8 +24,6 @@ namespace AE
 
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
-    	
-		initWindowRenderer();
 	}
 
     // ================ Setters ================ //
@@ -131,52 +104,22 @@ namespace AE
         return _size;
     }
 
-    uint16_t Window::getNumberOfWindows()
+    void Window::initWindowRenderer(const char* vert, const char* frag)
     {
-        return _winInfoSystem.size();
-    }
-    bool Window::isWindowOpenGL(uint16_t windowNumber)
-    {
-        if(windowNumber <= _winInfoSystem.size())
-            return _winInfoSystem[windowNumber];
-        return false;
-    }
-
-
-    void Window::initWindowRenderer()
-    {
-        if(_flags & SDL_WINDOW_OPENGL)
-        {
-            Context::init(_window);
-            _winInfoSystem[_winInfoSystem.size() + 1] = true;
-        }
-        if(_flags & SDL_WINDOW_VULKAN)
-        {
-            Instance::init(_window);
-            _winInfoSystem[_winInfoSystem.size() + 1] = false;
-        }
+        Instance::init(_window, vert, frag);
     }
     void Window::update()
     {
-        if(_flags & SDL_WINDOW_OPENGL)
-		{
-        	SDL_GL_SwapWindow(_window);
-            Context::clearRendering();
-		}
-		if(_components[INPUTS])
-			Input::update();
+		Input::update();
     }
 
 
     void Window::destroy()
     {
-        Context::destroy();
         SDL_FreeSurface(_icon);
-        Instance::destroy();
+        Instance::cleanup();
         SDL_DestroyWindow(_window);
     }
 
-    Window::~Window()
-    {
-    }
+    Window::~Window(){}
 }

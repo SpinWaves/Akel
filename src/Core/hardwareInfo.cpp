@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 19/04/2021
-// UPDATED : 27/04/2021
+// UPDATED : 05/06/2021
 
 #include <Core/core.h>
 
@@ -30,7 +30,5 @@ namespace AE::Core
         std::cout << "GPU model : " << info.getModelName() << std::endl;
         std::cout << "Vulkan version : " << info.getVulkanVersion() << std::endl;
         std::cout << "Number devices : " << info.getNumberOfDevices() << std::endl;
-        std::cout << "OpenGL version : " << info.getOpenGLversion() << std::endl;
-        std::cout << "GLSL version : " << info.getGLSLversion() << std::endl;
     }
 }

@@ -1,6 +1,6 @@
 // This file is a part of AtlasEngine
 // CREATED : 28/03/2021
-// UPDATED : 03/06/2021
+// UPDATED : 05/06/2021
 
 #ifndef __AE_WINDOW__
 #define __AE_WINDOW__
@@ -11,14 +11,6 @@
 #include <Maths/maths.h>
 #include <Platform/input.h>
 #include <Utils/utils.h>
-
-enum windowType
-{
-    AE_WINDOW_OPENGL,
-    AE_WINDOW_VULKAN,
-    AE_WINDOW_POP_UP,
-    AE_WINDOW_AUTO_TYPE
-};
 
 enum windowSetting
 {
@@ -43,12 +35,14 @@ enum windowComponents
 
 namespace AE
 {
-    class Window : public Context, public Instance, public Input
+    class Window : public Instance, public Input
     {
         public:
             Window();
 
-            void create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height, windowType type = AE_WINDOW_AUTO_TYPE);
+            void create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+
+            void initWindowRenderer(const char* vert, const char* frag);
 
             // Setters            
             void setSetting(windowSetting setting, AE_text value);
@@ -69,9 +63,6 @@ namespace AE
             void destroy();
 
             virtual ~Window();
-
-            static uint16_t getNumberOfWindows();
-            static bool isWindowOpenGL(uint16_t windowNumber);
         
         private:
             SDL_Window* _window;
@@ -88,10 +79,6 @@ namespace AE
             uint32_t _flags;
 
             SDL_Surface* _icon;
-
-            inline static std::map<uint16_t, bool> _winInfoSystem;
-            
-			void initWindowRenderer();
     };
 }
 
