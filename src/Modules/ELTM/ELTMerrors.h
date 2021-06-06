@@ -1,13 +1,13 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 13/05/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_ELTM_ERRORS__
-#define __AE_ELTM_ERRORS__
+#ifndef __AK_ELTM_ERRORS__
+#define __AK_ELTM_ERRORS__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE
+namespace Ak
 {
 	class ELTMerrors
 	{
@@ -37,4 +37,4 @@ namespace AE
 	ELTMerrors already_declared_error(std::string message, std::string file, size_t line);
 }
 
-#endif // __AE_ELTM_ERRORS__
+#endif // __AK_ELTM_ERRORS__

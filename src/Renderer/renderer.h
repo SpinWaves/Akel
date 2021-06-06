@@ -1,9 +1,9 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/04/2021
 // UPDATED : 06/06/2021
 
-#ifndef __AE_RENDERER__
-#define __AE_RENDERER__
+#ifndef __AK_RENDERER__
+#define __AK_RENDERER__
 
 #include <Renderer/instance.h>
 #include <Renderer/pipeline.h>
@@ -17,4 +17,4 @@
 #include <Renderer/rendering.h>
 #include <Renderer/validationLayers.h>
 
-#endif // __AE_RENDERER__
+#endif // __AK_RENDERER__

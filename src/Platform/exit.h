@@ -1,16 +1,16 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 29/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_EXIT__
-#define __AE_EXIT__
+#ifndef __AK_EXIT__
+#define __AK_EXIT__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE
+namespace Ak
 {
 	void exit();
 }
 
-#endif // __AE_EXIT__
+#endif // __AK_EXIT__
 

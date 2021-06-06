@@ -1,11 +1,11 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/04/2021
 // UPDATED : 30/04/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
 
-namespace AE::Core
+namespace Ak::Core
 {
     bool isVulkanSupported()
     {
@@ -31,7 +31,7 @@ namespace AE::Core
         << "                                       |___/               "		 << std::endl
     	<< "By Malo DAVID - 2021" 												 << std::endl
 		<< "AtlasEngine is a game engine made for fun by a young french man in his bedroom" << std::endl
-		<< "Its name was inspired by ATLAS and P-Body from Portal2 " << bold_off << std::endl;
+		<< "Its name was inspired by Sithis who is also known as Akel from The Elder Scrolls series" << bold_off << std::endl;
 	}
 
 	void printEngineCodeInfo()

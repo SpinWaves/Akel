@@ -1,13 +1,13 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 23/04/2021
 // UPDATED : 05/06/2021
 
-#ifndef __AE_GPU__
-#define __AE_GPU__
+#ifndef __AK_GPU__
+#define __AK_GPU__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE::Core
+namespace Ak::Core
 {
     class GPU
     {
@@ -30,4 +30,4 @@ namespace AE::Core
     };
 }
 
-#endif // __AE_GPU__
+#endif // __AK_GPU__

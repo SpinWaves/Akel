@@ -1,11 +1,11 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 04/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_INPUT__
-#define __AE_INPUT__
+#ifndef __AK_INPUT__
+#define __AK_INPUT__
 
-#include <AEpch.h>
+#include <Akpch.h>
 #include <Platform/inputScanCode.h>
 
 enum ButtonACTION
@@ -14,7 +14,7 @@ enum ButtonACTION
     DOWN
 };
 
-namespace AE
+namespace Ak
 {
     class Input
     {
@@ -45,7 +45,7 @@ namespace AE
 
         private:
             SDL_Event evenements;
-            std::array<std::array<bool, 2>, AE_NUM_SCANCODES> _touches; // 0 = UP, 1 = DOWN
+            std::array<std::array<bool, 2>, AK_NUM_SCANCODES> _touches; // 0 = UP, 1 = DOWN
             std::array<std::array<bool, 2>, 8> _boutonsSouris;		   // 0 = UP, 1 = DOWN
 
             std::string _text_input_string = " ";
@@ -61,4 +61,4 @@ namespace AE
     };
 }
 
-#endif // __AE_INPUT__
+#endif // __AK_INPUT__

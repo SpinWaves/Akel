@@ -1,13 +1,13 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/06/2021
 // UPDATED : 05/06/2021
 
-#ifndef __AE_VK_LOWEST_INHERITANCE__
-#define __AE_VK_LOWEST_INHERITANCE__
+#ifndef __AK_VK_LOWEST_INHERITANCE__
+#define __AK_VK_LOWEST_INHERITANCE__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE
+namespace Ak
 {
 	class LowestInheritance
 	{
@@ -25,5 +25,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_VK_LOWEST_INHERITANCE__
+#endif // __AK_VK_LOWEST_INHERITANCE__
 

@@ -1,15 +1,15 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/06/2021
 // UPDATED : 05/06/2021
 
-#ifndef __AE_VK_QUEUES__
-#define __AE_VK_QUEUES__
+#ifndef __AK_VK_QUEUES__
+#define __AK_VK_QUEUES__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
 #include <Renderer/surface.h>
 
-namespace AE
+namespace Ak
 {
     struct QueueFamilyIndices
     {
@@ -33,5 +33,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_VK_QUEUES__
+#endif // __AK_VK_QUEUES__
 

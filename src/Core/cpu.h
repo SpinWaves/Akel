@@ -1,13 +1,13 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 21/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_CPU__
-#define __AE_CPU__
+#ifndef __AK_CPU__
+#define __AK_CPU__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE::Core
+namespace Ak::Core
 {
     class CPUID 
     {
@@ -72,4 +72,4 @@ namespace AE::Core
     };
 }
 
-#endif // __AE_CPU__
+#endif // __AK_CPU__

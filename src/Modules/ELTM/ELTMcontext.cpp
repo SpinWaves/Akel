@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 12/05/2021
 // UPDATED : 30/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
-namespace AE
+namespace Ak
 {
 	std::string __ELTM_MAIN_FILE;
 

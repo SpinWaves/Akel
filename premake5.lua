@@ -1,4 +1,4 @@
-project "AtlasEngine"
+project "Akel"
 	kind "SharedLib"
 	language "C++"
 	cppdialect "C++17"
@@ -8,8 +8,8 @@ project "AtlasEngine"
 	targetdir ("%{prj.location}/build/" .. outputdir)
 	objdir ("%{prj.location}/build-int/" .. outputdir)
 
-	pchheader "src/AEpch.h"
-	pchsource "src/AEpch.cpp"
+	pchheader "src/Akpch.h"
+	pchsource "src/Akpch.cpp"
 	flags "NoPCH"
 	linkoptions "-shared"
 
@@ -44,9 +44,9 @@ project "AtlasEngine"
 
 
 	filter "configurations:Debug"
-        defines "AE_DEBUG"
+        defines "AK_DEBUG"
         symbols "On"
 
     filter "configurations:Release"
-        defines "AE_RELEASE"
+        defines "AK_RELEASE"
         optimize "On"

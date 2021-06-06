@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 03/04/2021
 // UPDATED : 18/05/2021
 
 #include <Platform/platform.h>
 
-namespace AE
+namespace Ak
 {
     void messageBox(enum LogType type, std::string message, std::string logReport)
     {

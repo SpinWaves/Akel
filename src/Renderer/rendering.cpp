@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 06/06/2021
 // UPDATED : 06/06/2021
 
 #include <Renderer/renderer.h>
 
-namespace AE
+namespace Ak
 {
 	Rendering::Rendering() : FrameBuffer() {}
 

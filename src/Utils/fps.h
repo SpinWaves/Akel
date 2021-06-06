@@ -1,13 +1,13 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 29/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_FPS__
-#define __AE_FPS__
+#ifndef __AK_FPS__
+#define __AK_FPS__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE
+namespace Ak
 {
 	class CounterFPS
     {
@@ -35,5 +35,5 @@ namespace AE
     };		
 }
 
-#endif // __AE_FPS__
+#endif // __AK_FPS__
 

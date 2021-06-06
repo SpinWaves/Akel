@@ -1,20 +1,20 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 04/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_MATH__
-#define __AE_MATH__
+#ifndef __AK_MATH__
+#define __AK_MATH__
 
 #include <Maths/vec2.h>
 #include <Maths/vec3.h>
 #include <Maths/vec4.h>
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE::Maths
+namespace Ak::Maths
 {
     int randint(int a, int b);
     bool rand_probability(double proba);
 }
 
-#endif // __AE_MATH__
+#endif // __AK_MATH__

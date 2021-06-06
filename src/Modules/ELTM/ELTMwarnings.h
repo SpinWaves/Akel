@@ -1,13 +1,13 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 20/05/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_ELTM_WARNING__
-#define __AE_ELTM_WARNING__
+#ifndef __AK_ELTM_WARNING__
+#define __AK_ELTM_WARNING__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE
+namespace Ak
 {
 	class ELTMwarning
 	{
@@ -28,5 +28,5 @@ namespace AE
 	ELTMwarning no_end(std::string message, std::string file, size_t line); 
 }
 
-#endif // __AE_ELTM_WARNING__
+#endif // __AK_ELTM_WARNING__
 

@@ -1,15 +1,15 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 12/05/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_ELTM_CONTEXT__
-#define __AE_ELTM_CONTEXT__
+#ifndef __AK_ELTM_CONTEXT__
+#define __AK_ELTM_CONTEXT__
 
-#include <AEpch.h>
+#include <Akpch.h>
 #include <Modules/ELTM/ELTMerrors.h>
 #include <Utils/utils.h>
 
-namespace AE
+namespace Ak
 {
 	class ELTMcontext
 	{
@@ -83,4 +83,4 @@ namespace AE
 	#define getText(ID) getText(ID, __LINE__, __FILE__, __FUNCTION__)
 }
 
-#endif // __AE_ELTM_CONTEXT__
+#endif // __AK_ELTM_CONTEXT__

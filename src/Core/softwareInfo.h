@@ -1,17 +1,17 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_SOFTWARE_INFO__
-#define __AE_SOFTWARE_INFO__
+#ifndef __AK_SOFTWARE_INFO__
+#define __AK_SOFTWARE_INFO__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE::Core
+namespace Ak::Core
 {
-        bool isVulkanSupported();
-        void printEngineInfo();
-		void printEngineCodeInfo();
+    bool isVulkanSupported();
+    void printEngineInfo();
+    void printEngineCodeInfo();
 }
 
-#endif // __AE_SOFTWARE_INFO__
+#endif // __AK_SOFTWARE_INFO__

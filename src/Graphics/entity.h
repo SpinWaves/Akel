@@ -1,11 +1,11 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 03/06/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_ENTITY__
-#define __AE_ENTITY__
+#ifndef __AK_ENTITY__
+#define __AK_ENTITY__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
 #include <Maths/maths.h>
 
@@ -14,7 +14,7 @@ enum Models
 	CUBE,
 };
 
-namespace AE
+namespace Ak
 {
 	class Entity
 	{
@@ -29,5 +29,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_ENTITY__
+#endif // __AK_ENTITY__
 

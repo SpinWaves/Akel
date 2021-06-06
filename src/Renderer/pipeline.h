@@ -1,15 +1,15 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/06/2021
 // UPDATED : 06/06/2021
 
-#ifndef __AE_VK_PIPELINE__
-#define __AE_VK_PIPELINE__
+#ifndef __AK_VK_PIPELINE__
+#define __AK_VK_PIPELINE__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
 #include <Renderer/device.h>
 
-namespace AE
+namespace Ak
 {
     class Pipeline : public Device
     {
@@ -24,4 +24,4 @@ namespace AE
     };
 }
 
-#endif // __AE_VK_PIPELINE__
+#endif // __AK_VK_PIPELINE__

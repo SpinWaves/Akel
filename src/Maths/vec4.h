@@ -1,13 +1,13 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 04/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_VEC4__
-#define __AE_VEC4__
+#ifndef __AK_VEC4__
+#define __AK_VEC4__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE::Maths
+namespace Ak::Maths
 {
 
 /* ============================================================== Déclaration ============================================================== */
@@ -440,4 +440,4 @@ namespace AE::Maths
     }
 }
 
-#endif // __AE_VEC4__
+#endif // __AK_VEC4__

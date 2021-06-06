@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 23/05/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_CONTAINERS__
-#define __AE_CONTAINERS__
+#ifndef __AK_CONTAINERS__
+#define __AK_CONTAINERS__
 
 #include <Utils/Containers/duetsArray.h>
 
-#endif // __AE_CONTAINERS__
+#endif // __AK_CONTAINERS__

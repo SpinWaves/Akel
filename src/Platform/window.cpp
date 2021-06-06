@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 28/03/2021
 // UPDATED : 05/06/2021
 
 #include <Platform/platform.h>
 
-namespace AE
+namespace Ak
 {
     Window::Window() : Instance(), Input() {}
 
@@ -34,7 +34,7 @@ namespace AE
             case title: SDL_SetWindowTitle(_window, value); break;
             case icon: _icon = IMG_Load(value); SDL_SetWindowIcon(_window, _icon); break;
 
-            default: messageBox(ERROR, "Unable to modify window's parameter", AE_CATCH_WIN_SETTING); break;
+            default: messageBox(ERROR, "Unable to modify window's parameter", AK_CATCH_WIN_SETTING); break;
         }
     }
     void Window::setSetting(windowSetting setting, bool value)
@@ -54,7 +54,7 @@ namespace AE
                 else      SDL_HideWindow(_window);
                 break;
             }
-            default: messageBox(ERROR, "Unable to modify window's parameter", AE_CATCH_WIN_SETTING); break;
+            default: messageBox(ERROR, "Unable to modify window's parameter", AK_CATCH_WIN_SETTING); break;
         }
     }
     void Window::setSetting(windowSetting setting, float value)
@@ -64,7 +64,7 @@ namespace AE
             case brightness: SDL_SetWindowBrightness(_window, value); break;
             case opacity: SDL_SetWindowOpacity(_window, value); break;
 
-            default: messageBox(ERROR, "Unable to modify window's parameter", AE_CATCH_WIN_SETTING); break;
+            default: messageBox(ERROR, "Unable to modify window's parameter", AK_CATCH_WIN_SETTING); break;
         }
     }
     void Window::setSetting(windowSetting setting, uint16_t x, uint16_t y)
@@ -76,7 +76,7 @@ namespace AE
             case maximumSize: SDL_SetWindowMaximumSize(_window, x, y); break;
             case minimumSize: SDL_SetWindowMinimumSize(_window, x, y); break;
 
-            default: messageBox(ERROR, "Unable to modify window's parameter", AE_CATCH_WIN_SETTING); break;
+            default: messageBox(ERROR, "Unable to modify window's parameter", AK_CATCH_WIN_SETTING); break;
         }
     }
 

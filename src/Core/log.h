@@ -1,11 +1,11 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 03/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_LOG__
-#define __AE_LOG__
+#ifndef __AK_LOG__
+#define __AK_LOG__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
 enum LogType
 {
@@ -15,7 +15,7 @@ enum LogType
     FATAL_ERROR
 };
 
-namespace AE::Core
+namespace Ak::Core
 {
     class log
     {
@@ -28,4 +28,4 @@ namespace AE::Core
     };
 }
 
-#endif // __AE_LOG__
+#endif // __AK_LOG__

@@ -1,17 +1,17 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 03/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_PATHS__
-#define __AE_PATHS__
+#ifndef __AK_PATHS__
+#define __AK_PATHS__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE::Core
+namespace Ak::Core
 {
     std::string getMainDirPath();
     std::string getAssetsDirPath();
     std::string getLogsDirPath();
 }
 
-#endif // __AE_PATHS__
+#endif // __AK_PATHS__

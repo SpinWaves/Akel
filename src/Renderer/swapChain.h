@@ -1,16 +1,16 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/06/2021
 // UPDATED : 06/06/2021
 
-#ifndef __AE_VK_SWAPCHAIN__
-#define __AE_VK_SWAPCHAIN__
+#ifndef __AK_VK_SWAPCHAIN__
+#define __AK_VK_SWAPCHAIN__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
 #include <Renderer/renderPass.h>
 #include <Renderer/queues.h>
 
-namespace AE
+namespace Ak
 {
 	struct SwapChainSupportDetails
     {
@@ -36,5 +36,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_VK_SWAPCHAIN__
+#endif // __AK_VK_SWAPCHAIN__
 

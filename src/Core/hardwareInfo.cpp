@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 19/04/2021
 // UPDATED : 05/06/2021
 
 #include <Core/core.h>
 
-namespace AE::Core
+namespace Ak::Core
 {
     void printCPUinfo()
     {

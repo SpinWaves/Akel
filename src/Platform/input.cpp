@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 04/04/2021
 // UPDATED : 01/06/2021
 
 #include <Platform/platform.h>
 
-namespace AE
+namespace Ak
 {
     Input::Input()
     {

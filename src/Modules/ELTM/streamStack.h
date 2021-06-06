@@ -1,15 +1,15 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 07/05/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_STREAM_STACK__
-#define __AE_STREAM_STACK__
+#ifndef __AK_STREAM_STACK__
+#define __AK_STREAM_STACK__
 
-#include <AEpch.h>
+#include <Akpch.h>
 #include <Modules/ELTM/token.h>
 #include <Utils/utils.h>
 
-namespace AE
+namespace Ak
 {
 	class StreamStack
 	{
@@ -112,5 +112,5 @@ namespace AE
 	#define getToken(line, index) getToken(line, index, __FILE__, __FUNCTION__, __LINE__)
 }
 
-#endif // __AE_STREAM_STACK__
+#endif // __AK_STREAM_STACK__
 

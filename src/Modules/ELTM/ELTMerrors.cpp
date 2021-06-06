@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 13/05/2021
 // UPDATED : 29/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
-namespace AE
+namespace Ak
 {
 	ELTMerrors::ELTMerrors(std::string message, std::string file, std::string caller, size_t line)
 	{

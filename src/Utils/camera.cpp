@@ -1,4 +1,4 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/05/2021
 // UPDATED : 02/06/2021
 
@@ -9,7 +9,7 @@
 #define M_PI 3.141592653589793
 #endif
 
-namespace AE
+namespace Ak
 {
 	Camera3D::Camera3D(int pos_x, int pos_y, int pos_z)
 	{
@@ -37,7 +37,7 @@ namespace AE
 			VectorsFromAngles();
 		}
 
-		if(input.getInKey(AE_KEY_F1, UP))
+		if(input.getInKey(AK_KEY_F1, UP))
 		{
 			_grabMouse = _grabMouse? SDL_FALSE : SDL_TRUE;
 			SDL_SetRelativeMouseMode(_grabMouse);
@@ -48,14 +48,14 @@ namespace AE
 			SDL_SetRelativeMouseMode(SDL_TRUE);
 		}
 
-		realspeed = (input.getInKey(AE_KEY_EXECUTE))? 10 * _speed : _speed;
+		realspeed = (input.getInKey(AK_KEY_EXECUTE))? 10 * _speed : _speed;
 
-		if(input.getInKey(AE_KEY_W) || input.getInKey(AE_KEY_UP))  			_movement += _forward.DirectCopy().NEGATE();
-		if(input.getInKey(AE_KEY_S) || input.getInKey(AE_KEY_DOWN))   		_movement += _forward.DirectCopy();
-		if(input.getInKey(AE_KEY_A) || input.getInKey(AE_KEY_LEFT))   		_movement += _left.DirectCopy();
-		if(input.getInKey(AE_KEY_D) || input.getInKey(AE_KEY_RIGHT))  		_movement += _left.DirectCopy().NEGATE();
-		if(input.getInKey(AE_KEY_LSHIFT) || input.getInKey(AE_KEY_RSHIFT))	_movement -= _up;
-		if(input.getInKey(AE_KEY_SPACE))									_movement += _up;
+		if(input.getInKey(AK_KEY_W) || input.getInKey(AK_KEY_UP))  			_movement += _forward.DirectCopy().NEGATE();
+		if(input.getInKey(AK_KEY_S) || input.getInKey(AK_KEY_DOWN))   		_movement += _forward.DirectCopy();
+		if(input.getInKey(AK_KEY_A) || input.getInKey(AK_KEY_LEFT))   		_movement += _left.DirectCopy();
+		if(input.getInKey(AK_KEY_D) || input.getInKey(AK_KEY_RIGHT))  		_movement += _left.DirectCopy().NEGATE();
+		if(input.getInKey(AK_KEY_LSHIFT) || input.getInKey(AK_KEY_RSHIFT))	_movement -= _up;
+		if(input.getInKey(AK_KEY_SPACE))									_movement += _up;
 
 		Move(_movement.X, _movement.Y, _movement.Z);     //update
 	}
@@ -71,7 +71,7 @@ namespace AE
 			VectorsFromAngles();
 		}
 
-		if(win.getInKey(AE_KEY_F1, UP))
+		if(win.getInKey(AK_KEY_F1, UP))
 		{
 			_grabMouse = _grabMouse? SDL_FALSE : SDL_TRUE;
 			SDL_SetRelativeMouseMode(_grabMouse);
@@ -82,14 +82,14 @@ namespace AE
 			SDL_SetRelativeMouseMode(SDL_TRUE);
 		}
 
-		realspeed = (win.getInKey(AE_KEY_EXECUTE))? 10 * _speed : _speed;
+		realspeed = (win.getInKey(AK_KEY_EXECUTE))? 10 * _speed : _speed;
 
-		if(win.getInKey(AE_KEY_W) || win.getInKey(AE_KEY_UP))  			_movement += _forward.DirectCopy().NEGATE();
-		if(win.getInKey(AE_KEY_S) || win.getInKey(AE_KEY_DOWN))   		_movement += _forward.DirectCopy();
-		if(win.getInKey(AE_KEY_A) || win.getInKey(AE_KEY_LEFT))   		_movement += _left.DirectCopy();
-		if(win.getInKey(AE_KEY_D) || win.getInKey(AE_KEY_RIGHT))  		_movement += _left.DirectCopy().NEGATE();
-		if(win.getInKey(AE_KEY_LSHIFT) || win.getInKey(AE_KEY_RSHIFT))	_movement -= _up;
-		if(win.getInKey(AE_KEY_SPACE))									_movement += _up;
+		if(win.getInKey(AK_KEY_W) || win.getInKey(AK_KEY_UP))  			_movement += _forward.DirectCopy().NEGATE();
+		if(win.getInKey(AK_KEY_S) || win.getInKey(AK_KEY_DOWN))   		_movement += _forward.DirectCopy();
+		if(win.getInKey(AK_KEY_A) || win.getInKey(AK_KEY_LEFT))   		_movement += _left.DirectCopy();
+		if(win.getInKey(AK_KEY_D) || win.getInKey(AK_KEY_RIGHT))  		_movement += _left.DirectCopy().NEGATE();
+		if(win.getInKey(AK_KEY_LSHIFT) || win.getInKey(AK_KEY_RSHIFT))	_movement -= _up;
+		if(win.getInKey(AK_KEY_SPACE))									_movement += _up;
 
 		Move(_movement.X, _movement.Y, _movement.Z);     //update
 	}

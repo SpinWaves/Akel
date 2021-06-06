@@ -1,9 +1,9 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 05/06/2021
+// UPDATED : 06/06/2021
 
-#ifndef __AE_PCH__
-#define __AE_PCH__
+#ifndef __AK_PCH__
+#define __AK_PCH__
 
 // SDL2
 #include <SDL2/SDL.h>
@@ -52,4 +52,4 @@
 #include <cstdio>
 #include <cstring>
 
-#endif // __AE_PCH__
+#endif // __AK_PCH__

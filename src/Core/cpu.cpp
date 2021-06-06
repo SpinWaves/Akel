@@ -1,4 +1,4 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 21/04/2021
 // UPDATED : 27/04/2021
 
@@ -7,7 +7,7 @@
 
 #define MAX_INTEL_TOP_LVL 4
 
-namespace AE::Core
+namespace Ak::Core
 {
     CPUID::CPUID(unsigned funcId, unsigned subFuncId)
     {
@@ -124,7 +124,7 @@ namespace AE::Core
                 _NumCores = _NumLogCpus = 1;
         } 
         else
-            messageBox(ERROR, "Unable to get CPU info", AE_CATCH_CPU_VENDOR_INFO);
+            messageBox(ERROR, "Unable to get CPU info", AK_CATCH_CPU_VENDOR_INFO);
 
         for(int i = 0x80000002; i < 0x80000005; i++)
         {

@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 04/04/2021
 // UPDATED : 04/04/2021
 
 #include <Maths/maths.h>
 
-namespace AE::Maths
+namespace Ak::Maths
 {
     int randint(int a, int b)
     {

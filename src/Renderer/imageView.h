@@ -1,15 +1,15 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/06/2021
 // UPDATED : 06/06/2021
 
-#ifndef __AE_VK_IMAGE_VIEW__
-#define __AE_VK_IMAGE_VIEW__
+#ifndef __AK_VK_IMAGE_VIEW__
+#define __AK_VK_IMAGE_VIEW__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
 #include <Renderer/rendering.h>
 
-namespace AE
+namespace Ak
 {
 	class ImageView : public Rendering
 	{
@@ -19,5 +19,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_VK_IMAGE_VIEW__
+#endif // __AK_VK_IMAGE_VIEW__
 

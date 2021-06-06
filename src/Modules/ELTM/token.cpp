@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 06/05/2021
 // UPDATED : 19/05/2021
 
 #include <Modules/ELTM/eltm.h>
 
-namespace AE
+namespace Ak
 {
 	Token::Token(std::variant<eltm_token, std::string> value)
 	{

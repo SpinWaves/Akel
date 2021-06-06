@@ -1,13 +1,13 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_CONSOLE_OUT__
-#define __AE_CONSOLE_OUT__
+#ifndef __AK_CONSOLE_OUT__
+#define __AK_CONSOLE_OUT__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE
+namespace Ak
 {
     enum Code
     {
@@ -41,4 +41,4 @@ namespace AE
     std::ostream &operator<<(std::ostream &os, const Code code); // Print std::cout with colors or effects
 }
 
-#endif // __AE_CONSOLE_OUT__
+#endif // __AK_CONSOLE_OUT__

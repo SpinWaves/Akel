@@ -1,15 +1,15 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 10/04/2021
 // UPDATED : 06/06/2021
 
-#ifndef __AE_INSTANCE__
-#define __AE_INSTANCE__
+#ifndef __AK_INSTANCE__
+#define __AK_INSTANCE__
 
-#include <AEpch.h>
+#include <Akpch.h>
 #include <Renderer/commandBuffer.h>
 #include <Renderer/validationLayers.h>
 
-namespace AE
+namespace Ak
 {
     #define VK_FORMAT_RGBA_8_SRGB VK_FORMAT_B8G8R8A8_SRGB
     const int MAX_FRAMES_IN_FLIGHT = 2;
@@ -33,4 +33,4 @@ namespace AE
     };
 }
 
-#endif // __AE_INSTANCE__
+#endif // __AK_INSTANCE__

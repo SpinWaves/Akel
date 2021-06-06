@@ -1,11 +1,11 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 28/03/2021
 // UPDATED : 05/06/2021
 
-#ifndef __AE_WINDOW__
-#define __AE_WINDOW__
+#ifndef __AK_WINDOW__
+#define __AK_WINDOW__
 
-#include <AEpch.h>
+#include <Akpch.h>
 #include <Core/core.h>
 #include <Renderer/renderer.h>
 #include <Maths/maths.h>
@@ -33,7 +33,7 @@ enum windowComponents
 	INPUTS
 };
 
-namespace AE
+namespace Ak
 {
     class Window : public Instance, public Input
     {
@@ -45,7 +45,7 @@ namespace AE
             void initWindowRenderer(const char* vert, const char* frag);
 
             // Setters            
-            void setSetting(windowSetting setting, AE_text value);
+            void setSetting(windowSetting setting, Ak_text value);
             void setSetting(windowSetting setting, bool value);
             void setSetting(windowSetting setting, float value);
             void setSetting(windowSetting setting, uint16_t x, uint16_t y);
@@ -82,4 +82,4 @@ namespace AE
     };
 }
 
-#endif // __AE_WINDOW__
+#endif // __AK_WINDOW__

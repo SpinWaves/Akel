@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 29/04/2021
 // UPDATED : 29/04/2021
 
 #include <Utils/utils.h>
 
-namespace AE
+namespace Ak
 {
 	CounterFPS::CounterFPS()
 	{}

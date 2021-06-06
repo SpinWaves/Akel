@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/04/2021
 // UPDATED : 05/04/2021
 
 #include <Utils/utils.h>
 
-namespace AE
+namespace Ak
 {
     std::ostream &operator<<(std::ostream &os, const Code code)
     {

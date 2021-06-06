@@ -1,15 +1,15 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/06/2021
 // UPDATED : 05/06/2021
 
-#ifndef __AE_VK_COMMAND_BUFFER__
-#define __AE_VK_COMMAND_BUFFER__
+#ifndef __AK_VK_COMMAND_BUFFER__
+#define __AK_VK_COMMAND_BUFFER__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
 #include <Renderer/pipeline.h>
 
-namespace AE
+namespace Ak
 {
 	class CommandBuffer : public Pipeline
 	{
@@ -24,5 +24,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_VK_COMMAND_BUFFER__
+#endif // __AK_VK_COMMAND_BUFFER__
 

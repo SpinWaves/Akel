@@ -1,19 +1,19 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 06/06/2021
 // UPDATED : 06/06/2021
 
-#ifndef __AE_VK_VALIDATION_LAYERS__
-#define __AE_VK_VALIDATION_LAYERS__
+#ifndef __AK_VK_VALIDATION_LAYERS__
+#define __AK_VK_VALIDATION_LAYERS__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
 #include <Renderer/lowestInheritance.h>
 
-namespace AE
+namespace Ak
 {
     const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
-    #ifdef AE_DEBUG
+    #ifdef AK_DEBUG
         constexpr bool enableValidationLayers = true;
     #else
         constexpr bool enableValidationLayers = false;
@@ -41,5 +41,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_VK_VALIDATION_LAYERS__
+#endif // __AK_VK_VALIDATION_LAYERS__
 

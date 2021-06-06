@@ -1,10 +1,10 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 03/04/2021
 // UPDATED : 25/04/2021
 
 #include <Core/core.h>
 
-namespace AE::Core
+namespace Ak::Core
 {
     std::filesystem::path path = std::filesystem::current_path();
     std::string getMainDirPath()

@@ -1,15 +1,15 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/05/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_ELTM_TOKEN__
-#define __AE_ELTM_TOKEN__
+#ifndef __AK_ELTM_TOKEN__
+#define __AK_ELTM_TOKEN__
 
-#include <AEpch.h>
+#include <Akpch.h>
 #include <Modules/ELTM/ELTMerrors.h>
 #include <Utils/utils.h>
 
-namespace AE
+namespace Ak
 {
 	enum eltm_token
 	{
@@ -108,5 +108,5 @@ namespace AE
 	#define getReservedToken() getReservedToken(__FILE__, __FUNCTION__, __LINE__)
 }
 
-#endif // __AE_ELTM_TOKEN__
+#endif // __AK_ELTM_TOKEN__
 

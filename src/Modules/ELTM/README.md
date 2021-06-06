@@ -30,11 +30,11 @@ There is a short example of it's use :
 
 In your C++ project :
 	
-	AE::ELTMcontext context;
-	if(context.newContext("file.tm") == true)	// AE::ELTMcontext::newContext return true or false in case of good execution or error in your ELTM file
+	Ak::ELTMcontext context;
+	if(context.newContext("file.tm") == true)	// Ak::ELTMcontext::newContext return true or false in case of good execution or error in your ELTM file
 	{
 		std::string text = context.getText("YourID"); // return "your text" in std::string
 		std::cout << context.getText("moduleName.yay") << std::endl;
-		std::cout << AE::ELTMcontext::getText("YourID") << std::endl; // you can get texts directly from ELTMcontext class if context was initialized
+		std::cout << Ak::ELTMcontext::getText("YourID") << std::endl; // you can get texts directly from ELTMcontext class if context was initialized
 	}
 

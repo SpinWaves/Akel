@@ -1,14 +1,14 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 06/06/2021
 // UPDATED : 06/06/2021
 
-#ifndef __AE_VK_RENDERING__
-#define __AE_VK_RENDERING__
+#ifndef __AK_VK_RENDERING__
+#define __AK_VK_RENDERING__
 
-#include <AEpch.h>
+#include <Akpch.h>
 #include <Renderer/frameBuffer.h>
 
-namespace AE
+namespace Ak
 {
 	class Rendering : public FrameBuffer
 	{
@@ -23,5 +23,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_VK_RENDERING__
+#endif // __AK_VK_RENDERING__
 

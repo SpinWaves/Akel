@@ -1,15 +1,15 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 05/06/2021
 // UPDATED : 05/06/2021
 
-#ifndef __AE_VK_DEVICE__
-#define __AE_VK_DEVICE__
+#ifndef __AK_VK_DEVICE__
+#define __AK_VK_DEVICE__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
 #include <Renderer/imageView.h>
 
-namespace AE
+namespace Ak
 {
 	const std::vector<const char*> deviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
 	
@@ -25,5 +25,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_VK_DEVICE__
+#endif // __AK_VK_DEVICE__
 

@@ -1,13 +1,13 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 23/05/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_DUETS_ARRAY__
-#define __AE_DUETS_ARRAY__
+#ifndef __AK_DUETS_ARRAY__
+#define __AK_DUETS_ARRAY__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE
+namespace Ak
 {
 	class default_t	// class for default value of any type
 	{
@@ -154,5 +154,5 @@ namespace AE
 	};
 }
 
-#endif // __AE_DUETS_ARRAY__
+#endif // __AK_DUETS_ARRAY__
 

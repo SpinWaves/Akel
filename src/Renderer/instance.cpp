@@ -1,4 +1,4 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 10/04/2021
 // UPDATED : 06/06/2021
 
@@ -7,7 +7,7 @@
 #include <Utils/utils.h>
 #include <Core/core.h>
 
-namespace AE
+namespace Ak
 {
 	Instance::Instance() : CommandBuffer(), ValidationLayers() {}
 

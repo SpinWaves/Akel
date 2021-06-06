@@ -1,16 +1,16 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 19/04/2021
 // UPDATED : 03/06/2021
 
-#ifndef __AE_HARDWARE_INFO__
-#define __AE_HARDWARE_INFO__
+#ifndef __AK_HARDWARE_INFO__
+#define __AK_HARDWARE_INFO__
 
-#include <AEpch.h>
+#include <Akpch.h>
 
-namespace AE::Core
+namespace Ak::Core
 {
     void printCPUinfo();
     void printGPUinfo();
 }
 
-#endif // __AE_HARDWARE_INFO__
+#endif // __AK_HARDWARE_INFO__

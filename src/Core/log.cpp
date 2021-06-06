@@ -1,4 +1,4 @@
-// This file is a part of AtlasEngine
+// This file is a part of Akel
 // CREATED : 03/04/2021
 // UPDATED : 25/04/2021
 
@@ -6,7 +6,7 @@
 #include <Utils/utils.h>
 
 
-namespace AE::Core
+namespace Ak::Core
 {
     void log::report(enum LogType type, std::string message, std::string path)
     {
