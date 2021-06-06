@@ -11,9 +11,6 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
-// OpenGL
-#include <GL/glew.h>
-
 // Vulkan
 #include <vulkan/vulkan.h>
 #include <SDL2/SDL_vulkan.h>
