@@ -1,6 +1,6 @@
 # Akel
 
-![Logo](https://github.com/Kbz-8/Akel/blob/dev/src/assets/logo.png)
+![Logo](https://github.com/Kbz-8/Akel/blob/main/src/assets/logo.png)
 
 Akel is a game engine made for fun by a young french man.
 Currently at an early stage, it is still in development and still needs some work to turn it into something.
@@ -75,7 +75,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 
 
 # Akel useful features
-* Text management language [ELTM](https://github.com/Kbz-8/Akel/tree/dev/src/Modules/ELTM)
+* Text management language [ELTM](https://github.com/Kbz-8/Akel/tree/main/src/Modules/ELTM)
 * Simple but efficient error management system 
 * System information retrieval
   * CPU infos (hardware and software)
