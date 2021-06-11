@@ -12,5 +12,6 @@
 #include <Core/cpu.h>
 #include <Core/gpu.h>
 #include <Core/errors.h>
+#include <Core/application.h>
 
 #endif // __AK_CORE__

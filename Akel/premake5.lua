@@ -5,7 +5,6 @@ project "Akel"
 	staticruntime "on"
 	architecture "x86_64"
 
-	targetdir ("../build/" .. outputdir)
 	objdir ("../build-int/" .. outputdir)
 
 	pchheader "src/Akpch.h"
@@ -14,9 +13,11 @@ project "Akel"
 	linkoptions "-shared"
 
 	filter "system:windows"
+		targetdir ("../libs/lib/Windows")
 		libdirs "../libs/lib/Windows"
 
 	filter "system:linux"
+		targetdir ("../libs/lib/Linux")
 		libdirs "../libs/lib/Linux"
 
 	links

@@ -13,15 +13,10 @@ project "Editor"
 	pchsource "src/AkEpch.cpp"
 	flags "NoPCH"
 
-	filter {"system:windows", "configurations:Release"}
-		libdirs {"../libs/lib/Windows", "../build/Release-windows"}
-	filter {"system:windows", "configurations:Debug"}
-		libdirs {"../libs/lib/Windows", "../build/Debug-windows"}
-
-	filter {"system:linux", "configurations:Release"}
-		libdirs {"../libs/lib/Linux", "../build/Release-linux"}
-	filter {"system:linux", "configurations:Debug"}
-		libdirs {"../libs/lib/Linux", "../build/Debug-linux"}
+	filter "system:windows"
+		libdirs "../libs/lib/Windows"
+	filter "system:linux"
+		libdirs "../libs/lib/Linux"
 
 	links
 	{

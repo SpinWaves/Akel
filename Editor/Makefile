@@ -19,9 +19,12 @@ endif
 # #############################################
 
 RESCOMP = windres
+INCLUDES += -I../Akel/src -Isrc -I../libs/include
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+LIBS += ../libs/lib/Linux/libAkel.so -lImGui
+LDDEPS += ../libs/lib/Linux/libAkel.so
 LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
 define PREBUILDCMDS
 endef
@@ -35,24 +38,18 @@ TARGETDIR = ../build/Debug-linux
 TARGET = $(TARGETDIR)/Editor
 OBJDIR = ../build-int/Debug-linux/Debug/Editor
 DEFINES += -DAK_DEBUG
-INCLUDES += -I../Akel/src -Isrc -I../libs/include
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++17
-LIBS += ../build/Debug-linux/libAkel.so -lImGui
-LDDEPS += ../build/Debug-linux/libAkel.so
-ALL_LDFLAGS += $(LDFLAGS) -L../libs/lib/Linux -L../build/Debug-linux -L/usr/lib64 -Wl,-rpath,'$$ORIGIN' -m64
+ALL_LDFLAGS += $(LDFLAGS) -L../libs/lib/Linux -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../../libs/lib/Linux' -m64
 
 else ifeq ($(config),release)
 TARGETDIR = ../build/Release-linux
 TARGET = $(TARGETDIR)/Editor
 OBJDIR = ../build-int/Release-linux/Release/Editor
 DEFINES += -DAK_RELEASE
-INCLUDES +=
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c++17
-LIBS +=
-LDDEPS +=
-ALL_LDFLAGS += $(LDFLAGS) -L../libs/lib/Linux -L../build/Release-linux -L/usr/lib64 -m64 -s
+ALL_LDFLAGS += $(LDFLAGS) -L../libs/lib/Linux -L/usr/lib64 -Wl,-rpath,'$$ORIGIN/../../libs/lib/Linux' -m64 -s
 
 endif
 
@@ -66,19 +63,22 @@ endif
 GENERATED :=
 OBJECTS :=
 
-ifeq ($(config),debug)
 GENERATED += $(OBJDIR)/AkEpch.o
 GENERATED += $(OBJDIR)/editorApp.o
 OBJECTS += $(OBJDIR)/AkEpch.o
 OBJECTS += $(OBJDIR)/editorApp.o
-
-endif
 
 # Rules
 # #############################################
 
 all: $(TARGET)
 	@:
+
+$(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
+	$(PRELINKCMDS)
+	@echo Linking Editor
+	$(SILENT) $(LINKCMD)
+	$(POSTBUILDCMDS)
 
 $(TARGETDIR):
 	@echo Creating $(TARGETDIR)
@@ -127,36 +127,15 @@ $(OBJECTS): | prebuild
 endif
 
 
-ifeq ($(config),debug)
-$(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
-	$(PRELINKCMDS)
-	@echo Linking Editor
-	$(SILENT) $(LINKCMD)
-	$(POSTBUILDCMDS)
-
-
-else ifeq ($(config),release)
-$(TARGET): $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
-	$(PRELINKCMDS)
-	@echo Linking Editor
-	$(SILENT) $(LINKCMD)
-	$(POSTBUILDCMDS)
-
-
-endif
-
 # File Rules
 # #############################################
 
-ifeq ($(config),debug)
 $(OBJDIR)/AkEpch.o: src/AkEpch.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/editorApp.o: src/editorApp.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-
-endif
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))

@@ -1,15 +1,20 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 08/06/2021
+// UPDATED : 11/06/2021
 
 #ifndef __AK_ENTRY_POINT__
 #define __AK_ENTRY_POINT__
 
 #include <Akpch.h>
+#include <Core/application.h>
+
+extern Ak::Application* Akel_main();
 
 int main(int argc, char** argv)
 {
-	std::cout << "test" << std::endl;
+	auto app = Akel_main();
+	app->test();
+	delete app;
 
 	return 0;
 }

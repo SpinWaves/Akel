@@ -19,6 +19,8 @@ endif
 # #############################################
 
 RESCOMP = windres
+TARGETDIR = ../libs/lib/Linux
+TARGET = $(TARGETDIR)/libAkel.so
 INCLUDES += -I../libs/include -Isrc
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
@@ -34,8 +36,6 @@ define POSTBUILDCMDS
 endef
 
 ifeq ($(config),debug)
-TARGETDIR = ../build/Debug-linux
-TARGET = $(TARGETDIR)/libAkel.so
 OBJDIR = ../build-int/Debug-linux/Debug/Akel
 DEFINES += -DSDL_MAIN_HANDLED -DAK_DEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g
@@ -43,8 +43,6 @@ ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -fPIC -g -std=c++17
 ALL_LDFLAGS += $(LDFLAGS) -L../libs/lib/Linux -L/usr/lib64 -m64 -shared -Wl,-soname=libAkel.so -shared
 
 else ifeq ($(config),release)
-TARGETDIR = ../build/Release-linux
-TARGET = $(TARGETDIR)/libAkel.so
 OBJDIR = ../build-int/Release-linux/Release/Akel
 DEFINES += -DSDL_MAIN_HANDLED -DAK_RELEASE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -fPIC
@@ -67,6 +65,7 @@ GENERATED += $(OBJDIR)/Akpch.o
 GENERATED += $(OBJDIR)/ELTMcontext.o
 GENERATED += $(OBJDIR)/ELTMerrors.o
 GENERATED += $(OBJDIR)/ELTMwarnings.o
+GENERATED += $(OBJDIR)/application.o
 GENERATED += $(OBJDIR)/camera.o
 GENERATED += $(OBJDIR)/commandBuffer.o
 GENERATED += $(OBJDIR)/consoleOut.o
@@ -100,6 +99,7 @@ OBJECTS += $(OBJDIR)/Akpch.o
 OBJECTS += $(OBJDIR)/ELTMcontext.o
 OBJECTS += $(OBJDIR)/ELTMerrors.o
 OBJECTS += $(OBJDIR)/ELTMwarnings.o
+OBJECTS += $(OBJDIR)/application.o
 OBJECTS += $(OBJDIR)/camera.o
 OBJECTS += $(OBJDIR)/commandBuffer.o
 OBJECTS += $(OBJDIR)/consoleOut.o
@@ -193,6 +193,9 @@ endif
 # #############################################
 
 $(OBJDIR)/Akpch.o: src/Akpch.cpp
+	@echo $(notdir $<)
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/application.o: src/Core/application.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/cpu.o: src/Core/cpu.cpp
