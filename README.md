@@ -1,6 +1,7 @@
 # Akel
-
-<img src="https://github.com/Kbz-8/Akel/blob/main/src/assets/logo.png" alt="drawing" width="300"/>
+<p align="center">
+    <img src="https://github.com/Kbz-8/Akel/blob/main/src/assets/logo.png" alt="drawing" width="500"/>
+</p>
 
 Akel is a game engine made for fun by a young french man.
 Currently at an early stage, it is still in development and still needs some work to turn it into something.
