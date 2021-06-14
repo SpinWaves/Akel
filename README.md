@@ -9,7 +9,7 @@ An editor (like Unity or UnrealEngine) is in development, facilitating the creat
 Akel is designed to be extremely easy to use. Not being the most powerful, it goes the way of simplicity of use, both on the editor side and on the code side.
 
 # Getting started
-Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, although it has not been tested on this OS (no information about MacOS, I have to find out). It is used with [Premake5](https://premake.github.io/). GCC 9 is required because it uses C++17 features. Dependencies are provided (SDL2, ImGui, Vulkan, GML) with the code.
+Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, although it has not been tested on this OS (no information about MacOS, I have to find out). It is used with [Premake5](https://premake.github.io/). GCC 9 is required because it uses C++17 features. Dependencies are provided (SDL2, ImGui, Vulkan, GLM) with the code.
 
 * Start by clonning the repo `git clone https://github.com.Kbz-8/Akel`.
 * <details> <summary>Use the "premake5" executable provided in "dependencies/premake/bin" (choose carefully according to your system (Windows, Linux, ...)), then launch it in the main folder with the right option depending on how you compile your it :</summary>
@@ -28,10 +28,10 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
     gmake2 | Generate GNU Makefiles (including Cygwin and MinGW)
     xcode4 | XCode projects
     codelite | CodeLite projects
-    
-</details>
-* Build your project and enjoy or cry depending on if it compiles correctly or if there are 400 errors
 
+</details>
+
+* Build your project and enjoy or cry depending on if it compiles correctly or if there are 400 errors
 
 # Akel useful features
 * Text management language [ELTM](https://github.com/Kbz-8/Akel/tree/main/src/Modules/ELTM)
