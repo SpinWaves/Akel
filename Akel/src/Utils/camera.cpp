@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/05/2021
-// UPDATED : 02/06/2021
+// UPDATED : 13/06/2021
 
 #include <Utils/utils.h>
 #include <Renderer/renderer.h>
@@ -11,9 +11,9 @@
 
 namespace Ak
 {
-	Camera3D::Camera3D(int pos_x, int pos_y, int pos_z)
+	Camera3D::Camera3D()
 	{
-		_position.SET(pos_x, pos_y, pos_z);
+		_position.SET(0, 0, 0);
 		_phi = -79;
 		_theta = 0;
 		VectorsFromAngles();
@@ -59,42 +59,6 @@ namespace Ak
 
 		Move(_movement.X, _movement.Y, _movement.Z);     //update
 	}
-
-	void Camera3D::update(Window &win)
-	{
-		_movement.SET(0, 0, 0);
-
-		if(_grabMouse)
-		{
-			_theta -= win.getXRel() * _sensivity;
-			_phi -= win.getYRel() * _sensivity;
-			VectorsFromAngles();
-		}
-
-		if(win.getInKey(AK_KEY_F1, UP))
-		{
-			_grabMouse = _grabMouse? SDL_FALSE : SDL_TRUE;
-			SDL_SetRelativeMouseMode(_grabMouse);
-		}
-		if(!_grabMouse && win.getInMouse(1, UP))
-		{
-			_grabMouse = SDL_TRUE;
-			SDL_SetRelativeMouseMode(SDL_TRUE);
-		}
-
-		realspeed = (win.getInKey(AK_KEY_EXECUTE))? 10 * _speed : _speed;
-
-		if(win.getInKey(AK_KEY_W) || win.getInKey(AK_KEY_UP))  			_movement += _forward.DirectCopy().NEGATE();
-		if(win.getInKey(AK_KEY_S) || win.getInKey(AK_KEY_DOWN))   		_movement += _forward.DirectCopy();
-		if(win.getInKey(AK_KEY_A) || win.getInKey(AK_KEY_LEFT))   		_movement += _left.DirectCopy();
-		if(win.getInKey(AK_KEY_D) || win.getInKey(AK_KEY_RIGHT))  		_movement += _left.DirectCopy().NEGATE();
-		if(win.getInKey(AK_KEY_LSHIFT) || win.getInKey(AK_KEY_RSHIFT))	_movement -= _up;
-		if(win.getInKey(AK_KEY_SPACE))									_movement += _up;
-
-		Move(_movement.X, _movement.Y, _movement.Z);     //update
-	}
-
-
 
 	void Camera3D::Move(double x, double y, double z)
 	{

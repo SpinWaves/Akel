@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 05/06/2021
+// UPDATED : 13/06/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -28,14 +28,9 @@ enum windowSetting
     icon
 };
 
-enum windowComponents
-{
-	INPUTS
-};
-
 namespace Ak
 {
-    class Window : public Instance, public Input
+    class Window : public Instance
     {
         public:
             Window();
@@ -49,8 +44,6 @@ namespace Ak
             void setSetting(windowSetting setting, bool value);
             void setSetting(windowSetting setting, float value);
             void setSetting(windowSetting setting, uint16_t x, uint16_t y);
-
-			void activateComponent(windowComponents component, bool activate);
 
             // Getters
             std::string getTitle();
@@ -70,11 +63,6 @@ namespace Ak
             std::string _title;
             Maths::Vec2<uint16_t> _position;
             Maths::Vec2<uint16_t> _size;
-
-			std::unordered_map<windowComponents, bool> _components
-			{
-				{INPUTS, true},		// Inputs are activated by default
-			};
 
             uint32_t _flags;
 

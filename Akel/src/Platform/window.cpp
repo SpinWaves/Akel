@@ -1,12 +1,12 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 05/06/2021
+// UPDATED : 13/06/2021
 
 #include <Platform/platform.h>
 
 namespace Ak
 {
-    Window::Window() : Instance(), Input() {}
+    Window::Window() : Instance() {}
 
     void Window::create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height)
     {
@@ -80,12 +80,6 @@ namespace Ak
         }
     }
 
-	void Window::activateComponent(windowComponents component, bool activate)
-	{
-		_components[component] = activate;
-	}
-    
-
     // ================ Getters ================ //
     std::string Window::getTitle()
     {
@@ -108,11 +102,6 @@ namespace Ak
     {
         Instance::init(_window, vert, frag);
     }
-    void Window::update()
-    {
-		Input::update();
-    }
-
 
     void Window::destroy()
     {

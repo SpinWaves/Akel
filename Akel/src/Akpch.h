@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 11/06/2021
+// UPDATED : 13/06/2021
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -25,18 +25,21 @@
 #include <algorithm>
 
 // Memory
+#include <memory>
+#include <initializer_list>
+#include <any>
+#include <type_traits>
+#include <tuple>
+
+// Containers
+#include <optional>
+#include <set>
+#include <unordered_map>
 #include <string>
 #include <map>
 #include <vector>
 #include <array>
 #include <variant>
-#include <unordered_map>
-#include <memory> // std::shared_ptr
-#include <initializer_list>
-#include <type_traits>
-#include <optional>
-#include <set>
-#include <any>
 
 // Streams
 #include <iostream>

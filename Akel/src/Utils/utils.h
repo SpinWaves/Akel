@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 03/06/2021
+// UPDATED : 14/06/2021
 
 #ifndef __A_UTILS__
 #define __A_UTILS__
@@ -17,6 +17,7 @@
 #include <Utils/consoleOut.h>
 #include <Utils/fps.h>
 #include <Utils/camera.h>
+#include <Utils/typeFinderTuple.h>
 
 #include <Utils/Containers/containers.h>
 

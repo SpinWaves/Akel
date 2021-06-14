@@ -1,75 +1,53 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 11/06/2021
+// UPDATED : 14/06/2021
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
 
 #include <Akpch.h>
-#include <Platform/platform.h>
-#include <Utils/utils.h>
+#include <Platform/window.h>
+#include <Platform/input.h>
+#include <Utils/camera.h>
+#include <Utils/Containers/duetsArray.h>
+#include <Utils/typeFinderTuple.h>
 
 namespace Ak
 {
 	class Window;
 	class Input;
 	class Camera3D;
-}
 
-enum Components
-{
-	WINDOW = Ak::Window,
-	INPUT = Ak::Input,
-	CAM_2D,
-	CAM_3D = Ak::Camera3D
-};
-
-namespace Ak
-{
 	class Application
 	{
 		public:
-			Application(const std::string& name);
+			Application(const std::string name);
 
-			template <Components Comp, typename T>
+			template <typename Comp, typename T>
 			void addComponent(T component)
 			{
-				Comp compo;
-				if(nullptr == dynamic_cast<T*>(&component))
-				{
-					std::cout << red << "Akel application : bad component type" << def << std::endl;
-					return;
-				}
-				switch(component)
-				{
-					case WINDOW: _components[WINDOW] = component; break;
-					case INPUT: _components[INPUT] = component; break;
-					case CAM_3D: _components[CAM_3D] = component; break;
-
-					default: break;
-				}
+				Comp type;
+				static_assert(std::is_same_v<decltype(component), decltype(type)>, "Akel application : the type of the component must be the same as the one specified");
+				_components[tuple_element_finder_v<T, decltype(_componentsTypes)>] = component;
 			}
-			template <Components T>
+			template <typename Comp>
 			void addComponent()
 			{
-				T component;
-				switch(component)
-				{
-					case WINDOW: _components[WINDOW] = Window; break;
-					case INPUT: _components[INPUT] = Input; break;
-					case CAM_3D: _components[CAM_3D] = Camera3D; break;
-
-					default: break;
-				}
+				_components[tuple_element_finder_v<Comp, decltype(_componentsTypes)>] = default_t<Comp>::get();
 			}
 
-			decltype(auto) getComponent(Components component);
+			template <typename T>
+			T getComponent()
+			{
+				return _components[tuple_element_finder_v<T, decltype(_componentsTypes)>];
+			}
 
 			virtual ~Application() = default;
 
 		private:
 			std::string _name = "";
-			std::unordered_map<Components, std::any> _components;
+			std::tuple<Window, Input> _componentsTypes;
+			std::array<std::any, std::tuple_size_v<decltype(_componentsTypes)>> _components;
 	};
 }
 

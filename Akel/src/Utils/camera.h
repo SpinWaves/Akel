@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/05/2021
-// UPDATED : 03/06/2021
+// UPDATED : 13/06/2021
 
 #ifndef __AK_CAMERA__
 #define __AK_CAMERA__ 
@@ -12,15 +12,13 @@
 namespace Ak
 {
 	class Input;
-	class Window;
 
 	class Camera3D
 	{
 		public:
-			Camera3D(int pos_x, int pos_y, int pos_z);
+			Camera3D();
 
 			void update(Input &input);
-			void update(Window &win);
 			void setPosition(int pos_x, int pos_y, int pos_z);
 
 			void look();

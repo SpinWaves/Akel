@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/05/2021
-// UPDATED : 03/06/2021
+// UPDATED : 14/06/2021
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__
@@ -9,40 +9,36 @@
 
 namespace Ak
 {
-	class default_t	// class for default value of any type
+	template <class T>
+	struct default_t
 	{
-		public:
-		  	template<typename T>
-		 	 operator T() const
-		 	 { 
-		  		return T(); 
-			 }
+		static T get()
+		{
+			return T();
+		}
 	};
-
-	default_t const DEFAULT = default_t(); // universal default value (int thing = DEFAULT;, std::vector<std::string> other = DEFAULT;)
 
 
 	template <typename __first, typename __second>
 	class duets_array
 	{
 		using __type = std::pair<__first, __second>;
-		#define __mv std::move
 
 		public:
 			duets_array(std::initializer_list<__type> duets)
 			{
 				assert(duets.size() <= _array.max_size());
-				_array = __mv(duets);
+				_array = std::move(duets);
 			}
-			duets_array& operator= (const duets_array&& array) noexcept	// copy duets_array from another
+			duets_array& operator= (const duets_array&& array) noexcept
 			{
-				_array = __mv(array);
+				_array = std::move(array);
 				return *this;
 			}
 
 			duets_array& set_duet(const __first&& first, const __second&& second) noexcept
 			{
-				_array.push_back(__type(__mv(first), __mv(second)));
+				_array.push_back(__type(std::move(first), std::move(second)));
 				return *this;
 			}
 
@@ -148,9 +144,9 @@ namespace Ak
 
 		private:
 			std::vector<__type> _array;
-			const __first _fDefault = DEFAULT;
-			const __second _sDefault = DEFAULT;
-			const __type _dDefault = DEFAULT;
+			const __first _fDefault = default_t<__first>::get();
+			const __second _sDefault = default_t<__second>::get();
+			const __type _dDefault = default_t<__type>::get();
 	};
 }
 
