@@ -25,60 +25,59 @@ namespace Ak
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
 	}
-
-    // ================ Setters ================ //
-    void Window::setSetting(windowSetting setting, const char* value)
-    {
-        switch(setting)
-        {
-            case title: SDL_SetWindowTitle(_window, value); break;
-            case icon: _icon = IMG_Load(value); SDL_SetWindowIcon(_window, _icon); break;
-
-            default: messageBox(ERROR, "Unable to modify window's parameter", AK_CATCH_WIN_SETTING); break;
-        }
-    }
-    void Window::setSetting(windowSetting setting, bool value)
-    {
-        SDL_bool pass;
-        if(value) pass = SDL_TRUE;
-        else      pass = SDL_FALSE;
-
-        switch(setting)
-        {
-            case fullscreen: SDL_SetWindowFullscreen(_window, pass); break;
-            case border:     SDL_SetWindowBordered(_window, pass); break; 
-            case resizable:  SDL_SetWindowResizable(_window, pass); break; 
-            case visible:
-            {
-                if(value) SDL_ShowWindow(_window);
-                else      SDL_HideWindow(_window);
-                break;
-            }
-            default: messageBox(ERROR, "Unable to modify window's parameter", AK_CATCH_WIN_SETTING); break;
-        }
-    }
-    void Window::setSetting(windowSetting setting, float value)
-    {
-        switch(setting)
-        {
-            case brightness: SDL_SetWindowBrightness(_window, value); break;
-            case opacity: SDL_SetWindowOpacity(_window, value); break;
-
-            default: messageBox(ERROR, "Unable to modify window's parameter", AK_CATCH_WIN_SETTING); break;
-        }
-    }
-    void Window::setSetting(windowSetting setting, uint16_t x, uint16_t y)
-    {
-        switch(setting)
-        {
-            case position:    _position.SET(x, y); SDL_SetWindowPosition(_window, x, y);  break; 
-            case dimensions:  _size.SET(x, y); SDL_SetWindowSize(_window, x, y); break;
-            case maximumSize: SDL_SetWindowMaximumSize(_window, x, y); break;
-            case minimumSize: SDL_SetWindowMinimumSize(_window, x, y); break;
-
-            default: messageBox(ERROR, "Unable to modify window's parameter", AK_CATCH_WIN_SETTING); break;
-        }
-    }
+	// Functions for window settings that use SDL2 functions. They are here to avoid you to link SDL2
+	void Window::setMaxSize(int x, int y)
+	{
+		SDL_SetWindowMaximumSize(_window, x, y);
+	}
+	void Window::setMinSize(int x, int y)
+	{
+		SDL_SetWindowMinimumSize(_window, x, y);
+	}
+	void Window::setPos(int x, int y)
+	{
+		SDL_SetWindowPosition(_window, x, y);
+	}
+	void Window::setSize(int x, int y)
+	{
+		SDL_SetWindowSize(_window, x, y);
+	}
+	void Window::setFullscreen(SDL_bool value)
+	{
+		SDL_SetWindowFullscreen(_window, value);
+	}
+	void Window::setBordered(SDL_bool value)
+	{
+		SDL_SetWindowBordered(_window, value);
+	}
+	void Window::setResizable(SDL_bool value)
+	{
+		SDL_SetWindowResizable(_window, value);
+	}
+	void Window::setShow(SDL_bool value)
+	{
+		if(value)
+			SDL_ShowWindow(_window);
+		else
+			SDL_HideWindow(_window);
+	}
+	void Window::setBrightness(float value)
+	{
+		SDL_SetWindowBrightness(_window, value);
+	}
+	void Window::setOpacity(float value)
+	{
+		SDL_SetWindowOpacity(_window, value);
+	}
+	void Window::setTitle(const char* value)
+	{
+		SDL_SetWindowTitle(_window, value);
+	}
+	void Window::setIcon(const char* value)
+	{
+		_icon = IMG_Load(value);
+		SDL_SetWindowIcon(_window, _icon);
+	}
 
     // ================ Getters ================ //
     std::string Window::getTitle()
@@ -112,3 +111,4 @@ namespace Ak
 
     Window::~Window(){}
 }
+

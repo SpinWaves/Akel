@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 06/06/2021
+// UPDATED : 14/06/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -30,6 +30,15 @@ namespace Ak
         createSemaphores();
     }
 
+	void Instance::setVsync(bool setter)
+	{
+		enableVsync = setter;
+	}
+
+	bool Instance::getVsync()
+	{
+		return enableVsync;
+	}
 
     std::vector<const char*> Instance::getRequiredExtensions() 
     {

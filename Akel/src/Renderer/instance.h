@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 06/06/2021
+// UPDATED : 14/06/2021
 
 #ifndef __AK_INSTANCE__
 #define __AK_INSTANCE__
@@ -26,6 +26,8 @@ namespace Ak
 
         protected:
             void cleanup();
+			void setVsync(bool setter);
+			bool getVsync();
 
         private:
             void createInstance();

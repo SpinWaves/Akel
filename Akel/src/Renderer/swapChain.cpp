@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 06/06/2021
+// UPDATED : 14/06/2021
 
 #include <Renderer/renderer.h>
 
@@ -17,9 +17,8 @@ namespace Ak
         VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
 
         uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
-        if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
+        if(swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount)
             imageCount = swapChainSupport.capabilities.maxImageCount;
-        }
 
         VkSwapchainCreateInfoKHR createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -35,13 +34,14 @@ namespace Ak
         QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
         uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
-        if (indices.graphicsFamily != indices.presentFamily) {
+        if(indices.graphicsFamily != indices.presentFamily)
+		{
             createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
             createInfo.queueFamilyIndexCount = 2;
             createInfo.pQueueFamilyIndices = queueFamilyIndices;
-        } else {
+        } 
+		else
             createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        }
 
         createInfo.preTransform = swapChainSupport.capabilities.currentTransform;
         createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
@@ -50,9 +50,8 @@ namespace Ak
 
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-        if (vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) != VK_SUCCESS) {
+        if(vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) != VK_SUCCESS)
             std::cout << "failed to create swap chain!" << std::endl;
-        }
 
         vkGetSwapchainImagesKHR(device, swapChain, &imageCount, nullptr);
         swapChainImages.resize(imageCount);
@@ -91,6 +90,9 @@ namespace Ak
 
     VkPresentModeKHR SwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes)
     {
+		if(!enableVsync)
+			return VK_PRESENT_MODE_IMMEDIATE_KHR;
+
         for(const auto& availablePresentMode : availablePresentModes)
         {
             if(availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
