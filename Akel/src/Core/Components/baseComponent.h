@@ -14,9 +14,9 @@ namespace Ak
 		public:
 			Component(const char* name = "Component");
 
-			virtual void init() {};
+			virtual void onAttach() {};
 			virtual void update() {};
-			virtual void quit() {};
+			virtual void onQuit() {};
 
 			const char* getName();
 			virtual ~Component();

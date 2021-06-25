@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 24/06/2021
+// UPDATED : 25/06/2021
 
 #include <Core/Components/components.h>
 
@@ -30,7 +30,7 @@ namespace Ak
 	}
 
 
-	constexpr Component* operator[](const char* name)
+	constexpr Component* ComponentStack::get_component(const char* name)
 	{
 		for(auto elem : _components)
 		{
@@ -38,7 +38,7 @@ namespace Ak
 				return elem;
 		}
 	}
-	constexpr Component* operator[](size_t index)
+	constexpr Component* ComponentStack::get_component(size_t index)
 	{
 		if(index <= _components.size())
 			return _components[index];

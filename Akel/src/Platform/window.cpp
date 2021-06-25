@@ -1,12 +1,12 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 13/06/2021
+// UPDATED : 25/06/2021
 
 #include <Platform/platform.h>
 
 namespace Ak
 {
-    Window::Window() : Instance() {}
+    Window::Window() : Instance(), Component{}
 
     void Window::create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height)
     {
@@ -25,6 +25,20 @@ namespace Ak
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
 	}
+
+	void Window::onAttach()
+	{
+        Instance::init(_window, "vert.spv", "frag.spv");
+	}
+	void Window::update()
+	{
+
+	}
+	void Window::onQuit()
+	{
+        Instance::cleanup();
+	}
+
 	// Functions for window settings that use SDL2 functions. They are here to avoid you to link SDL2
 	void Window::setMaxSize(int x, int y)
 	{
@@ -97,15 +111,9 @@ namespace Ak
         return _size;
     }
 
-    void Window::initWindowRenderer(const char* vert, const char* frag)
-    {
-        Instance::init(_window, vert, frag);
-    }
-
     void Window::destroy()
     {
         SDL_FreeSurface(_icon);
-        Instance::cleanup();
         SDL_DestroyWindow(_window);
     }
 

@@ -38,7 +38,10 @@ namespace Ak
             Window();
 
             void create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height);
-            void initWindowRenderer(const char* vert, const char* frag);
+			
+			void onAttach() override;
+			void update() override;		// overrides from Component class
+			void onQuit() override;
 
 			// ================ Setters ================ //
 			template <windowSetting T>
