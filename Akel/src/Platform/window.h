@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 14/06/2021
+// UPDATED : 25/06/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -32,7 +32,7 @@ enum windowSetting
 
 namespace Ak
 {
-    class Window : public Instance
+    class Window : public Instance, public Component
     {
         public:
             Window();
@@ -55,11 +55,7 @@ namespace Ak
 			template <windowSetting T>
 			void setSetting(bool value)
 			{
-				SDL_bool pass;
-				if(value)
-					pass = SDL_TRUE;
-				else
-					pass = SDL_FALSE;
+				SDL_bool pass = value ? SDL_TRUE : SDL_FALSE;
 
 				switch(T)
 				{
@@ -99,7 +95,7 @@ namespace Ak
 
             // Getters
             std::string getTitle();
-            uint32_t getFlags();
+            //uint32_t getFlags();
             Maths::Vec2<uint16_t> getPosition();
             Maths::Vec2<uint16_t> getSize();
 

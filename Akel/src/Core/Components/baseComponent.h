@@ -14,7 +14,10 @@ namespace Ak
 		public:
 			Component(const char* name = "Component");
 
+			virtual void init() {};
 			virtual void update() {};
+			virtual void quit() {};
+
 			const char* getName();
 			virtual ~Component();
 
