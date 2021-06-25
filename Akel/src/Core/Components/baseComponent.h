@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 24/06/2021
+// UPDATED : 25/06/2021
 
 #ifndef __AK_BASE_COMPONENT__
 #define __AK_BASE_COMPONENT__
