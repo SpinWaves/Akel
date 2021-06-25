@@ -19,5 +19,7 @@ namespace Ak
 				elem->update();
 		}
 	}
+
+	Application::~Application() {}
 }
 
