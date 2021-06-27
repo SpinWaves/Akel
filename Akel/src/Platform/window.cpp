@@ -1,16 +1,27 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 25/06/2021
+// UPDATED : 26/06/2021
 
 #include <Platform/platform.h>
 
 namespace Ak
 {
-    Window::Window() : Instance(), Component{}
+	const char* __win_comp_name(const char* manualName = "none")
+	{
+		if(manualName == "none")
+		{
+			static int i = 0;
+			std::string name = "__window" + std::to_string(i);
+			i++;
+			return name.c_str();
+		}
+		return manualName;
+	}
 
-    void Window::create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height)
+    Window::Window(const char* componentName) : Instance(), Component(__win_comp_name(componentName)){}
+
+    void Window::create(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
     {
-        _title = title;
         _position.SET(x, y);
         _size.SET(width, height);
         SDL_Init(SDL_INIT_VIDEO);
@@ -18,7 +29,7 @@ namespace Ak
 
         _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN;
  
-        _window = SDL_CreateWindow(title.c_str(), x, y, width, height, _flags);
+        _window = SDL_CreateWindow(_title.c_str(), x, y, width, height, _flags);
         if(!_window)
             messageBox(FATAL_ERROR, "Unable to create a window", SDL_GetError());
 
@@ -98,10 +109,10 @@ namespace Ak
     {
         return _title;
     }
-    uint32_t Window::getFlags()
-    {
-        return _flags;
-    }
+    //uint32_t Window::getFlags()
+    //{
+        //return _flags;
+    //}
     Maths::Vec2<uint16_t> Window::getPosition()
     {
         return _position;

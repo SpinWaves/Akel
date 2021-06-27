@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 25/06/2021
+// UPDATED : 26/06/2021
 
 #ifndef __AK_COMPONENTS_STACK__
 #define __AK_COMPONENTS_STACK__
@@ -19,8 +19,8 @@ namespace Ak
 			void remove_component(Component* component);	// Modifiers
 			void remove_component(const char* name);
 
-			constexpr Component* get_component(const char* name); // Accessor
-			constexpr Component* get_component(size_t index);
+			Component* get_component(const char* name); // Accessor
+			Component* get_component(size_t index);
 
 			std::vector<Component*>::iterator begin()
 			{ 
@@ -39,11 +39,11 @@ namespace Ak
 				return _components.rend();
 			}
 
-			std::vector<Component*>::const_iterator begin()
+			std::vector<Component*>::const_iterator cbegin()
 			{
 				return _components.cbegin();
 			}
-			std::vector<Component*>::const_iterator end()
+			std::vector<Component*>::const_iterator cend()
 			{
 				return _components.cend();
 			}
@@ -58,7 +58,7 @@ namespace Ak
 
 			~ComponentStack();
 
-		private:
+		protected:
 			std::vector<Component*> _components;
 	};
 }

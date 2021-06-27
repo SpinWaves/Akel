@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/04/2021
-// UPDATED : 05/06/2021
+// UPDATED : 26/06/2021
 
 #include <Core/core.h>
 #include <Platform/platform.h>
@@ -23,7 +23,7 @@ namespace Ak::Core
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 
         if(vkCreateInstance(&createInfo, nullptr, &_instance) != VK_SUCCESS)
-            messageBox(ERROR, "Unable to get GPU info", AK_CATCH_VK_INSTANCE_CREATION);
+            messageBox(ERROR, "Unable to get GPU info", "Vulkan instance : unable to create vulkan instance");
         else
         {
             vkEnumeratePhysicalDevices(_instance, &_deviceCount, nullptr);

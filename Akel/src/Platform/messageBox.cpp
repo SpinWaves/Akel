@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 18/05/2021
+// UPDATED : 27/06/2021
 
 #include <Platform/platform.h>
 
@@ -53,25 +53,25 @@ namespace Ak
         SDL_ShowMessageBox(&messageboxdata, &buttonid);
 
         if(buttonid == 1)
-            Core::log::report(type, logReport, Core::getLogsDirPath());
-        else
-        {
-            message.append(":\n");
-            message.append(logReport);
+		{
+            Core::log::report(type, logReport);
+			return;
+		}
+		message.append(":\n");
+		message.append(logReport);
 
-             messageboxdata = {
-                flag, /* .flags */
-                NULL, /* .window */
-                title, /* .title */
-                message.c_str(), /* .message */
-                SDL_arraysize(buttons) - 1, /* .numbuttons */
-                buttons, /* .buttons */
-                &colorScheme /* .colorScheme */
-            };
+		 messageboxdata = {
+			flag, /* .flags */
+			NULL, /* .window */
+			title, /* .title */
+			message.c_str(), /* .message */
+			SDL_arraysize(buttons) - 1, /* .numbuttons */
+			buttons, /* .buttons */
+			&colorScheme /* .colorScheme */
+		};
 
-            SDL_ShowMessageBox(&messageboxdata, &buttonid);
-            if(buttonid == 1)
-                Core::log::report(type, logReport, Core::getLogsDirPath());
-        }
+		SDL_ShowMessageBox(&messageboxdata, &buttonid);
+		if(buttonid == 1)
+			Core::log::report(type, logReport);
     }
 }

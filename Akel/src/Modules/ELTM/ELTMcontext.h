@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 03/06/2021
+// UPDATED : 26/06/2021
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -8,6 +8,7 @@
 #include <Akpch.h>
 #include <Modules/ELTM/ELTMerrors.h>
 #include <Utils/utils.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
@@ -80,7 +81,7 @@ namespace Ak
 	};
 
 	#undef getText
-	#define getText(ID) getText(ID, __LINE__, __FILE__, __FUNCTION__)
+	#define getText(ID) getText(ID, __LINE__, __FILE__, AK_FUNC_SIG)
 }
 
 #endif // __AK_ELTM_CONTEXT__

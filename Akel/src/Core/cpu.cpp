@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 21/04/2021
-// UPDATED : 27/04/2021
+// UPDATED : 26/06/2021
 
 #include <Core/core.h>
 #include <Platform/platform.h>
@@ -124,7 +124,7 @@ namespace Ak::Core
                 _NumCores = _NumLogCpus = 1;
         } 
         else
-            messageBox(ERROR, "Unable to get CPU info", AK_CATCH_CPU_VENDOR_INFO);
+            messageBox(ERROR, "Unable to get CPU info", "Unexpected vendor id");
 
         for(int i = 0x80000002; i < 0x80000005; i++)
         {

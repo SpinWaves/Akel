@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 25/06/2021
+// UPDATED : 26/06/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -35,9 +35,9 @@ namespace Ak
     class Window : public Instance, public Component
     {
         public:
-            Window();
+            Window(const char* componentName = "none");
 
-            void create(std::string title, uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+            void create(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 			
 			void onAttach() override;
 			void update() override;		// overrides from Component class
@@ -102,8 +102,6 @@ namespace Ak
             Maths::Vec2<uint16_t> getPosition();
             Maths::Vec2<uint16_t> getSize();
 
-            void update();
-
             void destroy();
 
             virtual ~Window();
@@ -111,7 +109,7 @@ namespace Ak
         private:
             SDL_Window* _window;
 
-            std::string _title;
+            std::string _title = "";
             Maths::Vec2<uint16_t> _position;
             Maths::Vec2<uint16_t> _size;
 

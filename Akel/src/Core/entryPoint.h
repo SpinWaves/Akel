@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 23/06/2021
+// UPDATED : 27/06/2021
 
 #ifndef __AK_ENTRY_POINT__
 #define __AK_ENTRY_POINT__
@@ -13,7 +13,9 @@ extern Ak::Application* Akel_main();
 int main(int argc, char** argv)
 {
 	auto app = Akel_main();
+	app->run();
 	delete app;
+
 	return 0;
 }
 

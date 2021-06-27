@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 07/05/2021
-// UPDATED : 03/06/2021
+// UPDATED : 27/06/2021
 
 #ifndef __AK_STREAM_STACK__
 #define __AK_STREAM_STACK__
@@ -8,6 +8,7 @@
 #include <Akpch.h>
 #include <Modules/ELTM/token.h>
 #include <Utils/utils.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
@@ -107,9 +108,9 @@ namespace Ak
 	};
 
 	#undef tokenize
-	#define tokenize(file) tokenize(file, __FILE__, __FUNCTION__, __LINE__)
+	#define tokenize(file) tokenize(file, __FILE__, AK_FUNC_SIG, __LINE__)
 	#undef getToken
-	#define getToken(line, index) getToken(line, index, __FILE__, __FUNCTION__, __LINE__)
+	#define getToken(line, index) getToken(line, index, __FILE__, AK_FUNC_SIG, __LINE__)
 }
 
 #endif // __AK_STREAM_STACK__

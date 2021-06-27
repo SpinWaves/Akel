@@ -1,0 +1,5 @@
+*.log
+Makefile
+build/
+build-int/
+

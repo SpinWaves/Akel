@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 25/06/2021
+// UPDATED : 27/06/2021
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -13,7 +13,7 @@ namespace Ak
 	class Application : public ComponentStack
 	{
 		public:
-			Application(const std::string name);
+			Application(const char* name);
 			void run();
 			~Application() = default;
 

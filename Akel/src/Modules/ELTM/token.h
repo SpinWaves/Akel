@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/05/2021
-// UPDATED : 18/06/2021
+// UPDATED : 26/06/2021
 
 #ifndef __AK_ELTM_TOKEN__
 #define __AK_ELTM_TOKEN__
@@ -8,6 +8,7 @@
 #include <Akpch.h>
 #include <Modules/ELTM/ELTMerrors.h>
 #include <Utils/utils.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
@@ -103,9 +104,9 @@ namespace Ak
 	};
 
 	#undef getString
-	#define getString() getString(__FILE__, __FUNCTION__, __LINE__)
+	#define getString() getString(__FILE__, AK_FUNC_SIG, __LINE__)
 	#undef getReservedToken
-	#define getReservedToken() getReservedToken(__FILE__, __FUNCTION__, __LINE__)
+	#define getReservedToken() getReservedToken(__FILE__, AK_FUNC_SIG, __LINE__)
 }
 
 #endif // __AK_ELTM_TOKEN__

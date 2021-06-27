@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 25/04/2021
+// UPDATED : 27/04/2021
 
 #include <Core/core.h>
 
@@ -13,10 +13,10 @@ namespace Ak::Core
         for(auto& dirs : std::filesystem::recursive_directory_iterator(path))
         {
             mainPath = dirs.path().string();
-            std::size_t found = mainPath.rfind("AtlasEngine.h");
+            std::size_t found = mainPath.rfind("Akel.h");
             if(found != std::string::npos)
             {
-                mainPath.erase(mainPath.begin() + found - std::string("src/").length(), mainPath.end());
+                mainPath.erase(mainPath.begin() + found - std::string("Akel/src/").length(), mainPath.end());
                 return mainPath;
             }
         }
@@ -25,7 +25,7 @@ namespace Ak::Core
 
     std::string getAssetsDirPath()
     {
-        return getMainDirPath() + "src/assets/";
+        return getMainDirPath() + "Ressources/";
     }
 
     std::string getLogsDirPath()

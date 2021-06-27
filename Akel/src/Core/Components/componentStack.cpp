@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 25/06/2021
+// UPDATED : 27/06/2021
 
 #include <Core/Components/components.h>
 
@@ -21,7 +21,7 @@ namespace Ak
 	{
 		for(size_t i = 0; i < _components.size(); i++)
 		{
-			if(_components[i].getName() == name)
+			if(_components[i]->getName() == name)
 			{
 				_components.erase(_components.begin() + i);
 				break;
@@ -30,15 +30,15 @@ namespace Ak
 	}
 
 
-	constexpr Component* ComponentStack::get_component(const char* name)
+	Component* ComponentStack::get_component(const char* name)
 	{
 		for(auto elem : _components)
 		{
-			if(elem.getName() == name)
+			if(elem->getName() == name)
 				return elem;
 		}
 	}
-	constexpr Component* ComponentStack::get_component(size_t index)
+	Component* ComponentStack::get_component(size_t index)
 	{
 		if(index <= _components.size())
 			return _components[index];
