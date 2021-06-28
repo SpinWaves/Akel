@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 05/06/2021
+// UPDATED : 28/06/2021
 
 #include <Renderer/renderer.h>
+#include <Core/core.h>
 
 namespace Ak
 {
@@ -14,7 +15,7 @@ namespace Ak
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
         if(deviceCount == 0)
-            std::cout << "failed to find GPUs with Vulkan support!" << std::endl;
+			Core::log::report(ERROR, "Vulkan : Failed to find GPUs with Vulkan support");
 
         std::vector<VkPhysicalDevice> devices(deviceCount);
         vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
@@ -29,7 +30,7 @@ namespace Ak
         }
 
         if(physicalDevice == VK_NULL_HANDLE)
-            std::cout << "failed to find a suitable GPU!" << std::endl;
+			Core::log::report(ERROR, "Vulkan : Failed to find a suitable GPU");
     }
 
     bool Device::isDeviceSuitable(VkPhysicalDevice device)
@@ -105,7 +106,7 @@ namespace Ak
             createInfo.enabledLayerCount = 0;
 
         if(vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS)
-            std::cout << "failed to create logical device!" << std::endl;
+			Core::log::report(ERROR, "Vulkan : Failed to create logcal device");
 
         vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
         vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &presentQueue);

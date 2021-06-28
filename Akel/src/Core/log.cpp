@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 27/06/2021
+// UPDATED : 28/06/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -9,10 +9,19 @@ namespace Ak::Core
 {
     void log::report(enum LogType type, std::string message)
     {
-		_out.open(getTime(type, getLogsDirPath()).c_str(), std::ios::app);
+		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
         if(_out.is_open())
 		{
-            _out << _now->tm_hour << ":" << _now->tm_min << " ---- " << message << std::endl;
+			switch(type)
+			{
+				case MESSAGE: std::cout << blue << "Akel log : " << message << def << std::endl; _type = "Message: "; break;
+				case WARNING: std::cout << magenta << "Akel log : " << message << def << std::endl; _type = "Warning: "; break;
+				case ERROR: std::cout << red << "Akel log : " << message << def << std::endl; _type = "Error: "; break;
+				case FATAL_ERROR: std::cout << red << "Akel log : " << message << def << std::endl; _type = "Fatal Error: "; break;
+
+				default: break;
+			}
+            _out << _now->tm_hour << ":" << _now->tm_min << " ---- " << _type << message << std::endl;
 			_out.flush();
 			_out.close();
 		}
@@ -21,6 +30,17 @@ namespace Ak::Core
             std::set_terminate(TERMINATE);
             std::terminate();
         }
+	}
+    
+    void log::report(std::string message)
+    {
+		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
+        if(_out.is_open())
+		{
+            _out << _now->tm_hour << ":" << _now->tm_min << " ---- "<< message << std::endl;
+			_out.flush();
+			_out.close();
+		}
     }
 
     void log::TERMINATE()
@@ -29,7 +49,7 @@ namespace Ak::Core
         abort();
     }
 
-    std::string log::getTime(enum LogType type, std::string path)
+    std::string log::getTime(std::string path)
     {
 		std::time_t t = std::time(0);
 		_now = std::localtime(&t);

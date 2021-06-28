@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 26/06/2021
-// UPDATED : 27/06/2021
+// UPDATED : 28/06/2021
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -25,7 +25,7 @@
 		#define AK_FUNC_SIG "Unknown function"
 	#endif
 #else
-	#define AK_FUNC_SIG __FUNCTION__
+	#define AK_FUNC_SIG "Unknown function"
 #endif
 
 #endif // __AK_PROFILE_CORE__

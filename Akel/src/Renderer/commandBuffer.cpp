@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 05/06/2021
+// UPDATED : 28/06/2021
 
 #include <Renderer/renderer.h>
+#include <Core/core.h>
 
 namespace Ak
 {
@@ -17,7 +18,7 @@ namespace Ak
         poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
 
         if(vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool) != VK_SUCCESS)
-            std::cout << "failed to create command pool!" << std::endl;
+			Core::log::report(ERROR, "Vulkan : Failed to create command pool");
     }
 
     void CommandBuffer::createCommandBuffers()
@@ -31,7 +32,7 @@ namespace Ak
         allocInfo.commandBufferCount = (uint32_t) commandBuffers.size();
 
         if(vkAllocateCommandBuffers(device, &allocInfo, commandBuffers.data()) != VK_SUCCESS)
-            std::cout << "failed to allocate command buffers!" << std::endl;
+			Core::log::report(ERROR, "Vulkan : Failed to allocate command buffer");
 
         for(size_t i = 0; i < commandBuffers.size(); i++)
         {
@@ -39,7 +40,7 @@ namespace Ak
             beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
             if(vkBeginCommandBuffer(commandBuffers[i], &beginInfo) != VK_SUCCESS)
-                std::cout << "failed to begin recording command buffer!" << std::endl;
+				Core::log::report(ERROR, "Vulkan : Failed to begin recording command buffer");
 
             VkRenderPassBeginInfo renderPassInfo{};
             renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -61,7 +62,7 @@ namespace Ak
             vkCmdEndRenderPass(commandBuffers[i]);
 
             if(vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS)
-                std::cout << "failed to record command buffer!" << std::endl;
+				Core::log::report(ERROR, "Vulkan : Failed to begin record command buffer");
         }
     }
 }

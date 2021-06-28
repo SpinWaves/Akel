@@ -23,9 +23,9 @@ namespace Ak
 
             void update();
 
-            bool getInKey(const SDL_Scancode touche, enum ButtonACTION type = DOWN) const;
+            bool getInKey(const SDL_Scancode touche, enum ButtonACTION type = UP) const;
 
-            bool getInMouse(const Uint8 bouton, enum ButtonACTION type = DOWN) const;
+            bool getInMouse(const Uint8 bouton, enum ButtonACTION type = UP) const;
             bool getMovMouse() const;
 
             int getX() const;

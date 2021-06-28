@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 06/06/2021
+// UPDATED : 28/06/2021
 
 #include <Renderer/renderer.h>
+#include <Core/core.h>
 
 namespace Ak
 {
@@ -51,7 +52,7 @@ namespace Ak
         VkDebugUtilsMessengerCreateInfoEXT createInfo;
         populateDebugMessengerCreateInfo(createInfo);
         if(CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
-            std::cout << "failed to set up debug messenger!" << std::endl;
+			Core::log::report(ERROR, "Vulkan : Failed to set up debug messenger");
     }
 
     VkResult ValidationLayers::CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pCallback)

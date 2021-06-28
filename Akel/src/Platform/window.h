@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 26/06/2021
+// UPDATED : 28/06/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -12,6 +12,7 @@
 #include <Platform/input.h>
 #include <Utils/utils.h>
 #include <Platform/messageBox.h>
+#include <Platform/input.h>
 
 enum windowSetting
 {
@@ -35,14 +36,13 @@ namespace Ak
     class Window : public Instance, public Component
     {
         public:
-            Window(const char* componentName = "none");
+            Window();
 
-            void create(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
-			
 			void onAttach() override;
-			void update() override;		// overrides from Component class
+			void update() override;
+			void onEvent(Input& input) override;
 			void onQuit() override;
-
+			
 			// ================ Setters ================ //
 			template <windowSetting T>
 			void setSetting(const char* value)
@@ -52,7 +52,7 @@ namespace Ak
 					case title: setTitle(value); break;
 					case icon: setIcon(value); break;
 
-					default: std::cout << red << "Unable to modify window's parameter" << def << std::endl; break;
+					default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
 				}
 			}
 			template <windowSetting T>
@@ -68,7 +68,7 @@ namespace Ak
 					case visible: setShow(pass); break;
 					case vsync: Instance::setVsync(value); break;
 
-					default: std::cout << red << "Unable to modify window's parameter" << def << std::endl; break;
+					default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
 				}
 			}
 			template <windowSetting T>
@@ -79,7 +79,7 @@ namespace Ak
 					case brightness: setBrightness(value); break;
 					case opacity: setOpacity(value); break;
 
-					default: std::cout << red << "Unable to modify window's parameter" << def << std::endl; break;
+					default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
 				}
 			}
 			template <windowSetting T>
@@ -92,17 +92,14 @@ namespace Ak
 					case maximumSize: setMaxSize(x, y); break;
 					case minimumSize: setMinSize(x, y); break;
 
-					default: std::cout << red << "Unable to modify window's parameter" << def << std::endl; break;
+					default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
 				}
 			}
 
             // Getters
             std::string getTitle();
-            //uint32_t getFlags();
             Maths::Vec2<uint16_t> getPosition();
             Maths::Vec2<uint16_t> getSize();
-
-            void destroy();
 
             virtual ~Window();
         

@@ -1,15 +1,18 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 27/06/2021
+// UPDATED : 28/06/2021
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
 
 #include <Akpch.h>
 #include <Core/Components/components.h>
+#include <Platform/input.h>
 
 namespace Ak
 {
+	class Input;
+
 	class Application : public ComponentStack
 	{
 		public:
@@ -19,7 +22,7 @@ namespace Ak
 
 		private:
 			std::string _name = "";
-			bool _running = true;
+			Input _in;
 	};
 }
 

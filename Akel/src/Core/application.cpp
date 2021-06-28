@@ -1,26 +1,30 @@
 // This file is a part of Akel
 // CREATED : 10/06/2021
-// UPDATED : 27/06/2021
+// UPDATED : 28/06/2021
 
 #include <Core/core.h>
-#include <Platform/messageBox.h>
 
 namespace Ak
 {
-	Application::Application(const char* name) : ComponentStack()
+	Application::Application(const char* name) : ComponentStack(), _in()
 	{
 		_name = name;
 	}
 
 	void Application::run()
 	{
-		messageBox(MESSAGE, "tset", "louloulou");
-		while(_running)
+		while(!_in.isEnded()) // Main loop
 		{
+			_in.update();
 			for(auto elem : _components)
+			{
+				elem->onEvent(_in);
 				elem->update();
-			_running = false;
+			}
 		}
+
+		for(auto elem : _components)
+			elem->onQuit();
 	}
 }
 

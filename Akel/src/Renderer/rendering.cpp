@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 06/06/2021
+// UPDATED : 28/06/2021
 
 #include <Renderer/renderer.h>
+#include <Core/core.h>
 
 namespace Ak
 {
@@ -27,7 +28,7 @@ namespace Ak
             if(vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
                 vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
                 vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS)
-                std::cout << "failed to create synchronization objects for a frame!" << std::endl;
+				Core::log::report(ERROR, "Vulkan : Failed to create synchronization objects for a frame");
         }
     }
 }

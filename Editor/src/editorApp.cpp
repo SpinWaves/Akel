@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 08/06/2021
-// UPDATED : 13/06/2021
+// UPDATED : 28/06/2021
 
 #ifndef __AK_EDITOR_APP__
 #define __AK_EDITOR_APP__
@@ -12,8 +12,17 @@
 class Editor : public Ak::Application
 {
 	public:
-		Editor() : Ak::Application("Akel Editor") {}
+		Editor() : Ak::Application("Akel Editor")
+		{
+			add_component(&_window);
+			_window.setSetting<title>("Akel Editor");
+			_window.setSetting<position>(100, 100);
+			_window.setSetting<dimensions>(800, 800);
+		}
 		~Editor() = default;
+
+	private:
+		Ak::Window _window;
 };
 
 Ak::Application* Akel_main()

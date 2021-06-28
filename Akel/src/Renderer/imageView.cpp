@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 06/06/2021
+// UPDATED : 28/06/2021
 
 #include <Renderer/renderer.h>
+#include <Core/core.h>
 
 namespace Ak
 {
@@ -30,7 +31,7 @@ namespace Ak
             createInfo.subresourceRange.layerCount = 1;
 
             if(vkCreateImageView(device, &createInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS)
-                std::cout << "failed to create image views!" << std::endl;
+				Core::log::report(ERROR, "Vulkan : Failed to create image views");
         }
     }
 }

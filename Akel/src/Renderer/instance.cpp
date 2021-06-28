@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 14/06/2021
+// UPDATED : 28/06/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -65,13 +65,13 @@ namespace Ak
     void Instance::createInstance()
     {
         if(enableValidationLayers && !checkValidationLayerSupport())
-            std::cout << "les validations layers sont activées mais ne sont pas disponibles!" << std::endl;
+			Core::log::report(ERROR, "Vulkan : Layer validations are enabled but not available");
 
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         appInfo.pApplicationName = SDL_GetWindowTitle(window);
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.pEngineName = "AtlasEnfine";
+        appInfo.pEngineName = "Akel";
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.apiVersion = VK_API_VERSION_1_2;
 
@@ -98,7 +98,7 @@ namespace Ak
         }
 
         if(vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
-            std::cout << "failed to create instance!" << std::endl;
+			Core::log::report(ERROR, "Vulkan : Failed to create Vulkan instance");
     }
 
     void Instance::render()
@@ -132,7 +132,7 @@ namespace Ak
         vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
         if(vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS)
-            std::cout << "failed to submit draw command buffer!" << std::endl;
+			Core::log::report(ERROR, "Vulkan : Failed to submit draw command buffer");
 
         VkPresentInfoKHR presentInfo{};
         presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;

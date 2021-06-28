@@ -1,27 +1,28 @@
 // This file is a part of Akel
 // CREATED : 05/05/2021
-// UPDATED : 13/06/2021
+// UPDATED : 28/06/2021
 
 #ifndef __AK_CAMERA__
 #define __AK_CAMERA__ 
 
 #include <Akpch.h>
-#include <Platform/platform.h>
 #include <Maths/maths.h>
+#include <Core/Components/components.h>
 
 namespace Ak
 {
-	class Input;
-
-	class Camera3D
+	class Camera3D : public Component
 	{
 		public:
 			Camera3D();
 
-			void update(Input &input);
+			void onAttach() override {}
+			void update() override;
+			void onEvent(Input& input) override;
+			void onQuit() override {}
+
 			void setPosition(int pos_x, int pos_y, int pos_z);
 
-			void look();
 
 		private:
 			double _speed;

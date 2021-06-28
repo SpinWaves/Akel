@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/05/2021
-// UPDATED : 13/06/2021
+// UPDATED : 28/06/2021
 
 #include <Utils/utils.h>
 #include <Renderer/renderer.h>
@@ -11,7 +11,7 @@
 
 namespace Ak
 {
-	Camera3D::Camera3D()
+	Camera3D::Camera3D() : Component()
 	{
 		_position.SET(0, 0, 0);
 		_phi = -79;
@@ -26,10 +26,14 @@ namespace Ak
 		_position.SET(pos_x, pos_y, pos_z);
 	}
 
-	void Camera3D::update(Input &input)
+	void Camera3D::update()
 	{
 		_movement.SET(0, 0, 0);
+		_target = _position + _direction;
+	}
 
+	void Camera3D::onEvent(Input& input)
+	{
 		if(_grabMouse)
 		{
 			_theta -= input.getXRel() * _sensivity;
@@ -81,13 +85,6 @@ namespace Ak
 
 		_forward = _up.crossProduct(_left);
 		_forward.normalize();
-	}
-
-	void Camera3D::look()
-	{
-		_target = _position + _direction;
-
-		// matrixes
 	}
 }
 

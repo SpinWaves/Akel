@@ -1,53 +1,45 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 26/06/2021
+// UPDATED : 28/06/2021
 
 #include <Platform/platform.h>
 
 namespace Ak
 {
-	const char* __win_comp_name(const char* manualName = "none")
+    Window::Window() : Instance(), Component("__window") {}
+	
+	void Window::onAttach()
 	{
-		if(manualName == "none")
-		{
-			static int i = 0;
-			std::string name = "__window" + std::to_string(i);
-			i++;
-			return name.c_str();
-		}
-		return manualName;
-	}
+		if(_window)
+			return;
 
-    Window::Window(const char* componentName) : Instance(), Component(__win_comp_name(componentName)){}
-
-    void Window::create(uint16_t x, uint16_t y, uint16_t width, uint16_t height)
-    {
-        _position.SET(x, y);
-        _size.SET(width, height);
+        _position.SET(0, 0);
+        _size.SET(0, 0);
         SDL_Init(SDL_INIT_VIDEO);
 		atexit(exit);
 
         _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN;
  
-        _window = SDL_CreateWindow(_title.c_str(), x, y, width, height, _flags);
+        _window = SDL_CreateWindow(_title.c_str(), 0, 0, 0, 0, _flags);
         if(!_window)
             messageBox(FATAL_ERROR, "Unable to create a window", SDL_GetError());
 
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
-	}
-
-	void Window::onAttach()
-	{
         Instance::init(_window, "vert.spv", "frag.spv");
 	}
+
 	void Window::update()
 	{
-
+		render();
 	}
+
+	void Window::onEvent(Input& input) {}
 	void Window::onQuit()
 	{
         Instance::cleanup();
+        SDL_FreeSurface(_icon);
+        SDL_DestroyWindow(_window);
 	}
 
 	// Functions for window settings that use SDL2 functions. They are here to avoid you to link SDL2
@@ -109,10 +101,6 @@ namespace Ak
     {
         return _title;
     }
-    //uint32_t Window::getFlags()
-    //{
-        //return _flags;
-    //}
     Maths::Vec2<uint16_t> Window::getPosition()
     {
         return _position;
@@ -120,12 +108,6 @@ namespace Ak
     Maths::Vec2<uint16_t> Window::getSize()
     {
         return _size;
-    }
-
-    void Window::destroy()
-    {
-        SDL_FreeSurface(_icon);
-        SDL_DestroyWindow(_window);
     }
 
     Window::~Window(){}
