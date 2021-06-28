@@ -1,5 +1,9 @@
 *.log
+*.spv
+premake5
+*.exe
 Makefile
 build/
 build-int/
+libAkel.so
 
