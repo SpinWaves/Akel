@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 28/06/2021
+// UPDATED : 29/06/2021
 
 #include <Platform/platform.h>
 
@@ -10,13 +10,11 @@ namespace Ak
 	
 	void Window::onAttach()
 	{
-		if(_window)
+		if(_window != nullptr)
 			return;
 
         _position.SET(0, 0);
         _size.SET(0, 0);
-        SDL_Init(SDL_INIT_VIDEO);
-		atexit(exit);
 
         _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN;
  
@@ -34,7 +32,11 @@ namespace Ak
 		render();
 	}
 
-	void Window::onEvent(Input& input) {}
+	void Window::onEvent(Input& input)
+	{
+		if(input.getInKey(AK_KEY_ESCAPE))
+			input.finish();
+	}
 	void Window::onQuit()
 	{
         Instance::cleanup();

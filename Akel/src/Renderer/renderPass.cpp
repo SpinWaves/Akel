@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 29/06/2021
 
 #include <Renderer/renderer.h>
 #include <Core/core.h>
@@ -37,7 +37,7 @@ namespace Ak
         renderPassInfo.pSubpasses = &subpass;
 
         if(vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
-			Core::log::report(ERROR, "Vulkan : Failed to create render pass");
+			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create render pass");
     }
 }
 

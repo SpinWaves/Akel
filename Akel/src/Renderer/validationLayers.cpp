@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 29/06/2021
 
 #include <Renderer/renderer.h>
 #include <Core/core.h>
@@ -66,7 +66,12 @@ namespace Ak
 
     VKAPI_ATTR VkBool32 VKAPI_CALL ValidationLayers::debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) 
     {
-        std::cout << "validation layer: " << pCallbackData->pMessage << std::endl;
+		if(messageSeverity == VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
+			Core::log::report(ERROR, std::string("Vulkan layer error : ") + pCallbackData->pMessage);
+		else if(messageSeverity == VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+			Core::log::report(WARNING, std::string("Vulkan layer warning : ") + pCallbackData->pMessage);
+		else
+        	std::cout << "validation layer: " << pCallbackData->pMessage << std::endl;
         return VK_FALSE;
     }
 

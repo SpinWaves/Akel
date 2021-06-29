@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 28/06/2021
+// UPDATED : 29/06/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -44,7 +44,7 @@ namespace Ak
     {
         unsigned int count;
         if(!SDL_Vulkan_GetInstanceExtensions(window, &count, nullptr))
-            std::cout << SDL_GetError() << std::endl;
+			Core::log::report(ERROR, std::string("Vulkan : Cannot get instance extentions from window : ") + SDL_GetError());
 
         std::vector<const char*> extensions = {
             VK_EXT_DEBUG_REPORT_EXTENSION_NAME // Sample additional extension
@@ -53,7 +53,7 @@ namespace Ak
         extensions.resize(additional_extension_count + count);
 
         if(!SDL_Vulkan_GetInstanceExtensions(window, &count, extensions.data() + additional_extension_count))
-            std::cout << SDL_GetError() << std::endl;
+			Core::log::report(ERROR, std::string("Vulkan : Cannot get instance extentions from window : ") + SDL_GetError());
 
         if(enableValidationLayers)
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
@@ -98,7 +98,7 @@ namespace Ak
         }
 
         if(vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
-			Core::log::report(ERROR, "Vulkan : Failed to create Vulkan instance");
+			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create Vulkan instance");
     }
 
     void Instance::render()
@@ -132,7 +132,7 @@ namespace Ak
         vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
         if(vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS)
-			Core::log::report(ERROR, "Vulkan : Failed to submit draw command buffer");
+			Core::log::report(FATAL_ERROR, "Vulkan : Failed to submit draw command buffer");
 
         VkPresentInfoKHR presentInfo{};
         presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -196,3 +196,4 @@ namespace Ak
         cleanup();
     }
 }
+

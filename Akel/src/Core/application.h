@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 29/06/2021
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -18,7 +18,7 @@ namespace Ak
 		public:
 			Application(const char* name);
 			void run();
-			~Application() = default;
+			~Application();
 
 		private:
 			std::string _name = "";

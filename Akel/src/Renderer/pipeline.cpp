@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 29/06/2021
 
 #include <Renderer/renderer.h>
 #include <Core/core.h>
@@ -96,7 +96,7 @@ namespace Ak
         pipelineLayoutInfo.pushConstantRangeCount = 0;
 
         if(vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
-			Core::log::report(ERROR, "Vulkan : Failed to create pipeline layout");
+			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create pipeline layout");
 
         VkGraphicsPipelineCreateInfo pipelineInfo{};
         pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -114,7 +114,7 @@ namespace Ak
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
         if(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS)
-			Core::log::report(ERROR, "Vulkan : Failed to create graphics pipeline");
+			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create graphics pipeline");
 
         vkDestroyShaderModule(device, fragShaderModule, nullptr);
         vkDestroyShaderModule(device, vertShaderModule, nullptr);
@@ -125,7 +125,7 @@ namespace Ak
         std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
         if(!file.is_open())
-			Core::log::report(ERROR, "Vulkan : Failed to open shader file");
+			Core::log::report(FATAL_ERROR, "Vulkan : Failed to open shader file");
 
         size_t fileSize = (size_t) file.tellg();
         std::vector<char> buffer(fileSize);
@@ -147,7 +147,7 @@ namespace Ak
 
         VkShaderModule shaderModule;
         if(vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
-			Core::log::report(ERROR, "Vulkan : Failed to create shader module");
+			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create shader module");
 
         return shaderModule;
     }

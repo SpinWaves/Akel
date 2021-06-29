@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 29/06/2021
 
 #include <Renderer/renderer.h>
 #include <Core/core.h>
@@ -52,7 +52,7 @@ namespace Ak
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
         if(vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) != VK_SUCCESS)
-			Core::log::report(ERROR, "Vulkan : Failed to create swap chain");
+			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create swap chain");
 
         vkGetSwapchainImagesKHR(device, swapChain, &imageCount, nullptr);
         swapChainImages.resize(imageCount);

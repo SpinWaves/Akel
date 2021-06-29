@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 29/06/2021
 
 #include <Renderer/renderer.h>
 #include <Core/core.h>
@@ -29,7 +29,7 @@ namespace Ak
             framebufferInfo.layers = 1;
 
             if(vkCreateFramebuffer(device, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS)
-				Core::log::report(ERROR, "Vulkan : Failed to create framebuffer");
+				Core::log::report(FATAL_ERROR, "Vulkan : Failed to create framebuffer");
         }
     }
 }

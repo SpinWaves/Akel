@@ -32,4 +32,8 @@ namespace Ak::Core
     };
 }
 
+#define AK_BEGIN_SESSION(name) Ak::Core::log::report("Begin " name " ----")
+#define AK_END_SESSION() Ak::Core::log::report("End ----")
+
 #endif // __AK_LOG__
+

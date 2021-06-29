@@ -14,15 +14,15 @@ class Editor : public Ak::Application
 	public:
 		Editor() : Ak::Application("Akel Editor")
 		{
-			add_component(&_window);
-			_window.setSetting<title>("Akel Editor");
-			_window.setSetting<position>(100, 100);
-			_window.setSetting<dimensions>(800, 800);
+			//add_component(&_window);
+			//_window.setSetting<title>("Akel Editor");
+			//_window.setSetting<position>(100, 100);
+			//_window.setSetting<dimensions>(800, 800);
 		}
 		~Editor() = default;
 
 	private:
-		Ak::Window _window;
+		//Ak::Window _window;
 };
 
 Ak::Application* Akel_main()

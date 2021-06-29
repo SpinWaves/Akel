@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 28/06/2021
+// UPDATED : 29/06/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -104,15 +104,15 @@ namespace Ak
             virtual ~Window();
         
         private:
-            SDL_Window* _window;
+            SDL_Window* _window = nullptr;
 
             std::string _title = "";
             Maths::Vec2<uint16_t> _position;
             Maths::Vec2<uint16_t> _size;
 
-            uint32_t _flags;
+            uint32_t _flags = 0;
 
-            SDL_Surface* _icon;
+            SDL_Surface* _icon = nullptr;
 
 			// Functions for window settings that use SDL2 functions. They are here to avoid you to link SDL2
 			void setMaxSize(int x, int y);
