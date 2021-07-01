@@ -49,7 +49,7 @@ You can contribute by :
 * Talking about Akel to other people
 
 ## Links
-[Website](http://akel-engine.games)
+[Website](http://akel-engine.epizy.com)
 
 ### Contact
 bilbo.sacquet@orange.fr
