@@ -4,7 +4,7 @@ project "Editor"
 	cppdialect "C++17"
 	staticruntime "on"
 	architecture "x86_64"
-	icon "../Akel/src/assets/logo.png"
+	icon "../Ressources/logo.png"
 
 	targetdir ("../build/" .. outputdir)
 	objdir ("../build-int/" .. outputdir)

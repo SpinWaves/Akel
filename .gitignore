@@ -6,4 +6,5 @@ Makefile
 build/
 build-int/
 libAkel.so
+*.swp
 

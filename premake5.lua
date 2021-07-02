@@ -9,7 +9,7 @@ workspace "Akel"
 	}
 
 	flags "MultiProcessorCompile"
-	outputdir = "%{cfg.buildcfg}-%{cfg.system}"
+	outputdir = "%{cfg.system}"
 
 include "Akel"
 include "Editor"	

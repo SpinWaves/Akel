@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 28/06/2021
+// UPDATED : 30/06/2021
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -20,6 +20,7 @@ namespace Ak::Core
     class log
     {
         public:
+			static void Init();
             static void report(enum LogType type, std::string message);
             static void report(std::string message);
 
