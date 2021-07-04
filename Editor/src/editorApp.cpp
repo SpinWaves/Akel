@@ -1,28 +1,25 @@
 // This file is a part of the Akel editor
 // CREATED : 08/06/2021
-// UPDATED : 01/07/2021
+// UPDATED : 04/07/2021
 
 #ifndef __AK_EDITOR_APP__
 #define __AK_EDITOR_APP__
 
 #include <AkEpch.h>
 #include <Akel.h>
-#include <Core/entryPoint.h>
+#include <Akel_main.h>
 
 class Editor : public Ak::Application
 {
 	public:
-		Editor() : Ak::Application("Akel Editor")
+		Editor() : Ak::Application("Akel Editor"), imgui()
 		{
-			//add_component(&_window);
-			//_window.setSetting<title>("Akel Editor");
-			//_window.setSetting<position>(100, 100);
-			//_window.setSetting<dimensions>(800, 800);
+			add_component(&imgui);
 		}
 		~Editor() = default;
 
 	private:
-		//Ak::Window _window;
+		Ak::ImGuiComponent imgui;
 };
 
 Ak::Application* Akel_main()

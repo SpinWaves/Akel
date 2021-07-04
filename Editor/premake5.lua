@@ -34,7 +34,8 @@ project "Editor"
 	{
 		"../Akel/src",
 		"src",
-		"../libs/include"
+		"../libs/include",
+		"../dependencies"
 	}
 
 

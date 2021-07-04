@@ -41,7 +41,8 @@ project "Akel"
 	includedirs 
 	{
 		"../libs/include",
-		"%{prj.location}/src"
+		"%{prj.location}/src",
+		"../dependencies"
 	}
 
 

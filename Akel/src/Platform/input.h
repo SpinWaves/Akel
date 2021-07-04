@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/04/2021
-// UPDATED : 03/06/2021
+// UPDATED : 04/07/2021
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -41,6 +41,11 @@ namespace Ak
 
             bool isEnded() const;
             void finish();
+
+			SDL_Event* getNativeEvent()
+			{
+				return &evenements;
+			}
 
 
         private:

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 29/06/2021
+// UPDATED : 04/07/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -100,6 +100,10 @@ namespace Ak
             std::string getTitle();
             Maths::Vec2<uint16_t> getPosition();
             Maths::Vec2<uint16_t> getSize();
+			SDL_Window* getNativeWindow()
+			{
+				return _window;
+			}
 
             virtual ~Window();
         

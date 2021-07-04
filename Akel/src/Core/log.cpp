@@ -47,15 +47,14 @@ namespace Ak::Core
 		{
 			switch(type)
 			{
-				case MESSAGE: std::cout << blue << "Akel log: " << message << def << std::endl; _type = "Message: "; break;
-				case WARNING: std::cout << magenta << "Akel log: " << message << def << std::endl; _type = "Warning: "; break;
-				case ERROR: std::cout << red << "Akel log: " << message << def << std::endl; _type = "Error: "; break;
-				case FATAL_ERROR: std::cout << red << "Akel log: " << message << def << std::endl; _type = "Fatal Error: "; break;
+				case MESSAGE: std::cout << blue << "Akel log: " << message << def << '\n'; _type = "Message: "; break;
+				case WARNING: std::cout << magenta << "Akel log: " << message << def << '\n'; _type = "Warning: "; break;
+				case ERROR: std::cout << red << "Akel log: " << message << def << '\n'; _type = "Error: "; break;
+				case FATAL_ERROR: std::cout << red << "Akel log: " << message << def << '\n'; _type = "Fatal Error: "; break;
 
 				default: break;
 			}
-            _out << _now->tm_hour << ":" << _now->tm_min << " ---- " << _type << message << std::endl;
-			_out.flush();
+            _out << _now->tm_hour << ":" << _now->tm_min << " ---- " << _type << message << std::endl; // No need to flush, std::endl does it
 			_out.close();
 		}
         if(type == FATAL_ERROR)
@@ -70,8 +69,7 @@ namespace Ak::Core
 		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
         if(_out.is_open())
 		{
-            _out << _now->tm_hour << ":" << _now->tm_min << " ---- "<< message << std::endl;
-			_out.flush();
+            _out << _now->tm_hour << ":" << _now->tm_min << " ---- "<< message << std::endl;  // No need to flush, std::endl does it
 			_out.close();
 		}
     }

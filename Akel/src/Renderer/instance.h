@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 29/06/2021
+// UPDATED : 04/07/2021
 
 #ifndef __AK_INSTANCE__
 #define __AK_INSTANCE__
@@ -18,6 +18,10 @@ namespace Ak
 
             void init(SDL_Window* win, const char* vertexShader, const char* fragmentShader);
             void render();
+			VkInstance& getNativeInstance()
+			{
+				return instance;
+			}
 
             ~Instance();
 
