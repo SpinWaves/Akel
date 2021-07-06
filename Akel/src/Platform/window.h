@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 04/07/2021
+// UPDATED : 06/07/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -30,6 +30,8 @@ enum windowSetting
     icon,
 	vsync
 };
+
+#define AK_WINDOW_MAX_SIZE 0xFFFF
 
 namespace Ak
 {
@@ -107,8 +109,11 @@ namespace Ak
 
             virtual ~Window();
         
-        private:
+		protected:
+			void create();
             SDL_Window* _window = nullptr;
+
+        private:
 
             std::string _title = "";
             Maths::Vec2<uint16_t> _position;

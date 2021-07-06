@@ -1,25 +1,22 @@
 // This file is a part of the Akel editor
 // CREATED : 08/06/2021
-// UPDATED : 04/07/2021
+// UPDATED : 06/07/2021
 
 #ifndef __AK_EDITOR_APP__
 #define __AK_EDITOR_APP__
 
 #include <AkEpch.h>
-#include <Akel.h>
 #include <Akel_main.h>
+#include <editorComponent.h>
 
 class Editor : public Ak::Application
 {
 	public:
-		Editor() : Ak::Application("Akel Editor"), imgui()
+		Editor() : Ak::Application("Akel Editor")
 		{
-			add_component(&imgui);
+			add_component(new EditorComponent);
 		}
 		~Editor() = default;
-
-	private:
-		Ak::ImGuiComponent imgui;
 };
 
 Ak::Application* Akel_main()

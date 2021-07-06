@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 06/07/2021
 
 #ifndef __AK_BASE_COMPONENT__
 #define __AK_BASE_COMPONENT__
@@ -17,6 +17,7 @@ namespace Ak
 
 			virtual void onAttach() {};
 			virtual void update() {};
+			virtual void onImGuiRender() {};
 			virtual void onEvent(Input& input) {};
 			virtual void onQuit() {};
 

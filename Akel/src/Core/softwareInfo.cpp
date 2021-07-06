@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 29/06/2021
+// UPDATED : 06/07/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -21,20 +21,20 @@ namespace Ak::Core
     void printEngineInfo()
     {
         std::cout << bold
-		<< "    ___     __          __ 		" << std::endl
-		<< "   /   |   / /__ ___   / /		" << std::endl
-		<< "  / /| |  / //_// _ \\ / / 		" << std::endl
-		<< " / ___ | / ,<  /  __// /  		" << std::endl
-		<< "/_/  |_|/_/|_| \\___//_/  		" << std::endl 
+		<< "    ___     __          __ 		" << '\n'
+		<< "   /   |   / /__ ___   / /		" << '\n'
+		<< "  / /| |  / //_// _ \\ / / 		" << '\n'
+		<< " / ___ | / ,<  /  __// /  		" << '\n'
+		<< "/_/  |_|/_/|_| \\___//_/  		" << '\n'
     	<< "By Malo DAVID - 2021" << std::endl;
 	}
 
 	void printEngineCodeInfo()
 	{
 		std::cout
-		<< "Language : C++ (C++17)" << std::endl
-		<< "Graphics : Vulkan, SDL_Image" << std::endl
-		<< "Window : SDL2, ImGUI" << std::endl
+		<< "Language : C++ (C++17)" << '\n'
+		<< "Graphics : Vulkan, SDL_Image" << '\n'
+		<< "Window : SDL2, ImGUI" << '\n'
 		<< "Sounds : SDL_mixer" << std::endl;
 	}
 }

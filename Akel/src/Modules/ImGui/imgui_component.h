@@ -1,25 +1,24 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 04/07/2021
+// UPDATED : 06/07/2021
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
 
 #include <Akpch.h>
-#include <Core/Components/baseComponent.h>
 #include <Platform/window.h>
 
 namespace Ak
 {
-	class ImGuiComponent : public Component
+	class ImGuiComponent : public Window
 	{
 		public:
-			ImGuiComponent();
+			ImGuiComponent(const char* title = "ImGui window");
 
-			virtual void onAttach() override;
-			virtual void update() override;
-			virtual void onEvent(Input& input) override;
-			virtual void onQuit() override;
+			void onAttach() override;
+			void onEvent(Input& input) override;
+			void update() override {}
+			void onQuit() override;
 
 			void begin();
 			void end();
@@ -37,10 +36,9 @@ namespace Ak
 			void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data);
 			void FramePresent(ImGui_ImplVulkanH_Window* wd);
 
-			SDL_Window* window;
+			const char* _title;
+
 			VkResult err;
-			ImGui_ImplVulkanH_Window* wd;
-			ImGuiIO& io = ImGui::GetIO();
 
 			VkAllocationCallbacks*   g_Allocator = NULL;
 			VkInstance               g_Instance = VK_NULL_HANDLE;
@@ -62,6 +60,7 @@ namespace Ak
 			bool show_demo_window = true;
 			bool show_another_window = false;
 			ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+			ImGui_ImplVulkanH_Window* _wd = &g_MainWindowData;
 	};
 }
 

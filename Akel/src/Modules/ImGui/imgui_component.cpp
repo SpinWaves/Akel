@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 07/07/2021
+// UPDATED : 06/07/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -10,28 +10,50 @@ namespace Ak
 {
 	static void check_vk_result(VkResult err);
 
-	ImGuiComponent::ImGuiComponent() : Component("ImGui") {}
+	ImGuiComponent::ImGuiComponent(const char* title) : Window()
+	{
+		_title = title;
+	}
 
 	void ImGuiComponent::onAttach()
 	{
-		std::cout << "test" << std::endl;
+		Window::create();
+		Window::setSetting<title>(_title);
+		Window::setSetting<resizable>(true);
+		Window::setSetting<dimensions>(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
+		//Window::setSetting<position>(0, 0);
+
+		// Setup Vulkan
+		uint32_t extensions_count = 0;
+		SDL_Vulkan_GetInstanceExtensions(_window, &extensions_count, NULL);
+		const char** extensions = new const char*[extensions_count];
+		SDL_Vulkan_GetInstanceExtensions(_window, &extensions_count, extensions);
+		SetupVulkan(extensions, extensions_count);
+		delete[] extensions;
+
+		// Create Window Surface
+		VkSurfaceKHR surface;
+		VkResult err;
+		if(SDL_Vulkan_CreateSurface(_window, g_Instance, &surface) == 0)
+			messageBox(FATAL_ERROR, "Unable to create ImGui window", "Failed to create Vulkan surface");
+
+		// Create Framebuffers
+		int w, h;
+		SDL_GetWindowSize(_window, &w, &h);
+		SetupVulkanWindow(_wd, surface, w, h);
+
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO();
 		(void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
 		io.Fonts->AddFontFromFileTTF(std::string(Core::getAssetsDirPath() + "fonts/opensans/OpenSans-Bold.ttf").c_str(), 18.0f);
 		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getAssetsDirPath() + "fonts/opensans/OpenSans-Regular.ttf").c_str(), 18.0f);
-
-		// Setup Dear ImGui style
-		ImGui::StyleColorsDark();
-		//ImGui::StyleColorsClassic();
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -43,29 +65,8 @@ namespace Ak
 
 		SetDarkThemeColors();
 
-		SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-		SDL_Window* window = SDL_CreateWindow("Dear ImGui SDL2+Vulkan example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
-
-		// Setup Vulkan
-		uint32_t extensions_count = 0;
-		SDL_Vulkan_GetInstanceExtensions(window, &extensions_count, NULL);
-		const char** extensions = new const char*[extensions_count];
-		SDL_Vulkan_GetInstanceExtensions(window, &extensions_count, extensions);
-		SetupVulkan(extensions, extensions_count);
-		delete[] extensions;
-
-		// Create Window Surface
-		VkSurfaceKHR surface;
-		if(SDL_Vulkan_CreateSurface(window, g_Instance, &surface) == 0)
-			messageBox(FATAL_ERROR, "Cannot open ImGui window", "Failed to create Vulkan surface");
-
-		// Create Framebuffers
-		int w, h;
-		SDL_GetWindowSize(window, &w, &h);
-		wd = &g_MainWindowData;
-		SetupVulkanWindow(wd, surface, w, h);
 		// Setup Platform/Renderer bindings
-		ImGui_ImplSDL2_InitForVulkan(window);
+		ImGui_ImplSDL2_InitForVulkan(_window);
 		ImGui_ImplVulkan_InitInfo init_info = {};
 			init_info.Instance = g_Instance;
 			init_info.PhysicalDevice = g_PhysicalDevice;
@@ -76,14 +77,14 @@ namespace Ak
 			init_info.DescriptorPool = g_DescriptorPool;
 			init_info.Allocator = g_Allocator;
 			init_info.MinImageCount = g_MinImageCount;
-			init_info.ImageCount = wd->ImageCount;
+			init_info.ImageCount = _wd->ImageCount;
 			init_info.CheckVkResultFn = check_vk_result;
-		ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
+		ImGui_ImplVulkan_Init(&init_info, _wd->RenderPass);
 
 		{
 			// Use any command queue
-			VkCommandPool command_pool = wd->Frames[wd->FrameIndex].CommandPool;
-			VkCommandBuffer command_buffer = wd->Frames[wd->FrameIndex].CommandBuffer;
+			VkCommandPool command_pool = _wd->Frames[_wd->FrameIndex].CommandPool;
+			VkCommandBuffer command_buffer = _wd->Frames[_wd->FrameIndex].CommandBuffer;
 
 			err = vkResetCommandPool(g_Device, command_pool, 0);
 			check_vk_result(err);
@@ -109,8 +110,21 @@ namespace Ak
 			ImGui_ImplVulkan_DestroyFontUploadObjects();
 		}
 	}
-	void ImGuiComponent::update()
+	
+	void ImGuiComponent::begin()
 	{
+        // Start the Dear ImGui frame
+        ImGui_ImplVulkan_NewFrame();
+        ImGui_ImplSDL2_NewFrame(_window);
+        ImGui::NewFrame();
+	}
+
+	void ImGuiComponent::end()
+	{
+		int x, y = 0;
+		SDL_GetWindowSize(_window, &x, &y);
+		ImGuiIO& io = ImGui::GetIO();
+		io.DisplaySize = ImVec2((float)x, (float)y);
         // Resize swap chain?
         if(g_SwapChainRebuild && g_SwapChainResizeWidth > 0 && g_SwapChainResizeHeight > 0)
         {
@@ -120,55 +134,13 @@ namespace Ak
             g_MainWindowData.FrameIndex = 0;
         }
 
-        // Start the Dear ImGui frame
-        ImGui_ImplVulkan_NewFrame();
-        ImGui_ImplSDL2_NewFrame(window);
-        ImGui::NewFrame();
-
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if(show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if(ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-
-        // 3. Show another simple window.
-        if(show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if(ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
-        }
-
         // Rendering
         ImGui::Render();
         ImDrawData* main_draw_data = ImGui::GetDrawData();
         const bool main_is_minimized = (main_draw_data->DisplaySize.x <= 0.0f || main_draw_data->DisplaySize.y <= 0.0f);
-        memcpy(&wd->ClearValue.color.float32[0], &clear_color, 4 * sizeof(float));
+		memcpy(&_wd->ClearValue.color.float32[0], &clear_color, 4 * sizeof(float));
         if(!main_is_minimized)
-            FrameRender(wd, main_draw_data);
+            FrameRender(_wd, main_draw_data);
 
         // Update and Render additional Platform Windows
         if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -179,8 +151,9 @@ namespace Ak
 
         // Present Main Platform Window
         if(!main_is_minimized)
-            FramePresent(wd);
+            FramePresent(_wd);
 	}
+
 	void ImGuiComponent::onEvent(Input& input)
 	{
 		ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
@@ -196,7 +169,7 @@ namespace Ak
 		CleanupVulkanWindow();
 		CleanupVulkan();
 
-		SDL_DestroyWindow(window);
+		SDL_DestroyWindow(_window);
 	}
 
 	void ImGuiComponent::SetDarkThemeColors()
@@ -509,7 +482,7 @@ namespace Ak
 		VkResult err = vkQueuePresentKHR(g_Queue, &info);
 		if(err == VK_ERROR_OUT_OF_DATE_KHR)
 		{
-			SDL_GetWindowSize(window, &g_SwapChainResizeWidth, &g_SwapChainResizeHeight);
+			SDL_GetWindowSize(_window, &g_SwapChainResizeWidth, &g_SwapChainResizeHeight);
 			g_SwapChainRebuild = true;
 			return;
 		}

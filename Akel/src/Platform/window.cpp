@@ -1,22 +1,28 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 29/06/2021
+// UPDATED : 06/07/2021
 
 #include <Platform/platform.h>
 
 namespace Ak
 {
+	SDL_DisplayMode DM;
+
     Window::Window() : Instance(), Component("__window") {}
 	
 	void Window::onAttach()
 	{
-		if(_window != nullptr)
-			return;
+		if(_window == nullptr)
+			create();
+        Instance::init(_window, "vert.spv", "frag.spv");
+	}
 
+	void Window::create()
+	{
         _position.SET(0, 0);
         _size.SET(0, 0);
 
-        _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN;
+        _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI;
  
         _window = SDL_CreateWindow(_title.c_str(), 0, 0, 0, 0, _flags);
         if(!_window)
@@ -24,7 +30,6 @@ namespace Ak
 
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
-        Instance::init(_window, "vert.spv", "frag.spv");
 	}
 
 	void Window::update()
@@ -47,10 +52,20 @@ namespace Ak
 	// Functions for window settings that use SDL2 functions. They are here to avoid you to link SDL2
 	void Window::setMaxSize(int x, int y)
 	{
+		SDL_GetCurrentDisplayMode(0, &DM);
+		if(x == AK_WINDOW_MAX_SIZE)
+			x = DM.w;
+		if(y == AK_WINDOW_MAX_SIZE)
+			y = DM.h;
 		SDL_SetWindowMaximumSize(_window, x, y);
 	}
 	void Window::setMinSize(int x, int y)
 	{
+		SDL_GetCurrentDisplayMode(0, &DM);
+		if(x == AK_WINDOW_MAX_SIZE)
+			x = DM.w;
+		if(y == AK_WINDOW_MAX_SIZE)
+			y = DM.h;
 		SDL_SetWindowMinimumSize(_window, x, y);
 	}
 	void Window::setPos(int x, int y)
@@ -59,6 +74,11 @@ namespace Ak
 	}
 	void Window::setSize(int x, int y)
 	{
+		SDL_GetCurrentDisplayMode(0, &DM);
+		if(x == AK_WINDOW_MAX_SIZE)
+			x = DM.w;
+		if(y == AK_WINDOW_MAX_SIZE)
+			y = DM.h;
 		SDL_SetWindowSize(_window, x, y);
 	}
 	void Window::setFullscreen(SDL_bool value)

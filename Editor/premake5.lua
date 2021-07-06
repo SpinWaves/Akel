@@ -20,8 +20,8 @@ project "Editor"
 
 	links
 	{
-		"ImGui",
-		"Akel"
+		"Akel",
+		"ImGui"
 	}
 
 	files
