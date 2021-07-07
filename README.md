@@ -11,7 +11,8 @@ Akel is designed to be extremely easy to use. Not being the most powerful, it go
 # Getting started
 Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, although it has not been tested on this OS (no information about MacOS, I have to find out). It is used with [Premake5](https://premake.github.io/). GCC 9 is required because it uses C++17 features. Dependencies are provided (SDL2, ImGui, Vulkan, GLM) with the code.
 
-* Start by clonning the repo `git clone https://github.com.Kbz-8/Akel`.
+* Start by clonning the repo `git clone --recursive https://github.com.Kbz-8/Akel`.
+  If the repository was cloned non-recursively previously, use `git submodule update --init` to clone the necessary submodules.
 * <details> <summary>Use the "premake5" executable provided in "dependencies/premake/bin" (choose carefully according to your system (Windows, Linux, ...)), then launch it in the main folder with the right option depending on how you compile your it :</summary>
     
     Premake5 options | Consequences
