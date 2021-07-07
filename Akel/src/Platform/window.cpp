@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 06/07/2021
+// UPDATED : 07/07/2021
 
 #include <Platform/platform.h>
 
@@ -70,6 +70,10 @@ namespace Ak
 	}
 	void Window::setPos(int x, int y)
 	{
+		if(x == AK_WINDOW_POS_CENTER)
+			x = SDL_WINDOWPOS_CENTERED;
+		if(y == AK_WINDOW_POS_CENTER)
+			y = SDL_WINDOWPOS_CENTERED;
 		SDL_SetWindowPosition(_window, x, y);
 	}
 	void Window::setSize(int x, int y)

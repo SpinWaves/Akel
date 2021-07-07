@@ -40,10 +40,10 @@ project "Editor"
 
 
 	filter "configurations:Debug"
-        defines "AK_DEBUG"
+        defines "AK_EDITOR_DEBUG"
         symbols "On"
 
     filter "configurations:Release"
-        defines "AK_RELEASE"
+        defines "AK_EDITOR_RELEASE"
         optimize "On"
 

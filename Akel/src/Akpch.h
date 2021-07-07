@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 04/07/2021
+// UPDATED : 07/07/2021
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -17,8 +17,8 @@
 
 // ImGui
 #include <imgui/imgui.h>
-#include <imgui/examples/imgui_impl_sdl.h>
-#include <imgui/examples/imgui_impl_vulkan.h>
+#include <imgui/backends/imgui_impl_sdl.h>
+#include <imgui/backends/imgui_impl_vulkan.h>
 
 // APIs' maths
 #include <glm/glm.hpp>

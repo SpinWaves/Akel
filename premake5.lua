@@ -1,4 +1,5 @@
 workspace "Akel"
+	startproject "ImGui"
 	startproject "Akel"
 	startproject "Editor"
 
@@ -8,9 +9,9 @@ workspace "Akel"
 		"Release"
 	}
 
-	flags "MultiProcessorCompile"
 	outputdir = "%{cfg.system}"
 
+include "dependencies/imgui"
 include "Akel"
 include "Editor"	
 

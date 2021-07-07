@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 06/07/2021
+// UPDATED : 07/07/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -32,6 +32,7 @@ enum windowSetting
 };
 
 #define AK_WINDOW_MAX_SIZE 0xFFFF
+#define AK_WINDOW_POS_CENTER 0xFFFE
 
 namespace Ak
 {
