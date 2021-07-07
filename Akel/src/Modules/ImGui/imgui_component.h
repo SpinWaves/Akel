@@ -23,7 +23,7 @@ namespace Ak
 			void begin();
 			void end();
 
-			~ImGuiComponent() = default;
+			virtual ~ImGuiComponent() = default;
 
 		private:
 			void SetDarkThemeColors();

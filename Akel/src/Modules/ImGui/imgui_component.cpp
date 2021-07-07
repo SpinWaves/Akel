@@ -50,7 +50,7 @@ namespace Ak
 		Window::setSetting<title>(_title);
 		Window::setSetting<resizable>(true);
 		Window::setSetting<dimensions>(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
-		//Window::setSetting<position>(0, 0);
+		Window::setSetting<position>(AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER);
 
 		// Setup Vulkan
 		uint32_t extensions_count = 0;

@@ -21,7 +21,6 @@ namespace Ak
 		while(!_in.isEnded()) // Main loop
 		{
 			_in.update();
-			CounterFPS::printFPS();
 			for(auto elem : _components)
 			{
 				elem->update();
