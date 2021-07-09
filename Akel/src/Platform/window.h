@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 07/07/2021
+// UPDATED : 08/07/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -28,7 +28,8 @@ enum windowSetting
     maximumSize,
     minimumSize,
     icon,
-	vsync
+	vsync,
+	maximize
 };
 
 #define AK_WINDOW_MAX_SIZE 0xFFFF
@@ -70,6 +71,7 @@ namespace Ak
 					case resizable:  setResizable(pass); break; 
 					case visible: setShow(pass); break;
 					case vsync: Instance::setVsync(value); break;
+					case maximize: setMaximize(pass); break;
 
 					default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
 				}
@@ -133,6 +135,7 @@ namespace Ak
 			void setBordered(SDL_bool value);
 			void setResizable(SDL_bool value);
 			void setShow(SDL_bool value);
+			void setMaximize(SDL_bool value);
 			void setBrightness(float value);
 			void setOpacity(float value);
 			void setTitle(const char* value);

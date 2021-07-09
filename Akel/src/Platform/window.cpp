@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 07/07/2021
+// UPDATED : 08/07/2021
 
 #include <Platform/platform.h>
 
@@ -89,6 +89,13 @@ namespace Ak
 	{
 		SDL_SetWindowFullscreen(_window, value);
 	}
+	void Window::setMaximize(SDL_bool value)
+	{
+		if(value == SDL_TRUE)
+			SDL_MaximizeWindow(_window);
+		else
+			SDL_MinimizeWindow(_window);
+	}
 	void Window::setBordered(SDL_bool value)
 	{
 		SDL_SetWindowBordered(_window, value);
@@ -133,6 +140,9 @@ namespace Ak
     }
     Maths::Vec2<uint16_t> Window::getSize()
     {
+		int x, y = 0;
+		SDL_GetWindowSize(_window, &x, &y);
+		_size.SET(x, y);
         return _size;
     }
 

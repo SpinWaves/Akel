@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 07/07/2021
+// UPDATED : 08/07/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -27,6 +27,8 @@ int main(int argc, char** argv)
 	AK_BEGIN_SESSION("Shutdown");
 		delete app;
 	AK_END_SESSION();
+
+	std::cout << Ak::bg_green << "Akel successfully finished" << Ak::bg_def << std::endl;
 
 	return 0;
 }

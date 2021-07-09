@@ -1,25 +1,29 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 30/05/2021
+// UPDATED : 08/07/2021
 
 #include <Modules/ELTM/eltm.h>
 
 namespace Ak
 {
-	std::string __ELTM_MAIN_FILE;
-
 	ELTMcontext::ELTMcontext() : _stream()
 	{
 		_comments[0] = false;
 		_comments[1] = false;
 	}
 
-	bool ELTMcontext::newContext(const char* file)
+	bool ELTMcontext::newContext(std::string file)
 	{
-		_file = file;
-		_stream.tokenize(file);
+		_file = file.c_str();
+		_stream.tokenize(_file);
+		static std::string __ELTM_MAIN_FILE;
 		std::string import_file;
 		std::string text;
+
+		std::string path;
+		std::size_t found = 0;
+		found = file.rfind("/");
+		path.append(file.begin(), file.begin() + found + 1);
 
 		if(__ELTM_MAIN_FILE.empty())
 			__ELTM_MAIN_FILE = file;
@@ -62,19 +66,22 @@ namespace Ak
 								bool isKnown = false;
 								if(_stream.getToken(_line, 1).getString() == __ELTM_MAIN_FILE)
 									isKnown = true;
-								for(auto elem : _imports)
+								else
 								{
-									if(elem.getFile() == _stream.getToken(_line, 1).getString().c_str())
+									for(auto elem : _imports)
 									{
-										isKnown = true;
-										break;
+										if(elem.getFile() == _stream.getToken(_line, 1).getString().c_str())
+										{
+											isKnown = true;
+											break;
+										}
 									}
 								}
 								if(!isKnown)
 								{
 									ELTMcontext newFile;
 									_imports.push_back(newFile);
-									if(!_imports.back().newContext(_stream.getToken(_line, 1).getString().c_str()))
+									if(!_imports.back().newContext(std::string(path + _stream.getToken(_line, 1).getString()).c_str()))
 									{
 										_isError = true;
 										return false;

@@ -1,0 +1,17 @@
+// This file is a part of the Akel Editor
+// CREATED : 08/07/2021
+// UPDATED : 08/07/2021
+
+begin module MainMenuBar
+
+	set file = File
+		set quit = Quit
+		set open = Open
+		set save = Save
+
+	set edit = Edit
+		set addFile = Add file to project
+		set build = Build the project
+
+end module
+

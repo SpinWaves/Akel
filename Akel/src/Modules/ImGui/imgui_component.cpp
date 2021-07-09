@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 07/07/2021
+// UPDATED : 09/07/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -36,7 +36,7 @@ namespace Ak
 	static int                      g_SwapChainResizeWidth = 0;
 	static int                      g_SwapChainResizeHeight = 0;
 
-	static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	static ImVec4 clear_color = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
 	static ImGui_ImplVulkanH_Window* _wd = &g_MainWindowData;
 
 	ImGuiComponent::ImGuiComponent(const char* title) : Window()
@@ -50,7 +50,7 @@ namespace Ak
 		Window::setSetting<title>(_title);
 		Window::setSetting<resizable>(true);
 		Window::setSetting<dimensions>(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
-		Window::setSetting<position>(AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER);
+		Window::setSetting<maximize>(true);
 
 		// Setup Vulkan
 		uint32_t extensions_count = 0;
