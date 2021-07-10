@@ -1,24 +1,26 @@
 // This file is a part of the Akel editor
 // CREATED : 09/07/2021
-// UPDATED : 09/07/2021
+// UPDATED : 10/07/2021
 
 #include <Panels/console.h>
 
-Console::Console(std::string name, size_t inputBufferSize)
+Console::Console(std::string name, std::shared_ptr<Ak::ELTMcontext> eltm, size_t inputBufferSize) : _sh()
 {
 	_name = std::move(name);
 	_input.resize(inputBufferSize);
 	_inBufferSize = inputBufferSize;
+	_eltm = eltm;
+	std::tm* t = std::localtime(new std::time_t(std::time(nullptr)));
 
-	_print.push_back("============================");
-	_print.push_back("Welcome to Akel Editor !");
-	_print.push_back("============================");
+	_print.push_back(std::pair<std::string, std::array<int, 3>>("============================", {t->tm_hour, t->tm_min, t->tm_sec}));
+	_print.push_back(std::pair<std::string, std::array<int, 3>>(_eltm->getText("Console.welcome"), {t->tm_hour, t->tm_min, t->tm_sec}));
+	_print.push_back(std::pair<std::string, std::array<int, 3>>("============================", {t->tm_hour, t->tm_min, t->tm_sec}));
 }
 
 void Console::render(int width, int height)
 {
 	_width = width;
-	_height = height;
+	_height = height / 4;
 
 	_WindowAlpha = 1.0f;
 	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, _WindowAlpha);
@@ -30,8 +32,9 @@ void Console::render(int width, int height)
         return;
     }
     ImGui::PopStyleVar();
-	ImGui::SetWindowSize(ImVec2(width, height / 5));
-	ImGui::SetWindowPos(ImVec2(0, height - height / 5), true);
+
+	ImGui::SetWindowSize(ImVec2(width, _height));
+	ImGui::SetWindowPos(ImVec2(0, height - _height), true);
 
 	logPart();
 	ImGui::Separator();
@@ -43,23 +46,22 @@ void Console::render(int width, int height)
 void Console::logPart()
 {
 	const float footerHeightToReserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
-    if(ImGui::BeginChild("Scrolling", ImVec2(0, (_height / 5) - 75), true))
+    if(ImGui::BeginChild("Scrolling", ImVec2(0, _height - 75), true))
     {
-		static const float timestamp_width = ImGui::CalcTextSize("00:00:00:0000").x;
-		int count = 0;
+		static const float timestamp_width = ImGui::CalcTextSize("00:00:00").x;
 
-		for(int i = 0; i < _print.size(); i++)
+		for(auto& elem : _print)
 		{
 			ImGui::PushTextWrapPos();
 
 				ImGui::PushTextWrapPos(ImGui::GetColumnWidth() - timestamp_width);
-					ImGui::TextUnformatted(_print[i].data());
+					ImGui::TextUnformatted(elem.first.data());
 				ImGui::PopTextWrapPos();
 
 				ImGui::SameLine(ImGui::GetColumnWidth(-1) - timestamp_width);
 
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 1.f, 1.f, 0.5f));
-					ImGui::Text("%02d:%02d:%02d:%04d", ((12 / 1000 / 3600) % 24), ((12 / 1000 / 60) % 60), ((12 / 1000) % 60), 12 % 1000);
+					ImGui::Text("%02d:%02d:%02d", elem.second[0], elem.second[1], elem.second[2]);
 				ImGui::PopStyleColor();
 
 			ImGui::PopTextWrapPos();
@@ -73,14 +75,9 @@ void Console::logPart()
 	ImGui::EndChild();
 }
 
-void Console::passELTM(std::shared_ptr<Ak::ELTMcontext> eltm)
-{
-	_eltm = eltm;
-}
-
 void Console::inputBar()
 {
-	ImGuiInputTextFlags inputTextFlags = ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_CallbackCharFilter | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackAlways;
+	ImGuiInputTextFlags inputTextFlags = ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_CallbackCharFilter | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackAlways | ImGuiInputTextFlags_AutoSelectAll;
 
     bool reclaimFocus = false;
 
@@ -90,10 +87,12 @@ void Console::inputBar()
     if(ImGui::InputText(_eltm->getText("Console.input").c_str(), in, IM_ARRAYSIZE(in), inputTextFlags, InputCallback, this))
     {
 		_input = in;
-		_print.push_back(_input);
+		std::tm* t = std::localtime(new std::time_t(std::time(nullptr)));
+		_print.push_back(std::pair<std::string, std::array<int, 3>>(_input, {t->tm_hour, t->tm_min, t->tm_sec}));
         if(!_input.empty())
             _scrollToBottom = true;
         reclaimFocus = true;
+		_sh.command(_input);
 		_input.clear();
     }
     ImGui::PopItemWidth();

@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 09/07/2021
+// UPDATED : 10/07/2021
 
 #include <editorComponent.h>
 
@@ -13,29 +13,13 @@ void EditorComponent::onAttach()
 {
 	Ak::ImGuiComponent::onAttach();
 	_eltm->newContext(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
-	_console = std::shared_ptr<Console>(new Console(_eltm->getText("Console.name")));
-	_console->passELTM(_eltm);
+	_console = std::shared_ptr<Console>(new Console(_eltm->getText("Console.name"), _eltm));
 }
 
 void EditorComponent::onImGuiRender()
 {
 	drawMainMenuBar();
 	_console->render(Window::getSize().X, Window::getSize().Y);
-
-	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-	static bool show_another_window;
-	ImGui::Checkbox("Another Window", &show_another_window);
-
-	static float f = 0.0f;
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-
-	static int counter = 0;
-	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-		counter++;
-	ImGui::SameLine();
-	ImGui::Text("counter = %d", counter);
-
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 }
 
 void EditorComponent::onEvent(Ak::Input& input)
@@ -68,6 +52,9 @@ void EditorComponent::drawMainMenuBar()
 			if(ImGui::MenuItem(_eltm->getText("MainMenuBar.build").c_str()))   { /* Do stuff */ }
 			ImGui::EndMenu();
 		}
+		ImGui::SameLine(ImGui::GetColumnWidth(-1));
+		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
+
 		ImGui::EndMainMenuBar();
 	}
 }
