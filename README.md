@@ -35,7 +35,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Build your project and enjoy or cry depending on if it compiles correctly or if there are 400 errors
 
 # Akel useful features
-* Text management language [ELTM](https://github.com/Kbz-8/Akel/tree/main/src/Modules/ELTM)
+* Text management language [ELTM](https://github.com/Kbz-8/Akel/tree/main/Akel/src/Modules/ELTM)
 * Simple but efficient error management system 
 * System information retrieval
   * CPU infos (hardware and software)
