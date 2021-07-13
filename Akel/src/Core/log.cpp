@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 02/07/2021
+// UPDATED : 13/07/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -9,9 +9,6 @@ namespace Ak::Core
 {
 	void log::Init() // Remove ten days old files
 	{
-		std::time_t t = std::time(0);
-		_now = std::localtime(&t);
-
 		std::string name = "";
 		int date = 0;
 		size_t finder = 0;
@@ -30,10 +27,10 @@ namespace Ak::Core
 					if((finder = name.find("-")) != std::string::npos)
 					{
 						name.erase(name.begin(), name.begin() + finder + 1);  // Get month
-						if(_now->tm_mon + 1 != std::stoi(name))
+						if(Time::getCurrentTime().month + 1 != std::stoi(name))
 							date -= 31;
 					}
-					if(date < _now->tm_mon - 9)
+					if(date < Time::getCurrentTime().month - 9)
 						std::filesystem::remove(p.path());
 				}
 			}
@@ -54,7 +51,7 @@ namespace Ak::Core
 
 				default: break;
 			}
-            _out << _now->tm_hour << ":" << _now->tm_min << " ---- " << _type << message << std::endl; // No need to flush, std::endl does it
+            _out << Time::getCurrentTime().hour << ":" << Time::getCurrentTime().min << " ---- " << _type << message << std::endl; // No need to flush, std::endl does it
 			_out.close();
 		}
         if(type == FATAL_ERROR)
@@ -69,7 +66,7 @@ namespace Ak::Core
 		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
         if(_out.is_open())
 		{
-            _out << _now->tm_hour << ":" << _now->tm_min << " ---- "<< message << std::endl;  // No need to flush, std::endl does it
+            _out << Time::getCurrentTime().hour << ":" << Time::getCurrentTime().min << " ---- "<< message << std::endl;  // No need to flush, std::endl does it
 			_out.close();
 		}
     }
@@ -82,12 +79,13 @@ namespace Ak::Core
 
     std::string log::getTime(std::string path)
     {
+		__time time = Time::getCurrentTime();
 		path.append("session-");
-        path.append(std::to_string(_now->tm_mday));
+        path.append(std::to_string(time.day));
 		path.append("-");
-        path.append(std::to_string(_now->tm_mon + 1));
+        path.append(std::to_string(time.month));
 		path.append("-");
-        path.append(std::to_string(_now->tm_year + 1900));
+        path.append(std::to_string(time.year));
         path.append(".log");
 
         return path;

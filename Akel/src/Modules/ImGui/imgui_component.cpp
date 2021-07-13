@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 09/07/2021
+// UPDATED : 12/07/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -36,7 +36,7 @@ namespace Ak
 	static int                      g_SwapChainResizeWidth = 0;
 	static int                      g_SwapChainResizeHeight = 0;
 
-	static ImVec4 clear_color = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+	static ImVec4 clear_color = ImVec4(0.157f, 0.165f, 0.211f, 1.0f);
 	static ImGui_ImplVulkanH_Window* _wd = &g_MainWindowData;
 
 	ImGuiComponent::ImGuiComponent(const char* title) : Window()
@@ -180,14 +180,12 @@ namespace Ak
 
 		CleanupVulkanWindow();
 		CleanupVulkan();
-
-		SDL_DestroyWindow(_window);
 	}
 
 	void ImGuiComponent::SetDarkThemeColors()
 	{
 		auto& colors = ImGui::GetStyle().Colors;
-		colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
+		colors[ImGuiCol_WindowBg] = ImVec4{ 0.188f, 0.196f, 0.235f, 1.0f };
 
 		// Headers
 		colors[ImGuiCol_Header] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
@@ -200,7 +198,7 @@ namespace Ak
 		colors[ImGuiCol_ButtonActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 
 		// Frame BG
-		colors[ImGuiCol_FrameBg] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_FrameBg] = ImVec4{ 0.150f, 0.158f, 0.184f, 1.0f };
 		colors[ImGuiCol_FrameBgHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
 		colors[ImGuiCol_FrameBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 
@@ -212,9 +210,10 @@ namespace Ak
 		colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
 
 		// Title
-		colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TitleBg] = ImVec4{ 0.188f, 0.196f, 0.235f, 1.0f };
+		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.188f, 0.196f, 0.235f, 1.0f };
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.188f, 0.196f, 0.235f, 1.0f };
+		colors[ImGuiCol_MenuBarBg] = ImVec4{ 0.157f, 0.165f, 0.211f, 1.0f };
 	}
 
 	static void check_vk_result(VkResult err)

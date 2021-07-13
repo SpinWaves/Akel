@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 08/07/2021
-// UPDATED : 10/07/2021
+// UPDATED : 13/07/2021
 
 #ifndef __AK_EDITOR_CONSOLE__
 #define __AK_EDITOR_CONSOLE__
@@ -16,7 +16,7 @@ class Console
 
 	protected:
 		std::string _input;
-		std::vector<std::pair<std::string, std::array<int, 3>>> _print; // Tempo
+		std::vector<std::pair<std::string, std::array<uint8_t, 3>>> _print; // Tempo
 
 	private:
 		void inputBar();

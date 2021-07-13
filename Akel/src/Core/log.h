@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 30/06/2021
+// UPDATED : 13/07/2021
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -28,7 +28,6 @@ namespace Ak::Core
             static std::string getTime(std::string path);
             static void TERMINATE();
 			inline static std::ofstream _out;
-			inline static std::tm* _now;
 			inline static std::string _type;
     };
 }
