@@ -5,7 +5,7 @@
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
 
-#define AK_PROFILE 0
+#define AK_PROFILE 1
 #if AK_PROFILE
 	#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
 		#define AK_FUNC_SIG __PRETTY_FUNCTION__

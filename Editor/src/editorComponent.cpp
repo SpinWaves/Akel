@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 12/07/2021
+// UPDATED : 13/07/2021
 
 #include <editorComponent.h>
 
@@ -13,7 +13,7 @@ void EditorComponent::onAttach()
 {
 	Ak::ImGuiComponent::onAttach();
 	_eltm->newContext(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
-	_console = std::shared_ptr<Console>(new Console(_eltm->getText("Console.name"), _eltm));
+	_console = std::shared_ptr<Console>(new Console(_eltm->getText("Console.name")));
 }
 
 void EditorComponent::onImGuiRender()
@@ -25,7 +25,7 @@ void EditorComponent::onImGuiRender()
 void EditorComponent::onEvent(Ak::Input& input)
 {
 	Ak::ImGuiComponent::onEvent(input);
-	if(!_running)
+	if(!_running || _console->_sh.quit())
 		input.finish();
 }
 

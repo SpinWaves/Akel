@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/04/2021
-// UPDATED : 01/06/2021
+// UPDATED : 13/07/2021
 
 #include <Platform/platform.h>
 
@@ -37,53 +37,50 @@ namespace Ak
                 _boutonsSouris[0][i] = false;
         }
 
-        while(SDL_PollEvent(&evenements))
-        {
-            if(evenements.window.event == SDL_WINDOWEVENT_CLOSE) 
-                _end = true;
+		if(evenements.window.event == SDL_WINDOWEVENT_CLOSE) 
+			_end = true;
 
-            switch(evenements.type) 
-            {
-                case SDL_KEYDOWN: 
-                    _touches[1][evenements.key.keysym.scancode] = true;
-                    _touches[0][evenements.key.keysym.scancode] = false;
-                break;
+		switch(evenements.type) 
+		{
+			case SDL_KEYDOWN: 
+				_touches[1][evenements.key.keysym.scancode] = true;
+				_touches[0][evenements.key.keysym.scancode] = false;
+			break;
 
 
-                case SDL_KEYUP: 
-                    _touches[1][evenements.key.keysym.scancode] = false;
-                    _touches[0][evenements.key.keysym.scancode] = true;
-                break;
+			case SDL_KEYUP: 
+				_touches[1][evenements.key.keysym.scancode] = false;
+				_touches[0][evenements.key.keysym.scancode] = true;
+			break;
 
-                case SDL_MOUSEBUTTONDOWN: 
-                    _boutonsSouris[1][evenements.button.button] = true;
-                    _boutonsSouris[0][evenements.button.button] = false;
-                break;
+			case SDL_MOUSEBUTTONDOWN: 
+				_boutonsSouris[1][evenements.button.button] = true;
+				_boutonsSouris[0][evenements.button.button] = false;
+			break;
 
-                case SDL_MOUSEBUTTONUP: 
-                    _boutonsSouris[1][evenements.button.button] = false;
-                    _boutonsSouris[0][evenements.button.button] = true;
-                break;
+			case SDL_MOUSEBUTTONUP: 
+				_boutonsSouris[1][evenements.button.button] = false;
+				_boutonsSouris[0][evenements.button.button] = true;
+			break;
 
-                case SDL_TEXTINPUT: 
-                    if(_isTextInputAllow)
-                    {
-                        _text_input_string = evenements.text.text;
-                        _isTyping = true;
-                    }
-                break;
+			case SDL_TEXTINPUT: 
+				if(_isTextInputAllow)
+				{
+					_text_input_string = evenements.text.text;
+					_isTyping = true;
+				}
+			break;
 
-                default: break;
-            }
+			default: break;
+		}
 
-            if(evenements.type == SDL_MOUSEMOTION) 
-            {
-                    _x = evenements.motion.x;
-                    _y = evenements.motion.y;
+		if(evenements.type == SDL_MOUSEMOTION) 
+		{
+				_x = evenements.motion.x;
+				_y = evenements.motion.y;
 
-                    _xRel = evenements.motion.xrel;
-                    _yRel = evenements.motion.yrel;
-            }
+				_xRel = evenements.motion.xrel;
+				_yRel = evenements.motion.yrel;
         }
     }
 

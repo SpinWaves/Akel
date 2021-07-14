@@ -4,16 +4,15 @@
 
 #include <Panels/console.h>
 
-Console::Console(std::string name, std::shared_ptr<Ak::ELTMcontext> eltm, size_t inputBufferSize) : _sh()
+Console::Console(std::string name, size_t inputBufferSize) : _sh()
 {
 	_name = std::move(name);
 	_input.resize(inputBufferSize);
 	_inBufferSize = inputBufferSize;
-	_eltm = eltm;
 
-	_print.push_back(std::pair<std::string, std::array<uint8_t, 3>>("============================", {Ak::Time::getCurrentTime().hour, Ak::Time::getCurrentTime().min, Ak::Time::getCurrentTime().sec})); // Tempo
-	_print.push_back(std::pair<std::string, std::array<uint8_t, 3>>(_eltm->getText("Console.welcome"), {Ak::Time::getCurrentTime().hour, Ak::Time::getCurrentTime().min, Ak::Time::getCurrentTime().sec})); // Tempo
-	_print.push_back(std::pair<std::string, std::array<uint8_t, 3>>("============================", {Ak::Time::getCurrentTime().hour, Ak::Time::getCurrentTime().min, Ak::Time::getCurrentTime().sec})); // Tempo
+	_sh.print("============================");
+	_sh.print(Ak::ELTMcontext::getText("Console.welcome"));
+	_sh.print("============================");
 }
 
 void Console::render(int width, int height)
@@ -27,7 +26,7 @@ void Console::render(int width, int height)
     {
         ImGui::PopStyleVar();
         ImGui::End();
-		Ak::messageBox(ERROR, _eltm->getText("errors.consoleMainWin"), "error from ImGui::Begin()");
+		Ak::messageBox(ERROR, Ak::ELTMcontext::getText("errors.consoleMainWin"), "error from ImGui::Begin()");
         return;
     }
     ImGui::PopStyleVar();
@@ -49,18 +48,31 @@ void Console::logPart()
     {
 		static const float timestamp_width = ImGui::CalcTextSize("00:00:00").x;
 
-		for(auto& elem : _print)
+		for(auto& elem : _sh.getOutPut())
 		{
 			ImGui::PushTextWrapPos();
 
 				ImGui::PushTextWrapPos(ImGui::GetColumnWidth() - timestamp_width);
-					ImGui::TextUnformatted(elem.first.data());
+				if(std::get<0>(elem) == 0)
+					ImGui::TextUnformatted(std::get<1>(elem).data());
+				else if(std::get<0>(elem) == 1)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.365f, 0.365f, 1.0f));
+						ImGui::TextUnformatted(std::get<1>(elem).data());
+					ImGui::PopStyleColor();
+				}
+				else if(std::get<0>(elem) == 2)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 0.5f));
+						ImGui::TextUnformatted(std::get<1>(elem).data());
+					ImGui::PopStyleColor();
+				}
 				ImGui::PopTextWrapPos();
 
 				ImGui::SameLine(ImGui::GetColumnWidth(-1) - timestamp_width);
 
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 1.f, 1.f, 0.5f));
-					ImGui::Text("%02d:%02d:%02d", elem.second[0], elem.second[1], elem.second[2]);
+					ImGui::Text("%02d:%02d:%02d", std::get<2>(elem).hour, std::get<2>(elem).min, std::get<2>(elem).sec);
 				ImGui::PopStyleColor();
 
 			ImGui::PopTextWrapPos();
@@ -83,14 +95,13 @@ void Console::inputBar()
 	char in[_inBufferSize] = "";
 
     ImGui::PushItemWidth(-ImGui::GetStyle().ItemSpacing.x * 7);
-    if(ImGui::InputText(_eltm->getText("Console.input").c_str(), in, _inBufferSize, inputTextFlags, InputCallback, this))
+    if(ImGui::InputText(Ak::ELTMcontext::getText("Console.input").c_str(), in, _inBufferSize, inputTextFlags, InputCallback, this))
     {
 		_input = in;
-		_print.push_back(std::pair<std::string, std::array<uint8_t, 3>>(_input, {Ak::Time::getCurrentTime().hour, Ak::Time::getCurrentTime().min, Ak::Time::getCurrentTime().sec})); // Tempo
-        if(!_input.empty())
-            _scrollToBottom = true;
-        reclaimFocus = true;
 		_sh.command(_input);
+		if(!_input.empty())
+			_scrollToBottom = true;
+		reclaimFocus = true;
 		_input.clear();
     }
     ImGui::PopItemWidth();

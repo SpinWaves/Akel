@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 10/07/2021
-// UPDATED : 10/07/2021
+// UPDATED : 13/07/2021
 
 #ifndef __AK_SHELL_PARSER__
 #define __AK_SHELL_PARSER__
@@ -9,12 +9,13 @@
 
 enum class Commands
 {
-	clear = 0x00,
-	help = 0x01,
-	history = 0x02,
-	build = 0x04,
-	sysShell = 0x08,
-	quit = 0xF0,
+	clear = 0x01,
+	help = 0x02,
+	history = 0x04,
+	build = 0x08,
+	sysShell = 0x10,
+	quit = 0x20,
+	error = 0x40
 };
 
 class Parser

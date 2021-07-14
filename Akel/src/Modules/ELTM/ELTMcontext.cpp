@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 08/07/2021
+// UPDATED : 14/07/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -36,7 +36,7 @@ namespace Ak
 				{
 					switch(_stream.getToken(_line, 0).getReservedToken())
 					{
-						case kw_set:
+						case eltm_token::kw_set:
 						{
 							if(_stream.getToken(_line, 1).isString())
 							{
@@ -51,7 +51,7 @@ namespace Ak
 									return false;
 							}
 							else
-							{				
+							{
 								ELTMerrors error = syntax_error("ID name cannot be a keyword", file, _line + 1);
 								std::cout << red << error.what() << def << std::endl;
 								_isError = true;
@@ -59,7 +59,7 @@ namespace Ak
 							}
 							break;
 						}
-						case kw_import:
+						case eltm_token::kw_import:
 						{
 							if(_stream.getToken(_line, 1).isString())
 							{
@@ -97,14 +97,14 @@ namespace Ak
 							}
 							break;
 						}
-						case basic_comment: _comments[0] = true; break;
-						case begin_long_comment: _comments[1] = true; _last_line_long_comment = _line; break;
-						
-						case kw_begin:
+						case eltm_token::basic_comment: _comments[0] = true; break;
+						case eltm_token::begin_long_comment: _comments[1] = true; _last_line_long_comment = _line; break;
+
+						case eltm_token::kw_begin:
 						{
 							if(_stream.getToken(_line, 1).isKeyword())
 							{
-								if(_stream.getToken(_line, 1).getReservedToken() == kw_module)
+								if(_stream.getToken(_line, 1).getReservedToken() == eltm_token::kw_module)
 								{
 									if(!_lastModuleName.empty())
 									{
@@ -135,11 +135,11 @@ namespace Ak
 							}
 							break;
 						}
-						case kw_end:
+						case eltm_token::kw_end:
 						{
 							if(_stream.getToken(_line, 1).isKeyword())
 							{
-								if(_stream.getToken(_line, 1).getReservedToken() == kw_module)
+								if(_stream.getToken(_line, 1).getReservedToken() == eltm_token::kw_module)
 									_lastModuleName.clear();
 							}
 						}
@@ -147,9 +147,9 @@ namespace Ak
 						default: break;
 					}
 				}
-				else 
+				else
 				{
-					Token::activateKw(false); 
+					Token::activateKw(false);
 					if(_stream.getToken(_line, 0).getString() == "___ELTM_TOKEN_COMMENT_BASIC_CODE___")
 					{
 						_comments[0] = true;
@@ -173,7 +173,7 @@ namespace Ak
 			{
 				if(_stream.getToken(_line, 0).isKeyword())
 				{
-					if(_stream.getToken(_line, 0).getReservedToken() == end_long_comment)
+					if(_stream.getToken(_line, 0).getReservedToken() == eltm_token::end_long_comment)
 						_comments[1] = false;
 				}
 			}
@@ -204,19 +204,19 @@ namespace Ak
 			assignPos = 1;
 		int j = assignPos + 1;
 
-		if(_stream.getToken(_line, assignPos).getReservedToken() == assign)
+		if(_stream.getToken(_line, assignPos).getReservedToken() == eltm_token::assign)
 		{
 			int currentLine = _line;
 			Token::activateKw(false);
-			
+
 			while(_line < _stream.getLineNumber())
 			{
 				for(;j < _stream.getLineIndexNumber(_line); j++)
 				{
 					// Comment check
-					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[basic_comment])
+					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::basic_comment])
 						_comments[0] = true;
-					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[begin_long_comment])
+					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::begin_long_comment])
 					{
 						_comments[1] = true;
 						_last_line_long_comment = _line;
@@ -224,11 +224,11 @@ namespace Ak
 
 					if(!_comments[0] && !_comments[1])
 					{
-						if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[kw_get] && _stream.getToken(_line, j+1).getString() == Token::mixable_keywords_token[begin_long_text])
+						if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::kw_get] && _stream.getToken(_line, j + 1).getString() == Token::mixable_keywords_token[eltm_token::begin_long_text])
 							getText = true;
 
 						// Long text begin check
-						if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[begin_long_text] && !getText)
+						if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::begin_long_text] && !getText)
 						{
 							if(j != assignPos + 1)
 							{
@@ -240,20 +240,41 @@ namespace Ak
 							else
 								long_text = true;
 						}
-						else if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[end_long_text] && long_text) // Check for long text end
+						else if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::end_long_text] && long_text) // Check for long text end
 							long_text = false;
 						else
 						{
 							if(getText)
 							{
-								if(_stream.getToken(_line, j + 3).getString() == Token::mixable_keywords_token[end_long_text])
+								if(_stream.getToken(_line, j + 3).getString() == Token::mixable_keywords_token[eltm_token::end_long_text])
 								{
 									if(_texts.count(_stream.getToken(_line, j + 2).getString()))
 									{
+								#ifdef AK_ELTM_VERSION_1_1
+										text += _texts[_stream.getToken(_line, j + 2).getString()];
+								#else
 										text = _texts[_stream.getToken(_line, j + 2).getString()];
+								#endif
 										break;
 									}
-									if((found = _stream.getToken(_line, j + 2).getString().find(".")) != std::string::npos)
+								#ifdef AK_ELTM_VERSION_1_1
+									else if(!_lastModuleName.empty())
+									{
+										if(_modules[_lastModuleName].count(_stream.getToken(_line, j + 2).getString()))
+										{
+											text += _modules[_lastModuleName][_stream.getToken(_line, j + 2).getString()];
+											break;
+										}
+										else
+										{
+											ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
+											std::cout << red << error.what() << def << std::endl;
+											_isError = true;
+											return false;
+										}
+									}
+								#endif
+									else if((found = _stream.getToken(_line, j + 2).getString().find(".")) != std::string::npos)
 									{
 										moduleName.append(_stream.getToken(_line, j + 2).getString(), 0, found);
 										if(_modules.count(moduleName))
@@ -261,7 +282,11 @@ namespace Ak
 											moduleID.append(_stream.getToken(_line, j + 2).getString(), found + 1, _stream.getToken(_line, j + 2).getString().length());
 											if(_modules[moduleName].count(moduleID))
 											{
+										#ifdef AK_ELTM_VERSION_1_1
+												text += _modules[moduleName][moduleID];
+										#else
 												text = _modules[moduleName][moduleID];
+										#endif
 												break;
 											}
 										}
@@ -296,7 +321,7 @@ namespace Ak
 						}
 					}
 
-					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[end_long_comment] && _comments[1])
+					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::end_long_comment] && _comments[1])
 						_comments[1] = false;
 				}
 
@@ -327,4 +352,3 @@ namespace Ak
 		return true;
 	}
 }
-

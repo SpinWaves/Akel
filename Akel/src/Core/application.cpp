@@ -21,12 +21,15 @@ namespace Ak
 		Input in;
 		while(!in.isEnded()) // Main loop
 		{
-			in.update();
-			for(auto elem : _components)
+        	while(SDL_PollEvent(in.getNativeEvent()))
 			{
-				elem->update();
-				elem->onEvent(in);
+				in.update();
+				for(auto elem : _components)
+					elem->onEvent(in);
 			}
+			for(auto elem : _components)
+				elem->update();
+
 			imgui.begin();
 				for(auto elem : _components)
 					elem->onImGuiRender();

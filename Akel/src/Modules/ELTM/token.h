@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/05/2021
-// UPDATED : 26/06/2021
+// UPDATED : 13/07/2021
 
 #ifndef __AK_ELTM_TOKEN__
 #define __AK_ELTM_TOKEN__
@@ -12,7 +12,7 @@
 
 namespace Ak
 {
-	enum eltm_token
+	enum class eltm_token
 	{
 		kw_set,
 		kw_import,
@@ -32,6 +32,10 @@ namespace Ak
 		begin_long_text,
 		end_long_text,
 
+		#ifdef AK_ELTM_VERSION_1_1
+			
+		#endif
+
 		error
 	};
 
@@ -42,33 +46,33 @@ namespace Ak
 
 			static inline duets_array<eltm_token, std::string> keyword_token
 			{
-				{kw_set, "set"},
-				{kw_get, "get"},
-				{assign, "="},
+				{eltm_token::kw_set, "set"},
+				{eltm_token::kw_get, "get"},
+				{eltm_token::assign, "="},
 
-				{kw_import, "import"},
+				{eltm_token::kw_import, "import"},
 
-				{kw_begin, "begin"},
-				{kw_end, "end"},
+				{eltm_token::kw_begin, "begin"},
+				{eltm_token::kw_end, "end"},
 
-				{kw_module, "module"},
+				{eltm_token::kw_module, "module"},
 
-				{basic_comment, "//"},
-				{begin_long_comment, "/*"},
-				{end_long_comment, "*/"},
-				{begin_long_text, "("},
-				{end_long_text, ")"}
+				{eltm_token::basic_comment, "//"},
+				{eltm_token::begin_long_comment, "/*"},
+				{eltm_token::end_long_comment, "*/"},
+				{eltm_token::begin_long_text, "("},
+				{eltm_token::end_long_text, ")"}
 			};
 
 			static inline duets_array<eltm_token, std::string> mixable_keywords_token
 			{
-				{kw_get, "get"},
-				{assign, "="},
-				{basic_comment, "//"},
-				{begin_long_comment, "/*"},
-				{end_long_comment, "*/"},
-				{begin_long_text, "("},
-				{end_long_text, ")"}
+				{eltm_token::kw_get, "get"},
+				{eltm_token::assign, "="},
+				{eltm_token::basic_comment, "//"},
+				{eltm_token::begin_long_comment, "/*"},
+				{eltm_token::end_long_comment, "*/"},
+				{eltm_token::begin_long_text, "("},
+				{eltm_token::end_long_text, ")"}
 			};
 
 			bool isString();
@@ -91,7 +95,7 @@ namespace Ak
 					return std::get<eltm_token>(_value);
 				ELTMerrors func_error = context_error("token : this token is not a reserved token", file, caller, line);
 				std::cout << red << func_error.what() << def << std::endl;
-				return error;
+				return eltm_token::error;
 			}
 
 			static bool isKwActivate();

@@ -11,12 +11,12 @@
 class Console
 {
 	public:
-		explicit Console(std::string name, std::shared_ptr<Ak::ELTMcontext> eltm, size_t inputBufferSize = 256);
+		explicit Console(std::string name, size_t inputBufferSize = 256);
 		void render(int width, int height);
+		Shell _sh;
 
 	protected:
 		std::string _input;
-		std::vector<std::pair<std::string, std::array<uint8_t, 3>>> _print; // Tempo
 
 	private:
 		void inputBar();
@@ -25,8 +25,6 @@ class Console
 		static int InputCallback(ImGuiInputTextCallbackData *data);
 
 		std::string _name;
-		std::shared_ptr<Ak::ELTMcontext> _eltm;
-		Shell _sh;
 		bool _autoScroll;
 		bool _coloredOutput;
 		bool _scrollToBottom;
