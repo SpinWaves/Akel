@@ -4,7 +4,7 @@
 
 begin module MainMenuBar
 
-	set file = File
+	set file = Fichier
 		set quit = Quitter
 		set open = Ouvrir
 		set save = Sauvegarder
@@ -14,4 +14,3 @@ begin module MainMenuBar
 		set build = Construire le projet
 
 end module
-

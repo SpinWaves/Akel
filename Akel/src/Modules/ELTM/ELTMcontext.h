@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 13/07/2021
+// UPDATED : 15/07/2021
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -20,15 +20,11 @@ namespace Ak
 			static std::string getText(std::string ID, size_t line, std::string file, std::string function)
 			{
 				if(_isError)
-				{
-					ELTMerrors error = context_error("context not created due to ELTM errors", file, function, line);
-					std::cout << red << error.what() << def << std::endl;
 					return "error";
-				}
 
 				if(_texts.count(ID))
 					return _texts[ID];
-				
+
 				std::string moduleName = "";
 				std::string moduleID = "";
 				size_t found = 0;
@@ -64,11 +60,11 @@ namespace Ak
 			bool setID(bool isNewID);
 
 			static inline bool _isError = false;
-			
+
 			static inline std::unordered_map<std::string, std::string> _texts;
 			static inline std::unordered_map<std::string, std::unordered_map<std::string, std::string>> _modules;
 			std::vector<ELTMcontext> _imports;
-			
+
 			StreamStack _stream;
 			const char* _file;
 
@@ -85,4 +81,3 @@ namespace Ak
 }
 
 #endif // __AK_ELTM_CONTEXT__
-

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 14/07/2021
+// UPDATED : 16/07/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -195,13 +195,9 @@ namespace Ak
 		std::string moduleID;
 		int found;
 		bool long_text = false;
-		int assignPos = 0;
 		bool getText = false;
 
-		if(isNewID)
-			assignPos = 2;
-		else
-			assignPos = 1;
+		int assignPos = isNewID ? 2 : 1;
 		int j = assignPos + 1;
 
 		if(_stream.getToken(_line, assignPos).getReservedToken() == eltm_token::assign)
@@ -240,30 +236,31 @@ namespace Ak
 							else
 								long_text = true;
 						}
+					#ifdef AK_ELTM_VERSION_1_1
+						else if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::end_long_text]) // Check for long text end
+						{
+							if(getText)
+								getText = false;
+							else if(long_text)
+								long_text = false;
+						}
+					#else
 						else if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::end_long_text] && long_text) // Check for long text end
 							long_text = false;
+					#endif
 						else
 						{
 							if(getText)
 							{
 								if(_stream.getToken(_line, j + 3).getString() == Token::mixable_keywords_token[eltm_token::end_long_text])
 								{
-									if(_texts.count(_stream.getToken(_line, j + 2).getString()))
-									{
 								#ifdef AK_ELTM_VERSION_1_1
-										text += _texts[_stream.getToken(_line, j + 2).getString()];
-								#else
-										text = _texts[_stream.getToken(_line, j + 2).getString()];
-								#endif
-										break;
-									}
-								#ifdef AK_ELTM_VERSION_1_1
-									else if(!_lastModuleName.empty())
+									if(!_lastModuleName.empty())
 									{
 										if(_modules[_lastModuleName].count(_stream.getToken(_line, j + 2).getString()))
 										{
 											text += _modules[_lastModuleName][_stream.getToken(_line, j + 2).getString()];
-											break;
+											j += 2;
 										}
 										else
 										{
@@ -272,6 +269,17 @@ namespace Ak
 											_isError = true;
 											return false;
 										}
+									}
+									else if(_texts.count(_stream.getToken(_line, j + 2).getString()))
+									{
+										text += _texts[_stream.getToken(_line, j + 2).getString()];
+										j += 2;
+									}
+								#else
+									if(_texts.count(_stream.getToken(_line, j + 2).getString()))
+									{
+										text = _texts[_stream.getToken(_line, j + 2).getString()];
+										break;
 									}
 								#endif
 									else if((found = _stream.getToken(_line, j + 2).getString().find(".")) != std::string::npos)
@@ -284,10 +292,11 @@ namespace Ak
 											{
 										#ifdef AK_ELTM_VERSION_1_1
 												text += _modules[moduleName][moduleID];
+												j += 2;
 										#else
 												text = _modules[moduleName][moduleID];
-										#endif
 												break;
+										#endif
 											}
 										}
 										else
@@ -298,11 +307,13 @@ namespace Ak
 											return false;
 										}
 									}
-
-									ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
-									std::cout << red << error.what() << def << std::endl;
-									_isError = true;
-									return false;
+									else
+									{
+										ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
+										std::cout << red << error.what() << def << std::endl;
+										_isError = true;
+										return false;
+									}
 								}
 								else
 								{

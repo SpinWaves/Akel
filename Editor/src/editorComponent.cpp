@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 13/07/2021
+// UPDATED : 16/07/2021
 
 #include <editorComponent.h>
 
@@ -58,4 +58,3 @@ void EditorComponent::drawMainMenuBar()
 		ImGui::EndMainMenuBar();
 	}
 }
-

@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 09/07/2021
-// UPDATED : 14/07/2021
+// UPDATED : 15/07/2021
 
 begin module Console
 
@@ -12,10 +12,10 @@ begin module Console
 	set helpBuild = \tbuild command is used to build the project loaded
 	set helpSysShell = \tsysShell command is used to switch to a system shell
 	set helpQuit = \tquit command is used to quit the editor
-	set help = (\t help clear: /*get(helpClear)*/\n
-				\t help history\n
-				\t help build\n
-				\t help sysShell\n
-				\t help quit)
+	set help = (\t help clear: get(helpClear)\n
+				\t help history: get(helpHistory)\n
+				\t help build: get(helpBuild)\n
+				\t help sysShell: get(helpSysShell)\n
+				\t help quit: get(helpQuit))
 
 end module

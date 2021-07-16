@@ -1,12 +1,21 @@
 // This file is a part of the Akel editor
 // CREATED : 09/07/2021
-// UPDATED : 10/07/2021
+// UPDATED : 16/07/2021
 
 begin module Console
-	
+
 	set name = Console
-		set input = Entrée
-		set welcome = Bienvenue dans l'éditeur d'Akel !
+	set input = Entrée
+	set welcome = Bienvenue dans l'éditeur d'Akel !
+	set helpClear = \tla commande clear est utilisée pour effacer le contenu de la console
+	set helpHistory = \tla commande history est utilisée pour afficher l'historique de la console depuis le dernier effacment
+	set helpBuild = \tla commande build est utilisée pour contruire le projet ouvert
+	set helpSysShell = \tla commande sysShell est utilisée pour passer sous un terminal système
+	set helpQuit = \tla commande quit est utilisée pour quitter l'éditeur
+	set help = (\t help clear: get(helpClear)\n
+				\t help history: get(helpHistory)\n
+				\t help build: get(helpBuild)\n
+				\t help sysShell: get(helpSysShell)\n
+				\t help quit: get(helpQuit))
 
 end module
-

@@ -39,4 +39,3 @@ class Parser
 };
 
 #endif // __AK_SHELL_PARSER__
-

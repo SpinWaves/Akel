@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 07/05/2021
-// UPDATED : 13/07/2021
+// UPDATED : 15/07/2021
 
 #ifndef __AK_STREAM_STACK__
 #define __AK_STREAM_STACK__
@@ -36,11 +36,22 @@ namespace Ak
 						subData = line;
 						for(int i = 0; i < Token::mixable_keywords_token.size(); i++)
 						{
+						#ifdef AK_ELTM_VERSION_1_1
+							found = subData.find(Token::mixable_keywords_token[i].second);
+							while(found != std::string::npos)
+							{
+								subData.insert(subData.begin() + found + Token::mixable_keywords_token[i].second.length(), ' ');
+								subData.insert(subData.begin() + found, ' ');
+
+								found = subData.find(Token::mixable_keywords_token[i].second, found + Token::mixable_keywords_token[i].second.length() + 2);
+							}
+						#else
 							if((found = subData.find(Token::mixable_keywords_token[i].second)) != std::string::npos)
 							{
 								subData.insert(subData.begin() + found + Token::mixable_keywords_token[i].second.length(), ' ');
 								subData.insert(subData.begin() + found, ' ');
 							}
+						#endif
 						}
 						std::istringstream iss(subData);
 						while(iss >> data)			// get word after word from the line
@@ -92,7 +103,7 @@ namespace Ak
 				std::cout << red << error.what() << def << std::endl;
 				return Token("error");
 			}
-			
+
 			int getTokenNumber();
 			int getLineIndexNumber(int line);
 			int getLineNumber();
@@ -105,9 +116,9 @@ namespace Ak
 						index1 Token
 						index2 Token
 
-				line1   index0 Token 
+				line1   index0 Token
 						index1 Token
-				
+
 				line2	index0 Token
 						index1 Token
 						index2 Token
@@ -122,4 +133,3 @@ namespace Ak
 }
 
 #endif // __AK_STREAM_STACK__
-

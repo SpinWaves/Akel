@@ -1,10 +1,10 @@
 // This file is a part of the Akel editor
 // CREATED : 10/07/2021
-// UPDATED : 10/07/2021
+// UPDATED : 16/07/2021
 
 begin module errors
 
 	set consoleMainWin = Akel Éditeur: Impossible de créer la console
+	set consoleUnknownCommand = Commande inconnue
 
 end module
-

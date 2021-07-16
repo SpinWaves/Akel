@@ -38,7 +38,7 @@ project "Akel"
 
 	defines "SDL_MAIN_HANDLED"
 
-	includedirs 
+	includedirs
 	{
 		"../libs/include",
 		"%{prj.location}/src",
