@@ -8,7 +8,7 @@ namespace Ak
 {
 	__time& Time::getCurrentTime()
 	{
-		_now = std::localtime(new std::time_t(std::time(nullptr)));
+		_now = std::localtime(new std::time_t(std::time(0)));
 		_time.sec = static_cast<uint8_t>(_now->tm_sec);
 		_time.min = static_cast<uint8_t>(_now->tm_min);
 		_time.hour = static_cast<uint8_t>(_now->tm_hour);
@@ -18,4 +18,3 @@ namespace Ak
 		return _time;
 	}
 }
-

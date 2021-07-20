@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 13/07/2021
+// UPDATED : 18/07/2021
 
 #ifndef __AK_EDITOR_COMPONENT__
 #define __AK_EDITOR_COMPONENT__
@@ -22,7 +22,6 @@ class EditorComponent : public Ak::ImGuiComponent
 
 	private:
 		void drawMainMenuBar();
-		void dockSpace();
 
 		bool _running = true;
 		ImGuiID dockspaceID = 0;
@@ -31,4 +30,3 @@ class EditorComponent : public Ak::ImGuiComponent
 };
 
 #endif // __AK_EDITOR_COMPONENT__
-

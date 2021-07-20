@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 13/07/2021
-// UPDATED : 13/07/2021
+// UPDATED : 19/07/2021
 
 #ifndef __AK_TIME__
 #define __AK_TIME__
@@ -9,11 +9,11 @@
 
 struct __time
 {
-	uint8_t sec = 0;
-	uint8_t min = 0;
-	uint8_t hour = 0;
-	uint8_t day = 0;
-	uint8_t month = 0;
+	uint8_t sec = 0;   // 0-60
+	uint8_t min = 0;   // 0-59
+	uint8_t hour = 0;  // 0-23
+	uint8_t day = 1;   // 1-30/31
+	uint8_t month = 1; // 1-12
 	uint32_t year = 0;
 };
 
@@ -31,4 +31,3 @@ namespace Ak
 }
 
 #endif // __AK_TIME__
-

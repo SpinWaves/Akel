@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 08/07/2021
+// UPDATED : 20/07/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -14,9 +14,23 @@ extern Ak::Application* Akel_main();
 int main(int argc, char** argv)
 {
 	Ak::Core::log::Init();
+	#if defined(AK_64BITS)
+		if(sizeof(void*) != 8)
+		{
+			Ak::Core::log::report(ERROR, "Conflict of system architecture detection");
+		    return 1;
+		}
+		Ak::Core::log::report("architecture: 64bits");
+	#elif defined(AK_32BITS)
+		if(sizeof(void*) != 4)
+		{
+			Ak::Core::log::report(ERROR, "Conflict of system architecture detection");
+		    return 1;
+		}
+		Ak::Core::log::report("architecture: 32bits");
+	#endif
 
 	AK_BEGIN_SESSION("Start");
-		Ak::Core::printEngineInfo();
 		auto app = Akel_main();
 	AK_END_SESSION();
 
@@ -34,4 +48,3 @@ int main(int argc, char** argv)
 }
 
 #endif // __AK_MAIN__
-

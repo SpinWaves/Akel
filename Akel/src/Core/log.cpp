@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 13/07/2021
+// UPDATED : 19/07/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -18,7 +18,7 @@ namespace Ak::Core
 			name.clear();
 			name.append(p.path().string(), getLogsDirPath().length(), p.path().string().length());
 
-            if(name[0] == 's') // Looking for "session", the only alternative is ".gitignore" so it just needs to find if first char is "s"
+			if(name[0] == 's') // Looking for "session", the only alternative is ".gitignore" so it just needs to find if first char is "s"
 			{
 				if((finder = name.find("-")) != std::string::npos)
 				{
@@ -27,10 +27,10 @@ namespace Ak::Core
 					if((finder = name.find("-")) != std::string::npos)
 					{
 						name.erase(name.begin(), name.begin() + finder + 1);  // Get month
-						if(Time::getCurrentTime().month + 1 != std::stoi(name))
+						if(Time::getCurrentTime().month != std::stoi(name))
 							date -= 31;
 					}
-					if(date < Time::getCurrentTime().month - 9)
+					if(date < Time::getCurrentTime().day - 10)
 						std::filesystem::remove(p.path());
 				}
 			}
@@ -60,7 +60,7 @@ namespace Ak::Core
             std::terminate();
         }
 	}
-    
+
     void log::report(std::string message)
     {
 		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);

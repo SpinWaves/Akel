@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 26/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 19/07/2021
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -24,9 +24,25 @@
 	#else
 		#define AK_FUNC_SIG "Unknown function"
 	#endif
+
+	#if _WIN32 || _WIN64
+		#if _WIN64
+			#define AK_64BITS
+		#else
+			#define AK_32BITS
+		#endif
+	#elif __GNUC__
+		#if __x86_64__ || __ppc64__
+			#define AK_64BITS
+		#else
+			#define AK_32BITS
+		#endif
+	#else
+		#error Akel can only run on 32bit or 64bit architectures
+	#endif
+
 #else
 	#define AK_FUNC_SIG "Unknown function"
 #endif
 
 #endif // __AK_PROFILE_CORE__
-

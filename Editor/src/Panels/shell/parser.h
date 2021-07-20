@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 10/07/2021
-// UPDATED : 13/07/2021
+// UPDATED : 18/07/2021
 
 #ifndef __AK_SHELL_PARSER__
 #define __AK_SHELL_PARSER__
@@ -23,6 +23,7 @@ class Parser
 	public:
 		Parser() = default;
 		uint8_t parse(std::string command);
+		~Parser() = default;
 
 	private:
 		static inline Ak::duets_array<Commands, std::string> _keywords
