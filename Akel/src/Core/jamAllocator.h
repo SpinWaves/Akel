@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 20/07/2021
-// UPDATED : 20/07/2021
+// UPDATED : 21/07/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -19,12 +19,13 @@ namespace Ak
     class JamAllocator
     {
         public:
-            JamAllocator() = delete;
+            JamAllocator() = default;
 
             void init(size_t Size);
             void* alloc(size_t Size);
             void free(void* ptr);
             void collect();
+            void resize(size_t Size);
             void destroy();
 
             ~JamAllocator();

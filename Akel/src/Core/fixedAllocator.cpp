@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 19/07/2021
-// UPDATED : 20/07/2021
+// UPDATED : 21/07/2021
 
 #include <Core/core.h>
 
@@ -8,22 +8,31 @@ namespace Ak
 {
     void FixedAllocator::init(size_t blockSize, size_t numBlocks)
     {
-        size_t Size = size_t(blockSize * numBlocks);
+        size_t Size = blockSize * numBlocks;
 
-        void* heap = malloc(Size); // Main allocation
+        _heap = malloc(Size); // Main allocation
 
         _block_size = blockSize;
         _heap_size = Size;
-        _bits.reserve(numBlocks);
-        _bits.assign(numBlocks, false);
+        _bits.resize(numBlocks, false);
+    }
+
+    void FixedAllocator::resize(size_t numBlocks)
+    {
+        size_t Size = size_t(_block_size * numBlocks);
+
+        _heap = realloc(_heap, Size);
+
+        _heap_size = Size;
+        _bits.resize(numBlocks, false);
     }
 
     void* FixedAllocator::alloc()
     {
         std::vector<bool>::iterator it;
-        if((it = std::find(_bits.begin(), _bits.end(), 0)) == _bits.end())
+        if((it = std::find(_bits.begin(), _bits.end(), false)) == _bits.end())
         {
-            Core::log::report(ERROR, "Fixed Allocator: unable to alloc block, no more space free");
+            Core::log::report(ERROR, "Fixed Allocator: unable to alloc block, no more block free");
             return nullptr;
         }
         *it = true;
@@ -48,7 +57,7 @@ namespace Ak
 
     void FixedAllocator::destroy()
     {
-        free(_heap);
+        std::free(_heap);
         _heap = nullptr;
     }
 

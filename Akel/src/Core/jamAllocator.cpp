@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 20/07/2021
-// UPDATED : 20/07/2021
+// UPDATED : 21/07/2021
 
 #include <Core/core.h>
 
@@ -24,11 +24,25 @@ namespace Ak
         _freeDesc[0].size = static_cast<int>((char*)_end - (char*)_heap);
     }
 
+    void JamAllocator::resize(size_t Size)
+    {
+        _heap = realloc(_heap, Size);
+        _heapSize = Size;
+        _nMaxDesc = Ak_uint(sqrt(Size) * 2);
+        _end = (char*)_heap + _heapSize - (static_cast<size_t>(_nMaxDesc) * 2 * sizeof(Block));
+        _freeDesc = static_cast<Block*>(_freeDesc + ((_nMaxDesc - _nUsedDesc) * sizeof(Block)));
+    }
+
     void* JamAllocator::alloc(size_t Size)
     {
         if(_nUsedDesc == _nMaxDesc)
         {
             Core::log::report(ERROR, "Jam Allocator: Reached maximum number of ALLOC descriptors, free something to continue");
+            return nullptr;
+        }
+        if(Size > _heapSize - _memUsed)
+        {
+            Core::log::report(ERROR, "Jam Allocator: the requested allocation is too large for the allocator, free up memory or increase the size of the allocator");
             return nullptr;
         }
         for(size_t i = 0; i < _nFreeDesc; i++)
@@ -120,7 +134,7 @@ namespace Ak
 
     void JamAllocator::destroy()
     {
-        free(_heap);
+        std::free(_heap);
         _heap = nullptr;
     }
 

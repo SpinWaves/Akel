@@ -25,4 +25,3 @@ Ak::Application* Akel_main()
 }
 
 #endif // __AK_EDITOR_APP__
-

@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 18/07/2021
-// UPDATED : 20/07/2021
+// UPDATED : 21/07/2021
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
@@ -12,11 +12,12 @@ namespace Ak
     class FixedAllocator
     {
         public:
-            FixedAllocator() = delete;
+            FixedAllocator() = default;
 
             void init(size_t blockSize, size_t numBlocks);
             void* alloc();
             void free(void* ptr);
+            void resize(size_t numBlocks);
             bool contains(void* ptr) const;
             void destroy();
 
