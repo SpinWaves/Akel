@@ -1,13 +1,25 @@
 // This file is a part of the Akel editor
 // CREATED : 20/07/2021
-// UPDATED : 21/07/2021
+// UPDATED : 22/07/2021
 
 #include <Core/core.h>
+#include <Utils/utils.h>
 
 namespace Ak
 {
+    namespace internal
+    {
+        MutexHandel mutex;
+    }
+
     void JamAllocator::init(size_t Size)
     {
+        #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+              InitializeCriticalSection(&internal::mutex);
+		#endif
+
+        lockThreads(internal::mutex);
+
         _heap = malloc(Size);
         _heapSize = Size;
         _nMaxDesc = Ak_uint(sqrt(Size) * 2);
@@ -22,19 +34,27 @@ namespace Ak
         _nFreeDesc = 1;
         _freeDesc[0].offset = 4;
         _freeDesc[0].size = static_cast<int>((char*)_end - (char*)_heap);
+
+        unlockThreads(internal::mutex);
     }
 
     void JamAllocator::resize(size_t Size)
     {
+        lockThreads(internal::mutex);
+
         _heap = realloc(_heap, Size);
         _heapSize = Size;
         _nMaxDesc = Ak_uint(sqrt(Size) * 2);
         _end = (char*)_heap + _heapSize - (static_cast<size_t>(_nMaxDesc) * 2 * sizeof(Block));
         _freeDesc = static_cast<Block*>(_freeDesc + ((_nMaxDesc - _nUsedDesc) * sizeof(Block)));
+
+        unlockThreads(internal::mutex);
     }
 
     void* JamAllocator::alloc(size_t Size)
     {
+        lockThreads(internal::mutex);
+
         if(_nUsedDesc == _nMaxDesc)
         {
             Core::log::report(ERROR, "Jam Allocator: Reached maximum number of ALLOC descriptors, free something to continue");
@@ -73,11 +93,15 @@ namespace Ak
             	return ptr;
             }
         }
+
+        unlockThreads(internal::mutex);
         return nullptr;
     }
 
     void JamAllocator::free(void* ptr)
     {
+        lockThreads(internal::mutex);
+
         unsigned int offset = static_cast<unsigned int>(static_cast<char*>(ptr) - static_cast<char*>(_heap));
     	for(unsigned int i = 0; i < _nUsedDesc; i++)
     	{
@@ -91,6 +115,8 @@ namespace Ak
     					_freeDesc[j].size = _usedDesc[i].size;
     					_usedDesc[i].offset = 0;
     					collect();
+
+                        unlockThreads(internal::mutex);
                         return;
     			    }
     			}
@@ -98,6 +124,8 @@ namespace Ak
     			{
                     Core::log::report(ERROR, "Jam Allocator: Reached maximum number of FREE descriptors, defragmenting");
     				collect();
+
+                    unlockThreads(internal::mutex);
                     return;
     			}
     			else
@@ -107,10 +135,14 @@ namespace Ak
     				_usedDesc[i].offset = 0;
     				_nFreeDesc++;
     				collect();
+
+                    unlockThreads(internal::mutex);
                     return;
     			}
     		}
     	}
+
+        unlockThreads(internal::mutex);
     }
 
     void JamAllocator::collect()
@@ -134,8 +166,16 @@ namespace Ak
 
     void JamAllocator::destroy()
     {
+        lockThreads(internal::mutex);
+
         std::free(_heap);
         _heap = nullptr;
+
+        unlockThreads(internal::mutex);
+
+        #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+            DeleteCriticalSection(&internal::mutex);
+        #endif
     }
 
     JamAllocator::~JamAllocator()

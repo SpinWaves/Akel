@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 13/07/2021
+// UPDATED : 22/07/2021
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -19,8 +19,8 @@ using Ak_text = const char*;
 #include <Utils/camera.h>
 #include <Utils/timeUtils.h>
 #include <Utils/time.h>
+#include <Utils/platformUtils.h>
 
 #include <Utils/Containers/containers.h>
 
 #endif // __AK_UTILS__
-

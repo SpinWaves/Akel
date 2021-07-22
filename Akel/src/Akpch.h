@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 07/07/2021
+// UPDATED : 22/07/2021
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -28,6 +28,14 @@
 #include <filesystem>
 #include <chrono>
 #include <algorithm>
+
+// MultiThreading
+#include <thread>
+#include <mutex>
+
+#ifdef Ak_PLATFORM_WINDOWS
+    #include <windows.h>
+#endif
 
 // Memory
 #include <memory>

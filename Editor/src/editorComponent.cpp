@@ -11,6 +11,15 @@ EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
 
 void EditorComponent::onAttach()
 {
+	Ak::FixedAllocator allocator;
+	allocator.init(16, 6);
+
+	void* test = allocator.alloc();
+	std::cout << test << std::endl;
+
+	allocator.free(test);
+	allocator.destroy();
+
 	Ak::ImGuiComponent::onAttach();
 	_eltm->newContext(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
 	_console = std::shared_ptr<Console>(new Console(_eltm->getText("Console.name")));
