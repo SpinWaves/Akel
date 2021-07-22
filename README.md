@@ -39,8 +39,8 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Simple but efficient error management system
 * Rendering system with Vulkan
 * 2 memory allocation systems:
- * FixedAllocator is a fast allocator consisting of blocks of the same size that can be allocated. It is more performance oriented than memory optimised because if an allocated block is not used in full, the unused memory is wasted.
- * JamAllocator is a slightly less efficient (but still effective) allocator that is memory optimisation oriented. It allocates the memory size you want, no memory is wasted.
+    * FixedAllocator is a fast allocator consisting of blocks of the same size that can be allocated. It is more performance oriented than memory optimised because if an allocated block is not used in full, the unused memory is wasted.
+    * JamAllocator is a slightly less efficient (but still effective) allocator that is memory optimisation oriented. It allocates the memory size you want, no memory is wasted.
 
 # Contribute
 You can contribute by :
