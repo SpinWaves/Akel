@@ -6,14 +6,14 @@
 #define __AK_PLATFORM_UTILS__
 
 #include <Akpch.h>
-#include <Core/core.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
     /*
      * Critical sections perform better in pre-2015 Visual Studio,
      * so it's best to use them. However, since Visual Studio 2015,
-     * std::mutexe are much more efficient than critical sections.
+     * std::mutex are much more efficient than critical sections.
      */
     #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
         using MutexHandel = CRITICAL_SECTION;

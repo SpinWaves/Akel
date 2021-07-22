@@ -3,11 +3,10 @@
 // UPDATED : 22/07/2021
 
 #include <Core/core.h>
-#include <Utils/utils.h>
 
 namespace Ak
 {
-    namespace internal
+    namespace internalJam
     {
         MutexHandel mutex;
     }
@@ -15,10 +14,10 @@ namespace Ak
     void JamAllocator::init(size_t Size)
     {
         #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-              InitializeCriticalSection(&internal::mutex);
+              InitializeCriticalSection(&internalJam::utex);
 		#endif
 
-        lockThreads(internal::mutex);
+        lockThreads(internalJam::mutex);
 
         _heap = malloc(Size);
         _heapSize = Size;
@@ -35,12 +34,12 @@ namespace Ak
         _freeDesc[0].offset = 4;
         _freeDesc[0].size = static_cast<int>((char*)_end - (char*)_heap);
 
-        unlockThreads(internal::mutex);
+        unlockThreads(internalJam::mutex);
     }
 
     void JamAllocator::resize(size_t Size)
     {
-        lockThreads(internal::mutex);
+        lockThreads(internalJam::mutex);
 
         _heap = realloc(_heap, Size);
         _heapSize = Size;
@@ -48,21 +47,23 @@ namespace Ak
         _end = (char*)_heap + _heapSize - (static_cast<size_t>(_nMaxDesc) * 2 * sizeof(Block));
         _freeDesc = static_cast<Block*>(_freeDesc + ((_nMaxDesc - _nUsedDesc) * sizeof(Block)));
 
-        unlockThreads(internal::mutex);
+        unlockThreads(internalJam::mutex);
     }
 
     void* JamAllocator::alloc(size_t Size)
     {
-        lockThreads(internal::mutex);
+        lockThreads(internalJam::mutex);
 
         if(_nUsedDesc == _nMaxDesc)
         {
             Core::log::report(ERROR, "Jam Allocator: Reached maximum number of ALLOC descriptors, free something to continue");
+            unlockThreads(internalJam::mutex);
             return nullptr;
         }
         if(Size > _heapSize - _memUsed)
         {
             Core::log::report(ERROR, "Jam Allocator: the requested allocation is too large for the allocator, free up memory or increase the size of the allocator");
+            unlockThreads(internalJam::mutex);
             return nullptr;
         }
         for(size_t i = 0; i < _nFreeDesc; i++)
@@ -90,17 +91,19 @@ namespace Ak
 
             	_freeDesc[i].size -= static_cast<unsigned int>(Size);
 
+                unlockThreads(internalJam::mutex);
+
             	return ptr;
             }
         }
 
-        unlockThreads(internal::mutex);
+        unlockThreads(internalJam::mutex);
         return nullptr;
     }
 
     void JamAllocator::free(void* ptr)
     {
-        lockThreads(internal::mutex);
+        lockThreads(internalJam::mutex);
 
         unsigned int offset = static_cast<unsigned int>(static_cast<char*>(ptr) - static_cast<char*>(_heap));
     	for(unsigned int i = 0; i < _nUsedDesc; i++)
@@ -116,7 +119,7 @@ namespace Ak
     					_usedDesc[i].offset = 0;
     					collect();
 
-                        unlockThreads(internal::mutex);
+                        unlockThreads(internalJam::mutex);
                         return;
     			    }
     			}
@@ -125,7 +128,7 @@ namespace Ak
                     Core::log::report(ERROR, "Jam Allocator: Reached maximum number of FREE descriptors, defragmenting");
     				collect();
 
-                    unlockThreads(internal::mutex);
+                    unlockThreads(internalJam::mutex);
                     return;
     			}
     			else
@@ -136,13 +139,13 @@ namespace Ak
     				_nFreeDesc++;
     				collect();
 
-                    unlockThreads(internal::mutex);
+                    unlockThreads(internalJam::mutex);
                     return;
     			}
     		}
     	}
 
-        unlockThreads(internal::mutex);
+        unlockThreads(internalJam::mutex);
     }
 
     void JamAllocator::collect()
@@ -166,15 +169,15 @@ namespace Ak
 
     void JamAllocator::destroy()
     {
-        lockThreads(internal::mutex);
+        lockThreads(internalJam::mutex);
 
         std::free(_heap);
         _heap = nullptr;
 
-        unlockThreads(internal::mutex);
+        unlockThreads(internalJam::mutex);
 
         #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-            DeleteCriticalSection(&internal::mutex);
+            DeleteCriticalSection(&internalJam::mutex);
         #endif
     }
 

@@ -1,11 +1,12 @@
 // This file is a part of the Akel editor
 // CREATED : 18/07/2021
-// UPDATED : 21/07/2021
+// UPDATED : 22/07/2021
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
 
 #include <Akpch.h>
+#include <Utils/utils.h>
 
 namespace Ak
 {
