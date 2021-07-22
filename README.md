@@ -14,7 +14,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Start by clonning the repo `git clone --recursive https://github.com.Kbz-8/Akel`.
   If the repository was cloned non-recursively previously, use `git submodule update --init` to clone the necessary submodules.
 * <details> <summary>Use the "premake5" executable provided in "dependencies/premake/bin" (choose carefully according to your system (Windows, Linux, ...)), then launch it in the main folder with the right option depending on how you compile your it :</summary>
-    
+
     Premake5 options | Consequences
     ---------------- | ------------
     vs2019 | Generate Visual Studio 2019 project files
@@ -36,8 +36,11 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 
 # Akel useful features
 * Text management language [ELTM](https://github.com/Kbz-8/Akel/tree/main/Akel/src/Modules/ELTM)
-* Simple but efficient error management system 
+* Simple but efficient error management system
 * Rendering system with Vulkan
+* 2 memory allocation systems:
+ * FixedAllocator is a fast allocator consisting of blocks of the same size that can be allocated. It is more performance oriented than memory optimised because if an allocated block is not used in full, the unused memory is wasted.
+ * JamAllocator is a slightly less efficient (but still effective) allocator that is memory optimisation oriented. It allocates the memory size you want, no memory is wasted.
 
 # Contribute
 You can contribute by :
