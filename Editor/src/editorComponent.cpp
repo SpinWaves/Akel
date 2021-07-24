@@ -1,28 +1,21 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 20/07/2021
+// UPDATED : 24/07/2021
 
 #include <editorComponent.h>
 
 EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
 {
-	_eltm = std::shared_ptr<Ak::ELTMcontext>(new Ak::ELTMcontext());
+	_eltm = Ak::shared_ptr_w<Ak::ELTMcontext>(Ak::custom_malloc<Ak::ELTMcontext>());
+	std::cout << "eltm" << sizeof(Ak::ELTMcontext) << std::endl;
 }
 
 void EditorComponent::onAttach()
 {
-	Ak::FixedAllocator allocator;
-	allocator.init(16, 6);
-
-	void* test = allocator.alloc();
-	std::cout << test << std::endl;
-
-	allocator.free(test);
-	allocator.destroy();
-
 	Ak::ImGuiComponent::onAttach();
 	_eltm->newContext(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
 	_console = std::shared_ptr<Console>(new Console(_eltm->getText("Console.name")));
+	std::cout << "console" << sizeof(Console) << std::endl;
 }
 
 void EditorComponent::onImGuiRender()

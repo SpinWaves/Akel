@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 08/06/2021
-// UPDATED : 06/07/2021
+// UPDATED : 24/07/2021
 
 #ifndef __AK_EDITOR_APP__
 #define __AK_EDITOR_APP__
@@ -14,6 +14,7 @@ class Editor : public Ak::Application
 	public:
 		Editor() : Ak::Application("Akel Editor")
 		{
+			std::cout << "comp" << sizeof(EditorComponent) << std::endl;
 			add_component(new EditorComponent);
 		}
 		~Editor() = default;

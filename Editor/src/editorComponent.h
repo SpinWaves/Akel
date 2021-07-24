@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 18/07/2021
+// UPDATED : 24/07/2021
 
 #ifndef __AK_EDITOR_COMPONENT__
 #define __AK_EDITOR_COMPONENT__

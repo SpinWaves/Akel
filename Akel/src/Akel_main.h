@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 20/07/2021
+// UPDATED : 24/07/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -30,6 +30,10 @@ int main(int argc, char** argv)
 		Ak::Core::log::report("architecture: 32bits");
 	#endif
 
+	#ifdef AK_USE_MEMORY_HELPER
+		Ak::InitMemoryHelper();
+	#endif
+
 	AK_BEGIN_SESSION("Start");
 		auto app = Akel_main();
 	AK_END_SESSION();
@@ -41,6 +45,10 @@ int main(int argc, char** argv)
 	AK_BEGIN_SESSION("Shutdown");
 		delete app;
 	AK_END_SESSION();
+
+	#ifdef AK_USE_MEMORY_HELPER
+		Ak::EndMemoryHelper();
+	#endif
 
 	std::cout << Ak::bg_green << "Akel successfully finished" << Ak::bg_def << std::endl;
 

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 26/06/2021
-// UPDATED : 22/07/2021
+// UPDATED : 24/07/2021
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -45,5 +45,7 @@
 #elif defined(__APPLE__) || defined(__MACH__)
 	#define AK_PLATFORM_OSX
 #endif
+
+#define AK_USE_MEMORY_HELPER
 
 #endif // __AK_PROFILE_CORE__
