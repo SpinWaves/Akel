@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 24/07/2021
+// UPDATED : 26/07/2021
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -43,6 +43,7 @@
 #include <any>
 #include <type_traits>
 #include <tuple>
+#include <new>
 
 // Containers
 #include <optional>

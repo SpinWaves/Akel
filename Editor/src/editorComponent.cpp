@@ -1,13 +1,18 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 24/07/2021
+// UPDATED : 26/07/2021
 
 #include <editorComponent.h>
 
 EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
 {
+	Ak::JamAllocator allocator;
+	allocator.init(200);
+	Ak::ELTMcontext* test = allocator.alloc<Ak::ELTMcontext>();
+	allocator.free(test);
+	allocator.destroy();
+
 	_eltm = Ak::shared_ptr_w<Ak::ELTMcontext>(Ak::custom_malloc<Ak::ELTMcontext>());
-	std::cout << "eltm" << sizeof(Ak::ELTMcontext) << std::endl;
 }
 
 void EditorComponent::onAttach()
