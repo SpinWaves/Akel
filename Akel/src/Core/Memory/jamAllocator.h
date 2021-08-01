@@ -1,6 +1,6 @@
-// This file is a part of the Akel editor
+// This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 25/07/2021
+// UPDATED : 29/07/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -10,12 +10,6 @@
 
 namespace Ak
 {
-    struct Block
-    {
-        Ak_uint offset;
-        Ak_uint size;
-    };
-
     namespace internalJam
     {
         static MutexHandel mutex;
@@ -43,11 +37,6 @@ namespace Ak
             ~JamAllocator();
 
         private:
-            Block* _usedDesc = nullptr;
-            Block* _freeDesc = nullptr;
-            Ak_uint _nMaxDesc = 0;
-            Ak_uint _nUsedDesc = 0;
-            Ak_uint _nFreeDesc = 0;
             size_t _heapSize = 0;
             size_t _memUsed = 0;
             void* _end = nullptr;

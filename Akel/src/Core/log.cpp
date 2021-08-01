@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 19/07/2021
+// UPDATED : 01/08/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -51,7 +51,7 @@ namespace Ak::Core
 
 				default: break;
 			}
-            _out << Time::getCurrentTime().hour << ":" << Time::getCurrentTime().min << " ---- " << _type << message << std::endl; // No need to flush, std::endl does it
+            _out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << _type << message << std::endl; // No need to flush, std::endl does it
 			_out.close();
 		}
         if(type == FATAL_ERROR)
@@ -66,7 +66,7 @@ namespace Ak::Core
 		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
         if(_out.is_open())
 		{
-            _out << Time::getCurrentTime().hour << ":" << Time::getCurrentTime().min << " ---- "<< message << std::endl;  // No need to flush, std::endl does it
+            _out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- "<< message << std::endl;  // No need to flush, std::endl does it
 			_out.close();
 		}
     }

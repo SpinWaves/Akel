@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 12/07/2021
+// UPDATED : 01/08/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -128,7 +128,7 @@ namespace Ak
 			ImGui_ImplVulkan_DestroyFontUploadObjects();
 		}
 	}
-	
+
 	void ImGuiComponent::begin()
 	{
 		if(g_SwapChainRebuild)
@@ -515,4 +515,3 @@ namespace Ak
 		wd->SemaphoreIndex = (wd->SemaphoreIndex + 1) % wd->ImageCount; // Now we can use the next set of semaphores
 	}
 }
-

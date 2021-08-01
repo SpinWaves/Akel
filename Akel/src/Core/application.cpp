@@ -46,4 +46,3 @@ namespace Ak
 			SDL_Quit();
 	}
 }
-

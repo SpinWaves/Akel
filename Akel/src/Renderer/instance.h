@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 04/07/2021
+// UPDATED : 01/08/2021
 
 #ifndef __AK_INSTANCE__
 #define __AK_INSTANCE__
@@ -23,12 +23,13 @@ namespace Ak
 				return instance;
 			}
 
-            ~Instance();
+            ~Instance() = default;
 
         protected:
             void cleanup();
 			void setVsync(bool setter);
 			bool getVsync();
+            bool _instanceInitialized = false; 
 
         private:
             void createInstance();

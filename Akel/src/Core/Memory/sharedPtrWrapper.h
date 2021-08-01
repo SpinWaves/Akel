@@ -1,6 +1,6 @@
-// This file is a part of the Akel editor
+// This file is a part of Akel
 // CREATED : 24/07/2021
-// UPDATED : 25/07/2021
+// UPDATED : 26/07/2021
 
 #ifndef __AK_SHARED_PTR_WRAPPER__
 #define __AK_SHARED_PTR_WRAPPER__

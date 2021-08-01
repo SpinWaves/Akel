@@ -46,7 +46,7 @@ namespace Ak
 			void update() override;
 			void onEvent(Input& input) override;
 			void onQuit() override;
-			
+
 			// ================ Setters ================ //
 			template <windowSetting T>
 			void setSetting(const char* value)
@@ -67,8 +67,8 @@ namespace Ak
 				switch(T)
 				{
 					case fullscreen: setFullscreen(pass); break;
-					case border:     setBordered(pass); break; 
-					case resizable:  setResizable(pass); break; 
+					case border:     setBordered(pass); break;
+					case resizable:  setResizable(pass); break;
 					case visible: setShow(pass); break;
 					case vsync: Instance::setVsync(value); break;
 					case maximize: setMaximize(pass); break;
@@ -92,7 +92,7 @@ namespace Ak
 			{
 				switch(T)
 				{
-					case position:    _position.SET(x, y); setPos(x, y);  break; 
+					case position:    _position.SET(x, y); setPos(x, y);  break;
 					case dimensions:  _size.SET(x, y); setSize(x, y); break;
 					case maximumSize: setMaxSize(x, y); break;
 					case minimumSize: setMinSize(x, y); break;
@@ -111,7 +111,7 @@ namespace Ak
 			}
 
             virtual ~Window();
-        
+
 		protected:
 			void create();
             SDL_Window* _window = nullptr;

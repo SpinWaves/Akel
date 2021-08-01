@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 24/07/2021
+// UPDATED : 01/08/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -14,6 +14,7 @@ extern Ak::Application* Akel_main();
 int main(int argc, char** argv)
 {
 	Ak::Core::log::Init();
+
 	#if defined(AK_64BITS)
 		if(sizeof(void*) != 8)
 		{
@@ -31,7 +32,7 @@ int main(int argc, char** argv)
 	#endif
 
 	#ifdef AK_USE_MEMORY_HELPER
-		Ak::InitMemoryHelper();
+		Ak::MemoryManager::init();
 	#endif
 
 	AK_BEGIN_SESSION("Start");
@@ -47,7 +48,7 @@ int main(int argc, char** argv)
 	AK_END_SESSION();
 
 	#ifdef AK_USE_MEMORY_HELPER
-		Ak::EndMemoryHelper();
+		Ak::MemoryManager::end();
 	#endif
 
 	std::cout << Ak::bg_green << "Akel successfully finished" << Ak::bg_def << std::endl;

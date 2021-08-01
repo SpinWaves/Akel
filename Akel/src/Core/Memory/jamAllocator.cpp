@@ -1,6 +1,6 @@
-// This file is a part of the Akel editor
+// This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 26/07/2021
+// UPDATED : 29/07/2021
 
 #include <Core/core.h>
 
@@ -10,26 +10,17 @@ namespace Ak
     {
         if(_heap != nullptr)
             return;
+
         #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-              InitializeCriticalSection(&internalJam::utex);
-		#endif
+              InitializeCriticalSection(&internalJam::mutex);
+        #endif
 
         lockThreads(internalJam::mutex);
 
         _heap = malloc(Size);
         _heapSize = Size;
-        _nMaxDesc = Ak_uint(sqrt(Size) * 2);
         _memUsed = 0;
-        _end = (char*)_heap + _heapSize - (static_cast<size_t>(_nMaxDesc) * 2 * sizeof(Block));
-
-        // Init Descriptors
-        _usedDesc = static_cast<Block*>(_end);
-        _nUsedDesc = 0;
-
-        _freeDesc = static_cast<Block*>((void*)((char*)_end + (_nMaxDesc * sizeof(Block))));
-        _nFreeDesc = 1;
-        _freeDesc[0].offset = 4;
-        _freeDesc[0].size = static_cast<int>((char*)_end - (char*)_heap);
+        _end = (char*)_heap + _heapSize;
 
         unlockThreads(internalJam::mutex);
     }
@@ -40,9 +31,7 @@ namespace Ak
 
         _heap = realloc(_heap, Size);
         _heapSize = Size;
-        _nMaxDesc = Ak_uint(sqrt(Size) * 2);
-        _end = (char*)_heap + _heapSize - (static_cast<size_t>(_nMaxDesc) * 2 * sizeof(Block));
-        _freeDesc = static_cast<Block*>(_freeDesc + ((_nMaxDesc - _nUsedDesc) * sizeof(Block)));
+        _end = (char*)_heap + _heapSize;
 
         unlockThreads(internalJam::mutex);
     }
@@ -57,25 +46,6 @@ namespace Ak
     void JamAllocator::autoResize(bool set)
     {
         _autoResize = set;
-    }
-
-    void JamAllocator::collect()
-    {
-        for(unsigned int i = 0; i < _nFreeDesc; i++)
-    	{
-    		if(_freeDesc[i].offset != 0)
-            {
-        		for(unsigned int j = 0; j < _nFreeDesc; j++)
-        		{
-        			if(_freeDesc[j].offset != 0 && _freeDesc[i].offset + _freeDesc[i].size == _freeDesc[j].offset)
-        			{
-        				_freeDesc[i].size += _freeDesc[j].size;
-        				_freeDesc[j].offset = 0;
-        				_freeDesc[j].size = 0;
-        			}
-        		}
-            }
-    	}
     }
 
     void JamAllocator::destroy()

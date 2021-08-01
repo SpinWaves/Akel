@@ -1,6 +1,6 @@
-// This file is a part of the Akel editor
+// This file is a part of Akel
 // CREATED : 18/07/2021
-// UPDATED : 24/07/2021
+// UPDATED : 30/07/2021
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
@@ -49,7 +49,7 @@ namespace Ak
                 {
                     T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * (std::distance(_it, _bits.rend()) - 1));
                     unlockThreads(internalFixed::mutex);
-                    new ((void*)ptr) T(std::forward<Args>(args)...);
+                    new (ptr) T(std::forward<Args>(args)...);
 
                     return ptr;
                 }

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 29/06/2021
+// UPDATED : 01/08/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -28,6 +28,8 @@ namespace Ak
         createCommandPool();
         createCommandBuffers();
         createSemaphores();
+
+		_instanceInitialized = true;
     }
 
 	void Instance::setVsync(bool setter)
@@ -40,7 +42,7 @@ namespace Ak
 		return enableVsync;
 	}
 
-    std::vector<const char*> Instance::getRequiredExtensions() 
+    std::vector<const char*> Instance::getRequiredExtensions()
     {
         unsigned int count;
         if(!SDL_Vulkan_GetInstanceExtensions(window, &count, nullptr))
@@ -84,7 +86,7 @@ namespace Ak
         createInfo.ppEnabledExtensionNames = extensions.data();
 
         VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
-        if(enableValidationLayers) 
+        if(enableValidationLayers)
         {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             createInfo.ppEnabledLayerNames = validationLayers.data();
@@ -154,6 +156,7 @@ namespace Ak
 
     void Instance::cleanup()
     {
+		std::cout << "test1000" << std::endl;
         vkDeviceWaitIdle(device);
 
         for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
@@ -174,7 +177,7 @@ namespace Ak
         vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
         vkDestroyRenderPass(device, renderPass, nullptr);
 
-        for(auto imageView : swapChainImageViews) 
+        for(auto imageView : swapChainImageViews)
         {
             vkDestroyImageView(device, imageView, nullptr);
         }
@@ -186,14 +189,5 @@ namespace Ak
         vkDestroySurfaceKHR(instance, surface, nullptr);
         vkDestroyDevice(device, nullptr);
         vkDestroyInstance(instance, nullptr);
-        
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-    }
-
-    Instance::~Instance()
-    {
-        cleanup();
     }
 }
-

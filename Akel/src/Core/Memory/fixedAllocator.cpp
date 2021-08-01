@@ -1,6 +1,6 @@
-// This file is a part of the Akel editor
+// This file is a part of Akel
 // CREATED : 19/07/2021
-// UPDATED : 24/07/2021
+// UPDATED : 26/07/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>

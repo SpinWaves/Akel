@@ -36,4 +36,3 @@ namespace Ak::Core
 #define AK_END_SESSION() Ak::Core::log::report("End ----")
 
 #endif // __AK_LOG__
-

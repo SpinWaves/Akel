@@ -1,6 +1,6 @@
 // This file is a part of the Akel Editor
 // CREATED : 08/07/2021
-// UPDATED : 08/07/2021
+// UPDATED : 30/07/2021
 
 begin module MainMenuBar
 
@@ -13,5 +13,8 @@ begin module MainMenuBar
 		set addFile = Add file to project
 		set build = Build the project
 
-end module
+	set help = Help
+		set about = About
+			set version = Editor version 0.0.1\nAkel version 0.0.1
 
+end module

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 08/07/2021
+// UPDATED : 01/08/2021
 
 #include <Platform/platform.h>
 
@@ -9,7 +9,7 @@ namespace Ak
 	SDL_DisplayMode DM;
 
     Window::Window() : Instance(), Component("__window") {}
-	
+
 	void Window::onAttach()
 	{
 		if(_window == nullptr)
@@ -23,7 +23,7 @@ namespace Ak
         _size.SET(0, 0);
 
         _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI;
- 
+
         _window = SDL_CreateWindow(_title.c_str(), 0, 0, 0, 0, _flags);
         if(!_window)
             messageBox(FATAL_ERROR, "Unable to create a window", SDL_GetError());
@@ -44,7 +44,8 @@ namespace Ak
 	}
 	void Window::onQuit()
 	{
-        Instance::cleanup();
+		if(Instance::_instanceInitialized)
+        	Instance::cleanup();
         SDL_FreeSurface(_icon);
         SDL_DestroyWindow(_window);
 	}
@@ -148,4 +149,3 @@ namespace Ak
 
     Window::~Window(){}
 }
-

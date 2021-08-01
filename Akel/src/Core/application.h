@@ -26,4 +26,3 @@ namespace Ak
 }
 
 #endif // __AK_APPLICATION__
-

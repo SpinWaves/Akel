@@ -1,6 +1,6 @@
-// This file is a part of the Akel editor
+// This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 24/07/2021
+// UPDATED : 26/07/2021
 
 #ifndef __AK_MEMORY__
 #define __AK_MEMORY__

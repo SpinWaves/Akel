@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 10/07/2021
-// UPDATED : 14/07/2021
+// UPDATED : 30/07/2021
 
 #include <Panels/shell/shell.h>
 
@@ -11,10 +11,7 @@ uint8_t Parser::parse(std::string command)
 	_stream >> data;
 	size_t found = 0;
 	if((found = data.find(" ")) != std::string::npos)
-	{
-		std::cout << "test" << std::endl;
 		data.erase(data.begin() + found, data.end());
-	}
 	if(_keywords.have(data))
 	{
 		if(_stream >> data) // Args management
