@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 29/07/2021
+// UPDATED : 02/08/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -10,11 +10,6 @@
 
 namespace Ak
 {
-    namespace internalJam
-    {
-        static MutexHandel mutex;
-    }
-
     class JamAllocator
     {
         public:
@@ -36,12 +31,15 @@ namespace Ak
 
             ~JamAllocator();
 
+            inline static std::vector<JamAllocator*> allAllocs;
+
         private:
             size_t _heapSize = 0;
             size_t _memUsed = 0;
             void* _end = nullptr;
             void* _heap = nullptr;
             bool _autoResize = false;
+            inline static MutexHandel mutex;
     };
 }
 

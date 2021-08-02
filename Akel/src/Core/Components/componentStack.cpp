@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 02/08/2021
 
 #include <Core/Components/components.h>
+#include <Core/Memory/memory.h>
 
 namespace Ak
 {
@@ -51,10 +52,33 @@ namespace Ak
 
 	ComponentStack::~ComponentStack()
 	{
+		bool isCustomAlloc = false;
 		for(auto elem : _components)
 		{
-			delete elem;
+			isCustomAlloc = false;
+			for(auto jam : JamAllocator::allAllocs)
+			{
+				if(jam->contains(elem))
+				{
+					jam->free(elem);
+					isCustomAlloc = true;
+					break;
+				}
+			}
+			if(!isCustomAlloc)
+			{
+				for(auto fixed : FixedAllocator::allAllocs)
+				{
+					if(fixed->contains(elem))
+					{
+						fixed->free(elem);
+						isCustomAlloc = true;
+						break;
+					}
+				}
+			}
+			if(!isCustomAlloc)
+				delete elem;
 		}
 	}
 }
-

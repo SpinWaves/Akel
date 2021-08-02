@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 29/07/2021
+// UPDATED : 02/08/2021
 
 #include <Core/core.h>
 
@@ -12,28 +12,30 @@ namespace Ak
             return;
 
         #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-              InitializeCriticalSection(&internalJam::mutex);
+              InitializeCriticalSection(&mutex);
         #endif
 
-        lockThreads(internalJam::mutex);
+        lockThreads(mutex);
 
         _heap = malloc(Size);
         _heapSize = Size;
         _memUsed = 0;
         _end = (char*)_heap + _heapSize;
 
-        unlockThreads(internalJam::mutex);
+        allAllocs.push_back(this);
+
+        unlockThreads(mutex);
     }
 
     void JamAllocator::resize(size_t Size)
     {
-        lockThreads(internalJam::mutex);
+        lockThreads(mutex);
 
         _heap = realloc(_heap, Size);
         _heapSize = Size;
         _end = (char*)_heap + _heapSize;
 
-        unlockThreads(internalJam::mutex);
+        unlockThreads(mutex);
     }
 
     bool JamAllocator::canHold(size_t Size)
@@ -50,15 +52,15 @@ namespace Ak
 
     void JamAllocator::destroy()
     {
-        lockThreads(internalJam::mutex);
+        lockThreads(mutex);
 
         std::free(_heap);
         _heap = nullptr;
 
-        unlockThreads(internalJam::mutex);
+        unlockThreads(mutex);
 
         #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-            DeleteCriticalSection(&internalJam::mutex);
+            DeleteCriticalSection(&mutex);
         #endif
     }
 

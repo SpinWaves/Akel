@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 30/07/2021
+// UPDATED : 02/08/2021
 
 #include <Core/Memory/jamAllocator.h>
 
@@ -25,11 +25,11 @@ namespace Ak
             }
         }
 
-        lockThreads(internalJam::mutex);
+        lockThreads(mutex);
 
         T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(T*));
 
-        unlockThreads(internalJam::mutex);
+        unlockThreads(mutex);
 
         _memUsed += sizeof(T*);
 
@@ -50,18 +50,18 @@ namespace Ak
         if(std::is_class<T>::value)
             ptr->~T();
 
-        lockThreads(internalJam::mutex);
+        lockThreads(mutex);
 
 		if(_memUsed == 0)
 		{
             Core::log::report(ERROR, "Jam Allocator: Reached maximum number of FREE descriptors, defragmenting");
 
-            unlockThreads(internalJam::mutex);
+            unlockThreads(mutex);
             return;
 		}
         _memUsed -= sizeof(T);
         ptr = nullptr;
 
-        unlockThreads(internalJam::mutex);
+        unlockThreads(mutex);
     }
 }

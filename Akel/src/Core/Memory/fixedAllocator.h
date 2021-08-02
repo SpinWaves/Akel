@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 18/07/2021
-// UPDATED : 30/07/2021
+// UPDATED : 02/08/2021
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
@@ -11,10 +11,6 @@
 
 namespace Ak
 {
-    namespace internalFixed
-    {
-        static MutexHandel mutex;
-    }
 
     class FixedAllocator
     {
@@ -29,56 +25,14 @@ namespace Ak
             void destroy();
 
             template <typename T = void, typename ... Args>
-            T* alloc(Args&& ... args)
-            {
-                if(!canAlloc())
-                {
-                    if(_autoResize)
-                        resize(_bits.size() * 2);
-                    else
-                    {
-                        Core::log::report(ERROR, "Fixed Allocator: unable to alloc block, no more block free");
-                        return nullptr;
-                    }
-                }
-                lockThreads(internalFixed::mutex);
-
-                *_it = true;
-
-                if(std::is_class<T>::value)
-                {
-                    T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * (std::distance(_it, _bits.rend()) - 1));
-                    unlockThreads(internalFixed::mutex);
-                    new (ptr) T(std::forward<Args>(args)...);
-
-                    return ptr;
-                }
-
-                unlockThreads(internalFixed::mutex);
-
-                return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * (std::distance(_it, _bits.rend()) - 1));
-            }
+            T* alloc(Args&& ... args);
 
             template <typename T = void>
-            void free(T* ptr)
-            {
-                if(!contains(ptr))
-                {
-                    Core::log::report(ERROR, "Fixed Allocator: a pointer allocated by another allocator cannot be freed");
-                    return;
-                }
-                lockThreads(internalFixed::mutex);
-
-                if(std::is_class<T>::value)
-                    ptr->~T();
-
-                const size_t index = (reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(_heap)) / _block_size;
-                _bits[index] = false;
-
-                unlockThreads(internalFixed::mutex);
-            }
+            void free(T* ptr);
 
             ~FixedAllocator();
+
+            inline static std::vector<FixedAllocator*> allAllocs;
 
         private:
             size_t _block_size = 0;
@@ -87,7 +41,10 @@ namespace Ak
             std::vector<bool> _bits;
             bool _autoResize = false;
             std::vector<bool>::reverse_iterator _it;
+            inline static MutexHandel mutex;
     };
 }
+
+#include <Core/Memory/fixedAllocator.inl>
 
 #endif // __AK_FIXED_ALLOCATOR__

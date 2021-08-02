@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 19/07/2021
-// UPDATED : 26/07/2021
+// UPDATED : 02/08/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -13,10 +13,10 @@ namespace Ak
             return;
 
         #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-              InitializeCriticalSection(&internalFixed::mutex);
+              InitializeCriticalSection(&mutex);
 		#endif
 
-        lockThreads(internalFixed::mutex);
+        lockThreads(mutex);
 
         size_t Size = blockSize * numBlocks;
 
@@ -26,12 +26,14 @@ namespace Ak
         _heap_size = Size;
         _bits.resize(numBlocks, false);
 
-        unlockThreads(internalFixed::mutex);
+        allAllocs.push_back(this);
+
+        unlockThreads(mutex);
     }
 
     void FixedAllocator::resize(size_t numBlocks)
     {
-        lockThreads(internalFixed::mutex);
+        lockThreads(mutex);
 
         size_t Size = size_t(_block_size * numBlocks);
 
@@ -40,7 +42,7 @@ namespace Ak
         _heap_size = Size;
         _bits.resize(numBlocks, false);
 
-        unlockThreads(internalFixed::mutex);
+        unlockThreads(mutex);
     }
 
     bool FixedAllocator::canAlloc()
@@ -68,15 +70,15 @@ namespace Ak
 
     void FixedAllocator::destroy()
     {
-        lockThreads(internalFixed::mutex);
+        lockThreads(mutex);
 
         std::free(_heap);
         _heap = nullptr;
 
-        unlockThreads(internalFixed::mutex);
+        unlockThreads(mutex);
 
         #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-            DeleteCriticalSection(&internalFixed::mutex);
+            DeleteCriticalSection(&mutex);
         #endif
     }
 
