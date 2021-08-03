@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 01/08/2021
+// UPDATED : 02/08/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -73,6 +73,15 @@ namespace Ak::Core
 
     void log::TERMINATE()
     {
+		for(auto elem : JamAllocator::allAllocs)
+		{
+			elem->destroy();
+		}
+		for(auto elem : FixedAllocator::allAllocs)
+		{
+			elem->destroy();
+		}
+
         std::cout << bg_red << "EXIT FAILURE: emergency abortion program" << bg_def << std::endl;
         abort();
     }

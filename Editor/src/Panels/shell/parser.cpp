@@ -1,33 +1,47 @@
 // This file is a part of the Akel editor
 // CREATED : 10/07/2021
-// UPDATED : 30/07/2021
+// UPDATED : 02/08/2021
 
 #include <Panels/shell/shell.h>
 
-uint8_t Parser::parse(std::string command)
+uint16_t Parser::parse(std::string command)
 {
+	size_t found = 0;
+	size_t endOpt = 0;
+	_option.clear();
+	if((found = command.find(" -")) != std::string::npos)
+	{
+		if((endOpt = command.find(" ", found + 2)) == std::string::npos)
+			endOpt = command.length();
+
+		_option.insert(_option.begin(), command.begin() + found + 2, command.begin() + endOpt);
+		command.erase(command.begin() + found, command.begin() + endOpt);
+	}
+
 	_stream << command;
 	std::string data;
 	_stream >> data;
-	size_t found = 0;
-	if((found = data.find(" ")) != std::string::npos)
-		data.erase(data.begin() + found, data.end());
 	if(_keywords.have(data))
 	{
 		if(_stream >> data) // Args management
 		{
 			_stream.clear();
 			if(_keywords.have(data))
-				return static_cast<uint8_t>(_keywords[std::string(command.begin(), command.begin() + command.find(" "))]) | static_cast<uint8_t>(_keywords[data]);
+				return static_cast<uint16_t>(_keywords[std::string(command.begin(), command.begin() + command.find(" "))]) | static_cast<uint8_t>(_keywords[data]);
 			else
-				return static_cast<uint8_t>(_keywords[std::string(command.begin(), command.begin() + command.find(" "))]) | static_cast<uint8_t>(Commands::error);
+				return static_cast<uint16_t>(_keywords[std::string(command.begin(), command.begin() + command.find(" "))]) | static_cast<uint8_t>(Commands::error);
 		}
 		else
 		{
 			_stream.clear();
-			return static_cast<uint8_t>(_keywords[command]);
+			return static_cast<uint16_t>(_keywords[command]);
 		}
 	}
 	_stream.clear();
 	return 0;
+}
+
+std::string Parser::getOption()
+{
+	return _option;
 }

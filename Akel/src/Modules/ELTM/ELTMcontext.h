@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 15/07/2021
+// UPDATED : 02/08/2021
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -15,7 +15,7 @@ namespace Ak
 	class ELTMcontext
 	{
 		public:
-			ELTMcontext();
+			explicit ELTMcontext();
 			bool newContext(std::string file);
 			static std::string getText(std::string ID, size_t line, std::string file, std::string function)
 			{
@@ -55,6 +55,8 @@ namespace Ak
 			{
 				return _file;
 			}
+
+			~ELTMcontext() = default;
 
 		private:
 			bool setID(bool isNewID);

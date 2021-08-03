@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 26/07/2021
+// UPDATED : 03/08/2021
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -8,8 +8,10 @@
 // SDL2
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+
+// OpenAL
+#include <AL/al.h>
 
 // Vulkan
 #include <vulkan/vulkan.h>
