@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 08/07/2021
-// UPDATED : 13/07/2021
+// UPDATED : 04/08/2021
 
 #ifndef __AK_EDITOR_CONSOLE__
 #define __AK_EDITOR_CONSOLE__
@@ -13,6 +13,8 @@ class Console
 	public:
 		explicit Console(std::string name, size_t inputBufferSize = 256);
 		void render(int width, int height);
+		~Console();
+
 		Shell _sh;
 
 	protected:
@@ -32,7 +34,8 @@ class Console
 		float _WindowAlpha;
 
 		int _width, _height = 0;
+
+		audioFile ee = 0;
 };
 
 #endif // __AK_EDITOR_CONSOLE__
-

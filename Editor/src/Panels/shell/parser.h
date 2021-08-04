@@ -38,7 +38,7 @@ class Parser
 			{Commands::build, "build"},
 			{Commands::sysShell, "sysShell"},
 			{Commands::quit, "quit"},
-			{Commands::easterEgg, "kbz_8"}
+			{Commands::easterEgg, "Rick"}
 		};
 
 		std::stringstream _stream;

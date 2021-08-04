@@ -35,12 +35,15 @@ namespace Ak
     T* MemoryManager::alloc(Args&& ... args)
     {
     #ifndef AK_USE_JAM_MEMORY_SYSTEM
-        if(sizeof(T) <= 16)
-			return __fixed1.alloc<T>(std::forward<Args>(args)...);
-        if(sizeof(T) <= 32)
-			return __fixed2.alloc<T>(std::forward<Args>(args)...);
-		if(sizeof(T) <= 96)
-			return __fixed3.alloc<T>(std::forward<Args>(args)...);
+        if(!std::is_class<T>::value)
+        {
+            if(sizeof(T) <= 16)
+    			return __fixed1.alloc<T>(std::forward<Args>(args)...);
+            if(sizeof(T) <= 32)
+    			return __fixed2.alloc<T>(std::forward<Args>(args)...);
+    		if(sizeof(T) <= 96)
+    			return __fixed3.alloc<T>(std::forward<Args>(args)...);
+        }
     #endif
         return __jam.alloc<T>(std::forward<Args>(args)...);
     }

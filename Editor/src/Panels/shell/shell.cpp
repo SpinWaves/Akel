@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 10/07/2021
-// UPDATED : 02/08/2021
+// UPDATED : 04/08/2021
 
 #include <Panels/shell/shell.h>
 
@@ -8,6 +8,7 @@ Shell::Shell() : Parser() {}
 
 void Shell::command(std::string command)
 {
+	ee = false;
 	print("> " + command);
 	const uint16_t type = Parser::parse(command);
 	if(type & static_cast<uint16_t>(Commands::help))
@@ -40,9 +41,8 @@ void Shell::command(std::string command)
 		_quit = true;
 	else if(type & static_cast<uint16_t>(Commands::easterEgg))
 	{
-		if(getOption() == "101010")
-			ee = true;
-		print("This is an easter egg" , 2);
+		print("RICK ROLL TIME !!!" , 2);
+		ee = true;
 	}
 	else
 		print(Ak::ELTMcontext::getText("errors.consoleUnknownCommand"), 1);

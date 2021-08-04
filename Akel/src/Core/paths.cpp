@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 27/04/2021
+// UPDATED : 04/08/2021
 
 #include <Core/core.h>
 
@@ -13,10 +13,10 @@ namespace Ak::Core
         for(auto& dirs : std::filesystem::recursive_directory_iterator(path))
         {
             mainPath = dirs.path().string();
-            std::size_t found = mainPath.rfind("Akel.h");
+            std::size_t found = mainPath.rfind("Akel");
             if(found != std::string::npos)
             {
-                mainPath.erase(mainPath.begin() + found - std::string("Akel/src/").length(), mainPath.end());
+                mainPath.erase(mainPath.begin() + found + 5, mainPath.end());
                 return mainPath;
             }
         }

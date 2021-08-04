@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 03/08/2021
+// UPDATED : 04/08/2021
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -12,6 +12,10 @@
 
 // OpenAL
 #include <AL/al.h>
+#include <AL/alc.h>
+
+// SndFile
+#include <snd/sndfile.h>
 
 // Vulkan
 #include <vulkan/vulkan.h>

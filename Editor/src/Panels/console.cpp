@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 09/07/2021
-// UPDATED : 13/07/2021
+// UPDATED : 04/08/2021
 
 #include <Panels/console.h>
 
@@ -9,6 +9,8 @@ Console::Console(std::string name, size_t inputBufferSize) : _sh()
 	_name = std::move(name);
 	_input.resize(inputBufferSize);
 	_inBufferSize = inputBufferSize;
+
+	ee = Ak::AudioManager::loadSound(Ak::Core::getMainDirPath() + "Editor/sounds/42.wav");
 
 	_sh.print("============================");
 	_sh.print(Ak::ELTMcontext::getText("Console.welcome"));
@@ -103,6 +105,8 @@ void Console::inputBar()
 			_scrollToBottom = true;
 		reclaimFocus = true;
 		_input.clear();
+		if(_sh.ee)
+			Ak::AudioManager::playSound(ee);
     }
     ImGui::PopItemWidth();
 
@@ -117,3 +121,7 @@ int Console::InputCallback(ImGuiInputTextCallbackData *data)
     return 0;
 }
 
+Console::~Console()
+{
+	Ak::AudioManager::freeSound(ee);
+}
