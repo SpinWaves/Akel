@@ -9,11 +9,7 @@ namespace Ak
 {
     void AudioManager::initAudioManager()
     {
-    #ifdef AK_USE_MEMORY_HELPER
         _al = shared_ptr_w<OpenAL>(custom_malloc<OpenAL>());
-    #else
-        _al = std::shared_ptr<OpenAL>(new OpenAl);
-    #endif
         _al->initOAL();
     }
 

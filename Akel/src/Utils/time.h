@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 13/07/2021
-// UPDATED : 19/07/2021
+// UPDATED : 07/08/2021
 
 #ifndef __AK_TIME__
 #define __AK_TIME__
@@ -23,6 +23,7 @@ namespace Ak
 	{
 		public:
 			static __time& getCurrentTime();
+			static void delay(long pause);	// This avoid you to link SDL2 to use SDL_Delay
 
 		private:
 			inline static std::tm* _now;

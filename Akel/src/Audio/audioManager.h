@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/08/2021
-// UPDATED : 04/08/2021
+// UPDATED : 05/08/2021
 
 #ifndef __AK_AUDIO_MANAGER__
 #define __AK_AUDIO_MANAGER__
@@ -32,7 +32,7 @@ namespace Ak
             ~AudioManager() = default;
 
         private:
-            inline static std::shared_ptr<OpenAL> _al;
+            static inline std::shared_ptr<OpenAL> _al;
     };
 }
 

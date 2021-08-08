@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 08/06/2021
-// UPDATED : 01/08/2021
+// UPDATED : 08/08/2021
 
 #ifndef __AK_EDITOR_APP__
 #define __AK_EDITOR_APP__
@@ -21,7 +21,7 @@ class Editor : public Ak::Application
 
 Ak::Application* Akel_main()
 {
-	return new Editor;
+	return Ak::custom_malloc<Editor>();
 }
 
 #endif // __AK_EDITOR_APP__

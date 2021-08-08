@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 04/08/2021
+// UPDATED : 08/08/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -47,10 +47,33 @@ int main(int argc, char** argv)
 	AK_END_SESSION();
 
 	AK_BEGIN_SESSION("Shutdown");
-		delete app;
+		bool freed = false;
+		for(auto jam : Ak::JamAllocator::allAllocs)
+		{
+			if(jam->contains(app))
+			{
+				jam->free(app);
+				freed = true;
+				break;
+			}
+		}
+		if(!freed)
+		{
+			for(auto fixed : Ak::FixedAllocator::allAllocs)
+			{
+				if(fixed->contains(app))
+				{
+					fixed->free(app);
+					freed = true;
+					break;
+				}
+			}
+			if(!freed)
+				delete app;
+		}
 
 		Ak::AudioManager::shutdownAudioManager();
-		
+
 		#ifdef AK_USE_MEMORY_HELPER
 			Ak::MemoryManager::end();
 		#endif

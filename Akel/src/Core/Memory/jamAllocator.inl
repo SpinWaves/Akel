@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 02/08/2021
+// UPDATED : 08/08/2021
 
 #include <Core/Memory/jamAllocator.h>
 
@@ -14,7 +14,7 @@ namespace Ak
             Core::log::report(ERROR, "Jam Allocator: you need to initialize the allocator before aking him to give you memory");
             return nullptr;
         }
-        if(!canHold(sizeof(T*)))
+        if(!canHold(sizeof(T)))
         {
             if(_autoResize)
                 resize(_heapSize * 2);
@@ -27,11 +27,11 @@ namespace Ak
 
         lockThreads(mutex);
 
-        T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(T*));
+        T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed);
 
         unlockThreads(mutex);
 
-        _memUsed += sizeof(T*);
+        _memUsed += sizeof(T);
 
         if(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);

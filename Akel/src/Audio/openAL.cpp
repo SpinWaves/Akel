@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/08/2021
-// UPDATED : 04/08/2021
+// UPDATED : 08/08/2021
 
 #include <Audio/openAL.h>
 #include <Core/core.h>
@@ -34,7 +34,13 @@ namespace Ak
 
     void OpenAL::freeSound(ALuint buffer)
     {
-        alDeleteBuffers(1, &buffer);
+        std::vector<ALuint*>::const_iterator it;
+        it = std::find(_buffers.begin(), _buffers.end(), &buffer);
+        if(it != _buffers.end())
+        {
+            _buffers.erase(it);
+            alDeleteBuffers(1, &buffer);
+        }
     }
 
     ALuint OpenAL::loadSound(std::string filename)
@@ -80,13 +86,19 @@ namespace Ak
             return 0;
         }
 
+        _buffers.push_back(&buffer);
+
         return buffer;
     }
 
     void OpenAL::playSound(ALuint buffer)
     {
-        newSource();
-        _currentSource = _sources.back();
+        if(_currentSource == 0)
+        {
+            if(_sources.empty())
+                newSource();
+            _currentSource = _sources.back();
+        }
         alSourcei(_currentSource, AL_BUFFER, buffer);
         alSourcePlay(_currentSource);
     }
@@ -114,8 +126,16 @@ namespace Ak
 
     void OpenAL::shutdownOAL()
     {
-        while(!_sources.empty())
-            freeSource(0);
+        for(auto elem : _buffers)
+            alDeleteBuffers(1, elem);
+        _buffers.clear();
+
+        for(auto elem : _sources)
+        {
+            alSourcei(elem, AL_BUFFER, 0);
+            alDeleteSources(1, &elem);
+        }
+        _sources.clear();
 
         alcMakeContextCurrent(NULL);
 

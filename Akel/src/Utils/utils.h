@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 24/07/2021
+// UPDATED : 08/08/2021
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -13,11 +13,11 @@ using Ak_ushort = unsigned short;
 using Ak_ubyte = unsigned char;
 using Ak_uchar = unsigned char;
 using Ak_text = const char*;
+using Ak_byte = char;
 
 #include <Utils/consoleOut.h>
 #include <Utils/fps.h>
 #include <Utils/camera.h>
-#include <Utils/timeUtils.h>
 #include <Utils/time.h>
 #include <Utils/platformUtils.h>
 

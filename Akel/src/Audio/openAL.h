@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/08/2021
-// UPDATED : 04/08/2021
+// UPDATED : 05/08/2021
 
 #ifndef __AK_OPENAL__
 #define __AK_OPENAL__
@@ -33,6 +33,7 @@ namespace Ak
             ALCcontext* _context = nullptr;
             std::vector<ALuint> _sources;
             ALuint _currentSource = 0;
+            std::vector<ALuint*> _buffers;
     };
 }
 

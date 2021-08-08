@@ -17,4 +17,9 @@ namespace Ak
 		_time.year = static_cast<uint32_t>(_now->tm_year + 1900);
 		return _time;
 	}
+
+	void Time::delay(long pause)
+	{
+		SDL_Delay(pause);
+	}
 }
