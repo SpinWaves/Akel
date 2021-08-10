@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 08/08/2021
+// UPDATED : 09/08/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -36,10 +36,11 @@ namespace Ak
         private:
             size_t _heapSize = 0;
             size_t _memUsed = 0;
+            std::vector<size_t> _allocOffsets;
             void* _end = nullptr;
             void* _heap = nullptr;
             bool _autoResize = false;
-            
+
             inline static MutexHandel mutex;
     };
 }

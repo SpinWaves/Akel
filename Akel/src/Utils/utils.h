@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 08/08/2021
+// UPDATED : 09/08/2021
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -22,5 +22,17 @@ using Ak_byte = char;
 #include <Utils/platformUtils.h>
 
 #include <Utils/Containers/containers.h>
+
+namespace Ak
+{
+	template <class T>
+	struct default_t
+	{
+		static T get()
+		{
+			return T();
+		}
+	};
+}
 
 #endif // __AK_UTILS__

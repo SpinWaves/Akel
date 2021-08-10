@@ -13,5 +13,4 @@ workspace "Akel"
 
 include "dependencies/imgui"
 include "Akel"
-include "Editor"	
-
+include "Editor"

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 08/08/2021
+// UPDATED : 09/08/2021
 
 #include <Core/core.h>
 
@@ -21,6 +21,7 @@ namespace Ak
         _heapSize = Size;
         _memUsed = 0;
         _end = (char*)_heap + _heapSize;
+        _allocOffsets.clear();
 
         allAllocs.push_back(this);
 

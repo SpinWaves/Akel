@@ -1,24 +1,15 @@
 // This file is a part of Akel
 // CREATED : 23/05/2021
-// UPDATED : 14/06/2021
+// UPDATED : 09/08/2021
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__
 
 #include <Akpch.h>
+#include <Utils/utils.h>
 
 namespace Ak
 {
-	template <class T>
-	struct default_t
-	{
-		static T get()
-		{
-			return T();
-		}
-	};
-
-
 	template <typename __first, typename __second>
 	class duets_array
 	{
@@ -151,4 +142,3 @@ namespace Ak
 }
 
 #endif // __AK_DUETS_ARRAY__
-
