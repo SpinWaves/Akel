@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 09/08/2021
-// UPDATED : 10/08/2021
+// UPDATED : 11/08/2021
 
 #ifndef __AK_CHAINED_LIST__
 #define __AK_CHAINED_LIST__
@@ -11,6 +11,7 @@
 
 namespace Ak
 {
+    /*
     template <class T>
     struct chained_list
     {
@@ -70,6 +71,7 @@ namespace Ak
             block* _tail = nullptr;
             FixedAllocator _allocator;
     };
+    */
 }
 
 #endif // __AK_CHAINED_LIST__

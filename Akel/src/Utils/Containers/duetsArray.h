@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/05/2021
-// UPDATED : 09/08/2021
+// UPDATED : 11/08/2021
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__
@@ -10,6 +10,9 @@
 
 namespace Ak
 {
+	template <class T>
+	struct default_t;
+
 	template <typename __first, typename __second>
 	class duets_array
 	{
