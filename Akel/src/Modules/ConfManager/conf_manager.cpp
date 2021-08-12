@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/08/2021
-// UPDATED : 11/08/2021
+// UPDATED : 12/08/2021
 
 #include <Modules/ConfManager/conf_manager.h>
 #include <Core/core.h>
@@ -17,7 +17,7 @@ namespace Ak
         }
 
         std::string getter;
-        size_t com_found = 0
+        size_t com_found = 0;
         size_t equal_found = 0;
         for(int i = 0; std::getline(file, getter); i++)
         {
@@ -30,30 +30,51 @@ namespace Ak
             if((equal_found = getter.find("=")) == std::string::npos && _warnings)
             {
                 Core::log::report(WARNING, "config file manager: key declared without associated value (possible omission of \"=\")");
-                _data[filename.c_str()][key] = std::pair<int, std::variant<std::string, bool, float, int>(i, "");
+                _data[getter] = std::tuple<const char*, int, _type>(filename.c_str(), i, "");
                 continue;
             }
 
-            std::string key(getter.begin(), getter.begin() + equal_found);
-            std::string val(getter.begin() + equal_found, getter.end());
+            int space = 0;
+            for(space = equal_found - 1; space >= 0; space--)
+            {
+                if(getter[space] != ' ')
+                {
+                    space++;
+                    break;
+                }
+            }
+            std::string key(getter.begin(), getter.begin() + space);
+
+            for(space = equal_found + 1; space < getter.length(); space++)
+            {
+                if(getter[space] != ' ')
+                    break;
+            }
+            std::string val(getter.begin() + space, getter.end());
 
             if(getter.find_first_not_of("0123456789.") == std::string::npos)
             {
                 if(getter.find(".") != std::string::npos)
                 {
-                    _data[filename.c_str()][key] = std::pair<int, std::variant<std::string, bool, float, int>(i, std::stof(val));
+                    _data[key] = std::tuple<const char*, int, _type>(filename.c_str(), i, std::stof(val));
                     continue;
                 }
-                _data[filename.c_str()][key] = std::pair<int, std::variant<std::string, bool, float, int>(i, std::stoi(val));
+                    _data[key] = std::tuple<const char*, int, _type>(filename.c_str(), i, std::stoi(val));
                 continue;
             }
 
             if(val == "true")
-                _data[filename.c_str()][key] = std::pair<int, std::variant<std::string, bool, float, int>(i, true);
+            {
+                _data[key] = std::tuple<const char*, int, _type>(filename.c_str(), i, true);
+                continue;
+            }
             if(val == "false")
-                _data[filename.c_str()][key] = std::pair<int, std::variant<std::string, bool, float, int>(i, false);
+            {
+                _data[key] = std::tuple<const char*, int, _type>(filename.c_str(), i, false);
+                continue;
+            }
 
-            _data[filename.c_str()][key] = std::pair<int, std::variant<std::string, bool, float, int>(i, val);
+            _data[key] = std::tuple<const char*, int, _type>(filename.c_str(), i, val);
         }
 
         file.close();
@@ -63,108 +84,124 @@ namespace Ak
 
     bool Conf_manager::getBoolValue(const std::string& key)
     {
-        for(auto elem : _data)
+        if(_data.count(key))
         {
-            if(elem.second.count(key) && std::holds_alternative<bool>(elem.second[key].second))
-    		      return std::get<bool>(elem.second[key].second);
+            if(std::holds_alternative<bool>(std::get<2>(_data[key])))
+		      return std::get<bool>(std::get<2>(_data[key]));
+            for(auto elem : Core::ProjectFile::getRam())
+            {
+                if(elem == _data[key])
+                    return std::get<bool>(elem);
+            }
         }
         return false;
     }
     int Conf_manager::getIntValue(const std::string& key)
     {
-        for(auto elem : _data)
+        if(_data.count(key))
         {
-            if(elem.second.count(key) && std::holds_alternative<int>(elem.second[key].second))
-    		      return std::get<int>(elem.second[key].second);
+            if(std::holds_alternative<int>(std::get<2>(_data[key])))
+		      return std::get<int>(std::get<2>(_data[key]));
+            for(auto elem : Core::ProjectFile::getRam())
+            {
+                if(elem == _data[key])
+                    return std::get<int>(elem);
+            }
         }
         return 0;
     }
     float Conf_manager::getFloatValue(const std::string& key)
     {
-        for(auto elem : _data)
+        if(_data.count(key))
         {
-            if(elem.second.count(key) && std::holds_alternative<float>(elem.second[key].second))
-    		      return std::get<float>(elem.second[key].second);
+            if(std::holds_alternative<float>(std::get<2>(_data[key])))
+		      return std::get<float>(std::get<2>(_data[key]));
+            for(auto elem : Core::ProjectFile::getRam())
+            {
+                if(elem == _data[key])
+                    return std::get<float>(elem);
+            }
         }
         return 0.0f;
     }
     std::string Conf_manager::getStringValue(const std::string& key)
     {
-        for(auto elem : _data)
+        if(_data.count(key))
         {
-            if(elem.second.count(key) && std::holds_alternative<std::string>(elem.second[key]))
-    		      return std::get<std::string>(elem.second[key]);
+            if(std::holds_alternative<std::string>(std::get<2>(_data[key])))
+		      return std::get<std::string>(std::get<2>(_data[key]));
+            for(auto elem : Core::ProjectFile::getRam())
+            {
+                if(elem == _data[key])
+                    return std::get<std::string>(elem);
+            }
         }
         return "";
     }
 
     void Conf_manager::setStringValue(const std::string& key, const std::string& value)
     {
-        for(auto elem : _data)
+        if(!_data.count(key))
         {
-            if(!elem.second.count(key))
-                continue;
-
-            std::fstream file(elem.first, std::ios::out | std::ios::in);
-            if(!file.is_open())
-                Core::log::report(ERROR, "config file manager: unable to modify string value of " + key + ", cannot open " + std::string(elem.first));
-
-            std::string line;
-            for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
-            {
-                if(i == elem.second[key].first)
-                    break;
-            }
-
-            size_t equal = 0;
-            if((equal = line.find("=")) == std::string::npos)
-            {
-                line.erase(line.begin() + equal + 1, line.end());
-                line.append(value);
-            }
-            else
-                line.append(" = " + value);
-
-            elem.second[key].second = value;
-
-            file.close();
+            Core::log::report(ERROR, "config file manager: unable to modify string value of " + key + ", key not found");
             return;
         }
-        Core::log::report(ERROR, "config file manager: unable to modify string value of" + key + ", key not found");
+
+        std::fstream file(std::get<0>(_data[key]), std::ios::out | std::ios::in);
+        if(!file.is_open())
+            Core::log::report(ERROR, "config file manager: unable to modify string value of " + key + ", cannot open " + std::string(std::get<0>(_data[key])));
+
+        std::string line;
+        for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
+        {
+            if(i == std::get<1>(_data[key]))
+                break;
+        }
+
+        size_t equal = 0;
+        if((equal = line.find("=")) == std::string::npos)
+        {
+            line.erase(line.begin() + equal + 1, line.end());
+            line.append(value);
+        }
+        else
+            line.append(std::string(" = ") + value);
+
+        _data[key] = std::tuple<const char*, int, _type>(std::get<0>(_data[key]), std::get<1>(_data[key]), value);
+
+        file.close();
     }
     void Conf_manager::setIntValue(const std::string& key, const int value)
     {
-        for(auto elem : _data)
+        if(!_data.count(key))
         {
-            if(!elem.second.count(key))
-                continue;
-
-            std::fstream file(elem.first, std::ios::out | std::ios::in);
-            if(!file.is_open())
-                Core::log::report(ERROR, "config file manager: unable to modify int value of " + key + ", cannot open " + std::string(elem.first));
-
-            std::string line;
-            for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
-            {
-                if(i == elem.second[key].first)
-                    break;
-            }
-
-            size_t equal = 0;
-            if((equal = line.find("=")) == std::string::npos)
-            {
-                line.erase(line.begin() + equal + 1, line.end());
-                line.append(std::to_string(value));
-            }
-            else
-                line.append(" = " + std::to_string(value));
-
-            elem.second[key].second = value;
-
-            file.close();
+            Core::log::report(ERROR, "config file manager: unable to modify string value of " + key + ", key not found");
             return;
         }
-        Core::log::report(ERROR, "config file manager: unable to modify int value of" + key + ", key not found");
+
+        std::fstream file(std::get<0>(_data[key]), std::ios::out | std::ios::in);
+        if(!file.is_open())
+            Core::log::report(ERROR, "config file manager: unable to modify int value of " + key + ", cannot open " + std::string(std::get<0>(_data[key])));
+
+        std::string line;
+        for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
+        {
+            if(i == std::get<1>(_data[key]))
+                break;
+        }
+
+        size_t equal = 0;
+        if((equal = line.find("=")) == std::string::npos)
+        {
+            line.erase(line.begin() + equal + 1, line.end());
+            line.append(std::to_string(value));
+        }
+        else
+            line.append(std::string(" = ") + std::to_string(value));
+
+        _data[key] = std::tuple<const char*, int, _type>(std::get<0>(_data[key]), std::get<1>(_data[key]), value);
+
+        file.close();
     }
     void Conf_manager::setBoolValue(const std::string& key, const bool value)
     {
@@ -174,71 +211,67 @@ namespace Ak
         else
             pass = "false";
 
-        for(auto elem : _data)
+        if(!_data.count(key))
         {
-            if(!elem.second.count(key))
-                continue;
-
-            std::fstream file(elem.first, std::ios::out | std::ios::in);
-            if(!file.is_open())
-                Core::log::report(ERROR, "config file manager: unable to modify bool value of " + key + ", cannot open " + std::string(elem.first));
-
-            std::string line;
-            for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
-            {
-                if(i == elem.second[key].first)
-                    break;
-            }
-
-            size_t equal = 0;
-            if((equal = line.find("=")) == std::string::npos)
-            {
-                line.erase(line.begin() + equal + 1, line.end());
-                line.append(pass);
-            }
-            else
-                line.append(" = " + pass);
-
-            elem.second[key].second = value;
-
-            file.close();
+            Core::log::report(ERROR, "config file manager: unable to modify string value of " + key + ", key not found");
             return;
         }
-        Core::log::report(ERROR, "config file manager: unable to modify bool value of" + key + ", key not found");
+
+        std::fstream file(std::get<0>(_data[key]), std::ios::out | std::ios::in);
+        if(!file.is_open())
+            Core::log::report(ERROR, "config file manager: unable to modify bool value of " + key + ", cannot open " + std::string(std::get<0>(_data[key])));
+
+        std::string line;
+        for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
+        {
+            if(i == std::get<1>(_data[key]))
+                break;
+        }
+
+        size_t equal = 0;
+        if((equal = line.find("=")) == std::string::npos)
+        {
+            line.erase(line.begin() + equal + 1, line.end());
+            line.append(pass);
+        }
+        else
+            line.append(std::string(" = ") + pass);
+
+        _data[key] = std::tuple<const char*, int, _type>(std::get<0>(_data[key]), std::get<1>(_data[key]), value);
+
+        file.close();
     }
     void Conf_manager::setFloatValue(const std::string& key, const float value)
     {
-        for(auto elem : _data)
+        if(!_data.count(key))
         {
-            if(!elem.second.count(key))
-                continue;
-
-            std::fstream file(elem.first, std::ios::out | std::ios::in);
-            if(!file.is_open())
-                Core::log::report(ERROR, "config file manager: unable to modify float value of " + key + ", cannot open " + std::string(elem.first));
-
-            std::string line;
-            for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
-            {
-                if(i == elem.second[key].first)
-                    break;
-            }
-
-            size_t equal = 0;
-            if((equal = line.find("=")) == std::string::npos)
-            {
-                line.erase(line.begin() + equal + 1, line.end());
-                line.append(std::to_string(value));
-            }
-            else
-                line.append(" = " + std::to_string(value));
-
-            elem.second[key].second = value;
-
-            file.close();
+            Core::log::report(ERROR, "config file manager: unable to modify string value of " + key + ", key not found");
             return;
         }
-        Core::log::report(ERROR, "config file manager: unable to modify float value of" + key + ", key not found");
+
+        std::fstream file(std::get<0>(_data[key]), std::ios::out | std::ios::in);
+        if(!file.is_open())
+            Core::log::report(ERROR, "config file manager: unable to modify float value of " + key + ", cannot open " + std::string(std::get<0>(_data[key])));
+
+        std::string line;
+        for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
+        {
+            if(i == std::get<1>(_data[key]))
+                break;
+        }
+        size_t equal = 0;
+
+        if((equal = line.find("=")) == std::string::npos)
+        {
+            line.erase(line.begin() + equal + 1, line.end());
+            line.append(std::to_string(value));
+        }
+        else
+            line.append(std::string(" = ") + std::to_string(value));
+
+        _data[key] = std::tuple<const char*, int, _type>(std::get<0>(_data[key]), std::get<1>(_data[key]), value);
+
+        file.close();
     }
 
     void Conf_manager::enableWarnings(bool set)

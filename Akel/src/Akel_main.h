@@ -1,20 +1,21 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 08/08/2021
+// UPDATED : 12/08/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
 
-#include <Akpch.h>
 #include <Core/application.h>
+#include <Akpch.h>
 #include <Core/softwareInfo.h>
+#include <Core/paths.h>
 #include <Audio/audio.h>
 
 extern Ak::Application* Akel_main();
 
 int main(int argc, char** argv)
 {
-	Ak::Core::log::Init();
+	Ak::Core::Paths::initPaths();
 
 	AK_BEGIN_SESSION("Start");
 		#if defined(AK_64BITS)
@@ -33,9 +34,11 @@ int main(int argc, char** argv)
 			Ak::Core::log::report("architecture: 32bits");
 		#endif
 
-		#ifdef AK_USE_MEMORY_HELPER
+		Ak::Core::log::Init();
+		Ak::Conf_manager::load(Ak::Core::ProjectFile::getDirFileProject() + Ak::Core::ProjectFile::getNameFileProject() + std::string(".akel"));
+
+		if(Ak::Conf_manager::getBoolValue("use_memory_manager"))
 			Ak::MemoryManager::init();
-		#endif
 
 		Ak::AudioManager::initAudioManager();
 
@@ -74,9 +77,10 @@ int main(int argc, char** argv)
 
 		Ak::AudioManager::shutdownAudioManager();
 
-		#ifdef AK_USE_MEMORY_HELPER
+		if(Ak::Conf_manager::getBoolValue("use_memory_manager"))
 			Ak::MemoryManager::end();
-		#endif
+
+		Ak::Core::ProjectFile::initProjFile();
 	AK_END_SESSION();
 
 	std::cout << Ak::bg_green << "Akel successfully finished" << Ak::bg_def << std::endl;

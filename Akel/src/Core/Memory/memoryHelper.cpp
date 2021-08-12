@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 01/08/2021
+// UPDATED : 12/08/2021
 
 #include <Utils/utils.h>
 #include <Core/core.h>
@@ -29,5 +29,14 @@ namespace Ak
         __fixed3.destroy();
     #endif
         __jam.destroy();
+    }
+
+    void MemoryManager::useMemoryManager(bool set)
+    {
+        _use = set;
+    }
+    bool MemoryManager::isMemoryManagerUsed()
+    {
+        return _use;
     }
 }

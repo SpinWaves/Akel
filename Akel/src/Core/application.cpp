@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/06/2021
-// UPDATED : 13/07/2021
+// UPDATED : 12/08/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -9,7 +9,7 @@ namespace Ak
 {
 	Application::Application(const char* name) : ComponentStack()
 	{
-		add_component(new CounterFPS);
+		add_component(custom_malloc<CounterFPS>());
 		_name = name;
 		if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
 			Core::log::report(FATAL_ERROR, std::string("SDL error : unable to init all subsystems : ") + SDL_GetError());

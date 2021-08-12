@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 23/07/2021
+// UPDATED : 12/08/2021
 
 #ifndef __AK_CORE__
 #define __AK_CORE__
@@ -13,6 +13,7 @@
 #include <Core/gpu.h>
 #include <Core/application.h>
 #include <Core/profile.h>
+#include <Core/projectFile.h>
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>

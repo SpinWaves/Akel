@@ -12,8 +12,9 @@
 class Editor : public Ak::Application
 {
 	public:
-		Editor() : Ak::Application("Akel Editor")
+		Editor() : Ak::Application("Akel_Editor")
 		{
+			Ak::Core::ProjectFile::setDirFileProject(Ak::Core::getMainDirPath() + "Editor");
 			add_component(Ak::custom_malloc<EditorComponent>());
 		}
 		~Editor() = default;

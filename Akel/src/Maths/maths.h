@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/04/2021
-// UPDATED : 03/06/2021
+// UPDATED : 12/08/2021
 
 #ifndef __AK_MATH__
 #define __AK_MATH__
@@ -15,6 +15,7 @@ namespace Ak::Maths
 {
     int randint(int a, int b);
     bool rand_probability(double proba);
+    float rsqrt(float number);
 }
 
 #endif // __AK_MATH__

@@ -46,6 +46,4 @@
 	#define AK_PLATFORM_OSX
 #endif
 
-#define AK_USE_MEMORY_HELPER
-
 #endif // __AK_PROFILE_CORE__
