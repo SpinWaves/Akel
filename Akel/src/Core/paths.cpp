@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 12/08/2021
+// UPDATED : 14/08/2021
 
 #include <Core/core.h>
 
@@ -8,19 +8,22 @@ namespace Ak::Core
 {
     void Paths::initPaths()
     {
-        path = std::filesystem::current_path();
-        for(auto& dirs : std::filesystem::recursive_directory_iterator(path))
+        if(!_isInit)
         {
-            mainDir = dirs.path().string();
-            std::size_t found = mainDir.rfind("Akel");
-            if(found != std::string::npos)
+            path = std::filesystem::current_path();
+            for(auto& dirs : std::filesystem::recursive_directory_iterator(path))
             {
-                mainDir.erase(mainDir.begin() + found + 5, mainDir.end());
-                break;
+                mainDir = dirs.path().string();
+                std::size_t found = mainDir.rfind("Akel");
+                if(found != std::string::npos)
+                {
+                    mainDir.erase(mainDir.begin() + found + 5, mainDir.end());
+                    break;
+                }
+                mainDir = "Main path not found";
             }
-            mainDir = "Main path not found";
+            _isInit = true;
         }
-        _isInit = true;
     }
     std::string Paths::mainDirPath()
     {
@@ -30,11 +33,11 @@ namespace Ak::Core
     }
     std::string Paths::logDirPath()
     {
-        return mainDir + "Logs/";
+        return mainDirPath() + "Logs/";
     }
     std::string Paths::assetsDirPath()
     {
-        return mainDir + "Ressources/";
+        return mainDirPath() + "Ressources/";
     }
 
     std::string getMainDirPath()

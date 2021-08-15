@@ -4,7 +4,7 @@ project "Editor"
 	cppdialect "C++17"
 	staticruntime "on"
 	architecture "x86_64"
-	icon "../Ressources/logo.png"
+	icon "../Ressources/logo.ico"
 
 	targetdir ("../build/" .. outputdir)
 	objdir ("../build-int/" .. outputdir)
@@ -30,7 +30,7 @@ project "Editor"
 		"src/**.cpp"
 	}
 
-	includedirs 
+	includedirs
 	{
 		"../Akel/src",
 		"src",
@@ -46,4 +46,3 @@ project "Editor"
     filter "configurations:Release"
         defines "AK_EDITOR_RELEASE"
         optimize "On"
-

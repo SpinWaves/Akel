@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 09/08/2021
+// UPDATED : 13/08/2021
 
 #include <Core/core.h>
 
@@ -15,8 +15,6 @@ namespace Ak
               InitializeCriticalSection(&mutex);
         #endif
 
-        lockThreads(mutex);
-
         _heap = malloc(Size);
         _heapSize = Size;
         _memUsed = 0;
@@ -25,7 +23,6 @@ namespace Ak
 
         allAllocs.push_back(this);
 
-        unlockThreads(mutex);
     }
 
     void JamAllocator::resize(size_t Size)
