@@ -1,4 +1,5 @@
-# This file is an Akel project file. It contains configuration parameters for the engine.
+jamAllocator_size_1 = 16777216 = 16777216 = 16777216 = 16777216 = 16777216
+file. It contains configuration parameters for the engine.
 # DO NOT MODIFY IT, OTHERWISE YOU WILL GET BAD PERFORMANCES,
 # BAD MEMORY OPTIMISATION OR EVEN YOUR PROJECT WILL NOT WORK ANYMORE!
 

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 13/08/2021
+// UPDATED : 15/08/2021
 
 #include <Core/core.h>
 
@@ -21,8 +21,13 @@ namespace Ak
         _end = (char*)_heap + _heapSize;
         _allocOffsets.clear();
 
-        allAllocs.push_back(this);
+        lockThreads(mutex);
 
+        allAllocs.push_back(this);
+        std::string key = "jamAllocator_size_" + std::to_string(allAllocs.size());
+        Core::ProjectFile::setIntValue(key, Size);
+
+        unlockThreads(mutex);
     }
 
     void JamAllocator::resize(size_t Size)

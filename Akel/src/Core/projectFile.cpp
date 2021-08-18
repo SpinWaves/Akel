@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/08/2021
-// UPDATED : 15/08/2021
+// UPDATED : 16/08/2021
 
 #include <Core/core.h>
 
@@ -144,7 +144,7 @@ namespace Ak::Core
             return;
         }
 
-        for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
+        for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
         {
             if(i == std::get<0>(_data[key]))
             {
@@ -163,6 +163,7 @@ namespace Ak::Core
         file.close();
         newFile.close();
 
+		std::filesystem::remove(__FILEPATH);
         std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
 
         _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
@@ -170,7 +171,7 @@ namespace Ak::Core
     }
     void ProjectFile::setIntValue(const std::string& key, const int value)
     {
-        std::fstream file(__FILEPATH, std::ios::out | std::ios::in);
+        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::app);
         if(!file.is_open())
             Core::log::report(ERROR, "Project file manager: unable to modify a project file, cannot open " + __FILEPATH);
 
@@ -193,7 +194,7 @@ namespace Ak::Core
             return;
         }
 
-        for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
+        for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
         {
             if(i == std::get<0>(_data[key]))
             {
@@ -212,6 +213,7 @@ namespace Ak::Core
         file.close();
         newFile.close();
 
+		std::filesystem::remove(__FILEPATH);
         std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
 
         _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
@@ -247,7 +249,7 @@ namespace Ak::Core
             return;
         }
 
-        for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
+        for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
         {
             if(i == std::get<0>(_data[key]))
             {
@@ -266,6 +268,7 @@ namespace Ak::Core
         file.close();
         newFile.close();
 
+		std::filesystem::remove(__FILEPATH);
         std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
 
         _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
@@ -295,7 +298,7 @@ namespace Ak::Core
             return;
         }
 
-        for(int i = 0; getline(file, line); i++) // Acces to key line (seekg have problems with files opened in text mode)
+        for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
         {
             if(i == std::get<0>(_data[key]))
             {
@@ -314,6 +317,7 @@ namespace Ak::Core
         file.close();
         newFile.close();
 
+		std::filesystem::remove(__FILEPATH);
         std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
 
         _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);

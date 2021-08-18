@@ -9,7 +9,7 @@
 
 namespace Ak::Core
 {
-    class CPUID 
+    class CPUID
     {
         public:
             CPUID(unsigned funcId, unsigned subFuncId);
@@ -18,7 +18,7 @@ namespace Ak::Core
             uint32_t &EBX();
             uint32_t &ECX();
             uint32_t &EDX();
-        
+
         private:
             uint32_t regs[4];
     };

@@ -1,13 +1,9 @@
 // This file is a part of Akel
 // CREATED : 05/05/2021
-// UPDATED : 28/06/2021
+// UPDATED : 18/08/2021
 
 #include <Utils/utils.h>
 #include <Renderer/renderer.h>
-
-#ifndef M_PI
-#define M_PI 3.141592653589793
-#endif
 
 namespace Ak
 {
@@ -87,4 +83,3 @@ namespace Ak
 		_forward.normalize();
 	}
 }
-
