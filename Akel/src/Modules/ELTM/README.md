@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/Kbz-8/Akel/blob/main/Ressources/eltm_logo.png" alt="drawing" width="500"/>
+    <img src="https://github.com/Kbz-8/Akel/blob/dev/Ressources/eltm_logo.png" alt="drawing" width="500"/>
 </p>
 
 # ELTM
