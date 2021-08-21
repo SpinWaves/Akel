@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 18/08/2021
-// UPDATED : 18/08/2021
+// UPDATED : 19/08/2021
 
 #ifndef __AK_EASINGS_FUNCTIONS__
 #define __AK_EASINGS_FUNCTIONS__
@@ -27,6 +27,12 @@ namespace Ak::Maths
     float easeInExpo(float x);
     float easeOutExpo(float x);
     float easeInOutExpo(float x);
+    float easeInCirc(float x);
+    float easeOutCirc(float x);
+    float easeInOutCirc(float x);
+    float easeInBack(float x);
+    float easeOutBack(float x);
+    float easeInOutBack(float x);
 }
 
 #endif // __AK_EASINGS_FUNCTIONS__

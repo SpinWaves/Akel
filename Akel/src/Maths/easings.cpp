@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 18/08/2021
-// UPDATED : 18/08/2021
+// UPDATED : 19/08/2021
 
 #include <Maths/maths.h>
 
@@ -100,5 +100,44 @@ namespace Ak::Maths
         if(x < 0.5)
             return pow(2, 20 * x - 10) / 2;
         return (2 - pow(2, -20 * x + 10)) / 2;
+    }
+
+    float easeInCirc(float x)
+    {
+        return 1 - sqrt(1 - pow(x, 2));
+    }
+
+    float easeOutCirc(float x)
+    {
+        return sqrt(1 - pow(x - 1, 2));
+    }
+
+    float easeInOutCirc(float x)
+    {
+        return x < 0.5 ? (1 - sqrt(1 - pow(2 * x, 2))) / 2 : (sqrt(1 - pow(-2 * x + 2, 2)) + 1) / 2;
+    }
+
+    float easeInBack(float x)
+    {
+        const float c1 = 1.70158;
+        const float c3 = c1 + 1;
+
+        return c3 * x * x * x - c1 * x * x;
+    }
+
+    float easeOutBack(float x)
+    {
+        const float c1 = 1.70158;
+        const float c3 = c1 + 1;
+
+        return 1 + c3 * pow(x - 1, 3) + c1 * pow(x - 1, 2);
+    }
+
+    float easeInOutBack(float x)
+    {
+        const float c1 = 1.70158;
+        const float c2 = c1 * 1.525;
+
+        return x < 0.5 ? (pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2 : (pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
     }
 }
