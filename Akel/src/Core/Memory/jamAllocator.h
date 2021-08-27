@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 09/08/2021
+// UPDATED : 21/08/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -40,6 +40,7 @@ namespace Ak
             void* _end = nullptr;
             void* _heap = nullptr;
             bool _autoResize = false;
+            int _allocator_number = 0;
 
             inline static MutexHandel mutex;
     };

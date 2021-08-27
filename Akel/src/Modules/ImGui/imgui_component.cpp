@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 01/08/2021
+// UPDATED : 21/08/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -78,8 +78,8 @@ namespace Ak
 		(void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 
-		io.Fonts->AddFontFromFileTTF(std::string(Core::getAssetsDirPath() + "fonts/opensans/OpenSans-Bold.ttf").c_str(), 18.0f);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getAssetsDirPath() + "fonts/opensans/OpenSans-Regular.ttf").c_str(), 18.0f);
+		io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Bold.ttf").c_str(), 18.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Regular.ttf").c_str(), 18.0f);
 
 		SetDarkThemeColors();
 

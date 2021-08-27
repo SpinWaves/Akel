@@ -1,6 +1,6 @@
 # Akel
 <p align="center">
-    <img src="https://github.com/Kbz-8/Akel/blob/main/Ressources/logo.png" alt="drawing" width="500"/>
+    <img src="https://github.com/Kbz-8/Akel/blob/main/Ressources/assets/logo.png" alt="drawing" width="500"/>
 </p>
 
 Akel is a game engine made for fun by a young french man.

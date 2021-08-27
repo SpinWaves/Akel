@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/Kbz-8/Akel/blob/dev/Ressources/eltm_logo.png" alt="drawing" width="500"/>
+    <img src="https://github.com/Kbz-8/Akel/blob/dev/Ressources/assets/eltm_logo.png" alt="drawing" width="500"/>
 </p>
 
 # ELTM
@@ -10,6 +10,8 @@ context to use it. It is extremely simple and requires little time to
 to learn it.
 
 ===========================================================
+
+Your ELTM code :
 
 	// comment
 	/*
@@ -37,12 +39,12 @@ to learn it.
 
 In your C++ project :
 
-	Ak::ELTMcontext context;
-	if(context.newContext("file.tm") == true)	// Ak::ELTMcontext::newContext return true or false in case of good execution or error in your ELTM file
+	Ak::ELTM context;
+	if(context.load("file.tm") == true)	// Ak::ELTM::load return true or false in case of good execution or error in your ELTM file
 	{
 		std::string text = context.getText("YourID"); // return "your text" in std::string
 		std::cout << context.getText("moduleName.yay") << std::endl;
-		std::cout << Ak::ELTMcontext::getText("YourID") << std::endl; // you can get texts directly from ELTMcontext class if context was initialized
+		std::cout << Ak::ELTM::getText("YourID") << std::endl; // you can get texts directly from ELTM class if context was initialized
 	}
 
 ## Documentations

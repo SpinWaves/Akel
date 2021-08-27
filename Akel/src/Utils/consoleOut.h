@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 03/06/2021
+// UPDATED : 21/08/2021
 
 #ifndef __AK_CONSOLE_OUT__
 #define __AK_CONSOLE_OUT__
@@ -39,6 +39,12 @@ namespace Ak
     };
 
     std::ostream &operator<<(std::ostream &os, const Code code); // Print std::cout with colors or effects
+
+    template <typename T = const char*>
+    void debugPrint(T out = "debug")
+    {
+        std::cout << bg_blue << out << bg_def << std::endl;
+    }
 }
 
 #endif // __AK_CONSOLE_OUT__

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 14/08/2021
+// UPDATED : 21/08/2021
 
 #include <Core/core.h>
 
@@ -37,8 +37,22 @@ namespace Ak::Core
     }
     std::string Paths::assetsDirPath()
     {
+        return mainDirPath() + "Ressources/assets/";
+    }
+    std::string Paths::soundsDirPath()
+    {
+        return mainDirPath() + "Ressources/sounds/";
+    }
+    std::string Paths::fontsDirPath()
+    {
+        return mainDirPath() + "Ressources/fonts/";
+    }
+    std::string Paths::ressourcesDirPath()
+    {
         return mainDirPath() + "Ressources/";
     }
+
+// =============================================================== //
 
     std::string getMainDirPath()
     {
@@ -52,5 +66,19 @@ namespace Ak::Core
     std::string getLogsDirPath()
     {
         return Paths::logDirPath();
+    }
+
+    std::string getRessourcesDirPath()
+    {
+        return Paths::ressourcesDirPath();
+    }
+    std::string getSoundsDirPath()
+    {
+        return Paths::soundsDirPath();
+    }
+
+    std::string getFontsDirPath()
+    {
+        return Paths::fontsDirPath();
     }
 }

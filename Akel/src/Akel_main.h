@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 15/08/2021
+// UPDATED : 27/08/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -16,6 +16,7 @@ extern Ak::Application* Akel_main();
 int main(int argc, char** argv)
 {
 	Ak::Core::Paths::initPaths();
+	Ak::Core::log::Init();
 
 	AK_BEGIN_SESSION("Start");
 		#if defined(AK_64BITS)
@@ -42,8 +43,6 @@ int main(int argc, char** argv)
 		#endif
 
 		Ak::Core::ProjectFile::initProjFile();
-
-		Ak::Core::log::Init();
 
 		if(Ak::Core::ProjectFile::getBoolValue("use_memory_manager"))
 			Ak::MemoryManager::init();

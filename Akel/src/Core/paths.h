@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 12/08/2021
+// UPDATED : 21/08/2021
 
 #ifndef __AK_PATHS__
 #define __AK_PATHS__
@@ -17,6 +17,9 @@ namespace Ak::Core
         static std::string mainDirPath();
         static std::string logDirPath();
         static std::string assetsDirPath();
+        static std::string ressourcesDirPath();
+        static std::string soundsDirPath();
+        static std::string fontsDirPath();
 
         ~Paths() = delete;
 
@@ -28,6 +31,9 @@ namespace Ak::Core
     std::string getMainDirPath();
     std::string getAssetsDirPath();
     std::string getLogsDirPath();
+    std::string getRessourcesDirPath();
+    std::string getSoundsDirPath();
+    std::string getFontsDirPath();
 }
 
 #endif // __AK_PATHS__

@@ -1,8 +1,13 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 01/08/2021
+// UPDATED : 25/08/2021
 
 #include <Modules/ELTM/eltm.h>
+
+#ifndef AK_ELTM_VERSION_1_0
+	#define ELTMcontext ELTM
+	#define newContext load
+#endif
 
 namespace Ak
 {

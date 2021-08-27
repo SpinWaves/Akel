@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 02/08/2021
+// UPDATED : 25/08/2021
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -9,6 +9,11 @@
 #include <Modules/ELTM/ELTMerrors.h>
 #include <Utils/utils.h>
 #include <Core/profile.h>
+
+#ifndef AK_ELTM_VERSION_1_0
+	#define ELTMcontext ELTM
+	#define newContext load
+#endif
 
 namespace Ak
 {

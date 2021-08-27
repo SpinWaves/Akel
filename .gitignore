@@ -3,6 +3,6 @@
 Makefile
 build/
 build-int/
-libAkel.so
 *.swp
+premake5
 imgui.ini

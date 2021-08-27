@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 09/07/2021
-// UPDATED : 04/08/2021
+// UPDATED : 25/08/2021
 
 #include <Panels/console.h>
 
@@ -10,10 +10,10 @@ Console::Console(std::string name, size_t inputBufferSize) : _sh()
 	_input.resize(inputBufferSize);
 	_inBufferSize = inputBufferSize;
 
-	ee = Ak::AudioManager::loadSound(Ak::Core::getMainDirPath() + "Editor/sounds/42.wav");
+	ee = Ak::AudioManager::loadSound(Ak::Core::getSoundsDirPath() + "42.wav");
 
 	_sh.print("============================");
-	_sh.print(Ak::ELTMcontext::getText("Console.welcome"));
+	_sh.print(Ak::ELTM::getText("Console.welcome"));
 	_sh.print("============================");
 }
 
@@ -28,7 +28,7 @@ void Console::render(int width, int height)
     {
         ImGui::PopStyleVar();
         ImGui::End();
-		Ak::messageBox(ERROR, Ak::ELTMcontext::getText("errors.consoleMainWin"), "error from ImGui::Begin()");
+		Ak::messageBox(ERROR, Ak::ELTM::getText("errors.consoleMainWin"), "error from ImGui::Begin()");
         return;
     }
     ImGui::PopStyleVar();
@@ -97,7 +97,7 @@ void Console::inputBar()
 	char in[_inBufferSize] = "";
 
     ImGui::PushItemWidth(-ImGui::GetStyle().ItemSpacing.x * 7);
-    if(ImGui::InputText(Ak::ELTMcontext::getText("Console.input").c_str(), in, _inBufferSize, inputTextFlags, InputCallback, this))
+    if(ImGui::InputText(Ak::ELTM::getText("Console.input").c_str(), in, _inBufferSize, inputTextFlags, InputCallback, this))
     {
 		_input = in;
 		_sh.command(_input);

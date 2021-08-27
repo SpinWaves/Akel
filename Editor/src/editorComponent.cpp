@@ -6,13 +6,13 @@
 
 EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
 {
-	_eltm = Ak::shared_ptr_w<Ak::ELTMcontext>(Ak::custom_malloc<Ak::ELTMcontext>());
+	_eltm = Ak::shared_ptr_w<Ak::ELTM>(Ak::custom_malloc<Ak::ELTM>());
 }
 
 void EditorComponent::onAttach()
 {
 	Ak::ImGuiComponent::onAttach();
-	_eltm->newContext(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
+	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
 	_console = Ak::shared_ptr_w<Console>(Ak::custom_malloc<Console>(_eltm->getText("Console.name")));
 }
 

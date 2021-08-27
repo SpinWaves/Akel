@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/08/2021
-// UPDATED : 16/08/2021
+// UPDATED : 27/08/2021
 
 #include <Core/core.h>
 
@@ -121,7 +121,7 @@ namespace Ak::Core
 
     void ProjectFile::setStringValue(const std::string& key, const std::string& value)
     {
-        std::fstream file(__FILEPATH, std::ios::out | std::ios::in);
+        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
         if(!file.is_open())
             Core::log::report(ERROR, "Project file manager: unable to modify a project file, cannot open " + __FILEPATH);
 
@@ -171,7 +171,7 @@ namespace Ak::Core
     }
     void ProjectFile::setIntValue(const std::string& key, const int value)
     {
-        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::app);
+        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
         if(!file.is_open())
             Core::log::report(ERROR, "Project file manager: unable to modify a project file, cannot open " + __FILEPATH);
 
@@ -194,8 +194,11 @@ namespace Ak::Core
             return;
         }
 
+		std::cout << "test" << std::endl;
+
         for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
         {
+			std::cout << line << std::endl;
             if(i == std::get<0>(_data[key]))
             {
                 size_t equal = 0;
@@ -213,8 +216,8 @@ namespace Ak::Core
         file.close();
         newFile.close();
 
-		std::filesystem::remove(__FILEPATH);
-        std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
+		//std::filesystem::remove(__FILEPATH);
+        //std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
 
         _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
     }
@@ -226,7 +229,7 @@ namespace Ak::Core
         else
             pass = "false";
 
-        std::fstream file(__FILEPATH, std::ios::out | std::ios::in);
+        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
         if(!file.is_open())
             Core::log::report(ERROR, "Project file manager: unable to modify a project file, cannot open " + __FILEPATH);
 
@@ -275,7 +278,7 @@ namespace Ak::Core
     }
     void ProjectFile::setFloatValue(const std::string& key, const float value)
     {
-        std::fstream file(__FILEPATH, std::ios::out | std::ios::in);
+        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
         if(!file.is_open())
             Core::log::report(ERROR, "Project file manager: unable to modify a project file, cannot open " + __FILEPATH);
 
