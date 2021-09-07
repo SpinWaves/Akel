@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 24/07/2021
-// UPDATED : 26/07/2021
+// UPDATED : 07/09/2021
 
 #ifndef __AK_SHARED_PTR_WRAPPER__
 #define __AK_SHARED_PTR_WRAPPER__
@@ -15,19 +15,25 @@ namespace Ak
     template <typename T>
     std::shared_ptr<T> shared_ptr_w(T* ptr, FixedAllocator& allocator)
     {
-        return std::shared_ptr<T>(ptr, [allocator](T* ptr) { allocator.free(ptr); });
+        if(allocator.contains(ptr))
+            return std::shared_ptr<T>(ptr, [allocator](T* ptr) { allocator.free(ptr); });
+        return std::shared_ptr<T>(ptr);
     }
 
     template <typename T>
     std::shared_ptr<T> shared_ptr_w(T* ptr, JamAllocator& allocator)
     {
-        return std::shared_ptr<T>(ptr, [allocator](T* ptr) { allocator.free(ptr); });
+        if(allocator.contains(ptr))
+            return std::shared_ptr<T>(ptr, [allocator](T* ptr) { allocator.free(ptr); });
+        return std::shared_ptr<T>(ptr);
     }
 
     template <typename T>
     std::shared_ptr<T> shared_ptr_w(T* ptr)
     {
-        return std::shared_ptr<T>(ptr, [](T* ptr) { custom_free(ptr); });
+        if(ptr)
+            return std::shared_ptr<T>(ptr, [](T* ptr) { custom_free(ptr); });
+        return std::shared_ptr<T>(ptr);
     }
 }
 

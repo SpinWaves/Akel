@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 21/08/2021
+// UPDATED : 07/09/2021
 
 #include <Core/core.h>
 
@@ -79,6 +79,23 @@ namespace Ak
     	if(ptr > _heap && ptr < _end)
     		return true;
     	return false;
+    }
+
+    void JamAllocator::add_block(block* newBlock)
+    {
+        newBlock->prev = nullptr;
+    	newBlock->next = nullptr;
+        if(_head == nullptr)
+    	{
+    		_head = newBlock;
+    		_tail = _head;
+    	}
+    	else
+    	{
+    		newBlock->prev = _tail;
+            _tail->next = newBlock;
+    		_tail = newBlock;
+    	}
     }
 
     JamAllocator::~JamAllocator()

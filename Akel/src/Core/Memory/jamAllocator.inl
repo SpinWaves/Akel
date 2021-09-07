@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 08/08/2021
+// UPDATED : 07/09/2021
 
 #include <Core/Memory/jamAllocator.h>
 
@@ -27,11 +27,15 @@ namespace Ak
 
         lockThreads(mutex);
 
-        T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed);
+        block* block_ptr = static_cast<block*>((void*)(reinterpret_cast<uintptr_t>(_heap) + _memUsed));
 
         unlockThreads(mutex);
 
-        _memUsed += sizeof(T);
+        T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(block));
+        block_ptr->size = sizeof(T);
+        add_block(block_ptr);
+
+        _memUsed += sizeof(T) + sizeof(block);
 
         if(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
@@ -44,7 +48,8 @@ namespace Ak
     {
         if(!contains((void*)ptr))
         {
-            Core::log::report(ERROR, "Jam Allocator: a pointer allocated by another allocator cannot be freed");
+            Core::log::report(WARNING, "Jam Allocator: a pointer allocated by another allocator will be freed, this may be an error");
+            delete ptr;
             return;
         }
         if(std::is_class<T>::value)
@@ -59,7 +64,6 @@ namespace Ak
             unlockThreads(mutex);
             return;
 		}
-        _memUsed -= sizeof(T);
         ptr = nullptr;
 
         unlockThreads(mutex);

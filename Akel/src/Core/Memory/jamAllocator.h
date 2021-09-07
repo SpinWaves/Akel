@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 21/08/2021
+// UPDATED : 07/09/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -10,6 +10,13 @@
 
 namespace Ak
 {
+    struct block
+    {
+        size_t size;
+        block* prev;
+        block* next;
+    };
+
     class JamAllocator
     {
         public:
@@ -36,6 +43,8 @@ namespace Ak
         private:
             size_t _heapSize = 0;
             size_t _memUsed = 0;
+            block* _head = nullptr;
+            block* _tail = nullptr;
             std::vector<size_t> _allocOffsets;
             void* _end = nullptr;
             void* _heap = nullptr;
@@ -43,6 +52,8 @@ namespace Ak
             int _allocator_number = 0;
 
             inline static MutexHandel mutex;
+
+            void add_block(block* newBlock);
     };
 }
 

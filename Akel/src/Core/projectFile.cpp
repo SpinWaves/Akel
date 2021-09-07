@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/08/2021
-// UPDATED : 27/08/2021
+// UPDATED : 07/09/2021
 
 #include <Core/core.h>
 
@@ -144,6 +144,8 @@ namespace Ak::Core
             return;
         }
 
+		file.seekg(0, file.beg);
+
         for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
         {
             if(i == std::get<0>(_data[key]))
@@ -151,13 +153,14 @@ namespace Ak::Core
                 size_t equal = 0;
                 if((equal = line.find("=")) == std::string::npos)
                 {
-                    line.erase(line.begin() + equal + 1, line.end());
+                    line.erase(line.begin() + equal + 2, line.end());
                     line.append(value);
                 }
                 else
                     line.append(std::string(" = ") + value);
             }
             newFile << line << '\n';
+			line.clear();
         }
 
         file.close();
@@ -169,6 +172,7 @@ namespace Ak::Core
         _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
 
     }
+
     void ProjectFile::setIntValue(const std::string& key, const int value)
     {
         std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
@@ -180,7 +184,7 @@ namespace Ak::Core
         {
             file << key << " = " << value << std::endl;
             int lines = 0;
-            while(getline(file, line))
+            while(std::getline(file, line))
                lines++;
             file.close();
             _data[key] = std::tuple<int, _type>(lines - 1, value); // lines - 1 because we ended file with std::endl so it makes a new line
@@ -194,33 +198,34 @@ namespace Ak::Core
             return;
         }
 
-		std::cout << "test" << std::endl;
+		file.seekg(0, file.beg);
 
-        for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
+        for(int i = 0; std::getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
         {
-			std::cout << line << std::endl;
             if(i == std::get<0>(_data[key]))
             {
                 size_t equal = 0;
-                if((equal = line.find("=")) == std::string::npos)
+                if((equal = line.find("=")) != std::string::npos)
                 {
-                    line.erase(line.begin() + equal + 1, line.end());
+                    line.erase(line.begin() + equal + 2, line.end());
                     line.append(std::to_string(value));
                 }
                 else
                     line.append(std::string(" = ") + std::to_string(value));
             }
-            newFile << line << '\n';
+        	newFile << line << '\n';
+			line.clear();
         }
 
         file.close();
         newFile.close();
 
-		//std::filesystem::remove(__FILEPATH);
-        //std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
+		std::filesystem::remove(__FILEPATH);
+        std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
 
         _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
     }
+
     void ProjectFile::setBoolValue(const std::string& key, const bool value)
     {
         std::string pass;
@@ -252,6 +257,8 @@ namespace Ak::Core
             return;
         }
 
+		file.seekg(0, file.beg);
+
         for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
         {
             if(i == std::get<0>(_data[key]))
@@ -259,13 +266,14 @@ namespace Ak::Core
                 size_t equal = 0;
                 if((equal = line.find("=")) == std::string::npos)
                 {
-                    line.erase(line.begin() + equal + 1, line.end());
+                    line.erase(line.begin() + equal + 2, line.end());
                     line.append(pass);
                 }
                 else
                     line.append(std::string(" = ") + pass);
             }
             newFile << line << '\n';
+			line.clear();
         }
 
         file.close();
@@ -276,6 +284,7 @@ namespace Ak::Core
 
         _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
     }
+
     void ProjectFile::setFloatValue(const std::string& key, const float value)
     {
         std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
@@ -301,6 +310,8 @@ namespace Ak::Core
             return;
         }
 
+		file.seekg(0, file.beg);
+
         for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
         {
             if(i == std::get<0>(_data[key]))
@@ -308,13 +319,14 @@ namespace Ak::Core
                 size_t equal = 0;
                 if((equal = line.find("=")) == std::string::npos)
                 {
-                    line.erase(line.begin() + equal + 1, line.end());
+                    line.erase(line.begin() + equal + 2, line.end());
                     line.append(std::to_string(value));
                 }
                 else
                     line.append(std::string(" = ") + std::to_string(value));
             }
             newFile << line << '\n';
+			line.clear();
         }
 
         file.close();

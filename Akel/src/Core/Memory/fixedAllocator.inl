@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 02/08/2021
-// UPDATED : 02/08/2021
+// UPDATED : 07/09/2021
 
 #include <Core/Memory/fixedAllocator.h>
 
@@ -43,7 +43,8 @@ namespace Ak
     {
         if(!contains(ptr))
         {
-            Core::log::report(ERROR, "Fixed Allocator: a pointer allocated by another allocator cannot be freed");
+            Core::log::report(WARNING, "Fixed Allocator: a pointer allocated by another allocator will be freed, this may be an error");
+            delete ptr;
             return;
         }
         lockThreads(mutex);

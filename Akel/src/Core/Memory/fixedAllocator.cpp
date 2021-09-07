@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 19/07/2021
-// UPDATED : 02/08/2021
+// UPDATED : 07/09/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -16,8 +16,6 @@ namespace Ak
               InitializeCriticalSection(&mutex);
 		#endif
 
-        lockThreads(mutex);
-
         size_t Size = blockSize * numBlocks;
 
         _heap = malloc(Size); // Main allocation
@@ -26,7 +24,12 @@ namespace Ak
         _heap_size = Size;
         _bits.resize(numBlocks, false);
 
+        lockThreads(mutex);
+
         allAllocs.push_back(this);
+        _allocator_number = allAllocs.size();
+        std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
+        Core::ProjectFile::setIntValue(key, Size);
 
         unlockThreads(mutex);
     }
@@ -43,6 +46,9 @@ namespace Ak
         _bits.resize(numBlocks, false);
 
         unlockThreads(mutex);
+
+        std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
+        Core::ProjectFile::setIntValue(key, Size);
     }
 
     bool FixedAllocator::canAlloc()
@@ -80,6 +86,9 @@ namespace Ak
         #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
             DeleteCriticalSection(&mutex);
         #endif
+
+        //std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
+        //Core::ProjectFile::setIntValue(key, _memUsed);
     }
 
     FixedAllocator::~FixedAllocator()

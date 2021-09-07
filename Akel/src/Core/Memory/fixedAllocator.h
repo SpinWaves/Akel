@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 18/07/2021
-// UPDATED : 02/08/2021
+// UPDATED : 07/09/2021
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
@@ -42,6 +42,7 @@ namespace Ak
             bool _autoResize = false;
             std::vector<bool>::reverse_iterator _it;
             inline static MutexHandel mutex;
+            int _allocator_number = 0;
     };
 }
 
