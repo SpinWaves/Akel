@@ -1,19 +1,19 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 08/08/2021
+// UPDATED : 09/09/2021
 
 #include <editorComponent.h>
 
 EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
 {
-	_eltm = Ak::shared_ptr_w<Ak::ELTM>(Ak::custom_malloc<Ak::ELTM>());
+	_eltm = Ak::make_shared_ptr_w<Ak::ELTM>(Ak::custom_malloc<Ak::ELTM>());
 }
 
 void EditorComponent::onAttach()
 {
 	Ak::ImGuiComponent::onAttach();
 	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
-	_console = Ak::shared_ptr_w<Console>(Ak::custom_malloc<Console>(_eltm->getText("Console.name")));
+	_console = Ak::make_shared_ptr_w<Console>(Ak::custom_malloc<Console>(_eltm->getText("Console.name")));
 }
 
 void EditorComponent::onImGuiRender()

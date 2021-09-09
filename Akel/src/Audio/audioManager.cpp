@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/08/2021
-// UPDATED : 04/08/2021
+// UPDATED : 09/09/2021
 
 #include <Audio/audioManager.h>
 #include <Core/core.h>
@@ -9,7 +9,7 @@ namespace Ak
 {
     void AudioManager::initAudioManager()
     {
-        _al = shared_ptr_w<OpenAL>(custom_malloc<OpenAL>());
+        _al = make_shared_ptr_w<OpenAL>(custom_malloc<OpenAL>());
         _al->initOAL();
     }
 

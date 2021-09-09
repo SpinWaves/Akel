@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 07/09/2021
+// UPDATED : 09/09/2021
 
 #include <Core/core.h>
 
@@ -27,8 +27,6 @@ namespace Ak
         _allocator_number = allAllocs.size();
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
-
-        std::cout << sizeof(JamAllocator) << std::endl;
 
         unlockThreads(mutex);
     }

@@ -19,44 +19,44 @@ namespace Ak
     namespace internal
     {
         template <typename T>
-        auto jam_destr = [](T* ptr, JamAllocator& allocator){ allocator.free(ptr) };
+        auto jam_destr = [](T* ptr, JamAllocator& allocator){ allocator.free(ptr); };
         template <typename T>
-        auto fixe_destr = [](T* ptr, FixedAllocator& allocator){ allocator.free(ptr) };
+        auto fixe_destr = [](T* ptr, FixedAllocator& allocator){ allocator.free(ptr); };
         template <typename T>
-        auto def_destr = [](T* ptr){ custom_free(ptr) };
+        auto def_destr = [](T* ptr){ custom_free(ptr); };
     }
 
     template <typename T>
-    using unique_ptr_w = std::unique_ptr<T, decltype(internal::def_destr)>;
+    using unique_ptr_w = std::unique_ptr<T, decltype(internal::def_destr<T>)>;
     template <typename T>
-    using unique_ptr_w_jam = std::unique_ptr<T, decltype(internal::jam_destr)>;
+    using unique_ptr_w_jam = std::unique_ptr<T, decltype(internal::jam_destr<T>)>;
     template <typename T>
-    using unique_ptr_w_fixed = std::unique_ptr<T, decltype(internal::fixe_destr)>;
+    using unique_ptr_w_fixed = std::unique_ptr<T, decltype(internal::fixe_destr<T>)>;
 
     template <typename T>
-    unique_ptr_w_fixed<T> make_unique_fixed(T* ptr, FixedAllocator& allocator)
+    unique_ptr_w_fixed<T> make_unique_ptr_w(T* ptr, FixedAllocator& allocator)
     {
         if(allocator.contains(ptr))
-            return unique_ptr_w_fixed<T>(ptr, fixe_destr(ptr, allocator));
+            return unique_ptr_w_fixed<T>(ptr, internal::fixe_destr<T>(ptr, allocator));
         Core::log::report(WARNING, "unique pointer FixedAllocator wrapper: a pointer allocated by another allocator than the given one has been passed, the unique_ptr returned will contain a nullptr");
-        return std::unique_ptr_w_fixed<T>(nullptr, fixe_destr(nullptr, allocator));
+        return unique_ptr_w_fixed<T>(nullptr, internal::fixe_destr<T>(nullptr, allocator));
     }
 
     template <typename T>
-    unique_ptr_w_jam<T> make_unique_jam(T* ptr, JamAllocator& allocator)
+    unique_ptr_w_jam<T> make_unique_ptr_w(T* ptr, JamAllocator& allocator)
     {
         if(allocator.contains(ptr))
-            return unique_ptr_w_jam<T>(ptr, jam_destr(ptr, allocator));
+            return unique_ptr_w_jam<T>(ptr, internal::jam_destr<T>(ptr, allocator));
         Core::log::report(WARNING, "unique pointer JamAllocator wrapper: a pointer allocated by another allocator than the given one has been passed, the unique_ptr returned will contain a nullptr");
-        return std::unique_ptr_w_jam<T>(nullptr, jam_destr(nullptr, allocator));
+        return unique_ptr_w_jam<T>(nullptr, internal::jam_destr<T>(nullptr, allocator));
     }
 
     template <typename T>
-    unique_ptr_w<T> make_unique_default(T* ptr)
+    unique_ptr_w<T> make_unique_ptr_w(T* ptr)
     {
         if(ptr)
-            return unique_ptr_w<T>(ptr, def_destr(ptr));
-        return std::unique_ptr_w<T>(nullptr, def_destr(nullptr));
+            return unique_ptr_w<T>(ptr, internal::def_destr<T>(ptr));
+        return unique_ptr_w<T>(nullptr, internal::def_destr<T>(nullptr));
     }
 }
 
