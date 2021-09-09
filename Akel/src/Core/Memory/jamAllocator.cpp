@@ -28,6 +28,8 @@ namespace Ak
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
 
+        std::cout << sizeof(JamAllocator) << std::endl;
+
         unlockThreads(mutex);
     }
 
@@ -83,7 +85,6 @@ namespace Ak
 
     void JamAllocator::add_block(block* newBlock)
     {
-        newBlock->prev = nullptr;
     	newBlock->next = nullptr;
         if(_head == nullptr)
     	{
@@ -92,7 +93,6 @@ namespace Ak
     	}
     	else
     	{
-    		newBlock->prev = _tail;
             _tail->next = newBlock;
     		_tail = newBlock;
     	}

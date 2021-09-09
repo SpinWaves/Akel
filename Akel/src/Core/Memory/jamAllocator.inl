@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 07/09/2021
+// UPDATED : 08/09/2021
 
 #include <Core/Memory/jamAllocator.h>
 
@@ -25,14 +25,39 @@ namespace Ak
             }
         }
 
+        block* finder = _head;
+        block* better = nullptr;
+        T* ptr = nullptr;
+
         lockThreads(mutex);
+
+        while(finder != nullptr)
+        {
+            if(finder->size >= sizeof(T) && finder->is_free)
+            {
+                if(finder->size == sizeof(T)) // We found a perfect sized block !
+                {
+                    ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + finder->offset + sizeof(block));
+                    break;
+                }
+                if(better == nullptr)
+                    better = finder;
+                else if(finder->size < better->size)
+                    better = finder;
+            }
+            finder = finder->next;
+        }
+        if(ptr == nullptr && better != nullptr)
+            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + finder->offset + sizeof(block));
 
         block* block_ptr = static_cast<block*>((void*)(reinterpret_cast<uintptr_t>(_heap) + _memUsed));
 
         unlockThreads(mutex);
 
-        T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(block));
+        ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(block));
         block_ptr->size = sizeof(T);
+        block_ptr->is_free = false;
+        block_ptr->offset = _memUsed;
         add_block(block_ptr);
 
         _memUsed += sizeof(T) + sizeof(block);
@@ -55,17 +80,16 @@ namespace Ak
         if(std::is_class<T>::value)
             ptr->~T();
 
-        lockThreads(mutex);
-
-		if(_memUsed == 0)
-		{
-            Core::log::report(ERROR, "Jam Allocator: Reached maximum number of FREE descriptors, defragmenting");
-
-            unlockThreads(mutex);
-            return;
-		}
+        block* finder = _head;
+        do
+        {
+            if(ptr == (void*)((uintptr_t)finder + sizeof(block)))
+            {
+                finder->is_free = true;
+                break;
+            }
+            finder = finder->next;
+        } while(finder != _tail);
         ptr = nullptr;
-
-        unlockThreads(mutex);
     }
 }

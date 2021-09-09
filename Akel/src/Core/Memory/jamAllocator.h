@@ -12,9 +12,10 @@ namespace Ak
 {
     struct block
     {
-        size_t size;
-        block* prev;
-        block* next;
+        size_t size = 0;
+        bool is_free = true;
+        unsigned int offset = 0;
+        block* next = nullptr;
     };
 
     class JamAllocator
