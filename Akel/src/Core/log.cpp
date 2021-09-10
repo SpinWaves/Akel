@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 04/08/2021
+// UPDATED : 10/09/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -79,11 +79,11 @@ namespace Ak::Core
 
     void log::TERMINATE()
     {
-		for(auto elem : JamAllocator::allAllocs)
+		for(auto elem : MemoryManager::accesToControlUnit()->jamStack)
 		{
 			elem->destroy();
 		}
-		for(auto elem : FixedAllocator::allAllocs)
+		for(auto elem : MemoryManager::accesToControlUnit()->fixedStack)
 		{
 			elem->destroy();
 		}

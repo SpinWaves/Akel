@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 07/09/2021
+// UPDATED : 10/09/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -10,15 +10,7 @@
 
 namespace Ak
 {
-    struct block
-    {
-        size_t size = 0;
-        bool is_free = true;
-        unsigned int offset = 0;
-        block* next = nullptr;
-    };
-
-    class JamAllocator
+    class JamAllocator : public std::enable_shared_from_this<JamAllocator>
     {
         public:
             JamAllocator() = default;
@@ -39,9 +31,16 @@ namespace Ak
 
             ~JamAllocator();
 
-            inline static std::vector<JamAllocator*> allAllocs;
-
         private:
+
+            struct block
+            {
+                size_t size = 0;
+                bool is_free = true;
+                unsigned int offset = 0;
+                block* next = nullptr;
+            };
+
             size_t _heapSize = 0;
             size_t _memUsed = 0;
             block* _head = nullptr;

@@ -1,12 +1,11 @@
 // This file is a part of Akel
 // CREATED : 02/08/2021
-// UPDATED : 07/09/2021
+// UPDATED : 10/09/2021
 
 #include <Core/Memory/fixedAllocator.h>
 
 namespace Ak
 {
-
     template <typename T = void, typename ... Args>
     T* FixedAllocator::alloc(Args&& ... args)
     {

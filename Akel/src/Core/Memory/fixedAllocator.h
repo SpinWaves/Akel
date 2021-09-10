@@ -1,18 +1,16 @@
 // This file is a part of Akel
 // CREATED : 18/07/2021
-// UPDATED : 07/09/2021
+// UPDATED : 10/09/2021
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
 
 #include <Akpch.h>
-#include <Core/core.h>
 #include <Utils/utils.h>
 
 namespace Ak
 {
-
-    class FixedAllocator
+    class FixedAllocator : public std::enable_shared_from_this<FixedAllocator>
     {
         public:
             FixedAllocator() = default;
@@ -31,8 +29,6 @@ namespace Ak
             void free(T* ptr);
 
             ~FixedAllocator();
-
-            inline static std::vector<FixedAllocator*> allAllocs;
 
         private:
             size_t _block_size = 0;

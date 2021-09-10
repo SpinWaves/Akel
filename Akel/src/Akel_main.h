@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 27/08/2021
+// UPDATED : 10/09/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -44,8 +44,7 @@ int main(int argc, char** argv)
 
 		Ak::Core::ProjectFile::initProjFile();
 
-		if(Ak::Core::ProjectFile::getBoolValue("use_memory_manager"))
-			Ak::MemoryManager::init();
+		Ak::MemoryManager::init();
 
 		Ak::AudioManager::initAudioManager();
 
@@ -58,7 +57,7 @@ int main(int argc, char** argv)
 
 	AK_BEGIN_SESSION("Shutdown");
 		bool freed = false;
-		for(auto jam : Ak::JamAllocator::allAllocs)
+		for(auto jam : Ak::MemoryManager::accesToControlUnit()->jamStack)
 		{
 			if(jam->contains(app))
 			{
@@ -69,7 +68,7 @@ int main(int argc, char** argv)
 		}
 		if(!freed)
 		{
-			for(auto fixed : Ak::FixedAllocator::allAllocs)
+			for(auto fixed : Ak::MemoryManager::accesToControlUnit()->fixedStack)
 			{
 				if(fixed->contains(app))
 				{
@@ -84,8 +83,7 @@ int main(int argc, char** argv)
 
 		Ak::AudioManager::shutdownAudioManager();
 
-		if(Ak::Core::ProjectFile::getBoolValue("use_memory_manager"))
-			Ak::MemoryManager::end();
+		Ak::MemoryManager::end();
 	AK_END_SESSION();
 
 	std::cout << Ak::bg_green << "Akel successfully finished" << Ak::bg_def << std::endl;

@@ -25,8 +25,8 @@ namespace Ak
             }
         }
 
-        block* finder = _head;
-        block* better = nullptr;
+        JamAllocator::block* finder = _head;
+        JamAllocator::block* better = nullptr;
         T* ptr = nullptr;
 
         lockThreads(mutex);
@@ -37,7 +37,7 @@ namespace Ak
             {
                 if(finder->size == sizeof(T)) // We found a perfect sized block !
                 {
-                    ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + finder->offset + sizeof(block));
+                    ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + finder->offset + sizeof(JamAllocator::block));
                     break;
                 }
                 if(better == nullptr)
@@ -48,19 +48,19 @@ namespace Ak
             finder = finder->next;
         }
         if(ptr == nullptr && better != nullptr)
-            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + finder->offset + sizeof(block));
+            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + finder->offset + sizeof(JamAllocator::block));
 
-        block* block_ptr = static_cast<block*>((void*)(reinterpret_cast<uintptr_t>(_heap) + _memUsed));
+        JamAllocator::block* block_ptr = static_cast<block*>((void*)(reinterpret_cast<uintptr_t>(_heap) + _memUsed));
 
         unlockThreads(mutex);
 
-        ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(block));
+        ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(JamAllocator::block));
         block_ptr->size = sizeof(T);
         block_ptr->is_free = false;
         block_ptr->offset = _memUsed;
         add_block(block_ptr);
 
-        _memUsed += sizeof(T) + sizeof(block);
+        _memUsed += sizeof(T) + sizeof(JamAllocator::block);
 
         if(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
@@ -80,10 +80,10 @@ namespace Ak
         if(std::is_class<T>::value)
             ptr->~T();
 
-        block* finder = _head;
+        JamAllocator::block* finder = _head;
         do
         {
-            if(ptr == (void*)((uintptr_t)finder + sizeof(block)))
+            if(ptr == (void*)((uintptr_t)finder + sizeof(JamAllocator::block)))
             {
                 finder->is_free = true;
                 break;

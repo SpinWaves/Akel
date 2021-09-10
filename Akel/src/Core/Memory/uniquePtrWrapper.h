@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 09/09/2021
-// UPDATED : 09/09/2021
+// UPDATED : 10/09/2021
 
 #ifndef __AK_UNIQUE_PTR_WRAPPER__
 #define __AK_UNIQUE_PTR_WRAPPER__
@@ -8,56 +8,46 @@
 #include <Akpch.h>
 #include <Core/Memory/fixedAllocator.h>
 #include <Core/Memory/jamAllocator.h>
-#include <Core/Memory/memoryHelper.h>
-
-/*
- *  WARNING ! THIS PART IS IN TEST AND NEEDS MORE WORK ! You can use it but be careful
- */
+#include <Core/Memory/memoryManager.h>
 
 namespace Ak
 {
-    namespace internal
+    template <typename T>
+    class unique_ptr_w
     {
-        template <typename T>
-        auto jam_destr = [](T* ptr, JamAllocator& allocator){ allocator.free(ptr); };
-        template <typename T>
-        auto fixe_destr = [](T* ptr, FixedAllocator& allocator){ allocator.free(ptr); };
-        template <typename T>
-        auto def_destr = [](T* ptr){ custom_free(ptr); };
-    }
+        public:
+            unique_ptr_w() = default;
+            explicit unique_ptr_w(T* ptr);
+            unique_ptr_w(unique_ptr_w& src);
+            unique_ptr_w(unique_ptr_w&& src);
 
-    template <typename T>
-    using unique_ptr_w = std::unique_ptr<T, decltype(internal::def_destr<T>)>;
-    template <typename T>
-    using unique_ptr_w_jam = std::unique_ptr<T, decltype(internal::jam_destr<T>)>;
-    template <typename T>
-    using unique_ptr_w_fixed = std::unique_ptr<T, decltype(internal::fixe_destr<T>)>;
+            T* get() { return _pointer.get(); }
+            operator bool() const { return _pointer(); }
+            T* release() { return _pointer.release() }
+            void reset(T* ptr) { _pointer.reset(ptr) }
+            void reset() { _pointer.reset() }
+            void swap(unique_ptr_w& x) { _pointer.swap(x) }
 
-    template <typename T>
-    unique_ptr_w_fixed<T> make_unique_ptr_w(T* ptr, FixedAllocator& allocator)
-    {
-        if(allocator.contains(ptr))
-            return unique_ptr_w_fixed<T>(ptr, internal::fixe_destr<T>(ptr, allocator));
-        Core::log::report(WARNING, "unique pointer FixedAllocator wrapper: a pointer allocated by another allocator than the given one has been passed, the unique_ptr returned will contain a nullptr");
-        return unique_ptr_w_fixed<T>(nullptr, internal::fixe_destr<T>(nullptr, allocator));
-    }
+            T* operator ->() { return _pointer }
+            typename std::add_lvalue_reference<T>::type operator*() const { return *_pointer }
+            typename std::add_lvalue_reference<T>::type operator [](size_t i) const { return _pointer[i] }
 
-    template <typename T>
-    unique_ptr_w_jam<T> make_unique_ptr_w(T* ptr, JamAllocator& allocator)
-    {
-        if(allocator.contains(ptr))
-            return unique_ptr_w_jam<T>(ptr, internal::jam_destr<T>(ptr, allocator));
-        Core::log::report(WARNING, "unique pointer JamAllocator wrapper: a pointer allocated by another allocator than the given one has been passed, the unique_ptr returned will contain a nullptr");
-        return unique_ptr_w_jam<T>(nullptr, internal::jam_destr<T>(nullptr, allocator));
-    }
+            ~unique_ptr_w() = default;
+
+        private:
+            auto _dest = [](T* ptr) { custom_free(ptr); };
+            std::unique_ptr<T, decltype(_dest)> _pointer;
+    };
 
     template <typename T>
     unique_ptr_w<T> make_unique_ptr_w(T* ptr)
     {
         if(ptr)
-            return unique_ptr_w<T>(ptr, internal::def_destr<T>(ptr));
-        return unique_ptr_w<T>(nullptr, internal::def_destr<T>(nullptr));
+            return unique_ptr_w<T>(ptr);
+        return unique_ptr_w<T>(nullptr);
     }
 }
+
+#include <Core/Memory/uniquePtrWrapper.inl>
 
 #endif // __AK_UNIQUE_PTR_WRAPPER__
