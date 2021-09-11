@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 10/09/2021
+// UPDATED : 11/09/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -10,7 +10,7 @@
 
 namespace Ak
 {
-    class JamAllocator : public std::enable_shared_from_this<JamAllocator>
+    class JamAllocator
     {
         public:
             JamAllocator() = default;

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 10/09/2021
+// UPDATED : 11/09/2021
 
 #include <Core/core.h>
 
@@ -23,10 +23,10 @@ namespace Ak
 
         lockThreads(mutex);
 
-        MemoryManager::accesToControlUnit()->jamStack.push_back(shared_from_this());
         _allocator_number = MemoryManager::accesToControlUnit()->jamStack.size();
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
+        MemoryManager::accesToControlUnit()->jamStack.push_back(this);
 
         unlockThreads(mutex);
     }

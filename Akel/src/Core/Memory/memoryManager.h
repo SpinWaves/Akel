@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 10/09/2021
+// UPDATED : 11/09/2021
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -15,14 +15,14 @@ namespace Ak
         private:
             struct ControlUnit
             {
-                std::vector<std::shared_ptr<JamAllocator>> jamStack;
-                std::vector<std::shared_ptr<FixedAllocator>> fixedStack;
+                std::vector<JamAllocator*> jamStack;
+                std::vector<FixedAllocator*> fixedStack;
             };
 
             inline static std::shared_ptr<ControlUnit> control_unit;
 
         public:
-            MemoryManager() = default;
+            MemoryManager() = delete;
 
             static void init();
             static void end();
@@ -38,7 +38,7 @@ namespace Ak
             template <typename T = void>
             static void free(T* ptr);
 
-            ~MemoryManager() = default;
+            ~MemoryManager() = delete;
 
         private:
             inline static JamAllocator __jam;
