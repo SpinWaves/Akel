@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 08/09/2021
+// UPDATED : 13/09/2021
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -75,6 +75,7 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
+#include <cstdarg>
 
 // Other includes
 #include <exception>
