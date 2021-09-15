@@ -1,14 +1,15 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 13/09/2021
+// UPDATED : 14/09/2021
 
 #include <Core/core.h>
-#include <Utils/utils.h>
 
 namespace Ak::Core
 {
 	void log::Init() // Remove ten days old files
 	{
+		lockThreads(mutex);
+
 		std::string name = "";
 		int date = 0;
 		size_t finder = 0;
@@ -41,10 +42,14 @@ namespace Ak::Core
 			_out << std::endl;
 			_out.close();
 		}
+
+		unlockThreads(mutex);
 	}
 
     void log::report(enum LogType type, std::string message, ...)
     {
+		lockThreads(mutex);
+
 		char buffer[message.length() + 255];
 		va_list args;
 		va_start(args, message);
@@ -71,10 +76,14 @@ namespace Ak::Core
             std::set_terminate(TERMINATE);
             std::terminate();
         }
+
+		unlockThreads(mutex);
 	}
 
     void log::report(std::string message, ...)
     {
+		lockThreads(mutex);
+
 		char buffer[message.length() + 255];
 		va_list args;
 		va_start(args, message);
@@ -87,6 +96,8 @@ namespace Ak::Core
             _out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- "<< buffer << std::endl;  // No need to flush, std::endl does it
 			_out.close();
 		}
+
+		unlockThreads(mutex);
     }
 
     void log::TERMINATE()

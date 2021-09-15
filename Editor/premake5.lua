@@ -4,6 +4,7 @@ project "Editor"
 	cppdialect "C++17"
 	staticruntime "on"
 	architecture "x86_64"
+	buildoptions "-O3"
 	icon "../Ressources/logo.ico"
 
 	targetdir ("../build/" .. outputdir)
@@ -45,4 +46,3 @@ project "Editor"
 
     filter "configurations:Release"
         defines "AK_EDITOR_RELEASE"
-        optimize "On"

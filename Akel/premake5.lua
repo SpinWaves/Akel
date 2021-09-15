@@ -11,6 +11,7 @@ project "Akel"
 	pchsource "src/Akpch.cpp"
 	flags "NoPCH"
 	linkoptions "-shared"
+	buildoptions "-O3"
 
 	filter "system:windows"
 		targetdir ("../libs/lib/Windows")
@@ -53,4 +54,3 @@ project "Akel"
 
     filter "configurations:Release"
         defines "AK_RELEASE"
-        optimize "On"

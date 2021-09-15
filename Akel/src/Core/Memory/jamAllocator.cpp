@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 11/09/2021
+// UPDATED : 15/09/2021
 
 #include <Core/core.h>
 
@@ -11,7 +11,7 @@ namespace Ak
         if(_heap != nullptr)
             return;
 
-        #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
               InitializeCriticalSection(&mutex);
         #endif
 
@@ -19,7 +19,7 @@ namespace Ak
         _heapSize = Size;
         _memUsed = 0;
         _end = (char*)_heap + _heapSize;
-        _allocOffsets.clear();
+
 
         lockThreads(mutex);
 
@@ -35,14 +35,13 @@ namespace Ak
     {
         lockThreads(mutex);
 
-        _heap = realloc(_heap, Size);
+
         _heapSize = Size;
         _end = (char*)_heap + _heapSize;
-
-        unlockThreads(mutex);
-
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
+
+        unlockThreads(mutex);
     }
 
     bool JamAllocator::canHold(size_t Size)
@@ -79,21 +78,6 @@ namespace Ak
     	if(ptr > _heap && ptr < _end)
     		return true;
     	return false;
-    }
-
-    void JamAllocator::add_block(block* newBlock)
-    {
-    	newBlock->next = nullptr;
-        if(_head == nullptr)
-    	{
-    		_head = newBlock;
-    		_tail = _head;
-    	}
-    	else
-    	{
-            _tail->next = newBlock;
-    		_tail = newBlock;
-    	}
     }
 
     JamAllocator::~JamAllocator()

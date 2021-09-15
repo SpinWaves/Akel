@@ -1,11 +1,12 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 13/09/2021
+// UPDATED : 14/09/2021
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
 
 #include <Akpch.h>
+#include <Utils/utils.h>
 
 enum LogType
 {
@@ -31,6 +32,7 @@ namespace Ak::Core
             static void TERMINATE();
 			inline static std::ofstream _out;
 			inline static std::string _type;
+            inline static MutexHandel mutex;
     };
 }
 
