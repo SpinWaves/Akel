@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 15/09/2021
+// UPDATED : 16/09/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -33,7 +33,7 @@ namespace Ak
 
         private:
 
-            struct block
+            struct flag
             {
                 size_t size = 0;
                 unsigned int offset = 0;
@@ -42,12 +42,13 @@ namespace Ak
             size_t _heapSize = 0;
             size_t _memUsed = 0;
             std::vector<void*> _resises;
-            void* _end = nullptr;
+
             void* _heap = nullptr;
+            
             bool _autoResize = false;
             int _allocator_number = 0;
-            std::vector<block*> _freeSpaces;
-            std::vector<block*> _usedSpaces;
+            std::vector<flag*> _freeSpaces;
+            std::vector<flag*> _usedSpaces;
 
             inline static MutexHandel mutex;
     };

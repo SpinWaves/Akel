@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 26/06/2021
-// UPDATED : 24/07/2021
+// UPDATED : 17/09/2021
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -24,7 +24,7 @@
 #endif
 
 #if _WIN32 || _WIN64
-	#define Ak_PLATFORM_WINDOWS
+	#define AK_PLATFORM_WINDOWS
 	#if _WIN64
 		#define AK_64BITS
 	#else

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/08/2021
-// UPDATED : 11/09/2021
+// UPDATED : 17/09/2021
 
 #ifndef __AK_AUDIO_MANAGER__
 #define __AK_AUDIO_MANAGER__
@@ -33,7 +33,7 @@ namespace Ak
             ~AudioManager() = delete;
 
         private:
-            static inline unique_ptr_w<OpenAL> _al;
+            static inline OpenAL* _al;
     };
 }
 

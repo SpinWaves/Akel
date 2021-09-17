@@ -3,11 +3,10 @@
 </p>
 
 # ELTM
-ELTM (Extension Language for Text Management) is a C++ extension language for C++ that allows you to manage your project texts more easily
+ELTM (Extension Language for Text Management) is a C++ extension language that allows you to manage your project texts more easily
 with Akel.
 Its use is not dissociable from C++ because it needs an instanciated context
-context to use it. It is extremely simple and requires little time to
-to learn it.
+context to use it. It is extremely simple and requires little time to learn it.
 
 ===========================================================
 

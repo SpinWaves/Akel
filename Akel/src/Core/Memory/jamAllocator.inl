@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 15/09/2021
+// UPDATED : 17/09/2021
 
 #include <Core/Memory/jamAllocator.h>
 
@@ -32,56 +32,53 @@ namespace Ak
 
         /**
          * Start looking in the middle of the vector and go down to find the best
-         * size if the pointed block is too big or up if the pointed block is too small
+         * size if the pointed flag is too big or up if the pointed flag is too small
          */
-        std::vector<block*>::iterator it = _freeSpaces.begin() + _freeSpaces.size() / 2;
-        while(it != _freeSpaces.end() || it != _freeSpaces.begin())
+        if(!_freeSpaces.empty())
         {
-            if((*it)->size == sizeType) // We found a perfect sized block !
+            std::vector<flag*>::iterator it = _freeSpaces.begin() + (int)(_freeSpaces.size() / 2);
+            while(it != _freeSpaces.end() || it != _freeSpaces.begin())
             {
-                ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::block));
-                break;
-            }
-            else if((*it)->size > sizeType)
-            {
-                it--;
-                if((*it)->size == sizeType)
+                if((*it)->size == sizeType) // We found a perfect sized flag !
                 {
-                    ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::block));
-                    break;
-                }
-                else if((*it)->size < sizeType)
-                {
-                    it++;
-                    ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::block));
-                    break;
-                }
-            }
-            else if((*it)->size < sizeType)
-            {
-                it++;
-                if((*it)->size == sizeType)
-                {
-                    ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::block));
+                    ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag));
+                    _usedSpaces.push_back(*it);
+                    _freeSpaces.erase(it);
                     break;
                 }
                 else if((*it)->size > sizeType)
                 {
                     it--;
-                    ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::block));
-                    break;
+                    if((*it)->size < sizeType)
+                    {
+                        it++;
+                        ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag));
+                        _usedSpaces.push_back(*it);
+                        _freeSpaces.erase(it);
+                        break;
+                    }
+                }
+                else if((*it)->size < sizeType)
+                {
+                    it++;
+                    if((*it)->size > sizeType)
+                    {
+                        ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag));
+                        _usedSpaces.push_back(*it);
+                        _freeSpaces.erase(it);
+                        break;
+                    }
                 }
             }
         }
-
-        if(ptr == nullptr) // If we haven't found free block
+        if(ptr == nullptr) // If we haven't found free flag
         {
-            JamAllocator::block* block_ptr = static_cast<block*>((void*)(reinterpret_cast<uintptr_t>(_heap) + _memUsed)); // We create a new block
-            block_ptr->size = sizeType;
-            block_ptr->offset = _memUsed;
-            _usedSpaces.push_back(block_ptr);
-            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(JamAllocator::block));
-            _memUsed += sizeType + sizeof(JamAllocator::block);
+            JamAllocator::flag* flag_ptr = static_cast<flag*>((void*)(reinterpret_cast<uintptr_t>(_heap) + _memUsed)); // We create a new flag
+            flag_ptr->size = sizeType;
+            flag_ptr->offset = _memUsed;
+            _usedSpaces.push_back(flag_ptr);
+            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(JamAllocator::flag));
+            _memUsed += sizeType + sizeof(JamAllocator::flag);
         }
 
         unlockThreads(mutex);
@@ -104,78 +101,93 @@ namespace Ak
         if(std::is_class<T>::value)
             ptr->~T();
 
-        block* block_ptr = nullptr;
+        flag* flag_ptr = nullptr;
 
         lockThreads(mutex);
 
-        for(int i = 0; i < _usedSpaces.size(); i++)
+        for(auto it = _usedSpaces.begin(); it != _usedSpaces.end(); it++)
         {
-            if(ptr == (void*)((uintptr_t)_usedSpaces[i] + sizeof(JamAllocator::block)))
+            if(ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag)) && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + (*(it + 1))->offset + sizeof(JamAllocator::flag)))
             {
-                block_ptr = _usedSpaces[i];
-                _usedSpaces.erase(_usedSpaces.begin() + i);
+                flag_ptr = *it;
+                _usedSpaces.erase(it);
                 break;
             }
         }
 
-        size_t size = block_ptr->size;
-        if(size > _freeSpaces[_freeSpaces.size() / 4]->size) // If size of block to move is size is less than the first quarter of the free blocks we do a simple iteration
+        size_t sizeType = flag_ptr->size;
+        if(_freeSpaces.empty())
         {
-            std::vector<block*>::iterator it = _freeSpaces.begin() + _freeSpaces.size() / 2;
-            while(it != _freeSpaces.begin() || it != _freeSpaces.end())
+            _freeSpaces.push_back(flag_ptr);
+            unlockThreads(mutex);
+            ptr = nullptr;
+            return;
+        }
+        else if(_freeSpaces.size() >= 10)
+        {
+            if(sizeType > _freeSpaces[(int)(_freeSpaces.size() / 4)]->size) // If size of flag to move is size is less than the first quarter of the free flags we do a simple iteration
             {
-                if((*it)->size == size)
+                std::vector<JamAllocator::flag*>::iterator it = _freeSpaces.begin() + (int)(_freeSpaces.size() / 2);
+                while(it != _freeSpaces.begin() || it != _freeSpaces.end())
                 {
-                    _freeSpaces.insert(it, block_ptr);
-                    break;
-                }
-                else if((*it)->size > size)
-                {
-                    it--;
-                    if((*it)->size == size)
+                    if((*it)->size == sizeType)
                     {
-                        _freeSpaces.insert(it, block_ptr);
+                        _freeSpaces.insert(it, flag_ptr);
                         break;
                     }
-                    else if((*it)->size < size)
-                    {
-                        it++;
-                        _freeSpaces.insert(it, block_ptr);
-                        break;
-                    }
-                }
-                else if((*it)->size < size)
-                {
-                    it++;
-                    if((*it)->size == size)
-                    {
-                        _freeSpaces.insert(it, block_ptr);
-                        break;
-                    }
-                    else if((*it)->size > size)
+                    else if((*it)->size > sizeType)
                     {
                         it--;
-                        _freeSpaces.insert(it, block_ptr);
-                        break;
+                        if((*it)->size == sizeType)
+                        {
+                            _freeSpaces.insert(it, flag_ptr);
+                            break;
+                        }
+                        else if((*it)->size < sizeType)
+                        {
+                            it++;
+                            _freeSpaces.insert(it, flag_ptr);
+                            break;
+                        }
+                    }
+                    else if((*it)->size < sizeType)
+                    {
+                        it++;
+                        if((*it)->size == sizeType)
+                        {
+                            _freeSpaces.insert(it, flag_ptr);
+                            break;
+                        }
+                        else if((*it)->size > sizeType)
+                        {
+                            it--;
+                            _freeSpaces.insert(it, flag_ptr);
+                            break;
+                        }
                     }
                 }
+                unlockThreads(mutex);
+
+                ptr = nullptr;
+                return;
             }
         }
-        else
+
+        debugPrint(_freeSpaces.size());
+
+        for(std::vector<JamAllocator::flag*>::iterator it = _freeSpaces.begin(); it != _freeSpaces.end(); it++)
         {
-            for(auto it = _freeSpaces.begin(); it < _freeSpaces.end(); it++)
+            debugPrint(*it);
+            if((*it)->size == sizeType)
             {
-                if((*it)->size == size)
-                {
-                    _freeSpaces.insert(it, block_ptr);
-                    break;
-                }
-                else if((*it)->size > size)
-                {
-                    it--;
-                    _freeSpaces.insert(it, block_ptr);
-                    break;
-                }
+                _freeSpaces.insert(it, flag_ptr);
+                break;
+            }
+            else if((*it)->size > sizeType)
+            {
+                it--;
+                _freeSpaces.insert(it, flag_ptr);
+                break;
             }
         }
 

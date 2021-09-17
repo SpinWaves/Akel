@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 15/09/2021
+// UPDATED : 16/09/2021
 
 #include <Core/core.h>
 
@@ -18,8 +18,9 @@ namespace Ak
         _heap = malloc(Size);
         _heapSize = Size;
         _memUsed = 0;
-        _end = (char*)_heap + _heapSize;
 
+        _freeSpaces.clear();
+        _usedSpaces.clear();
 
         lockThreads(mutex);
 
@@ -36,8 +37,7 @@ namespace Ak
         lockThreads(mutex);
 
 
-        _heapSize = Size;
-        _end = (char*)_heap + _heapSize;
+        //_heapSize = Size;
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
 
@@ -66,7 +66,7 @@ namespace Ak
         unlockThreads(mutex);
 
         #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-            DeleteCriticalSection(&mutex);
+            DeleteCriticalSection(&mutex);  // Not thread safe ! TODO !!
         #endif
 
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
@@ -75,7 +75,7 @@ namespace Ak
 
     bool JamAllocator::contains(void* ptr)
     {
-    	if(ptr > _heap && ptr < _end)
+    	if(ptr > _heap && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + _heapSize))
     		return true;
     	return false;
     }

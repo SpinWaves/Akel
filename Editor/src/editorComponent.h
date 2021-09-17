@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 10/09/2021
+// UPDATED : 17/09/2021
 
 #ifndef __AK_EDITOR_COMPONENT__
 #define __AK_EDITOR_COMPONENT__
@@ -18,7 +18,7 @@ class EditorComponent : public Ak::ImGuiComponent
 		void onEvent(Ak::Input& input) override;
 		void onQuit() override;
 
-		~EditorComponent() = default;
+		virtual ~EditorComponent() { std::cout << "test" << std::endl; }
 
 	private:
 		void drawMainMenuBar();
