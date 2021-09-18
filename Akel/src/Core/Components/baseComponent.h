@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 06/07/2021
+// UPDATED : 18/09/2021
 
 #ifndef __AK_BASE_COMPONENT__
 #define __AK_BASE_COMPONENT__
@@ -22,7 +22,7 @@ namespace Ak
 			virtual void onQuit() {};
 
 			const char* getName();
-			~Component() = default;
+			virtual ~Component() = default;
 
 		protected:
 			const char* _name;
@@ -30,4 +30,3 @@ namespace Ak
 }
 
 #endif // __AK_BASE_COMPONENT__
-

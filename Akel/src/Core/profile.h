@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 26/06/2021
-// UPDATED : 17/09/2021
+// UPDATED : 18/09/2021
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -23,8 +23,9 @@
 	#define AK_FUNC_SIG "Unknown function"
 #endif
 
-#if _WIN32 || _WIN64
+#if defined(_WIN32) || defined(_WIN64)
 	#define AK_PLATFORM_WINDOWS
+	#define forceinline __forceinline
 	#if _WIN64
 		#define AK_64BITS
 	#else
@@ -42,8 +43,10 @@
 
 #ifdef __linux__
 	#define AK_PLATFORM_LINUX
+	#define forceinline __attribute__((always_inline))
 #elif defined(__APPLE__) || defined(__MACH__)
 	#define AK_PLATFORM_OSX
+	#define forceinline __attribute__((always_inline))
 #endif
 
 #endif // __AK_PROFILE_CORE__

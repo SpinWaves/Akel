@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 17/09/2021
+// UPDATED : 18/09/2021
 
 #include <Core/Memory/jamAllocator.h>
 
@@ -173,11 +173,8 @@ namespace Ak
             }
         }
 
-        debugPrint(_freeSpaces.size());
-
         for(std::vector<JamAllocator::flag*>::iterator it = _freeSpaces.begin(); it != _freeSpaces.end(); it++)
         {
-            debugPrint(*it);
             if((*it)->size == sizeType)
             {
                 _freeSpaces.insert(it, flag_ptr);
@@ -185,6 +182,11 @@ namespace Ak
             }
             else if((*it)->size > sizeType)
             {
+                if(it == _freeSpaces.begin())
+                {
+                    _freeSpaces.insert(_freeSpaces.begin(), flag_ptr);
+                    break;
+                }
                 it--;
                 _freeSpaces.insert(it, flag_ptr);
                 break;

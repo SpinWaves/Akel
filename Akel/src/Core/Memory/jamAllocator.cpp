@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 16/09/2021
+// UPDATED : 18/09/2021
 
 #include <Core/core.h>
 
@@ -44,14 +44,14 @@ namespace Ak
         unlockThreads(mutex);
     }
 
-    bool JamAllocator::canHold(size_t Size)
+    forceinline bool JamAllocator::canHold(size_t Size)
     {
         if(Size > _heapSize - _memUsed)
             return false;
         return true;
     }
 
-    void JamAllocator::autoResize(bool set)
+    forceinline void JamAllocator::autoResize(bool set)
     {
         _autoResize = set;
     }
@@ -73,7 +73,7 @@ namespace Ak
         Core::ProjectFile::setIntValue(key, _memUsed);
     }
 
-    bool JamAllocator::contains(void* ptr)
+    forceinline bool JamAllocator::contains(void* ptr)
     {
     	if(ptr > _heap && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + _heapSize))
     		return true;

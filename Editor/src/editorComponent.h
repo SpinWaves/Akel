@@ -18,7 +18,7 @@ class EditorComponent : public Ak::ImGuiComponent
 		void onEvent(Ak::Input& input) override;
 		void onQuit() override;
 
-		virtual ~EditorComponent() { std::cout << "test" << std::endl; }
+		~EditorComponent() = default;
 
 	private:
 		void drawMainMenuBar();
