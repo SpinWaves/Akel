@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/08/2021
-// UPDATED : 17/09/2021
+// UPDATED : 19/09/2021
 
 #include <Audio/audioManager.h>
 
@@ -8,7 +8,7 @@ namespace Ak
 {
     void AudioManager::initAudioManager()
     {
-        _al = custom_malloc<OpenAL>();
+        _al = make_unique_ptr_w<OpenAL>(custom_malloc<OpenAL>());
         _al->initOAL();
     }
 
@@ -45,6 +45,6 @@ namespace Ak
     void AudioManager::shutdownAudioManager()
     {
         _al->shutdownOAL();
-        custom_free(_al);
+        _al.reset(nullptr); // freeing _al pointer
     }
 }

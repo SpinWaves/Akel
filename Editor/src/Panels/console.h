@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 08/07/2021
-// UPDATED : 04/08/2021
+// UPDATED : 19/09/2021
 
 #ifndef __AK_EDITOR_CONSOLE__
 #define __AK_EDITOR_CONSOLE__
@@ -35,7 +35,7 @@ class Console
 
 		int _width, _height = 0;
 
-		audioFile ee = 0;
+		Ak::audioFile ee = 0;
 };
 
 #endif // __AK_EDITOR_CONSOLE__

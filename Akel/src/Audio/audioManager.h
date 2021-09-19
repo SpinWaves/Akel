@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/08/2021
-// UPDATED : 17/09/2021
+// UPDATED : 19/09/2021
 
 #ifndef __AK_AUDIO_MANAGER__
 #define __AK_AUDIO_MANAGER__
@@ -9,10 +9,10 @@
 #include <Audio/openAL.h>
 #include <Core/Memory/uniquePtrWrapper.h>
 
-using audioFile = ALuint;
-
 namespace Ak
 {
+    using audioFile = ALuint;
+
     class AudioManager
     {
         public:
@@ -33,7 +33,7 @@ namespace Ak
             ~AudioManager() = delete;
 
         private:
-            static inline OpenAL* _al;
+            static inline unique_ptr_w<OpenAL> _al;
     };
 }
 

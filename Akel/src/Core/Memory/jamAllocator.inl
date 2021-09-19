@@ -86,6 +86,8 @@ namespace Ak
         if(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
 
+        std::cout << ptr << std::endl;
+
     	return ptr;
     }
 
@@ -105,14 +107,27 @@ namespace Ak
 
         lockThreads(mutex);
 
+        for(JamAllocator::flag* elem : _usedSpaces)
+        {
+            debugPrint(elem + sizeof(JamAllocator::flag));
+        }
+        std::cout << std::endl;
+
         for(auto it = _usedSpaces.begin(); it != _usedSpaces.end(); it++)
         {
-            if(ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag)) && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + (*(it + 1))->offset + sizeof(JamAllocator::flag)))
+            if(ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag)) && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + (*(it + 1))->offset))
             {
                 flag_ptr = *it;
                 _usedSpaces.erase(it);
                 break;
             }
+        }
+
+        if(!flag_ptr)
+        {
+            Core::log::report(ERROR, "JamAllocator : unable to find block for ptr %p", ptr);
+            unlockThreads(mutex);
+            return;
         }
 
         size_t sizeType = flag_ptr->size;

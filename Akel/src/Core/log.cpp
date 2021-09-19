@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 14/09/2021
+// UPDATED : 18/09/2021
 
 #include <Core/core.h>
 
@@ -53,7 +53,7 @@ namespace Ak::Core
 		char buffer[message.length() + 255];
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, message.c_str(), args);
+		vsprintf(buffer, std::move(message).c_str(), args);
 		va_end(args);
 
 		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
@@ -61,14 +61,14 @@ namespace Ak::Core
 		{
 			switch(type)
 			{
-			case MESSAGE: std::cout << blue << "Akel log: " << buffer << def << '\n'; _type = "Message: "; break;
-			case WARNING: std::cout << magenta << "Akel log: " << buffer << def << '\n'; _type = "Warning: "; break;
-			case ERROR: std::cout << red << "Akel log: " << buffer << def << '\n'; _type = "Error: "; break;
-			case FATAL_ERROR: std::cout << red << "Akel log: " << buffer << def << '\n'; _type = "Fatal Error: "; break;
+				case MESSAGE: std::cout << blue << "Akel log: " << buffer << def << '\n'; _type = "Message: "; break;
+				case WARNING: std::cout << magenta << "Akel log: " << buffer << def << '\n'; _type = "Warning: "; break;
+				case ERROR: std::cout << red << "Akel log: " << buffer << def << '\n'; _type = "Error: "; break;
+				case FATAL_ERROR: std::cout << red << "Akel log: " << buffer << def << '\n'; _type = "Fatal Error: "; break;
 
 				default: break;
 			}
-            _out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << _type << message << std::endl; // No need to flush, std::endl does it
+            _out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << _type << buffer << std::endl; // No need to flush, std::endl does it
 			_out.close();
 		}
         if(type == FATAL_ERROR)
