@@ -86,8 +86,6 @@ namespace Ak
         if(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
 
-        std::cout << ptr << std::endl;
-
     	return ptr;
     }
 
@@ -107,15 +105,10 @@ namespace Ak
 
         lockThreads(mutex);
 
-        for(JamAllocator::flag* elem : _usedSpaces)
-        {
-            debugPrint(elem + sizeof(JamAllocator::flag));
-        }
-        std::cout << std::endl;
-
         for(auto it = _usedSpaces.begin(); it != _usedSpaces.end(); it++)
         {
-            if(ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag)) && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + (*(it + 1))->offset))
+            if((ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag)) && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + (*(it + 1))->offset))
+               || (it == _usedSpaces.end() - 1 && ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag))))
             {
                 flag_ptr = *it;
                 _usedSpaces.erase(it);
