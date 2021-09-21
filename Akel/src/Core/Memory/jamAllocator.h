@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 16/09/2021
+// UPDATED : 21/09/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -16,7 +16,6 @@ namespace Ak
             JamAllocator() = default;
 
             void init(size_t Size);
-            void collect();
             bool contains(void* ptr);
             bool canHold(size_t Size);
             void autoResize(bool set);
@@ -44,7 +43,7 @@ namespace Ak
             std::vector<void*> _resises;
 
             void* _heap = nullptr;
-            
+
             bool _autoResize = false;
             int _allocator_number = 0;
             std::vector<flag*> _freeSpaces;

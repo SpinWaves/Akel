@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 18/09/2021
+// UPDATED : 21/09/2021
 
 #include <Core/core.h>
 
@@ -15,7 +15,7 @@ namespace Ak
               InitializeCriticalSection(&mutex);
         #endif
 
-        _heap = malloc(Size);
+        _heap = std::malloc(Size);
         _heapSize = Size;
         _memUsed = 0;
 
@@ -36,10 +36,18 @@ namespace Ak
     {
         lockThreads(mutex);
 
+        if(Size < _heapSize)
+        {
+            // TODO
+        }
+        else if(Size > _heapSize)
+        {
+            _resises.push_back(std::malloc(Size - _heapSize));
 
-        //_heapSize = Size;
-        std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
-        Core::ProjectFile::setIntValue(key, Size);
+            _heapSize = Size;
+            std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
+            Core::ProjectFile::setIntValue(key, Size);
+        }
 
         unlockThreads(mutex);
     }

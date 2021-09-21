@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 18/09/2021
+// UPDATED : 21/09/2021
 
 #include <Core/Memory/jamAllocator.h>
 
@@ -84,7 +84,7 @@ namespace Ak
         unlockThreads(mutex);
 
         if(std::is_class<T>::value)
-            ::new ((void*)ptr) T(std::forward<Args>(args)...);
+            new ((void*)ptr) T(std::forward<Args>(args)...);
 
     	return ptr;
     }
