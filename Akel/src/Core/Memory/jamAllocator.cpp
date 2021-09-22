@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 21/09/2021
+// UPDATED : 22/09/2021
 
 #include <Core/core.h>
 
@@ -66,19 +66,18 @@ namespace Ak
 
     void JamAllocator::destroy()
     {
+        if(_heap == nullptr)
+            return;
+
         lockThreads(mutex);
 
         std::free(_heap);
         _heap = nullptr;
 
-        unlockThreads(mutex);
-
-        #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-            DeleteCriticalSection(&mutex);  // Not thread safe ! TODO !!
-        #endif
-
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, _memUsed);
+
+        unlockThreads(mutex);   
     }
 
     forceinline bool JamAllocator::contains(void* ptr)
@@ -90,7 +89,10 @@ namespace Ak
 
     JamAllocator::~JamAllocator()
     {
-        if(_heap != nullptr)
-            destroy();
+        destroy();
+
+        #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+            DeleteCriticalSection(&mutex);
+        #endif
     }
 }
