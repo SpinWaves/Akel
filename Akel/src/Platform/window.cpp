@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 01/08/2021
+// UPDATED : 22/09/2021
 
 #include <Platform/platform.h>
 
@@ -8,16 +8,16 @@ namespace Ak
 {
 	SDL_DisplayMode DM;
 
-    Window::Window() : Instance(), Component("__window") {}
+    WindowComponent::WindowComponent() : Instance(), Component("__window") {}
 
-	void Window::onAttach()
+	void WindowComponent::onAttach()
 	{
 		if(_window == nullptr)
 			create();
         Instance::init(_window, "vert.spv", "frag.spv");
 	}
 
-	void Window::create()
+	void WindowComponent::create()
 	{
         _position.SET(0, 0);
         _size.SET(0, 0);
@@ -32,17 +32,17 @@ namespace Ak
         SDL_SetWindowIcon(_window, _icon);
 	}
 
-	void Window::update()
+	void WindowComponent::update()
 	{
 		render();
 	}
 
-	void Window::onEvent(Input& input)
+	void WindowComponent::onEvent(Input& input)
 	{
 		if(input.getInKey(AK_KEY_ESCAPE))
 			input.finish();
 	}
-	void Window::onQuit()
+	void WindowComponent::onQuit()
 	{
 		if(Instance::_instanceInitialized)
         	Instance::cleanup();
@@ -51,7 +51,7 @@ namespace Ak
 	}
 
 	// Functions for window settings that use SDL2 functions. They are here to avoid you to link SDL2
-	void Window::setMaxSize(int x, int y)
+	void WindowComponent::setMaxSize(int x, int y)
 	{
 		SDL_GetCurrentDisplayMode(0, &DM);
 		if(x == AK_WINDOW_MAX_SIZE)
@@ -60,7 +60,7 @@ namespace Ak
 			y = DM.h;
 		SDL_SetWindowMaximumSize(_window, x, y);
 	}
-	void Window::setMinSize(int x, int y)
+	void WindowComponent::setMinSize(int x, int y)
 	{
 		SDL_GetCurrentDisplayMode(0, &DM);
 		if(x == AK_WINDOW_MAX_SIZE)
@@ -69,7 +69,7 @@ namespace Ak
 			y = DM.h;
 		SDL_SetWindowMinimumSize(_window, x, y);
 	}
-	void Window::setPos(int x, int y)
+	void WindowComponent::setPos(int x, int y)
 	{
 		if(x == AK_WINDOW_POS_CENTER)
 			x = SDL_WINDOWPOS_CENTERED;
@@ -77,7 +77,7 @@ namespace Ak
 			y = SDL_WINDOWPOS_CENTERED;
 		SDL_SetWindowPosition(_window, x, y);
 	}
-	void Window::setSize(int x, int y)
+	void WindowComponent::setSize(int x, int y)
 	{
 		SDL_GetCurrentDisplayMode(0, &DM);
 		if(x == AK_WINDOW_MAX_SIZE)
@@ -86,60 +86,60 @@ namespace Ak
 			y = DM.h;
 		SDL_SetWindowSize(_window, x, y);
 	}
-	void Window::setFullscreen(SDL_bool value)
+	void WindowComponent::setFullscreen(SDL_bool value)
 	{
 		SDL_SetWindowFullscreen(_window, value);
 	}
-	void Window::setMaximize(SDL_bool value)
+	void WindowComponent::setMaximize(SDL_bool value)
 	{
 		if(value == SDL_TRUE)
 			SDL_MaximizeWindow(_window);
 		else
 			SDL_MinimizeWindow(_window);
 	}
-	void Window::setBordered(SDL_bool value)
+	void WindowComponent::setBordered(SDL_bool value)
 	{
 		SDL_SetWindowBordered(_window, value);
 	}
-	void Window::setResizable(SDL_bool value)
+	void WindowComponent::setResizable(SDL_bool value)
 	{
 		SDL_SetWindowResizable(_window, value);
 	}
-	void Window::setShow(SDL_bool value)
+	void WindowComponent::setShow(SDL_bool value)
 	{
 		if(value)
 			SDL_ShowWindow(_window);
 		else
 			SDL_HideWindow(_window);
 	}
-	void Window::setBrightness(float value)
+	void WindowComponent::setBrightness(float value)
 	{
 		SDL_SetWindowBrightness(_window, value);
 	}
-	void Window::setOpacity(float value)
+	void WindowComponent::setOpacity(float value)
 	{
 		SDL_SetWindowOpacity(_window, value);
 	}
-	void Window::setTitle(const char* value)
+	void WindowComponent::setTitle(const char* value)
 	{
 		SDL_SetWindowTitle(_window, value);
 	}
-	void Window::setIcon(const char* value)
+	void WindowComponent::setIcon(const char* value)
 	{
 		_icon = IMG_Load(value);
 		SDL_SetWindowIcon(_window, _icon);
 	}
 
     // ================ Getters ================ //
-    std::string Window::getTitle()
+    std::string WindowComponent::getTitle()
     {
         return _title;
     }
-    Maths::Vec2<uint16_t> Window::getPosition()
+    Maths::Vec2<uint16_t> WindowComponent::getPosition()
     {
         return _position;
     }
-    Maths::Vec2<uint16_t> Window::getSize()
+    Maths::Vec2<uint16_t> WindowComponent::getSize()
     {
 		int x, y = 0;
 		SDL_GetWindowSize(_window, &x, &y);
@@ -147,5 +147,5 @@ namespace Ak
         return _size;
     }
 
-    Window::~Window(){}
+    WindowComponent::~WindowComponent(){}
 }

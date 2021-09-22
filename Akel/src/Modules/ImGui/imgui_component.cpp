@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 21/08/2021
+// UPDATED : 22/09/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -39,18 +39,18 @@ namespace Ak
 	static ImVec4 clear_color = ImVec4(0.157f, 0.165f, 0.211f, 1.0f);
 	static ImGui_ImplVulkanH_Window* _wd = &g_MainWindowData;
 
-	ImGuiComponent::ImGuiComponent(const char* title) : Window()
+	ImGuiComponent::ImGuiComponent(const char* title) : WindowComponent()
 	{
 		_title = title;
 	}
 
 	void ImGuiComponent::onAttach()
 	{
-		Window::create();
-		Window::setSetting<title>(_title);
-		Window::setSetting<resizable>(true);
-		Window::setSetting<dimensions>(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
-		Window::setSetting<maximize>(true);
+		WindowComponent::create();
+		WindowComponent::setSetting<title>(_title);
+		WindowComponent::setSetting<resizable>(true);
+		WindowComponent::setSetting<dimensions>(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
+		WindowComponent::setSetting<maximize>(true);
 
 		// Setup Vulkan
 		uint32_t extensions_count = 0;

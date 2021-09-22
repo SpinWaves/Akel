@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 08/07/2021
+// UPDATED : 22/09/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -37,10 +37,10 @@ enum windowSetting
 
 namespace Ak
 {
-    class Window : public Instance, public Component
+    class WindowComponent : public Instance, public Component
     {
         public:
-            Window();
+            WindowComponent();
 
 			void onAttach() override;
 			void update() override;
@@ -110,7 +110,7 @@ namespace Ak
 				return _window;
 			}
 
-            virtual ~Window();
+            virtual ~WindowComponent();
 
 		protected:
 			void create();

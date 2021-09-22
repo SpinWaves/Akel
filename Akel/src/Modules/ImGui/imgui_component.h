@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 07/07/2021
+// UPDATED : 22/09/2021
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -10,7 +10,7 @@
 
 namespace Ak
 {
-	class ImGuiComponent : public Window
+	class ImGuiComponent : public WindowComponent
 	{
 		public:
 			ImGuiComponent(const char* title = "ImGui window");
@@ -32,4 +32,3 @@ namespace Ak
 }
 
 #endif // __AK_IMGUI_COMPONENT__
-

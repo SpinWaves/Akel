@@ -1,26 +1,26 @@
 #include "rectComponent.h"
 
-RectComponent::RectComponent() : Ak::Window() {}
+RectComponent::RectComponent() : Ak::WindowComponent() {}
 
 void RectComponent::onAttach()
 {
-    Ak::Window::create();
-    Ak::Window::setSetting<title>("Rectangle using Akel Engine");
-    Ak::Window::setSetting<dimensions>(1280, 750);
-    Ak::Window::setSetting<resizable>(false);
+    Ak::WindowComponent::create();
+    Ak::WindowComponent::setSetting<title>("Rectangle using Akel Engine");
+    Ak::WindowComponent::setSetting<dimensions>(1280, 750);
+    Ak::WindowComponent::setSetting<resizable>(false);
 }
 
 void RectComponent::onEvent(Ak::Input& input)
 {
-    Ak::Window::onEvent(input);
+    Ak::WindowComponent::onEvent(input);
 }
 
 void RectComponent::update()
 {
-    Ak::Window::update();
+    Ak::WindowComponent::update();
 }
 
 void RectComponent::onQuit()
 {
-    Ak::Window::onQuit();
+    Ak::WindowComponent::onQuit();
 }
