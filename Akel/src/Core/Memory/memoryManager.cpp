@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 11/09/2021
+// UPDATED : 22/09/2021
 
 #include <Utils/utils.h>
 #include <Core/core.h>
@@ -22,7 +22,7 @@ namespace Ak
             __fixed3.autoResize(true);
         #endif
             __jam.init(4096 * 4096);
-            __jam.autoResize(true);
+            __jam.auto_increase_size(true);
         }
     }
     void MemoryManager::end()
@@ -48,7 +48,7 @@ namespace Ak
         return _use;
     }
 
-    std::shared_ptr<MemoryManager::ControlUnit> MemoryManager::accesToControlUnit()
+    std::shared_ptr<MemoryManager::ControlUnit> MemoryManager::accessToControlUnit()
     {
         return control_unit;
     }

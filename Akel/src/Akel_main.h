@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 11/09/2021
+// UPDATED : 22/09/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
 	AK_BEGIN_SESSION("Shutdown");
 		bool freed = false;
-		for(auto jam : Ak::MemoryManager::accesToControlUnit()->jamStack)
+		for(auto jam : Ak::MemoryManager::accessToControlUnit()->jamStack)
 		{
 			if(jam->contains(app))
 			{
@@ -68,7 +68,7 @@ int main(int argc, char** argv)
 		}
 		if(!freed)
 		{
-			for(auto fixed : Ak::MemoryManager::accesToControlUnit()->fixedStack)
+			for(auto fixed : Ak::MemoryManager::accessToControlUnit()->fixedStack)
 			{
 				if(fixed->contains(app))
 				{

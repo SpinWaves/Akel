@@ -1,9 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 08/06/2021
-// UPDATED : 15/08/2021
-
-#ifndef __AK_EDITOR_APP__
-#define __AK_EDITOR_APP__
+// UPDATED : 22/09/2021
 
 #define AK_PROJECT_FILE_DIR std::string(Ak::Core::getMainDirPath() + "Editor")
 #define AK_PROJECT_FILE_NAME std::string("editor")
@@ -26,5 +23,3 @@ Ak::Application* Akel_main()
 {
 	return Ak::custom_malloc<Editor>();
 }
-
-#endif // __AK_EDITOR_APP__

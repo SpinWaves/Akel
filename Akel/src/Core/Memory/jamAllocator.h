@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 21/09/2021
+// UPDATED : 22/09/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -18,8 +18,8 @@ namespace Ak
             void init(size_t Size);
             bool contains(void* ptr);
             bool canHold(size_t Size);
-            void autoResize(bool set);
-            void resize(size_t Size);
+            void auto_increase_size(bool set);
+            void increase_size(size_t Size);
             void destroy();
 
             template <typename T = void, typename ... Args>
@@ -40,9 +40,10 @@ namespace Ak
 
             size_t _heapSize = 0;
             size_t _memUsed = 0;
-            std::vector<void*> _resises;
+            std::vector<std::pair<void*, unsigned int>> _resises;
 
             void* _heap = nullptr;
+            void* _heapEnd = nullptr;
 
             bool _autoResize = false;
             int _allocator_number = 0;

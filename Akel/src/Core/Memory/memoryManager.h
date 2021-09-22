@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 11/09/2021
+// UPDATED : 22/09/2021
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -30,7 +30,7 @@ namespace Ak
             static void useMemoryManager(bool set = true);
             static bool isMemoryManagerUsed();
 
-            static std::shared_ptr<ControlUnit> accesToControlUnit();
+            static std::shared_ptr<ControlUnit> accessToControlUnit();
 
             template <typename T = void, typename ... Args>
             static T* alloc(Args&& ... args);

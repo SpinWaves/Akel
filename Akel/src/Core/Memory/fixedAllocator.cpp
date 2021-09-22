@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 19/07/2021
-// UPDATED : 11/09/2021
+// UPDATED : 22/09/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -26,10 +26,10 @@ namespace Ak
 
         lockThreads(mutex);
 
-        _allocator_number = MemoryManager::accesToControlUnit()->fixedStack.size();
+        _allocator_number = MemoryManager::accessToControlUnit()->fixedStack.size();
         std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
-        MemoryManager::accesToControlUnit()->fixedStack.emplace_back(this);
+        MemoryManager::accessToControlUnit()->fixedStack.emplace_back(this);
 
         unlockThreads(mutex);
     }

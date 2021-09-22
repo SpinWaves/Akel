@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 10/09/2021
+// UPDATED : 22/09/2021
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -56,7 +56,7 @@ namespace Ak
 		for(auto elem : _components)
 		{
 			isCustomAlloc = false;
-			for(auto jam : MemoryManager::accesToControlUnit()->jamStack)
+			for(auto jam : MemoryManager::accessToControlUnit()->jamStack)
 			{
 				if(jam->contains(elem))
 				{
@@ -67,7 +67,7 @@ namespace Ak
 			}
 			if(!isCustomAlloc)
 			{
-				for(auto fixed : MemoryManager::accesToControlUnit()->fixedStack)
+				for(auto fixed : MemoryManager::accessToControlUnit()->fixedStack)
 				{
 					if(fixed->contains(elem))
 					{

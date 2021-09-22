@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 21/09/2021
+// UPDATED : 22/09/2021
 
 #include <Core/Memory/jamAllocator.h>
 
@@ -18,7 +18,7 @@ namespace Ak
         if(!canHold(sizeType))
         {
             if(_autoResize)
-                resize(_heapSize * (4/3));
+                increase_size(_heapSize * (4/3));
             else
             {
                 Core::log::report(ERROR, "Jam Allocator: the requested allocation is too large for the allocator, free up memory or increase the size of the allocator");

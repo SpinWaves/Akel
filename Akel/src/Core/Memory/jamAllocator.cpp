@@ -11,6 +11,8 @@ namespace Ak
         if(_heap != nullptr)
             return;
 
+        lockThreads(mutex);
+
         #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
               InitializeCriticalSection(&mutex);
         #endif
@@ -19,34 +21,35 @@ namespace Ak
 
         if(!_heap)
             Core::log::report(FATAL_ERROR, "JamAllocator : unable to allocate memory space for an allocator");
-        
+
         _heapSize = Size;
         _memUsed = 0;
+        _heapEnd = (void*)(reinterpret_cast<uintptr_t>(_heap) + _heapSize);
 
         _freeSpaces.clear();
         _usedSpaces.clear();
 
-        lockThreads(mutex);
-
-        _allocator_number = MemoryManager::accesToControlUnit()->jamStack.size();
+        _allocator_number = MemoryManager::accessToControlUnit()->jamStack.size();
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
-        MemoryManager::accesToControlUnit()->jamStack.push_back(this);
+        MemoryManager::accessToControlUnit()->jamStack.push_back(this);
 
         unlockThreads(mutex);
     }
 
-    void JamAllocator::resize(size_t Size)
+    void JamAllocator::increase_size(size_t Size)
     {
-        lockThreads(mutex);
-
         if(Size < _heapSize)
         {
-            // TODO
+            Core::log::report(WARNING, "JamAllocator : allocators are not supposed to reduce their size");
+            return;
         }
-        else if(Size > _heapSize)
+
+        lockThreads(mutex);
+
+        if(Size > _heapSize)
         {
-            _resises.push_back(std::malloc(Size - _heapSize));
+            _resises.push_back(std::make_pair(std::malloc(Size - _heapSize), Size - _heapSize));
 
             _heapSize = Size;
             std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
@@ -56,17 +59,26 @@ namespace Ak
         unlockThreads(mutex);
     }
 
+#pragma GCC diagnostic push
+// to avoid "warning: always_inline function might not be inlinable [-Wattributes]"
+#pragma GCC diagnostic ignored "-Wattributes"
+
     forceinline bool JamAllocator::canHold(size_t Size)
     {
-        if(Size > _heapSize - _memUsed)
-            return false;
-        return true;
+        return Size > _heapSize - _memUsed;
     }
 
-    forceinline void JamAllocator::autoResize(bool set)
+    forceinline void JamAllocator::auto_increase_size(bool set)
     {
         _autoResize = set;
     }
+
+    forceinline bool JamAllocator::contains(void* ptr)
+    {
+    	return ptr > _heap && ptr < _heapEnd;
+    }
+
+#pragma GCC diagnostic pop
 
     void JamAllocator::destroy()
     {
@@ -81,14 +93,7 @@ namespace Ak
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, _memUsed);
 
-        unlockThreads(mutex);   
-    }
-
-    forceinline bool JamAllocator::contains(void* ptr)
-    {
-    	if(ptr > _heap && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + _heapSize))
-    		return true;
-    	return false;
+        unlockThreads(mutex);
     }
 
     JamAllocator::~JamAllocator()
