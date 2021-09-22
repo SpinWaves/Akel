@@ -16,6 +16,10 @@ namespace Ak
         #endif
 
         _heap = std::malloc(Size);
+
+        if(!_heap)
+            Core::log::report(FATAL_ERROR, "JamAllocator : unable to allocate memory space for an allocator");
+        
         _heapSize = Size;
         _memUsed = 0;
 
