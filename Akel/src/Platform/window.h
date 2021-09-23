@@ -37,7 +37,7 @@ enum windowSetting
 
 namespace Ak
 {
-    class WindowComponent : public Instance, public Component
+    class WindowComponent : public Component
     {
         public:
             WindowComponent();
@@ -110,7 +110,7 @@ namespace Ak
 				return _window;
 			}
 
-            virtual ~WindowComponent();
+            ~WindowComponent() override;
 
 		protected:
 			void create();

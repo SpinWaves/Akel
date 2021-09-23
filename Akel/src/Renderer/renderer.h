@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 29/06/2021
+// UPDATED : 23/09/2021
 
 #ifndef __AK_RENDERER__
 #define __AK_RENDERER__
@@ -20,13 +20,14 @@ const int MAX_FRAMES_IN_FLIGHT = 2;
 #include <Renderer/rendering.h>
 #include <Renderer/validationLayers.h>
 
-#include <Core/Components/components.h>
+#include <Core/core.h>
 
 namespace Ak
 {
     class RendererComponent : public Component
     {
         public:
+            explicit RendererComponent(WindowComponent& window);
             explicit RendererComponent();
 
             void onAttach() override;
@@ -34,9 +35,16 @@ namespace Ak
             void onEvent(Ak::Input& input) override;
             void onQuit() override;
 
-            ~RendererComponent();
+            void setShader(std::string vertexShader, std::string fragmentShader);
+            void render_to_window(WindowComponent& window);
+
+            ~RendererComponent() = default;
 
         private:
+            unique_ptr_w<Instance> _instance;
+            std::string _vertexShader = Core::getMainDirPath() + "Ressources/Shaders/vert.spv";
+            std::string _fragmentShader = Core::getMainDirPath() + "Ressources/Shader/frag.spv";
+            SDL_Window* _window;
     };
 }
 

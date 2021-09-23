@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 22/09/2021
+// UPDATED : 23/09/2021
 
 #include <Platform/platform.h>
 
@@ -8,13 +8,12 @@ namespace Ak
 {
 	SDL_DisplayMode DM;
 
-    WindowComponent::WindowComponent() : Instance(), Component("__window") {}
+    WindowComponent::WindowComponent() : Component("__window") {}
 
 	void WindowComponent::onAttach()
 	{
 		if(_window == nullptr)
 			create();
-        Instance::init(_window, "vert.spv", "frag.spv");
 	}
 
 	void WindowComponent::create()
@@ -32,10 +31,7 @@ namespace Ak
         SDL_SetWindowIcon(_window, _icon);
 	}
 
-	void WindowComponent::update()
-	{
-		render();
-	}
+	void WindowComponent::update() {}
 
 	void WindowComponent::onEvent(Input& input)
 	{
@@ -44,8 +40,6 @@ namespace Ak
 	}
 	void WindowComponent::onQuit()
 	{
-		if(Instance::_instanceInitialized)
-        	Instance::cleanup();
         SDL_FreeSurface(_icon);
         SDL_DestroyWindow(_window);
 	}

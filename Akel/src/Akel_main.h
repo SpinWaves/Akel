@@ -19,6 +19,8 @@ int main(int argc, char** argv)
 	Ak::Core::log::Init();
 
 	AK_BEGIN_SESSION("Start");
+		Ak::Core::printEngineInfo();
+		
 		#if defined(AK_64BITS)
 			if(sizeof(void*) != 8)
 			{
