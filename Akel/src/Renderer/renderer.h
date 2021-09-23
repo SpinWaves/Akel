@@ -20,4 +20,24 @@ const int MAX_FRAMES_IN_FLIGHT = 2;
 #include <Renderer/rendering.h>
 #include <Renderer/validationLayers.h>
 
+#include <Core/Components/components.h>
+
+namespace Ak
+{
+    class RendererComponent : public Component
+    {
+        public:
+            explicit RendererComponent();
+
+            void onAttach() override;
+            void update() override;
+            void onEvent(Ak::Input& input) override;
+            void onQuit() override;
+
+            ~RendererComponent();
+
+        private:
+    };
+}
+
 #endif // __AK_RENDERER__

@@ -1,4 +1,3 @@
-
 #ifndef __AK_SANDBOX_RECT__
 #define __AK_SANDBOX_RECT__
 
