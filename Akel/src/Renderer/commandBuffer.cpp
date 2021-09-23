@@ -1,13 +1,13 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 29/06/2021
+// UPDATED : 23/09/2021
 
 #include <Renderer/renderer.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-	CommandBuffer::CommandBuffer() : Pipeline() {}
+	CommandBuffer::CommandBuffer() : Pipeline(), VertexBuffer() {}
 
     void CommandBuffer::createCommandPool()
     {
@@ -56,7 +56,14 @@ namespace Ak
             vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
                 vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
-                vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);
+
+                VkBuffer vertexBuffers[] = {vertexBuffer};
+                VkDeviceSize offsets[] = {0};
+                vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, vertexBuffers, offsets);
+
+                vkCmdBindIndexBuffer(commandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+
+                vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
             vkCmdEndRenderPass(commandBuffers[i]);
 

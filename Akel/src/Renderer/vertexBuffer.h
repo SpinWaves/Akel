@@ -1,9 +1,11 @@
 // This file is a part of Akel
 // CREATED : 22/09/2021
-// UPDATED : 22/09/2021
+// UPDATED : 23/09/2021
 
 #ifndef __AK_VK_VERTEX_BUFFER__
 #define __AK_VK_VERTEX_BUFFER__
+
+#include <Akpch.h>
 
 namespace Ak
 {
@@ -41,16 +43,18 @@ namespace Ak
         }
     };
 
-    class VertexBuffer
+    class VertexBuffer : virtual public LowestInheritance
     {
         public:
             VertexBuffer();
-            void createVertexBuffer();
+            void createVertexBuffer(std::vector& vertices);
             uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
             void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
             void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
-            void createIndexBuffer();
+            void createIndexBuffer(std::vector& indices);
+
+            void cleanupBuffers();
 
         private:
             VkBuffer vertexBuffer;

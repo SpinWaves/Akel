@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 22/09/2021
+// UPDATED : 23/09/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 
 	AK_BEGIN_SESSION("Start");
 		Ak::Core::printEngineInfo();
-		
+
 		#if defined(AK_64BITS)
 			if(sizeof(void*) != 8)
 			{

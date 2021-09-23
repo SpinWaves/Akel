@@ -3,7 +3,7 @@
 
 #include <Akel.h>
 
-class RectComponent : public Ak::WindowComponent, public Ak::RendererComponent
+class RectComponent : public Ak::WindowComponent, Ak::RendererComponent
 {
     public:
         explicit RectComponent();

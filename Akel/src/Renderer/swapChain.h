@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 28/06/2021
+// UPDATED : 23/09/2021
 
 #ifndef __AK_VK_SWAPCHAIN__
 #define __AK_VK_SWAPCHAIN__

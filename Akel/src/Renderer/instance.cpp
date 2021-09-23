@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 01/08/2021
+// UPDATED : 23/09/2021
 
 #include <Renderer/renderer.h>
 #include <Platform/platform.h>
@@ -26,6 +26,8 @@ namespace Ak
         createGraphicsPipeline(vertexShader, fragmentShader);
         createFramebuffers();
         createCommandPool();
+        createVertexBuffer();
+        createIndexBuffer();
         createCommandBuffers();
         createSemaphores();
 
@@ -156,8 +158,9 @@ namespace Ak
 
     void Instance::cleanup()
     {
-		std::cout << "test1000" << std::endl;
-        vkDeviceWaitIdle(device);
+        cleanupSwapChain();
+
+        cleanupBuffers();
 
         for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
@@ -168,26 +171,13 @@ namespace Ak
 
         vkDestroyCommandPool(device, commandPool, nullptr);
 
-        for(auto framebuffer : swapChainFramebuffers)
-        {
-            vkDestroyFramebuffer(device, framebuffer, nullptr);
-        }
-
-        vkDestroyPipeline(device, graphicsPipeline, nullptr);
-        vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-        vkDestroyRenderPass(device, renderPass, nullptr);
-
-        for(auto imageView : swapChainImageViews)
-        {
-            vkDestroyImageView(device, imageView, nullptr);
-        }
-
-        if(enableValidationLayers)
-            DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
-
-        vkDestroySwapchainKHR(device, swapChain, nullptr);
-        vkDestroySurfaceKHR(instance, surface, nullptr);
         vkDestroyDevice(device, nullptr);
+
+        if (enableValidationLayers) {
+            DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
+        }
+
+        vkDestroySurfaceKHR(instance, surface, nullptr);
         vkDestroyInstance(instance, nullptr);
     }
 }
