@@ -2,7 +2,7 @@
 // CREATED : 10/04/2021
 // UPDATED : 23/09/2021
 
-#include <Renderer/renderer.h>
+#include <Renderer/instance.h>
 #include <Platform/platform.h>
 #include <Utils/utils.h>
 #include <Core/core.h>
@@ -15,6 +15,16 @@ namespace Ak
     {
         window = win;
 
+		const std::vector<Vertex> vertices =
+		{
+		    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+		    {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+		    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+		    {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+		};
+
+		const std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
+
         createInstance();
         setupDebugMessenger();
         createSurface();
@@ -26,8 +36,8 @@ namespace Ak
         createGraphicsPipeline(vertexShader, fragmentShader);
         createFramebuffers();
         createCommandPool();
-        createVertexBuffer();
-        createIndexBuffer();
+        createVertexBuffer(vertices);
+        createIndexBuffer(indices);
         createCommandBuffers();
         createSemaphores();
 
@@ -158,7 +168,20 @@ namespace Ak
 
     void Instance::cleanup()
     {
-        cleanupSwapChain();
+        for(auto framebuffer : swapChainFramebuffers)
+            vkDestroyFramebuffer(device, framebuffer, nullptr);
+
+        vkFreeCommandBuffers(device, commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+
+        vkDestroyPipeline(device, graphicsPipeline, nullptr);
+        vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+        vkDestroyRenderPass(device, renderPass, nullptr);
+
+        for(auto imageView : swapChainImageViews)
+            vkDestroyImageView(device, imageView, nullptr);
+
+        vkDestroySwapchainKHR(device, swapChain, nullptr);
+
         cleanupBuffers();
 
         for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)

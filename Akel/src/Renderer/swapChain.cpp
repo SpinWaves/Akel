@@ -2,7 +2,7 @@
 // CREATED : 05/06/2021
 // UPDATED : 23/09/2021
 
-#include <Renderer/renderer.h>
+#include <Renderer/swapChain.h>
 #include <Core/core.h>
 
 namespace Ak
@@ -40,7 +40,7 @@ namespace Ak
             createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
             createInfo.queueFamilyIndexCount = 2;
             createInfo.pQueueFamilyIndices = queueFamilyIndices;
-        } 
+        }
 		else
             createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
@@ -118,4 +118,3 @@ namespace Ak
         }
     }
 }
-

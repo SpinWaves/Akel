@@ -8,7 +8,7 @@ namespace Ak
 {
     VertexBuffer::VertexBuffer() : LowestInheritance() {}
 
-    void VertexBuffer::createVertexBuffer(std::vector<Vertex>& verticesVector)
+    void VertexBuffer::createVertexBuffer(std::vector<Vertex> verticesVector)
     {
         vertices = verticesVector;
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
@@ -30,7 +30,7 @@ namespace Ak
         vkFreeMemory(device, stagingBufferMemory, nullptr);
     }
 
-    void VertexBuffer::createIndexBuffer(std::vector<uint16_t>& indicesVector)
+    void VertexBuffer::createIndexBuffer(std::vector<uint32_t> indicesVector)
     {
         indices = indicesVector;
         VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
@@ -123,6 +123,7 @@ namespace Ak
         }
 
         Core::log::report(FATAL_ERROR, "Vulkan : failed to find suitable memory type");
+        return 0; // Not necessary due to the FATAL_ERROR parameter for logs but that remove a warning
     }
 
     void VertexBuffer::cleanupBuffers()

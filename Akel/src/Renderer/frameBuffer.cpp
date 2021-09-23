@@ -2,7 +2,7 @@
 // CREATED : 06/06/2021
 // UPDATED : 23/09/2021
 
-#include <Renderer/renderer.h>
+#include <Renderer/frameBuffer.h>
 #include <Core/core.h>
 
 namespace Ak
@@ -32,22 +32,4 @@ namespace Ak
 				Core::log::report(FATAL_ERROR, "Vulkan : Failed to create framebuffer");
         }
     }
-
-    void FrameBuffer::cleanupSwapChain()
-    {
-        for(auto framebuffer : swapChainFramebuffers)
-            vkDestroyFramebuffer(device, framebuffer, nullptr);
-
-        vkFreeCommandBuffers(device, commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
-
-        vkDestroyPipeline(device, graphicsPipeline, nullptr);
-        vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-        vkDestroyRenderPass(device, renderPass, nullptr);
-
-        for(auto imageView : swapChainImageViews)
-            vkDestroyImageView(device, imageView, nullptr);
-
-        vkDestroySwapchainKHR(device, swapChain, nullptr);
-    }
 }
-

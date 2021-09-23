@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 10/09/2021
+// UPDATED : 22/09/2021
 
 #include <editorComponent.h>
 
@@ -19,7 +19,7 @@ void EditorComponent::onAttach()
 void EditorComponent::onImGuiRender()
 {
 	drawMainMenuBar();
-	_console->render(Window::getSize().X, Window::getSize().Y);
+	_console->render(WindowComponent::getSize().X, WindowComponent::getSize().Y);
 	if(_showAbout)
 		drawAboutWindow();
 }

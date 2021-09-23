@@ -6,4 +6,4 @@ use_memory_manager = true
 fixedAllocator_size_0 = 1600
 fixedAllocator_size_1 = 6400
 fixedAllocator_size_2 = 38400
-jamAllocator_size_0 = 1472
+jamAllocator_size_0 = 1632

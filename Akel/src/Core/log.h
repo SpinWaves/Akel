@@ -38,10 +38,10 @@ namespace Ak
         };
     }
 
-    void FatalError(std::string message) { Core::log::report(FATAL_ERROR, message); }
-    void Error(std::string message) { Core::log::report(ERROR, message); }
-    void Warning(std::string message) { Core::log::report(WARNING, message); }
-    void Message(std::string message) { Core::log::report(MESSAGE, message); }
+    void FatalError(std::string message);
+    void Error(std::string message);
+    void Warning(std::string message);
+    void Message(std::string message);
 }
 
 #define AK_BEGIN_SESSION(name) Ak::Core::log::report("Begin " name " ----")

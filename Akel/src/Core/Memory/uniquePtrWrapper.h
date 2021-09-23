@@ -25,7 +25,7 @@ namespace Ak
             #ifdef AK_UNIQUE_PTR_WRAPPER_DEBUG_MESSAGE_ENABLED
                 Core::log::report(MESSAGE, "unique_ptr_w : pointer freed %p", address);
             #endif
-            
+
             address = nullptr;
         }
     };

@@ -129,3 +129,23 @@ namespace Ak::Core
         return path;
     }
 }
+
+namespace Ak
+{
+    void FatalError(std::string message)
+	{
+		Core::log::report(FATAL_ERROR, std::move(message));
+	}
+    void Error(std::string message)
+	{
+		Core::log::report(ERROR, std::move(message));
+	}
+    void Warning(std::string message)
+	{
+		Core::log::report(WARNING, std::move(message));
+	}
+    void Message(std::string message)
+	{
+		Core::log::report(MESSAGE, std::move(message));
+	}
+}

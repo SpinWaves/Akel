@@ -1,8 +1,8 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 29/06/2021
+// UPDATED : 23/09/2021
 
-#include <Renderer/renderer.h>
+#include <Renderer/imageView.h>
 #include <Core/core.h>
 
 namespace Ak
@@ -13,7 +13,7 @@ namespace Ak
     {
         swapChainImageViews.resize(swapChainImages.size());
 
-        for(size_t i = 0; i < swapChainImages.size(); i++) 
+        for(size_t i = 0; i < swapChainImages.size(); i++)
         {
             VkImageViewCreateInfo createInfo{};
             createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -35,4 +35,3 @@ namespace Ak
         }
     }
 }
-

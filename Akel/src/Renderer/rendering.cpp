@@ -1,8 +1,8 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 29/06/2021
+// UPDATED : 23/09/2021
 
-#include <Renderer/renderer.h>
+#include <Renderer/rendering.h>
 #include <Core/core.h>
 
 namespace Ak
@@ -23,13 +23,12 @@ namespace Ak
         fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-        for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) 
+        for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
-            if(vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS || 
-			   vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS || 
+            if(vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+			   vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
 			   vkCreateFence(device, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS)
 				Core::log::report(FATAL_ERROR, "Vulkan : Failed to create synchronization objects for a frame");
         }
     }
 }
-

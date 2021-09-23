@@ -2,7 +2,8 @@
 // CREATED : 05/06/2021
 // UPDATED : 29/06/2021
 
-#include <Renderer/renderer.h>
+#include <Renderer/device.h>
+#include <Renderer/validationLayers.h>
 #include <Core/core.h>
 
 namespace Ak
@@ -22,7 +23,7 @@ namespace Ak
 
         for(const auto& device : devices)
         {
-            if(isDeviceSuitable(device)) 
+            if(isDeviceSuitable(device))
             {
                 physicalDevice = device;
                 break;
@@ -58,7 +59,7 @@ namespace Ak
 
         std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
 
-        for(const auto& extension : availableExtensions) 
+        for(const auto& extension : availableExtensions)
         {
             requiredExtensions.erase(extension.extensionName);
         }
@@ -74,7 +75,7 @@ namespace Ak
         std::set<uint32_t> uniqueQueueFamilies = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
         float queuePriority = 1.0f;
-        for(uint32_t queueFamily : uniqueQueueFamilies) 
+        for(uint32_t queueFamily : uniqueQueueFamilies)
         {
             VkDeviceQueueCreateInfo queueCreateInfo{};
             queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -101,7 +102,7 @@ namespace Ak
         {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             createInfo.ppEnabledLayerNames = validationLayers.data();
-        } 
+        }
         else
             createInfo.enabledLayerCount = 0;
 
@@ -112,4 +113,3 @@ namespace Ak
         vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &presentQueue);
     }
 }
-

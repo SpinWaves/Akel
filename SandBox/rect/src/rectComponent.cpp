@@ -1,6 +1,6 @@
 #include "rectComponent.h"
 
-RectComponent::RectComponent() : Ak::WindowComponent(){}
+RectComponent::RectComponent() : Ak::WindowComponent() {}
 
 void RectComponent::onAttach()
 {
@@ -22,5 +22,5 @@ void RectComponent::update()
 
 void RectComponent::onQuit()
 {
-    Ak::RendererComponent::onQuit();
+    Ak::WindowComponent::onQuit();
 }

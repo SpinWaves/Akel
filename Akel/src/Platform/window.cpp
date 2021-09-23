@@ -8,7 +8,7 @@ namespace Ak
 {
 	SDL_DisplayMode DM;
 
-    WindowComponent::WindowComponent() : RendererComponent() {}
+    WindowComponent::WindowComponent() : RendererComponent(_window) {}
 
 	void WindowComponent::onAttach()
 	{
@@ -24,7 +24,7 @@ namespace Ak
 
         _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI;
 
-        _window = SDL_CreateWindow(_title.c_str(), 0, 0, 0, 0, _flags);
+        _window = SDL_CreateWindow(_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900, 506, _flags);
         if(!_window)
             messageBox(FATAL_ERROR, "Unable to create a window", SDL_GetError());
 
@@ -41,7 +41,6 @@ namespace Ak
 	{
 		if(input.getInKey(AK_KEY_ESCAPE))
 			input.finish();
-		RendererComponent::onEvent(input);
 	}
 	void WindowComponent::onQuit()
 	{

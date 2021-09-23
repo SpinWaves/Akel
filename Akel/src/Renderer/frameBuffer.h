@@ -16,11 +16,9 @@ namespace Ak
 		public:
 			FrameBuffer();
             void createFramebuffers();
-			void cleanupSwapChain();
             
 			std::vector<VkImageView> swapChainImageViews;
 	};
 }
 
 #endif // __AK_VK_FRAMEBUFFER__
-

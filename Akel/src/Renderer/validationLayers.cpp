@@ -1,8 +1,8 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 13/07/2021
+// UPDATED : 23/09/2021
 
-#include <Renderer/renderer.h>
+#include <Renderer/validationLayers.h>
 #include <Core/core.h>
 
 namespace Ak
@@ -17,7 +17,7 @@ namespace Ak
         std::vector<VkLayerProperties> availableLayers(layerCount);
         vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
-        for(const char* layerName : validationLayers) 
+        for(const char* layerName : validationLayers)
         {
             bool layerFound = false;
 
@@ -45,7 +45,7 @@ namespace Ak
         createInfo.pfnUserCallback = debugCallback;
     }
 
-    void ValidationLayers::setupDebugMessenger() 
+    void ValidationLayers::setupDebugMessenger()
     {
         if(!enableValidationLayers)
             return;
@@ -64,7 +64,7 @@ namespace Ak
             return VK_ERROR_EXTENSION_NOT_PRESENT;
     }
 
-    VKAPI_ATTR VkBool32 VKAPI_CALL ValidationLayers::debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) 
+    VKAPI_ATTR VkBool32 VKAPI_CALL ValidationLayers::debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData)
     {
 		if(messageSeverity == VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
 		{
@@ -88,4 +88,3 @@ namespace Ak
             func(instance, callback, pAllocator);
     }
 }
-

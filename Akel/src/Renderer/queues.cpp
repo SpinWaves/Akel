@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 05/06/2021
+// UPDATED : 23/09/2021
 
-#include <Renderer/renderer.h>
+#include <Renderer/queues.h>
 
 namespace Ak
 {
 	Queues::Queues() : Surface() {}
 
-    QueueFamilyIndices Queues::findQueueFamilies(VkPhysicalDevice device) 
+    QueueFamilyIndices Queues::findQueueFamilies(VkPhysicalDevice device)
     {
         QueueFamilyIndices indices;
 
@@ -38,4 +38,3 @@ namespace Ak
         return indices;
     }
 }
-

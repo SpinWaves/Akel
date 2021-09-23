@@ -7,7 +7,7 @@
 
 #include <Akpch.h>
 #include <Core/core.h>
-#include <Renderer/renderer.h>
+#include <Renderer/rendererComponent.h>
 #include <Maths/maths.h>
 #include <Platform/input.h>
 #include <Utils/utils.h>
@@ -70,7 +70,7 @@ namespace Ak
 					case border:     setBordered(pass); break;
 					case resizable:  setResizable(pass); break;
 					case visible: setShow(pass); break;
-					case vsync: Instance::setVsync(value); break;
+					//case vsync: setVsync(value); break;
 					case maximize: setMaximize(pass); break;
 
 					default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;

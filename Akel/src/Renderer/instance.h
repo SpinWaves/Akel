@@ -23,13 +23,12 @@ namespace Ak
 				return instance;
 			}
 
-            ~Instance() = default;
-
-        protected:
             void cleanup();
 			void setVsync(bool setter);
 			bool getVsync();
-            bool _instanceInitialized = false; 
+            bool _instanceInitialized = false;
+
+            ~Instance() = default;
 
         private:
             void createInstance();

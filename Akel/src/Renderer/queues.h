@@ -27,11 +27,9 @@ namespace Ak
 		public:
 			Queues();
             QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
-	
-            VkQueue graphicsQueue;
+
             VkQueue presentQueue;
 	};
 }
 
 #endif // __AK_VK_QUEUES__
-

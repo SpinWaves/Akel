@@ -20,10 +20,8 @@ namespace Ak
             void createCommandPool();
             void createCommandBuffers();
 
-            VkCommandPool commandPool;
             std::vector<VkCommandBuffer> commandBuffers;
 	};
 }
 
 #endif // __AK_VK_COMMAND_BUFFER__
-
