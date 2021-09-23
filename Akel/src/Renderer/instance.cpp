@@ -159,7 +159,6 @@ namespace Ak
     void Instance::cleanup()
     {
         cleanupSwapChain();
-
         cleanupBuffers();
 
         for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
@@ -173,9 +172,8 @@ namespace Ak
 
         vkDestroyDevice(device, nullptr);
 
-        if (enableValidationLayers) {
+        if(enableValidationLayers)
             DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
-        }
 
         vkDestroySurfaceKHR(instance, surface, nullptr);
         vkDestroyInstance(instance, nullptr);

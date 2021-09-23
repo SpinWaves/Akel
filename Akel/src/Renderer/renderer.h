@@ -19,8 +19,10 @@ const int MAX_FRAMES_IN_FLIGHT = 2;
 #include <Renderer/frameBuffer.h>
 #include <Renderer/rendering.h>
 #include <Renderer/validationLayers.h>
+#include <Renderer/vertexBuffer.h>
 
 #include <Core/core.h>
+#include <Platform/platform.h>
 
 namespace Ak
 {

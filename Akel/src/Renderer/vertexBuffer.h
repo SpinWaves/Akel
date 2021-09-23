@@ -6,6 +6,7 @@
 #define __AK_VK_VERTEX_BUFFER__
 
 #include <Akpch.h>
+#include <Renderer/lowestInheritance.h>
 
 namespace Ak
 {
