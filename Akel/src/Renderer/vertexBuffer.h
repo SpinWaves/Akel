@@ -48,20 +48,23 @@ namespace Ak
     {
         public:
             VertexBuffer();
-            void createVertexBuffer(std::vector& vertices);
+            void createVertexBuffer(std::vector& verticesVector);
             uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
             void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
             void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
-            void createIndexBuffer(std::vector& indices);
+            void createIndexBuffer(std::vector& indicesVector);
 
             void cleanupBuffers();
 
-        private:
+        protected:
             VkBuffer vertexBuffer;
             VkDeviceMemory vertexBufferMemory;
             VkBuffer indexBuffer;
             VkDeviceMemory indexBufferMemory;
+
+            std::vector<Vertex> vertices;
+            std::vector<uint16_t> indices;
     };
 }
 

@@ -37,7 +37,7 @@ enum windowSetting
 
 namespace Ak
 {
-    class WindowComponent : public Component
+    class WindowComponent : public RendererComponent
     {
         public:
             WindowComponent();

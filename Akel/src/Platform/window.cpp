@@ -8,12 +8,13 @@ namespace Ak
 {
 	SDL_DisplayMode DM;
 
-    WindowComponent::WindowComponent() : Component("__window") {}
+    WindowComponent::WindowComponent() : RendererComponent() {}
 
 	void WindowComponent::onAttach()
 	{
 		if(_window == nullptr)
 			create();
+		RendererComponent::onAttach();
 	}
 
 	void WindowComponent::create()
@@ -31,15 +32,20 @@ namespace Ak
         SDL_SetWindowIcon(_window, _icon);
 	}
 
-	void WindowComponent::update() {}
+	void WindowComponent::update()
+	{
+		RendererComponent::update();
+	}
 
 	void WindowComponent::onEvent(Input& input)
 	{
 		if(input.getInKey(AK_KEY_ESCAPE))
 			input.finish();
+		RendererComponent::onEvent(input);
 	}
 	void WindowComponent::onQuit()
 	{
+		RendererComponent::onQuit();
         SDL_FreeSurface(_icon);
         SDL_DestroyWindow(_window);
 	}

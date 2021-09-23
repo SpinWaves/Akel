@@ -8,8 +8,9 @@ namespace Ak
 {
     VertexBuffer::VertexBuffer() : LowestInheritance() {}
 
-    void VertexBuffer::createVertexBuffer(std::vector& vertices)
+    void VertexBuffer::createVertexBuffer(std::vector<Vertex>& verticesVector)
     {
+        vertices = verticesVector;
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
         VkBuffer stagingBuffer;
@@ -29,15 +30,16 @@ namespace Ak
         vkFreeMemory(device, stagingBufferMemory, nullptr);
     }
 
-    void VertexBuffer::createIndexBuffer(std::vector& indices)
+    void VertexBuffer::createIndexBuffer(std::vector<uint16_t>& indicesVector)
     {
+        indices = indicesVector;
         VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
-        void* data;
+        void* data = nullptr;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
             memcpy(data, indices.data(), (size_t)bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
