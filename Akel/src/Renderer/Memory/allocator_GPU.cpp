@@ -37,6 +37,11 @@ namespace Ak
         // TODO
     }
 
+    VkBuffer Allocator_GPU::allocBuffer(size_t size)
+    {
+        // TODO
+    }
+
     Allocator_GPU::~Allocator_GPU()
     {
         // TODO

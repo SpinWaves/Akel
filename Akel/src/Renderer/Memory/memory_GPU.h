@@ -6,6 +6,5 @@
 #define __AK_VULKAN_MEMORY_GPU__
 
 #include <Renderer/Memory/allocator_GPU.h>
-#include <Renderer/Memory/globalBuffer.h>
 
 #endif // __AK_VULKAN_MEMORY_GPU__
