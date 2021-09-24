@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 23/09/2021
+// UPDATED : 24/09/2021
 
 #ifndef __AK_RENDERER__
 #define __AK_RENDERER__
@@ -18,5 +18,7 @@
 #include <Renderer/validationLayers.h>
 #include <Renderer/vertexBuffer.h>
 #include <Renderer/rendererComponent.h>
+
+#include <Renderer/Memory/memory_GPU.h>
 
 #endif // __AK_RENDERER__
