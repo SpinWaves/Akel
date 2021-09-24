@@ -6,26 +6,21 @@
 #define __AK_VULKAN_ALLOCATOR_GPU__
 
 #include <Akpch.h>
+#include <Renderer/Memory/globalBuffer.h>
 
 namespace Ak
 {
-    struct GlobalBuffer
-    {
-        // TODO
-    };
-
     class Allocator_GPU
     {
         public:
             explicit Allocator_GPU();
 
-            VkBuffer& allocBuffer(size_t size);
-            void freeBuffer(VkBuffer& buffer);
+            GlobalBuffer& allocGBuffer(size_t size);
+            void freeBuffer(GlobalBuffer& buffer);
 
             ~Allocator_GPU();
 
         private:
-            
             VkBuffer _heap;
     };
 }
