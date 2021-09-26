@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 22/09/2021
+// UPDATED : 26/09/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -127,6 +127,8 @@ namespace Ak
 			check_vk_result(err);
 			ImGui_ImplVulkan_DestroyFontUploadObjects();
 		}
+
+		_componentsInit += 1;
 	}
 
 	void ImGuiComponent::begin()

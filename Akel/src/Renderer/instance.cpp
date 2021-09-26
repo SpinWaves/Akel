@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 23/09/2021
+// UPDATED : 26/09/2021
 
 #include <Renderer/instance.h>
 #include <Platform/platform.h>
@@ -117,6 +117,8 @@ namespace Ak
 
     void Instance::render()
     {
+		if(!_instanceInitialized)
+			Core::log::report(FATAL_ERROR, "Vulkan : unable to render, you need to init the instance before");
         vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
         uint32_t imageIndex;

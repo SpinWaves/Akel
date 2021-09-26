@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 24/09/2021
-// UPDATED : 24/09/2021
+// UPDATED : 26/09/2021
 
 #ifndef __AK_VULKAN_GPU_MEMORY_CHUNK__
 #define __AK_VULKAN_GPU_MEMORY_CHUNK__
@@ -15,7 +15,6 @@ namespace Ak
         VkDeviceMemory memory = VK_NULL_HANDLE;
         VkDeviceSize offset = 0;
         VkDeviceSize size = 0;
-        bool free = true;
         void* ptr = nullptr;
 
         bool operator == (Buffer const& buffer);
@@ -26,16 +25,19 @@ namespace Ak
         public:
             explicit Chunk(VkDeviceSize size, int memoryTypeIndex);
 
-            bool alloc(VkDeviceSize size, Buffer& buffer, VkDeviceSize alignment);
-            bool isIn(const Buffer& buffer);
+            bool alloc(VkDeviceSize size, Buffer& buffer, VkDeviceSize alignment = 1);
+            bool contains(const Buffer& buffer);
+            bool canHold(VkDeviceSize size);
             void free(const Buffer& buffer);
             int memoryTypeIndex() const { return _memoryTypeIndex; }
 
         private:
             VkDeviceMemory _memory = VK_NULL_HANDLE;
             VkDeviceSize _size;
+            VkDeviceSize _memUsed = 0;
             int _memoryTypeIndex = 0;
-            std::vector<Buffer> _buffers;
+            std::vector<Buffer> _usedBuffers;
+            std::vector<Buffer> _freeBuffers;
             void *_ptr = nullptr;
     };
 }

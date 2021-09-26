@@ -4,7 +4,7 @@ RectComponent::RectComponent() : Ak::WindowComponent() {}
 
 void RectComponent::onAttach()
 {
-    Ak::WindowComponent::create();
+    Ak::WindowComponent::onAttach();
     Ak::WindowComponent::setSetting<title>("Rectangle using Akel Engine");
     Ak::WindowComponent::setSetting<dimensions>(1280, 750);
     Ak::WindowComponent::setSetting<resizable>(false);

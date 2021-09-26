@@ -8,12 +8,13 @@ namespace Ak
 {
 	SDL_DisplayMode DM;
 
-    WindowComponent::WindowComponent() : RendererComponent(_window) {}
+    WindowComponent::WindowComponent() : RendererComponent() {}
 
 	void WindowComponent::onAttach()
 	{
 		if(_window == nullptr)
 			create();
+		RendererComponent::render_to_window(_window);
 		RendererComponent::onAttach();
 	}
 

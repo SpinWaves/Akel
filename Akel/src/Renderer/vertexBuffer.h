@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 22/09/2021
-// UPDATED : 23/09/2021
+// UPDATED : 26/09/2021
 
 #ifndef __AK_VK_VERTEX_BUFFER__
 #define __AK_VK_VERTEX_BUFFER__
@@ -48,12 +48,12 @@ namespace Ak
     {
         public:
             VertexBuffer();
-            void createVertexBuffer(std::vector<Vertex> verticesVector);
+            void createVertexBuffer(const std::vector<Vertex>& verticesVector);
             uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
             void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
             void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
-            void createIndexBuffer(std::vector<uint32_t> indicesVector);
+            void createIndexBuffer(const std::vector<uint32_t>& indicesVector);
 
             void cleanupBuffers();
 

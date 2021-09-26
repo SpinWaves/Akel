@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/09/2021
-// UPDATED : 23/09/2021
+// UPDATED : 26/09/2021
 
 #include <Renderer/renderer.h>
 
@@ -8,7 +8,7 @@ namespace Ak
 {
     VertexBuffer::VertexBuffer() : LowestInheritance() {}
 
-    void VertexBuffer::createVertexBuffer(std::vector<Vertex> verticesVector)
+    void VertexBuffer::createVertexBuffer(const std::vector<Vertex>& verticesVector)
     {
         vertices = verticesVector;
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
@@ -30,7 +30,7 @@ namespace Ak
         vkFreeMemory(device, stagingBufferMemory, nullptr);
     }
 
-    void VertexBuffer::createIndexBuffer(std::vector<uint32_t> indicesVector)
+    void VertexBuffer::createIndexBuffer(const std::vector<uint32_t>& indicesVector)
     {
         indices = indicesVector;
         VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();

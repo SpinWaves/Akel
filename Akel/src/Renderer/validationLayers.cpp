@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 23/09/2021
+// UPDATED : 26/09/2021
 
 #include <Renderer/validationLayers.h>
 #include <Core/core.h>
@@ -76,8 +76,10 @@ namespace Ak
 			std::cout << '\n';
 			Core::log::report(WARNING, std::string("Vulkan layer warning: ") + pCallbackData->pMessage);
 		}
+	#ifdef AK_VK_ENABLE_MESSAGE_VALIDATION_LAYERS
 		else
         	std::cout << green << pCallbackData->pMessage << def << std::endl;
+	#endif
         return VK_FALSE;
     }
 
