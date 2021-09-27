@@ -52,7 +52,7 @@ namespace Ak
     {
 		if(Core::ProjectFile::getBoolValue("use_memory_manager"))
         {
-            #ifndef AK_USE_JAM_MEMORY_SYSTEM
+            #ifndef AK_USE_JAM_MEMORY_HELPER
                 if(!std::is_class<T>::value)
                 {
                     if(sizeof(T) <= 16)
@@ -73,7 +73,7 @@ namespace Ak
     {
 		if(Core::ProjectFile::getBoolValue("use_memory_manager"))
         {
-            #ifndef AK_USE_JAM_MEMORY_SYSTEM
+            #ifndef AK_USE_JAM_MEMORY_HELPER
                 if(__fixed1.contains((void*)ptr))
                 {
         			__fixed1.free(ptr);

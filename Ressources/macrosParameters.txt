@@ -1,0 +1,6 @@
+This file contains all the macros that can be defined to change the Akel Engine behaviour
+
+AK_ELTM_VERSION_1_0
+AK_UNIQUE_PTR_WRAPPER_DEBUG_MESSAGE_ENABLED
+AK_USE_JAM_MEMORY_HELPER
+AK_VK_ENABLE_MESSAGE_VALIDATION_LAYERS
