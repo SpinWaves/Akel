@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/04/2021
-// UPDATED : 26/09/2021
+// UPDATED : 28/09/2021
 
 #include <Renderer/instance.h>
 #include <Platform/platform.h>
@@ -119,10 +119,14 @@ namespace Ak
     {
 		if(!_instanceInitialized)
 			Core::log::report(FATAL_ERROR, "Vulkan : unable to render, you need to init the instance before");
+
         vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
         uint32_t imageIndex;
         vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+
+		if(imageIndex > imagesInFlight.size())
+			Core::log::report(FATAL_ERROR, "Vulkan : unable to render, image index larger than images available : imageIndex = %d", imageIndex);
 
         if(imagesInFlight[imageIndex] != VK_NULL_HANDLE)
             vkWaitForFences(device, 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);

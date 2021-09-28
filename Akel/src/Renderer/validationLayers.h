@@ -25,10 +25,10 @@ namespace Ak
 			ValidationLayers();
 
             void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
-            void setupDebugMessenger(); 
+            void setupDebugMessenger();
 
             bool checkValidationLayerSupport();
-            
+
 			static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
 
             VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pCallback);
@@ -42,4 +42,3 @@ namespace Ak
 }
 
 #endif // __AK_VK_VALIDATION_LAYERS__
-

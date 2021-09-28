@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/09/2021
-// UPDATED : 23/09/2021
+// UPDATED : 28/09/2021
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -27,8 +27,8 @@ namespace Ak
 
         private:
             Instance _instance;
-            std::string _vertexShader = Core::getMainDirPath() + "Ressources/shaders/vert.spv";
-            std::string _fragmentShader = Core::getMainDirPath() + "Ressources/shaders/frag.spv";
+            std::string _vertexShader = Core::getMainDirPath() + "Akel/src/Shaders/basic_2D/basic_2D.vert.spv";
+            std::string _fragmentShader = Core::getMainDirPath() + "Akel/src/Shaders/basic_2D/basic_2D.frag.spv";
             SDL_Window* _window;
     };
 }
