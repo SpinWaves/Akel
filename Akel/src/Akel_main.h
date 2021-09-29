@@ -36,7 +36,6 @@ int main(int argc, char** argv)
 			    return 1;
 			}
 			Ak::Core::log::report("architecture: 32bits");
-			buildBasics2D();
 		#endif
 
 		#ifdef AK_PROJECT_FILE_DIR
@@ -51,6 +50,8 @@ int main(int argc, char** argv)
 		Ak::MemoryManager::init();
 
 		Ak::AudioManager::initAudioManager();
+
+		Ak::buildBasics2D();
 
 		auto app = Akel_main();
 	AK_END_SESSION();
