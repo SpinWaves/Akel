@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 06/09/2021
+// UPDATED : 29/09/2021
 
 #include <Core/core.h>
 
@@ -51,6 +51,10 @@ namespace Ak::Core
     {
         return mainDirPath() + "Ressources/";
     }
+    std::string Paths::shaderPath()
+    {
+        return mainDirPath() + "Akel/src/Shaders/"
+    }
 
     void Paths::setLogsDir(std::string path)
     {
@@ -97,6 +101,11 @@ namespace Ak::Core
     std::string getFontsDirPath()
     {
         return Paths::fontsDirPath();
+    }
+
+    std::string getShaderPath()
+    {
+        return Paths::shaderPath();
     }
 
     void setLogsDir(std::string path)

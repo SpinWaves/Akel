@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 23/09/2021
+// UPDATED : 29/09/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -10,6 +10,7 @@
 #include <Core/softwareInfo.h>
 #include <Core/paths.h>
 #include <Audio/audio.h>
+#include <Shaders/basic_2D/build.h>
 
 extern Ak::Application* Akel_main();
 
@@ -35,6 +36,7 @@ int main(int argc, char** argv)
 			    return 1;
 			}
 			Ak::Core::log::report("architecture: 32bits");
+			buildBasics2D();
 		#endif
 
 		#ifdef AK_PROJECT_FILE_DIR
