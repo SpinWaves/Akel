@@ -10,7 +10,7 @@
 #include <Core/softwareInfo.h>
 #include <Core/paths.h>
 #include <Audio/audio.h>
-#include <Shaders/basic_2D/build.h>
+#include <Shaders/build.h>
 
 extern Ak::Application* Akel_main();
 

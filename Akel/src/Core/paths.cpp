@@ -53,7 +53,7 @@ namespace Ak::Core
     }
     std::string Paths::shaderPath()
     {
-        return mainDirPath() + "Akel/src/Shaders/"
+        return mainDirPath() + "Akel/src/Shaders/";
     }
 
     void Paths::setLogsDir(std::string path)

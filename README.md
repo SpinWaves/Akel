@@ -50,7 +50,7 @@ You can contribute by :
 * Talking about Akel to other people
 
 ## Links
-[Website](http://akel-engine.com)
+[Website](https://akel-engine.com)
 
 ### Contact
 bilbo.sacquet@orange.fr
