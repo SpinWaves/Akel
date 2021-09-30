@@ -54,4 +54,5 @@ You can contribute by :
 
 ### Contact
 [Profile](https://solo.to/kbz_8)
+
 kbz_8.dev@akel-engine.com
