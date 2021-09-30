@@ -53,4 +53,5 @@ You can contribute by :
 [Website](https://akel-engine.com)
 
 ### Contact
-bilbo.sacquet@orange.fr
+[Profile](https://solo.to/kbz_8)
+kbz_8.dev@akel-engine.com
