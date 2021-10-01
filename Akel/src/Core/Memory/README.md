@@ -7,5 +7,39 @@ Flags are 16-byte chunks allocated just before the pointer returned to the user.
 Akel has an internal safety feature that allows the heap to be freed of all instantiated JamAllocators and FixedAllocators when a FATAL_ERROR is sent to the logs and to the kernel's error handling system (which will cause the program to be stopped in an emergency).
 
 <p align="center">
-    <img src="https://github.com/Kbz-8/Akel/blob/dev/Ressources/assets/jam_alloc_diagram.png" alt="drawing" width="500"/>
+    <img src="https://github.com/Kbz-8/Akel/blob/dev/Ressources/assets/jam_alloc_diagram.png" alt="drawing"/>
 </p>
+
+# FixedAllocator
+
+# Memory Manager
+Akel's memory manager is based on two simple functions: Ak::custom_malloc() and Ak::custom_free().
+Ak::custom_malloc() allows you to allocate memory as "new" and Ak::custom_free() to free it as "delete".
+
+```C++
+class CustomComponent : public Ak::Component
+{
+    private:
+        Myclass* ptr = nullptr;
+
+    public:
+        void CustomComponent::onAttach() override
+        {
+            ptr = Ak::custom_malloc<MyClass>(/* Args to pass to MyClass constructor */);
+        }
+
+        void CustomComponent::onQuit() override
+        {
+            Ak::custom_free(ptr); // free the pointer
+        }
+};
+```
+
+# Smart pointers wrappers
+The unique_ptr and shared_ptr of the standard C++ lib have wrappers for JamAllocators and FixedAllocators, however the two work differently.
+
+The shared_ptr use the Ak::make_shared_ptr_w functions which are derived in 3 functions. The first has a second parameter which is a reference to the FixedAllocator which contains the passed pointer (to free it properly when destroying the pointer). The second one has a second parameter, like the first one) but for the JamAllocators. The third one only takes as parameter the pointer to be passed to the shared_ptr. This one will free it via the memory manager and the "custom_free()" function.
+It is possible not to pass the allocator which contains the pointer and to use the third function even for pointers not allocated by the memory manager because if this one does not find the pointer among its allocators it will seek in the other instanciated allocators, but that can take more time.
+
+The unique_ptr needs to be declared differently as we need to pass the destructor of the pointer to the instantiation of the unique_ptr (unlike the shared_ptr). To solve this problem Akel has Ak::unique_ptr_w which is an alias to std::unique_ptr with the default destructor of the memory manager.
+Akel also has a function to create a unique_ptr_w which is Ak::make_unique_ptr_w and which takes as argument a simple pointer to contain.
