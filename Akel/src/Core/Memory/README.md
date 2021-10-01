@@ -51,7 +51,7 @@ class CustomComponent : public Ak::Component
         void CustomComponent::onAttach() override
         {
             allocator.init(8, 1);
-            ptr = allocator.alloc<int>(/* Args to pass to MyClass constructor */);
+            ptr = allocator.alloc<int>();
         }
 
         void CustomComponent::onQuit() override
