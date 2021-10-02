@@ -98,8 +98,8 @@ Akel also has a function to create a unique_ptr_w which is Ak::make_unique_ptr_w
 class CustomComponent : public Ak::Component
 {
     private:
-        std::shared_ptr s_ptr;
-        Ak::unique_ptr_w u_ptr;
+        std::shared_ptr<MyClass> s_ptr;
+        Ak::unique_ptr_w<MyClass> u_ptr;
 
     public:
         void CustomComponent::onAttach() override
