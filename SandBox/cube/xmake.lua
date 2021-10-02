@@ -34,10 +34,7 @@ target("Akel")
 	add_packages("libsdl_ttf")
 	add_packages("libsndfile")
 	add_packages("openal-soft")
-	add_packages("imgui")
 	add_packages("vulkan-headers")
-
-	add_ldflags("-lvulkan")
 
 target("Editor")
     set_kind("binary")
@@ -45,7 +42,7 @@ target("Editor")
 	add_includedirs("Akel/src", "Editor/src", "libs/include")
     add_files("Editor/src/**.cpp")
 
-	add_packages("imgui", {links = {}})
+	add_packages("imgui")
 	set_pcxxheader("Editor/src/AkEpch.h")
 
 	if is_mode("debug") then
