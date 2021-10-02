@@ -1,8 +1,4 @@
-*.spv
-*.exe
-Makefile
 build/
 build-int/
-*.swp
-premake5
+.xmake/
 imgui.ini
