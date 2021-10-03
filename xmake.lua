@@ -6,6 +6,8 @@ add_requires("libsdl_ttf")
 add_requires("libsndfile")
 add_requires("openal-soft")
 add_requires("vulkan-headers")
+add_requires("vulkan-loader")
+add_requires("vulkan-tools")
 add_requires("imgui")
 
 add_rules("mode.debug", "mode.release")
@@ -36,8 +38,8 @@ target("Akel")
 	add_packages("openal-soft")
 	add_packages("imgui")
 	add_packages("vulkan-headers")
-
-	add_ldflags("-lvulkan")
+	add_packages("vulkan-loader")
+	add_packages("vulkan-tools")
 
 target("Editor")
     set_kind("binary")
@@ -45,7 +47,7 @@ target("Editor")
 	add_includedirs("Akel/src", "Editor/src", "libs/include")
     add_files("Editor/src/**.cpp")
 
-	add_packages("imgui", {links = {}})
+	add_packages("imgui")
 	set_pcxxheader("Editor/src/AkEpch.h")
 
 	if is_mode("debug") then
