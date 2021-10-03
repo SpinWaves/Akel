@@ -13,8 +13,8 @@ add_requires("imgui")
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
 
-set_objectdir("build-int/$(os)_$(arch)_$(mode)")
-set_targetdir("build/$(os)_$(arch)_$(mode)")
+set_objectdir("build-int/$(os)_$(arch)")
+set_targetdir("build/$(os)_$(arch)")
 
 target("Akel")
 	set_kind("shared")

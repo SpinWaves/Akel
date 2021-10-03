@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 06/07/2021
+// UPDATED : 03/10/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -26,7 +26,7 @@ namespace Ak::Core
 		<< "  / /| |  / //_// _ \\ / / 		" << '\n'
 		<< " / ___ | / ,<  /  __// /  		" << '\n'
 		<< "/_/  |_|/_/|_| \\___//_/  		" << '\n'
-    	<< "By Malo DAVID - 2021" << std::endl;
+    	<< '\t' << '\t' << "By kbz_8 - 2021" << std::endl;
 	}
 
 	void printEngineCodeInfo()
