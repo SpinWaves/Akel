@@ -21,7 +21,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
   Editor | `xmake` or `xmake build Editor`
   Rectangle | `xmake build RectDemo`
   Cube | Coming soon...
-  
+
   </details>
 
 # Akel useful features
@@ -32,10 +32,23 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
     * FixedAllocator is a fast allocator consisting of blocks of the same size that can be allocated. It is more performance oriented than memory optimised because if an allocated block is not used in full, the unused memory is wasted.
     * JamAllocator is a slightly less efficient (but still effective) allocator that is memory optimisation oriented. It allocates the memory size you want, no memory is wasted.
 
+# Coming soon...
+* Fully functionnal renderer using Vulkan API
+* Demos
+* Finished ELTM version 1.1 including :
+    * Concatenation
+    * Recognition of \n and \t
+    * Documentation
+* Better ImGui component implementation using Akel Vulkan renderer
+* Custom shading language
+* More powerful allocators
+* Entity management
+* Models manager
+
 # Contribute
 You can contribute by :
-* reporting problems
-* suggesting features
+* Reporting problems
+* Suggesting features
 * [Fork the project](https://github.com/Kbz-8/Akel/fork) on GitHub and push your changes
 * Talking about Akel to other people
 

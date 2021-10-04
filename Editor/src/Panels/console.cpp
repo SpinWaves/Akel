@@ -28,7 +28,7 @@ void Console::render(int width, int height)
     {
         ImGui::PopStyleVar();
         ImGui::End();
-		Ak::messageBox(ERROR, Ak::ELTM::getText("errors.consoleMainWin"), "error from ImGui::Begin()");
+		Ak::messageBox(ERROR, Ak::ELTM::getText("errors.consoleMainWin"), "ImGui::Begin() returned false");
         return;
     }
     ImGui::PopStyleVar();
