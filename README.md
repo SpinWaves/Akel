@@ -13,7 +13,16 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 
 * Start by clonning the repo `git clone https://github.com/Kbz-8/Akel`.
 * Use the "xmake" executable provided in [here](https://github.com/Kbz-8/Akel/tree/main/Ressources/xmake/bin) (choose according to your system (Windows, Linux, ...)).
-* Build your project and enjoy or cry depending on if it compiles correctly or if there are 400 errors...
+* <details> <summary>Run xmake in the "xmake.lua" directory.</summary>
+  By default xmake will build the Akel editor. If you want to build one of the demos you can run xmake as follows :
+
+  Demo | Command
+  ---- | -------
+  Editor | `xmake` or `xmake build Editor`
+  Rectangle | `xmake build RectDemo`
+  Cube | Coming soon...
+  
+  </details>
 
 # Akel useful features
 * Text management language [ELTM](https://github.com/Kbz-8/Akel/tree/main/Akel/src/Modules/ELTM)
