@@ -1,16 +1,13 @@
+-- This file is a part of Akel
+-- CREATED : 02/10/2021
+-- UPDATED : 05/10/2021
+
+-- Globals settings
 set_xmakever("2.5.6")
 
 add_repositories("local-repo libs")
 
-add_requires("libsdl_image")
-add_requires("libsdl")
-add_requires("libsdl_ttf")
-add_requires("libsndfile")
-add_requires("openal-soft")
-add_requires("vulkan-headers")
-add_requires("vulkan-loader")
-add_requires("vulkan-tools")
-add_requires("imgui_sdl_vk")
+add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-tools", "imgui_sdl_vk")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
@@ -18,6 +15,7 @@ set_languages("cxx17")
 set_objectdir("build-int/$(os)_$(arch)")
 set_targetdir("build/$(os)_$(arch)")
 
+-- Lib Akel Build
 target("Akel")
 	set_default(true)
 	set_kind("shared")
@@ -31,20 +29,11 @@ target("Akel")
 	end
 
 	set_pcxxheader("Akel/src/Akpch.h")
-
 	add_defines("SDL_MAIN_HANDLED")
-
-	add_packages("libsdl_image")
-	add_packages("libsdl")
-	add_packages("libsdl_ttf")
-	add_packages("libsndfile")
-	add_packages("openal-soft")
-	add_packages("imgui_sdl_vk")
-	add_packages("vulkan-headers")
-	add_packages("vulkan-loader")
-	add_packages("vulkan-tools")
+	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "imgui_sdl_vk", "vulkan-headers", "vulkan-loader", "vulkan-tools")
 target_end() -- optional but I think the code is cleaner with this
 
+-- Editor Build
 target("Editor")
 	set_default(true)
     set_kind("binary")
@@ -62,9 +51,11 @@ target("Editor")
 	end
 target_end() -- optional but I think the code is cleaner with this
 
+-- Rectangle Demo Build
 target("RectDemo")
 	set_default(false)
     set_kind("binary")
+	add_packages("imgui_sdl_vk")
     add_deps("Akel")
 	add_includedirs("Akel/src", "SandBox/rect/src", "libs/include")
     add_files("SandBox/rect/src/*.cpp")
