@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 22/09/2021
+// UPDATED : 06/10/2021
 
 #include <Core/Memory/jamAllocator.h>
 
@@ -11,7 +11,7 @@ namespace Ak
     {
         if(_heapSize == 0)
         {
-            Core::log::report(ERROR, "Jam Allocator: you need to initialize the allocator before aking him to give you memory");
+            Core::log::report(FATAL_ERROR, "Jam Allocator: you need to initialize the allocator before aking him to give you memory");
             return nullptr;
         }
         size_t sizeType = sizeof(T);
@@ -21,7 +21,7 @@ namespace Ak
                 increase_size(_heapSize * (4/3));
             else
             {
-                Core::log::report(ERROR, "Jam Allocator: the requested allocation is too large for the allocator, free up memory or increase the size of the allocator");
+                Core::log::report(FATAL_ERROR, "Jam Allocator: the requested allocation is too large for the allocator, free up memory or increase the size of the allocator");
                 return nullptr;
             }
         }
@@ -118,7 +118,7 @@ namespace Ak
 
         if(!flag_ptr)
         {
-            Core::log::report(ERROR, "JamAllocator : unable to find block for ptr %p", ptr);
+            Core::log::report(ERROR, "JamAllocator : unable to find the flah of %p", ptr);
             unlockThreads(mutex);
             return;
         }

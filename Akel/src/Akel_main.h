@@ -7,10 +7,7 @@
 
 #include <Core/application.h>
 #include <Akpch.h>
-#include <Core/softwareInfo.h>
 #include <Core/paths.h>
-#include <Audio/audio.h>
-#include <Shaders/build.h>
 
 extern Ak::Application* Akel_main();
 
@@ -20,37 +17,7 @@ int main(int argc, char** argv)
 	Ak::Core::log::Init();
 
 	AK_BEGIN_SESSION("Start");
-		#if defined(AK_64BITS)
-			if(sizeof(void*) != 8)
-			{
-				Ak::Core::log::report(ERROR, "Conflict of system architecture detection");
-			    return 1;
-			}
-			Ak::Core::log::report("architecture: 64bits");
-		#elif defined(AK_32BITS)
-			if(sizeof(void*) != 4)
-			{
-				Ak::Core::log::report(ERROR, "Conflict of system architecture detection");
-			    return 1;
-			}
-			Ak::Core::log::report("architecture: 32bits");
-		#endif
-
-		#ifdef AK_PROJECT_FILE_DIR
-			Ak::Core::ProjectFile::setDir(AK_PROJECT_FILE_DIR);
-		#endif
-		#ifdef AK_PROJECT_FILE_NAME
-			Ak::Core::ProjectFile::setName(AK_PROJECT_FILE_NAME);
-		#endif
-
-		Ak::Core::ProjectFile::initProjFile();
-
-		Ak::MemoryManager::init();
-
-		Ak::AudioManager::initAudioManager();
-
-		Ak::buildBasics2D();
-
+		Ak::initAkel();
 		auto app = Akel_main();
 	AK_END_SESSION();
 
@@ -59,33 +26,8 @@ int main(int argc, char** argv)
 	AK_END_SESSION();
 
 	AK_BEGIN_SESSION("Shutdown");
-		bool freed = false;
-		for(auto jam : Ak::MemoryManager::accessToControlUnit()->jamStack)
-		{
-			if(jam->contains(app))
-			{
-				jam->free(app);
-				freed = true;
-				break;
-			}
-		}
-		if(!freed)
-		{
-			for(auto fixed : Ak::MemoryManager::accessToControlUnit()->fixedStack)
-			{
-				if(fixed->contains(app))
-				{
-					fixed->free(app);
-					freed = true;
-					break;
-				}
-			}
-			if(!freed)
-				delete app;
-		}
-
+		Ak::custom_free(app);
 		Ak::AudioManager::shutdownAudioManager();
-
 		Ak::MemoryManager::end();
 	AK_END_SESSION();
 

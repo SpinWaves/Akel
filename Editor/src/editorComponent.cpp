@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 22/09/2021
+// UPDATED : 05/10/2021
 
 #include <editorComponent.h>
 
@@ -12,14 +12,22 @@ EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
 void EditorComponent::onAttach()
 {
 	Ak::ImGuiComponent::onAttach();
+	ImGui::LoadIniSettingsFromDisk(std::string(Ak::Core::getMainDirPath() + "Editor").c_str());
 	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
 	_console = Ak::make_unique_ptr_w<Console>(Ak::custom_malloc<Console>(_eltm->getText("Console.name")));
 }
 
 void EditorComponent::onImGuiRender()
 {
-	drawMainMenuBar();
-	_console->render(WindowComponent::getSize().X, WindowComponent::getSize().Y);
+	//drawMainMenuBar();
+	//_console->render(WindowComponent::getSize().X, WindowComponent::getSize().Y);
+	ImGui::Text("Hello, world %d", 123);
+	if(ImGui::Button("Save")) {}
+		//MySaveFunction();
+	char buf[256];
+	float f = 0.0f;
+	ImGui::InputText("string", buf, IM_ARRAYSIZE(buf));
+	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
 	if(_showAbout)
 		drawAboutWindow();
 }
@@ -33,6 +41,7 @@ void EditorComponent::onEvent(Ak::Input& input)
 
 void EditorComponent::onQuit()
 {
+	ImGui::SaveIniSettingsToDisk(std::string(Ak::Core::getMainDirPath() + "Editor").c_str());
 	Ak::ImGuiComponent::onQuit();
 }
 
