@@ -1,8 +1,8 @@
 // This file is a part of the Akel editor
 // CREATED : 08/06/2021
-// UPDATED : 05/10/2021
+// UPDATED : 07/10/2021
 
-#define AK_PROJECT_FILE_DIR std::string(Ak::Core::getMainDirPath() + "Editor")
+#define AK_PROJECT_FILE_DIR std::string(Ak::Core::getMainDirPath() + "Editor/settings")
 #define AK_PROJECT_FILE_NAME std::string("editor")
 
 #include <AkEpch.h>

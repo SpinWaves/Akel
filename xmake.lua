@@ -7,7 +7,7 @@ set_xmakever("2.5.6")
 
 add_repositories("local-repo libs")
 
-add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-tools", "imgui_sdl_vk")
+add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-tools", "imgui_sdl_vk v1.83-docking")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 06/10/2021
-// UPDATED : 06/10/2021
+// UPDATED : 07/10/2021
 
 #include <Core/core.h>
 #include <Audio/audio.h>
@@ -24,13 +24,6 @@ namespace Ak
 			    return 1;
 			}
 			Ak::Core::log::report("architecture: 32bits");
-		#endif
-
-		#ifdef AK_PROJECT_FILE_DIR
-			Ak::Core::ProjectFile::setDir(AK_PROJECT_FILE_DIR);
-		#endif
-		#ifdef AK_PROJECT_FILE_NAME
-			Ak::Core::ProjectFile::setName(AK_PROJECT_FILE_NAME);
 		#endif
 
 		Ak::Core::ProjectFile::initProjFile();

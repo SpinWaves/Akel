@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 05/10/2021
+// UPDATED : 07/10/2021
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -17,6 +17,12 @@ int main(int argc, char** argv)
 	Ak::Core::log::Init();
 
 	AK_BEGIN_SESSION("Start");
+		#ifdef AK_PROJECT_FILE_DIR
+			Ak::Core::ProjectFile::setDir(AK_PROJECT_FILE_DIR);
+		#endif
+		#ifdef AK_PROJECT_FILE_NAME
+			Ak::Core::ProjectFile::setName(AK_PROJECT_FILE_NAME);
+		#endif
 		Ak::initAkel();
 		auto app = Akel_main();
 	AK_END_SESSION();

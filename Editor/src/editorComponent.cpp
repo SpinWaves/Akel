@@ -19,15 +19,8 @@ void EditorComponent::onAttach()
 
 void EditorComponent::onImGuiRender()
 {
-	//drawMainMenuBar();
-	//_console->render(WindowComponent::getSize().X, WindowComponent::getSize().Y);
-	ImGui::Text("Hello, world %d", 123);
-	if(ImGui::Button("Save")) {}
-		//MySaveFunction();
-	char buf[256];
-	float f = 0.0f;
-	ImGui::InputText("string", buf, IM_ARRAYSIZE(buf));
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+	drawMainMenuBar();
+	_console->render(WindowComponent::getSize().X, WindowComponent::getSize().Y);
 	if(_showAbout)
 		drawAboutWindow();
 }

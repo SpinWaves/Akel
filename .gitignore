@@ -2,3 +2,4 @@ build/
 build-int/
 .xmake/
 imgui.ini
+Editor/settings/

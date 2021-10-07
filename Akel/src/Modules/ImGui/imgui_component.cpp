@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 26/09/2021
+// UPDATED : 07/10/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -222,9 +222,9 @@ namespace Ak
 	{
 		if(err == 0)
 			return;
-		Core::log::report(ERROR, std::string("Imgui: Vulkan: VkResult = " + err));
 		if(err < 0)
-			abort();
+			Core::log::report(FATAL_ERROR, std::string("Imgui: Vulkan: VkResult = " + err));
+		Core::log::report(ERROR, std::string("Imgui: Vulkan: VkResult = " + err));
 	}
 
 #ifdef IMGUI_VULKAN_DEBUG_REPORT
