@@ -20,8 +20,8 @@ namespace Ak
 			void update() override {}
 			void onQuit() override;
 
-			void begin();
-			void end();
+			void begin(); // Do not use, the application will call it for you
+			void end(); // Do not use, the application will call it for you
 
 			static int getNumComp() { return _componentsInit; }
 

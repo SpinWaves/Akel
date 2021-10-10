@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 07/10/2021
+// UPDATED : 10/10/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -128,7 +128,7 @@ namespace Ak
 			ImGui_ImplVulkan_DestroyFontUploadObjects();
 		}
 
-		_componentsInit += 1;
+		_componentsInit++;
 	}
 
 	void ImGuiComponent::begin()
@@ -231,7 +231,7 @@ namespace Ak
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debug_report(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage, void* pUserData)
 	{
 		(void)flags; (void)object; (void)location; (void)messageCode; (void)pUserData; (void)pLayerPrefix; // Unused arguments
-		Core::log::report(ERROR, std::string("ImGui: Vulkan: debug report from ObjectType: " + objectType + "\nMessage:" + pMessage));
+		Core::log::report(ERROR, std::string(std::string("ImGui: Vulkan: debug report from ObjectType: " + objectType) + "\nMessage:" + pMessage)); // Needs to be improved
 		return VK_FALSE;
 	}
 #endif // IMGUI_VULKAN_DEBUG_REPORT
