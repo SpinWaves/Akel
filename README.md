@@ -1,6 +1,6 @@
 # Akel
 <p align="center">
-    <img src="https://github.com/NurissGames/Akel/blob/main/Ressources/assets/logo.png" alt="drawing" width="500"/>
+    <img src="https://github.com/SpinWaves/Akel/blob/main/Ressources/assets/logo.png" alt="drawing" width="500"/>
 </p>
 
 Akel is a game engine made for fun by a young french man.
@@ -11,7 +11,7 @@ Akel is designed to be extremely easy to use. Not being the most powerful, it go
 # Getting started
 Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, although it has not been tested on this OS (no information about MacOS, I have to find out). It is used with [xmake](https://xmake.io/#/). GCC 8(or higher) is required because it uses C++17 features. Dependencies are provided (SDL2, ImGui, Vulkan, GLM) by xmake.
 
-* Start by clonning the repo `git clone https://github.com/NurissGames/Akel`.
+* Start by clonning the repo `git clone https://github.com/SpinWaves/Akel`.
 * [Install xmake](https://xmake.io/#/guide/installation) (choose according to your system (Windows, Linux, ...)).
 * <details> <summary>Run xmake in the "xmake.lua" directory.</summary>
   By default xmake will build the Akel editor. If you want to build one of the demos you can run xmake as follows :
@@ -25,10 +25,10 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
   </details>
 
 # Akel useful features
-* Text management language [ELTM](https://github.com/NurissGames/Akel/tree/main/Akel/src/Modules/ELTM)
+* Text management language [ELTM](https://github.com/SpinWaves/Akel/tree/main/Akel/src/Modules/ELTM)
 * Simple but efficient error management system
 * Rendering system with Vulkan
-* [2 memory allocation systems](https://github.com/NurissGames/Akel/tree/main/Akel/src/Core/Memory):
+* [2 memory allocation systems](https://github.com/SpinWaves/Akel/tree/main/Akel/src/Core/Memory):
     * FixedAllocator is a fast allocator consisting of blocks of the same size that can be allocated. It is more performance oriented than memory optimised because if an allocated block is not used in full, the unused memory is wasted.
     * JamAllocator is a slightly less efficient (but still effective) allocator that is memory optimisation oriented. It allocates the memory size you want, no memory is wasted.
 
@@ -49,7 +49,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 You can contribute by :
 * Reporting problems
 * Suggesting features
-* [Fork the project](https://github.com/NurissGames/Akel/fork) on GitHub and push your changes
+* [Fork the project](https://github.com/SpinWaves/Akel/fork) on GitHub and push your changes
 * Talking about Akel to other people
 
 ## Links
