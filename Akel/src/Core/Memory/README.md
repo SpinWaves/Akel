@@ -7,7 +7,7 @@ Flags are 16-byte chunks allocated just before the pointer returned to the user.
 Akel has an internal safety feature that allows the heap to be freed of all instantiated JamAllocators and FixedAllocators when a FATAL_ERROR is sent to the logs and to the kernel's error core system (which will cause the program to be stopped in an emergency).
 
 <p align="center">
-    <img src="https://github.com/Kbz-8/Akel/blob/main/Ressources/assets/jam_alloc_diagram.png" alt="drawing"/>
+    <img src="https://github.com/NurissGames/Akel/blob/main/Ressources/assets/jam_alloc_diagram.png" alt="drawing"/>
 </p>
 
 ```C++
@@ -37,7 +37,7 @@ class CustomComponent : public Ak::Component
 The FixedAllocator is an allocation performance oriented allocator. It is based on a system of blocks of the same size that can be allocated individually. Like the JamAllocator it can allocate objects like "new".
 
 <p align="center">
-    <img src="https://github.com/Kbz-8/Akel/blob/main/Ressources/assets/fixed_alloc_diagram.png" alt="drawing"/>
+    <img src="https://github.com/NurissGames/Akel/blob/main/Ressources/assets/fixed_alloc_diagram.png" alt="drawing"/>
 </p>
 
 ```C++

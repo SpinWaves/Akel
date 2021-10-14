@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/Kbz-8/Akel/blob/main/Ressources/assets/eltm_logo.png" alt="drawing" width="500"/>
+    <img src="https://github.com/NurissGames/Akel/blob/main/Ressources/assets/eltm_logo.png" alt="drawing" width="500"/>
 </p>
 
 # ELTM
@@ -46,6 +46,6 @@ if(context.load("file.eltm"))	// Ak::ELTM::load return true or false in case of 
 ```
 
 ## Documentations
-[ELTM 1.0](https://github.com/Kbz-8/Akel/blob/main/Akel/src/Modules/ELTM/ELTM_documentation_1_0.pdf)
+[ELTM 1.0](https://github.com/NurissGames/Akel/blob/main/Akel/src/Modules/ELTM/ELTM_documentation_1_0.pdf)
 
-[ELTM 1.1](https://github.com/Kbz-8/Akel/blob/main/Akel/src/Modules/ELTM/ELTM_documentation_1_1.pdf)
+[ELTM 1.1](https://github.com/NurissGames/Akel/blob/main/Akel/src/Modules/ELTM/ELTM_documentation_1_1.pdf)
