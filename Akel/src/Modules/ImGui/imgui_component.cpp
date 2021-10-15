@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 10/10/2021
+// UPDATED : 15/10/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -33,8 +33,6 @@ namespace Ak
 	static ImGui_ImplVulkanH_Window g_MainWindowData;
 	static uint32_t                 g_MinImageCount = 2;
 	static bool                     g_SwapChainRebuild = false;
-	static int                      g_SwapChainResizeWidth = 0;
-	static int                      g_SwapChainResizeHeight = 0;
 
 	static ImVec4 clear_color = ImVec4(0.157f, 0.165f, 0.211f, 1.0f);
 	static ImGui_ImplVulkanH_Window* _wd = &g_MainWindowData;
@@ -77,11 +75,20 @@ namespace Ak
 		ImGuiIO& io = ImGui::GetIO();
 		(void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; 
 
 		io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Bold.ttf").c_str(), 18.0f);
 		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Regular.ttf").c_str(), 18.0f);
 
 		SetDarkThemeColors();
+
+		ImGuiStyle& style = ImGui::GetStyle();
+		if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			style.WindowRounding = 0.0f;
+			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		}
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplSDL2_InitForVulkan(_window);
@@ -246,7 +253,7 @@ namespace Ak
 			create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 			create_info.enabledExtensionCount = extensions_count;
 			create_info.ppEnabledExtensionNames = extensions;
-#ifdef IMGUI_VULKAN_DEBUG_REPORT
+	#ifdef IMGUI_VULKAN_DEBUG_REPORT
 			// Enabling validation layers
 			const char* layers[] = { "VK_LAYER_KHRONOS_validation" };
 			create_info.enabledLayerCount = 1;
@@ -276,12 +283,12 @@ namespace Ak
 			debug_report_ci.pUserData = NULL;
 			err = vkCreateDebugReportCallbackEXT(g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
 			check_vk_result(err);
-#else
+	#else
 			// Create Vulkan Instance without any debug feature
 			err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
 			check_vk_result(err);
 			IM_UNUSED(g_DebugReport);
-#endif
+	#endif
 		}
 
 		// Select GPU
@@ -303,7 +310,7 @@ namespace Ak
 			{
 				VkPhysicalDeviceProperties properties;
 				vkGetPhysicalDeviceProperties(gpus[i], &properties);
-				if(properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+				if (properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
 				{
 					use_gpu = i;
 					break;
@@ -321,7 +328,70 @@ namespace Ak
 			VkQueueFamilyProperties* queues = (VkQueueFamilyProperties*)malloc(sizeof(VkQueueFamilyProperties) * count);
 			vkGetPhysicalDeviceQueueFamilyProperties(g_PhysicalDevice, &count, queues);
 			for (uint32_t i = 0; i < count; i++)
-				if(queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
+				if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
+				{
+					g_QueueFamily = i;
+					break;
+				}
+			free(queues);
+			IM_ASSERT(g_QueueFamily != (uint32_t)-1);
+		}
+
+		// Create Logical Device (with 1 queue)
+		{
+			int device_extension_count = 1;
+			const char* device_extensions[] = { "VK_KHR_swapchain" };
+			const float queue_priority[] = { 1.0f };
+			VkDeviceQueueCreateInfo queue_info[1] = {};
+			queue_info[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+			queue_info[0].queueFamilyIndex = g_QueueFamily;
+			queue_info[0].queueCount = 1;
+			queue_info[0].pQueuePriorities = queue_priority;
+			VkDeviceCreateInfo create_info = {};
+			create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+			create_info.queueCreateInfoCount = sizeof(queue_info) / sizeof(queue_info[0]);
+			create_info.pQueueCreateInfos = queue_info;
+			create_info.enabledExtensionCount = device_extension_count;
+			create_info.ppEnabledExtensionNames = device_extensions;
+			err = vkCreateDevice(g_PhysicalDevice, &create_info, g_Allocator, &g_Device);
+			check_vk_result(err);
+			vkGetDeviceQueue(g_Device, g_QueueFamily, 0, &g_Queue);
+		}
+
+		// Create Descriptor Pool
+		{
+			VkDescriptorPoolSize pool_sizes[] =
+			{
+				{ VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+				{ VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+				{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+				{ VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+			};
+			VkDescriptorPoolCreateInfo pool_info = {};
+			pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+			pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+			pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
+			pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
+			pool_info.pPoolSizes = pool_sizes;
+			err = vkCreateDescriptorPool(g_Device, &pool_info, g_Allocator, &g_DescriptorPool);
+			check_vk_result(err);
+		}
+
+		// Select graphics queue family
+		{
+			uint32_t count;
+			vkGetPhysicalDeviceQueueFamilyProperties(g_PhysicalDevice, &count, NULL);
+			VkQueueFamilyProperties* queues = (VkQueueFamilyProperties*)malloc(sizeof(VkQueueFamilyProperties) * count);
+			vkGetPhysicalDeviceQueueFamilyProperties(g_PhysicalDevice, &count, queues);
+			for (uint32_t i = 0; i < count; i++)
+				if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 				{
 					g_QueueFamily = i;
 					break;
@@ -387,8 +457,11 @@ namespace Ak
 		// Check for WSI support
 		VkBool32 res;
 		vkGetPhysicalDeviceSurfaceSupportKHR(g_PhysicalDevice, g_QueueFamily, wd->Surface, &res);
-		if(res != VK_TRUE)
-			messageBox(FATAL_ERROR, "Vulkan error for ImGui window", "Error no WSI support on physical device 0");
+		if (res != VK_TRUE)
+		{
+			fprintf(stderr, "Error no WSI support on physical device 0\n");
+			exit(-1);
+		}
 
 		// Select Surface Format
 		const VkFormat requestSurfaceImageFormat[] = { VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM };
@@ -396,11 +469,11 @@ namespace Ak
 		wd->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(g_PhysicalDevice, wd->Surface, requestSurfaceImageFormat, (size_t)IM_ARRAYSIZE(requestSurfaceImageFormat), requestSurfaceColorSpace);
 
 		// Select Present Mode
-#ifdef IMGUI_UNLIMITED_FRAME_RATE
+	#ifdef IMGUI_UNLIMITED_FRAME_RATE
 		VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR };
-#else
+	#else
 		VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_FIFO_KHR };
-#endif
+	#endif
 		wd->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, wd->Surface, &present_modes[0], IM_ARRAYSIZE(present_modes));
 		//printf("[vulkan] Selected PresentMode = %d\n", wd->PresentMode);
 
@@ -413,11 +486,11 @@ namespace Ak
 	{
 		vkDestroyDescriptorPool(g_Device, g_DescriptorPool, g_Allocator);
 
-#ifdef IMGUI_VULKAN_DEBUG_REPORT
+	#ifdef IMGUI_VULKAN_DEBUG_REPORT
 		// Remove the debug report callback
 		auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkDestroyDebugReportCallbackEXT");
 		vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
-#endif // IMGUI_VULKAN_DEBUG_REPORT
+	#endif // IMGUI_VULKAN_DEBUG_REPORT
 
 		vkDestroyDevice(g_Device, g_Allocator);
 		vkDestroyInstance(g_Instance, g_Allocator);
@@ -435,7 +508,7 @@ namespace Ak
 		VkSemaphore image_acquired_semaphore  = wd->FrameSemaphores[wd->SemaphoreIndex].ImageAcquiredSemaphore;
 		VkSemaphore render_complete_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
 		err = vkAcquireNextImageKHR(g_Device, wd->Swapchain, UINT64_MAX, image_acquired_semaphore, VK_NULL_HANDLE, &wd->FrameIndex);
-		if(err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
+		if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
 		{
 			g_SwapChainRebuild = true;
 			return;
@@ -497,7 +570,7 @@ namespace Ak
 
 	static void FramePresent(ImGui_ImplVulkanH_Window* wd)
 	{
-		if(g_SwapChainRebuild)
+		if (g_SwapChainRebuild)
 			return;
 		VkSemaphore render_complete_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
 		VkPresentInfoKHR info = {};
@@ -508,7 +581,7 @@ namespace Ak
 		info.pSwapchains = &wd->Swapchain;
 		info.pImageIndices = &wd->FrameIndex;
 		VkResult err = vkQueuePresentKHR(g_Queue, &info);
-		if(err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
+		if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
 		{
 			g_SwapChainRebuild = true;
 			return;

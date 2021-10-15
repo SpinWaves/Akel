@@ -15,6 +15,8 @@ set_languages("cxx17")
 set_objectdir("build-int/$(os)_$(arch)")
 set_targetdir("build/$(os)_$(arch)")
 
+add_linkdirs("libs/packages/i/imgui_sdl_vk/install")
+
 -- Lib Akel Build
 target("Akel")
 	set_default(true)
@@ -30,7 +32,12 @@ target("Akel")
 
 	set_pcxxheader("Akel/src/Akpch.h")
 	add_defines("SDL_MAIN_HANDLED")
-	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "imgui_sdl_vk", "vulkan-headers", "vulkan-loader", "vulkan-tools")
+	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-tools")
+	add_packages("imgui_sdl_vk")
+
+	on_load(function(target)
+		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")
+    end);
 target_end() -- optional but I think the code is cleaner with this
 
 -- Editor Build

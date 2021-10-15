@@ -21,7 +21,7 @@ package("imgui_sdl_vk")
         add_syslinks("Imm32")
     end
 
-    on_load("macosx", "linux", "windows", "mingw", "android", "iphoneos", function (package)
+    on_load("macosx", "linux", "windows", "mingw", "android", "iphoneos", function(package)
         package:add("deps", "libsdl", "vulkan-headers", "vulkan-loader", "vulkan-tools")
 
         if package:version_str():find("-docking", 1, true) then
@@ -29,16 +29,17 @@ package("imgui_sdl_vk")
         end
     end)
 
-    on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos", function (package)
+    on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos", function(package, target)
+        local configs = {}
+        configs.kind = "shared"
         local xmake_lua
-
         local pkgs = "\"libsdl\", \"vulkan-headers\", \"vulkan-loader\", \"vulkan-tools\""
         xmake_lua = format([[
             add_rules("mode.debug", "mode.release")
             add_rules("utils.install.cmake_importfiles")
             add_requires(%s)
             target("imgui_sdl_vk")
-                set_kind("static")
+                set_kind("shared")
                 add_files("*.cpp", "backends/imgui_impl_sdl.cpp", "backends/imgui_impl_vulkan.cpp")
                 add_packages(%s)
                 add_includedirs(".")
@@ -47,5 +48,7 @@ package("imgui_sdl_vk")
         ]], pkgs, pkgs)
 
         io.writefile("xmake.lua", xmake_lua)
-        import("package.tools.xmake").install(package)
+        import("package.tools.xmake").install(package, configs)
+        os.cp(path.join(package:installdir(), "lib"), path.join(os.scriptdir(), "install"))
     end)
+ 
