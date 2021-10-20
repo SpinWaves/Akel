@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 06/10/2021
-// UPDATED : 07/10/2021
+// UPDATED : 20/10/2021
 
 #include <Core/core.h>
 #include <Audio/audio.h>
@@ -8,31 +8,36 @@
 
 namespace Ak
 {
-    bool initAkel()
+    bool initAkel(AkelInstance* project)
     {
 		#if defined(AK_64BITS)
 			if(sizeof(void*) != 8)
 			{
-				Ak::Core::log::report(ERROR, "Conflict of system architecture detection");
-			    return 1;
+				Core::log::report(ERROR, "Conflict of system architecture detection");
+			    return false;
 			}
-			Ak::Core::log::report("architecture: 64bits");
+			Core::log::report("architecture: 64bits");
 		#elif defined(AK_32BITS)
 			if(sizeof(void*) != 4)
 			{
-				Ak::Core::log::report(ERROR, "Conflict of system architecture detection");
-			    return 1;
+				Core::log::report(ERROR, "Conflict of system architecture detection");
+			    return false;
 			}
-			Ak::Core::log::report("architecture: 32bits");
+			Core::log::report("architecture: 32bits");
 		#endif
 
-		Ak::Core::ProjectFile::initProjFile();
+		if(project->project_file_name != "")
+			Core::ProjectFile::setName(project->project_file_name);
+		if(project->project_file_path != "")
+			Core::ProjectFile::setDir(project->project_file_path);
+		Core::ProjectFile::initProjFile();
 
-		Ak::MemoryManager::init();
+		MemoryManager::useMemoryManager(project->use_memory_manager);
+		MemoryManager::init();
 
-		Ak::AudioManager::initAudioManager();
+		AudioManager::initAudioManager();
 
-		Ak::buildBasics2D();
-
+		buildBasics2D();
+		return true;
     }
 }

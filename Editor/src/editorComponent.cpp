@@ -11,9 +11,8 @@ EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
 
 void EditorComponent::onAttach()
 {
+	Ak::ImGuiComponent::setSettingsFilePath(std::string(Ak::Core::getMainDirPath() + "Editor/settings/editor.ini").c_str());
 	Ak::ImGuiComponent::onAttach();
-	ImGui::LoadIniSettingsFromDisk(std::string(Ak::Core::getMainDirPath() + "Editor").c_str());
-	ImGui::SaveIniSettingsToDisk(std::string(Ak::Core::getMainDirPath() + "Editor").c_str());
 	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
 	_console = Ak::make_unique_ptr_w<Console>(Ak::custom_malloc<Console>(_eltm->getText("Console.name")));
 }

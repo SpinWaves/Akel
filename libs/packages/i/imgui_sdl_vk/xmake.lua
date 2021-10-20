@@ -1,3 +1,7 @@
+-- This file is a part of Akel
+-- CREATED : 05/10/2021
+-- UPDATED : 16/10/2021
+
 package("imgui_sdl_vk")
 
     set_homepage("https://github.com/ocornut/imgui")

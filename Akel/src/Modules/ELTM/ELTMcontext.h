@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 25/08/2021
+// UPDATED : 16/10/2021
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -10,18 +10,18 @@
 #include <Utils/utils.h>
 #include <Core/profile.h>
 
-#ifndef AK_ELTM_VERSION_1_0
-	#define ELTMcontext ELTM
-	#define newContext load
+#ifdef AK_ELTM_VERSION_1_0
+	#define ELTM ELTMcontext
+	#define load newContext
 #endif
 
 namespace Ak
 {
-	class ELTMcontext
+	class ELTM
 	{
 		public:
-			explicit ELTMcontext();
-			bool newContext(std::string file);
+			explicit ELTM();
+			bool load(std::string file);
 			static std::string getText(std::string ID, size_t line, std::string file, std::string function)
 			{
 				if(_isError)
@@ -61,7 +61,7 @@ namespace Ak
 				return _file;
 			}
 
-			~ELTMcontext() = default;
+			~ELTM() = default;
 
 		private:
 			bool setID(bool isNewID);
@@ -70,7 +70,7 @@ namespace Ak
 
 			static inline std::unordered_map<std::string, std::string> _texts;
 			static inline std::unordered_map<std::string, std::unordered_map<std::string, std::string>> _modules;
-			std::vector<ELTMcontext> _imports;
+			std::vector<ELTM> _imports;
 
 			StreamStack _stream;
 			const char* _file;

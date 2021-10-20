@@ -1,6 +1,6 @@
 -- This file is a part of Akel
 -- CREATED : 02/10/2021
--- UPDATED : 05/10/2021
+-- UPDATED : 16/10/2021
 
 -- Globals settings
 set_xmakever("2.5.6")
@@ -15,8 +15,6 @@ set_languages("cxx17")
 set_objectdir("build-int/$(os)_$(arch)")
 set_targetdir("build/$(os)_$(arch)")
 
-add_linkdirs("libs/packages/i/imgui_sdl_vk/install")
-
 -- Lib Akel Build
 target("Akel")
 	set_default(true)
@@ -29,6 +27,8 @@ target("Akel")
 	elseif is_mode("release") then
 		add_defines("AK_RELEASE")
 	end
+
+	add_defines("MAIN_PATH=\"$(projectdir)/\"")
 
 	set_pcxxheader("Akel/src/Akpch.h")
 	add_defines("SDL_MAIN_HANDLED")

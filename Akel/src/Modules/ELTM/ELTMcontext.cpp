@@ -1,23 +1,18 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 25/08/2021
+// UPDATED : 16/10/2021
 
 #include <Modules/ELTM/eltm.h>
 
-#ifndef AK_ELTM_VERSION_1_0
-	#define ELTMcontext ELTM
-	#define newContext load
-#endif
-
 namespace Ak
 {
-	ELTMcontext::ELTMcontext() : _stream()
+	ELTM::ELTM() : _stream()
 	{
 		_comments[0] = false;
 		_comments[1] = false;
 	}
 
-	bool ELTMcontext::newContext(std::string file)
+	bool ELTM::load(std::string file)
 	{
 		_file = file.c_str();
 		_stream.tokenize(_file);
@@ -84,9 +79,9 @@ namespace Ak
 								}
 								if(!isKnown)
 								{
-									ELTMcontext newFile;
+									ELTM newFile;
 									_imports.push_back(newFile);
-									if(!_imports.back().newContext(std::string(path + _stream.getToken(_line, 1).getString()).c_str()))
+									if(!_imports.back().load(std::string(path + _stream.getToken(_line, 1).getString()).c_str()))
 									{
 										_isError = true;
 										return false;
@@ -193,7 +188,7 @@ namespace Ak
 		return true;
 	}
 
-	bool ELTMcontext::setID(bool isNewID)
+	bool ELTM::setID(bool isNewID)
 	{
 		std::string text;
 		std::string moduleName;

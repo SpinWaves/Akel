@@ -24,23 +24,18 @@ void Console::render(int width, int height)
 
 	_WindowAlpha = 1.0f;
 	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, _WindowAlpha);
-	if(!ImGui::Begin(_name.data(), nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar))
+	if(ImGui::Begin(_name.data(), nullptr, ImGuiWindowFlags_NoScrollbar))
     {
-        ImGui::PopStyleVar();
-        ImGui::End();
-		Ak::messageBox(ERROR, Ak::ELTM::getText("errors.consoleMainWin"), "ImGui::Begin() returned false");
-        return;
+		//ImGui::SetWindowSize(ImVec2(width, _height));
+		//ImGui::SetWindowPos(ImVec2(0, height - _height));
+
+		//logPart();
+		ImGui::Separator();
+		//inputBar();
+
+		ImGui::End();
     }
     ImGui::PopStyleVar();
-
-	ImGui::SetWindowSize(ImVec2(width, _height));
-	ImGui::SetWindowPos(ImVec2(0, height - _height), true);
-
-	logPart();
-	ImGui::Separator();
-    inputBar();
-
-    ImGui::End();
 }
 
 void Console::logPart()

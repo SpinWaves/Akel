@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 15/10/2021
+// UPDATED : 16/10/2021
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -77,6 +77,14 @@ namespace Ak
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; 
+
+		if(_settingsFilePath != nullptr)		
+		{
+			std::cout << "test " << _settingsFilePath << std::endl;
+			io.IniFilename = _settingsFilePath;
+			//ImGui::LoadIniSettingsFromDisk(_settingsFilePath);
+			//ImGui::SaveIniSettingsToDisk(_settingsFilePath);
+		}
 
 		io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Bold.ttf").c_str(), 18.0f);
 		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Regular.ttf").c_str(), 18.0f);
@@ -172,6 +180,12 @@ namespace Ak
             _wd->ClearValue.color.float32[3] = clear_color.w;
             FrameRender(_wd, draw_data);
             FramePresent(_wd);
+        }
+		ImGuiIO& io = ImGui::GetIO();
+		if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
         }
 	}
 

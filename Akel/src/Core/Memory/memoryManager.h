@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 22/09/2021
+// UPDATED : 16/10/2021
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -50,7 +50,7 @@ namespace Ak
     template <typename T = void, typename ... Args>
     T* MemoryManager::alloc(Args&& ... args)
     {
-		if(Core::ProjectFile::getBoolValue("use_memory_manager"))
+        if(_use)
         {
             #ifndef AK_USE_JAM_MEMORY_HELPER
                 if(!std::is_class<T>::value)
@@ -71,7 +71,7 @@ namespace Ak
     template <typename T = void>
     void MemoryManager::free(T* ptr)
     {
-		if(Core::ProjectFile::getBoolValue("use_memory_manager"))
+        if(_use)
         {
             #ifndef AK_USE_JAM_MEMORY_HELPER
                 if(__fixed1.contains((void*)ptr))

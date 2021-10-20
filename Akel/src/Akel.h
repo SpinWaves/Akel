@@ -1,6 +1,6 @@
 // Akel is an open source game engine made for fun
-// Its name was inspired by Sithis who is also known as Akel from The Elder Scrolls series
-// 2021 - Malo DAVID
+// https://github.com/SpinWaves/Akel
+// 2021 - SpinWaves Studios
 
 #ifndef __AKEL__
 #define __AKEL__

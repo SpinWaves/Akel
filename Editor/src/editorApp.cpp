@@ -1,9 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 08/06/2021
-// UPDATED : 07/10/2021
-
-#define AK_PROJECT_FILE_DIR std::string(Ak::Core::getMainDirPath() + "Editor/settings")
-#define AK_PROJECT_FILE_NAME std::string("editor")
+// UPDATED : 20/10/2021
 
 #include <AkEpch.h>
 #include <Akel_main.h>
@@ -20,7 +17,15 @@ class Editor : public Ak::Application
 		~Editor() = default;
 };
 
-Ak::Application* Akel_main()
+Ak::AkelInstance Akel_init()
+{
+	Ak::AkelInstance project;
+		project.project_file_path = std::string(Ak::Core::getMainDirPath() + "Editor/settings");
+		project.project_file_name = "editor";
+	return project;
+}
+
+Ak::Application* Akel_mainApplication()
 {
 	return Ak::custom_malloc<Editor>();
 }

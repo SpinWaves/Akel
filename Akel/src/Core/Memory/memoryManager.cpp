@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 22/09/2021
+// UPDATED : 16/10/2021
 
 #include <Utils/utils.h>
 #include <Core/core.h>
@@ -10,7 +10,7 @@ namespace Ak
     void MemoryManager::init()
     {
         control_unit = std::make_shared<ControlUnit>();
-		if(Ak::Core::ProjectFile::getBoolValue("use_memory_manager"))
+        if(_use)
         {
         #ifndef AK_USE_JAM_MEMORY_HELPER
             __fixed1.init(16, 100);
@@ -27,7 +27,7 @@ namespace Ak
     }
     void MemoryManager::end()
     {
-		if(Core::ProjectFile::getBoolValue("use_memory_manager"))
+        if(_use)
         {
         #ifndef AK_USE_JAM_MEMORY_HELPER
             __fixed1.destroy();
