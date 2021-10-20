@@ -35,6 +35,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 # Coming soon...
 * Fully functionnal renderer using Vulkan API
 * Demos
+* Custom strings to replace std::string
 * Finished ELTM version 1.1 including :
     * Concatenation
     * Recognition of \n and \t
