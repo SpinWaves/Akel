@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 22/09/2021
+// UPDATED : 21/10/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -34,7 +34,7 @@ namespace Ak
 
             struct flag
             {
-                size_t size = 0;
+                unsigned int size = 0;
                 unsigned int offset = 0;
             };
 
