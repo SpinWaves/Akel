@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 	Ak::Core::log::Init();
 
 	AK_BEGIN_SESSION("Start");
-		Ak::AkelInstance project = Akel_init();
+		Ak::AkelInstance project = std::move(Akel_init());
 		if(!Ak::initAkel(&project))
 		{
 			Ak::Core::log::report(ERROR, "Something went wrong with Akel initialisation");

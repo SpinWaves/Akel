@@ -74,6 +74,7 @@ namespace Ak::Core
         if(type == FATAL_ERROR)
         {
             std::set_terminate(TERMINATE);
+			unlockThreads(mutex);
             std::terminate();
         }
 

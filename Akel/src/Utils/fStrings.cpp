@@ -3,7 +3,7 @@
 // UPDATED : 21/10/2021
 
 #include <Utils/fStrings.h>
-#include <Core/log.h>
+#include <Core/core.h>
 
 namespace Ak
 {
@@ -49,7 +49,7 @@ namespace Ak
     {
         return _string[index];
     }
-    char* fString::back()
+    char fString::back()
     {
         return _string[sizeof(_string) - 1];
     }

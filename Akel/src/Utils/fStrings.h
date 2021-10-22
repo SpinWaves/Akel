@@ -30,9 +30,9 @@ namespace Ak
             // Getters
             char operator[](unsigned int index);
             char at(unsigned int index);
-            char* back();
+            char back();
             char front();
-            const char* c_str() { return _string; }
+            const char* c_str() const { return _string; }
 
             // Finders
             int find(fString str);

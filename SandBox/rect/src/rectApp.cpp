@@ -1,8 +1,4 @@
 #include <Akel.h>
-
-#define AK_PROJECT_FILE_DIR std::string(Ak::Core::getMainDirPath() + "SandBox/rect")
-#define AK_PROJECT_FILE_NAME std::string("rect")
-
 #include <Akel_main.h>
 #include "rectComponent.h"
 
@@ -16,7 +12,15 @@ class Rect : public Ak::Application
         ~Rect() = default;
 };
 
-Ak::Application* Akel_main()
+Ak::AkelInstance Akel_init()
+{
+    Ak::AkelInstance instance;
+		instance.project_file_path = std::string(Ak::Core::getMainDirPath() + "SandBox/rect");
+		instance.project_file_name = "rect";
+    return instance;    
+}
+
+Ak::Application* Akel_mainApplication()
 {
     return Ak::custom_malloc<Rect>();
 }

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 06/10/2021
+// UPDATED : 21/10/2021
 
 #include <Core/core.h>
 
@@ -90,9 +90,6 @@ namespace Ak
         std::free(_heap);
         _heap = nullptr;
         
-        if(_memUsed != 0)
-            Core::log::report(WARNING, "JamAllocator : leaks of %d have been detected", _memUsed);
-
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, _memUsed);
 
