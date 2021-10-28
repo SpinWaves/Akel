@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 09/07/2021
-// UPDATED : 25/08/2021
+// UPDATED : 28/10/2021
 
 #include <Panels/console.h>
 
@@ -26,12 +26,12 @@ void Console::render(int width, int height)
 	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, _WindowAlpha);
 	if(ImGui::Begin(_name.data(), nullptr, ImGuiWindowFlags_NoScrollbar))
     {
-		//ImGui::SetWindowSize(ImVec2(width, _height));
-		//ImGui::SetWindowPos(ImVec2(0, height - _height));
+		ImGui::SetWindowPos(ImVec2(0, height), ImGuiCond_FirstUseEver);
+		ImGui::SetWindowSize(ImVec2(width, _height), ImGuiCond_FirstUseEver);
 
-		//logPart();
+		logPart();
 		ImGui::Separator();
-		//inputBar();
+		inputBar();
 
 		ImGui::End();
     }

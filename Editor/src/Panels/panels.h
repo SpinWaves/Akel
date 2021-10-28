@@ -7,6 +7,7 @@
 
 #include <Panels/console.h>
 #include <Panels/shell/shell.h>
+#include <Panels/eltm_editor.h>
 
 #endif // __AK_EDITOR_PANELS__
 

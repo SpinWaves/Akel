@@ -112,7 +112,7 @@ namespace Ak::Core
 			elem->destroy();
 		}
 
-        std::cout << bg_red << "EXIT FAILURE: emergency abortion program" << bg_def << std::endl;
+        std::cout << bg_red << "FATAL ERROR: emergency abortion program" << bg_def << std::endl;
         abort();
     }
 

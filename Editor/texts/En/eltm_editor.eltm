@@ -1,0 +1,9 @@
+// This file is a part of the Akel editor
+// CREATED : 28/10/2021
+// UPDATED : 28/10/2021
+
+begin module ELTM_Editor
+
+    set name = ELTM Editor
+
+end module

@@ -2,7 +2,7 @@
 # DO NOT MODIFY IT, OTHERWISE YOU WILL GET BAD PERFORMANCES,
 # BAD MEMORY OPTIMISATION OR EVEN YOUR PROJECT WILL NOT WORK ANYMORE!
 
-use_memory_manager = true = true = true = true = true = true
+use_memory_manager = true = true = true
 fixedAllocator_size_0 = 1600
 fixedAllocator_size_1 = 6400
 fixedAllocator_size_2 = 38400
