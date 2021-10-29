@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 16/10/2021
+// UPDATED : 29/10/2021
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -61,6 +61,15 @@ namespace Ak
 				return _file;
 			}
 
+			std::unordered_map<std::string, std::string>& getCurrentTexts()
+			{
+				return _current_texts;
+			}
+			std::unordered_map<std::string, std::unordered_map<std::string, std::string>>& getCurrentModules()
+			{
+				return _current_modules;
+			}
+
 			~ELTM() = default;
 
 		private:
@@ -69,7 +78,9 @@ namespace Ak
 			static inline bool _isError = false;
 
 			static inline std::unordered_map<std::string, std::string> _texts;
+			std::unordered_map<std::string, std::string> _current_texts;
 			static inline std::unordered_map<std::string, std::unordered_map<std::string, std::string>> _modules;
+			std::unordered_map<std::string, std::unordered_map<std::string, std::string>> _current_modules;
 			std::vector<ELTM> _imports;
 
 			StreamStack _stream;

@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 28/10/2021
-// UPDATED : 28/10/2021
+// UPDATED : 29/10/2021
 
 #include <Panels/eltm_editor.h>
 
@@ -23,7 +23,7 @@ void ELTM_editor::render(int width, int height)
     _width = width;
 	if(ImGui::Begin(_name.data(), nullptr, ImGuiWindowFlags_NoScrollbar))
     {
-		ImGui::SetWindowPos(ImVec2(0, 20), ImGuiCond_FirstUseEver);
+		ImGui::SetWindowPos(ImVec2(0, 100), ImGuiCond_FirstUseEver);
 		ImGui::SetWindowSize(ImVec2(width, height - 500), ImGuiCond_FirstUseEver);
 
         editor();
@@ -36,7 +36,11 @@ void ELTM_editor::editor()
 {
     if(ImGui::BeginChild("Scrolling", ImVec2(0, _height - 75), true))
     {
-        ImGui::Text("oui");
+        for(auto it = _eltm->getCurrentTexts().begin(); it!= _eltm->getCurrentTexts().end(); it++)
+        {
+            std::cout << it->first << " : " << it->second << std::endl;
+			ImGui::TextUnformatted(std::string(it->first + " : " + it->second).data());
+        }
 	    ImGui::EndChild();
     }
 }

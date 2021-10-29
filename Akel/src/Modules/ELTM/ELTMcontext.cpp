@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 16/10/2021
+// UPDATED : 29/10/2021
 
 #include <Modules/ELTM/eltm.h>
 
@@ -342,9 +342,15 @@ namespace Ak
 				j = 0;
 			}
 			if(_lastModuleName.empty())
+			{
+				_current_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;				
 				_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;
+			}
 			else
+			{
+				_current_modules[_lastModuleName][_stream.getToken(currentLine, assignPos - 1).getString()] = text;
 				_modules[_lastModuleName][_stream.getToken(currentLine, assignPos - 1).getString()] = text;
+			}
 
 			Token::activateKw();
 			if(long_text)
