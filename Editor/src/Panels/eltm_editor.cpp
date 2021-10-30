@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 28/10/2021
-// UPDATED : 29/10/2021
+// UPDATED : 30/10/2021
 
 #include <Panels/eltm_editor.h>
 
@@ -38,9 +38,15 @@ void ELTM_editor::editor()
     {
         for(auto it = _eltm->getCurrentTexts().begin(); it!= _eltm->getCurrentTexts().end(); it++)
         {
-            std::cout << it->first << " : " << it->second << std::endl;
 			ImGui::TextUnformatted(std::string(it->first + " : " + it->second).data());
+        }
+        for(auto it = _eltm->getCurrentModules().begin(); it!= _eltm->getCurrentModules().end(); it++)
+        {
+            for(auto it2 = it->second.begin(); it2 != it->second.end(); it2++)
+			    ImGui::TextUnformatted(std::string(it->first + "." + it2->first + " : " + it2->second).data());
         }
 	    ImGui::EndChild();
     }
+
+    ImGui::Separator();
 }

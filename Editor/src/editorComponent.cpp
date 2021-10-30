@@ -16,7 +16,7 @@ void EditorComponent::onAttach()
 	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
 	_console = Ak::make_unique_ptr_w<Console>(Ak::custom_malloc<Console>(_eltm->getText("Console.name")));
 	_eltm_editor = Ak::make_unique_ptr_w<ELTM_editor>(Ak::custom_malloc<ELTM_editor>(_eltm->getText("ELTM_Editor.name")));
-	_eltm_editor->load(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
+	_eltm_editor->load(Ak::Core::getMainDirPath() + "Editor/texts/En/console.eltm");
 }
 
 void EditorComponent::onImGuiRender()
