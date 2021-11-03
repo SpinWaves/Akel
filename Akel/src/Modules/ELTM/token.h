@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/05/2021
-// UPDATED : 13/07/2021
+// UPDATED : 03/11/2021
 
 #ifndef __AK_ELTM_TOKEN__
 #define __AK_ELTM_TOKEN__
@@ -31,10 +31,6 @@ namespace Ak
 
 		begin_long_text,
 		end_long_text,
-
-		#ifdef AK_ELTM_VERSION_1_1
-			
-		#endif
 
 		error
 	};

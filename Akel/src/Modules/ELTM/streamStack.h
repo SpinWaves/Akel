@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 07/05/2021
-// UPDATED : 15/07/2021
+// UPDATED : 03/11/2021
 
 #ifndef __AK_STREAM_STACK__
 #define __AK_STREAM_STACK__
@@ -36,7 +36,6 @@ namespace Ak
 						subData = line;
 						for(int i = 0; i < Token::mixable_keywords_token.size(); i++)
 						{
-						#ifdef AK_ELTM_VERSION_1_1
 							found = subData.find(Token::mixable_keywords_token[i].second);
 							while(found != std::string::npos)
 							{
@@ -45,13 +44,6 @@ namespace Ak
 
 								found = subData.find(Token::mixable_keywords_token[i].second, found + Token::mixable_keywords_token[i].second.length() + 2);
 							}
-						#else
-							if((found = subData.find(Token::mixable_keywords_token[i].second)) != std::string::npos)
-							{
-								subData.insert(subData.begin() + found + Token::mixable_keywords_token[i].second.length(), ' ');
-								subData.insert(subData.begin() + found, ' ');
-							}
-						#endif
 						}
 						std::istringstream iss(subData);
 						while(iss >> data)			// get word after word from the line
@@ -60,12 +52,10 @@ namespace Ak
 								tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(data)])));
 							else
 							{
-							#ifdef AK_ELTM_VERSION_1_1
 								if((found = data.find("\\n")) != std::string::npos)
 									data.replace(data.begin() + found, data.begin() + found + 2, "\n");
 								if((found = data.find("\\t")) != std::string::npos)
 									data.replace(data.begin() + found, data.begin() + found + 2, "\t");
-							#endif
 								tempo.push_back(std::make_pair(index_count, Token(std::move(data))));
 							}
 							index_count++;

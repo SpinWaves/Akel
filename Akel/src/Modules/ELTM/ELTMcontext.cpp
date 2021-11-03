@@ -1,15 +1,16 @@
 // This file is a part of Akel
 // CREATED : 12/05/2021
-// UPDATED : 29/10/2021
+// UPDATED : 03/11/2021
 
 #include <Modules/ELTM/eltm.h>
 
 namespace Ak
 {
-	ELTM::ELTM() : _stream()
+	ELTM::ELTM(bool is_global) : _stream()
 	{
 		_comments[0] = false;
 		_comments[1] = false;
+		_is_global = is_global;
 	}
 
 	bool ELTM::load(std::string file)
@@ -163,6 +164,14 @@ namespace Ak
 						_isError = true;
 						return false;
 					}
+					else if(!_current_texts.count(_stream.getToken(_line, 0).getString()))
+					{
+						Token::activateKw();
+						ELTMerrors error = simple_error(std::string("undefined ID or keyword \"" + _stream.getToken(_line, 0).getString() + "\""), file, _line + 1);
+						std::cout << red << error.what() << def << std::endl;
+						_isError = true;
+						return false;
+					}
 					if(!setID(false))
 						return false;
 				}
@@ -207,7 +216,7 @@ namespace Ak
 
 			while(_line < _stream.getLineNumber())
 			{
-				for(;j < _stream.getLineIndexNumber(_line); j++)
+				for(; j < _stream.getLineIndexNumber(_line); j++)
 				{
 					// Comment check
 					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::basic_comment])
@@ -236,7 +245,6 @@ namespace Ak
 							else
 								long_text = true;
 						}
-					#ifdef AK_ELTM_VERSION_1_1
 						else if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::end_long_text]) // Check for long text end
 						{
 							if(getText)
@@ -244,67 +252,93 @@ namespace Ak
 							else if(long_text)
 								long_text = false;
 						}
-					#else
-						else if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::end_long_text] && long_text) // Check for long text end
-							long_text = false;
-					#endif
 						else
 						{
 							if(getText)
 							{
 								if(_stream.getToken(_line, j + 3).getString() == Token::mixable_keywords_token[eltm_token::end_long_text])
 								{
-								#ifdef AK_ELTM_VERSION_1_1
 									if(!_lastModuleName.empty())
 									{
-										if(_modules[_lastModuleName].count(_stream.getToken(_line, j + 2).getString()))
+										if(_is_global)
 										{
-											text += _modules[_lastModuleName][_stream.getToken(_line, j + 2).getString()];
-											j += 2;
-										}
-										else
-										{
-											ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
-											std::cout << red << error.what() << def << std::endl;
-											_isError = true;
-											return false;
-										}
-									}
-									else if(_texts.count(_stream.getToken(_line, j + 2).getString()))
-									{
-										text += _texts[_stream.getToken(_line, j + 2).getString()];
-										j += 2;
-									}
-								#else
-									if(_texts.count(_stream.getToken(_line, j + 2).getString()))
-									{
-										text = _texts[_stream.getToken(_line, j + 2).getString()];
-										break;
-									}
-								#endif
-									else if((found = _stream.getToken(_line, j + 2).getString().find(".")) != std::string::npos)
-									{
-										moduleName.append(_stream.getToken(_line, j + 2).getString(), 0, found);
-										if(_modules.count(moduleName))
-										{
-											moduleID.append(_stream.getToken(_line, j + 2).getString(), found + 1, _stream.getToken(_line, j + 2).getString().length());
-											if(_modules[moduleName].count(moduleID))
+											if(_modules[_lastModuleName].count(_stream.getToken(_line, j + 2).getString()))
 											{
-										#ifdef AK_ELTM_VERSION_1_1
-												text += _modules[moduleName][moduleID];
+												text += _modules[_lastModuleName][_stream.getToken(_line, j + 2).getString()];
 												j += 2;
-										#else
-												text = _modules[moduleName][moduleID];
-												break;
-										#endif
+											}
+											else
+											{
+												ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
+												std::cout << red << error.what() << def << std::endl;
+												_isError = true;
+												return false;
 											}
 										}
 										else
 										{
-											ELTMerrors error = simple_error("\"get()\" : undefined module name", _file, _line + 1);
-											std::cout << red << error.what() << def << std::endl;
-											_isError = true;
-											return false;
+											if(_current_modules[_lastModuleName].count(_stream.getToken(_line, j + 2).getString()))
+											{
+												text += _current_modules[_lastModuleName][_stream.getToken(_line, j + 2).getString()];
+												j += 2;
+											}
+											else
+											{
+												ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
+												std::cout << red << error.what() << def << std::endl;
+												_isError = true;
+												return false;
+											}
+										}
+									}
+									else if(_texts.count(_stream.getToken(_line, j + 2).getString()) || _current_texts.count(_stream.getToken(_line, j + 2).getString()))
+									{
+										if(_is_global)
+											text += _texts[_stream.getToken(_line, j + 2).getString()];
+										else
+											text += _current_texts[_stream.getToken(_line, j + 2).getString()];
+										j += 2;
+									}
+									else if((found = _stream.getToken(_line, j + 2).getString().find(".")) != std::string::npos)
+									{
+										moduleName.append(_stream.getToken(_line, j + 2).getString(), 0, found);
+										if(_is_global)
+										{
+											if(_modules.count(moduleName))
+											{
+												moduleID.append(_stream.getToken(_line, j + 2).getString(), found + 1, _stream.getToken(_line, j + 2).getString().length());
+												if(_modules[moduleName].count(moduleID))
+												{
+													text += _modules[moduleName][moduleID];
+													j += 2;
+												}
+											}
+											else
+											{
+												ELTMerrors error = simple_error("\"get()\" : undefined module name", _file, _line + 1);
+												std::cout << red << error.what() << def << std::endl;
+												_isError = true;
+												return false;
+											}
+										}
+										else
+										{
+											if(_current_modules.count(moduleName))
+											{
+												moduleID.append(_stream.getToken(_line, j + 2).getString(), found + 1, _stream.getToken(_line, j + 2).getString().length());
+												if(_current_modules[moduleName].count(moduleID))
+												{
+													text += _current_modules[moduleName][moduleID];
+													j += 2;
+												}
+											}
+											else
+											{
+												ELTMerrors error = simple_error("\"get()\" : undefined module name", _file, _line + 1);
+												std::cout << red << error.what() << def << std::endl;
+												_isError = true;
+												return false;
+											}
 										}
 									}
 									else
@@ -343,13 +377,15 @@ namespace Ak
 			}
 			if(_lastModuleName.empty())
 			{
-				_current_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;				
-				_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;
+				_current_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;
+				if(_is_global)
+					_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;
 			}
 			else
 			{
 				_current_modules[_lastModuleName][_stream.getToken(currentLine, assignPos - 1).getString()] = text;
-				_modules[_lastModuleName][_stream.getToken(currentLine, assignPos - 1).getString()] = text;
+				if(_is_global)
+					_modules[_lastModuleName][_stream.getToken(currentLine, assignPos - 1).getString()] = text;
 			}
 
 			Token::activateKw();

@@ -1,13 +1,9 @@
 // This file is a part of Akel
 // CREATED : 06/05/2021
-// UPDATED : 16/10/2021
+// UPDATED : 03/11/2021
 
 #ifndef __AK_ELTM__
 #define __AK_ELTM__
-
-#ifndef AK_ELTM_VERSION_1_0
-	#define AK_ELTM_VERSION_1_1
-#endif
 
 #include <Modules/ELTM/token.h>
 #include <Modules/ELTM/streamStack.h>

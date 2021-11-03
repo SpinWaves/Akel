@@ -12,7 +12,7 @@ Akel is designed to be extremely easy to use. Not being the most powerful, it go
 Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, although it has not been tested on this OS (no information about MacOS, I have to find out). It is used with [xmake](https://xmake.io/#/). GCC 8(or higher) is required because it uses C++17 features. Dependencies are provided (SDL2, ImGui, Vulkan, GLM) by xmake.
 
 * Start by clonning the repo `git clone https://github.com/SpinWaves/Akel`.
-* [Install xmake](https://xmake.io/#/guide/installation) (choose according to your system (Windows, Linux, ...)).
+* [Install xmake](https://xmake.io/#/guide/installation)
 * <details> <summary>Run xmake in the "xmake.lua" directory.</summary>
   By default xmake will build the Akel editor. If you want to build one of the demos you can run xmake as follows :
 

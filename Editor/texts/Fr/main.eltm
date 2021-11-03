@@ -1,9 +1,58 @@
 // This file is a part of the Akel Editor
 // CREATED : 08/07/2021
-// UPDATED : 10/07/2021
+// UPDATED : 03/11/2021
 
-import mainMenuBar.eltm
-import console.eltm
+begin module MainMenuBar
 
-import errors.eltm
+	set file = Ficher
+		set quit = Quitter
+		set open = Ouvrir
+		set save = Sauvegarder
 
+	set edit = Éditer
+		set addFile = Ajouter un fichier au projet
+		set build = Construire le projet
+        set options = Parametres
+
+	set help = Aide
+		set about = À propos
+			set version = Éditeur version 0.0.1\nAkel version 0.0.1
+
+	set eltm_editor = ELTM éditeur
+		set e_load = Charger un fichier
+		set e_save = get(save)
+		set e_save_as = get(save) sous
+
+end module
+
+begin module errors
+
+	set consoleMainWin = Akel Éditeur: Impossible de créer la console
+	set consoleUnknownCommand = Commande inconnue
+
+end module
+
+begin module Console
+
+	set name = Console
+	set input = Entrée
+	set welcome = Bienvenue dans l'éditeur d'Akel !
+
+	set helpClear = \tla commande clear est utilisée pour effacer le contenu de la console
+	set helpHistory = \tla commande history est utilisée pour afficher l'historique de la console depuis le dernier effacment
+	set helpBuild = \tla commande build est utilisée pour contruire le projet ouvert
+	set helpSysShell = \tla commande sysShell est utilisée pour passer sous un terminal système
+	set helpQuit = \tla commande quit est utilisée pour quitter l'éditeur
+	set help = (\t help clear: get(helpClear)\n
+				\t help history: get(helpHistory)\n
+				\t help build: get(helpBuild)\n
+				\t help sysShell: get(helpSysShell)\n
+				\t help quit: get(helpQuit))
+
+end module
+
+begin module ELTM_Editor
+
+    set name = ELTM Éditeur
+
+end module

@@ -1,19 +1,21 @@
 // This file is a part of the Akel editor
 // CREATED : 09/07/2021
-// UPDATED : 28/10/2021
+// UPDATED : 03/11/2021
 
 #include <Panels/console.h>
 
-Console::Console(std::string name, size_t inputBufferSize) : _sh()
+Console::Console(std::string name, std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize) : _sh(eltm)
 {
 	_name = std::move(name);
 	_input.resize(inputBufferSize);
 	_inBufferSize = inputBufferSize;
 
+	_eltm = eltm;
+
 	ee = Ak::AudioManager::loadSound(Ak::Core::getSoundsDirPath() + "42.wav");
 
 	_sh.print("============================");
-	_sh.print(Ak::ELTM::getText("Console.welcome"));
+	_sh.print(_eltm->getLocalText("Console.welcome"));
 	_sh.print("============================");
 }
 
@@ -92,7 +94,7 @@ void Console::inputBar()
 	char in[_inBufferSize] = "";
 
     ImGui::PushItemWidth(-ImGui::GetStyle().ItemSpacing.x * 7);
-    if(ImGui::InputText(Ak::ELTM::getText("Console.input").c_str(), in, _inBufferSize, inputTextFlags, InputCallback, this))
+    if(ImGui::InputText(_eltm->getLocalText("Console.input").c_str(), in, _inBufferSize, inputTextFlags, InputCallback, this))
     {
 		_input = in;
 		_sh.command(_input);

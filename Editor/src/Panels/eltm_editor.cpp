@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 28/10/2021
-// UPDATED : 30/10/2021
+// UPDATED : 03/11/2021
 
 #include <Panels/eltm_editor.h>
 
@@ -23,8 +23,8 @@ void ELTM_editor::render(int width, int height)
     _width = width;
 	if(ImGui::Begin(_name.data(), nullptr, ImGuiWindowFlags_NoScrollbar))
     {
-		ImGui::SetWindowPos(ImVec2(0, 100), ImGuiCond_FirstUseEver);
-		ImGui::SetWindowSize(ImVec2(width, height - 500), ImGuiCond_FirstUseEver);
+		ImGui::SetWindowPos(ImVec2(50, 100), ImGuiCond_FirstUseEver);
+		ImGui::SetWindowSize(ImVec2(width - 100, height - 500), ImGuiCond_FirstUseEver);
 
         editor();
 

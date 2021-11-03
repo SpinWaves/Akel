@@ -1,10 +1,13 @@
 // This file is a part of the Akel editor
 // CREATED : 10/07/2021
-// UPDATED : 25/08/2021
+// UPDATED : 03/11/2021
 
 #include <Panels/shell/shell.h>
 
-Shell::Shell() : Parser() {}
+Shell::Shell(std::shared_ptr<Ak::ELTM> eltm) : Parser()
+{
+	_eltm = eltm;
+}
 
 void Shell::command(std::string command)
 {
@@ -14,19 +17,19 @@ void Shell::command(std::string command)
 	if(type & static_cast<uint16_t>(Commands::help))
 	{
 		if(type & static_cast<uint16_t>(Commands::clear))
-			print(Ak::ELTM::getText("Console.helpClear"), 2);
+			print(_eltm->getLocalText("Console.helpClear"), 2);
 		else if(type & static_cast<uint16_t>(Commands::history))
-			print(Ak::ELTM::getText("Console.helpHistory"), 2);
+			print(_eltm->getLocalText("Console.helpHistory"), 2);
 		else if(type & static_cast<uint16_t>(Commands::build))
-			print(Ak::ELTM::getText("Console.helpBuild"), 2);
+			print(_eltm->getLocalText("Console.helpBuild"), 2);
 		else if(type & static_cast<uint16_t>(Commands::sysShell))
-			print(Ak::ELTM::getText("Console.helpSysShell"), 2);
+			print(_eltm->getLocalText("Console.helpSysShell"), 2);
 		else if(type & static_cast<uint16_t>(Commands::quit))
-			print(Ak::ELTM::getText("Console.helpQuit"), 2);
+			print(_eltm->getLocalText("Console.helpQuit"), 2);
 		else if(type & static_cast<uint16_t>(Commands::error))
-			print("help: " + Ak::ELTM::getText("errors.consoleUnknownCommand"), 1);
+			print("help: " + _eltm->getLocalText("errors.consoleUnknownCommand"), 1);
 		else
-			print(" " + Ak::ELTM::getText("Console.help"), 2);
+			print(" " + _eltm->getLocalText("Console.help"), 2);
 	}
 	else if(type & static_cast<uint16_t>(Commands::clear))
 	{
@@ -45,7 +48,7 @@ void Shell::command(std::string command)
 		ee = true;
 	}
 	else
-		print(Ak::ELTM::getText("errors.consoleUnknownCommand"), 1);
+		print(_eltm->getLocalText("errors.consoleUnknownCommand"), 1);
 }
 
 void Shell::print(std::string print, uint8_t type)

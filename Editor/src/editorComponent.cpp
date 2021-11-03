@@ -1,22 +1,27 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 28/10/2021
+// UPDATED : 03/11/2021
 
 #include <editorComponent.h>
 
 EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
 {
-	_eltm = Ak::make_unique_ptr_w<Ak::ELTM>(Ak::custom_malloc<Ak::ELTM>());
+	_eltm = Ak::make_shared_ptr_w<Ak::ELTM>(Ak::custom_malloc<Ak::ELTM>(true));
 }
 
 void EditorComponent::onAttach()
 {
 	Ak::ImGuiComponent::setSettingsFilePath(std::string(Ak::Core::getMainDirPath() + "Editor/settings/editor.ini").c_str());
 	Ak::ImGuiComponent::onAttach();
-	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
-	_console = Ak::make_unique_ptr_w<Console>(Ak::custom_malloc<Console>(_eltm->getText("Console.name")));
-	_eltm_editor = Ak::make_unique_ptr_w<ELTM_editor>(Ak::custom_malloc<ELTM_editor>(_eltm->getText("ELTM_Editor.name")));
-	_eltm_editor->load(Ak::Core::getMainDirPath() + "Editor/texts/En/console.eltm");
+
+	std::string language = "language";
+	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/lang.eltm");
+	if(Ak::Core::ProjectFile::getStringValue(language) == "")
+		Ak::Core::ProjectFile::setStringValue(language, _eltm->getLocalText("Languages.English"));
+
+	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/Fr/main.eltm");
+	_console = Ak::make_unique_ptr_w<Console>(Ak::custom_malloc<Console>(_eltm->getLocalText("Console.name"), _eltm));
+	_eltm_editor = Ak::make_unique_ptr_w<ELTM_editor>(Ak::custom_malloc<ELTM_editor>(_eltm->getLocalText("ELTM_Editor.name")));
 }
 
 void EditorComponent::onImGuiRender()
@@ -26,6 +31,8 @@ void EditorComponent::onImGuiRender()
 	_eltm_editor->render(WindowComponent::getSize().X, WindowComponent::getSize().Y);
 	if(_showAbout)
 		drawAboutWindow();
+	if(_showOpt)
+		drawOptionsWindow();
 }
 
 void EditorComponent::onEvent(Ak::Input& input)
@@ -44,24 +51,46 @@ void EditorComponent::drawMainMenuBar()
 {
 	if(ImGui::BeginMainMenuBar())
 	{
-		if(ImGui::BeginMenu(_eltm->getText("MainMenuBar.file").c_str()))
+		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.file").c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getText("MainMenuBar.open").c_str(), "Ctrl+O")) { /* Do stuff */ }
-			if(ImGui::MenuItem(_eltm->getText("MainMenuBar.save").c_str(), "Ctrl+S")) { /* Do stuff */ }
-			if(ImGui::MenuItem(_eltm->getText("MainMenuBar.quit").c_str()))
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.open").c_str(), "Ctrl+O"))
+			{
+				auto file = pfd::open_file(_eltm->getLocalText("MainMenuBar.open"), Ak::Core::getMainDirPath(), { "Akel projects (.akel)", "*.akel" });	
+			}
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.save").c_str(), "Ctrl+S")) { /* Do stuff */ }
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.quit").c_str()))
 				_running = false;
 			ImGui::EndMenu();
 		}
-		if(ImGui::BeginMenu(_eltm->getText("MainMenuBar.edit").c_str()))
+		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.edit").c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getText("MainMenuBar.addFile").c_str())) { /* Do stuff */ }
-			if(ImGui::MenuItem(_eltm->getText("MainMenuBar.build").c_str()))   { /* Do stuff */ }
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.addFile").c_str())) { /* Do stuff */ }
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.build").c_str()))   { /* Do stuff */ }
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.options").c_str()))
+				_showOpt = _showOpt ? false : true;
 			ImGui::EndMenu();
 		}
-		if(ImGui::BeginMenu(_eltm->getText("MainMenuBar.help").c_str()))
+		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.help").c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getText("MainMenuBar.about").c_str()))
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.about").c_str()))
 				_showAbout = _showAbout ? false : true;
+			ImGui::EndMenu();
+		}
+		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.eltm_editor").c_str()))
+		{
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_load").c_str()))
+			{
+				auto file = pfd::open_file(_eltm->getLocalText("MainMenuBar.e_load"), Ak::Core::getMainDirPath(), { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All files", "*"});	
+				if(!file.result().empty())
+					_eltm_editor->load(file.result()[0]);
+			}
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_save").c_str()))
+			{
+			}
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_save_as").c_str()))
+			{
+				
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::SameLine(ImGui::GetColumnWidth(-1));
@@ -73,9 +102,26 @@ void EditorComponent::drawMainMenuBar()
 
 void EditorComponent::drawAboutWindow()
 {
-	if(ImGui::Begin(_eltm->getText("MainMenuBar.about").data(), nullptr, ImGuiWindowFlags_NoResize))
+	if(ImGui::Begin(_eltm->getLocalText("MainMenuBar.about").data(), &_showAbout, ImGuiWindowFlags_NoResize))
 	{
-		ImGui::TextUnformatted(_eltm->getText("MainMenuBar.version").data());
+		ImGui::TextUnformatted(_eltm->getLocalText("MainMenuBar.version").data());
+		ImGui::End();
+	}
+}
+
+void EditorComponent::drawOptionsWindow()
+{
+	if(ImGui::Begin(_eltm->getLocalText("MainMenuBar.about").data(), &_showOpt))
+	{
+		ImGui::SetWindowSize(ImVec2(800, 800), ImGuiCond_FirstUseEver);
+    	if(ImGui::BeginChild("Panel", ImVec2(100, 750), true))
+		{
+			if(ImGui::Button("Languages", ImVec2(85, 25)))
+			{
+				// TODO
+			}
+			ImGui::EndChild();
+		}
 		ImGui::End();
 	}
 }

@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 08/07/2021
-// UPDATED : 19/09/2021
+// UPDATED : 03/11/2021
 
 #ifndef __AK_EDITOR_CONSOLE__
 #define __AK_EDITOR_CONSOLE__
@@ -11,7 +11,7 @@
 class Console
 {
 	public:
-		explicit Console(std::string name, size_t inputBufferSize = 256);
+		explicit Console(std::string name, std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize = 256);
 		void render(int width, int height);
 		~Console();
 
@@ -32,6 +32,8 @@ class Console
 		bool _scrollToBottom;
 		size_t _inBufferSize = 0;
 		float _WindowAlpha;
+
+		std::shared_ptr<Ak::ELTM> _eltm;
 
 		int _width, _height = 0;
 

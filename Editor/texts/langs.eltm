@@ -1,0 +1,10 @@
+// This file is a part of the Akel Editor
+// CREATED : 03/11/2021
+// UPDATED : 03/11/2021
+
+begin module Languages
+
+    set Français = Editor/texts/Fr/main.eltm
+    set English = Editor/texts/En/main.eltm
+    
+end module
