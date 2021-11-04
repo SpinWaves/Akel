@@ -19,6 +19,11 @@ Console::Console(std::string name, std::shared_ptr<Ak::ELTM> eltm, size_t inputB
 	_sh.print("============================");
 }
 
+void Console::open()
+{
+	_is_open = _is_open ? false : true;
+}
+
 void Console::render(int width, int height)
 {
 	_width = width;
@@ -26,7 +31,7 @@ void Console::render(int width, int height)
 
 	_WindowAlpha = 1.0f;
 	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, _WindowAlpha);
-	if(ImGui::Begin(_name.data(), nullptr, ImGuiWindowFlags_NoScrollbar))
+	if(ImGui::Begin(_name.data(), &_is_open, ImGuiWindowFlags_NoScrollbar))
     {
 		ImGui::SetWindowPos(ImVec2(0, height), ImGuiCond_FirstUseEver);
 		ImGui::SetWindowSize(ImVec2(width, _height), ImGuiCond_FirstUseEver);

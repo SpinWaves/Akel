@@ -1,6 +1,8 @@
 // This file is a part of the Akel Editor
 // CREATED : 08/07/2021
-// UPDATED : 03/11/2021
+// UPDATED : 04/11/2021
+
+set lang = Language
 
 begin module MainMenuBar
 
@@ -22,6 +24,8 @@ begin module MainMenuBar
 		set e_load = Load File
 		set e_save = Save
 		set e_save_as = Save As
+
+	set panels = Panels
 
 end module
 

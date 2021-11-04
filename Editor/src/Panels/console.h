@@ -13,6 +13,7 @@ class Console
 	public:
 		explicit Console(std::string name, std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize = 256);
 		void render(int width, int height);
+		void open();
 		~Console();
 
 		Shell _sh;
@@ -32,6 +33,7 @@ class Console
 		bool _scrollToBottom;
 		size_t _inBufferSize = 0;
 		float _WindowAlpha;
+		bool _is_open = true;
 
 		std::shared_ptr<Ak::ELTM> _eltm;
 

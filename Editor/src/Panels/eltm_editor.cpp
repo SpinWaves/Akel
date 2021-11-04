@@ -1,12 +1,12 @@
 // This file is a part of the Akel editor
 // CREATED : 28/10/2021
-// UPDATED : 03/11/2021
+// UPDATED : 04/11/2021
 
 #include <Panels/eltm_editor.h>
 
 ELTM_editor::ELTM_editor(const std::string& name)
 {
-	_eltm = Ak::make_unique_ptr_w<Ak::ELTM>(Ak::custom_malloc<Ak::ELTM>());
+	_eltm = Ak::make_unique_ptr_w<Ak::ELTM>(Ak::custom_malloc<Ak::ELTM>(true));
     _name = name;
 }
 
@@ -17,11 +17,16 @@ void ELTM_editor::load(const std::string& filename)
         Ak::Core::log::report(ERROR, "ELTM editor: Couldn't load %s", filename.c_str());
 }
 
+void ELTM_editor::open()
+{
+    _is_open = _is_open ? false : true;
+}
+
 void ELTM_editor::render(int width, int height)
 {
     _height = height;
     _width = width;
-	if(ImGui::Begin(_name.data(), nullptr, ImGuiWindowFlags_NoScrollbar))
+	if(ImGui::Begin(_name.data(), &_is_open))
     {
 		ImGui::SetWindowPos(ImVec2(50, 100), ImGuiCond_FirstUseEver);
 		ImGui::SetWindowSize(ImVec2(width - 100, height - 500), ImGuiCond_FirstUseEver);
@@ -34,7 +39,7 @@ void ELTM_editor::render(int width, int height)
 
 void ELTM_editor::editor()
 {
-    if(ImGui::BeginChild("Scrolling", ImVec2(0, _height - 75), true))
+    if(ImGui::BeginChild("Scrolling", ImVec2(0, _height - 100), true))
     {
         for(auto it = _eltm->getCurrentTexts().begin(); it!= _eltm->getCurrentTexts().end(); it++)
         {

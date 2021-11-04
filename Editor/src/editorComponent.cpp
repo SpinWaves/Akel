@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 03/11/2021
+// UPDATED : 04/11/2021
 
 #include <editorComponent.h>
 
@@ -70,10 +70,12 @@ void EditorComponent::drawMainMenuBar()
 				_showOpt = _showOpt ? false : true;
 			ImGui::EndMenu();
 		}
-		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.help").c_str()))
+		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.panels").c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.about").c_str()))
-				_showAbout = _showAbout ? false : true;
+			if(ImGui::MenuItem(_eltm->getLocalText("Console.name").c_str()))
+				_console->open();
+			if(ImGui::MenuItem(_eltm->getLocalText("ELTM_Editor.name").c_str()))
+				_eltm_editor->open();
 			ImGui::EndMenu();
 		}
 		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.eltm_editor").c_str()))
@@ -91,6 +93,12 @@ void EditorComponent::drawMainMenuBar()
 			{
 				
 			}
+			ImGui::EndMenu();
+		}
+		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.help").c_str()))
+		{
+			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.about").c_str()))
+				_showAbout = _showAbout ? false : true;
 			ImGui::EndMenu();
 		}
 		ImGui::SameLine(ImGui::GetColumnWidth(-1));
@@ -111,17 +119,27 @@ void EditorComponent::drawAboutWindow()
 
 void EditorComponent::drawOptionsWindow()
 {
-	if(ImGui::Begin(_eltm->getLocalText("MainMenuBar.about").data(), &_showOpt))
+	if(ImGui::Begin(_eltm->getLocalText("MainMenuBar.options").data(), &_showOpt))
 	{
+		static int selected = -1;
+		
 		ImGui::SetWindowSize(ImVec2(800, 800), ImGuiCond_FirstUseEver);
+  
     	if(ImGui::BeginChild("Panel", ImVec2(100, 750), true))
 		{
-			if(ImGui::Button("Languages", ImVec2(85, 25)))
-			{
-				// TODO
-			}
+			if(ImGui::Selectable(_eltm->getLocalText("lang").data(), selected == 0))
+				selected = 0;
+			if(ImGui::Selectable("test", selected == 1))
+				selected = 1;
 			ImGui::EndChild();
 		}
+		
+		if(ImGui::BeginChild("Choices", ImVec2(700, 750), true))
+		{
+			ImGui::Button(_eltm->getLocalText("lang").data(), ImVec2(85, 25));
+			ImGui::EndChild();
+		}
+
 		ImGui::End();
-	}
+	}	
 }

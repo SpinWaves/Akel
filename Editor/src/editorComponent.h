@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 03/11/2021
+// UPDATED : 04/11/2021
 
 #ifndef __AK_EDITOR_COMPONENT__
 #define __AK_EDITOR_COMPONENT__
@@ -32,6 +32,7 @@ class EditorComponent : public Ak::ImGuiComponent
 		Ak::unique_ptr_w<ELTM_editor> _eltm_editor;
 		bool _showAbout = false;
 		bool _showOpt = false;
+		std::array<bool, 1> _opts;
 };
 
 #endif // __AK_EDITOR_COMPONENT__

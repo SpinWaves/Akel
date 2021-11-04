@@ -1,6 +1,8 @@
 // This file is a part of the Akel Editor
 // CREATED : 08/07/2021
-// UPDATED : 03/11/2021
+// UPDATED : 04/11/2021
+
+set lang = Langue
 
 begin module MainMenuBar
 
@@ -18,10 +20,12 @@ begin module MainMenuBar
 		set about = À propos
 			set version = Éditeur version 0.0.1\nAkel version 0.0.1
 
-	set eltm_editor = ELTM éditeur
+	set eltm_editor = Éditeur d'ELTM
 		set e_load = Charger un fichier
 		set e_save = get(save)
 		set e_save_as = get(save) sous
+
+	set panels = Paneaux
 
 end module
 
