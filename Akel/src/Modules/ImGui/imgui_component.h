@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 16/10/2021
+// UPDATED : 07/11/2021
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -27,7 +27,6 @@ namespace Ak
 			void setSettingsFilePath(const char* path = nullptr) // Calling it without parameter will reset to the default path
 			{
 				_settingsFilePath = path;
-				std::cout << "oui " << _settingsFilePath << std::endl;
 			}
 
 			static int getNumComp() { return _componentsInit; }

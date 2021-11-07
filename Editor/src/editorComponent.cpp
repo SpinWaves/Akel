@@ -1,6 +1,6 @@
 // This file is a part of the Akel editor
 // CREATED : 06/07/2021
-// UPDATED : 04/11/2021
+// UPDATED : 07/11/2021
 
 #include <editorComponent.h>
 
@@ -15,7 +15,7 @@ void EditorComponent::onAttach()
 	Ak::ImGuiComponent::onAttach();
 
 	std::string language = "language";
-	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/lang.eltm");
+	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/langs.eltm");
 	if(Ak::Core::ProjectFile::getStringValue(language) == "")
 		Ak::Core::ProjectFile::setStringValue(language, _eltm->getLocalText("Languages.English"));
 

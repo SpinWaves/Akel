@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 12/08/2021
-// UPDATED : 07/09/2021
+// UPDATED : 07/11/2021
 
 #include <Core/core.h>
 
@@ -25,8 +25,7 @@ namespace Ak::Core
 
     		proj_file << "# This file is an Akel project file. It contains configuration parameters for the engine." << '\n'
     			      << "# DO NOT MODIFY IT, OTHERWISE YOU WILL GET BAD PERFORMANCES," << '\n'
-    				  << "# BAD MEMORY OPTIMISATION OR EVEN YOUR PROJECT WILL NOT WORK ANYMORE!" << '\n' << '\n'
-                      << "use_memory_manager = " << useMemMan << std::endl;
+    				  << "# BAD MEMORY OPTIMISATION OR EVEN YOUR PROJECT WILL NOT WORK ANYMORE!" << '\n' << std::endl;
     		proj_file.close();
         }
 
@@ -151,7 +150,7 @@ namespace Ak::Core
             if(i == std::get<0>(_data[key]))
             {
                 size_t equal = 0;
-                if((equal = line.find("=")) == std::string::npos)
+                if((equal = line.find("=")) != std::string::npos)
                 {
                     line.erase(line.begin() + equal + 2, line.end());
                     line.append(value);
@@ -241,7 +240,7 @@ namespace Ak::Core
         std::string line;
         if(!_data.count(key))
         {
-            file << key << " = " << value << std::endl;
+            file << key << " = " << pass << std::endl;
             int lines = 0;
             while(getline(file, line))
                lines++;
@@ -264,7 +263,7 @@ namespace Ak::Core
             if(i == std::get<0>(_data[key]))
             {
                 size_t equal = 0;
-                if((equal = line.find("=")) == std::string::npos)
+                if((equal = line.find("=")) != std::string::npos)
                 {
                     line.erase(line.begin() + equal + 2, line.end());
                     line.append(pass);
@@ -317,7 +316,7 @@ namespace Ak::Core
             if(i == std::get<0>(_data[key]))
             {
                 size_t equal = 0;
-                if((equal = line.find("=")) == std::string::npos)
+                if((equal = line.find("=")) != std::string::npos)
                 {
                     line.erase(line.begin() + equal + 2, line.end());
                     line.append(std::to_string(value));
