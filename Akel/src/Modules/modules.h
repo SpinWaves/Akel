@@ -7,5 +7,6 @@
 
 #include <Modules/ELTM/eltm.h>
 #include <Modules/ImGui/imgui.h>
+#include <Modules/Kila/kila.h>
 
 #endif // __AK_MODULES__
