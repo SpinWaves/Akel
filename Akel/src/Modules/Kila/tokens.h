@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/11/2021
-// UPDATED : 08/11/2021
+// UPDATED : 09/11/2021
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -14,6 +14,8 @@ namespace Ak::Kl
     {
         kw_fn,
         kw_class,
+        kw_public,
+        kw_private,
         kw_struct,
         kw_mtd,
         kw_var,
@@ -27,6 +29,8 @@ namespace Ak::Kl
 		kw_break,
 		kw_continue,
 		kw_return,
+        kw_entry,
+        kw_newtype,
 
         end_line,
         type_specifier,
@@ -34,6 +38,9 @@ namespace Ak::Kl
         brecket_e,
         embrace_b,
         embrace_e,
+        comma,
+        square_b,
+        square_e,
 
         t_int,
         t_float,
@@ -48,10 +55,10 @@ namespace Ak::Kl
         m_unset,
         m_get,
         m_once,
-        m_if,
-        m_elif,
-        m_else,
         m_endif,
+        m_vert,
+        m_frag,
+        m_global,
 
         statment_if,
         statment_else,
@@ -65,7 +72,19 @@ namespace Ak::Kl
 		mul,
 		div,
 		mod,
-        assign
+        assign,
+
+        eq,
+        ne,
+        lt,
+        gt,
+        le,
+        ge,
+
+        question,
+        logical_not,
+        logical_and,
+        logical_or
     };
     
     struct eof{};
@@ -76,65 +95,87 @@ namespace Ak::Kl
     class Token
     {
         public:
-            Tokens(token_value value, unsigned int line, unsigned int index);
+            Token(token_value value, unsigned int line, unsigned int index);
 
-			static inline duets_array<eltm_token, std::string> kw_tokens
+			static inline duets_array<Tokens, std::string> kw_tokens
 			{
-                {Token::kw_fn, "fn"},
-                {Token::kw_class, "class"},
-                {Token::kw_struct, "struct"},
-                {Token::kw_mtd, "mtd"},
-                {Token::kw_var, "var"},
-                {Token::kw_obj, "obj"},
-                {Token::kw_switch, "switch"},
-                {Token::kw_case, "case"},
-                {Token::kw_default, "default"},
-                {Token::kw_for, "for"},
-                {Token::kw_while, "while"},
-                {Token::kw_do, "do"},
-                {Token::kw_break, "break"},
-                {Token::kw_continue, "continue"},
-                {Token::kw_return, "return"},
+                {Tokens::kw_fn, "fn"},
+                {Tokens::kw_class, "class"},
+                {Tokens::kw_public, "public"},
+                {Tokens::kw_private, "private"},
+                {Tokens::kw_struct, "struct"},
+                {Tokens::kw_mtd, "mtd"},
+                {Tokens::kw_var, "var"},
+                {Tokens::kw_obj, "obj"},
+                {Tokens::kw_switch, "switch"},
+                {Tokens::kw_case, "case"},
+                {Tokens::kw_default, "default"},
+                {Tokens::kw_for, "for"},
+                {Tokens::kw_while, "while"},
+                {Tokens::kw_do, "do"},
+                {Tokens::kw_break, "break"},
+                {Tokens::kw_continue, "continue"},
+                {Tokens::kw_return, "return"},
+                {Tokens::kw_entry, "entry"},
+                {Tokens::kw_newtype, "newtype"},
 
-                {Token::t_int, "int"},
-                {Token::t_float, "float"},
-                {Token::t_double, "double"},
-                {Token::t_bool, "bool"},
-                {Token::t_string, "string"},
-                {Token::t_byte, "byte"},
-                {Token::t_unsigned, "unsigned"},
+                {Tokens::t_int, "int"},
+                {Tokens::t_float, "float"},
+                {Tokens::t_double, "double"},
+                {Tokens::t_bool, "bool"},
+                {Tokens::t_string, "string"},
+                {Tokens::t_byte, "byte"},
+                {Tokens::t_unsigned, "unsigned"},
 
-                {Token::m_set, "set"},
-                {Token::m_unset, "unset"},
-                {Token::m_get, "get"},
-                {Token::m_once, "once"},
-                {Token::m_endif, "endif"},
+                {Tokens::m_set, "set"},
+                {Tokens::m_unset, "unset"},
+                {Tokens::m_get, "get"},
+                {Tokens::m_once, "once"},
+                {Tokens::m_endif, "endif"},
+                {Tokens::m_vert, "vert"},
+                {Tokens::m_frag, "frag"},
+                {Tokens::m_global, "global"},
 
-                {Token::statment_if, "if"},
-                {Token::statment_else, "else"},
-                {Token::statment_elif, "elif"}
+                {Tokens::statment_if, "if"},
+                {Tokens::statment_else, "else"},
+                {Tokens::statment_elif, "elif"}
 			};
 
-			static inline duets_array<Tokens, std::string> mixable_kw_token
+			static inline duets_array<Tokens, std::string> operators_token
 			{
-                {Token::end_line, ";"},
-                {Token::type_specifier, ":"},
-                {Token::brecket_b, "("},
-                {Token::brecket_e, ")"},
-                {Token::embrace_b, "{"},
-                {Token::embrace_e, "}"},
+                {Tokens::end_line, ";"},
+                {Tokens::comma, ","},
+                {Tokens::type_specifier, ":"},
+                {Tokens::brecket_b, "("},
+                {Tokens::brecket_e, ")"},
+                {Tokens::embrace_b, "{"},
+                {Tokens::embrace_e, "}"},
+                {Tokens::square_b, "["},
+                {Tokens::square_e, "]"},
 
-                {Token::macro, "@"},
+                {Tokens::eq, "=="},
+                {Tokens::ne, "!="},
+                {Tokens::lt, "<"},
+                {Tokens::gt, ">"},
+                {Tokens::le, "<="},
+                {Tokens::ge, ">="},
 
-                {Token::inc, "++"},
-                {Token::dec, "--"},
+                {Tokens::question, "?"},
+                {Tokens::logical_not, "!"},
+                {Tokens::logical_and, "&&"},
+                {Tokens::logical_or, "||"},
 
-                {Token::add, "+"},
-                {Token::sub, "-"},
-                {Token::mul, "*"},
-                {Token::div, "/"},
-                {Token::mod, "%"},
-                {Token::assign, "="}
+                {Tokens::macro, "@"},
+
+                {Tokens::inc, "++"},
+                {Tokens::dec, "--"},
+
+                {Tokens::add, "+"},
+                {Tokens::sub, "-"},
+                {Tokens::mul, "*"},
+                {Tokens::div, "/"},
+                {Tokens::mod, "%"},
+                {Tokens::assign, "="}
 			};
 
             bool is_keyword() const;
@@ -143,7 +184,7 @@ namespace Ak::Kl
             bool is_identifier() const;
             bool is_eof() const;
 
-            Tokens get_reserved_token() const;
+            Tokens get_token() const;
             const identifier& get_identifier() const;
             double get_number() const;
             const std::string& get_string() const;
@@ -152,10 +193,10 @@ namespace Ak::Kl
             size_t get_line_number() const;
             size_t get_char_index() const;
 
-            bool has_value(token_value value) const;
+	        bool has_value(token_value value) const;
 
         private:
-            Tokens _value;
+            token_value _value;
             unsigned int _line = 0;
             unsigned int _index = 0;
     };
