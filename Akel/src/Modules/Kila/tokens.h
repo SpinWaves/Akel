@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/11/2021
-// UPDATED : 09/11/2021
+// UPDATED : 10/11/2021
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -31,6 +31,7 @@ namespace Ak::Kl
 		kw_return,
         kw_entry,
         kw_newtype,
+        kw_uniform,
 
         end_line,
         type_specifier,
@@ -118,6 +119,7 @@ namespace Ak::Kl
                 {Tokens::kw_return, "return"},
                 {Tokens::kw_entry, "entry"},
                 {Tokens::kw_newtype, "newtype"},
+                {Tokens::kw_uniform, "uniform"},
 
                 {Tokens::t_int, "int"},
                 {Tokens::t_float, "float"},
