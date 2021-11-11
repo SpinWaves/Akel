@@ -1,7 +1,17 @@
 // Test commentary
 
 @entry vert
+
+class Light
+{
+    public:
+        fn Light() {}
+        mtd calc() {}
+}
+
 fn main()
 {
+    obj light = Light();
+    light.calc();
     return 0;
 }

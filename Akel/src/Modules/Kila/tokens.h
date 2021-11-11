@@ -41,6 +41,7 @@ namespace Ak::Kl
         embrace_b,
         embrace_e,
         comma,
+        dot,
         square_b,
         square_e,
 
@@ -151,6 +152,7 @@ namespace Ak::Kl
 			{
                 {Tokens::end_line, ";"},
                 {Tokens::comma, ","},
+                {Tokens::dot, "."},
                 {Tokens::type_specifier, ":"},
                 {Tokens::brecket_b, "("},
                 {Tokens::brecket_e, ")"},
