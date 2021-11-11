@@ -36,15 +36,12 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Fully functionnal renderer using Vulkan API
 * Demos
 * Custom strings to replace std::string
-* Finished ELTM version 1.1 including :
-    * Concatenation
-    * Recognition of \n and \t
-    * Documentation
 * Better ImGui component implementation using Akel Vulkan renderer
 * Custom shading language
 * More powerful allocators
 * Entity management
 * Models manager
+* Shading language
 
 # Contribute
 You can contribute by :
@@ -55,6 +52,17 @@ You can contribute by :
 
 ## Links
 [Website](https://akel-engine.com)
+
+## Credits
+* Malte Skarupke for better implementation of std::function : https://github.com/skarupke/std_function
+* Sam Hocevar for PFD : https://github.com/samhocevar/portable-file-dialogs
+* Omar Cornut for ImGui lib : https://github.com/ocornut/imgui
+* Ruki for xmake : https://xmake.io/#/
+* For libSNDfile : http://www.mega-nerd.com/libsndfile/
+    * Erik de Castro Lopo aka @erikd
+    * David Seifert aka @SoapGentoo
+    * Arthur Taylor aka @arthurt
+    * @evpobr
 
 ### Contact
 [Profile](https://solo.to/kbz_8)

@@ -67,3 +67,13 @@ target("RectDemo")
 	add_includedirs("Akel/src", "SandBox/rect/src", "libs/include")
     add_files("SandBox/rect/src/*.cpp")
 target_end() -- optional but I think the code is cleaner with this
+
+-- Kila tester Build
+target("Kila_tester")
+	set_default(false)
+    set_kind("binary")
+	add_packages("imgui_sdl_vk")
+    add_deps("Akel")
+	add_includedirs("Akel/src", "Tests/Kila", "libs/include")
+    add_files("Tests/Kila/*.cpp")
+target_end() -- optional but I think the code is cleaner with this

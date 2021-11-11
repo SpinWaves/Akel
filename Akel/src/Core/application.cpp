@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/06/2021
-// UPDATED : 26/09/2021
+// UPDATED : 11/11/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -10,7 +10,7 @@
 
 namespace Ak
 {
-	Application::Application(const char* name) : ComponentStack()
+	Application::Application(const char* name) : ComponentStack(), _in()
 	{
 		add_component(custom_malloc<CounterFPS>());
 		_name = name;
@@ -21,14 +21,13 @@ namespace Ak
 	void Application::run()
 	{
 		ImGuiComponent imgui;
-		Input in;
-		while(!in.isEnded()) // Main loop
+		while(!_in.isEnded()) // Main loop
 		{
-        	while(SDL_PollEvent(in.getNativeEvent()))
+        	while(SDL_PollEvent(_in.getNativeEvent()))
 			{
-				in.update();
+				_in.update();
 				for(auto elem : _components)
-					elem->onEvent(in);
+					elem->onEvent(_in);
 			}
 			for(auto elem : _components)
 				elem->update();
@@ -44,6 +43,11 @@ namespace Ak
 
 		for(auto elem : _components)
 			elem->onQuit();
+	}
+
+	void Application::end()
+	{
+		_in.finish();
 	}
 
 	Application::~Application()

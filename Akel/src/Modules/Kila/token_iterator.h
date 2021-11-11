@@ -42,7 +42,7 @@ namespace Ak::Kl
 	
         private:
             Token _current;
-            std::function<Token()> _get_next_token;
+            func::function<Token()> _get_next_token;
     };
 }
 

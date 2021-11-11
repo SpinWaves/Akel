@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 21/10/2021
+// UPDATED : 11/11/2021
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__

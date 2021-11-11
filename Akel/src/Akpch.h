@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 10/11/2021
+// UPDATED : 11/11/2021
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -61,6 +61,7 @@
 #include <array>
 #include <variant>
 #include <deque>
+#include <stack>
 
 // Streams
 #include <iostream>
@@ -80,6 +81,6 @@
 
 // Other includes
 #include <exception>
-#include <functional>
+#include <Utils/function.h>
 
 #endif // __AK_PCH__
