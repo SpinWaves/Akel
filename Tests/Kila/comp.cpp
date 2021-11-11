@@ -23,14 +23,14 @@ void Comp::update()
     {
         if(it->is_keyword())
         {
-            std::cout << "Keyword :    ";
+            std::cout << "Keyword    : ";
             if(Ak::Kl::Token::kw_tokens.have(it->get_token()))
                 std::cout << Ak::Kl::Token::kw_tokens[it->get_token()] << std::endl;
             else if(Ak::Kl::Token::operators_token.have(it->get_token()))
                 std::cout << Ak::Kl::Token::operators_token[it->get_token()] << std::endl;
         }
         if(it->is_number())
-            std::cout << "Number :     " << it->get_number() << std::endl;
+            std::cout << "Number     : " << it->get_number() << std::endl;
         if(it->is_identifier())
             std::cout << "Identifier : " << it->get_identifier().name << std::endl;
     }

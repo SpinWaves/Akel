@@ -1,6 +1,6 @@
 // Test commentary
 
-//@entry vert
+@entry vert
 fn main()
 {
     return 0;
