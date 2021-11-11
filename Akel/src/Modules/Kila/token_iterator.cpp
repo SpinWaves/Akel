@@ -13,17 +13,17 @@ namespace Ak::Kl
 	}
 	
 	tk_iterator::tk_iterator(std::deque<Token>& tokens) : _current(eof(), 0, 0),
-		_get_next_token([&tokens]()
-        {
-			if(tokens.empty())
-				return Token(eof(), 0, 0);
-			else
-            {
-				Token ret = std::move(tokens.front());
-				tokens.pop_front();
-				return ret;
-			}
-		})
+														_get_next_token([&tokens]()
+														{
+															if(tokens.empty())
+																return Token(eof(), 0, 0);
+															else
+															{
+																Token ret = std::move(tokens.front());
+																tokens.pop_front();
+																return ret;
+															}
+														})
 	{
 		++(*this);
 	}

@@ -18,10 +18,6 @@ namespace Ak::Kl
             tk_iterator(std::deque<Token>& tokens);
             tk_iterator(StreamStack& tokens);
 
-            tk_iterator(const tk_iterator&) = delete;
-
-            void operator=(const tk_iterator&) = delete;
-
             inline const Token& operator*() const
             {
                 return _current;
@@ -35,7 +31,13 @@ namespace Ak::Kl
                 _current = _get_next_token();
                 return *this;
             }
-            inline explicit operator bool() const
+            inline tk_iterator operator++(int)
+            {
+                tk_iterator old = *this;
+                operator++();
+                return old;
+            }
+            inline bool operator()() const
             {
                 return !_current.is_eof();
             }

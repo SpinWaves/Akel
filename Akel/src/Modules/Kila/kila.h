@@ -9,5 +9,7 @@
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/stream_stack.h>
 #include <Modules/Kila/token_iterator.h>
+#include <Modules/Kila/errors.h>
+#include <Modules/Kila/file.h>
 
 #endif // __AK_KILA__

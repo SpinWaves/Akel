@@ -56,6 +56,7 @@
 #include <set>
 #include <unordered_map>
 #include <string>
+#include <string_view>
 #include <map>
 #include <vector>
 #include <array>
@@ -81,6 +82,6 @@
 
 // Other includes
 #include <exception>
-#include <Utils/function.h>
+#include <function/function.h>
 
 #endif // __AK_PCH__

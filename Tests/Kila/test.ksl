@@ -1,0 +1,7 @@
+// Test commentary
+
+//@entry vert
+fn main()
+{
+    return 0;
+}

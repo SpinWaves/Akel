@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // CREATED : 08/11/2021
-// UPDATED : 10/11/2021
+// UPDATED : 11/11/2021
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
 
 #include <Akpch.h>
 #include <Utils/Containers/duetsArray.h>
+#include <Modules/Kila/stream_stack.h>
 
 namespace Ak::Kl
 {
@@ -89,9 +90,12 @@ namespace Ak::Kl
     };
     
     struct eof{};
-    struct identifier { const char* name; };
+    struct identifier { std::string name; };
 
-    using token_value = std::variant<Tokens, identifier, double, std::string, eof>;
+    std::optional<Tokens> get_keyword(const std::string& word);
+	std::optional<Tokens> get_operator(StreamStack& stream);
+
+    using token_value = std::variant<Tokens, identifier, double, eof>;
 
     class Token
     {
@@ -181,7 +185,6 @@ namespace Ak::Kl
 			};
 
             bool is_keyword() const;
-            bool is_string() const;
             bool is_number() const;
             bool is_identifier() const;
             bool is_eof() const;
@@ -189,7 +192,6 @@ namespace Ak::Kl
             Tokens get_token() const;
             const identifier& get_identifier() const;
             double get_number() const;
-            const std::string& get_string() const;
             const token_value& get_value() const;
             
             size_t get_line_number() const;

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/05/2021
-// UPDATED : 11/08/2021
+// UPDATED : 11/11/2021
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__
@@ -19,6 +19,9 @@ namespace Ak
 		using __type = std::pair<__first, __second>;
 
 		public:
+			using iterator = typename std::vector<__type>::const_iterator;
+			using const_iterator = iterator;
+
 			duets_array(std::initializer_list<__type> duets)
 			{
 				assert(duets.size() <= _array.max_size());
@@ -125,6 +128,26 @@ namespace Ak
 						return true;
 				}
 				return false;
+			}
+
+			iterator begin()
+			{
+				return _array.begin();
+			}
+			
+			iterator end()
+			{
+				return _array.end();
+			}
+
+			const_iterator cbegin() const
+			{
+				return _array.cbegin();
+			}
+			
+			const_iterator cend() const
+			{
+				return _array.cend();
 			}
 
 			friend std::ostream& operator<<(std::ostream& target, const duets_array& source)

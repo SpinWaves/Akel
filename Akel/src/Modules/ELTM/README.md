@@ -44,8 +44,4 @@ if(context.load("file.eltm"))	// Ak::ELTM::load return true or false in case of 
 	std::cout << Ak::ELTM::getText("YourID") << std::endl; // you can get texts directly from ELTM class if context was initialized
 }
 ```
-
-## Documentations
-[ELTM 1.0](https://github.com/SpinWaves/Akel/blob/main/Akel/src/Modules/ELTM/ELTM_documentation_1_0.pdf)
-
-[ELTM 1.1](https://github.com/SpinWaves/Akel/blob/main/Akel/src/Modules/ELTM/ELTM_documentation_1_1.pdf)
+[Documentation](https://github.com/SpinWaves/Akel/blob/main/Akel/src/Modules/ELTM/ELTM_documentation_1_1.pdf)

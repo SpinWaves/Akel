@@ -1,11 +1,27 @@
 // This file is a part of Akel
 // CREATED : 09/11/2021
-// UPDATED : 09/11/2021
+// UPDATED : 11/11/2021
 
 #include <Modules/Kila/tokens.h>
 
 namespace Ak::Kl
 {
+	std::optional<Tokens> get_keyword(const std::string& word)
+	{
+		if(!Token::kw_tokens.have(word))
+			return std::nullopt;
+		return std::make_optional(Token::kw_tokens[word]);
+	}
+
+	std::optional<Tokens> get_operator(StreamStack& stream)
+	{
+		std::string c;
+		c.push_back(char(stream()));
+		if(!Token::operators_token.have(c))
+			return std::nullopt;
+		return std::make_optional(Token::operators_token[std::move(c)]);
+	}
+
     Token::Token(token_value value, unsigned int line, unsigned int index) : _value(std::move(value)), _line(line), _index(index) {}
 	
 	bool Token::is_keyword() const
@@ -21,11 +37,6 @@ namespace Ak::Kl
 	bool Token::is_number() const
     {
 		return std::holds_alternative<double>(_value);
-	}
-	
-	bool Token::is_string() const
-    {
-		return std::holds_alternative<std::string>(_value);
 	}
 	
 	bool Token::is_eof() const
@@ -46,11 +57,6 @@ namespace Ak::Kl
 	double Token::get_number() const
     {
 		return std::get<double>(_value);
-	}
-	
-	const std::string& Token::get_string() const
-    {
-		return std::get<std::string>(_value);
 	}
 	
 	const token_value& Token::get_value() const

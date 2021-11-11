@@ -21,7 +21,10 @@ namespace Ak::Kl
 		}
 
 		if(ret == '\n')
+		{
 			_line++;
+			_index = 0;
+		}
 		
 		_index++;
 		

@@ -4,7 +4,7 @@ Kila is a shading language made for Akel engine. It is an oriented object progra
 
 Example of Kila program
 ```Kotlin
-@get lstd.kl // To have vec2, vec3, vec4, mat2, mat3, mat4...
+@get lstd.ksl // To have vec2, vec3, vec4, mat2, mat3, mat4...
 
 // Global part
 var pos: vec3 = entry(0); // entry is equivalent to layout in GLSL and "(0)" means "location 0"
