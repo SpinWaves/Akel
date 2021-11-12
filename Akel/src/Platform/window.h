@@ -102,9 +102,9 @@ namespace Ak
 			}
 
             // Getters
-            inline std::string& getTitle() const noexcept { return _title; }
-            inline Maths::Vec2<uint16_t>& getPosition() const noexcept { return _position; }
-            Maths::Vec2<uint16_t>& getSize();
+            inline const std::string& getTitle() const noexcept { return _title; }
+            inline const Maths::Vec2<uint16_t>& getPosition() const noexcept { return _position; }
+            const Maths::Vec2<uint16_t>& getSize();
 			inline SDL_Window* getNativeWindow() const noexcept { return _window; }
 
             ~WindowComponent() override;

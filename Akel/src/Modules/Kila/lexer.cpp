@@ -4,6 +4,7 @@
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
+#include <Modules/Kila/warnings.h>
 
 namespace Ak::Kl
 {
@@ -11,7 +12,7 @@ namespace Ak::Kl
     {
         eof,
         space,
-        num,
+        alphanum,
         punct
     };
 
@@ -21,8 +22,8 @@ namespace Ak::Kl
             return char_type::eof;
         if(std::isspace(c))
             return char_type::space;
-        if(std::isdigit(c))
-            return char_type::num;
+        if(std::isalpha(c) || std::isdigit(c) || char(c) == '_')
+            return char_type::alphanum;
         return char_type::punct;
     }
 
@@ -48,7 +49,7 @@ namespace Ak::Kl
                 word.pop_back();
                 break;
             }
-        } while(get_char_type(c) == char_type::num || (is_number && c == '.'));
+        } while(get_char_type(c) == char_type::alphanum || (is_number && c == '.'));
         
         stream.push_back(c);
         
@@ -137,7 +138,7 @@ namespace Ak::Kl
                 
                 case char_type::space: continue;
                 
-                case char_type::num: stream.push_back(c); return fetch_word(stream);
+                case char_type::alphanum: stream.push_back(c); return fetch_word(stream);
                 
                 case char_type::punct:
                 {

@@ -33,6 +33,7 @@ namespace Ak::Kl
         kw_entry,
         kw_newtype,
         kw_uniform,
+        kw_operator,
 
         end_line,
         type_specifier,
@@ -68,6 +69,12 @@ namespace Ak::Kl
 
         inc,
 		dec,
+
+        add_assign,
+        sub_assign,
+        mul_assign,
+        div_assign,
+        mod_assign,
 		
 		add,
 		sub,
@@ -94,6 +101,26 @@ namespace Ak::Kl
 
     std::optional<Tokens> get_keyword(const std::string& word);
 	std::optional<Tokens> get_operator(StreamStack& stream);
+
+	inline bool operator==(const identifier& id1, const identifier& id2)
+    {
+		return id1.name == id2.name;
+	}
+	
+	inline bool operator!=(const identifier& id1, const identifier& id2)
+    {
+		return id1.name != id2.name;
+	}
+	
+	inline bool operator==(const eof&, const eof&)
+    {
+		return true;
+	}
+	
+	inline bool operator!=(const eof&, const eof&)
+    {
+		return false;
+	}
 
     using token_value = std::variant<Tokens, identifier, double, eof>;
 
@@ -124,6 +151,7 @@ namespace Ak::Kl
                 {Tokens::kw_entry, "entry"},
                 {Tokens::kw_newtype, "newtype"},
                 {Tokens::kw_uniform, "uniform"},
+                {Tokens::kw_operator, "operator"},
 
                 {Tokens::t_int, "int"},
                 {Tokens::t_float, "float"},
@@ -175,13 +203,18 @@ namespace Ak::Kl
 
                 {Tokens::inc, "++"},
                 {Tokens::dec, "--"},
+                {Tokens::add_assign, "+="},
+                {Tokens::sub_assign, "-="},
+                {Tokens::mul_assign, "*="},
+                {Tokens::div_assign, "/="},
+                {Tokens::mod_assign, "%="},
 
                 {Tokens::add, "+"},
                 {Tokens::sub, "-"},
                 {Tokens::mul, "*"},
                 {Tokens::div, "/"},
                 {Tokens::mod, "%"},
-                {Tokens::assign, "="}
+                {Tokens::assign, "="},
 			};
 
             inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }

@@ -19,7 +19,7 @@ namespace Ak::Kl
         _index = index;
     }
 
-    void Error::expose() const noexcept
+    void Error::expose() const
     {
         if(_line == -1 && _index == -1)
             Core::log::report(FATAL_ERROR, _message);

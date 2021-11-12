@@ -1,4 +1,5 @@
 // Test commentary
+@get lstd.ksl
 
 @entry vert
 
@@ -7,6 +8,9 @@ class Light
     public:
         fn Light() {}
         mtd calc() {}
+
+    private:
+        var _float: float;
 }
 
 fn main()

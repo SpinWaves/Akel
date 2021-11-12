@@ -131,7 +131,7 @@ namespace Ak
 	}
 
     // ================ Getters ================ //
-    Maths::Vec2<uint16_t>& WindowComponent::getSize()
+    const Maths::Vec2<uint16_t>& WindowComponent::getSize()
     {
 		int x, y = 0;
 		SDL_GetWindowSize(_window, &x, &y);

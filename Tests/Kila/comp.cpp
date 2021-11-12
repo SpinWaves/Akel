@@ -14,7 +14,8 @@ void Comp::onEvent(Ak::Input& input)
 
 void Comp::update()
 {
-    Ak::Kl::File f(std::string(Ak::Core::getMainDirPath() + "Tests/Kila/test.ksl").c_str());
+    //Ak::Kl::File f(std::string(Ak::Core::getMainDirPath() + "Tests/Kila/test.ksl").c_str());
+    Ak::Kl::File f(std::string(Ak::Core::getMainDirPath() + "Akel/src/Modules/Kila/lib_std/std_vec3.ksl").c_str());
     func::function<int()> get = [&](){ return f(); };
     Ak::Kl::StreamStack stream(&get);
     Ak::Kl::tk_iterator it(stream);

@@ -19,7 +19,7 @@ namespace Ak::Kl
         _index = index;
     }
 
-    void Warning::expose() const noexcept
+    void Warning::expose() const
     {
         Core::log::report(WARNING, "%s, line: %d, index: %d", _message.c_str(), _line, _index);
     }

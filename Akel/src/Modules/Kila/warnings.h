@@ -16,7 +16,7 @@ namespace Ak::Kl
             Warning(std::string message, size_t line, size_t index);
 
             inline const char* what() const noexcept { return _message.c_str(); }
-            void expose() const noexcept;
+            void expose() const;
             inline int line() const noexcept { return _line; }
             inline int index() const noexcept { return _index; }
         
