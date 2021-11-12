@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 23/09/2021
+// UPDATED : 12/11/2021
 
 #include <Platform/platform.h>
 
@@ -131,15 +131,7 @@ namespace Ak
 	}
 
     // ================ Getters ================ //
-    std::string WindowComponent::getTitle()
-    {
-        return _title;
-    }
-    Maths::Vec2<uint16_t> WindowComponent::getPosition()
-    {
-        return _position;
-    }
-    Maths::Vec2<uint16_t> WindowComponent::getSize()
+    Maths::Vec2<uint16_t>& WindowComponent::getSize()
     {
 		int x, y = 0;
 		SDL_GetWindowSize(_window, &x, &y);

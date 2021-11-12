@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 23/09/2021
+// UPDATED : 12/11/2021
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -102,13 +102,10 @@ namespace Ak
 			}
 
             // Getters
-            std::string getTitle();
-            Maths::Vec2<uint16_t> getPosition();
-            Maths::Vec2<uint16_t> getSize();
-			SDL_Window* getNativeWindow()
-			{
-				return _window;
-			}
+            inline std::string& getTitle() const noexcept { return _title; }
+            inline Maths::Vec2<uint16_t>& getPosition() const noexcept { return _position; }
+            Maths::Vec2<uint16_t>& getSize();
+			inline SDL_Window* getNativeWindow() const noexcept { return _window; }
 
             ~WindowComponent() override;
 
