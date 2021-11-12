@@ -1,15 +1,16 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 06/10/2021
+// UPDATED : 12/11/2021
 
 #include <Core/Memory/jamAllocator.h>
+#include <Core/log.h>
 
 namespace Ak
 {
     template <typename T = void, typename ... Args>
     T* JamAllocator::alloc(Args&& ... args)
     {
-        if(_heapSize == 0)
+        if(_heap == nullptr)
         {
             Core::log::report(FATAL_ERROR, "Jam Allocator: you need to initialize the allocator before aking him to give you memory");
             return nullptr;
