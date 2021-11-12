@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 11/11/2021
-// UPDATED : 11/11/2021
+// UPDATED : 12/11/2021
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
@@ -11,18 +11,18 @@ namespace Ak::Kl
     {
         eof,
         space,
-        alphnum,
+        num,
         punct
     };
 
     char_type get_char_type(int c)
     {
-        if(c < 0 )
+        if(c < 0)
             return char_type::eof;
         if(std::isspace(c))
             return char_type::space;
-        if(std::isalpha(c) || std::isdigit(c) || c == '_') 
-            return char_type::alphnum;
+        if(std::isdigit(c))
+            return char_type::num;
         return char_type::punct;
     }
 
@@ -48,7 +48,7 @@ namespace Ak::Kl
                 word.pop_back();
                 break;
             }
-        } while(get_char_type(c) == char_type::alphnum || (is_number && c == '.'));
+        } while(get_char_type(c) == char_type::num || (is_number && c == '.'));
         
         stream.push_back(c);
         
@@ -137,7 +137,7 @@ namespace Ak::Kl
                 
                 case char_type::space: continue;
                 
-                case char_type::alphnum: stream.push_back(c); return fetch_word(stream);
+                case char_type::num: stream.push_back(c); return fetch_word(stream);
                 
                 case char_type::punct:
                 {

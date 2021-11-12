@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 11/11/2021
-// UPDATED : 11/11/2021
+// UPDATED : 12/11/2021
 
 #ifndef __AK_KILA_STREAM_STACK__
 #define __AK_KILA_STREAM_STACK__
@@ -18,8 +18,8 @@ namespace Ak::Kl
             
             void push_back(int c);
             
-            inline size_t getline() const { return _line; }
-            inline size_t getindex() const { return _index; }
+            inline size_t getline() const noexcept { return _line; }
+            inline size_t getindex() const noexcept { return _index; }
 
             ~StreamStack() = default;
 

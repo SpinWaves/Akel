@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/11/2021
-// UPDATED : 11/11/2021
+// UPDATED : 12/11/2021
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -49,7 +49,6 @@ namespace Ak::Kl
         t_float,
         t_double,
         t_bool,
-        t_string,
         t_byte,
         t_unsigned,
 
@@ -130,7 +129,6 @@ namespace Ak::Kl
                 {Tokens::t_float, "float"},
                 {Tokens::t_double, "double"},
                 {Tokens::t_bool, "bool"},
-                {Tokens::t_string, "string"},
                 {Tokens::t_byte, "byte"},
                 {Tokens::t_unsigned, "unsigned"},
 
@@ -186,20 +184,20 @@ namespace Ak::Kl
                 {Tokens::assign, "="}
 			};
 
-            bool is_keyword() const;
-            bool is_number() const;
-            bool is_identifier() const;
-            bool is_eof() const;
+            inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }
+            inline bool is_number() const { return std::holds_alternative<double>(_value); }
+            inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
+            inline bool is_eof() const { return std::holds_alternative<eof>(_value); }
 
-            Tokens get_token() const;
-            const identifier& get_identifier() const;
-            double get_number() const;
-            const token_value& get_value() const;
-            
-            size_t get_line_number() const;
-            size_t get_char_index() const;
+            inline Tokens get_token() const { return std::get<Tokens>(_value); }
+            inline const identifier& get_identifier() const { return std::get<identifier>(_value); }
+            inline double get_number() const { return std::get<double>(_value); }
+            inline const token_value& get_value() const { return _value; }
+        
+            inline size_t get_line_number() const noexcept { return _line; }
+            inline size_t get_char_index() const noexcept { return _index; }
 
-	        bool has_value(token_value value) const;
+	        bool has_value(token_value value) const { return _value == std::move(value); }
 
         private:
             token_value _value;
