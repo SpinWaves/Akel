@@ -120,7 +120,7 @@ namespace Ak::Kl
         } while(get_char_type(c) != char_type::eof);
 
         stream.push_back(c);
-        parsing_error("Expected closing '*/', but none was found", stream.getline(), stream.getindex()).expose();
+        no_end("'*/'", stream.getline(), stream.getindex()).expose();
     }
 
     Token lexe(StreamStack& stream)

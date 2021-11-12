@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 11/11/2021
-// UPDATED : 11/11/2021
+// UPDATED : 12/11/2021
 
 #include <Modules/Kila/errors.h>
 
@@ -24,7 +24,7 @@ namespace Ak::Kl
         if(_line == -1 && _index == -1)
             Core::log::report(FATAL_ERROR, _message);
         else
-            Core::log::report(FATAL_ERROR, "%s, line: %d, index: %d",_message.c_str() , _line, _index);
+            Core::log::report(FATAL_ERROR, "%s, line: %d, index: %d", _message.c_str(), _line, _index);
     }
 
     Error parsing_error(const char* message, size_t line, size_t index)
