@@ -19,7 +19,6 @@ namespace Ak::Kl
             void push_back(int c);
             
             inline size_t getline() const noexcept { return _line; }
-            inline size_t getindex() const noexcept { return _index; }
 
             ~StreamStack() = default;
 
@@ -27,7 +26,6 @@ namespace Ak::Kl
             const func::function<int()>& _input;
             std::stack<int> _stack;
             size_t _line;
-            size_t _index;
     };
 }
 

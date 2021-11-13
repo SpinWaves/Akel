@@ -14,8 +14,7 @@ void Comp::onEvent(Ak::Input& input)
 
 void Comp::update()
 {
-    //Ak::Kl::File f(std::string(Ak::Core::getMainDirPath() + "Tests/Kila/test.ksl").c_str());
-    Ak::Kl::File f(std::string(Ak::Core::getMainDirPath() + "Akel/src/Modules/Kila/lib_std/std_vec3.ksl").c_str());
+    Ak::Kl::File f(std::string(Ak::Core::getMainDirPath() + "Tests/Kila/test.ksl").c_str());
     func::function<int()> get = [&](){ return f(); };
     Ak::Kl::StreamStack stream(&get);
     Ak::Kl::tk_iterator it(stream);
@@ -34,6 +33,8 @@ void Comp::update()
             std::cout << "Number     : " << it->get_number() << std::endl;
         if(it->is_identifier())
             std::cout << "Identifier : " << it->get_identifier().name << std::endl;
+        if(it->is_macro())
+            std::cout << "Macro      : " << Ak::Kl::Token::macros_token[it->get_macro().name] << std::endl;
     }
     std::cout << "end of file" << std::endl;
 }

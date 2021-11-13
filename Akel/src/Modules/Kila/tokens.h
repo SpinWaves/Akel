@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/11/2021
-// UPDATED : 12/11/2021
+// UPDATED : 13/11/2021
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -30,8 +30,7 @@ namespace Ak::Kl
 		kw_break,
 		kw_continue,
 		kw_return,
-        kw_entry,
-        kw_newtype,
+        kw_location,
         kw_uniform,
         kw_operator,
 
@@ -48,20 +47,14 @@ namespace Ak::Kl
 
         t_int,
         t_float,
-        t_double,
         t_bool,
-        t_byte,
         t_unsigned,
-
-        macro,
-        m_set,
-        m_unset,
-        m_get,
-        m_once,
-        m_endif,
-        m_vert,
-        m_frag,
-        m_global,
+        t_vec2,
+        t_vec3,
+        t_vec4,
+        t_mat2,
+        t_mat3,
+        t_mat4,
 
         statment_if,
         statment_else,
@@ -95,12 +88,34 @@ namespace Ak::Kl
         logical_and,
         logical_or
     };
+
+    enum class Macro_Tokens
+    {
+        macro,
+        set,
+        unset,
+        get,
+        once,
+        endif,
+
+        entry,
+        
+        vert,
+        frag,
+        global,
+
+        statment_if,
+        statment_else,
+        statment_elif
+    };
     
     struct eof{};
     struct identifier { std::string name; };
+    struct macro { Macro_Tokens name; };
 
     std::optional<Tokens> get_keyword(const std::string& word);
 	std::optional<Tokens> get_operator(StreamStack& stream);
+	std::optional<Macro_Tokens> get_macro(const std::string& word);
 
 	inline bool operator==(const identifier& id1, const identifier& id2)
     {
@@ -108,6 +123,16 @@ namespace Ak::Kl
 	}
 	
 	inline bool operator!=(const identifier& id1, const identifier& id2)
+    {
+		return id1.name != id2.name;
+	}
+
+	inline bool operator==(const macro& id1, const macro& id2)
+    {
+		return id1.name == id2.name;
+	}
+	
+	inline bool operator!=(const macro& id1, const macro& id2)
     {
 		return id1.name != id2.name;
 	}
@@ -122,12 +147,12 @@ namespace Ak::Kl
 		return false;
 	}
 
-    using token_value = std::variant<Tokens, identifier, double, eof>;
+    using token_value = std::variant<Tokens, identifier, double, eof, macro>;
 
     class Token
     {
         public:
-            Token(token_value value, unsigned int line, unsigned int index);
+            Token(token_value value, unsigned int line);
 
 			static inline duets_array<Tokens, std::string> kw_tokens
 			{
@@ -148,31 +173,45 @@ namespace Ak::Kl
                 {Tokens::kw_break, "break"},
                 {Tokens::kw_continue, "continue"},
                 {Tokens::kw_return, "return"},
-                {Tokens::kw_entry, "entry"},
-                {Tokens::kw_newtype, "newtype"},
+                {Tokens::kw_location, "location"},
                 {Tokens::kw_uniform, "uniform"},
                 {Tokens::kw_operator, "operator"},
 
                 {Tokens::t_int, "int"},
                 {Tokens::t_float, "float"},
-                {Tokens::t_double, "double"},
                 {Tokens::t_bool, "bool"},
-                {Tokens::t_byte, "byte"},
                 {Tokens::t_unsigned, "unsigned"},
-
-                {Tokens::m_set, "set"},
-                {Tokens::m_unset, "unset"},
-                {Tokens::m_get, "get"},
-                {Tokens::m_once, "once"},
-                {Tokens::m_endif, "endif"},
-                {Tokens::m_vert, "vert"},
-                {Tokens::m_frag, "frag"},
-                {Tokens::m_global, "global"},
+                {Tokens::t_vec2, "vec2"},
+                {Tokens::t_vec3, "vec3"},
+                {Tokens::t_vec4, "vec4"},
+                {Tokens::t_mat2, "mat2"},
+                {Tokens::t_mat3, "mat3"},
+                {Tokens::t_mat4, "mat4"},
 
                 {Tokens::statment_if, "if"},
                 {Tokens::statment_else, "else"},
                 {Tokens::statment_elif, "elif"}
 			};
+
+			static inline duets_array<Macro_Tokens, std::string> macros_token
+            {
+                {Macro_Tokens::macro, "@"},
+                
+                {Macro_Tokens::set, "set"},
+                {Macro_Tokens::unset, "unset"},
+                {Macro_Tokens::get, "get"},
+                {Macro_Tokens::once, "once"},
+                {Macro_Tokens::endif, "endif"},
+
+                {Macro_Tokens::entry, "entry"},
+                {Macro_Tokens::vert, "vert"},
+                {Macro_Tokens::frag, "frag"},
+                {Macro_Tokens::global, "global"},
+
+                {Macro_Tokens::statment_if, "if"},
+                {Macro_Tokens::statment_else, "else"},
+                {Macro_Tokens::statment_elif, "elif"}
+            };
 
 			static inline duets_array<Tokens, std::string> operators_token
 			{
@@ -199,8 +238,6 @@ namespace Ak::Kl
                 {Tokens::logical_and, "&&"},
                 {Tokens::logical_or, "||"},
 
-                {Tokens::macro, "@"},
-
                 {Tokens::inc, "++"},
                 {Tokens::dec, "--"},
                 {Tokens::add_assign, "+="},
@@ -220,22 +257,22 @@ namespace Ak::Kl
             inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }
             inline bool is_number() const { return std::holds_alternative<double>(_value); }
             inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
+            inline bool is_macro() const { return std::holds_alternative<macro>(_value); }
             inline bool is_eof() const { return std::holds_alternative<eof>(_value); }
 
             inline Tokens get_token() const { return std::get<Tokens>(_value); }
             inline const identifier& get_identifier() const { return std::get<identifier>(_value); }
             inline double get_number() const { return std::get<double>(_value); }
+            inline macro get_macro() const { return std::get<macro>(_value); }
             inline const token_value& get_value() const { return _value; }
         
             inline size_t get_line_number() const noexcept { return _line; }
-            inline size_t get_char_index() const noexcept { return _index; }
 
 	        bool has_value(token_value value) const { return _value == std::move(value); }
 
         private:
             token_value _value;
             unsigned int _line = 0;
-            unsigned int _index = 0;
     };
 }
 
