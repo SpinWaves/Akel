@@ -33,8 +33,6 @@ void Comp::update()
             std::cout << "Number     : " << it->get_number() << std::endl;
         if(it->is_identifier())
             std::cout << "Identifier : " << it->get_identifier().name << std::endl;
-        if(it->is_macro())
-            std::cout << "Macro      : " << Ak::Kl::Token::macros_token[it->get_macro().name] << std::endl;
     }
     std::cout << "end of file" << std::endl;
 }

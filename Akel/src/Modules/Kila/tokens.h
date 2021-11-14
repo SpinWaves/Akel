@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/11/2021
-// UPDATED : 13/11/2021
+// UPDATED : 14/11/2021
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -111,7 +111,6 @@ namespace Ak::Kl
     
     struct eof{};
     struct identifier { std::string name; };
-    struct macro { Macro_Tokens name; };
 
     std::optional<Tokens> get_keyword(const std::string& word);
 	std::optional<Tokens> get_operator(StreamStack& stream);
@@ -127,16 +126,6 @@ namespace Ak::Kl
 		return id1.name != id2.name;
 	}
 
-	inline bool operator==(const macro& id1, const macro& id2)
-    {
-		return id1.name == id2.name;
-	}
-	
-	inline bool operator!=(const macro& id1, const macro& id2)
-    {
-		return id1.name != id2.name;
-	}
-	
 	inline bool operator==(const eof&, const eof&)
     {
 		return true;
@@ -147,7 +136,7 @@ namespace Ak::Kl
 		return false;
 	}
 
-    using token_value = std::variant<Tokens, identifier, double, eof, macro>;
+    using token_value = std::variant<Tokens, identifier, double, eof, Macro_Tokens>;
 
     class Token
     {
@@ -257,13 +246,13 @@ namespace Ak::Kl
             inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }
             inline bool is_number() const { return std::holds_alternative<double>(_value); }
             inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
-            inline bool is_macro() const { return std::holds_alternative<macro>(_value); }
+            inline bool is_macro() const { return std::holds_alternative<Macro_Tokens>(_value); }
             inline bool is_eof() const { return std::holds_alternative<eof>(_value); }
 
             inline Tokens get_token() const { return std::get<Tokens>(_value); }
             inline const identifier& get_identifier() const { return std::get<identifier>(_value); }
             inline double get_number() const { return std::get<double>(_value); }
-            inline macro get_macro() const { return std::get<macro>(_value); }
+            inline Macro_Tokens get_macro() const { return std::get<Macro_Tokens>(_value); }
             inline const token_value& get_value() const { return _value; }
         
             inline size_t get_line_number() const noexcept { return _line; }

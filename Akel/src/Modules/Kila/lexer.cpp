@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // CREATED : 11/11/2021
-// UPDATED : 13/11/2021
+// UPDATED : 14/11/2021
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
 #include <Modules/Kila/warnings.h>
+#include <Modules/Kila/macros.h>
 
 namespace Ak::Kl
 {
@@ -16,8 +17,6 @@ namespace Ak::Kl
         punct,
         macro
     };
-
-    static std::map<std::string, std::string> __set_macros;
 
     char_type get_char_type(int c)
     {
@@ -55,6 +54,9 @@ namespace Ak::Kl
             }
         } while(get_char_type(c) == char_type::alphanum || (is_number && c == '.'));
         
+        if(Macros::get_sets().count(word))
+            word = Macros::get_sets()[word];
+
         stream.push_back(c);
         
         if(std::optional<Tokens> t = get_keyword(word))
@@ -98,32 +100,54 @@ namespace Ak::Kl
     void fetch_macro(StreamStack& stream)
     {
         size_t line = stream.getline();
-        std::string identifier;
+        std::vector<std::string> identifiers;
+        identifiers.push_back("");
         std::vector<Token> cache;
         int c = stream();
-        while(c != '\n')
-        {
-            do
-            {
-                identifier.push_back(char(c));
-                c = stream();
-            } while(get_char_type(c) == char_type::alphanum && get_char_type(c) != char_type::space && c != '\n');
-            
-            if(get_char_type(c) == char_type::space && c != '\n')
-                stream.push_back(c);
-            
-            if(std::optional<Macro_Tokens> t = get_macro(identifier))
-                cache.push_back(Token(macro{*t}, line));
-            else if(cache.empty())
-                unexpected_macro_error(identifier.c_str(), line).expose();
-            else
-                cache.push_back(fetch_word(identifier));
-        }
+        std::optional<Macro_Tokens> t;
 
-        switch(cache.get_value())
+        do
         {
-            f
-        };
+            identifiers.back().push_back(char(c));
+            c = stream();
+            if(get_char_type(c) == char_type::space)
+            {
+                c = stream();
+                if(t = get_macro(identifiers.back()))
+                    cache.push_back(Token(*t, line));
+                else if(cache.empty())
+                    unexpected_macro_error(identifiers.back().c_str(), line).expose();
+                identifiers.push_back("");
+            }
+        } while(c != '\n' && get_char_type(c) != char_type::eof && get_char_type(c) != char_type::macro);
+        
+        if(c != '\n')
+            stream.push_back(c);
+
+        switch(cache.front().get_macro())
+        {
+            case Macro_Tokens::entry:
+            {
+                if(t = get_macro(identifiers[1]))
+                {
+                    switch(*t)
+                    {
+                        case Macro_Tokens::vert: Macros::set_entry(entries::vert); break;
+                        case Macro_Tokens::frag: Macros::set_entry(entries::frag); break;
+                        case Macro_Tokens::global: Macros::set_entry(entries::global); break;
+
+                        default: unexpected_macro_error(identifiers[1].c_str(), line).expose(); break;
+                    }
+                }
+                else
+                    unexpected_macro_error(identifiers[1].c_str(), line).expose();
+                break;
+            }
+
+            case Macro_Tokens::set : Macros::new_set(identifiers[1], identifiers[2]); break;
+            case Macro_Tokens::unset: Macros::remove_set(identifiers[1]); break;
+            case Macro_Tokens::get: break;
+        }
     }
     
     void skip_line_comment(StreamStack& stream)
