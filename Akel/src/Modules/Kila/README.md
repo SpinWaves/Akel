@@ -8,7 +8,7 @@ Example of Kila program
 var pos: vec3 = location(0); // location is equivalent to layout in GLSL
 var color: vec4 = location(1);
 
-entry vert // vertex shader
+@entry vert // vertex shader
 
 uniform var view: mat4;
 uniform var proj: mat4;
@@ -20,7 +20,7 @@ fn main()
     return proj * view * vec4(pos, 1.0);
 }
 
-entry frag // fragment shader
+@entry frag // fragment shader
 
 class Light
 {
