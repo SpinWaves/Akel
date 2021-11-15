@@ -146,7 +146,12 @@ namespace Ak::Kl
 
             case Macro_Tokens::set : Macros::new_set(identifiers[1], identifiers[2]); break;
             case Macro_Tokens::unset: Macros::remove_set(identifiers[1]); break;
-            case Macro_Tokens::get: break;
+            
+            case Macro_Tokens::get:
+                File f(std::string(Core::getMainDirPath() + "Tests/Kila" + identifiers[1]).c_str()); // Path for tests
+                func::function<int()> get = [&](){ return f(); };
+                StreamStack st(&get);
+            break;
         }
     }
     

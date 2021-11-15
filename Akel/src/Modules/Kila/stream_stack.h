@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 11/11/2021
-// UPDATED : 12/11/2021
+// UPDATED : 14/11/2021
 
 #ifndef __AK_KILA_STREAM_STACK__
 #define __AK_KILA_STREAM_STACK__
@@ -17,6 +17,7 @@ namespace Ak::Kl
             int operator()();
             
             void push_back(int c);
+            inline std::stack<int> get_stack() { return _stack; }
             
             inline size_t getline() const noexcept { return _line; }
 

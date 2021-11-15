@@ -1,4 +1,6 @@
 // Test commentary
+@get import.ksl
+
 @entry vert
 
 class Light
