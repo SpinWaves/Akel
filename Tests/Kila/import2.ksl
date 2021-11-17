@@ -1,0 +1,3 @@
+@get once
+
+var number : int = 2;

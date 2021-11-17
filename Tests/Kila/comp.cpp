@@ -14,6 +14,7 @@ void Comp::onEvent(Ak::Input& input)
 
 void Comp::update()
 {
+    /*
     Ak::Kl::File f(std::string(Ak::Core::getMainDirPath() + "Tests/Kila/test.ksl").c_str());
     func::function<int()> get = [&](){ return f(); };
     Ak::Kl::StreamStack stream(&get);
@@ -35,6 +36,16 @@ void Comp::update()
             std::cout << "Identifier : " << it->get_identifier().name << std::endl;
     }
     std::cout << "end of file" << std::endl;
+    */
+    Ak::BinarySearchTree<int> tree(20);
+    tree.add(15);
+    tree.add(7);
+    tree.add(19);
+    tree.add(16);
+    tree.add(40);
+    tree.add(60);
+    tree.add(50);
+    tree.add(70);
 }
 
 void Comp::onQuit()

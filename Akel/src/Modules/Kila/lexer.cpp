@@ -1,11 +1,12 @@
 // This file is a part of Akel
 // CREATED : 11/11/2021
-// UPDATED : 14/11/2021
+// UPDATED : 15/11/2021
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
 #include <Modules/Kila/warnings.h>
 #include <Modules/Kila/macros.h>
+#include <Modules/Kila/file.h>
 
 namespace Ak::Kl
 {
@@ -145,13 +146,35 @@ namespace Ak::Kl
             }
 
             case Macro_Tokens::set : Macros::new_set(identifiers[1], identifiers[2]); break;
-            case Macro_Tokens::unset: Macros::remove_set(identifiers[1]); break;
+            case Macro_Tokens::unset : Macros::remove_set(identifiers[1]); break;
             
-            case Macro_Tokens::get:
-                File f(std::string(Core::getMainDirPath() + "Tests/Kila" + identifiers[1]).c_str()); // Path for tests
-                func::function<int()> get = [&](){ return f(); };
-                StreamStack st(&get);
-            break;
+            case Macro_Tokens::get :
+            {
+                if(cache.back().get_macro() == Macro_Tokens::once)
+                {
+                    Macros::add_once(stream.get_files().back());
+                    
+                    for(auto elem : stream.get_files())
+                        std::cout << elem << std::endl;
+                }
+                if(!Macros::have_once(identifiers[1]))
+                {
+                    File f(std::string(Core::getMainDirPath() + "Tests/Kila/" + identifiers[1]).c_str()); // Path for tests (will change)
+                    stream.add_file(f.get_path());
+                    std::stack<int> temp;
+                    while(!f.is_eof())
+                    {
+                        temp.push(f());
+                    }
+                    temp.pop(); // To remove the end of file
+                    while(!temp.empty())
+                    {
+                        stream.push_back(temp.top());
+                        temp.pop();
+                    }
+                }
+                break;
+            }
         }
     }
     

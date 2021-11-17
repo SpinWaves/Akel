@@ -27,11 +27,16 @@ namespace Ak::Kl
             inline static entries get_current_entry() { return _entry; }
             inline static void set_entry(entries entry) { _entry = entry; }
 
+            inline static std::vector<std::string>& get_onces() { return _onces; }
+            static bool have_once(const std::string& name);
+            inline static void add_once(const std::string& name) { _onces.push_back(name); }
+
             ~Macros() = delete;
 
         private:
             inline static std::unordered_map<std::string, std::string> _sets;
             inline static entries _entry;
+            inline static std::vector<std::string> _onces;
     };
 }
 
