@@ -50,7 +50,7 @@ namespace Ak
     template <typename T = void, typename ... Args>
     T* MemoryManager::alloc(Args&& ... args)
     {
-        if(_use)
+        if(_use && __jam.is_init())
         {
             #ifndef AK_USE_JAM_MEMORY_HELPER
                 if(!std::is_class<T>::value)
@@ -71,7 +71,7 @@ namespace Ak
     template <typename T = void>
     void MemoryManager::free(T* ptr)
     {
-        if(_use)
+        if(_use && __jam.is_init())
         {
             #ifndef AK_USE_JAM_MEMORY_HELPER
                 if(__fixed1.contains((void*)ptr))

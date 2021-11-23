@@ -11,16 +11,17 @@ namespace Ak
     class BinarySearchTree
     {
         public:
-            explicit BinarySearchTree(T data);
-            BinarySearchTree<T>* add(T data); // The type returned is for internal recursion
-            BinarySearchTree<T>* remove(T data); // Same shit
+            explicit BinarySearchTree(T&& data);
+            BinarySearchTree<T>* add(T&& data); // The type returned is for internal recursion
+            BinarySearchTree<T>* remove(T&& data); // Same shit
             BinarySearchTree<T>* find_minimum();
-            BinarySearchTree<T>* find(T data);
+            BinarySearchTree<T>* find(T&& data);
             inline BinarySearchTree<T>* getRight() { return _right; }
             inline BinarySearchTree<T>* getLeft() { return _left; }
-            inline T& getData() { return _data; }
-            inline BinarySearchTree<T>* setRight(BinarySearchTree<T>* right) { _right = right; }
-            inline BinarySearchTree<T>* setLeft(BinarySearchTree<T>* left) { _left = left; }
+            inline T&& getData() { return _data; }
+            inline void setRight(BinarySearchTree<T>* right) { _right = right; }
+            inline void setLeft(BinarySearchTree<T>* left) { _left = left; }
+            inline void setData(T&& data) { _data = data; }
             ~BinarySearchTree();
         
         private:

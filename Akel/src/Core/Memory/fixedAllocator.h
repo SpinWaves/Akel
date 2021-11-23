@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 18/07/2021
-// UPDATED : 11/09/2021
+// UPDATED : 23/11/2021
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
@@ -21,6 +21,7 @@ namespace Ak
             bool contains(void* ptr) const;
             void autoResize(bool set);
             void destroy();
+            inline bool is_init() const { return _heap != nullptr; }
 
             template <typename T = void, typename ... Args>
             T* alloc(Args&& ... args);

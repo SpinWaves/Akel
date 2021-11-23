@@ -13,40 +13,40 @@ namespace Ak
     void custom_free(T* ptr);
 
     template <typename T>
-    BinarySearchTree<T>::BinarySearchTree(T data)
+    BinarySearchTree<T>::BinarySearchTree(T&& data)
     {
         _data = data;
     }
 
     template <typename T>
-    BinarySearchTree<T>* BinarySearchTree<T>::add(T data)
+    BinarySearchTree<T>* BinarySearchTree<T>::add(T&& data)
     {
         if(data > _data)
         {
             if(_right != nullptr)
-                _right = _right->add(data);
+                _right = _right->add(std::move(data));
             else
             {
-                BinarySearchTree<T>* right = custom_malloc<BinarySearchTree<T>>(data);
-                right->setRight(_right);
-                _right = right;
+                BinarySearchTree<T>* right = custom_malloc<BinarySearchTree<T>>(std::move(data));
+                right->setRight(_right->getRight());
+                _right->setRight(right);
             }
         }
         else
         {
             if(_left != nullptr)
-                _left = _left->add(data);
+                _left = _left->add(std::move(data));
             else
             {
-                BinarySearchTree<T>* left = custom_malloc<BinarySearchTree<T>>(data);
-                left->setLeft(_left);
-                _left = left;
+                BinarySearchTree<T>* left = custom_malloc<BinarySearchTree<T>>(std::move(data));
+                left->setLeft(_left->getLeft());
+                _left->setLeft(left);
             }
         }
     }
 
     template <typename T>
-    BinarySearchTree<T>* BinarySearchTree<T>::remove(T data)
+    BinarySearchTree<T>* BinarySearchTree<T>::remove(T&& data)
     {
         if(data > _data)
         {
@@ -98,19 +98,19 @@ namespace Ak
     }
 
     template <typename T>
-    BinarySearchTree<T>* BinarySearchTree<T>::find(T data)
+    BinarySearchTree<T>* BinarySearchTree<T>::find(T&& data)
     {
         if(data > _data)
         {
             if(_right != nullptr)
-                _right = _right->find(data);
+                _right = _right->find(std::move(data));
             else
                 return nullptr;
         }
         else if(data < _data)
         {
             if(_left != nullptr)
-                _left = _left->find(data);
+                _left = _left->find(std::move(data));
             else
                 return nullptr;
         }
