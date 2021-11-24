@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 23/11/2021
+// UPDATED : 24/11/2021
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -12,13 +12,14 @@ namespace Ak
     {
         public:
             explicit BinarySearchTree(T&& data);
-            BinarySearchTree<T>* add(T&& data); // The type returned is for internal recursion
-            BinarySearchTree<T>* remove(T&& data); // Same shit
+            void add(T&& data);
+            void remove(T&& data);
             BinarySearchTree<T>* find_minimum();
             BinarySearchTree<T>* find(T&& data);
+            BinarySearchTree<T>* find_parent(T&& data);
             inline BinarySearchTree<T>* getRight() { return _right; }
             inline BinarySearchTree<T>* getLeft() { return _left; }
-            inline T&& getData() { return _data; }
+            inline T& getData() { return _data; }
             inline void setRight(BinarySearchTree<T>* right) { _right = right; }
             inline void setLeft(BinarySearchTree<T>* left) { _left = left; }
             inline void setData(T&& data) { _data = data; }

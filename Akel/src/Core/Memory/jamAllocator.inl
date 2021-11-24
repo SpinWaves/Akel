@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 12/11/2021
+// UPDATED : 24/11/2021
 
 #include <Core/Memory/jamAllocator.h>
 #include <Core/log.h>
@@ -119,7 +119,7 @@ namespace Ak
 
         if(!flag_ptr)
         {
-            Core::log::report(ERROR, "JamAllocator : unable to find the flah of %p", ptr);
+            Core::log::report(ERROR, "JamAllocator : unable to find the flag of %p", ptr);
             unlockThreads(mutex);
             return;
         }

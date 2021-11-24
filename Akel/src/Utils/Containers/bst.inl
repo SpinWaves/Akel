@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 23/11/2021
+// UPDATED : 24/11/2021
 
 #include <Utils/Containers/bst.h>
 #include <Core/core.h>
@@ -15,61 +15,73 @@ namespace Ak
     template <typename T>
     BinarySearchTree<T>::BinarySearchTree(T&& data)
     {
-        _data = data;
+        _data = std::forward<T>(data);
     }
 
     template <typename T>
-    BinarySearchTree<T>* BinarySearchTree<T>::add(T&& data)
+    void BinarySearchTree<T>::add(T&& data)
     {
         if(data > _data)
         {
             if(_right != nullptr)
-                _right = _right->add(std::move(data));
+                _right->add(std::forward<T>(data));
             else
-            {
-                BinarySearchTree<T>* right = custom_malloc<BinarySearchTree<T>>(std::move(data));
-                right->setRight(_right->getRight());
-                _right->setRight(right);
-            }
+                _right = custom_malloc<BinarySearchTree<T>>(std::forward<T>(data));
         }
         else
         {
             if(_left != nullptr)
-                _left = _left->add(std::move(data));
+                _left->add(std::forward<T>(data));
             else
-            {
-                BinarySearchTree<T>* left = custom_malloc<BinarySearchTree<T>>(std::move(data));
-                left->setLeft(_left->getLeft());
-                _left->setLeft(left);
-            }
+                _left = custom_malloc<BinarySearchTree<T>>(std::forward<T>(data));
         }
     }
 
     template <typename T>
-    BinarySearchTree<T>* BinarySearchTree<T>::remove(T&& data)
+    void BinarySearchTree<T>::remove(T&& data)
     {
+        BinarySearchTree<T>* node = find_parent(std::forward<T>(data));
+        if(node == nullptr)
+        {
+            Core::log::report(ERROR, "Binary Search Tree : unable to remove a node : no node with that data");
+            return;
+        }
+        BinarySearchTree<T>* cache = nullptr;
+        if(node->getLeft() != nullptr && node->getLeft()->getData() == data)
+        {
+            cache = node->getLeft();
+            node->setLeft(cache->getLeft());
+            custom_free(cache);
+        }
+        if(node->getRight() != nullptr && node->getRight()->getData() == data)
+        {
+            
+        }
+        
+        //BinarySearchTree<T>* child = 
+        /*
         if(data > _data)
         {
             if(_right != nullptr)
-                _right = _right->remove(data);
+                _right = _right->remove(std::forward<T>(data));
             else
                 return nullptr;
         }
         else if(data < _data)
         {
             if(_left != nullptr)
-                _left = _left->remove(data);
+                _left = _left->remove(std::forward<T>(data));
             else
                 return nullptr;
         }
         else
         {
-            if(_left == nullptr && _right == nullptr)
+            if(_left == nullptr && _right == nullptr) // no children
             {
                 custom_free(this);
                 return nullptr;
             }
-            else if(_left == nullptr || _right == nullptr)
+            else if(_left == nullptr || _right == nullptr) // one child
             {
                 BinarySearchTree<T>* temp;
                 if(_left == nullptr)
@@ -79,14 +91,15 @@ namespace Ak
                 custom_free(this);
                 return temp;
             }
-            else
+            else // two children
             {
                 BinarySearchTree<T>* temp = _right->find_minimum();
                 _data = temp->getData();
-                _right = _right->remove(temp->getData());
+                _right = _right->remove(std::forward<T>(temp->getData()));
             }
         }
         return this;
+        */
     }
 
     template <typename T>
@@ -103,19 +116,46 @@ namespace Ak
         if(data > _data)
         {
             if(_right != nullptr)
-                _right = _right->find(std::move(data));
+                _right->find(std::forward<T>(data));
             else
                 return nullptr;
         }
         else if(data < _data)
         {
             if(_left != nullptr)
-                _left = _left->find(std::move(data));
+                _left->find(std::forward<T>(data));
             else
                 return nullptr;
         }
         else
             return this;
+    }
+
+    template <typename T>
+    BinarySearchTree<T>* BinarySearchTree<T>::find_parent(T&& data)
+    {
+        if(data > _data)
+        {
+            if(_right != nullptr)
+            {
+                if(_right->getData() == data)
+                    return this;
+                _right->find_parent(std::forward<T>(data));
+            }
+            else
+                return nullptr;
+        }
+        else if(data < _data)
+        {
+            if(_left != nullptr)
+            {
+                if(_left->getData() == data)
+                    return this;
+                _left->find_parent(std::forward<T>(data));
+            }
+            else
+                return nullptr;
+        }
     }
 
     template <typename T>

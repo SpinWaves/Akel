@@ -46,7 +46,8 @@ void Comp::update()
     tree.add(60);
     tree.add(50);
     tree.add(70);
-    std::cout << tree.find(7) << std::endl;
+    //tree.remove(19);
+    std::cout << "test : " << tree.find_parent(19)->getData() << std::endl;
 }
 
 void Comp::onQuit()
