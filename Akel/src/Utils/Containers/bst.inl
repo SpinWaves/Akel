@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 24/11/2021
+// UPDATED : 25/11/2021
 
 #include <Utils/Containers/bst.h>
 #include <Core/core.h>
@@ -38,28 +38,8 @@ namespace Ak
     }
 
     template <typename T>
-    void BinarySearchTree<T>::remove(T&& data)
+    BinarySearchTree<T>* BinarySearchTree<T>::remove(T&& data)
     {
-        BinarySearchTree<T>* node = find_parent(std::forward<T>(data));
-        if(node == nullptr)
-        {
-            Core::log::report(ERROR, "Binary Search Tree : unable to remove a node : no node with that data");
-            return;
-        }
-        BinarySearchTree<T>* cache = nullptr;
-        if(node->getLeft() != nullptr && node->getLeft()->getData() == data)
-        {
-            cache = node->getLeft();
-            node->setLeft(cache->getLeft());
-            custom_free(cache);
-        }
-        if(node->getRight() != nullptr && node->getRight()->getData() == data)
-        {
-            
-        }
-        
-        //BinarySearchTree<T>* child = 
-        /*
         if(data > _data)
         {
             if(_right != nullptr)
@@ -99,7 +79,6 @@ namespace Ak
             }
         }
         return this;
-        */
     }
 
     template <typename T>

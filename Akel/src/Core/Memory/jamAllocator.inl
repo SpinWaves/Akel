@@ -93,9 +93,15 @@ namespace Ak
     template <typename T = void>
     void JamAllocator::free(T* ptr)
     {
+        if(_heap == nullptr)
+        {
+            Core::log::report(WARNING, "Jam Allocator: trying to free a pointer with an uninitialised allocator (the pointer will be free by 'delete')");
+            delete ptr;
+            return;
+        }
         if(!contains((void*)ptr))
         {
-            Core::log::report(WARNING, "Jam Allocator: a pointer allocated by another allocator will be freed, this may be an error");
+            Core::log::report(WARNING, "Jam Allocator: a pointer allocated by another allocator will be freed, this may be an error (the pointer will be free by 'delete')");
             delete ptr;
             return;
         }
