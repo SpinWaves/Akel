@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 24/11/2021
+// UPDATED : 26/11/2021
 
 #include <Core/Memory/jamAllocator.h>
 #include <Core/log.h>
@@ -93,6 +93,11 @@ namespace Ak
     template <typename T = void>
     void JamAllocator::free(T* ptr)
     {
+        if(ptr == nullptr)
+        {
+            Core::log::report(WARNING, "Jam Allocator: you cannot to free a nullptr");
+            return;
+        }
         if(_heap == nullptr)
         {
             Core::log::report(WARNING, "Jam Allocator: trying to free a pointer with an uninitialised allocator (the pointer will be free by 'delete')");

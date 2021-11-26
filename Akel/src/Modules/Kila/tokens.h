@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/11/2021
-// UPDATED : 15/11/2021
+// UPDATED : 26/11/2021
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -95,7 +95,7 @@ namespace Ak::Kl
         set,
         unset,
         get,
-        once,
+        getonce,
         endif,
 
         entry,
@@ -189,7 +189,7 @@ namespace Ak::Kl
                 {Macro_Tokens::set, "set"},
                 {Macro_Tokens::unset, "unset"},
                 {Macro_Tokens::get, "get"},
-                {Macro_Tokens::once, "once"},
+                {Macro_Tokens::getonce, "getonce"},
                 {Macro_Tokens::endif, "endif"},
 
                 {Macro_Tokens::entry, "entry"},

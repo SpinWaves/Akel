@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 25/11/2021
+// UPDATED : 26/11/2021
 
 #include <Utils/Containers/bst.h>
 #include <Core/core.h>
@@ -38,47 +38,56 @@ namespace Ak
     }
 
     template <typename T>
-    BinarySearchTree<T>* BinarySearchTree<T>::remove(T&& data)
+    void BinarySearchTree<T>::remove(T&& data)
     {
-        if(data > _data)
+        BinarySearchTree<T>* node = find(std::forward<T>(data));
+        if(node->getLeft() = nullptr && node->getRight() == nullptr) // no children
         {
-            if(_right != nullptr)
-                _right = _right->remove(std::forward<T>(data));
-            else
-                return nullptr;
+            custom_free(this);
+            return;
         }
-        else if(data < _data)
+        else if(node->getLeft() == nullptr || node->getRight() == nullptr) // only one child
         {
-            if(_left != nullptr)
-                _left = _left->remove(std::forward<T>(data));
-            else
-                return nullptr;
-        }
-        else
-        {
-            if(_left == nullptr && _right == nullptr) // no children
+            BinarySearchTree<T>* parent = find_parent(std::forward<T>(data));
+            if(node->getLeft() == nullptr)
             {
-                custom_free(this);
-                return nullptr;
-            }
-            else if(_left == nullptr || _right == nullptr) // one child
-            {
-                BinarySearchTree<T>* temp;
-                if(_left == nullptr)
-                    temp = _right;
+                if(parent->getLeft() == node)
+                {
+                    parent->setLeft(node->getRight());
+                    node->setRight(nullptr);
+                    custom_free(this);
+                    return;
+                }
                 else
-                    temp = _left;
-                custom_free(this);
-                return temp;
+                {
+                    parent->setRight(node->getRight());
+                    node->setRight(nullptr);
+                    custom_free(this);
+                    return;
+                }
             }
-            else // two children
+            else
             {
-                BinarySearchTree<T>* temp = _right->find_minimum();
-                _data = temp->getData();
-                _right = _right->remove(std::forward<T>(temp->getData()));
+                if(parent->getRight() == node)
+                {
+                    parent->setRight(node->getLeft());
+                    node->setLeft(nullptr);
+                    custom_free(this);
+                    return;
+                }
+                else
+                {
+                    parent->setLeft(node->getLeft());
+                    node->setRight(nullptr);
+                    custom_free(this);
+                    return;
+                }
             }
         }
-        return this;
+        else // two children
+        {
+
+        }
     }
 
     template <typename T>

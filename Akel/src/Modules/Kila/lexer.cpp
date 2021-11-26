@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 11/11/2021
-// UPDATED : 15/11/2021
+// UPDATED : 26/11/2021
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
@@ -147,16 +147,11 @@ namespace Ak::Kl
 
             case Macro_Tokens::set : Macros::new_set(identifiers[1], identifiers[2]); break;
             case Macro_Tokens::unset : Macros::remove_set(identifiers[1]); break;
+
+            case Macro_Tokens::getonce : break;
             
             case Macro_Tokens::get :
             {
-                if(cache.back().get_macro() == Macro_Tokens::once)
-                {
-                    Macros::add_once(stream.get_files().back());
-                    
-                    for(auto elem : stream.get_files())
-                        std::cout << elem << std::endl;
-                }
                 if(!Macros::have_once(identifiers[1]))
                 {
                     File f(std::string(Core::getMainDirPath() + "Tests/Kila/" + identifiers[1]).c_str()); // Path for tests (will change)
