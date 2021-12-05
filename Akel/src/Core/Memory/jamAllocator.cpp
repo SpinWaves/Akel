@@ -100,7 +100,7 @@ namespace Ak
     {
         destroy();
 
-        #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
             DeleteCriticalSection(&mutex);
         #endif
     }

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 22/09/2021
+// UPDATED : 05/12/2021
 
 #include <Core/core.h>
 
@@ -103,6 +103,7 @@ namespace Ak::Core
 
     void log::TERMINATE()
     {
+        std::cout << bg_red << "FATAL ERROR: emergency abortion program" << '\n' << "Freeing all instanciated allocators..." << bg_def << std::endl;
 		for(auto elem : MemoryManager::accessToControlUnit()->jamStack)
 		{
 			elem->destroy();
@@ -111,8 +112,7 @@ namespace Ak::Core
 		{
 			elem->destroy();
 		}
-
-        std::cout << bg_red << "FATAL ERROR: emergency abortion program" << bg_def << std::endl;
+        std::cout << bg_red << "All allocators have been correctly freed" << '\n' << "Program failed successfully !" << bg_def << std::endl;
         abort();
     }
 

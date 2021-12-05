@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 26/11/2021
+// UPDATED : 05/12/2021
 
 #include <Utils/Containers/bst.h>
 #include <Core/core.h>
@@ -86,7 +86,15 @@ namespace Ak
         }
         else // two children
         {
-
+            BinarySearchTree<T>* parent = find_parent(std::forward<T>(data));
+            BinarySearchTree<T>* node = nullptr;
+            BinarySearchTree<T>* floating_node = nullptr;
+            if(parent->getLeft()->getData() == data)
+            {
+                node = parent->getLeft();
+                parent->setLeft(nullptr);
+                floating_node = node->getRight();
+            }
         }
     }
 
