@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 05/12/2021
+// UPDATED : 06/12/2021
 
 #include <Utils/Containers/bst.h>
 #include <Core/core.h>
@@ -94,6 +94,8 @@ namespace Ak
                 node = parent->getLeft();
                 parent->setLeft(nullptr);
                 floating_node = node->getRight();
+                add(floating_node->getData());
+                
             }
         }
     }
