@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 05/12/2021
+// UPDATED : 06/12/2021
 
 #include <Core/core.h>
 
@@ -101,18 +101,32 @@ namespace Ak::Core
 		unlockThreads(mutex);
     }
 
-    void log::TERMINATE()
+    void log::TERMINATE() noexcept
     {
-        std::cout << bg_red << "FATAL ERROR: emergency abortion program" << '\n' << "Freeing all instanciated allocators..." << bg_def << std::endl;
-		for(auto elem : MemoryManager::accessToControlUnit()->jamStack)
+        std::cout << bg_red << "FATAL ERROR: emergency abortion program " << '\n' << "Trying to free all instanciated allocators... " << bg_def << std::endl;
+		int allocators_leaks = 0;
+		for(auto& elem : MemoryManager::accessToControlUnit()->jamStack)
 		{
-			elem->destroy();
+			if(!elem.expired())
+			{
+				elem.lock()->destroy();
+				if(elem.lock()->is_init())
+					allocators_leaks++;
+			}
 		}
-		for(auto elem : MemoryManager::accessToControlUnit()->fixedStack)
+		for(auto& elem : MemoryManager::accessToControlUnit()->fixedStack)
 		{
-			elem->destroy();
+			if(!elem.expired())
+			{
+				elem.lock()->destroy();
+				if(elem.lock()->is_init())
+					allocators_leaks++;
+			}
 		}
-        std::cout << bg_red << "All allocators have been correctly freed" << '\n' << "Program failed successfully !" << bg_def << std::endl;
+		if(allocators_leaks == 0)
+        	std::cout << green << "All allocators have been correctly freed " << '\n' << "Program failed successfully ! " << def << std::endl;
+		else
+			std::cout << bg_red << "Strong Fatal Error : Akel's core failed to free all instantiated allocators [" << allocators_leaks << " allocators leaked] " << bg_def << std::endl;
         abort();
     }
 

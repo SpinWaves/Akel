@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 19/07/2021
-// UPDATED : 22/09/2021
+// UPDATED : 06/12/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -29,7 +29,7 @@ namespace Ak
         _allocator_number = MemoryManager::accessToControlUnit()->fixedStack.size();
         std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
-        MemoryManager::accessToControlUnit()->fixedStack.emplace_back(this);
+        MemoryManager::accessToControlUnit()->fixedStack.emplace_back(weak_from_this());
 
         unlockThreads(mutex);
     }
@@ -83,10 +83,6 @@ namespace Ak
 
         unlockThreads(mutex);
 
-        #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-            DeleteCriticalSection(&mutex);
-        #endif
-
         //std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
         //Core::ProjectFile::setIntValue(key, _memUsed);
     }
@@ -95,5 +91,9 @@ namespace Ak
     {
         if(_heap != nullptr)
             destroy();
+
+        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+            DeleteCriticalSection(&mutex);
+        #endif
     }
 }

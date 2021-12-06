@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 16/10/2021
+// UPDATED : 06/12/2021
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -14,8 +14,8 @@ namespace Ak
         private:
             struct ControlUnit
             {
-                std::vector<JamAllocator*> jamStack;
-                std::vector<FixedAllocator*> fixedStack;
+                std::vector<std::weak_ptr<JamAllocator>> jamStack;
+                std::vector<std::weak_ptr<FixedAllocator>> fixedStack;
             };
 
             inline static std::shared_ptr<ControlUnit> control_unit;
@@ -29,7 +29,7 @@ namespace Ak
             static void useMemoryManager(bool set = true);
             static bool isMemoryManagerUsed();
 
-            static std::shared_ptr<ControlUnit> accessToControlUnit();
+            static std::shared_ptr<ControlUnit>& accessToControlUnit() { return control_unit; }
 
             template <typename T = void, typename ... Args>
             static T* alloc(Args&& ... args);
@@ -96,20 +96,26 @@ namespace Ak
                 return;
             }
         }
-        for(auto elem : control_unit->jamStack)
+        for(auto& elem : control_unit->jamStack)
         {
-            if(elem->contains(ptr))
+            if(!elem.expired())
             {
-                elem->free(ptr);
-                return;
+                if(elem.lock()->contains(ptr))
+                {
+                    elem.lock()->free(ptr);
+                    return;
+                }
             }
         }
-        for(auto elem : control_unit->fixedStack)
+        for(auto& elem : control_unit->fixedStack)
         {
-            if(elem->contains(ptr))
+            if(!elem.expired())
             {
-                elem->free(ptr);
-                return;
+                if(elem.lock()->contains(ptr))
+                {
+                    elem.lock()->free(ptr);
+                    return;
+                }
             }
         }
 

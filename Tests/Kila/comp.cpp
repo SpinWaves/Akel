@@ -37,6 +37,8 @@ void Comp::update()
     }
     std::cout << "end of file" << std::endl;
     */
+    Ak::FatalError("test");
+
     Ak::BinarySearchTree<int> tree(20);
     tree.add(15);
     tree.add(7);

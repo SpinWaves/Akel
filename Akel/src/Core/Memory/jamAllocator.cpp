@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 21/10/2021
+// UPDATED : 06/12/2021
 
 #include <Core/core.h>
 
@@ -32,7 +32,7 @@ namespace Ak
         _allocator_number = MemoryManager::accessToControlUnit()->jamStack.size();
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
-        MemoryManager::accessToControlUnit()->jamStack.push_back(this);
+        MemoryManager::accessToControlUnit()->jamStack.push_back(weak_from_this());
 
         unlockThreads(mutex);
     }

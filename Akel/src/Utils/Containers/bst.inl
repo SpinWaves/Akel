@@ -40,6 +40,7 @@ namespace Ak
     template <typename T>
     void BinarySearchTree<T>::remove(T&& data)
     {
+        /*
         BinarySearchTree<T>* node = find(std::forward<T>(data));
         if(node->getLeft() = nullptr && node->getRight() == nullptr) // no children
         {
@@ -86,6 +87,7 @@ namespace Ak
         }
         else // two children
         {
+            
             BinarySearchTree<T>* parent = find_parent(std::forward<T>(data));
             BinarySearchTree<T>* node = nullptr;
             BinarySearchTree<T>* floating_node = nullptr;
@@ -98,6 +100,7 @@ namespace Ak
                 
             }
         }
+        */
     }
 
     template <typename T>

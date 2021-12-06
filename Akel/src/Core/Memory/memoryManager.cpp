@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 16/10/2021
+// UPDATED : 06/12/2021
 
 #include <Utils/utils.h>
 #include <Core/core.h>
@@ -46,10 +46,5 @@ namespace Ak
     bool MemoryManager::isMemoryManagerUsed()
     {
         return _use;
-    }
-
-    std::shared_ptr<MemoryManager::ControlUnit> MemoryManager::accessToControlUnit()
-    {
-        return control_unit;
     }
 }
