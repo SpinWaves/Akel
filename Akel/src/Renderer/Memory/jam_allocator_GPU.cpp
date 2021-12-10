@@ -12,9 +12,18 @@ namespace Ak
         // TODO
     }
 
-    Buffer& JamAllocator_GPU::allocBuffer(VkDeviceSize size);
-    inline bool JamAllocator_GPU::canHold(VkDeviceSize size);
-    inline bool JamAllocator_GPUcontains(Buffer& buffer);
+    Buffer& JamAllocator_GPU::allocBuffer(VkDeviceSize size)
+    {
+
+    }
+    inline bool JamAllocator_GPU::canHold(VkDeviceSize size)
+    {
+
+    }
+    inline bool JamAllocator_GPUcontains(Buffer& buffer)
+    {
+        
+    }
 
     JamAllocator_GPU::~JamAllocator_GPU()
     {

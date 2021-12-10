@@ -13,14 +13,14 @@ namespace Ak
     class JamAllocator_GPU
     {
         public:
-            explicit Allocator_GPU();
+            explicit JamAllocator_GPU();
 
             Buffer& allocBuffer(VkDeviceSize size);
             inline bool canHold(VkDeviceSize size);
             inline bool contains(Buffer& buffer);
             void freeBuffer(const Buffer& buffer);
 
-            ~Allocator_GPU();
+            ~JamAllocator_GPU();
 
         private:
             std::vector<Chunk> _chuncks;

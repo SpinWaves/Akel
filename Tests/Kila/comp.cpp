@@ -37,8 +37,7 @@ void Comp::update()
     }
     std::cout << "end of file" << std::endl;
     */
-    Ak::FatalError("test");
-
+    /*
     Ak::BinarySearchTree<int> tree(20);
     tree.add(15);
     tree.add(7);
@@ -50,6 +49,11 @@ void Comp::update()
     tree.add(70);
     tree.remove(60);
     std::cout << "test : " << tree.find_parent(19)->getData() << std::endl;
+    */
+    Ak::fString str;
+    str = "Akel";
+    for(auto it = str.begin(); it != str.end(); it++)
+        std::cout << *it << std::endl;
 }
 
 void Comp::onQuit()

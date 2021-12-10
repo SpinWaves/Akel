@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 11/11/2021
+// UPDATED : 10/12/2021
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -79,9 +79,11 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdarg>
+#include <cstddef>
 
 // Other includes
 #include <exception>
 #include <function/function.h>
+#include <iterator>
 
 #endif // __AK_PCH__

@@ -29,7 +29,7 @@ namespace Ak
             inline bool contains(const Buffer& buffer);
             inline bool canHold(VkDeviceSize size);
             void free(const Buffer& buffer);
-            inline int memoryTypeIndex() noexcept const { return _memoryTypeIndex; }
+            inline int memoryTypeIndex() const noexcept { return _memoryTypeIndex; }
 
         private:
             VkDeviceMemory _memory = VK_NULL_HANDLE;
