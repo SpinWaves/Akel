@@ -5,6 +5,6 @@
 #ifndef __AK_VULKAN_MEMORY_GPU__
 #define __AK_VULKAN_MEMORY_GPU__
 
-#include <Renderer/Memory/allocator_GPU.h>
+#include <Renderer/Memory/jam_allocator_GPU.h>
 
 #endif // __AK_VULKAN_MEMORY_GPU__

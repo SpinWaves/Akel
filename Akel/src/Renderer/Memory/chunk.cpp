@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 24/09/2021
-// UPDATED : 26/09/2021
+// UPDATED : 10/12/2021
 
 #include <Renderer/Memory/chunk.h>
 #include <Core/core.h>
@@ -42,10 +42,7 @@ namespace Ak
         _freeBuffers.emplace_back(buffer);
     }
 
-#pragma GCC diagnostic push
-// to avoid "warning: always_inline function might not be inlinable [-Wattributes]"
-#pragma GCC diagnostic ignored "-Wattributes"
-    forceinline bool Chunk::contains(const Buffer& buffer)
+    inline bool Chunk::contains(const Buffer& buffer)
     {
         for(auto it = _usedBuffers.begin(); it != _usedBuffers.end(); it++)
         {
@@ -55,11 +52,10 @@ namespace Ak
         return false;
     }
 
-    forceinline bool Chunk::canHold(VkDeviceSize size)
+    inline bool Chunk::canHold(VkDeviceSize size)
     {
         return size <= _size - _memUsed;
     }
-#pragma GCC diagnostic pop
 
     bool Chunk::alloc(VkDeviceSize size, Buffer& buffer, VkDeviceSize alignment)
     {
