@@ -51,9 +51,10 @@ void Comp::update()
     std::cout << "test : " << tree.find_parent(19)->getData() << std::endl;
     */
     Ak::fString str;
-    str = "Akel";
-    for(auto it = str.begin(); it != str.end(); it++)
-        std::cout << *it << std::endl;
+    str = "Akel is the best game engine";
+    std::cout << "found : " << str.rfind("engine") << std::endl;
+    //for(auto it = str.begin(); it != str.end(); it++)
+    //    std::cout << *it << std::endl;
 }
 
 void Comp::onQuit()

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 21/10/2021
-// UPDATED : 10/12/2021
+// UPDATED : 11/12/2021
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
@@ -38,15 +38,16 @@ namespace Ak
 
                 private:
                     pointer _ptr;
-
             };
+
+            inline static const size_t npos = -1;
 
             explicit fString() = default;
             explicit fString(const char* str);
             explicit fString(const fString& str); // A constructor cannot accept a object passed by value
             explicit fString(fString&& str);
 
-            fString& operator=(fString str);
+            fString& operator=(const fString& str);
             fString& operator=(const char* str);
 
             size_t size() noexcept;
@@ -54,27 +55,34 @@ namespace Ak
             inline bool empty() noexcept { return size() == 0; }
 
             // Getters
-            char operator[](unsigned int index);
-            char at(unsigned int index);
-            char back();
-            char front();
+            inline const char& operator[](unsigned int index) const noexcept { return _string[index]; }
+            inline const char& at(unsigned int index) const noexcept { return _string[index]; }
+            inline const char& back()  const noexcept { return _string[sizeof(_string) - 1]; }
+            inline const char& front() const noexcept { return _string[0]; }
+            inline const char* data()  const noexcept { return _string; }
             inline const char* c_str() const noexcept { return _string; }
 
             // Finders
-            size_t find(fString str);
-            size_t rfind(fString str);
+            size_t find(const char* str, size_t pos = 0);
+            size_t find(fString&& str, size_t pos = 0);
+            size_t find(const fString& str, size_t pos = 0);
+            size_t find(char c, size_t pos = 0);
 
-            friend std::ostream& operator<<(std::ostream& target, const fString& str) { return target << str.c_str(); }
+            size_t rfind(const char* str, size_t pos = npos);
+            size_t rfind(fString&& str, size_t pos = npos);
+            size_t rfind(const fString& str, size_t pos = npos);
+            size_t rfind(char c, size_t pos = npos);
+
+            inline friend std::ostream& operator<<(std::ostream& target, const fString& str) { return target << str.c_str(); }
 
             inline iterator begin() { return iterator(&_string[0]); }
-            inline iterator end()   { return iterator(&_string[size()]); } 
+            inline iterator end()   { return iterator(&_string[size()]); }
 
             ~fString() = default;
 
-            inline static const size_t npos = -1;
-
         private:
             const char* _string = nullptr;
+            static int compare(const char* p, const char* q, size_t n);
     };
 }
 
