@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 06/12/2021
+// UPDATED : 12/12/2021
 
 #include <Utils/Containers/bst.h>
-#include <Core/core.h>
 
 namespace Ak
 {
+    void Error(std::string message);
+
     template <typename T = void, typename ... Args>
     T* custom_malloc(Args&& ... args);
     template <typename T = void>
@@ -21,6 +22,11 @@ namespace Ak
     template <typename T>
     void BinarySearchTree<T>::add(T&& data)
     {
+        if(!_data)
+        {
+            _data = std::forward<T>(data);
+            return;
+        }
         if(data > _data)
         {
             if(_right != nullptr)
@@ -40,30 +46,34 @@ namespace Ak
     template <typename T>
     void BinarySearchTree<T>::remove(T&& data)
     {
-        /*
         BinarySearchTree<T>* node = find(std::forward<T>(data));
-        if(node->getLeft() = nullptr && node->getRight() == nullptr) // no children
+        if(node == nullptr)
         {
-            custom_free(this);
+            Error("Binary Search Tree : unable to remove element (no node found with this value)");
+            return;
+        }
+        if(node->getLeft() == nullptr && node->getRight() == nullptr) // no children
+        {
+            custom_free(node);
             return;
         }
         else if(node->getLeft() == nullptr || node->getRight() == nullptr) // only one child
         {
-            BinarySearchTree<T>* parent = find_parent(std::forward<T>(data));
+            BinarySearchTree<T>* parent = find_parent(node);
             if(node->getLeft() == nullptr)
             {
                 if(parent->getLeft() == node)
                 {
                     parent->setLeft(node->getRight());
                     node->setRight(nullptr);
-                    custom_free(this);
+                    custom_free(node);
                     return;
                 }
                 else
                 {
                     parent->setRight(node->getRight());
                     node->setRight(nullptr);
-                    custom_free(this);
+                    custom_free(node);
                     return;
                 }
             }
@@ -73,34 +83,41 @@ namespace Ak
                 {
                     parent->setRight(node->getLeft());
                     node->setLeft(nullptr);
-                    custom_free(this);
+                    custom_free(node);
                     return;
                 }
                 else
                 {
                     parent->setLeft(node->getLeft());
                     node->setRight(nullptr);
-                    custom_free(this);
+                    custom_free(node);
                     return;
                 }
             }
         }
         else // two children
         {
-            
-            BinarySearchTree<T>* parent = find_parent(std::forward<T>(data));
-            BinarySearchTree<T>* node = nullptr;
+            BinarySearchTree<T>* parent = find_parent(node);
             BinarySearchTree<T>* floating_node = nullptr;
-            if(parent->getLeft()->getData() == data)
+            if(parent->getLeft() == node)
             {
-                node = parent->getLeft();
-                parent->setLeft(nullptr);
+                parent->setLeft(node->getRight());
                 floating_node = node->getRight();
-                add(floating_node->getData());
-                
+                while(floating_node->getLeft() != nullptr)
+                    floating_node = floating_node->getLeft();
+                floating_node->setLeft(node->getLeft());
+                custom_free(node);
+            }
+            else
+            {
+                parent->setRight(node->getRight());
+                floating_node = node->getRight();
+                while(floating_node->getLeft() != nullptr)
+                    floating_node = floating_node->getLeft();
+                floating_node->setLeft(node->getLeft());
+                custom_free(node);
             }
         }
-        */
     }
 
     template <typename T>
@@ -160,9 +177,40 @@ namespace Ak
     }
 
     template <typename T>
+    BinarySearchTree<T>* BinarySearchTree<T>::find_parent(BinarySearchTree<T>* node)
+    {
+        if(node == nullptr)
+        {
+            Error("Binary Search Tree : unable to find parent of a node");
+            return nullptr;
+        }
+        if(node->getData() > _data)
+        {
+            if(_right != nullptr)
+            {
+                if(_right == node)
+                    return this;
+                _right->find_parent(node);
+            }
+            else
+                return nullptr;
+        }
+        else if(node->getData() < _data)
+        {
+            if(_left != nullptr)
+            {
+                if(_left == node)
+                    return this;
+                _left->find_parent(node);
+            }
+            else
+                return nullptr;
+        }
+    }
+
+    template <typename T>
     BinarySearchTree<T>::~BinarySearchTree()
     {
-        std::cout << _data << std::endl;
         if(_left != nullptr)
             custom_free(_left);
         if(_right != nullptr)

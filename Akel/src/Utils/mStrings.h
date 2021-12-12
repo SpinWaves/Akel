@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/10/2021
-// UPDATED : 21/10/2021
+// UPDATED : 11/12/2021
 
 #ifndef __AK_MUTABLE_STRINGS__
 #define __AK_MUTABLE_STRINGS__
@@ -29,10 +29,10 @@ namespace Ak
             mString& operator=(mString str);
             mString& operator=(const char* str);
 
-            size_t size()       { return _string.size(); }
-            size_t length()     { return _string.size(); }
-            void clear()        { _string.clear(); }
-            bool empty() const  { return _string.empty(); }
+            inline size_t size()       { return _string.size(); }
+            inline size_t length()     { return _string.size(); }
+            inline void clear()        { _string.clear(); }
+            inline bool empty() const  { return _string.empty(); }
 
             // Modifiers
             mString& append(mString str);

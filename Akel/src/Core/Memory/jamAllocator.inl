@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 26/11/2021
+// UPDATED : 12/12/2021
 
 #include <Core/Memory/jamAllocator.h>
 #include <Core/log.h>
@@ -31,53 +31,22 @@ namespace Ak
 
         lockThreads(mutex);
 
-        /**
-         * Start looking in the middle of the vector and go down to find the best
-         * size if the pointed flag is too big or up if the pointed flag is too small
-         */
-        if(!_freeSpaces.empty())
+        JamAllocator::flag finder;
+        finder.size = sizeType;
+        finder.offset = 0;
+        BinarySearchTree<JamAllocator::flag&> node = _freeSpaces.find(finder);
+        if(node != nullptr)
         {
-            std::vector<flag*>::iterator it = _freeSpaces.begin() + (int)(_freeSpaces.size() / 2);
-            while(it != _freeSpaces.end() || it != _freeSpaces.begin())
-            {
-                if((*it)->size == sizeType) // We found a perfect sized flag !
-                {
-                    ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag));
-                    _usedSpaces.push_back(*it);
-                    _freeSpaces.erase(it);
-                    break;
-                }
-                else if((*it)->size > sizeType)
-                {
-                    it--;
-                    if((*it)->size < sizeType)
-                    {
-                        it++;
-                        ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag));
-                        _usedSpaces.push_back(*it);
-                        _freeSpaces.erase(it);
-                        break;
-                    }
-                }
-                else if((*it)->size < sizeType)
-                {
-                    it++;
-                    if((*it)->size > sizeType)
-                    {
-                        ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag));
-                        _usedSpaces.push_back(*it);
-                        _freeSpaces.erase(it);
-                        break;
-                    }
-                }
-            }
+            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + node->getData().offset + sizeof(JamAllocator::flag));
+            _usedSpaces.add(node->getData());
+            _freeSpaces.remove(finder);
         }
         if(ptr == nullptr) // If we haven't found free flag
         {
             JamAllocator::flag* flag_ptr = static_cast<flag*>((void*)(reinterpret_cast<uintptr_t>(_heap) + _memUsed)); // We create a new flag
             flag_ptr->size = sizeType;
             flag_ptr->offset = _memUsed;
-            _usedSpaces.push_back(flag_ptr);
+            _usedSpaces.add(*flag_ptr);
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed + sizeof(JamAllocator::flag));
             _memUsed += sizeType + sizeof(JamAllocator::flag);
         }
@@ -95,7 +64,7 @@ namespace Ak
     {
         if(ptr == nullptr)
         {
-            Core::log::report(WARNING, "Jam Allocator: you cannot to free a nullptr");
+            Core::log::report(WARNING, "Jam Allocator: you cannot free a nullptr");
             return;
         }
         if(_heap == nullptr)
@@ -127,6 +96,8 @@ namespace Ak
                 break;
             }
         }
+        
+        flag_ptr = &_usedSpaces.find();
 
         if(!flag_ptr)
         {

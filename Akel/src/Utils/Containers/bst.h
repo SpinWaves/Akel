@@ -1,9 +1,11 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 26/11/2021
+// UPDATED : 12/12/2021
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
+
+#include <Core/core.h>
 
 namespace Ak
 {
@@ -11,12 +13,14 @@ namespace Ak
     class BinarySearchTree
     {
         public:
+            explicit BinarySearchTree() = default;
             explicit BinarySearchTree(T&& data);
             void add(T&& data);
             void remove(T&& data);
             BinarySearchTree<T>* find_minimum();
             BinarySearchTree<T>* find(T&& data);
             BinarySearchTree<T>* find_parent(T&& data);
+            BinarySearchTree<T>* find_parent(BinarySearchTree<T>* node);
             inline BinarySearchTree<T>* getRight() { return _right; }
             inline BinarySearchTree<T>* getLeft() { return _left; }
             inline T& getData() { return _data; }

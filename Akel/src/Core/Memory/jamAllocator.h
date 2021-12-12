@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 06/12/2021
+// UPDATED : 12/12/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -16,9 +16,9 @@ namespace Ak
             JamAllocator() = default;
 
             void init(size_t Size);
-            bool contains(void* ptr);
-            bool canHold(size_t Size);
-            void auto_increase_size(bool set);
+            inline bool contains(void* ptr);
+            inline bool canHold(size_t Size);
+            inline void auto_increase_size(bool set);
             void increase_size(size_t Size);
             void destroy();
             inline constexpr bool is_init() noexcept { return _heap != nullptr; }
@@ -37,6 +37,9 @@ namespace Ak
             {
                 unsigned int size = 0;
                 unsigned int offset = 0;
+                inline friend bool operator< (const flag& a, const flag& b) { return a.size < b.size; }
+                inline friend bool operator> (const flag& a, const flag& b) { return a.size > b.size; }
+                inline friend bool operator== (const flag& a, const flag& b) { return a.size == b.size; }
             };
 
             size_t _heapSize = 0;
@@ -48,8 +51,8 @@ namespace Ak
 
             bool _autoResize = false;
             int _allocator_number = 0;
-            std::vector<flag*> _freeSpaces;
-            std::vector<flag*> _usedSpaces;
+            BinarySearchTree<flag&> _freeSpaces;
+            BinarySearchTree<flag&> _usedSpaces;
 
             inline static MutexHandel mutex;
     };
