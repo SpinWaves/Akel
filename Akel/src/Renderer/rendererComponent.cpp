@@ -7,10 +7,7 @@
 namespace Ak
 {
     RendererComponent::RendererComponent() : Component("__renderer"), _instance() {}
-    RendererComponent::RendererComponent(SDL_Window* window) : Component("__renderer"), _instance()
-    {
-        _window = window;
-    }
+    RendererComponent::RendererComponent(SDL_Window* window) : Component("__renderer"), _instance(), _window(window) {}
 
     void RendererComponent::onAttach()
     {

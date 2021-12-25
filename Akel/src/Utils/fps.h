@@ -1,23 +1,23 @@
 // This file is a part of Akel
 // CREATED : 29/04/2021
-// UPDATED : 06/07/2021
+// UPDATED : 25/12/2021
 
 #ifndef __AK_FPS__
 #define __AK_FPS__
 
 #include <Akpch.h>
-#include <Core/Components/components.h>
 
 namespace Ak
 {
-	class CounterFPS : public Component
+	class CounterFPS
     {
         public:
-            CounterFPS();
-			void onAttach() override;
-			void update() override;
-			static int getFPS();
-			static int getTicks();
+            explicit CounterFPS() = default;
+			void init();
+			void update();
+			inline static bool make_update() { return make_up; }
+			inline static int getFPS() { return outputFPS; }
+			inline static int getTicks() { return outputTicks; }
 			static void printFPS();
 			static void printTicks();
 			~CounterFPS() = default;	
@@ -32,6 +32,7 @@ namespace Ak
 			uint32_t timer = 0;
 			long long before = 0;			
 			long long now = 0;
+			inline static bool make_up = false;
 			inline static bool second_passed = false;	
     };		
 }

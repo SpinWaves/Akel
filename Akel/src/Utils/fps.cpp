@@ -1,14 +1,12 @@
 // This file is a part of Akel
 // CREATED : 29/04/2021
-// UPDATED : 06/07/2021
+// UPDATED : 25/12/2021
 
-#include <Utils/utils.h>
+#include <Utils/fps.h>
 
 namespace Ak
 {
-	CounterFPS::CounterFPS() : Component("FPS Counter") {}
-
-	void CounterFPS::onAttach()
+	void CounterFPS::init()
 	{
 		timer = SDL_GetTicks();
 		before = static_cast<long long>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
@@ -50,17 +48,9 @@ namespace Ak
         {
             ticks++;
             before += ns;
+			make_up = true;
 		}
-	}
-
-	int CounterFPS::getFPS()
-	{
-		return outputFPS;
-	}
-
-	int CounterFPS::getTicks()
-	{
-		return outputTicks;
+		else
+			make_up = false;
 	}
 }
-

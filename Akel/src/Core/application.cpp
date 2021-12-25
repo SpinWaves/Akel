@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/06/2021
-// UPDATED : 11/11/2021
+// UPDATED : 25/12/2021
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -10,10 +10,10 @@
 
 namespace Ak
 {
-	Application::Application(const char* name) : ComponentStack(), _in()
+	Application::Application(const char* name) : ComponentStack(), _in(), _fps()
 	{
-		add_component(custom_malloc<CounterFPS>());
 		_name = name;
+		_fps.init();
 		if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
 			Core::log::report(FATAL_ERROR, std::string("SDL error : unable to init all subsystems : ") + SDL_GetError());
 	}
@@ -23,21 +23,30 @@ namespace Ak
 		ImGuiComponent imgui;
 		while(!_in.isEnded()) // Main loop
 		{
-        	while(SDL_PollEvent(_in.getNativeEvent()))
+			_fps.update();
+			// separation between updates and rendering
+			if(_fps.make_update()) // updates
 			{
-				_in.update();
-				for(auto elem : _components)
-					elem->onEvent(_in);
-			}
-			for(auto elem : _components)
-				elem->update();
-
-			if(ImGuiComponent::getNumComp() != 0)
-			{
-				imgui.begin();
+				while(SDL_PollEvent(_in.getNativeEvent()))
+				{
+					_in.update();
 					for(auto elem : _components)
-						elem->onImGuiRender();
-				imgui.end();
+						elem->onEvent(_in);
+				}
+				for(auto elem : _components)
+					elem->update();
+			}
+			else // rendering
+			{
+				for(auto elem : _components)
+					elem->onRender();
+				if(ImGuiComponent::getNumComp() != 0)
+				{
+					imgui.begin();
+						for(auto elem : _components)
+							elem->onImGuiRender();
+					imgui.end();
+				}
 			}
 		}
 

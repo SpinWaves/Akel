@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 12/11/2021
+// UPDATED : 25/12/2021
 
 #include <Platform/platform.h>
 
@@ -50,84 +50,100 @@ namespace Ak
         SDL_DestroyWindow(_window);
 	}
 
-	// Functions for window settings that use SDL2 functions. They are here to avoid you to link SDL2
-	void WindowComponent::setMaxSize(int x, int y)
+	void WindowComponent::setSetting(winsets setting, const char* value)
 	{
-		SDL_GetCurrentDisplayMode(0, &DM);
-		if(x == AK_WINDOW_MAX_SIZE)
-			x = DM.w;
-		if(y == AK_WINDOW_MAX_SIZE)
-			y = DM.h;
-		SDL_SetWindowMaximumSize(_window, x, y);
+		switch(setting)
+		{
+			case title: SDL_SetWindowTitle(_window, value); break;
+			case icon: _icon = IMG_Load(value); SDL_SetWindowIcon(_window, _icon); break;
+
+			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
+		}
 	}
-	void WindowComponent::setMinSize(int x, int y)
+	void WindowComponent::setSetting(winsets setting, bool value)
 	{
-		SDL_GetCurrentDisplayMode(0, &DM);
-		if(x == AK_WINDOW_MAX_SIZE)
-			x = DM.w;
-		if(y == AK_WINDOW_MAX_SIZE)
-			y = DM.h;
-		SDL_SetWindowMinimumSize(_window, x, y);
+		switch(setting)
+		{
+			case fullscreen: SDL_SetWindowFullscreen(_window, value); break;
+			case border:     SDL_SetWindowBordered(_window, value); break;
+			case resizable:  SDL_SetWindowResizable(_window, value); break;
+			case visible:
+			{
+				if(value)
+					SDL_ShowWindow(_window);
+				else
+					SDL_HideWindow(_window);
+				break;
+			}
+			case vsync:  break; // TODO
+			case maximize:
+			{
+				if(value)
+					SDL_MaximizeWindow(_window);
+				else
+					SDL_MinimizeWindow(_window);
+				break;
+			}
+
+			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
+		}
 	}
-	void WindowComponent::setPos(int x, int y)
+	void WindowComponent::setSetting(winsets setting, float value)
 	{
-		if(x == AK_WINDOW_POS_CENTER)
-			x = SDL_WINDOWPOS_CENTERED;
-		if(y == AK_WINDOW_POS_CENTER)
-			y = SDL_WINDOWPOS_CENTERED;
-		SDL_SetWindowPosition(_window, x, y);
+		switch(setting)
+		{
+			case brightness: SDL_SetWindowBrightness(_window, value); break;
+			case opacity: SDL_SetWindowOpacity(_window, value); break;
+
+			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
+		}
 	}
-	void WindowComponent::setSize(int x, int y)
+	void WindowComponent::setSetting(winsets setting, uint16_t x, uint16_t y)
 	{
-		SDL_GetCurrentDisplayMode(0, &DM);
-		if(x == AK_WINDOW_MAX_SIZE)
-			x = DM.w;
-		if(y == AK_WINDOW_MAX_SIZE)
-			y = DM.h;
-		SDL_SetWindowSize(_window, x, y);
-	}
-	void WindowComponent::setFullscreen(SDL_bool value)
-	{
-		SDL_SetWindowFullscreen(_window, value);
-	}
-	void WindowComponent::setMaximize(SDL_bool value)
-	{
-		if(value == SDL_TRUE)
-			SDL_MaximizeWindow(_window);
-		else
-			SDL_MinimizeWindow(_window);
-	}
-	void WindowComponent::setBordered(SDL_bool value)
-	{
-		SDL_SetWindowBordered(_window, value);
-	}
-	void WindowComponent::setResizable(SDL_bool value)
-	{
-		SDL_SetWindowResizable(_window, value);
-	}
-	void WindowComponent::setShow(SDL_bool value)
-	{
-		if(value)
-			SDL_ShowWindow(_window);
-		else
-			SDL_HideWindow(_window);
-	}
-	void WindowComponent::setBrightness(float value)
-	{
-		SDL_SetWindowBrightness(_window, value);
-	}
-	void WindowComponent::setOpacity(float value)
-	{
-		SDL_SetWindowOpacity(_window, value);
-	}
-	void WindowComponent::setTitle(const char* value)
-	{
-		SDL_SetWindowTitle(_window, value);
-	}
-	void WindowComponent::setIcon(const char* value)
-	{
-		_icon = IMG_Load(value);
-		SDL_SetWindowIcon(_window, _icon);
+		switch(setting)
+		{
+			case position:
+			{
+				if(x == AK_WINDOW_POS_CENTER)
+					x = SDL_WINDOWPOS_CENTERED;
+				if(y == AK_WINDOW_POS_CENTER)
+					y = SDL_WINDOWPOS_CENTERED;
+				SDL_SetWindowPosition(_window, x, y);
+				break;
+			}
+			case size:
+			{
+				SDL_GetCurrentDisplayMode(0, &DM);
+				if(x == AK_WINDOW_MAX_SIZE)
+					x = DM.w;
+				if(y == AK_WINDOW_MAX_SIZE)
+					y = DM.h;
+				SDL_SetWindowSize(_window, x, y);
+				break;
+			}
+			case maximumSize:
+			{
+				SDL_GetCurrentDisplayMode(0, &DM);
+				if(x == AK_WINDOW_MAX_SIZE)
+					x = DM.w;
+				if(y == AK_WINDOW_MAX_SIZE)
+					y = DM.h;
+				SDL_SetWindowMaximumSize(_window, x, y);
+				break;
+			}
+			case minimumSize: 
+			{
+				SDL_GetCurrentDisplayMode(0, &DM);
+				if(x == AK_WINDOW_MAX_SIZE)
+					x = DM.w;
+				if(y == AK_WINDOW_MAX_SIZE)
+					y = DM.h;
+				SDL_SetWindowMinimumSize(_window, x, y);
+				break;
+			}
+
+			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
+		}
 	}
 
     // ================ Getters ================ //

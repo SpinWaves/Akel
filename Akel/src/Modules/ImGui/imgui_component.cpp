@@ -45,10 +45,10 @@ namespace Ak
 	void ImGuiComponent::onAttach()
 	{
 		WindowComponent::create();
-		WindowComponent::setSetting<title>(_title);
-		WindowComponent::setSetting<resizable>(true);
-		WindowComponent::setSetting<dimensions>(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
-		WindowComponent::setSetting<maximize>(true);
+		WindowComponent::setSetting(winsets::title, _title);
+		WindowComponent::setSetting(winsets::resizable, true);
+		WindowComponent::setSetting(winsets::size, AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
+		WindowComponent::setSetting(winsets::maximize, true);
 
 		// Setup Vulkan
 		uint32_t extensions_count = 0;
