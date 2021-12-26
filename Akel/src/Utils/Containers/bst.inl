@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 12/12/2021
+// UPDATED : 26/12/2021
 
 #include <Utils/Containers/bst.h>
 
@@ -14,19 +14,11 @@ namespace Ak
     void custom_free(T* ptr);
 
     template <typename T>
-    BinarySearchTree<T>::BinarySearchTree(T&& data)
-    {
-        _data = std::forward<T>(data);
-    }
+    BinarySearchTree<T>::BinarySearchTree(T&& data) : _data(std::forward<T>(data)) {}
 
     template <typename T>
     void BinarySearchTree<T>::add(T&& data)
     {
-        if(!_data)
-        {
-            _data = std::forward<T>(data);
-            return;
-        }
         if(data > _data)
         {
             if(_right != nullptr)
@@ -50,6 +42,82 @@ namespace Ak
         if(node == nullptr)
         {
             Error("Binary Search Tree : unable to remove element (no node found with this value)");
+            return;
+        }
+        if(node->getLeft() == nullptr && node->getRight() == nullptr) // no children
+        {
+            custom_free(node);
+            return;
+        }
+        else if(node->getLeft() == nullptr || node->getRight() == nullptr) // only one child
+        {
+            BinarySearchTree<T>* parent = find_parent(node);
+            if(node->getLeft() == nullptr)
+            {
+                if(parent->getLeft() == node)
+                {
+                    parent->setLeft(node->getRight());
+                    node->setRight(nullptr);
+                    custom_free(node);
+                    return;
+                }
+                else
+                {
+                    parent->setRight(node->getRight());
+                    node->setRight(nullptr);
+                    custom_free(node);
+                    return;
+                }
+            }
+            else
+            {
+                if(parent->getRight() == node)
+                {
+                    parent->setRight(node->getLeft());
+                    node->setLeft(nullptr);
+                    custom_free(node);
+                    return;
+                }
+                else
+                {
+                    parent->setLeft(node->getLeft());
+                    node->setRight(nullptr);
+                    custom_free(node);
+                    return;
+                }
+            }
+        }
+        else // two children
+        {
+            BinarySearchTree<T>* parent = find_parent(node);
+            BinarySearchTree<T>* floating_node = nullptr;
+            if(parent->getLeft() == node)
+            {
+                parent->setLeft(node->getRight());
+                floating_node = node->getRight();
+                while(floating_node->getLeft() != nullptr)
+                    floating_node = floating_node->getLeft();
+                floating_node->setLeft(node->getLeft());
+                custom_free(node);
+            }
+            else
+            {
+                parent->setRight(node->getRight());
+                floating_node = node->getRight();
+                while(floating_node->getLeft() != nullptr)
+                    floating_node = floating_node->getLeft();
+                floating_node->setLeft(node->getLeft());
+                custom_free(node);
+            }
+        }
+    }
+
+    template <typename T>
+    void BinarySearchTree<T>::remove(BinarySearchTree<T>* node)
+    {
+        if(node == nullptr)
+        {
+            Error("Binary Search Tree : unable to remove element (node NULL)");
             return;
         }
         if(node->getLeft() == nullptr && node->getRight() == nullptr) // no children

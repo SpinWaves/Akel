@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 12/12/2021
+// UPDATED : 26/12/2021
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -10,10 +10,13 @@
 
 namespace Ak
 {
+    template <typename T>
+    class BinarySearchTree;
+
     class JamAllocator : public std::enable_shared_from_this<JamAllocator>
     {
         public:
-            JamAllocator() = default;
+            JamAllocator();
 
             void init(size_t Size);
             inline bool contains(void* ptr);

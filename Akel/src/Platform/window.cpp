@@ -54,20 +54,21 @@ namespace Ak
 	{
 		switch(setting)
 		{
-			case title: SDL_SetWindowTitle(_window, value); break;
-			case icon: _icon = IMG_Load(value); SDL_SetWindowIcon(_window, _icon); break;
+			case winsets::title: SDL_SetWindowTitle(_window, value); break;
+			case winsets::icon: _icon = IMG_Load(value); SDL_SetWindowIcon(_window, _icon); break;
 
 			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
 		}
 	}
 	void WindowComponent::setSetting(winsets setting, bool value)
 	{
+		SDL_bool __value = value ? SDL_TRUE : SDL_FALSE;
 		switch(setting)
 		{
-			case fullscreen: SDL_SetWindowFullscreen(_window, value); break;
-			case border:     SDL_SetWindowBordered(_window, value); break;
-			case resizable:  SDL_SetWindowResizable(_window, value); break;
-			case visible:
+			case winsets::fullscreen: SDL_SetWindowFullscreen(_window, __value); break;
+			case winsets::border:     SDL_SetWindowBordered(_window, __value); break;
+			case winsets::resizable:  SDL_SetWindowResizable(_window, __value); break;
+			case winsets::visible:
 			{
 				if(value)
 					SDL_ShowWindow(_window);
@@ -75,8 +76,8 @@ namespace Ak
 					SDL_HideWindow(_window);
 				break;
 			}
-			case vsync:  break; // TODO
-			case maximize:
+			case winsets::vsync:  break; // TODO
+			case winsets::maximize:
 			{
 				if(value)
 					SDL_MaximizeWindow(_window);
@@ -92,8 +93,8 @@ namespace Ak
 	{
 		switch(setting)
 		{
-			case brightness: SDL_SetWindowBrightness(_window, value); break;
-			case opacity: SDL_SetWindowOpacity(_window, value); break;
+			case winsets::brightness: SDL_SetWindowBrightness(_window, value); break;
+			case winsets::opacity: SDL_SetWindowOpacity(_window, value); break;
 
 			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
 		}
@@ -102,7 +103,7 @@ namespace Ak
 	{
 		switch(setting)
 		{
-			case position:
+			case winsets::position:
 			{
 				if(x == AK_WINDOW_POS_CENTER)
 					x = SDL_WINDOWPOS_CENTERED;
@@ -111,7 +112,7 @@ namespace Ak
 				SDL_SetWindowPosition(_window, x, y);
 				break;
 			}
-			case size:
+			case winsets::size:
 			{
 				SDL_GetCurrentDisplayMode(0, &DM);
 				if(x == AK_WINDOW_MAX_SIZE)
@@ -121,7 +122,7 @@ namespace Ak
 				SDL_SetWindowSize(_window, x, y);
 				break;
 			}
-			case maximumSize:
+			case winsets::maximumSize:
 			{
 				SDL_GetCurrentDisplayMode(0, &DM);
 				if(x == AK_WINDOW_MAX_SIZE)
@@ -131,7 +132,7 @@ namespace Ak
 				SDL_SetWindowMaximumSize(_window, x, y);
 				break;
 			}
-			case minimumSize: 
+			case winsets::minimumSize: 
 			{
 				SDL_GetCurrentDisplayMode(0, &DM);
 				if(x == AK_WINDOW_MAX_SIZE)

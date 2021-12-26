@@ -1,11 +1,13 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 12/12/2021
+// UPDATED : 26/12/2021
 
 #include <Core/core.h>
 
 namespace Ak
 {
+    JamAllocator::JamAllocator() : _usedSpaces(), _freeSpaces() {}
+
     void JamAllocator::init(size_t Size)
     {
         if(_heap != nullptr)

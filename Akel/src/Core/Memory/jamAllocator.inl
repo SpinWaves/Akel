@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 12/12/2021
+// UPDATED : 26/12/2021
 
 #include <Core/Memory/jamAllocator.h>
 #include <Core/log.h>
@@ -34,7 +34,7 @@ namespace Ak
         JamAllocator::flag finder;
         finder.size = sizeType;
         finder.offset = 0;
-        BinarySearchTree<JamAllocator::flag&> node = _freeSpaces.find(finder);
+        BinarySearchTree<JamAllocator::flag&>* node = _freeSpaces.find(finder);
         if(node != nullptr)
         {
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + node->getData().offset + sizeof(JamAllocator::flag));
@@ -82,110 +82,31 @@ namespace Ak
         if(std::is_class<T>::value)
             ptr->~T();
 
-        flag* flag_ptr = nullptr;
+        flag flag_ref;
 
         lockThreads(mutex);
 
-        for(auto it = _usedSpaces.begin(); it != _usedSpaces.end(); it++)
+        for(auto it = _usedSpaces.root_it(); it.hasNext(); it.next())
         {
-            if((ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag)) && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + (*(it + 1))->offset))
-               || (it == _usedSpaces.end() - 1 && ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it)->offset + sizeof(JamAllocator::flag))))
+            if((ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it).getData().offset + sizeof(JamAllocator::flag)) && ptr < (void*)(reinterpret_cast<uintptr_t>(_heap) + it.forward_next().getData().offset))
+               || (it.hasNext() == false && ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it).getData().offset + sizeof(JamAllocator::flag))))
             {
-                flag_ptr = *it;
-                _usedSpaces.erase(it);
+                flag_ref.size = (*it).getData().size;
+                flag_ref.offset = (*it).getData().offset;
+                _usedSpaces.remove(it.get_node());
                 break;
             }
         }
         
-        flag_ptr = &_usedSpaces.find();
-
-        if(!flag_ptr)
+        if(flag_ref.size == 0 && flag_ref.offset == 0)
         {
             Core::log::report(ERROR, "JamAllocator : unable to find the flag of %p", ptr);
             unlockThreads(mutex);
             return;
         }
 
-        size_t sizeType = flag_ptr->size;
-        if(_freeSpaces.empty())
-        {
-            _freeSpaces.push_back(flag_ptr);
-            unlockThreads(mutex);
-            ptr = nullptr;
-            return;
-        }
-        else if(_freeSpaces.size() >= 10)
-        {
-            if(sizeType > _freeSpaces[(int)(_freeSpaces.size() / 4)]->size) // If size of flag to move is size is less than the first quarter of the free flags we do a simple iteration
-            {
-                std::vector<JamAllocator::flag*>::iterator it = _freeSpaces.begin() + (int)(_freeSpaces.size() / 2);
-                while(it != _freeSpaces.begin() || it != _freeSpaces.end())
-                {
-                    if((*it)->size == sizeType)
-                    {
-                        _freeSpaces.insert(it, flag_ptr);
-                        break;
-                    }
-                    else if((*it)->size > sizeType)
-                    {
-                        it--;
-                        if((*it)->size == sizeType)
-                        {
-                            _freeSpaces.insert(it, flag_ptr);
-                            break;
-                        }
-                        else if((*it)->size < sizeType)
-                        {
-                            it++;
-                            _freeSpaces.insert(it, flag_ptr);
-                            break;
-                        }
-                    }
-                    else if((*it)->size < sizeType)
-                    {
-                        it++;
-                        if((*it)->size == sizeType)
-                        {
-                            _freeSpaces.insert(it, flag_ptr);
-                            break;
-                        }
-                        else if((*it)->size > sizeType)
-                        {
-                            it--;
-                            _freeSpaces.insert(it, flag_ptr);
-                            break;
-                        }
-                    }
-                }
-                unlockThreads(mutex);
-
-                ptr = nullptr;
-                return;
-            }
-        }
-
-        for(std::vector<JamAllocator::flag*>::iterator it = _freeSpaces.begin(); it != _freeSpaces.end(); it++)
-        {
-            if((*it)->size == sizeType)
-            {
-                _freeSpaces.insert(it, flag_ptr);
-                break;
-            }
-            else if((*it)->size > sizeType)
-            {
-                if(it == _freeSpaces.begin())
-                {
-                    _freeSpaces.insert(_freeSpaces.begin(), flag_ptr);
-                    break;
-                }
-                it--;
-                _freeSpaces.insert(it, flag_ptr);
-                break;
-            }
-        }
-
+        _freeSpaces.add(flag_ref);
         unlockThreads(mutex);
-
         ptr = nullptr;
     }
 }
