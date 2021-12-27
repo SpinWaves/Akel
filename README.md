@@ -9,11 +9,11 @@ An editor (like Unity or UnrealEngine) is in development, facilitating the creat
 Akel is designed to be extremely easy to use. Not being the most powerful, it goes the way of simplicity of use, both on the editor side and on the code side.
 
 # Getting started
-Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, although it has not been tested on this OS (no information about MacOS, I have to find out). It is used with [xmake](https://xmake.io/#/). GCC 8(or higher) is required because it uses C++17 features. Dependencies are provided (SDL2, ImGui, Vulkan, GLM) by xmake.
+Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, although it has not been tested on this OS (no information about MacOS, I have to find out). It is used with [xmake](https://xmake.io/#/). A compiler that supports C++17 is required because Akel uses C++17 features. Dependencies are provided (SDL2, ImGui, Vulkan, ...) by xmake.
 
-* Start by clonning the repo `git clone https://github.com/SpinWaves/Akel`.
-* [Install xmake](https://xmake.io/#/guide/installation).
-* <details> <summary>Run xmake in the "xmake.lua" directory.</summary>
+* Start by clonning the repo `git clone https://github.com/SpinWaves/Akel`
+* [Install xmake](https://xmake.io/#/guide/installation)
+* <details> <summary>Run xmake in the "xmake.lua" directory</summary>
   By default xmake will build the Akel editor. If you want to build one of the demos you can run xmake as follows :
 
   Demo | Command
@@ -31,6 +31,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * [2 memory allocation systems](https://github.com/SpinWaves/Akel/tree/main/Akel/src/Core/Memory):
     * FixedAllocator is a fast allocator consisting of blocks of the same size that can be allocated. It is more performance oriented than memory optimised because if an allocated block is not used in full, the unused memory is wasted.
     * JamAllocator is a slightly less efficient (but still effective) allocator that is memory optimisation oriented. It allocates the memory size you want, no memory is wasted.
+* Memory protection system in case of crash
 
 # Coming soon...
 * Fully functionnal renderer using Vulkan API
