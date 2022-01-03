@@ -1,12 +1,18 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 26/12/2021
+// UPDATED : 03/01/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
 
 #include <Akpch.h>
 #include <Utils/utils.h>
+
+/**
+ * TODO :
+ *  - Resize system
+ *  - Size allocation (like malloc)
+ */
 
 namespace Ak
 {
@@ -40,9 +46,9 @@ namespace Ak
             {
                 unsigned int size = 0;
                 unsigned int offset = 0;
-                inline friend bool operator< (const flag& a, const flag& b) { return a.size < b.size; }
-                inline friend bool operator> (const flag& a, const flag& b) { return a.size > b.size; }
-                inline friend bool operator== (const flag& a, const flag& b) { return a.size == b.size; }
+                inline constexpr friend bool operator< (const flag& a, const flag& b) noexcept { return a.size < b.size; }
+                inline constexpr friend bool operator> (const flag& a, const flag& b) noexcept { return a.size > b.size; }
+                inline constexpr friend bool operator== (const flag& a, const flag& b) noexcept { return a.size == b.size; }
             };
 
             size_t _heapSize = 0;
@@ -54,8 +60,8 @@ namespace Ak
 
             bool _autoResize = false;
             int _allocator_number = 0;
-            BinarySearchTree<flag&> _freeSpaces;
-            BinarySearchTree<flag&> _usedSpaces;
+            std::unique_ptr<BinarySearchTree<flag&>> _freeSpaces;
+            std::unique_ptr<BinarySearchTree<flag&>> _usedSpaces;
 
             inline static MutexHandel mutex;
     };

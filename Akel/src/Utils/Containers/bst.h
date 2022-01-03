@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 26/12/2021
+// UPDATED : 03/01/2022
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -59,6 +59,7 @@ namespace Ak
             explicit BinarySearchTree();
             explicit BinarySearchTree(T&& data);
             void add(T&& data);
+            void add(BinarySearchTree<T>* node);
             void remove(T&& data);
             void remove(BinarySearchTree<T>* node);
             BinarySearchTree<T>* find_minimum();

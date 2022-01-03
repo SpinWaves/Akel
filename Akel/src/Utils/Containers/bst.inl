@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 26/12/2021
+// UPDATED : 03/01/2022
 
 #include <Utils/Containers/bst.h>
 
@@ -32,6 +32,30 @@ namespace Ak
                 _left->add(std::forward<T>(data));
             else
                 _left = custom_malloc<BinarySearchTree<T>>(std::forward<T>(data));
+        }
+    }
+
+    template <typename T>
+    void BinarySearchTree<T>::add(BinarySearchTree<T>* node)
+    {
+        if(node == nullptr)
+        {
+            Error("Binary Search Tree : unable to add element (NULL node)");
+            return;
+        }
+        if(node->getData() > _data)
+        {
+            if(_right != nullptr)
+                _right->add(node);
+            else
+                _right = node;
+        }
+        else
+        {
+            if(_left != nullptr)
+                _left->add(node);
+            else
+                _left = node;
         }
     }
 

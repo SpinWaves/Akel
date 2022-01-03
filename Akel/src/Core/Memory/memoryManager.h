@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 26/12/2021
+// UPDATED : 03/01/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -65,8 +65,7 @@ namespace Ak
             #endif
             return __jam.alloc<T>(std::forward<Args>(args)...);
         }
-        T* ptr = new T(std::forward<Args>(args)...);
-        return ptr;
+        return new T(std::forward<Args>(args)...);
     }
 
     template <typename T = void>

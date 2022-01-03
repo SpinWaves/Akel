@@ -1,12 +1,12 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 26/12/2021
+// UPDATED : 03/01/2022
 
 #include <Core/core.h>
 
 namespace Ak
 {
-    JamAllocator::JamAllocator() : _usedSpaces(), _freeSpaces() {}
+    JamAllocator::JamAllocator() : _freeSpaces(nullptr), _usedSpaces(nullptr) {}
 
     void JamAllocator::init(size_t Size)
     {
@@ -15,7 +15,7 @@ namespace Ak
 
         lockThreads(mutex);
 
-        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+        #if defined(_MSC_VER) && _MSC_VER < 1900
               InitializeCriticalSection(&mutex);
         #endif
 
@@ -25,8 +25,11 @@ namespace Ak
             Core::log::report(FATAL_ERROR, "JamAllocator : unable to allocate memory space for an allocator");
 
         _heapSize = Size;
-        _memUsed = 0;
         _heapEnd = (void*)(reinterpret_cast<uintptr_t>(_heap) + _heapSize);
+
+        _freeSpaces.reset(reinterpret_cast<BinarySearchTree<JamAllocator::flag&>>(reinterpret_cast<uintptr_t>(_heap)));
+        _usedSpaces.reset(reinterpret_cast<BinarySearchTree<JamAllocator::flag&>>(reinterpret_cast<uintptr_t>(_heap) + sizeof(BinarySearchTree<JamAllocator::flag&>)));
+        _memUsed = sizeof(BinarySearchTree<JamAllocator::flag&>) * 2;
 
         _allocator_number = MemoryManager::accessToControlUnit()->jamStack.size();
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
@@ -80,6 +83,9 @@ namespace Ak
 
         lockThreads(mutex);
 
+        _freeSpaces.release();
+        _usedSpaces.release();
+
         std::free(_heap);
         _heap = nullptr;
         
@@ -93,7 +99,7 @@ namespace Ak
     {
         destroy();
 
-        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+        #if defined(_MSC_VER) && _MSC_VER < 1900
             DeleteCriticalSection(&mutex);
         #endif
     }
