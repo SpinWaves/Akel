@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 03/01/2022
+// UPDATED : 04/01/2022
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -61,7 +61,7 @@ namespace Ak
             void add(T&& data);
             void add(BinarySearchTree<T>* node);
             void remove(T&& data);
-            void remove(BinarySearchTree<T>* node);
+            void remove(BinarySearchTree<T>* node, bool free = true);
             BinarySearchTree<T>* find_minimum();
             BinarySearchTree<T>* find(T&& data);
             BinarySearchTree<T>* find_parent(T&& data);
@@ -73,6 +73,7 @@ namespace Ak
             inline void setLeft(BinarySearchTree<T>* left) { _left = left; }
             inline void setData(T&& data) { _data = data; }
             inline bool empty() const noexcept { return _right == nullptr && _left == nullptr && !_data; }
+            inline bool has_data() const noexcept { return _is_init; }
 
             inline iterator root_it() { return iterator(this); }
 
@@ -80,6 +81,7 @@ namespace Ak
         
         private:
             T _data;
+            bool _is_init = false;
             BinarySearchTree<T>* _left = nullptr;
             BinarySearchTree<T>* _right = nullptr;
     };

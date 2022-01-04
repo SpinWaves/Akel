@@ -1,8 +1,8 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 24/06/2021
+// UPDATED : 04/01/2022
 
-#include <Core/Components/components.h>
+#include <Core/Components/baseComponent.h>
 
 namespace Ak
 {
@@ -10,9 +10,14 @@ namespace Ak
 	{
 		_name = name;
 	}
-	const char* Component::getName()
-	{
-		return _name;
-	}
+
+	void Component::onAttach() {}
+	void Component::update() {}
+	void Component::onRender() {}
+	void Component::onImGuiRender() {}
+	void Component::onEvent(Input& input) {}
+	void Component::onQuit() {}
+
+	Component::~Component() {}
 }
 

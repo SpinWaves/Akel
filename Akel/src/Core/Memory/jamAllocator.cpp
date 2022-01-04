@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 03/01/2022
+// UPDATED : 04/01/2022
 
 #include <Core/core.h>
 
@@ -27,9 +27,9 @@ namespace Ak
         _heapSize = Size;
         _heapEnd = (void*)(reinterpret_cast<uintptr_t>(_heap) + _heapSize);
 
-        _freeSpaces.reset(reinterpret_cast<BinarySearchTree<JamAllocator::flag&>>(reinterpret_cast<uintptr_t>(_heap)));
-        _usedSpaces.reset(reinterpret_cast<BinarySearchTree<JamAllocator::flag&>>(reinterpret_cast<uintptr_t>(_heap) + sizeof(BinarySearchTree<JamAllocator::flag&>)));
-        _memUsed = sizeof(BinarySearchTree<JamAllocator::flag&>) * 2;
+        _freeSpaces = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap));
+        _usedSpaces = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + sizeof(BinarySearchTree<JamAllocator::flag&>));
+        _memUsed = sizeof(_freeSpaces) * 2;
 
         _allocator_number = MemoryManager::accessToControlUnit()->jamStack.size();
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
@@ -37,6 +37,12 @@ namespace Ak
         MemoryManager::accessToControlUnit()->jamStack.push_back(weak_from_this());
 
         unlockThreads(mutex);
+    }
+
+
+    void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag&>* node, JamAllocator::flag* flag)
+    {
+        new ((void*)node) BinarySearchTree<JamAllocator::flag&>(*flag); // Give flag to node (node is not init, just allocated so we call his constructor)
     }
 
     void JamAllocator::increase_size(size_t Size)
@@ -61,21 +67,6 @@ namespace Ak
         unlockThreads(mutex);
     }
 
-    inline bool JamAllocator::canHold(size_t Size)
-    {
-        return Size > _heapSize - _memUsed;
-    }
-
-    inline void JamAllocator::auto_increase_size(bool set)
-    {
-        _autoResize = set;
-    }
-
-    inline bool JamAllocator::contains(void* ptr)
-    {
-    	return ptr > _heap && ptr < _heapEnd;
-    }
-
     void JamAllocator::destroy()
     {
         if(_heap == nullptr)
@@ -83,8 +74,8 @@ namespace Ak
 
         lockThreads(mutex);
 
-        _freeSpaces.release();
-        _usedSpaces.release();
+        _freeSpaces = nullptr;
+        _usedSpaces = nullptr;
 
         std::free(_heap);
         _heap = nullptr;

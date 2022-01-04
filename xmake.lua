@@ -1,10 +1,8 @@
 -- This file is a part of Akel
 -- CREATED : 02/10/2021
--- UPDATED : 16/10/2021
+-- UPDATED : 04/01/2022
 
 -- Globals settings
-set_xmakever("2.5.6")
-
 add_repositories("local-repo libs")
 
 add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-tools", "imgui_sdl_vk v1.83-docking")
@@ -32,8 +30,7 @@ target("Akel")
 
 	set_pcxxheader("Akel/src/Akpch.h")
 	add_defines("SDL_MAIN_HANDLED")
-	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-tools")
-	add_packages("imgui_sdl_vk")
+	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-tools", "imgui_sdl_vk")
 
 	on_load(function(target)
 		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")

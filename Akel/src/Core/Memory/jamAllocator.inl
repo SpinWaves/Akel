@@ -1,8 +1,7 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 03/01/2022
+// UPDATED : 04/01/2022
 
-#include <Core/Memory/jamAllocator.h>
 #include <Core/log.h>
 
 namespace Ak
@@ -34,22 +33,24 @@ namespace Ak
         JamAllocator::flag finder;
         finder.size = sizeType;
         finder.offset = 0;
-        BinarySearchTree<JamAllocator::flag&>* node = _freeSpaces->find(finder);
+        BinarySearchTree<JamAllocator::flag&>* node = nullptr;
+        if(_freeSpaces->has_data())
+            node = _freeSpaces->find(finder);
         if(node != nullptr)
         {
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + node->getData().offset + sizeof(JamAllocator::flag));
-            _usedSpaces->add(node->getData());
-            _freeSpaces->remove(finder);
+            _usedSpaces->add(node);
+            _freeSpaces->remove(node, false);
         }
         if(ptr == nullptr) // If we haven't found free flag
         {
-            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
-            _memUsed += sizeof(BinarySearchTree<JamAllocator::flag&>);
+            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
+            _memUsed += sizeof(_freeSpaces);
 
             JamAllocator::flag* flag_ptr = static_cast<flag*>((void*)(reinterpret_cast<uintptr_t>(_heap) + _memUsed)); // New Flag
             flag_ptr->size = sizeType;
             flag_ptr->offset = _memUsed;
-            new ((void*)node) BinarySearchTree<JamAllocator::flag&>(*flag_ptr); // Give flag to node (node is not init, just allocated so we call his constructor)
+            init_node(node, flag_ptr);
             _memUsed += sizeof(JamAllocator::flag);
 
             _usedSpaces->add(node); // Give node to Used Spaces Tree
@@ -103,7 +104,7 @@ namespace Ak
         {
             flag_ref.size = (*it).getData().size;
             flag_ref.offset = (*it).getData().offset;
-            _usedSpaces->remove(it.get_node());
+            _usedSpaces->remove(it.get_node(), false);
         }
         else
         {

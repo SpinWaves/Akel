@@ -11,8 +11,6 @@ class Comp : public Ak::Component
         void onAttach() override;
         void update() override;
         void onEvent(Ak::Input& input) override;
-        void onRender() override;
-        void onImGuiRender() override;
         void onQuit() override;
 
         ~Comp() = default;

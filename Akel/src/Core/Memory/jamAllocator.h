@@ -1,12 +1,11 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 03/01/2022
+// UPDATED : 04/01/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
 
 #include <Akpch.h>
-#include <Utils/utils.h>
 
 /**
  * TODO :
@@ -25,12 +24,14 @@ namespace Ak
             JamAllocator();
 
             void init(size_t Size);
-            inline bool contains(void* ptr);
-            inline bool canHold(size_t Size);
-            inline void auto_increase_size(bool set);
+
+            inline constexpr bool canHold(size_t Size) noexcept { return Size > _heapSize - _memUsed; }
+            inline constexpr void auto_increase_size(bool set) noexcept { _autoResize = set; }
+            inline constexpr bool contains(void* ptr) noexcept { return ptr > _heap && ptr < _heapEnd; }
+            inline constexpr bool is_init() noexcept { return _heap != nullptr; }
+
             void increase_size(size_t Size);
             void destroy();
-            inline constexpr bool is_init() noexcept { return _heap != nullptr; }
 
             template <typename T = void, typename ... Args>
             T* alloc(Args&& ... args);
@@ -46,9 +47,9 @@ namespace Ak
             {
                 unsigned int size = 0;
                 unsigned int offset = 0;
-                inline constexpr friend bool operator< (const flag& a, const flag& b) noexcept { return a.size < b.size; }
-                inline constexpr friend bool operator> (const flag& a, const flag& b) noexcept { return a.size > b.size; }
-                inline constexpr friend bool operator== (const flag& a, const flag& b) noexcept { return a.size == b.size; }
+                inline friend bool operator<  (const flag& a, const flag& b) noexcept { return a.size <  b.size; }
+                inline friend bool operator>  (const flag& a, const flag& b) noexcept { return a.size >  b.size; }
+                inline friend bool operator== (const flag& a, const flag& b) noexcept { return a.size == b.size; }
             };
 
             size_t _heapSize = 0;
@@ -60,8 +61,10 @@ namespace Ak
 
             bool _autoResize = false;
             int _allocator_number = 0;
-            std::unique_ptr<BinarySearchTree<flag&>> _freeSpaces;
-            std::unique_ptr<BinarySearchTree<flag&>> _usedSpaces;
+            BinarySearchTree<flag&>* _freeSpaces;
+            BinarySearchTree<flag&>* _usedSpaces;
+
+            void init_node(BinarySearchTree<flag&>* node, flag* ptr);
 
             inline static MutexHandel mutex;
     };
