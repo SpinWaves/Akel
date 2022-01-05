@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 06/12/2021
+// UPDATED : 05/01/2022
 
 #include <Core/core.h>
 
@@ -130,7 +130,7 @@ namespace Ak::Core
         abort();
     }
 
-    std::string log::getTime(std::string path)
+    std::string log::getTime(const std::string& path)
     {
 		__time time = Time::getCurrentTime();
 		path.append("session-");
@@ -147,20 +147,44 @@ namespace Ak::Core
 
 namespace Ak
 {
-    void FatalError(std::string message)
+    void FatalError(std::string message, ...)
 	{
-		Core::log::report(FATAL_ERROR, std::move(message));
+		char buffer[message.length() + 255];
+		va_list args;
+		va_start(args, message);
+		vsprintf(buffer, message.c_str(), args);
+		va_end(args);
+
+		Core::log::report(FATAL_ERROR, std::move(message), buffer);
 	}
-    void Error(std::string message)
+    void Error(std::string message, ...)
 	{
-		Core::log::report(ERROR, std::move(message));
+		char buffer[message.length() + 255];
+		va_list args;
+		va_start(args, message);
+		vsprintf(buffer, message.c_str(), args);
+		va_end(args);
+
+		Core::log::report(ERROR, std::move(message), buffer);
 	}
-    void Warning(std::string message)
+    void Warning(std::string message, ...)
 	{
-		Core::log::report(WARNING, std::move(message));
+		char buffer[message.length() + 255];
+		va_list args;
+		va_start(args, message);
+		vsprintf(buffer, message.c_str(), args);
+		va_end(args);
+
+		Core::log::report(WARNING, std::move(message, buffer);
 	}
-    void Message(std::string message)
+    void Message(std::string message, ...)
 	{
-		Core::log::report(MESSAGE, std::move(message));
+		char buffer[message.length() + 255];
+		va_list args;
+		va_start(args, message);
+		vsprintf(buffer, message.c_str(), args);
+		va_end(args);
+
+		Core::log::report(MESSAGE, std::move(message), buffer);
 	}
 }

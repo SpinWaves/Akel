@@ -29,7 +29,7 @@ namespace Ak::Core
 		<< "  / /| |  / //_// _ \\ / / 		" << '\n'
 		<< " / ___ | / ,<  /  __// /  		" << '\n'
 		<< "/_/  |_|/_/|_| \\___//_/  		" << '\n'
-    	<< '\t' << '\t' << "By SpinWaves Studios - 2021" << std::endl;
+    	<< '\t' << '\t' << "By SpinWaves Studios - 2021-2022" << std::endl;
 	}
 
 	void printEngineCodeInfo()

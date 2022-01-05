@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 06/12/2021
+// UPDATED : 05/01/2022
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -23,14 +23,14 @@ namespace Ak
         class log
         {
             public:
-                log() = delete;
+                explicit log() = delete;
                 static void Init();
                 static void report(enum LogType type, std::string message, ...);
                 static void report(std::string message, ...);
                 ~log() = delete;
 
             private:
-                static std::string getTime(std::string path);
+                static std::string getTime(const std::string& path);
                 static void TERMINATE() noexcept;
                 inline static std::ofstream _out;
                 inline static std::string _type;
@@ -38,10 +38,10 @@ namespace Ak
         };
     }
 
-    void FatalError(std::string message);
-    void Error(std::string message);
-    void Warning(std::string message);
-    void Message(std::string message);
+    void FatalError(std::string message, ...);
+    void Error(std::string message, ...);
+    void Warning(std::string message, ...);
+    void Message(std::string message, ...);
 }
 
 #define AK_BEGIN_SESSION(name) Ak::Core::log::report("Begin " name " ----")
