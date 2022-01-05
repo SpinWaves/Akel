@@ -130,7 +130,7 @@ namespace Ak::Core
         abort();
     }
 
-    std::string log::getTime(const std::string& path)
+    std::string log::getTime(std::string path)
     {
 		__time time = Time::getCurrentTime();
 		path.append("session-");
@@ -141,7 +141,7 @@ namespace Ak::Core
         path.append(std::to_string(time.year));
         path.append(".log");
 
-        return path;
+        return std::move(path);
     }
 }
 
@@ -152,39 +152,39 @@ namespace Ak
 		char buffer[message.length() + 255];
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, message.c_str(), args);
+		vsprintf(buffer, std::move(message).c_str(), args);
 		va_end(args);
 
-		Core::log::report(FATAL_ERROR, std::move(message), buffer);
+		Core::log::report(FATAL_ERROR, buffer);
 	}
     void Error(std::string message, ...)
 	{
 		char buffer[message.length() + 255];
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, message.c_str(), args);
+		vsprintf(buffer, std::move(message).c_str(), args);
 		va_end(args);
 
-		Core::log::report(ERROR, std::move(message), buffer);
+		Core::log::report(ERROR, buffer);
 	}
     void Warning(std::string message, ...)
 	{
 		char buffer[message.length() + 255];
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, message.c_str(), args);
+		vsprintf(buffer, std::move(message).c_str(), args);
 		va_end(args);
 
-		Core::log::report(WARNING, std::move(message, buffer);
+		Core::log::report(WARNING, buffer);
 	}
     void Message(std::string message, ...)
 	{
 		char buffer[message.length() + 255];
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, message.c_str(), args);
+		vsprintf(buffer, std::move(message).c_str(), args);
 		va_end(args);
 
-		Core::log::report(MESSAGE, std::move(message), buffer);
+		Core::log::report(MESSAGE, buffer);
 	}
 }

@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 04/01/2022
+// UPDATED : 05/01/2022
 
 #include <Utils/Containers/bst.h>
 
 namespace Ak
 {
-    void Error(std::string message);
+    void Error(std::string message, ...);
+    void Warning(std::string message, ...);
 
     template <typename T = void, typename ... Args>
     T* custom_malloc(Args&& ... args);
@@ -14,16 +15,11 @@ namespace Ak
     void custom_free(T* ptr);
 
     template <typename T>
-    BinarySearchTree<T>::BinarySearchTree(T&& data) : _data(std::forward<T>(data)), _is_init(true) {}
+    BinarySearchTree<T>::BinarySearchTree(T&& data) : _data(std::forward<T>(data)), is_init(true) {}
 
     template <typename T>
     void BinarySearchTree<T>::add(T&& data)
     {
-        if(!_is_init)
-        {
-            _data = std::forward<T>(data);
-            return;
-        }
         if(data > _data)
         {
             if(_right != nullptr)
@@ -38,6 +34,7 @@ namespace Ak
             else
                 _left = custom_malloc<BinarySearchTree<T>>(std::forward<T>(data));
         }
+        is_init = true;
     }
 
     template <typename T>
@@ -45,15 +42,12 @@ namespace Ak
     {
         if(node == nullptr)
         {
-            Error("Binary Search Tree : unable to add element (NULL node)");
+            Error("Binary Search Tree : unable to add node (NULL node)");
             return;
         }
-        if(!_is_init)
+        if(node == this)
         {
-            if(node->has_data())
-                _data = node->getData();
-            else
-                Error("Binary Search Tree : unable to add element (no data)");
+            Warning("Binary Search Tree : unable to add a node (trying to add a node to itself)");
             return;
         }
         if(node->getData() > _data)
@@ -70,6 +64,7 @@ namespace Ak
             else
                 _left = node;
         }
+        is_init = true;
     }
 
     template <typename T>
@@ -243,7 +238,7 @@ namespace Ak
     template <typename T>
     BinarySearchTree<T>* BinarySearchTree<T>::find(T&& data)
     {
-        if(!_is_init)
+        if(!is_init)
             return nullptr;
         if(data > _data)
         {

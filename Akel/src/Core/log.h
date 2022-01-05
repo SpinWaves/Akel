@@ -30,7 +30,7 @@ namespace Ak
                 ~log() = delete;
 
             private:
-                static std::string getTime(const std::string& path);
+                static std::string getTime(std::string path);
                 static void TERMINATE() noexcept;
                 inline static std::ofstream _out;
                 inline static std::string _type;

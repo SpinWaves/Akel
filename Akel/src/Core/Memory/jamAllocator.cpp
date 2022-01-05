@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 04/01/2022
+// UPDATED : 05/01/2022
 
 #include <Core/core.h>
 
@@ -26,10 +26,6 @@ namespace Ak
 
         _heapSize = Size;
         _heapEnd = (void*)(reinterpret_cast<uintptr_t>(_heap) + _heapSize);
-
-        _freeSpaces = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap));
-        _usedSpaces = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + sizeof(BinarySearchTree<JamAllocator::flag&>));
-        _memUsed = sizeof(_freeSpaces) * 2;
 
         _allocator_number = MemoryManager::accessToControlUnit()->jamStack.size();
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);

@@ -69,19 +69,21 @@ namespace Ak
             inline BinarySearchTree<T>* getRight() { return _right; }
             inline BinarySearchTree<T>* getLeft() { return _left; }
             inline T& getData() { return _data; }
+            inline T getData_copy() { return _data; }
+            inline void setData(T&& data) { _data = std::forward<T>(data); }
             inline void setRight(BinarySearchTree<T>* right) { _right = right; }
             inline void setLeft(BinarySearchTree<T>* left) { _left = left; }
-            inline void setData(T&& data) { _data = data; }
             inline bool empty() const noexcept { return _right == nullptr && _left == nullptr && !_data; }
-            inline bool has_data() const noexcept { return _is_init; }
+            inline bool has_data() const noexcept { return is_init; }
 
             inline iterator root_it() { return iterator(this); }
 
             ~BinarySearchTree();
         
+            bool is_init = false;
+
         private:
             T _data;
-            bool _is_init = false;
             BinarySearchTree<T>* _left = nullptr;
             BinarySearchTree<T>* _right = nullptr;
     };

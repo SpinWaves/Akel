@@ -34,12 +34,18 @@ namespace Ak
         finder.size = sizeType;
         finder.offset = 0;
         BinarySearchTree<JamAllocator::flag&>* node = nullptr;
-        if(_freeSpaces->has_data())
-            node = _freeSpaces->find(finder);
+        if(_freeSpaces != nullptr)
+        {
+            if(_freeSpaces->has_data())
+               node = _freeSpaces->find(finder);
+        }
         if(node != nullptr)
         {
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + node->getData().offset + sizeof(JamAllocator::flag));
-            _usedSpaces->add(node);
+            if(!_usedSpaces->has_data())
+                _usedSpaces = node;
+            else
+                _usedSpaces->add(node); // Give node to Used Spaces Tree
             _freeSpaces->remove(node, false);
         }
         if(ptr == nullptr) // If we haven't found free flag
@@ -53,7 +59,10 @@ namespace Ak
             init_node(node, flag_ptr);
             _memUsed += sizeof(JamAllocator::flag);
 
-            _usedSpaces->add(node); // Give node to Used Spaces Tree
+            if(_usedSpaces == nullptr || !_usedSpaces->has_data())
+                _usedSpaces = node;
+            else
+                _usedSpaces->add(node); // Give node to Used Spaces Tree
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // Allocate Pointer
             _memUsed += sizeType;
         }
@@ -119,7 +128,10 @@ namespace Ak
             return;
         }
 
-        _freeSpaces->add(flag_ref);
+        if(_freeSpaces == nullptr && !_freeSpaces->has_data())
+            _freeSpaces = it.get_node();
+        else
+            _freeSpaces->add(flag_ref);
         unlockThreads(mutex);
         ptr = nullptr;
     }
