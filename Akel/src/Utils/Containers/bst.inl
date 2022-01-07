@@ -18,7 +18,7 @@ namespace Ak
     BinarySearchTree<T>::BinarySearchTree(T&& data) : _data(std::forward<T>(data)), is_init(true) {}
 
     template <typename T>
-    void BinarySearchTree<T>::add(T&& data)
+    void BinarySearchTree<T>::add(T&& data) // kiki bg
     {
         if(data > _data)
         {
