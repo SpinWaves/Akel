@@ -59,7 +59,7 @@ You can contribute by :
 * Sam Hocevar for PFD : https://github.com/samhocevar/portable-file-dialogs
 * Omar Cornut for ImGui lib : https://github.com/ocornut/imgui
 * Ruki for xmake : https://xmake.io/#/
-* For libSNDfile : http://www.mega-nerd.com/libsndfile/
+* For libSNDfile : [http://www.mega-nerd.com/libsndfile/](https://www.youtube.com/watch?v=iik25wqIuFo)
     * Erik de Castro Lopo aka @erikd
     * David Seifert aka @SoapGentoo
     * Arthur Taylor aka @arthurt
