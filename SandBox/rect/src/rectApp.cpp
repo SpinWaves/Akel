@@ -18,8 +18,13 @@ class Rect : public Ak::Application
             window->setSetting(Ak::winsets::resizable, false);
             //window->setSetting(Ak::winsets::size, 1280, 750);
 
-            add_component<Ak::RendererComponent>(window->getNativeWindow(), Ak::shader::basic_2D);
             add_component<FPSprinterComponent>();
+
+            Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(window->getNativeWindow(), Ak::shader::basic_2D);
+            renderer->setClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            Ak::Entity2D rectangle(Models::quad, {-0.5f, -0.5f}, {1.0f, 1.0f}, Colors::red);
+            renderer->add_entity(rectangle);
+            add_component(renderer);
         }
         ~Rect() = default;
 };

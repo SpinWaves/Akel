@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/06/2021
-// Updated : 04/03/2022
+// Updated : 05/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -39,7 +39,7 @@ namespace Ak
             beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
             if(vkBeginCommandBuffer(commandBuffers[i], &beginInfo) != VK_SUCCESS)
-				Core::log::report(FATAL_ERROR, "Vulkan : Failed to begin recording command buffer");
+                Core::log::report(FATAL_ERROR, "Vulkan : Failed to begin recording command buffer");
 
             VkRenderPassBeginInfo renderPassInfo{};
             renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -48,26 +48,33 @@ namespace Ak
             renderPassInfo.renderArea.offset = {0, 0};
             renderPassInfo.renderArea.extent = swapChainExtent;
 
-            VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
             renderPassInfo.clearValueCount = 1;
             renderPassInfo.pClearValues = &clearColor;
+            
+            VkBuffer vertexBuffers[entities2D.size()];
+            VkDeviceSize offsets[entities2D.size()];
+            for(int j = 0; j < entities2D.size(); j++)
+            {
+                vertexBuffers[j] = entities2D[j].__data.vertexBuffer;
+                offsets[j] = 0;
+            }
 
             vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
                 vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 
-                VkBuffer vertexBuffers[] = {vertexBuffer};
-                VkDeviceSize offsets[] = {0};
                 vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, vertexBuffers, offsets);
 
-                vkCmdBindIndexBuffer(commandBuffers[i], indexBuffer, 0, VK_INDEX_TYPE_UINT16);
-
-                vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+                for(Entity2D& elem : entities2D)
+                {
+                    vkCmdBindIndexBuffer(commandBuffers[i], elem.__data.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+                    vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(elem.__data.indexData.size()), 1, 0, 0, 0);
+                }
 
             vkCmdEndRenderPass(commandBuffers[i]);
 
             if(vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS)
-				Core::log::report(FATAL_ERROR, "Vulkan : Failed to begin record command buffer");
+                Core::log::report(FATAL_ERROR, "Vulkan : Failed to end recording command buffer");
         }
     }
 }

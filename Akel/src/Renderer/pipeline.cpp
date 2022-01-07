@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // Created : 05/06/2021
-// Updated : 04/03/2022
+// Updated : 05/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -52,8 +52,8 @@ namespace Ak
 	    vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 	    vertexInputInfo.vertexBindingDescriptionCount = 0;
 	    vertexInputInfo.vertexAttributeDescriptionCount = 0;
-	    auto bindingDescription = Vertex::getBindingDescription();
-	    auto attributeDescriptions = Vertex::getAttributeDescriptions();
+	    auto bindingDescription = Vertex2D::getBindingDescription();
+	    auto attributeDescriptions = Vertex2D::getAttributeDescriptions();
 
 	    vertexInputInfo.vertexBindingDescriptionCount = 1;
 	    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());

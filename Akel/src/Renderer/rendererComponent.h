@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 04/03/2022
+// Updated : 05/03/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
 
 #include <Core/core.h>
+#include <Graphics/entity.h>
 
 namespace Ak
 {
@@ -25,39 +26,6 @@ namespace Ak
         VkSurfaceCapabilitiesKHR capabilities;
         std::vector<VkSurfaceFormatKHR> formats;
         std::vector<VkPresentModeKHR> presentModes;
-    };
-
-    struct Vertex
-    {
-        glm::vec2 pos;
-        glm::vec3 color;
-
-        static VkVertexInputBindingDescription getBindingDescription()
-        {
-            VkVertexInputBindingDescription bindingDescription{};
-            bindingDescription.binding = 0;
-            bindingDescription.stride = sizeof(Vertex);
-            bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-            return bindingDescription;
-        }
-
-        static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions()
-        {
-            std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions;
-
-            attributeDescriptions[0].binding = 0;
-            attributeDescriptions[0].location = 0;
-            attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
-            attributeDescriptions[0].offset = offsetof(Vertex, pos);
-
-            attributeDescriptions[1].binding = 0;
-            attributeDescriptions[1].location = 1;
-            attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-            attributeDescriptions[1].offset = offsetof(Vertex, color);
-
-            return std::move(attributeDescriptions);
-        }
     };
 
     const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
@@ -90,6 +58,11 @@ namespace Ak
             inline void setShader(std::string vertexShader, std::string fragmentShader) { _vertexShader = std::move(vertexShader); _fragmentShader = std::move(fragmentShader); }
             void useShader(shader internal);
             inline void render_to_window(SDL_Window* win) noexcept { window = win; }
+            
+            inline void add_entity(Entity2D& entity) { entities2D.push_back(entity); }
+            inline void add_entity(Entity3D& entity) { entities3D.push_back(entity); }
+
+            inline void setClearColor(float r, float g, float b, float a) noexcept { clearColor.color.float32[0] = r; clearColor.color.float32[1] = g; clearColor.color.float32[2] = b; clearColor.color.float32[3] = a; }
 
             ~RendererComponent() = default;
 
@@ -149,11 +122,14 @@ namespace Ak
             void createSemaphores();
 
             // VertexBuffer
-            void createVertexBuffer();
             uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
             void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
             void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+            void createVertexBuffer();
             void createIndexBuffer();
+
+            std::vector<Entity2D> entities2D;
+            std::vector<Entity3D> entities3D;
 
             std::string _vertexShader;
             std::string _fragmentShader;
@@ -198,18 +174,11 @@ namespace Ak
             std::vector<VkFence> imagesInFlight;
             size_t currentFrame = 0;
 
-            // Vertex Buffer
-            VkBuffer vertexBuffer;
-            VkDeviceMemory vertexBufferMemory;
-            VkBuffer indexBuffer;
-            VkDeviceMemory indexBufferMemory;
-
             SDL_Window* window = nullptr;
 
             bool _instanceInitialized = false;
 
-            std::vector<Vertex> vertices;
-            std::vector<uint16_t> indices;
+            VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
     };
 }
 

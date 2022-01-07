@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // CREATED : 23/09/2021
-// Updated : 03/03/2022
+// Updated : 05/03/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -22,16 +22,6 @@ namespace Ak
     {
         if(!window)
             Core::log::report(FATAL_ERROR, "RendererComponent : no window passed to the renderer, \n call \"render_to_window()\" or create the RendererComponent with a window in arg");
-
-        vertices =
-        {
-            {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-            {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-            {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-            {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
-        };
-
-        indices = {0, 1, 2, 2, 3, 0};
 
         createInstance();
         setupDebugMessenger();
@@ -137,11 +127,14 @@ namespace Ak
 
         vkDestroySwapchainKHR(device, swapChain, nullptr);
 
-        vkDestroyBuffer(device, indexBuffer, nullptr);
-        vkFreeMemory(device, indexBufferMemory, nullptr);
+        for(Entity2D& elem : entities2D)
+        {
+            vkDestroyBuffer(device, elem.__data.indexBuffer, nullptr);
+            vkFreeMemory(device, elem.__data.indexBufferMemory, nullptr);
 
-        vkDestroyBuffer(device, vertexBuffer, nullptr);
-        vkFreeMemory(device, vertexBufferMemory, nullptr);
+            vkDestroyBuffer(device, elem.__data.vertexBuffer, nullptr);
+            vkFreeMemory(device, elem.__data.vertexBufferMemory, nullptr);
+        }
 
         for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
         {
