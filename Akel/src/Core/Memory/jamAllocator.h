@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 04/01/2022
+// UPDATED : 08/01/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -12,6 +12,8 @@
  *  - Resize system
  *  - Size allocation (like malloc)
  */
+
+// JamAllocator version 2.0.0
 
 namespace Ak
 {
@@ -64,7 +66,7 @@ namespace Ak
             BinarySearchTree<flag&>* _freeSpaces;
             BinarySearchTree<flag&>* _usedSpaces;
 
-            void init_node(BinarySearchTree<flag&>* node, flag* ptr);
+            void init_node(BinarySearchTree<flag&>* node, flag& ptr);
 
             inline static MutexHandel mutex;
     };

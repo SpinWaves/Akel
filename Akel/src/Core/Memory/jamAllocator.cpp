@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 05/01/2022
+// UPDATED : 08/01/2022
 
 #include <Core/core.h>
 
@@ -35,10 +35,9 @@ namespace Ak
         unlockThreads(mutex);
     }
 
-
-    void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag&>* node, JamAllocator::flag* flag)
+    void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag&>* node, JamAllocator::flag& flag)
     {
-        new ((void*)node) BinarySearchTree<JamAllocator::flag&>(*flag); // Give flag to node (node is not init, just allocated so we call his constructor)
+        new ((void*)node) BinarySearchTree<JamAllocator::flag&>(flag); // Give flag to node (node is not init, just allocated so we call his constructor)
     }
 
     void JamAllocator::increase_size(size_t Size)

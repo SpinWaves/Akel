@@ -50,12 +50,20 @@ namespace Ak
             Warning("Binary Search Tree : unable to add a node (trying to add a node to itself)");
             return;
         }
+        std::cout << node << "   " << node->getData().size << "     " << node->getData().offset << std::endl;
+        std::cout << this << "   " << _data.size << "     " << _data.offset << '\n' << std::endl;
         if(node->getData() > _data)
         {
             if(_right != nullptr)
+            {
+                debugPrint("add");
                 _right->add(node);
+            }
             else
+            {
+                debugPrint("set");
                 _right = node;
+            }
         }
         else
         {

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 04/01/2022
+// UPDATED : 08/01/2022
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -56,7 +56,7 @@ namespace Ak
                 inline iterator operator++(int) { iterator tmp = *this; ++(*this); return tmp; }
             };
 
-            explicit BinarySearchTree();
+            explicit BinarySearchTree() = delete;
             explicit BinarySearchTree(T&& data);
             void add(T&& data);
             void add(BinarySearchTree<T>* node);

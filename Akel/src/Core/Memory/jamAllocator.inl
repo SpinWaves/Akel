@@ -53,16 +53,16 @@ namespace Ak
             node = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
             _memUsed += sizeof(_freeSpaces);
 
-            JamAllocator::flag* flag_ptr = static_cast<flag*>((void*)(reinterpret_cast<uintptr_t>(_heap) + _memUsed)); // New Flag
-            flag_ptr->size = sizeType;
-            flag_ptr->offset = _memUsed;
-            init_node(node, flag_ptr);
-            _memUsed += sizeof(JamAllocator::flag);
+            JamAllocator::flag flag;
+            flag.size = sizeType;
+            flag.offset = _memUsed;
+            init_node(node, flag);
 
             if(_usedSpaces == nullptr || !_usedSpaces->has_data())
                 _usedSpaces = node;
             else
                 _usedSpaces->add(node); // Give node to Used Spaces Tree
+            std::cout << std::endl;
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // Allocate Pointer
             _memUsed += sizeType;
         }
