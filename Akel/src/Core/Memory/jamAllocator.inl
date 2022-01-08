@@ -51,9 +51,19 @@ namespace Ak
         }
         if(ptr == nullptr) // If we haven't found free flag
         {
+<<<<<<< HEAD
             JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
             flag->size = sizeType;
             _memUsed += sizeof(JamAllocator::flag);
+=======
+            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
+            _memUsed += sizeof(_freeSpaces);
+
+            JamAllocator::flag flag;
+            flag.size = sizeType;
+            flag.offset = _memUsed;
+            init_node(node, flag);
+>>>>>>> working on path for jamallocator
 
             node = reinterpret_cast<BinarySearchTree<JamAllocator::flag*>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
             init_node(node, flag);
@@ -62,6 +72,7 @@ namespace Ak
                 _usedSpaces = node;
             else
                 _usedSpaces->add(node); // Give node to Used Spaces Tree
+            std::cout << std::endl;
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // Allocate Pointer
             _memUsed += sizeType;
         }

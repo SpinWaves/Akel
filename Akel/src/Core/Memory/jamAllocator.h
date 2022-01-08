@@ -1,7 +1,12 @@
 // This file is a part of Akel
+<<<<<<< HEAD
 // Authors : @kbz_8
 // Created : 20/07/2021
 // Updated : 24/02/2022
+=======
+// CREATED : 20/07/2021
+// UPDATED : 08/01/2022
+>>>>>>> working on path for jamallocator
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -14,7 +19,11 @@
  *  - Size allocation (like malloc)
  */
 
+<<<<<<< HEAD
 // JamAllocator version 2.0.1
+=======
+// JamAllocator version 2.0.0
+>>>>>>> working on path for jamallocator
 
 namespace Ak
 {
@@ -63,7 +72,11 @@ namespace Ak
             BinarySearchTree<flag*>* _freeSpaces = nullptr;
             BinarySearchTree<flag*>* _usedSpaces = nullptr;
 
+<<<<<<< HEAD
             void init_node(BinarySearchTree<flag*>* node, flag* ptr);
+=======
+            void init_node(BinarySearchTree<flag&>* node, flag& ptr);
+>>>>>>> working on path for jamallocator
 
             inline static MutexHandel mutex;
     };

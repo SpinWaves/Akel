@@ -1,7 +1,12 @@
 // This file is a part of Akel
+<<<<<<< HEAD
 // Authors : @kbz_8
 // Created : 20/07/2021
 // Updated : 24/02/2022
+=======
+// CREATED : 20/07/2021
+// UPDATED : 08/01/2022
+>>>>>>> working on path for jamallocator
 
 #include <Core/core.h>
 
@@ -34,6 +39,7 @@ namespace Ak
         unlockThreads(mutex);
     }
 
+<<<<<<< HEAD
     void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag*>* node, JamAllocator::flag* flag)
     {
         new ((void*)node) BinarySearchTree<JamAllocator::flag*>(std::move(flag)); // Give flag to node (node is not init, just allocated so we call his constructor)
@@ -41,6 +47,11 @@ namespace Ak
         node->set_equal_operation(  [](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size == curr_d->size; } );
         node->set_less_operation(   [](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size  < curr_d->size; } );
         _memUsed += sizeof(BinarySearchTree<JamAllocator::flag*>);
+=======
+    void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag&>* node, JamAllocator::flag& flag)
+    {
+        new ((void*)node) BinarySearchTree<JamAllocator::flag&>(flag); // Give flag to node (node is not init, just allocated so we call his constructor)
+>>>>>>> working on path for jamallocator
     }
 
     void JamAllocator::increase_size(size_t Size)

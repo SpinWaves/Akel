@@ -1,7 +1,12 @@
 // This file is a part of Akel
+<<<<<<< HEAD
 // Authors : @kbz_8
 // Created : 17/11/2021
 // Updated : 29/01/2022
+=======
+// CREATED : 17/11/2021
+// UPDATED : 08/01/2022
+>>>>>>> working on path for jamallocator
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
