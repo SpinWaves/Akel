@@ -40,6 +40,7 @@ namespace Ak
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag*>* node, JamAllocator::flag* flag)
     {
         new ((void*)node) BinarySearchTree<JamAllocator::flag*>(std::move(flag)); // Give flag to node (node is not init, just allocated so we call his constructor)
@@ -52,6 +53,11 @@ namespace Ak
     {
         new ((void*)node) BinarySearchTree<JamAllocator::flag&>(flag); // Give flag to node (node is not init, just allocated so we call his constructor)
 >>>>>>> working on path for jamallocator
+=======
+    void JamAllocator::init_node(BinarySearchTree<const JamAllocator::flag&>* node, const JamAllocator::flag& flag)
+    {
+        new ((void*)node) BinarySearchTree<const JamAllocator::flag&>(flag); // Give flag to node (node is not init, just allocated so we call his constructor)
+>>>>>>> working on a patch for jamallocator
     }
 
     void JamAllocator::increase_size(size_t Size)

@@ -69,6 +69,7 @@ namespace Ak
 
             bool _autoResize = false;
             int _allocator_number = 0;
+<<<<<<< HEAD
             BinarySearchTree<flag*>* _freeSpaces = nullptr;
             BinarySearchTree<flag*>* _usedSpaces = nullptr;
 
@@ -77,6 +78,12 @@ namespace Ak
 =======
             void init_node(BinarySearchTree<flag&>* node, flag& ptr);
 >>>>>>> working on path for jamallocator
+=======
+            BinarySearchTree<const flag&>* _freeSpaces;
+            BinarySearchTree<const flag&>* _usedSpaces;
+
+            void init_node(BinarySearchTree<const flag&>* node, const flag& ptr);
+>>>>>>> working on a patch for jamallocator
 
             inline static MutexHandel mutex;
     };

@@ -34,7 +34,12 @@ namespace Ak
 
         JamAllocator::flag finder;
         finder.size = sizeType;
+<<<<<<< HEAD
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
+=======
+        finder.offset = 0;
+        BinarySearchTree<const JamAllocator::flag&>* node = nullptr;
+>>>>>>> working on a patch for jamallocator
         if(_freeSpaces != nullptr)
         {
             if(_freeSpaces->has_data())
@@ -52,16 +57,18 @@ namespace Ak
         if(ptr == nullptr) // If we haven't found free flag
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
             flag->size = sizeType;
             _memUsed += sizeof(JamAllocator::flag);
 =======
             node = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
+=======
+            node = reinterpret_cast<BinarySearchTree<const JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
+>>>>>>> working on a patch for jamallocator
             _memUsed += sizeof(_freeSpaces);
 
-            JamAllocator::flag flag;
-            flag.size = sizeType;
-            flag.offset = _memUsed;
+            const JamAllocator::flag flag = { sizeType, _memUsed };
             init_node(node, flag);
 >>>>>>> working on path for jamallocator
 
@@ -106,10 +113,15 @@ namespace Ak
         if(std::is_class<T>::value)
             ptr->~T();
 
+<<<<<<< HEAD
         JamAllocator::flag* finder = nullptr;
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
         size_t flag_size = sizeof(JamAllocator::flag);
         unsigned int better_flag = UINT_MAX;
+=======
+        JamAllocator::flag flag_ref;
+        const JamAllocator::flag* finder;
+>>>>>>> working on a patch for jamallocator
 
         lockThreads(mutex);
 
@@ -120,9 +132,19 @@ namespace Ak
             return;
         }
 
+<<<<<<< HEAD
         unsigned int cache = 0;
 
         for(; it.has_data(); it.next()) // flag finder
+=======
+        if(finder)
+        {
+            flag_ref.size = (*it).getData().size;
+            flag_ref.offset = (*it).getData().offset;
+            _usedSpaces->remove(it.get_node(), false);
+        }
+        else
+>>>>>>> working on a patch for jamallocator
         {
             if((cache = reinterpret_cast<uintptr_t>(ptr) - (reinterpret_cast<uintptr_t>(it->getData()) + flag_size)) >= 0)
             {
