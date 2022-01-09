@@ -63,10 +63,10 @@ namespace Ak
 
             bool _autoResize = false;
             int _allocator_number = 0;
-            BinarySearchTree<flag&>* _freeSpaces;
-            BinarySearchTree<flag&>* _usedSpaces;
+            BinarySearchTree<const flag&>* _freeSpaces;
+            BinarySearchTree<const flag&>* _usedSpaces;
 
-            void init_node(BinarySearchTree<flag&>* node, flag& ptr);
+            void init_node(BinarySearchTree<const flag&>* node, const flag& ptr);
 
             inline static MutexHandel mutex;
     };

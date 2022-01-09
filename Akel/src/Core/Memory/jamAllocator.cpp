@@ -35,9 +35,9 @@ namespace Ak
         unlockThreads(mutex);
     }
 
-    void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag&>* node, JamAllocator::flag& flag)
+    void JamAllocator::init_node(BinarySearchTree<const JamAllocator::flag&>* node, const JamAllocator::flag& flag)
     {
-        new ((void*)node) BinarySearchTree<JamAllocator::flag&>(flag); // Give flag to node (node is not init, just allocated so we call his constructor)
+        new ((void*)node) BinarySearchTree<const JamAllocator::flag&>(flag); // Give flag to node (node is not init, just allocated so we call his constructor)
     }
 
     void JamAllocator::increase_size(size_t Size)

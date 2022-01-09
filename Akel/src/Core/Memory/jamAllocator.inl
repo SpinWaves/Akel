@@ -33,7 +33,7 @@ namespace Ak
         JamAllocator::flag finder;
         finder.size = sizeType;
         finder.offset = 0;
-        BinarySearchTree<JamAllocator::flag&>* node = nullptr;
+        BinarySearchTree<const JamAllocator::flag&>* node = nullptr;
         if(_freeSpaces != nullptr)
         {
             if(_freeSpaces->has_data())
@@ -50,12 +50,10 @@ namespace Ak
         }
         if(ptr == nullptr) // If we haven't found free flag
         {
-            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
+            node = reinterpret_cast<BinarySearchTree<const JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
             _memUsed += sizeof(_freeSpaces);
 
-            JamAllocator::flag flag;
-            flag.size = sizeType;
-            flag.offset = _memUsed;
+            const JamAllocator::flag flag = { sizeType, _memUsed };
             init_node(node, flag);
 
             if(_usedSpaces == nullptr || !_usedSpaces->has_data())
@@ -97,7 +95,7 @@ namespace Ak
             ptr->~T();
 
         JamAllocator::flag flag_ref;
-        JamAllocator::flag* finder = nullptr;
+        const JamAllocator::flag* finder;
 
         lockThreads(mutex);
 
@@ -109,7 +107,7 @@ namespace Ak
                 finder = &(*it).getData();
         }
 
-        if(finder != nullptr)
+        if(finder)
         {
             flag_ref.size = (*it).getData().size;
             flag_ref.offset = (*it).getData().offset;
