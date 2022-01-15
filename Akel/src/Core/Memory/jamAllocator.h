@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 08/01/2022
+// UPDATED : 15/01/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -49,9 +49,6 @@ namespace Ak
             {
                 unsigned int size = 0;
                 unsigned int offset = 0;
-                inline friend bool operator<  (const flag& a, const flag& b) noexcept { return a.size <  b.size; }
-                inline friend bool operator>  (const flag& a, const flag& b) noexcept { return a.size >  b.size; }
-                inline friend bool operator== (const flag& a, const flag& b) noexcept { return a.size == b.size; }
             };
 
             size_t _heapSize = 0;
@@ -63,10 +60,10 @@ namespace Ak
 
             bool _autoResize = false;
             int _allocator_number = 0;
-            BinarySearchTree<const flag&>* _freeSpaces;
-            BinarySearchTree<const flag&>* _usedSpaces;
+            BinarySearchTree<flag*>* _freeSpaces;
+            BinarySearchTree<flag*>* _usedSpaces;
 
-            void init_node(BinarySearchTree<const flag&>* node, const flag& ptr);
+            void init_node(BinarySearchTree<flag*>* node, flag* ptr);
 
             inline static MutexHandel mutex;
     };

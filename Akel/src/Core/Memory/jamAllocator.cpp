@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 08/01/2022
+// UPDATED : 15/01/2022
 
 #include <Core/core.h>
 
@@ -35,16 +35,20 @@ namespace Ak
         unlockThreads(mutex);
     }
 
-    void JamAllocator::init_node(BinarySearchTree<const JamAllocator::flag&>* node, const JamAllocator::flag& flag)
+    void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag*>* node, JamAllocator::flag* flag)
     {
-        new ((void*)node) BinarySearchTree<const JamAllocator::flag&>(flag); // Give flag to node (node is not init, just allocated so we call his constructor)
+        new ((void*)node) BinarySearchTree<JamAllocator::flag*>(std::move(flag)); // Give flag to node (node is not init, just allocated so we call his constructor)
+        node->set_greater_operation([](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size  > curr_d->size; } );
+        node->set_equal_operation(  [](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size == curr_d->size; } );
+        node->set_less_operation(   [](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size  < curr_d->size; } );
+        _memUsed += sizeof(BinarySearchTree<JamAllocator::flag*>);
     }
 
     void JamAllocator::increase_size(size_t Size)
     {
         if(Size < _heapSize)
         {
-            Core::log::report(WARNING, "JamAllocator : allocators are not supposed to reduce their size");
+            Core::log::report(WARNING, "JamAllocator : Akel's JamAllocators cannot reduce their size");
             return;
         }
 

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 05/01/2022
+// UPDATED : 15/01/2022
 
 #include <Core/log.h>
 
@@ -33,15 +33,15 @@ namespace Ak
         JamAllocator::flag finder;
         finder.size = sizeType;
         finder.offset = 0;
-        BinarySearchTree<const JamAllocator::flag&>* node = nullptr;
+        BinarySearchTree<JamAllocator::flag*>* node = nullptr;
         if(_freeSpaces != nullptr)
         {
             if(_freeSpaces->has_data())
-               node = _freeSpaces->find(finder);
+               node = _freeSpaces->find(&finder);
         }
         if(node != nullptr)
         {
-            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + node->getData().offset + sizeof(JamAllocator::flag));
+            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + node->getData()->offset);
             if(!_usedSpaces->has_data())
                 _usedSpaces = node;
             else
@@ -50,17 +50,18 @@ namespace Ak
         }
         if(ptr == nullptr) // If we haven't found free flag
         {
-            node = reinterpret_cast<BinarySearchTree<const JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
-            _memUsed += sizeof(_freeSpaces);
+            JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
+            flag->size = sizeType;
+            _memUsed += sizeof(JamAllocator::flag);
 
-            const JamAllocator::flag flag = { sizeType, _memUsed };
+            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag*>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
             init_node(node, flag);
+            flag->offset = _memUsed; // Set offset here to include node size
 
             if(_usedSpaces == nullptr || !_usedSpaces->has_data())
                 _usedSpaces = node;
             else
                 _usedSpaces->add(node); // Give node to Used Spaces Tree
-            std::cout << std::endl;
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // Allocate Pointer
             _memUsed += sizeType;
         }
@@ -94,8 +95,7 @@ namespace Ak
         if(std::is_class<T>::value)
             ptr->~T();
 
-        JamAllocator::flag flag_ref;
-        const JamAllocator::flag* finder;
+        JamAllocator::flag* finder = nullptr;
 
         lockThreads(mutex);
 
@@ -103,33 +103,36 @@ namespace Ak
 
         for(; it.hasNext(); it.next()) // flag finder
         {
-            if(ptr >= (void*)(reinterpret_cast<uintptr_t>(_heap) + (*it).getData().offset + sizeof(JamAllocator::flag)))
-                finder = &(*it).getData();
+            if(ptr == (void*)(reinterpret_cast<uintptr_t>(_heap) + it->getData()->offset))
+                finder = it->getData();
         }
 
-        if(finder)
+        bool oui = (void*)ptr == (void*)(finder + sizeof(JamAllocator::flag));
+        std::cout << ptr << "   " << finder + sizeof(JamAllocator::flag) << "    match : " << oui << std::endl;
+
+        if(finder != nullptr)
         {
-            flag_ref.size = (*it).getData().size;
-            flag_ref.offset = (*it).getData().offset;
+            debugPrint(it->getData());
             _usedSpaces->remove(it.get_node(), false);
         }
         else
-        {
-            flag_ref.size = 0;
-            flag_ref.offset = 0;
-        }
-        
-        if(flag_ref.size == 0 && flag_ref.offset == 0)
         {
             Core::log::report(ERROR, "JamAllocator : unable to find the flag of %p", ptr);
             unlockThreads(mutex);
             return;
         }
-
-        if(_freeSpaces == nullptr && !_freeSpaces->has_data())
+        
+        debugPrint("test2");
+        if(_freeSpaces == nullptr || !_freeSpaces->has_data())
+        {
+            debugPrint("test3");
             _freeSpaces = it.get_node();
+        }
         else
-            _freeSpaces->add(flag_ref);
+        {
+            debugPrint("test4");
+            _freeSpaces->add(it.get_node());
+        }
         unlockThreads(mutex);
         ptr = nullptr;
     }

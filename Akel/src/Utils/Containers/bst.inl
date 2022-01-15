@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 05/01/2022
+// UPDATED : 15/01/2022
 
 #include <Utils/Containers/bst.h>
 
@@ -20,7 +20,7 @@ namespace Ak
     template <typename T>
     void BinarySearchTree<T>::add(T&& data) // kiki bg
     {
-        if(data > _data)
+        if(_greater(data, _data))
         {
             if(_right != nullptr)
                 _right->add(std::forward<T>(data));
@@ -50,20 +50,12 @@ namespace Ak
             Warning("Binary Search Tree : unable to add a node (trying to add a node to itself)");
             return;
         }
-        std::cout << node << "   " << node->getData().size << "     " << node->getData().offset << std::endl;
-        std::cout << this << "   " << _data.size << "     " << _data.offset << '\n' << std::endl;
-        if(node->getData() > _data)
+        if(_greater(node->getData(), _data))
         {
             if(_right != nullptr)
-            {
-                debugPrint("add");
                 _right->add(node);
-            }
             else
-            {
-                debugPrint("set");
                 _right = node;
-            }
         }
         else
         {
@@ -248,14 +240,14 @@ namespace Ak
     {
         if(!is_init)
             return nullptr;
-        if(data > _data)
+        if(_greater(data, _data))
         {
             if(_right != nullptr)
                 _right->find(std::forward<T>(data));
             else
                 return nullptr;
         }
-        else if(data < _data)
+        else if(_less(data, _data))
         {
             if(_left != nullptr)
                 _left->find(std::forward<T>(data));
@@ -269,22 +261,22 @@ namespace Ak
     template <typename T>
     BinarySearchTree<T>* BinarySearchTree<T>::find_parent(T&& data)
     {
-        if(data > _data)
+        if(_greater(data, _data))
         {
             if(_right != nullptr)
             {
-                if(_right->getData() == data)
+                if(_equal(_right->getData(), data))
                     return this;
                 _right->find_parent(std::forward<T>(data));
             }
             else
                 return nullptr;
         }
-        else if(data < _data)
+        else if(_less(data, _data))
         {
             if(_left != nullptr)
             {
-                if(_left->getData() == data)
+                if(_equal(_left->getData(), data))
                     return this;
                 _left->find_parent(std::forward<T>(data));
             }
@@ -301,7 +293,7 @@ namespace Ak
             Error("Binary Search Tree : unable to find parent of a node");
             return nullptr;
         }
-        if(node->getData() > _data)
+        if(_greater(node->getData(), _data))
         {
             if(_right != nullptr)
             {
@@ -312,7 +304,7 @@ namespace Ak
             else
                 return nullptr;
         }
-        else if(node->getData() < _data)
+        else if(_less(node->getData(), _data))
         {
             if(_left != nullptr)
             {
