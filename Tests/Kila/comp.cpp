@@ -5,7 +5,6 @@ Comp::Comp() : Ak::Component() {}
 void Comp::onAttach()
 {
     std::cout << "Running..." << std::endl;
-    Ak::messageBox(MESSAGE, "Main message", "Second message (saved by the logs)");
 }
 
 void Comp::onEvent(Ak::Input& input)
