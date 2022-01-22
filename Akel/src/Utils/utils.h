@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 05/04/2021
-// UPDATED : 11/11/2021
+// UPDATED : 16/01/2022
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -30,10 +30,7 @@ namespace Ak
 	template <class T>
 	struct default_t // default type class
 	{
-		static T get()
-		{
-			return T();
-		}
+		static T get() { return T(); }
 	};
 }
 

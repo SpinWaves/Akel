@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 15/01/2022
+// UPDATED : 16/01/2022
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -41,9 +41,16 @@ namespace Ak
                     return *curr;
                 }
 
-                inline reference forward_next() { return *st.top(); }
+                reference forward_next()
+                {
+                    pointer curr = st.top();
+                    st.pop();
+                    pointer next = st.top();
+                    st.push(curr);
+                    return *next;
+                }
 
-                inline bool hasNext() { return !st.empty(); }
+                inline bool hasNext() const { return !st.empty(); }
 
                 inline reference operator*() const
                 {

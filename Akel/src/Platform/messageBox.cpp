@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 27/06/2021
+// UPDATED : 22/01/2022
 
 #include <Platform/platform.h>
 
@@ -8,7 +8,7 @@ namespace Ak
 {
     void messageBox(enum LogType type, std::string message, std::string logReport)
     {
-        SDL_MessageBoxButtonData buttons[] = {{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "ok"}, {0, 0, "Plus de détails"}};
+        SDL_MessageBoxButtonData buttons[] = {{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Ok"}, {0, 0, "More details"}};
 
         const SDL_MessageBoxColorScheme colorScheme = {
             { /* .colors (.r, .g, .b) */

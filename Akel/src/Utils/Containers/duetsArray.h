@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/05/2021
-// UPDATED : 11/11/2021
+// UPDATED : 22/01/2022
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__
@@ -154,7 +154,7 @@ namespace Ak
 			{
 				for(int i = 0; i < source.size(); i++)
 				{
-					target << source[i].first << "	" << source[i].second << std::endl;;
+					target << source[i].first << "	" << source[i].second << std::endl;
 				}
 				return target;
 			}
