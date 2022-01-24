@@ -53,12 +53,14 @@ You can contribute by :
 
 ## Links
 [Website](https://akel-engine.com)
+[Documentation](https://doc.akel-engine.com)
 
 ## Credits
 * Malte Skarupke for better implementation of std::function : https://github.com/skarupke/std_function
 * Sam Hocevar for PFD : https://github.com/samhocevar/portable-file-dialogs
 * Omar Cornut for ImGui lib : https://github.com/ocornut/imgui
 * Ruki for xmake : https://xmake.io/#/
+* Benjamin SAHRAOUI aka @ColorMan for the logo
 * For libSNDfile : [http://www.mega-nerd.com/libsndfile/](https://www.youtube.com/watch?v=iik25wqIuFo)
     * Erik de Castro Lopo aka @erikd
     * David Seifert aka @SoapGentoo
