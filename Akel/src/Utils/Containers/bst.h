@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 16/01/2022
+// UPDATED : 26/01/2022
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -18,6 +18,9 @@ namespace Ak
         public:
             struct iterator
             {
+                /**
+                 * The iterator uses the inorder traversal algorithm to iterate through the BST
+                 */
                 using pointer = BinarySearchTree<T>*;
                 using reference = BinarySearchTree<T>&;
 
@@ -38,7 +41,7 @@ namespace Ak
                     st.pop();
                     if(curr->getRight())
                         fillStack(curr->getRight());
-                    return *curr;
+                    return *st.top();
                 }
 
                 reference forward_next()
@@ -56,22 +59,21 @@ namespace Ak
                 {
                     if(!st.empty())
                         return *st.top();
-                    else
-                        Error("Cannot return the top of an empty stack");
+                    Error("Cannot return the top of an empty stack");
                 }
                 inline pointer operator->()
                 {
                     if(!st.empty())
                         return st.top();
-                    else
-                        Error("Cannot return the top of an empty stack");
+                    Error("Cannot return the top of an empty stack");
+                    return nullptr;
                 }
                 inline pointer get_node()
                 {
                     if(!st.empty())
                         return st.top();
-                    else
-                        Error("Cannot return the top of an empty stack");
+                    Error("Cannot return the top of an empty stack");
+                    return nullptr;
                 }
 
                 inline friend bool operator== (const iterator& a, const iterator& b) { return a.st.top() == b.st.top(); }

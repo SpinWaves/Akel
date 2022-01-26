@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 15/01/2022
+// UPDATED : 26/01/2022
 
 #include <Utils/Containers/bst.h>
 
@@ -161,6 +161,11 @@ namespace Ak
         else if(node->getLeft() == nullptr || node->getRight() == nullptr) // only one child
         {
             BinarySearchTree<T>* parent = find_parent(node);
+            if(parent == nullptr)
+            {
+                Error("Binary Search Tree : unable to find the parent node");
+                return;
+            }
             if(node->getLeft() == nullptr)
             {
                 if(parent->getLeft() == node)
@@ -182,8 +187,10 @@ namespace Ak
             }
             else
             {
+                std::cout << "doudou" << std::endl;
                 if(parent->getRight() == node)
                 {
+                    std::cout << "doudou je t aime" << std::endl;
                     parent->setRight(node->getLeft());
                     node->setLeft(nullptr);
                     if(free)
@@ -192,6 +199,7 @@ namespace Ak
                 }
                 else
                 {
+                    std::cout << "doudou tu es belle" << std::endl;
                     parent->setLeft(node->getLeft());
                     node->setRight(nullptr);
                     if(free)
@@ -261,6 +269,7 @@ namespace Ak
     template <typename T>
     BinarySearchTree<T>* BinarySearchTree<T>::find_parent(T&& data)
     {
+        // this fucking function makes a mess... 
         if(_greater(data, _data))
         {
             if(_right != nullptr)

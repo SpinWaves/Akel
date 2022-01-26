@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 15/01/2022
+// UPDATED : 26/01/2022
 
 #include <Core/log.h>
 
@@ -104,17 +104,14 @@ namespace Ak
         for(; it.hasNext(); it.next()) // flag finder
         {
             if(ptr == (void*)(reinterpret_cast<uintptr_t>(_heap) + it->getData()->offset))
+            {
                 finder = it->getData();
+                break;
+            }
         }
-
-        bool oui = (void*)ptr == (void*)(finder + sizeof(JamAllocator::flag));
-        std::cout << ptr << "   " << finder + sizeof(JamAllocator::flag) << "    match : " << oui << std::endl;
 
         if(finder != nullptr)
-        {
-            debugPrint(it->getData());
             _usedSpaces->remove(it.get_node(), false);
-        }
         else
         {
             Core::log::report(ERROR, "JamAllocator : unable to find the flag of %p", ptr);
