@@ -48,6 +48,7 @@ void Comp::update()
     tree.add(70);
     tree.remove(60);
     std::cout << "test : " << tree.find_parent(19)->getData() << std::endl;
+    Ak::Core::log::report(FATAL_ERROR, "breaker");
 }
 
 void Comp::onQuit()

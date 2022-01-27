@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/04/2021
-// UPDATED : 12/08/2021
+// UPDATED : 27/01/2022
 
 #include <Maths/maths.h>
 
@@ -32,6 +32,7 @@ namespace Ak::Maths
         i = *(long*)&y;
         i = 0x5f3759df - (i >> 1);
         y = *(float*)&i;
+        y = y * (threehalfs - (x2 * y * y));
         y = y * (threehalfs - (x2 * y * y));
 
         return y;

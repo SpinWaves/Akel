@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 26/01/2022
+// UPDATED : 27/01/2022
 
 #include <Utils/Containers/bst.h>
 
@@ -161,12 +161,26 @@ namespace Ak
         else if(node->getLeft() == nullptr || node->getRight() == nullptr) // only one child
         {
             BinarySearchTree<T>* parent = find_parent(node);
-            if(parent == nullptr)
+            if(parent == nullptr) // root node
             {
-                Error("Binary Search Tree : unable to find the parent node");
+                // add the left subtree to the right one
+                if(_right != nullptr)
+                    _right->add(_left);
+                else
+                    _right = _left;
+                _left = nullptr;
+                
+                // right subtree becomes the new root
+                if(_right != nullptr)
+                {
+                    parent = _right; // recycling the pointer for the environment
+                    _data = parent->getData();
+                    _right = parent->getRight();
+                    _left = parent->getLeft();
+                }
                 return;
             }
-            if(node->getLeft() == nullptr)
+            else if(node->getLeft() == nullptr)
             {
                 if(parent->getLeft() == node)
                 {
@@ -247,20 +261,29 @@ namespace Ak
     BinarySearchTree<T>* BinarySearchTree<T>::find(T&& data)
     {
         if(!is_init)
+        {
+            Error("Binary Search Tree : unable to find an uninit node");
             return nullptr;
+        }
         if(_greater(data, _data))
         {
             if(_right != nullptr)
                 _right->find(std::forward<T>(data));
             else
+            {
+                Error("Binary Search Tree : unable to find a node");
                 return nullptr;
+            }
         }
         else if(_less(data, _data))
         {
             if(_left != nullptr)
                 _left->find(std::forward<T>(data));
             else
+            {
+                Error("Binary Search Tree : unable to find a node");
                 return nullptr;
+            }
         }
         else
             return this;
@@ -269,7 +292,6 @@ namespace Ak
     template <typename T>
     BinarySearchTree<T>* BinarySearchTree<T>::find_parent(T&& data)
     {
-        // this fucking function makes a mess... 
         if(_greater(data, _data))
         {
             if(_right != nullptr)
@@ -279,7 +301,10 @@ namespace Ak
                 _right->find_parent(std::forward<T>(data));
             }
             else
+            {
+                Error("Binary Search Tree : unable to find the parent of a node");
                 return nullptr;
+            }
         }
         else if(_less(data, _data))
         {
@@ -290,16 +315,21 @@ namespace Ak
                 _left->find_parent(std::forward<T>(data));
             }
             else
+            {
+                Error("Binary Search Tree : unable to find the parent of a node");
                 return nullptr;
+            }
         }
+        return nullptr;
     }
 
     template <typename T>
     BinarySearchTree<T>* BinarySearchTree<T>::find_parent(BinarySearchTree<T>* node)
     {
+        // this fucking function makes a damn fucking mess kjhnjsjklwdhnjklfch vjklqhsnjklc fbhnqsjkldhf vkqsdhfcn k
         if(node == nullptr)
         {
-            Error("Binary Search Tree : unable to find parent of a node");
+            Error("Binary Search Tree : unable to find the parent of a null node");
             return nullptr;
         }
         if(_greater(node->getData(), _data))
@@ -311,7 +341,10 @@ namespace Ak
                 _right->find_parent(node);
             }
             else
+            {
+                Error("Binary Search Tree : unable to find the parent of a node");
                 return nullptr;
+            }
         }
         else if(_less(node->getData(), _data))
         {
@@ -322,13 +355,18 @@ namespace Ak
                 _left->find_parent(node);
             }
             else
+            {
+                Error("Binary Search Tree : unable to find the parent of a node");
                 return nullptr;
+            }
         }
+        return nullptr;
     }
 
     template <typename T>
     BinarySearchTree<T>::~BinarySearchTree()
     {
+        // will free all subtrees by recursion
         if(_left != nullptr)
             custom_free(_left);
         if(_right != nullptr)

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 26/01/2022
+// UPDATED : 27/01/2022
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -98,15 +98,15 @@ namespace Ak
             BinarySearchTree<T>* find(T&& data);
             BinarySearchTree<T>* find_parent(T&& data);
             BinarySearchTree<T>* find_parent(BinarySearchTree<T>* node);
-            inline BinarySearchTree<T>* getRight() { return _right; }
-            inline BinarySearchTree<T>* getLeft() { return _left; }
+            inline constexpr BinarySearchTree<T>* getRight() const { return _right; }
+            inline constexpr BinarySearchTree<T>* getLeft() const { return _left; }
             inline T& getData() { return _data; }
             inline T getData_copy() { return _data; }
             inline void setData(T&& data) { _data = std::forward<T>(data); }
-            inline void setRight(BinarySearchTree<T>* right) { _right = right; }
-            inline void setLeft(BinarySearchTree<T>* left) { _left = left; }
-            inline bool empty() const noexcept { return _right == nullptr && _left == nullptr && !_data; }
-            inline bool has_data() const noexcept { return is_init; }
+            inline void setRight(BinarySearchTree<T>* right) noexcept { _right = right; }
+            inline void setLeft(BinarySearchTree<T>* left) noexcept { _left = left; }
+            inline constexpr bool empty() const noexcept { return _right == nullptr && _left == nullptr && !is_init; }
+            inline constexpr bool has_data() const noexcept { return is_init; }
 
             inline void set_greater_operation(bool(*greater)(T, T)) noexcept { _greater = greater; }
             inline void set_less_operation(bool(*less)(T, T)) noexcept { _less = less; }
