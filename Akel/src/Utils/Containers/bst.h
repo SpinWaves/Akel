@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 27/01/2022
+// UPDATED : 28/01/2022
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -41,7 +41,9 @@ namespace Ak
                     st.pop();
                     if(curr->getRight())
                         fillStack(curr->getRight());
-                    return *st.top();
+                    if(!st.empty())
+                        return *st.top();
+                    return *curr;
                 }
 
                 reference forward_next()
@@ -53,26 +55,26 @@ namespace Ak
                     return *next;
                 }
 
-                inline bool hasNext() const { return !st.empty(); }
+                inline bool has_data() const { return !st.empty(); }
 
                 inline reference operator*() const
                 {
                     if(!st.empty())
                         return *st.top();
-                    Error("Cannot return the top of an empty stack");
+                    Error("Binary Search Tree Iterator : Cannot return the top of an empty stack");
                 }
                 inline pointer operator->()
                 {
                     if(!st.empty())
                         return st.top();
-                    Error("Cannot return the top of an empty stack");
+                    Error("Binary Search Tree Iterator : Cannot return the top of an empty stack");
                     return nullptr;
                 }
                 inline pointer get_node()
                 {
                     if(!st.empty())
                         return st.top();
-                    Error("Cannot return the top of an empty stack");
+                    Error("Binary Search Tree Iterator : Cannot return the top of an empty stack");
                     return nullptr;
                 }
 
@@ -98,15 +100,15 @@ namespace Ak
             BinarySearchTree<T>* find(T&& data);
             BinarySearchTree<T>* find_parent(T&& data);
             BinarySearchTree<T>* find_parent(BinarySearchTree<T>* node);
-            inline constexpr BinarySearchTree<T>* getRight() const { return _right; }
-            inline constexpr BinarySearchTree<T>* getLeft() const { return _left; }
+            inline BinarySearchTree<T>* getRight() const noexcept { return _right; }
+            inline BinarySearchTree<T>* getLeft() const noexcept { return _left; }
             inline T& getData() { return _data; }
             inline T getData_copy() { return _data; }
             inline void setData(T&& data) { _data = std::forward<T>(data); }
             inline void setRight(BinarySearchTree<T>* right) noexcept { _right = right; }
             inline void setLeft(BinarySearchTree<T>* left) noexcept { _left = left; }
-            inline constexpr bool empty() const noexcept { return _right == nullptr && _left == nullptr && !is_init; }
-            inline constexpr bool has_data() const noexcept { return is_init; }
+            inline bool empty() const noexcept { return _right == nullptr && _left == nullptr && !is_init; }
+            inline bool has_data() const noexcept { return is_init; }
 
             inline void set_greater_operation(bool(*greater)(T, T)) noexcept { _greater = greater; }
             inline void set_less_operation(bool(*less)(T, T)) noexcept { _less = less; }

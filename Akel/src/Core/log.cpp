@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 15/01/2022
+// UPDATED : 29/01/2022
 
 #include <Core/core.h>
 
@@ -123,10 +123,27 @@ namespace Ak::Core
 					allocators_leaks++;
 			}
 		}
+		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
+		_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: Trying to free all instanciated allocators..." << std::endl; // No need to flush, std::endl does it
 		if(allocators_leaks == 0)
+		{
         	std::cout << green << "All allocators have been correctly freed " << '\n' << "Program failed successfully ! " << def << std::endl;
+			if(_out.is_open())
+			{
+				_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: All allocators have been correctly freed" << std::endl; // No need to flush, std::endl does it
+				_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: Program failed successfully !" << std::endl; // No need to flush, std::endl does it
+				_out.close();
+			}
+		}
 		else
+		{
 			std::cout << bg_red << "Strong Fatal Error : Akel's core failed to free all instantiated allocators [" << allocators_leaks << " allocators leaked] " << bg_def << std::endl;
+			if(_out.is_open())
+			{
+				_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error : Strong Fatal Error: Akel's core failed to free all instantiated allocators [" << allocators_leaks << " allocators leaked] " << std::endl; // No need to flush, std::endl does it
+				_out.close();
+			}
+		}
         abort();
     }
 

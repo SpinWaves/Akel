@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 26/01/2022
+// UPDATED : 28/01/2022
 
 #include <Core/log.h>
+#include <Maths/maths.h>
 
 namespace Ak
 {
@@ -32,7 +33,6 @@ namespace Ak
 
         JamAllocator::flag finder;
         finder.size = sizeType;
-        finder.offset = 0;
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
         if(_freeSpaces != nullptr)
         {
@@ -41,7 +41,7 @@ namespace Ak
         }
         if(node != nullptr)
         {
-            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + node->getData()->offset);
+            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (reinterpret_cast<uintptr_t>(node->getData()) - reinterpret_cast<uintptr_t>(_heap)));
             if(!_usedSpaces->has_data())
                 _usedSpaces = node;
             else
@@ -56,7 +56,6 @@ namespace Ak
 
             node = reinterpret_cast<BinarySearchTree<JamAllocator::flag*>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
             init_node(node, flag);
-            flag->offset = _memUsed; // Set offset here to include node size
 
             if(_usedSpaces == nullptr || !_usedSpaces->has_data())
                 _usedSpaces = node;
@@ -96,17 +95,29 @@ namespace Ak
             ptr->~T();
 
         JamAllocator::flag* finder = nullptr;
+        size_t flag_size = sizeof(JamAllocator::flag);
+        unsigned int better_flag = UINT_MAX;
 
         lockThreads(mutex);
 
         auto it = _usedSpaces->root_it();
-
-        for(; it.hasNext(); it.next()) // flag finder
+        if(!it.has_data()) // used spaces tree is not supposed to be empty here
         {
-            if(ptr == (void*)(reinterpret_cast<uintptr_t>(_heap) + it->getData()->offset))
+            Core::log::report(ERROR, "Jam Allocator: an inconsistency was detected when a pointer was freed");
+            return;
+        }
+
+        unsigned int cache = 0;
+
+        for(; it.has_data(); it.next()) // flag finder
+        {
+            if((cache = reinterpret_cast<uintptr_t>(ptr) - (reinterpret_cast<uintptr_t>(it->getData()) + flag_size)) >= 0)
             {
                 finder = it->getData();
-                break;
+                if(cache < better_flag)
+                    better_flag = cache;
+                if(better_flag == 0) // we found the exact flag
+                    break;
             }
         }
 
@@ -119,17 +130,10 @@ namespace Ak
             return;
         }
         
-        debugPrint("test2");
         if(_freeSpaces == nullptr || !_freeSpaces->has_data())
-        {
-            debugPrint("test3");
             _freeSpaces = it.get_node();
-        }
         else
-        {
-            debugPrint("test4");
             _freeSpaces->add(it.get_node());
-        }
         unlockThreads(mutex);
         ptr = nullptr;
     }

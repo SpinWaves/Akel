@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 10/12/2021
+// UPDATED : 28/01/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -80,6 +80,7 @@
 #include <cstring>
 #include <cstdarg>
 #include <cstddef>
+#include <climits>
 
 // Other includes
 #include <exception>
