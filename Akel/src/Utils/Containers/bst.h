@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 17/11/2021
-// UPDATED : 28/01/2022
+// UPDATED : 29/01/2022
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -61,20 +61,20 @@ namespace Ak
                 {
                     if(!st.empty())
                         return *st.top();
-                    Error("Binary Search Tree Iterator : Cannot return the top of an empty stack");
+                    Error("Binary Search Tree Iterator : operator * : Cannot return the top of an empty stack");
                 }
                 inline pointer operator->()
                 {
                     if(!st.empty())
                         return st.top();
-                    Error("Binary Search Tree Iterator : Cannot return the top of an empty stack");
+                    Error("Binary Search Tree Iterator : operator ->  : Cannot return the top of an empty stack");
                     return nullptr;
                 }
                 inline pointer get_node()
                 {
                     if(!st.empty())
                         return st.top();
-                    Error("Binary Search Tree Iterator : Cannot return the top of an empty stack");
+                    Error("Binary Search Tree Iterator : get_node() : Cannot return the top of an empty stack");
                     return nullptr;
                 }
 

@@ -37,6 +37,7 @@ void Comp::update()
     }
     std::cout << "end of file" << std::endl;
     */
+    /*
     Ak::BinarySearchTree<int> tree(20);
     tree.add(15);
     tree.add(7);
@@ -48,7 +49,8 @@ void Comp::update()
     tree.add(70);
     tree.remove(60);
     std::cout << "test : " << tree.find_parent(19)->getData() << std::endl;
-    Ak::Core::log::report(FATAL_ERROR, "breaker");
+    */
+    //Ak::Core::log::report(FATAL_ERROR, "breaker");
 }
 
 void Comp::onQuit()

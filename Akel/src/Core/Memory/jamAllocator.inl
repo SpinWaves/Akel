@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 25/07/2021
-// UPDATED : 28/01/2022
+// UPDATED : 03/02/2022
 
 #include <Core/log.h>
 #include <Maths/maths.h>
@@ -95,6 +95,7 @@ namespace Ak
             ptr->~T();
 
         JamAllocator::flag* finder = nullptr;
+        BinarySearchTree<JamAllocator::flag*>* node = nullptr;
         size_t flag_size = sizeof(JamAllocator::flag);
         unsigned int better_flag = UINT_MAX;
 
@@ -113,27 +114,32 @@ namespace Ak
         {
             if((cache = reinterpret_cast<uintptr_t>(ptr) - (reinterpret_cast<uintptr_t>(it->getData()) + flag_size)) >= 0)
             {
-                finder = it->getData();
                 if(cache < better_flag)
+                {
+                    std::cout << it->getData() << std::endl;
+                    finder = it->getData();
+                    node = it.get_node();
                     better_flag = cache;
+                }
                 if(better_flag == 0) // we found the exact flag
                     break;
             }
         }
 
-        if(finder != nullptr)
-            _usedSpaces->remove(it.get_node(), false);
-        else
+        if(finder == nullptr)
         {
             Core::log::report(ERROR, "JamAllocator : unable to find the flag of %p", ptr);
             unlockThreads(mutex);
             return;
         }
         
+        _usedSpaces->remove(node, false);
+        
         if(_freeSpaces == nullptr || !_freeSpaces->has_data())
-            _freeSpaces = it.get_node();
+            _freeSpaces = node;
         else
-            _freeSpaces->add(it.get_node());
+            _freeSpaces->add(node);
+        
         unlockThreads(mutex);
         ptr = nullptr;
     }
