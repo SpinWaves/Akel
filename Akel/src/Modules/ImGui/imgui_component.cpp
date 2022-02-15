@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/07/2021
-// UPDATED : 16/10/2021
+// UPDATED : 15/02/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -40,6 +40,7 @@ namespace Ak
 	ImGuiComponent::ImGuiComponent(const char* title) : WindowComponent()
 	{
 		_title = title;
+		WindowComponent::setName("__imgui");
 	}
 
 	void ImGuiComponent::onAttach()

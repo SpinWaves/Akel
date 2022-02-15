@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 04/01/2022
+// UPDATED : 15/02/2022
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
+#include <Core/log.h>
 
 namespace Ak
 {
@@ -58,10 +59,13 @@ namespace Ak
 			isCustomAlloc = false;
 			for(auto& jam : MemoryManager::accessToControlUnit()->jamStack)
 			{
+				std::cout << "test : " << elem << std::endl;
 				if(!jam.expired())
 				{
+					std::cout << "alloc : " << elem << std::endl;
 					if(jam.lock()->contains(elem))
 					{
+						std::cout << "elem : " << elem << std::endl;
 						jam.lock()->free(elem);
 						isCustomAlloc = true;
 						break;
@@ -84,7 +88,7 @@ namespace Ak
 				}
 			}
 			if(!isCustomAlloc)
-				delete elem;
+				Core::log::report(ERROR, "Component Stack: unable to free a component \"%s\" address(%p), unable to find its allocator", elem->getName(), elem);
 		}
 	}
 }

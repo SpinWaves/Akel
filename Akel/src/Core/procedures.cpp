@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 06/10/2021
-// UPDATED : 20/10/2021
+// UPDATED : 15/02/2022
 
 #include <Core/core.h>
 #include <Audio/audio.h>
@@ -34,8 +34,6 @@ namespace Ak
 
 		MemoryManager::useMemoryManager(project->use_memory_manager);
 		MemoryManager::init();
-
-		AudioManager::initAudioManager();
 
 		buildBasics2D();
 		return true;

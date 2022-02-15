@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/09/2021
-// UPDATED : 28/09/2021
+// UPDATED : 15/02/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -13,8 +13,8 @@ namespace Ak
     class RendererComponent : public Component
     {
         public:
-            explicit RendererComponent(SDL_Window* window);
-            explicit RendererComponent();
+            RendererComponent(SDL_Window* window);
+            RendererComponent();
 
             void onAttach() override;
             void update() override;

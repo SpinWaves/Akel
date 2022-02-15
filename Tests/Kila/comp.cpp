@@ -1,6 +1,6 @@
 #include "comp.h"
 
-Comp::Comp() : Ak::Component() {}
+Comp::Comp() : Ak::Component("Kila tester component") {}
 
 void Comp::onAttach()
 {

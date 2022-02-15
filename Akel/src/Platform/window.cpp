@@ -1,14 +1,17 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 25/12/2021
+// UPDATED : 15/02/2022
 
 #include <Platform/platform.h>
 
 namespace Ak
 {
-	SDL_DisplayMode DM;
+	static SDL_DisplayMode DM;
 
-    WindowComponent::WindowComponent() : RendererComponent() {}
+    WindowComponent::WindowComponent() : RendererComponent()
+	{
+		RendererComponent::setName("__window");
+	}
 
 	void WindowComponent::onAttach()
 	{

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/06/2021
-// UPDATED : 20/10/2021
+// UPDATED : 15/02/2022
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -33,7 +33,6 @@ int main(int argc, char** argv)
 
 	AK_BEGIN_SESSION("Shutdown");
 		Ak::custom_free(app);
-		Ak::AudioManager::shutdownAudioManager();
 		Ak::MemoryManager::end();
 	AK_END_SESSION();
 

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 29/01/2022
+// UPDATED : 15/02/2022
 
 #include <Core/core.h>
 
@@ -61,10 +61,10 @@ namespace Ak::Core
 		{
 			switch(type)
 			{
-				case MESSAGE: std::cout << blue << "[Akel log] " << buffer << def << '\n'; _type = "Message: "; break;
-				case WARNING: std::cout << magenta << "[Akel log] " << buffer << def << '\n'; _type = "Warning: "; break;
-				case ERROR: std::cout << red << "[Akel log] " << buffer << def << '\n'; _type = "Error: "; break;
-				case FATAL_ERROR: std::cout << red << "[Akel log] " << buffer << def << '\n'; _type = "Fatal Error: "; break;
+				case MESSAGE: std::cout << blue << "[Akel log Message] " << buffer << def << '\n'; _type = "Message: "; break;
+				case WARNING: std::cout << magenta << "[Akel log Warning] " << buffer << def << '\n'; _type = "Warning: "; break;
+				case ERROR: std::cout << red << "[Akel log Error] " << buffer << def << '\n'; _type = "Error: "; break;
+				case FATAL_ERROR: std::cout << red << "[Akel log Fatal Error] " << buffer << def << '\n'; _type = "Fatal Error: "; break;
 
 				default: break;
 			}

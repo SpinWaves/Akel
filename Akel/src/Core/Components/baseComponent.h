@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 04/01/2022
+// UPDATED : 15/02/2022
 
 #ifndef __AK_BASE_COMPONENT__
 #define __AK_BASE_COMPONENT__
@@ -22,11 +22,12 @@ namespace Ak
 			virtual void onEvent(Input& input);
 			virtual void onQuit();
 
-			inline constexpr const char* getName() noexcept { return _name; }
+			inline const char* getName() noexcept { return _name.c_str(); }
+			inline void setName(const char* name) noexcept { _name = name; }
 			virtual ~Component();
 
 		protected:
-			const char* _name;
+			std::string _name;
 	};
 }
 

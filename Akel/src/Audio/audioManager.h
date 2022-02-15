@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 04/08/2021
-// UPDATED : 19/09/2021
+// UPDATED : 15/02/2022
 
 #ifndef __AK_AUDIO_MANAGER__
 #define __AK_AUDIO_MANAGER__
@@ -8,17 +8,18 @@
 #include <Akpch.h>
 #include <Audio/openAL.h>
 #include <Core/Memory/uniquePtrWrapper.h>
+#include <Core/Components/baseComponent.h>
 
 namespace Ak
 {
     using audioFile = ALuint;
 
-    class AudioManager
+    class AudioManager : public Component
     {
         public:
-            AudioManager() = delete;
+            AudioManager();
 
-            static void initAudioManager();
+            void onAttach() override;
 
             static audioFile loadSound(std::string filename);
             static void playSound(audioFile sound);
@@ -28,12 +29,13 @@ namespace Ak
             static void freeSource(int index);
             static void switch_to_source(int index);
 
-            static void shutdownAudioManager();
+            void onQuit() override;
 
-            ~AudioManager() = delete;
+            ~AudioManager() = default;
 
         private:
             static inline unique_ptr_w<OpenAL> _al;
+            static inline bool _is_init = false;
     };
 }
 
