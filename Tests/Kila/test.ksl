@@ -2,21 +2,19 @@
 @get import.ksl
 @get import2.ksl
 
+var in_pos : vec2 = location(0);
+var in_color : vec3 = location(1);
+
 @entry vert
-
-class Light
-{
-    public:
-        fn Light() {}
-        mtd calc() {}
-
-    private:
-        var _color: vec3;
-}
 
 fn main()
 {
-    obj light = Light();
-    light.calc();
-    return 0;
+    return vec4(in_pos.x, in_pos.y, 0.0, 1.0);
+}
+
+@entry frag
+
+fn main()
+{
+    return vec4(in_color.x, in_color.y, in_color.z, 1.0);
 }

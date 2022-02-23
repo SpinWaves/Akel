@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 05/01/2022
+// UPDATED : 23/02/2022
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -12,6 +12,7 @@ enum LogType
 {
     MESSAGE,
     WARNING,
+    STRONG_WARNING,
     ERROR,
     FATAL_ERROR
 };
@@ -41,6 +42,7 @@ namespace Ak
     void FatalError(std::string message, ...);
     void Error(std::string message, ...);
     void Warning(std::string message, ...);
+    void Strong_Warning(std::string message, ...);
     void Message(std::string message, ...);
 }
 

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 06/12/2021
+// UPDATED : 22/02/2022
 
 #include <Utils/utils.h>
 #include <Core/core.h>
@@ -42,9 +42,5 @@ namespace Ak
     {
         _use = set;
 		Core::ProjectFile::setBoolValue("use_memory_manager", _use);
-    }
-    bool MemoryManager::isMemoryManagerUsed()
-    {
-        return _use;
     }
 }

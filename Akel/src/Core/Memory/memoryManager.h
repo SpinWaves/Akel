@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 03/01/2022
+// UPDATED : 22/02/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -27,7 +27,7 @@ namespace Ak
             static void end();
 
             static void useMemoryManager(bool set = true);
-            static bool isMemoryManagerUsed();
+            inline static bool isMemoryManagerUsed() noexcept { return _use; }
 
             static std::shared_ptr<ControlUnit>& accessToControlUnit() { return control_unit; }
 

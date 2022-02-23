@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 03/04/2021
-// UPDATED : 15/02/2022
+// UPDATED : 23/02/2022
 
 #include <Core/core.h>
 
@@ -62,7 +62,20 @@ namespace Ak::Core
 			switch(type)
 			{
 				case MESSAGE: std::cout << blue << "[Akel log Message] " << buffer << def << '\n'; _type = "Message: "; break;
-				case WARNING: std::cout << magenta << "[Akel log Warning] " << buffer << def << '\n'; _type = "Warning: "; break;
+				case WARNING:
+				{	
+					if(Core::ProjectFile::getBoolValue("enable_warning_console_message"))
+						std::cout << magenta << "[Akel log Warning] " << buffer << def << '\n';
+					_type = "Warning: ";
+					break;
+				}
+				case STRONG_WARNING:
+				{
+					if(Core::ProjectFile::getBoolValue("enable_warning_console_message"))
+						std::cout << yellow << "[Akel log Strong Warning] " << buffer << def << '\n';
+					_type = "Strong Warning: ";
+					break;
+				}
 				case ERROR: std::cout << red << "[Akel log Error] " << buffer << def << '\n'; _type = "Error: "; break;
 				case FATAL_ERROR: std::cout << red << "[Akel log Fatal Error] " << buffer << def << '\n'; _type = "Fatal Error: "; break;
 
@@ -193,6 +206,16 @@ namespace Ak
 		va_end(args);
 
 		Core::log::report(WARNING, buffer);
+	}
+    void Strong_Warning(std::string message, ...)
+	{
+		char buffer[message.length() + 255];
+		va_list args;
+		va_start(args, message);
+		vsprintf(buffer, std::move(message).c_str(), args);
+		va_end(args);
+
+		Core::log::report(STRONG_WARNING, buffer);
 	}
     void Message(std::string message, ...)
 	{

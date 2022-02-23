@@ -12,7 +12,7 @@ namespace Ak
     {
         if(_heap == nullptr)
         {
-            Core::log::report(FATAL_ERROR, "Jam Allocator: you need to initialize the allocator before aking him to give you memory");
+            Core::log::report(FATAL_ERROR, "Jam Allocator: you need to initialize the allocator before asking him to give you memory");
             return nullptr;
         }
         size_t sizeType = sizeof(T);
@@ -102,7 +102,7 @@ namespace Ak
         lockThreads(mutex);
 
         auto it = _usedSpaces->root_it();
-        if(!it.has_data()) // used spaces tree is not supposed to be empty here
+        if(!it.has_data()) // used space tree is not supposed to be empty here
         {
             Core::log::report(ERROR, "Jam Allocator: an inconsistency was detected when a pointer was freed");
             return;

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 15/01/2022
+// UPDATED : 23/02/2022
 
 #include <Core/core.h>
 
@@ -13,11 +13,11 @@ namespace Ak
         if(_heap != nullptr)
             return;
 
-        lockThreads(mutex);
-
-        #if defined(_MSC_VER) && _MSC_VER < 1900
+        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
               InitializeCriticalSection(&mutex);
         #endif
+
+        lockThreads(mutex);
 
         _heap = std::malloc(Size);
 
@@ -31,6 +31,8 @@ namespace Ak
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
         MemoryManager::accessToControlUnit()->jamStack.push_back(weak_from_this());
+        std::weak_ptr<JamAllocator> test = weak_from_this();
+        std::cout << test.use_count() << std::endl;
 
         unlockThreads(mutex);
     }
@@ -89,7 +91,7 @@ namespace Ak
     {
         destroy();
 
-        #if defined(_MSC_VER) && _MSC_VER < 1900
+        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
             DeleteCriticalSection(&mutex);
         #endif
     }
