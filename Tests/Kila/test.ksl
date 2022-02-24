@@ -2,6 +2,8 @@
 @get import.ksl
 @get import2.ksl
 
+@set define 12
+
 var in_pos : vec2 = location(0);
 var in_color : vec3 = location(1);
 
@@ -9,6 +11,10 @@ var in_color : vec3 = location(1);
 
 fn main()
 {
+    for var i : int = 0 to 10 step 2 do
+    {
+        // do stuff
+    }
     return vec4(in_pos.x, in_pos.y, 0.0, 1.0);
 }
 

@@ -1,13 +1,11 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 23/02/2022
+// UPDATED : 24/02/2022
 
 #include <Core/core.h>
 
 namespace Ak
 {
-    JamAllocator::JamAllocator() : _freeSpaces(nullptr), _usedSpaces(nullptr) {}
-
     void JamAllocator::init(size_t Size)
     {
         if(_heap != nullptr)
@@ -31,8 +29,6 @@ namespace Ak
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
         MemoryManager::accessToControlUnit()->jamStack.push_back(weak_from_this());
-        std::weak_ptr<JamAllocator> test = weak_from_this();
-        std::cout << test.use_count() << std::endl;
 
         unlockThreads(mutex);
     }

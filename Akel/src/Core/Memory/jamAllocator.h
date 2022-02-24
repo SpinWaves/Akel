@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 20/07/2021
-// UPDATED : 15/02/2022
+// UPDATED : 24/02/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -23,7 +23,7 @@ namespace Ak
     class JamAllocator : public std::enable_shared_from_this<JamAllocator>
     {
         public:
-            JamAllocator();
+            JamAllocator() = default;
 
             void init(size_t Size);
 
@@ -59,8 +59,8 @@ namespace Ak
 
             bool _autoResize = false;
             int _allocator_number = 0;
-            BinarySearchTree<flag*>* _freeSpaces;
-            BinarySearchTree<flag*>* _usedSpaces;
+            BinarySearchTree<flag*>* _freeSpaces = nullptr;
+            BinarySearchTree<flag*>* _usedSpaces = nullptr;
 
             void init_node(BinarySearchTree<flag*>* node, flag* ptr);
 

@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 08/11/2021
-// UPDATED : 26/11/2021
+// UPDATED : 24/02/2022
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -27,6 +27,8 @@ namespace Ak::Kl
         kw_for,
 		kw_while,
 		kw_do,
+        kw_to,
+        kw_by,
 		kw_break,
 		kw_continue,
 		kw_return,
@@ -45,6 +47,7 @@ namespace Ak::Kl
         square_b,
         square_e,
 
+        t_void,
         t_int,
         t_float,
         t_bool,
@@ -126,12 +129,12 @@ namespace Ak::Kl
 		return id1.name != id2.name;
 	}
 
-	inline bool operator==(const eof&, const eof&)
+	inline constexpr bool operator==(const eof&, const eof&) noexcept
     {
 		return true;
 	}
 	
-	inline bool operator!=(const eof&, const eof&)
+	inline constexpr bool operator!=(const eof&, const eof&) noexcept
     {
 		return false;
 	}
@@ -159,6 +162,8 @@ namespace Ak::Kl
                 {Tokens::kw_for, "for"},
                 {Tokens::kw_while, "while"},
                 {Tokens::kw_do, "do"},
+                {Tokens::kw_to, "to"},
+                {Tokens::kw_by, "by"},
                 {Tokens::kw_break, "break"},
                 {Tokens::kw_continue, "continue"},
                 {Tokens::kw_return, "return"},
@@ -166,6 +171,7 @@ namespace Ak::Kl
                 {Tokens::kw_uniform, "uniform"},
                 {Tokens::kw_operator, "operator"},
 
+                {Tokens::t_void, "void"},
                 {Tokens::t_int, "int"},
                 {Tokens::t_float, "float"},
                 {Tokens::t_bool, "bool"},
@@ -190,7 +196,6 @@ namespace Ak::Kl
                 {Macro_Tokens::unset, "unset"},
                 {Macro_Tokens::get, "get"},
                 {Macro_Tokens::getonce, "getonce"},
-                {Macro_Tokens::endif, "endif"},
 
                 {Macro_Tokens::entry, "entry"},
                 {Macro_Tokens::vert, "vert"},
@@ -199,7 +204,8 @@ namespace Ak::Kl
 
                 {Macro_Tokens::statment_if, "if"},
                 {Macro_Tokens::statment_else, "else"},
-                {Macro_Tokens::statment_elif, "elif"}
+                {Macro_Tokens::statment_elif, "elif"},
+                {Macro_Tokens::endif, "endif"}
             };
 
 			static inline duets_array<Tokens, std::string> operators_token

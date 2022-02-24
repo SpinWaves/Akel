@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 23/07/2021
-// UPDATED : 22/02/2022
+// UPDATED : 24/02/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -71,7 +71,7 @@ namespace Ak
     template <typename T = void>
     void MemoryManager::free(T* ptr)
     {
-        if(_use && __jam.is_init())
+        if(_use)
         {
             #ifndef AK_USE_JAM_MEMORY_HELPER
                 if(__fixed1.contains((void*)ptr))
