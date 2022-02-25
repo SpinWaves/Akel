@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 11/11/2021
-// UPDATED : 27/11/2021
+// UPDATED : 25/02/2022
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
@@ -189,6 +189,7 @@ namespace Ak::Kl
     {
         bool closing = false;
         int c = 0;
+        int line = stream.getline();
         do
         {
             c = stream();
@@ -198,7 +199,7 @@ namespace Ak::Kl
         } while(get_char_type(c) != char_type::eof);
 
         stream.push_back(c);
-        no_end("'*/'", stream.getline()).expose();
+        no_end("'*/'", line).expose();
     }
 
     Token lexe(StreamStack& stream)
