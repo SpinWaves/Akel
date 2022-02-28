@@ -38,14 +38,12 @@ namespace Ak
         maximize
     };
 
-    class WindowComponent : public RendererComponent
+    class WindowComponent : public Component
     {
         public:
             WindowComponent();
 
 			void onAttach() override;
-			void update() override;
-            void onRender() override;
 			void onEvent(Input& input) override;
 			void onQuit() override;
 

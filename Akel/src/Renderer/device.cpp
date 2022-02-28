@@ -8,7 +8,7 @@
 namespace Ak
 {
 	const std::vector<const char*> deviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
-    
+
     void RendererComponent::pickPhysicalDevice()
     {
         uint32_t deviceCount = 0;
@@ -59,9 +59,7 @@ namespace Ak
         std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
 
         for(const auto& extension : availableExtensions)
-        {
             requiredExtensions.erase(extension.extensionName);
-        }
 
         return requiredExtensions.empty();
     }

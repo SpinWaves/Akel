@@ -6,8 +6,8 @@
 
 namespace Ak
 {
-    RendererComponent::RendererComponent() : Component("__renderer") {}
-    RendererComponent::RendererComponent(SDL_Window* win) : Component("__renderer"), window(win) {}
+    RendererComponent::RendererComponent() : Component("__renderer_component") {}
+    RendererComponent::RendererComponent(SDL_Window* win) : Component("__renderer_component"), window(win) {}
 
     void RendererComponent::onAttach()
     {
@@ -33,14 +33,12 @@ namespace Ak
         _instanceInitialized = true;
     }
 
-    void RendererComponent::update()
-    {
-    }
+    void RendererComponent::update() {}
 
     void RendererComponent::onRender()
     {
-		if(!_instanceInitialized)
-			Core::log::report(FATAL_ERROR, "Vulkan : unable to render, you need to init the instance before");
+        if(!_instanceInitialized)
+            Core::log::report(FATAL_ERROR, "Vulkan : unable to render, you need to init the instance before");
 
         vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
@@ -50,14 +48,14 @@ namespace Ak
         {
             switch(res)
             {
-                case VK_ERROR_OUT_OF_HOST_MEMORY : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned error (VK_ERROR_OUT_OF_HOST_MEMORY)"); break;
-                case VK_ERROR_OUT_OF_DEVICE_MEMORY : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned error (VK_ERROR_OUT_OF_DEVICE_MEMORY)"); break;
-                case VK_ERROR_DEVICE_LOST : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned error (VK_ERROR_DEVICE_LOST)"); break;
-                case VK_ERROR_OUT_OF_DATE_KHR : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned error (VK_ERROR_OUT_OF_DATE_KHR)"); break;
-                case VK_ERROR_SURFACE_LOST_KHR : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned error (VK_ERROR_SURFACE_LOST_KHR)"); break;
-                case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned error (VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT)"); break;
+                case VK_ERROR_OUT_OF_HOST_MEMORY : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_OUT_OF_HOST_MEMORY)"); break;
+                case VK_ERROR_OUT_OF_DEVICE_MEMORY : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_OUT_OF_DEVICE_MEMORY)"); break;
+                case VK_ERROR_DEVICE_LOST : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_DEVICE_LOST)"); break;
+                case VK_ERROR_OUT_OF_DATE_KHR : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_OUT_OF_DATE_KHR)"); break;
+                case VK_ERROR_SURFACE_LOST_KHR : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_SURFACE_LOST_KHR)"); break;
+                case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT)"); break;
 
-                default : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned error"); break;
+                default : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error"); break;
             }
         }
 
@@ -142,16 +140,5 @@ namespace Ak
 
         vkDestroySurfaceKHR(instance, surface, nullptr);
         vkDestroyInstance(instance, nullptr);
-    }
-
-    void RendererComponent::setShader(std::string vertexShader, std::string fragmentShader)
-    {
-        _vertexShader = std::move(vertexShader);
-        _fragmentShader = std::move(fragmentShader);
-    }
-
-    void RendererComponent::render_to_window(SDL_Window* win)
-    {
-        window = win;
     }
 }

@@ -42,7 +42,6 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * More powerful allocators
 * Entity management
 * Models manager
-* Shading language
 
 # Contribute
 You can contribute by :

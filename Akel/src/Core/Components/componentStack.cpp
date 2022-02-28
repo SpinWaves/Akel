@@ -36,7 +36,6 @@ namespace Ak
 		}
 	}
 
-
 	Component* ComponentStack::get_component(const char* name)
 	{
 		for(auto elem : _components)

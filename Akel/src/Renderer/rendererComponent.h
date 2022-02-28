@@ -5,7 +5,6 @@
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
 
-#define VK_FORMAT_RGBA_8_SRGB VK_FORMAT_B8G8R8A8_SRGB
 #include <Core/core.h>
 
 namespace Ak
@@ -82,8 +81,8 @@ namespace Ak
             void onRender() override;
             void onQuit() override;
 
-            void setShader(std::string vertexShader, std::string fragmentShader);
-            void render_to_window(SDL_Window* win);
+            inline void setShader(std::string vertexShader, std::string fragmentShader) { _vertexShader = std::move(vertexShader); _fragmentShader = std::move(fragmentShader); }
+            inline void render_to_window(SDL_Window* win) noexcept { window = win; }
 
             ~RendererComponent() = default;
 
@@ -148,7 +147,6 @@ namespace Ak
             uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
             void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
             void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
-
             void createIndexBuffer();
 
             std::string _vertexShader = Core::getMainDirPath() + "Akel/src/Shaders/basic_2D/basic_2D.vert.spv";

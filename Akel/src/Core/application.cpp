@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 10/06/2021
-// UPDATED : 25/12/2021
+// UPDATED : 28/02/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -39,13 +39,14 @@ namespace Ak
 			else // rendering
 			{
 				for(auto elem : _components)
-					elem->onRender();
-				if(ImGuiComponent::getNumComp() != 0)
 				{
-					imgui.begin();
-						for(auto elem : _components)
+					elem->onRender();
+					if(ImGuiComponent::getNumComp() != 0)
+					{	
+						imgui.begin();
 							elem->onImGuiRender();
-					imgui.end();
+						imgui.end();
+					}
 				}
 			}
 		}

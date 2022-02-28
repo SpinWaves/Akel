@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 29/04/2021
-// UPDATED : 25/12/2021
+// UPDATED : 28/02/2022
 
 #ifndef __AK_FPS__
 #define __AK_FPS__
@@ -15,7 +15,7 @@ namespace Ak
             explicit CounterFPS() = default;
 			void init();
 			void update();
-			inline static bool make_update() { return make_up; }
+			inline bool make_update() noexcept { return make_up; }
 			inline static int getFPS() { return outputFPS; }
 			inline static int getTicks() { return outputTicks; }
 			static void printFPS();
@@ -32,7 +32,7 @@ namespace Ak
 			uint32_t timer = 0;
 			long long before = 0;			
 			long long now = 0;
-			inline static bool make_up = false;
+			bool make_up = false;
 			inline static bool second_passed = false;	
     };		
 }

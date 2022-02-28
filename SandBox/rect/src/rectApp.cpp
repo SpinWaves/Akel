@@ -1,13 +1,18 @@
 #include <Akel.h>
 #include <Akel_main.h>
-#include "rectComponent.h"
 
 class Rect : public Ak::Application
 {
     public:
         explicit Rect() : Ak::Application("Rect")
         {
-            add_component(Ak::custom_malloc<RectComponent>());
+            Ak::WindowComponent* window = Ak::custom_malloc<Ak::WindowComponent>();
+            add_component(window); // inherited from Ak::Application
+            window->setSetting(Ak::winsets::title, "Rectangle using Akel Engine");
+            //window->setSetting(Ak::winsets::size, 1280, 750);
+            window->setSetting(Ak::winsets::resizable, false);
+
+            add_component(Ak::custom_malloc<Ak::RendererComponent>(window->getNativeWindow()));
         }
         ~Rect() = default;
 };
