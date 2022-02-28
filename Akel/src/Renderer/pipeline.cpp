@@ -1,19 +1,16 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 26/09/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/pipeline.h>
+#include <Renderer/rendererComponent.h>
 #include <Core/core.h>
-#include <Renderer/vertexBuffer.h>
 
 namespace Ak
 {
-	Pipeline::Pipeline() : Device() {}
-
-    void Pipeline::createGraphicsPipeline(const char* vert, const char* frag)
+    void RendererComponent::createGraphicsPipeline()
     {
-        auto vertShaderCode = readFile(vert);
-        auto fragShaderCode = readFile(frag);
+        auto vertShaderCode = readFile(_vertexShader.c_str());
+        auto fragShaderCode = readFile(_fragmentShader.c_str());
 
 		VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
 	    VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -129,7 +126,7 @@ namespace Ak
         vkDestroyShaderModule(device, vertShaderModule, nullptr);
     }
 
-    std::vector<char> Pipeline::readFile(const std::string& filename)
+    std::vector<char> RendererComponent::readFile(const std::string& filename)
     {
         std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
@@ -144,10 +141,10 @@ namespace Ak
 
         file.close();
 
-        return buffer;
+        return std::move(buffer);
     }
 
-    VkShaderModule Pipeline::createShaderModule(const std::vector<char>& code)
+    VkShaderModule RendererComponent::createShaderModule(const std::vector<char>& code)
     {
         VkShaderModuleCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;

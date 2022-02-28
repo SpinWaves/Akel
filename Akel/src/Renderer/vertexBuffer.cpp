@@ -1,16 +1,13 @@
 // This file is a part of Akel
 // CREATED : 23/09/2021
-// UPDATED : 26/09/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/renderer.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-    VertexBuffer::VertexBuffer() : LowestInheritance() {}
-
-    void VertexBuffer::createVertexBuffer(const std::vector<Vertex>& verticesVector)
+    void RendererComponent::createVertexBuffer()
     {
-        vertices = verticesVector;
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
         VkBuffer stagingBuffer;
@@ -30,9 +27,8 @@ namespace Ak
         vkFreeMemory(device, stagingBufferMemory, nullptr);
     }
 
-    void VertexBuffer::createIndexBuffer(const std::vector<uint32_t>& indicesVector)
+    void RendererComponent::createIndexBuffer()
     {
-        indices = indicesVector;
         VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
         VkBuffer stagingBuffer;
@@ -52,7 +48,7 @@ namespace Ak
         vkFreeMemory(device, stagingBufferMemory, nullptr);
     }
 
-    void VertexBuffer::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+    void RendererComponent::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
     {
         VkBufferCreateInfo bufferInfo{};
         bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -77,7 +73,7 @@ namespace Ak
         vkBindBufferMemory(device, buffer, bufferMemory, 0);
     }
 
-    void VertexBuffer::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
+    void RendererComponent::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
     {
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -111,7 +107,7 @@ namespace Ak
         vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
     }
 
-    uint32_t VertexBuffer::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
+    uint32_t RendererComponent::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
     {
         VkPhysicalDeviceMemoryProperties memProperties;
         vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
@@ -124,14 +120,5 @@ namespace Ak
 
         Core::log::report(FATAL_ERROR, "Vulkan : failed to find suitable memory type");
         return 0; // Not necessary due to the FATAL_ERROR parameter for logs but that remove a warning
-    }
-
-    void VertexBuffer::cleanupBuffers()
-    {
-        vkDestroyBuffer(device, indexBuffer, nullptr);
-        vkFreeMemory(device, indexBufferMemory, nullptr);
-
-        vkDestroyBuffer(device, vertexBuffer, nullptr);
-        vkFreeMemory(device, vertexBufferMemory, nullptr);
     }
 }

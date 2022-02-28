@@ -1,19 +1,18 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 23/09/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/surface.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-	Surface::Surface() : LowestInheritance() {}
-    void Surface::createSurface()
+    void RendererComponent::createSurface()
     {
         if(SDL_Vulkan_CreateSurface(window, instance, &surface) != SDL_TRUE)
             std::cout << SDL_GetError() << std::endl;
     }
 
-    VkSurfaceFormatKHR Surface::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
+    VkSurfaceFormatKHR RendererComponent::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
     {
         for(const auto& availableFormat : availableFormats)
         {

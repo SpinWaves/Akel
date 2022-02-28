@@ -1,16 +1,15 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 29/06/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/device.h>
-#include <Renderer/validationLayers.h>
+#include <Renderer/rendererComponent.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-	Device::Device() : ImageView() {}
-
-    void Device::pickPhysicalDevice()
+	const std::vector<const char*> deviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+    
+    void RendererComponent::pickPhysicalDevice()
     {
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
@@ -34,7 +33,7 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : Failed to find a suitable GPU");
     }
 
-    bool Device::isDeviceSuitable(VkPhysicalDevice device)
+    bool RendererComponent::isDeviceSuitable(VkPhysicalDevice device)
     {
         QueueFamilyIndices indices = findQueueFamilies(device);
 
@@ -49,7 +48,7 @@ namespace Ak
         return indices.isComplete() && extensionsSupported && swapChainAdequate;
     }
 
-    bool Device::checkDeviceExtensionSupport(VkPhysicalDevice device)
+    bool RendererComponent::checkDeviceExtensionSupport(VkPhysicalDevice device)
     {
         uint32_t extensionCount;
         vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
@@ -67,7 +66,7 @@ namespace Ak
         return requiredExtensions.empty();
     }
 
-    void Device::createLogicalDevice()
+    void RendererComponent::createLogicalDevice()
     {
         QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 

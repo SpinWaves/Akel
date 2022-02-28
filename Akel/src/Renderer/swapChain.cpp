@@ -1,15 +1,13 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 23/09/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/swapChain.h>
+#include <Renderer/rendererComponent.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-    SwapChain::SwapChain() : RenderPass(), Queues() {}
-
-    void SwapChain::createSwapChain()
+    void RendererComponent::createSwapChain()
     {
         SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physicalDevice);
 
@@ -62,7 +60,7 @@ namespace Ak
         swapChainExtent = extent;
     }
 
-    SwapChainSupportDetails SwapChain::querySwapChainSupport(VkPhysicalDevice device)
+    SwapChainSupportDetails RendererComponent::querySwapChainSupport(VkPhysicalDevice device)
     {
         SwapChainSupportDetails details;
 
@@ -89,11 +87,12 @@ namespace Ak
         return details;
     }
 
-    VkPresentModeKHR SwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes)
+    VkPresentModeKHR RendererComponent::chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes)
     {
+        /*
 		if(!enableVsync)
 			return VK_PRESENT_MODE_IMMEDIATE_KHR;
-
+        */
         for(const auto& availablePresentMode : availablePresentModes)
         {
             if(availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
@@ -103,7 +102,7 @@ namespace Ak
         return VK_PRESENT_MODE_FIFO_KHR;
     }
 
-    VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
+    VkExtent2D RendererComponent::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
     {
         if (capabilities.currentExtent.width != UINT32_MAX)
             return capabilities.currentExtent;

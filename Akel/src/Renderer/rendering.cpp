@@ -1,15 +1,13 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 23/09/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/rendering.h>
+#include <Renderer/rendererComponent.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-	Rendering::Rendering() : FrameBuffer() {}
-
-    void Rendering::createSemaphores()
+    void RendererComponent::createSemaphores()
     {
         imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
         renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);

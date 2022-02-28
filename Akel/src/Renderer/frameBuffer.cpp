@@ -1,15 +1,13 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 23/09/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/frameBuffer.h>
+#include <Renderer/rendererComponent.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-	FrameBuffer::FrameBuffer() : SwapChain() {}
-
-    void FrameBuffer::createFramebuffers()
+    void RendererComponent::createFramebuffers()
     {
         swapChainFramebuffers.resize(swapChainImageViews.size());
 

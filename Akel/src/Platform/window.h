@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 12/11/2021
+// UPDATED : 28/02/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -14,29 +14,30 @@
 #include <Platform/messageBox.h>
 #include <Platform/input.h>
 
-enum class winsets
-{
-    title,
-    size,
-    position,
-    fullscreen,
-    border,
-    brightness,
-    opacity,
-    resizable,
-    visible,
-    maximumSize,
-    minimumSize,
-    icon,
-	vsync,
-	maximize
-};
 
 #define AK_WINDOW_MAX_SIZE 0xFFFF
 #define AK_WINDOW_POS_CENTER 0xFFFE
 
 namespace Ak
 {
+    enum class winsets
+    {
+        title,
+        size,
+        position,
+        fullscreen,
+        border,
+        brightness,
+        opacity,
+        resizable,
+        visible,
+        maximumSize,
+        minimumSize,
+        icon,
+        vsync,
+        maximize
+    };
+
     class WindowComponent : public RendererComponent
     {
         public:
@@ -44,6 +45,7 @@ namespace Ak
 
 			void onAttach() override;
 			void update() override;
+            void onRender() override;
 			void onEvent(Input& input) override;
 			void onQuit() override;
 

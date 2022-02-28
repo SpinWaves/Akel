@@ -15,9 +15,9 @@ void RectComponent::onEvent(Ak::Input& input)
     Ak::WindowComponent::onEvent(input);
 }
 
-void RectComponent::update()
+void RectComponent::onRender()
 {
-    Ak::WindowComponent::update();
+    Ak::WindowComponent::onRender();
 }
 
 void RectComponent::onQuit()

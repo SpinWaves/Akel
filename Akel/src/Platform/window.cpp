@@ -1,6 +1,6 @@
 // This file is a part of Akel
 // CREATED : 28/03/2021
-// UPDATED : 15/02/2022
+// UPDATED : 28/02/2022
 
 #include <Platform/platform.h>
 
@@ -39,6 +39,11 @@ namespace Ak
 	void WindowComponent::update()
 	{
 		RendererComponent::update();
+	}
+
+	void WindowComponent::onRender()
+	{
+		RendererComponent::onRender();
 	}
 
 	void WindowComponent::onEvent(Input& input)

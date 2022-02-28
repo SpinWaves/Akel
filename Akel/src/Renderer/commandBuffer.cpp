@@ -1,15 +1,13 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 23/09/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/commandBuffer.h>
+#include <Renderer/rendererComponent.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-	CommandBuffer::CommandBuffer() : Pipeline(), VertexBuffer() {}
-
-    void CommandBuffer::createCommandPool()
+    void RendererComponent::createCommandPool()
     {
         QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
 
@@ -21,7 +19,7 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create command pool");
     }
 
-    void CommandBuffer::createCommandBuffers()
+    void RendererComponent::createCommandBuffers()
     {
         commandBuffers.resize(swapChainFramebuffers.size());
 

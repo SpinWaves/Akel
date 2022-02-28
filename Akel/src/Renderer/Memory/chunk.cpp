@@ -13,8 +13,8 @@ namespace Ak
             return true;
         return false;
     }
-
-    Chunk::Chunk(VkDeviceSize size, int memoryTypeIndex) : LowestInheritance()
+/*
+    Chunk::Chunk(VkDeviceSize size, int memoryTypeIndex)
     {
         _size = size;
         _memoryTypeIndex = memoryTypeIndex;
@@ -107,4 +107,5 @@ namespace Ak
         _freeBuffers.emplace_back(*bufferIt);
         _usedBuffers.erase(bufferIt);
     }
+    */
 }

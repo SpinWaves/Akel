@@ -1,15 +1,13 @@
 // This file is a part of Akel
 // CREATED : 06/06/2021
-// UPDATED : 26/09/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/validationLayers.h>
+#include <Renderer/rendererComponent.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-	ValidationLayers::ValidationLayers() : LowestInheritance() {}
-
-    bool ValidationLayers::checkValidationLayerSupport()
+    bool RendererComponent::checkValidationLayerSupport()
     {
         uint32_t layerCount;
         vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
@@ -36,7 +34,7 @@ namespace Ak
         return true;
     }
 
-    void ValidationLayers::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
+    void RendererComponent::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
     {
         createInfo = {};
         createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -45,7 +43,7 @@ namespace Ak
         createInfo.pfnUserCallback = debugCallback;
     }
 
-    void ValidationLayers::setupDebugMessenger()
+    void RendererComponent::setupDebugMessenger()
     {
         if(!enableValidationLayers)
             return;
@@ -55,7 +53,7 @@ namespace Ak
 			Core::log::report(ERROR, "Vulkan : Failed to set up debug messenger");
     }
 
-    VkResult ValidationLayers::CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pCallback)
+    VkResult RendererComponent::CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pCallback)
     {
         auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
         if(func != nullptr)
@@ -64,7 +62,7 @@ namespace Ak
             return VK_ERROR_EXTENSION_NOT_PRESENT;
     }
 
-    VKAPI_ATTR VkBool32 VKAPI_CALL ValidationLayers::debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData)
+    VKAPI_ATTR VkBool32 VKAPI_CALL RendererComponent::debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData)
     {
 		if(messageSeverity == VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
 		{
@@ -83,7 +81,7 @@ namespace Ak
         return VK_FALSE;
     }
 
-    void ValidationLayers::DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT callback, const VkAllocationCallbacks* pAllocator)
+    void RendererComponent::DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT callback, const VkAllocationCallbacks* pAllocator)
     {
         auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
         if(func != nullptr)

@@ -9,7 +9,7 @@ class RectComponent : public Ak::WindowComponent
         explicit RectComponent();
 
         void onAttach() override;
-        void update() override;
+        void onRender() override;
         void onEvent(Ak::Input& input) override;
         void onQuit() override;
 

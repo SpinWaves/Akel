@@ -1,14 +1,13 @@
 // This file is a part of Akel
 // CREATED : 05/06/2021
-// UPDATED : 23/09/2021
+// UPDATED : 28/02/2022
 
-#include <Renderer/renderPass.h>
+#include <Renderer/rendererComponent.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-	RenderPass::RenderPass() : LowestInheritance() {}
-    void RenderPass::createRenderPass()
+    void RendererComponent::createRenderPass()
     {
         VkAttachmentDescription colorAttachment{};
         colorAttachment.format = swapChainImageFormat;

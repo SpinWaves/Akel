@@ -6,7 +6,6 @@
 #define __AK_VULKAN_GPU_MEMORY_CHUNK__
 
 #include <Akpch.h>
-#include <Renderer/lowestInheritance.h>
 
 namespace Ak
 {
@@ -20,7 +19,7 @@ namespace Ak
         bool operator == (Buffer const& buffer);
     };
 
-    class Chunk : virtual private LowestInheritance
+    class Chunk
     {
         public:
             explicit Chunk(VkDeviceSize size, int memoryTypeIndex);
