@@ -1,5 +1,5 @@
 // This file is a part of Akel
-// Authors : @kbz_8
+// Author : @kbz_8
 // Created : 05/06/2021
 // Updated : 02/03/2022
 

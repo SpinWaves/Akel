@@ -17,10 +17,7 @@ namespace Ak
         std::optional<uint32_t> graphicsFamily;
         std::optional<uint32_t> presentFamily;
 
-        inline bool isComplete()
-        {
-            return graphicsFamily.has_value() && presentFamily.has_value();
-        }
+        inline bool isComplete() { return graphicsFamily.has_value() && presentFamily.has_value(); }
     };
 
 	struct SwapChainSupportDetails
@@ -47,7 +44,7 @@ namespace Ak
 
         static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions()
         {
-            std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
+            std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions;
 
             attributeDescriptions[0].binding = 0;
             attributeDescriptions[0].location = 0;
@@ -59,11 +56,11 @@ namespace Ak
             attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
             attributeDescriptions[1].offset = offsetof(Vertex, color);
 
-            return attributeDescriptions;
+            return std::move(attributeDescriptions);
         }
     };
 
-    const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
+    const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation" };
 
     #ifdef AK_DEBUG
         constexpr const bool enableValidationLayers = true;
@@ -198,11 +195,10 @@ namespace Ak
             VkBuffer indexBuffer;
             VkDeviceMemory indexBufferMemory;
 
-            SDL_Window* window;
+            SDL_Window* window = nullptr;
 
             bool _instanceInitialized = false;
 
-            
             std::vector<Vertex> vertices;
             std::vector<uint32_t> indices;
     };

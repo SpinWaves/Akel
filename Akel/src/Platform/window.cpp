@@ -24,7 +24,7 @@ namespace Ak
 
         _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI;
 
-        _window = SDL_CreateWindow(_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 750, _flags);
+        _window = SDL_CreateWindow(_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, _flags);
         if(!_window)
             messageBox(FATAL_ERROR, "Unable to create a window", SDL_GetError());
 

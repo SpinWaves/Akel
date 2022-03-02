@@ -1,12 +1,12 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
--- CREATED : 02/10/2021
--- UPDATED : 04/01/2022
+-- Created : 02/10/2021
+-- Updated : 02/03/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-tools", "imgui_sdl_vk v1.83-docking")
+add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "glslang", "vulkan-headers", "vulkan-loader", "vulkan-tools", "vulkan-validationlayers", "imgui_sdl_vk v1.83-docking")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
@@ -31,13 +31,13 @@ target("Akel")
 
 	set_pcxxheader("Akel/src/Akpch.h")
 	add_defines("SDL_MAIN_HANDLED")
-	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-tools", "imgui_sdl_vk")
+	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "glslang", "vulkan-headers", "vulkan-loader", "vulkan-validationlayers", "vulkan-tools", "imgui_sdl_vk")
 
 	on_load(function(target)
 		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")
     end);
 target_end() -- optional but I think the code is cleaner with this
-
+ 
 -- Editor Build
 target("Editor")
 	set_default(true)

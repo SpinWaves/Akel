@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/04/2021
-// Updated : 01/03/2022
+// Updated : 02/03/2022
 
 #include <Utils/fps.h>
 
@@ -30,13 +30,12 @@ namespace Ak
 		fps++;
 
 		elapsed_time = now - before;
+		make_up = false;
 		if(elapsed_time >= ns)
         {
             ticks++;
             before += ns;
 			make_up = true;
 		}
-		else
-			make_up = false;
 	}
 }

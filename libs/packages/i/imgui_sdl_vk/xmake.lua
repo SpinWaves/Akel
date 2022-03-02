@@ -1,6 +1,7 @@
 -- This file is a part of Akel
--- CREATED : 05/10/2021
--- UPDATED : 16/10/2021
+-- Authors : @kbz_8
+-- Created : 05/10/2021
+-- Updated : 02/03/2022
 
 package("imgui_sdl_vk")
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 24/02/2022
+// Updated : 02/03/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -53,7 +53,8 @@ namespace Ak
     {
         if(_use && __jam.is_init())
         {
-            #ifndef AK_USE_JAM_MEMORY_HELPER
+		    if(Core::ProjectFile::getBoolValue("memory_manager_enable_fixed_allocator"))
+            {
                 if(!std::is_class<T>::value)
                 {
                     if(sizeof(T) <= 16)
@@ -63,7 +64,7 @@ namespace Ak
             		if(sizeof(T) <= 96)
             			return __fixed3.alloc<T>(std::forward<Args>(args)...);
                 }
-            #endif
+            }
             return __jam.alloc<T>(std::forward<Args>(args)...);
         }
         return new T(std::forward<Args>(args)...);
@@ -74,7 +75,8 @@ namespace Ak
     {
         if(_use)
         {
-            #ifndef AK_USE_JAM_MEMORY_HELPER
+		    if(Core::ProjectFile::getBoolValue("memory_manager_enable_fixed_allocator"))
+            {
                 if(__fixed1.contains((void*)ptr))
                 {
         			__fixed1.free(ptr);
@@ -90,7 +92,7 @@ namespace Ak
         			__fixed3.free(ptr);
                     return;
                 }
-            #endif
+            }
     		if(__jam.contains((void*)ptr))
             {
     			__jam.free(ptr);
@@ -125,16 +127,10 @@ namespace Ak
 
 
     template <typename T = void, typename ... Args>
-    T* memAlloc(Args&& ... args)
-    {
-        return MemoryManager::alloc<T>(std::forward<Args>(args)...);
-    }
+    inline T* memAlloc(Args&& ... args) { return MemoryManager::alloc<T>(std::forward<Args>(args)...); }
 
     template <typename T = void>
-    void memFree(T* ptr)
-    {
-        MemoryManager::free(ptr);
-    }
+    inline void memFree(T* ptr) { MemoryManager::free(ptr); }
 }
 
 #endif // __AK_MEMORY_MANAGER__

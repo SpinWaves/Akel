@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2021
-// Updated : 02/03/2022
+// Updated : 28/02/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Platform/platform.h>

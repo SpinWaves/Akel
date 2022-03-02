@@ -1,7 +1,7 @@
 // This file is a part of the Akel
 // Authors : @kbz_8
 // Created : 16/10/2021
-// Updated : 23/02/2022
+// Updated : 02/03/2022
 
 #ifndef __AK_PARAMETER_STRUCT__
 #define __AK_PARAMETER_STRUCT__
@@ -15,7 +15,7 @@ namespace Ak
         std::string project_file_path = "";
         std::string project_file_name = "";
         bool use_memory_manager = true;
-        bool memory_manager_enable_jam_allocator = true;
+        bool memory_manager_enable_fixed_allocator = true;
         bool vk_enable_message_validation_layer = false;
         bool unique_ptr_wrapper_enable_debug_message = false;
         bool use_system_dialog_boxes = false;

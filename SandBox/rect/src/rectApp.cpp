@@ -4,7 +4,7 @@
 class FPSprinterComponent : public Ak::Component
 {
     public:
-        void update() override { Ak::CounterFPS::printTicks(); Ak::CounterFPS::printFPS(); }
+        void update() override { std::cout << "fps : " << Ak::CounterFPS::getFPS() << " - ticks : " << Ak::CounterFPS::getTicks() << '\r' << std::flush; }
 };
 
 class Rect : public Ak::Application
@@ -27,8 +27,9 @@ class Rect : public Ak::Application
 Ak::AkelInstance Akel_init()
 {
     Ak::AkelInstance instance;
-		instance.project_file_path = std::string(Ak::Core::getMainDirPath() + "SandBox/rect");
-		instance.project_file_name = "rect";
+        instance.project_file_path = std::string(Ak::Core::getMainDirPath() + "SandBox/rect");
+        instance.project_file_name = "rect";
+        instance.memory_manager_enable_fixed_allocator = false;
     return instance;    
 }
 

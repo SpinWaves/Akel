@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/06/2021
-// Updated : 28/02/2022
+// Updated : 02/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -14,9 +14,7 @@ namespace Ak
 
         for(size_t i = 0; i < swapChainImageViews.size(); i++)
         {
-            VkImageView attachments[] = {
-                swapChainImageViews[i]
-            };
+            VkImageView attachments[] = { swapChainImageViews[i] };
 
             VkFramebufferCreateInfo framebufferInfo{};
             framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;

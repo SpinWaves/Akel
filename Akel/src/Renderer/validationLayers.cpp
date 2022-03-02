@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/06/2021
-// Updated : 28/02/2022
+// Updated : 02/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -59,8 +59,7 @@ namespace Ak
         auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
         if(func != nullptr)
             return func(instance, pCreateInfo, pAllocator, pCallback);
-        else
-            return VK_ERROR_EXTENSION_NOT_PRESENT;
+        return VK_ERROR_EXTENSION_NOT_PRESENT;
     }
 
     VKAPI_ATTR VkBool32 VKAPI_CALL RendererComponent::debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData)
@@ -75,10 +74,9 @@ namespace Ak
 			std::cout << '\n';
 			Core::log::report(WARNING, std::string("Vulkan layer warning: ") + pCallbackData->pMessage);
 		}
-	#ifdef AK_VK_ENABLE_MESSAGE_VALIDATION_LAYERS
-		else
+		else if(Core::ProjectFile::getBoolValue("vk_enable_message_validation_layer"))
         	std::cout << green << pCallbackData->pMessage << def << std::endl;
-	#endif
+        
         return VK_FALSE;
     }
 
