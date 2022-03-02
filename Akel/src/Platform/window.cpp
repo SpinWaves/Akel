@@ -1,6 +1,7 @@
 // This file is a part of Akel
+// Author : @kbz_8
 // CREATED : 28/03/2021
-// UPDATED : 28/02/2022
+// UPDATED : 02/03/2022
 
 #include <Platform/platform.h>
 
@@ -23,7 +24,7 @@ namespace Ak
 
         _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI;
 
-        _window = SDL_CreateWindow(_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900, 506, _flags);
+        _window = SDL_CreateWindow(_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 750, _flags);
         if(!_window)
             messageBox(FATAL_ERROR, "Unable to create a window", SDL_GetError());
 

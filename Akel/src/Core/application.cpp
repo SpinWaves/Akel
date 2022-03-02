@@ -1,6 +1,7 @@
 // This file is a part of Akel
+// Author : @kbz_8
 // CREATED : 10/06/2021
-// UPDATED : 28/02/2022
+// UPDATED : 01/03/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -30,29 +31,28 @@ namespace Ak
 				while(SDL_PollEvent(_in.getNativeEvent()))
 				{
 					_in.update();
-					for(auto elem : _components)
-						elem->onEvent(_in);
+					for(auto component : _components)
+						component->onEvent(_in);
 				}
-				for(auto elem : _components)
-					elem->update();
+				for(auto component : _components)
+					component->update();
 			}
-			else // rendering
+			
+			// rendering
+			for(auto component : _components)
 			{
-				for(auto elem : _components)
-				{
-					elem->onRender();
-					if(ImGuiComponent::getNumComp() != 0)
-					{	
-						imgui.begin();
-							elem->onImGuiRender();
-						imgui.end();
-					}
+				component->onRender();
+				if(ImGuiComponent::getNumComp() != 0)
+				{	
+					imgui.begin();
+						component->onImGuiRender();
+					imgui.end();
 				}
 			}
 		}
 
-		for(auto elem : _components)
-			elem->onQuit();
+		for(auto component : _components)
+			component->onQuit();
 	}
 
 	void Application::end()

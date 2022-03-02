@@ -1,6 +1,6 @@
 // Akel is an open source game engine made for fun
 // https://github.com/SpinWaves/Akel
-// 2021 - SpinWaves Studios
+// 2021 - 2022 - SpinWaves Studios
 
 #ifndef __AKEL__
 #define __AKEL__

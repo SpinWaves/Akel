@@ -1,6 +1,7 @@
 // This file is a part of Akel
+// Author : @kbz_8
 // CREATED : 23/09/2021
-// UPDATED : 28/02/2022
+// UPDATED : 02/03/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -14,7 +15,7 @@ namespace Ak
         VkDeviceMemory stagingBufferMemory;
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
-        void* data;
+        void* data = nullptr;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
             memcpy(data, vertices.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
@@ -119,6 +120,6 @@ namespace Ak
         }
 
         Core::log::report(FATAL_ERROR, "Vulkan : failed to find suitable memory type");
-        return 0; // Not necessary due to the FATAL_ERROR parameter for logs but that remove a warning
+        return 0; // Not necessary due to the FATAL_ERROR parameter for logs but that removes a warning
     }
 }

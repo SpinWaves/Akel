@@ -1,6 +1,7 @@
 // This file is a part of Akel
+// Author : @kbz_8
 // CREATED : 23/09/2021
-// UPDATED : 28/02/2022
+// UPDATED : 02/03/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -203,15 +204,8 @@ namespace Ak
             bool _instanceInitialized = false;
 
             
-            const std::vector<Vertex> vertices =
-            {
-                {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-                {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-                {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-                {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
-            };
-
-            const std::vector<uint32_t> indices = {0, 1, 2, 2, 3, 0};
+            std::vector<Vertex> vertices;
+            std::vector<uint32_t> indices;
     };
 }
 

@@ -1,4 +1,5 @@
 // This file is a part of Akel
+// Author : @kbz_8
 // CREATED : 05/06/2021
 // UPDATED : 28/02/2022
 
@@ -91,8 +92,9 @@ namespace Ak
     {
         /*
 		if(!enableVsync)
-			return VK_PRESENT_MODE_IMMEDIATE_KHR;
         */
+		return VK_PRESENT_MODE_IMMEDIATE_KHR;
+  /*
         for(const auto& availablePresentMode : availablePresentModes)
         {
             if(availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
@@ -100,6 +102,7 @@ namespace Ak
         }
 
         return VK_PRESENT_MODE_FIFO_KHR;
+*/
     }
 
     VkExtent2D RendererComponent::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)

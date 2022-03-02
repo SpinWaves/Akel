@@ -1,6 +1,7 @@
 // This file is a part of Akel
+// Author : @kbz_8
 // CREATED : 29/04/2021
-// UPDATED : 28/02/2022
+// UPDATED : 01/03/2022
 
 #ifndef __AK_FPS__
 #define __AK_FPS__
@@ -18,8 +19,8 @@ namespace Ak
 			inline bool make_update() noexcept { return make_up; }
 			inline static int getFPS() { return outputFPS; }
 			inline static int getTicks() { return outputTicks; }
-			static void printFPS();
-			static void printTicks();
+			inline static void printFPS() noexcept { std::cout << "fps : "  << outputFPS << std::endl; }	
+			inline static void printTicks() noexcept { std::cout << "ticks : " << outputTicks << std::endl; }
 			~CounterFPS() = default;	
         
 		private:
@@ -33,7 +34,6 @@ namespace Ak
 			long long before = 0;			
 			long long now = 0;
 			bool make_up = false;
-			inline static bool second_passed = false;	
     };		
 }
 
