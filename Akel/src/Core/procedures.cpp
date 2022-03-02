@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 06/10/2021
-// UPDATED : 23/02/2022
+// Authors : @kbz_8
+// Created : 06/10/2021
+// Updated : 23/02/2022
 
 #include <Core/core.h>
 #include <Audio/audio.h>

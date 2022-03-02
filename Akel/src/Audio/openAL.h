@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 03/08/2021
-// UPDATED : 05/08/2021
+// Authors : @kbz_8
+// Created : 03/08/2021
+// Updated : 05/08/2021
 
 #ifndef __AK_OPENAL__
 #define __AK_OPENAL__

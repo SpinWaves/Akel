@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 23/09/2021
-// UPDATED : 02/03/2022
+// Authors : @kbz_8
+// Created : 23/09/2021
+// Updated : 02/03/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -14,7 +14,6 @@ namespace Ak
     {
         if(!window)
             Core::log::report(FATAL_ERROR, "RendererComponent : no window passed to the renderer, \n call \"render_to_window()\" or create the RendererComponent with a window in arg");
-
 
         vertices =
         {
@@ -44,8 +43,6 @@ namespace Ak
 
         _instanceInitialized = true;
     }
-
-    void RendererComponent::update() {}
 
     void RendererComponent::onRender()
     {

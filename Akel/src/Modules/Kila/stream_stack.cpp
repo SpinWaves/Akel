@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 11/11/2021
-// UPDATED : 13/11/2021
+// Authors : @kbz_8
+// Created : 11/11/2021
+// Updated : 13/11/2021
 
 #include <Modules/Kila/stream_stack.h>
 

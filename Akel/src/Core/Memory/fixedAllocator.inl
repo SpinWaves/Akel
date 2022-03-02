@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 02/08/2021
-// UPDATED : 11/11/2021
+// Authors : @kbz_8
+// Created : 02/08/2021
+// Updated : 11/11/2021
 
 #include <Core/Memory/fixedAllocator.h>
 #include <Core/log.h>

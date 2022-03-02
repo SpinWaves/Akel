@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 25/07/2021
-// UPDATED : 03/02/2022
+// Authors : @kbz_8
+// Created : 25/07/2021
+// Updated : 03/02/2022
 
 #include <Core/log.h>
 #include <Maths/maths.h>

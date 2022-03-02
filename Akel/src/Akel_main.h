@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 08/06/2021
-// UPDATED : 15/02/2022
+// Authors : @kbz_8
+// Created : 08/06/2021
+// Updated : 15/02/2022
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 	AK_END_SESSION();
 
 	AK_BEGIN_SESSION("Shutdown");
-		Ak::custom_free(app);
+		Ak::memFree(app);
 		Ak::MemoryManager::end();
 	AK_END_SESSION();
 

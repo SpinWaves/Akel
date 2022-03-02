@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 10/10/2021
-// UPDATED : 11/12/2021
+// Authors : @kbz_8
+// Created : 10/10/2021
+// Updated : 11/12/2021
 
 #ifndef __AK_MUTABLE_STRINGS__
 #define __AK_MUTABLE_STRINGS__

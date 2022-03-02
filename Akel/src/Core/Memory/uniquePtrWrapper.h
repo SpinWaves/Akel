@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 09/09/2021
-// UPDATED : 13/09/2021
+// Authors : @kbz_8
+// Created : 09/09/2021
+// Updated : 13/09/2021
 
 #ifndef __AK_UNIQUE_PTR_WRAPPER__
 #define __AK_UNIQUE_PTR_WRAPPER__
@@ -21,7 +21,7 @@ namespace Ak
         void operator()(T* ptr)
         {
             void* address = ptr;
-            custom_free(ptr);
+            memFree(ptr);
 
             #ifdef AK_UNIQUE_PTR_WRAPPER_DEBUG_MESSAGE_ENABLED
                 Core::log::report(MESSAGE, "unique_ptr_w : pointer freed %p", address);

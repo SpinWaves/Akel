@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 23/07/2021
-// UPDATED : 24/02/2022
+// Authors : @kbz_8
+// Created : 23/07/2021
+// Updated : 24/02/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -125,13 +125,13 @@ namespace Ak
 
 
     template <typename T = void, typename ... Args>
-    T* custom_malloc(Args&& ... args)
+    T* memAlloc(Args&& ... args)
     {
         return MemoryManager::alloc<T>(std::forward<Args>(args)...);
     }
 
     template <typename T = void>
-    void custom_free(T* ptr)
+    void memFree(T* ptr)
     {
         MemoryManager::free(ptr);
     }

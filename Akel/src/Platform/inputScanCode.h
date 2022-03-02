@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 04/04/2021
-// UPDATED : 03/06/2021
+// Authors : @kbz_8
+// Created : 04/04/2021
+// Updated : 03/06/2021
 
 #ifndef __AK_INPUT_SCANCODE__
 #define __AK_INPUT_SCANCODE__

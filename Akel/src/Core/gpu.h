@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 23/04/2021
-// UPDATED : 05/06/2021
+// Authors : @kbz_8
+// Created : 23/04/2021
+// Updated : 05/06/2021
 
 #ifndef __AK_GPU__
 #define __AK_GPU__

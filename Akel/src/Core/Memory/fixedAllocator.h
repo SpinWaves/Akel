@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 18/07/2021
-// UPDATED : 06/12/2021
+// Authors : @kbz_8
+// Created : 18/07/2021
+// Updated : 06/12/2021
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__

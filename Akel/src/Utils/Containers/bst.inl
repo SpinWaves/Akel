@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 17/11/2021
-// UPDATED : 28/01/2022
+// Authors : @kbz_8
+// Created : 17/11/2021
+// Updated : 28/01/2022
 
 #include <Utils/Containers/bst.h>
 
@@ -11,9 +11,9 @@ namespace Ak
     void Warning(std::string message, ...);
 
     template <typename T = void, typename ... Args>
-    T* custom_malloc(Args&& ... args);
+    T* memAlloc(Args&& ... args);
     template <typename T = void>
-    void custom_free(T* ptr);
+    void memFree(T* ptr);
 
     template <typename T>
     BinarySearchTree<T>::BinarySearchTree(T&& data) : _data(std::forward<T>(data)), is_init(true) {}
@@ -26,14 +26,14 @@ namespace Ak
             if(_right != nullptr)
                 _right->add(std::forward<T>(data));
             else
-                _right = custom_malloc<BinarySearchTree<T>>(std::forward<T>(data));
+                _right = memAlloc<BinarySearchTree<T>>(std::forward<T>(data));
         }
         else
         {
             if(_left != nullptr)
                 _left->add(std::forward<T>(data));
             else
-                _left = custom_malloc<BinarySearchTree<T>>(std::forward<T>(data));
+                _left = memAlloc<BinarySearchTree<T>>(std::forward<T>(data));
         }
         is_init = true;
     }
@@ -79,7 +79,7 @@ namespace Ak
         }
         if(node->getLeft() == nullptr && node->getRight() == nullptr) // no children
         {
-            custom_free(node);
+            memFree(node);
             return;
         }
         else if(node->getLeft() == nullptr || node->getRight() == nullptr) // only one child
@@ -110,14 +110,14 @@ namespace Ak
                 {
                     parent->setLeft(node->getRight());
                     node->setRight(nullptr);
-                    custom_free(node);
+                    memFree(node);
                     return;
                 }
                 else
                 {
                     parent->setRight(node->getRight());
                     node->setRight(nullptr);
-                    custom_free(node);
+                    memFree(node);
                     return;
                 }
             }
@@ -127,14 +127,14 @@ namespace Ak
                 {
                     parent->setRight(node->getLeft());
                     node->setLeft(nullptr);
-                    custom_free(node);
+                    memFree(node);
                     return;
                 }
                 else
                 {
                     parent->setLeft(node->getLeft());
                     node->setRight(nullptr);
-                    custom_free(node);
+                    memFree(node);
                     return;
                 }
             }
@@ -150,7 +150,7 @@ namespace Ak
                 while(floating_node->getLeft() != nullptr)
                     floating_node = floating_node->getLeft();
                 floating_node->setLeft(node->getLeft());
-                custom_free(node);
+                memFree(node);
             }
             else
             {
@@ -159,7 +159,7 @@ namespace Ak
                 while(floating_node->getLeft() != nullptr)
                     floating_node = floating_node->getLeft();
                 floating_node->setLeft(node->getLeft());
-                custom_free(node);
+                memFree(node);
             }
         }
     }
@@ -175,7 +175,7 @@ namespace Ak
         if(node->getLeft() == nullptr && node->getRight() == nullptr) // no children
         {
             if(free)
-                custom_free(node);
+                memFree(node);
             return;
         }
         else if(node->getLeft() == nullptr || node->getRight() == nullptr) // only one child
@@ -207,7 +207,7 @@ namespace Ak
                     parent->setLeft(node->getRight());
                     node->setRight(nullptr);
                     if(free)
-                        custom_free(node);
+                        memFree(node);
                     return;
                 }
                 else
@@ -215,7 +215,7 @@ namespace Ak
                     parent->setRight(node->getRight());
                     node->setRight(nullptr);
                     if(free)
-                        custom_free(node);
+                        memFree(node);
                     return;
                 }
             }
@@ -226,7 +226,7 @@ namespace Ak
                     parent->setRight(node->getLeft());
                     node->setLeft(nullptr);
                     if(free)
-                        custom_free(node);
+                        memFree(node);
                     return;
                 }
                 else
@@ -234,7 +234,7 @@ namespace Ak
                     parent->setLeft(node->getLeft());
                     node->setRight(nullptr);
                     if(free)
-                        custom_free(node);
+                        memFree(node);
                     return;
                 }
             }
@@ -251,7 +251,7 @@ namespace Ak
                     floating_node = floating_node->getLeft();
                 floating_node->setLeft(node->getLeft());
                 if(free)
-                    custom_free(node);
+                    memFree(node);
             }
             else
             {
@@ -261,7 +261,7 @@ namespace Ak
                     floating_node = floating_node->getLeft();
                 floating_node->setLeft(node->getLeft());
                 if(free)
-                    custom_free(node);
+                    memFree(node);
             }
         }
     }
@@ -366,8 +366,8 @@ namespace Ak
     {
         // will free all subtrees by recursion
         if(_left != nullptr)
-            custom_free(_left);
+            memFree(_left);
         if(_right != nullptr)
-            custom_free(_right);
+            memFree(_right);
     }
 }

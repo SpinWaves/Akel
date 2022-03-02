@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 10/11/2021
-// UPDATED : 10/11/2021
+// Authors : @kbz_8
+// Created : 10/11/2021
+// Updated : 10/11/2021
 
 #include <Modules/Kila/token_iterator.h>
 #include <Modules/Kila/lexer.h>

@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 05/04/2021
-// UPDATED : 16/01/2022
+// Authors : @kbz_8
+// Created : 05/04/2021
+// Updated : 16/01/2022
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__

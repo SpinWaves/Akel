@@ -7,7 +7,7 @@ class App : public Ak::Application
     public:
         explicit App() : Ak::Application("Kila test")
         {
-            add_component(Ak::custom_malloc<Comp>());
+            add_component(Ak::memAlloc<Comp>());
         }
         ~App() = default;
 };
@@ -24,5 +24,5 @@ Ak::AkelInstance Akel_init()
 
 Ak::Application* Akel_mainApplication()
 {
-    return Ak::custom_malloc<App>();
+    return Ak::memAlloc<App>();
 }

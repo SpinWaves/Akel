@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 24/09/2021
-// UPDATED : 10/12/2021
+// Authors : @kbz_8
+// Created : 24/09/2021
+// Updated : 10/12/2021
 
 #ifndef __AK_VULKAN_JAMALLOCATOR_GPU__
 #define __AK_VULKAN_JAMALLOCATOR_GPU__

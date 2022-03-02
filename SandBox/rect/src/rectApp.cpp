@@ -12,7 +12,7 @@ class Rect : public Ak::Application
     public:
         explicit Rect() : Ak::Application("Rect")
         {
-            Ak::WindowComponent* window = Ak::custom_malloc<Ak::WindowComponent>();
+            Ak::WindowComponent* window = Ak::memAlloc<Ak::WindowComponent>();
             add_component(window); // function inherited from Ak::Application
             window->setSetting(Ak::winsets::title, "Rectangle using Akel Engine");
             //window->setSetting(Ak::winsets::size, 1280, 750);
@@ -34,5 +34,5 @@ Ak::AkelInstance Akel_init()
 
 Ak::Application* Akel_mainApplication()
 {
-    return Ak::custom_malloc<Rect>();
+    return Ak::memAlloc<Rect>();
 }

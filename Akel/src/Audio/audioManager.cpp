@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 04/08/2021
-// UPDATED : 15/02/2022
+// Authors : @kbz_8
+// Created : 04/08/2021
+// Updated : 15/02/2022
 
 #include <Audio/audioManager.h>
 #include <Core/log.h>
@@ -12,7 +12,7 @@ namespace Ak
 
     void AudioManager::onAttach()
     {
-        _al = make_unique_ptr_w<OpenAL>(custom_malloc<OpenAL>());
+        _al = make_unique_ptr_w<OpenAL>(memAlloc<OpenAL>());
         _al->initOAL();
         _is_init = true;
     }

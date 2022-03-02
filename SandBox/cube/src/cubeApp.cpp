@@ -11,12 +11,12 @@ class Cube : public Ak::Application
     public:
         explicit Cube() : Ak::Application("Cube")
         {
-            add_component(Ak::custom_malloc<CubeComponent>());
+            add_component(Ak::memAlloc<CubeComponent>());
         }
         ~Cube() = default;
 };
 
 Ak::Application* Akel_main()
 {
-    return Ak::custom_malloc<Cube>();
+    return Ak::memAlloc<Cube>();
 }

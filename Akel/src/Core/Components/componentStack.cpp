@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 23/06/2021
-// UPDATED : 23/02/2022
+// Authors : @kbz_8
+// Created : 23/06/2021
+// Updated : 23/02/2022
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>

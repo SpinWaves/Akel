@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 28/03/2021
-// UPDATED : 28/02/2022
+// Authors : @kbz_8
+// Created : 28/03/2021
+// Updated : 28/02/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__

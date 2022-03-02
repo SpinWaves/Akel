@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 10/06/2021
-// UPDATED : 01/03/2022
+// Authors : @kbz_8
+// Created : 10/06/2021
+// Updated : 02/03/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -16,12 +16,12 @@ namespace Ak
 		_name = name;
 		_fps.init();
 		if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
-			Core::log::report(FATAL_ERROR, std::string("SDL error : unable to init all subsystems : ") + SDL_GetError());
+			Core::log::report(FATAL_ERROR, "SDL error : unable to init all subsystems : %s", SDL_GetError());
 	}
 
 	void Application::run()
 	{
-		ImGuiComponent imgui;
+		ImGuiComponent __imgui;
 		while(!_in.isEnded()) // Main loop
 		{
 			_fps.update();
@@ -39,15 +39,20 @@ namespace Ak
 			}
 			
 			// rendering
-			for(auto component : _components)
+			if(ImGuiComponent::getNumComp() != 0) // __imgui doesn't modify it because we don't attach it
 			{
-				component->onRender();
-				if(ImGuiComponent::getNumComp() != 0)
-				{	
-					imgui.begin();
-						component->onImGuiRender();
-					imgui.end();
+				__imgui.begin();
+				for(auto component : _components)
+				{
+					component->onRender();
+					component->onImGuiRender();
 				}
+				__imgui.end();
+			}
+			else
+			{
+				for(auto component : _components)
+					component->onRender();
 			}
 		}
 

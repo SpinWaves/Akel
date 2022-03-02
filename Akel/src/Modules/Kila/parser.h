@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 12/11/2021
-// UPDATED : 12/11/2021
+// Authors : @kbz_8
+// Created : 12/11/2021
+// Updated : 12/11/2021
 
 #ifndef __AK_KILA_PARSER__
 #define __AK_KILA_PARSER__

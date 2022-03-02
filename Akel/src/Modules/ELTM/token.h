@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 05/05/2021
-// UPDATED : 03/11/2021
+// Authors : @kbz_8
+// Created : 05/05/2021
+// Updated : 03/11/2021
 
 #ifndef __AK_ELTM_TOKEN__
 #define __AK_ELTM_TOKEN__

@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 08/11/2021
-// UPDATED : 24/02/2022
+// Authors : @kbz_8
+// Created : 08/11/2021
+// Updated : 24/02/2022
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__

@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 14/11/2021
-// UPDATED : 15/11/2021
+// Authors : @kbz_8
+// Created : 14/11/2021
+// Updated : 15/11/2021
 
 #ifndef __AK_KILA_MACROS__
 #define __AK_KILA_MACROS__

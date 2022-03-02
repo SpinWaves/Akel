@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 13/05/2021
-// UPDATED : 13/07/2021
+// Authors : @kbz_8
+// Created : 13/05/2021
+// Updated : 13/07/2021
 
 #ifndef __AK_ELTM_ERRORS__
 #define __AK_ELTM_ERRORS__

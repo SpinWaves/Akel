@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
-// Author : @kbz_8
-// CREATED : 07/06/2021
-// UPDATED : 03/11/2021
+// Authors : @kbz_8
+// Created : 07/06/2021
+// Updated : 03/11/2021
 
 #ifndef __AK_EDITOR_PCH__
 #define __AK_EDITOR_PCH__

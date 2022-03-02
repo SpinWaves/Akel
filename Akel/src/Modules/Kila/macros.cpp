@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 15/11/2021
-// UPDATED : 15/11/2021
+// Authors : @kbz_8
+// Created : 15/11/2021
+// Updated : 15/11/2021
 
 #include <Modules/Kila/macros.h>
 

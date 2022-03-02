@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 10/04/2021
-// UPDATED : 28/02/2022
+// Authors : @kbz_8
+// Created : 10/04/2021
+// Updated : 02/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Platform/platform.h>
@@ -14,7 +14,7 @@ namespace Ak
     {
         unsigned int count;
         if(!SDL_Vulkan_GetInstanceExtensions(window, &count, nullptr))
-			Core::log::report(ERROR, std::string("Vulkan : Cannot get instance extentions from window : ") + SDL_GetError());
+			Core::log::report(ERROR, "Vulkan : Cannot get instance extentions from window : %s",  SDL_GetError());
 
         std::vector<const char*> extensions = {
             VK_EXT_DEBUG_REPORT_EXTENSION_NAME // Sample additional extension
@@ -23,12 +23,12 @@ namespace Ak
         extensions.resize(additional_extension_count + count);
 
         if(!SDL_Vulkan_GetInstanceExtensions(window, &count, extensions.data() + additional_extension_count))
-			Core::log::report(ERROR, std::string("Vulkan : Cannot get instance extentions from window : ") + SDL_GetError());
+			Core::log::report(ERROR, "Vulkan : Cannot get instance extentions from window : %s", SDL_GetError());
 
         if(enableValidationLayers)
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 
-        return extensions;
+        return std::move(extensions);
     }
 
     void RendererComponent::createInstance()

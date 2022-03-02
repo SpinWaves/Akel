@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 23/05/2021
-// UPDATED : 22/01/2022
+// Authors : @kbz_8
+// Created : 23/05/2021
+// Updated : 22/01/2022
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__

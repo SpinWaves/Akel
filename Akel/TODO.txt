@@ -1,4 +1,1 @@
 ouais j'ai la flemme mais faut le faire ._.
-
-Akel/src/Renderer/surface.cpp :
-    - line 12 : use Core log system

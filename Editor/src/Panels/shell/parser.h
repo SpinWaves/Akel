@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
-// Author : @kbz_8
-// CREATED : 10/07/2021
-// UPDATED : 02/08/2021
+// Authors : @kbz_8
+// Created : 10/07/2021
+// Updated : 02/08/2021
 
 #ifndef __AK_SHELL_PARSER__
 #define __AK_SHELL_PARSER__

@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
-// Author : @kbz_8
-// CREATED : 09/07/2021
-// UPDATED : 03/11/2021
+// Authors : @kbz_8
+// Created : 09/07/2021
+// Updated : 03/11/2021
 
 #include <Panels/console.h>
 

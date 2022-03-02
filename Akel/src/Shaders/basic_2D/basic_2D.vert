@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 28/09/2021
-// UPDATED : 28/09/2021
+// Authors : @kbz_8
+// Created : 28/09/2021
+// Updated : 28/09/2021
 
 #version 450
 

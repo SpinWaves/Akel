@@ -1,13 +1,13 @@
 // This file is a part of the Akel editor
-// Author : @kbz_8
-// CREATED : 06/07/2021
-// UPDATED : 07/11/2021
+// Authors : @kbz_8
+// Created : 06/07/2021
+// Updated : 07/11/2021
 
 #include <editorComponent.h>
 
 EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
 {
-	_eltm = Ak::make_shared_ptr_w<Ak::ELTM>(Ak::custom_malloc<Ak::ELTM>(true));
+	_eltm = Ak::make_shared_ptr_w<Ak::ELTM>(Ak::memAlloc<Ak::ELTM>(true));
 }
 
 void EditorComponent::onAttach()
@@ -21,8 +21,8 @@ void EditorComponent::onAttach()
 		Ak::Core::ProjectFile::setStringValue(language, _eltm->getLocalText("Languages.English"));
 
 	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/Fr/main.eltm");
-	_console = Ak::make_unique_ptr_w<Console>(Ak::custom_malloc<Console>(_eltm->getLocalText("Console.name"), _eltm));
-	_eltm_editor = Ak::make_unique_ptr_w<ELTM_editor>(Ak::custom_malloc<ELTM_editor>(_eltm->getLocalText("ELTM_Editor.name")));
+	_console = Ak::make_unique_ptr_w<Console>(Ak::memAlloc<Console>(_eltm->getLocalText("Console.name"), _eltm));
+	_eltm_editor = Ak::make_unique_ptr_w<ELTM_editor>(Ak::memAlloc<ELTM_editor>(_eltm->getLocalText("ELTM_Editor.name")));
 }
 
 void EditorComponent::onImGuiRender()

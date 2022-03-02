@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 04/04/2021
-// UPDATED : 13/07/2021
+// Authors : @kbz_8
+// Created : 04/04/2021
+// Updated : 13/07/2021
 
 #include <Platform/platform.h>
 

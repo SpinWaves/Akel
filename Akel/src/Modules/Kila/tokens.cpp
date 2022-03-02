@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 09/11/2021
-// UPDATED : 13/11/2021
+// Authors : @kbz_8
+// Created : 09/11/2021
+// Updated : 13/11/2021
 
 #include <Modules/Kila/tokens.h>
 

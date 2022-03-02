@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 10/11/2021
-// UPDATED : 12/11/2021
+// Authors : @kbz_8
+// Created : 10/11/2021
+// Updated : 12/11/2021
 
 #ifndef __AK_KILA_TOKEN_ITERATOR__
 #define __AK_KILA_TOKEN_ITERATOR__

@@ -1,13 +1,13 @@
 // This file is a part of the Akel editor
-// Author : @kbz_8
-// CREATED : 28/10/2021
-// UPDATED : 07/11/2021
+// Authors : @kbz_8
+// Created : 28/10/2021
+// Updated : 07/11/2021
 
 #include <Panels/eltm_editor.h>
 
 ELTM_editor::ELTM_editor(const std::string& name)
 {
-	_eltm = Ak::make_unique_ptr_w<Ak::ELTM>(Ak::custom_malloc<Ak::ELTM>(true));
+	_eltm = Ak::make_unique_ptr_w<Ak::ELTM>(Ak::memAlloc<Ak::ELTM>(true));
     _name = name;
 }
 

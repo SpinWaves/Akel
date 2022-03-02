@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 08/06/2021
-// UPDATED : 25/12/2021
+// Authors : @kbz_8
+// Created : 08/06/2021
+// Updated : 25/12/2021
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -22,7 +22,7 @@ namespace Ak
 			~Application();
 
 		private:
-			const char* _name = "";
+			const char* _name = nullptr;
 			Input _in;
 			CounterFPS _fps;
 	};

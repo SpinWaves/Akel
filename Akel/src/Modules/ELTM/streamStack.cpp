@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 08/05/2021
-// UPDATED : 19/05/2021
+// Authors : @kbz_8
+// Created : 08/05/2021
+// Updated : 19/05/2021
 
 #include <Modules/ELTM/eltm.h>
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 23/06/2021
-// UPDATED : 04/01/2022
+// Authors : @kbz_8
+// Created : 23/06/2021
+// Updated : 04/01/2022
 
 #include <Core/Components/baseComponent.h>
 

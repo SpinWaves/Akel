@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 11/11/2021
-// UPDATED : 25/02/2022
+// Authors : @kbz_8
+// Created : 11/11/2021
+// Updated : 25/02/2022
 
 #include <Modules/Kila/errors.h>
 

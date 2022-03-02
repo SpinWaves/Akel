@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 23/06/2021
-// UPDATED : 02/03/2022
+// Authors : @kbz_8
+// Created : 23/06/2021
+// Updated : 02/03/2022
 
 #ifndef __AK_COMPONENTS_STACK__
 #define __AK_COMPONENTS_STACK__
@@ -12,7 +12,7 @@ namespace Ak
 {
 	class Component;
 	template <typename T, typename ... Args>
-	T* custom_malloc(Args&& ... args); 
+	T* memAlloc(Args&& ... args); 
 
 	class ComponentStack
 	{
@@ -22,7 +22,7 @@ namespace Ak
 			void add_component(Component* component);
 
 			template <typename T, typename ... Args>
-			inline void add_component(Args&& ... args) { add_component(custom_malloc<T>(std::forward<Args>(args)...)); }
+			inline void add_component(Args&& ... args) { add_component(memAlloc<T>(std::forward<Args>(args)...)); }
 
 			void remove_component(Component* component);	// Modifiers
 			void remove_component(const char* name);

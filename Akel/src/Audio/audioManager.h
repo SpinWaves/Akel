@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 04/08/2021
-// UPDATED : 15/02/2022
+// Authors : @kbz_8
+// Created : 04/08/2021
+// Updated : 15/02/2022
 
 #ifndef __AK_AUDIO_MANAGER__
 #define __AK_AUDIO_MANAGER__

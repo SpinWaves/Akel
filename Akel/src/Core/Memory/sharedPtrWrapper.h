@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 24/07/2021
-// UPDATED : 10/09/2021
+// Authors : @kbz_8
+// Created : 24/07/2021
+// Updated : 10/09/2021
 
 #ifndef __AK_SHARED_PTR_WRAPPER__
 #define __AK_SHARED_PTR_WRAPPER__
@@ -41,7 +41,7 @@ namespace Ak
     std::shared_ptr<T> make_shared_ptr_w(T* ptr)
     {
         if(ptr)
-            return std::shared_ptr<T>(ptr, [](T* ptr) { custom_free(ptr); });
+            return std::shared_ptr<T>(ptr, [](T* ptr) { memFree(ptr); });
         return std::shared_ptr<T>(ptr);
     }
 }

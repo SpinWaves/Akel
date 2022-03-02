@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 29/04/2021
-// UPDATED : 01/03/2022
+// Authors : @kbz_8
+// Created : 29/04/2021
+// Updated : 01/03/2022
 
 #include <Utils/fps.h>
 

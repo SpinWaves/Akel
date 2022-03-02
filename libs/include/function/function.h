@@ -1,6 +1,6 @@
 // This file is a part of Akel
-// CREATED : 11/11/2021
-// UPDATED : 11/11/2021
+// Created : 11/11/2021
+// Updated : 11/11/2021
 
 /**
  * This is free and unencumbered software released into the public domain.

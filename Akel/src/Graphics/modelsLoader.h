@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 29/09/2021
-// UPDATED : 29/09/2021
+// Authors : @kbz_8
+// Created : 29/09/2021
+// Updated : 29/09/2021
 
 #ifndef __AK_GRAPHICS_MODELS_LOADER__
 #define __AK_GRAPHICS_MODELS_LOADER__

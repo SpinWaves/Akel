@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 07/05/2021
-// UPDATED : 03/11/2021
+// Authors : @kbz_8
+// Created : 07/05/2021
+// Updated : 03/11/2021
 
 #ifndef __AK_STREAM_STACK__
 #define __AK_STREAM_STACK__

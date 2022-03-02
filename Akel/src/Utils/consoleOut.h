@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 05/04/2021
-// UPDATED : 21/08/2021
+// Authors : @kbz_8
+// Created : 05/04/2021
+// Updated : 21/08/2021
 
 #ifndef __AK_CONSOLE_OUT__
 #define __AK_CONSOLE_OUT__
