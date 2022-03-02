@@ -1,11 +1,12 @@
 // This file is a part of Akel
 // CREATED : 23/06/2021
-// UPDATED : 04/01/2022
+// UPDATED : 02/03/2022
 
 #ifndef __AK_COMPONENTS_STACK__
 #define __AK_COMPONENTS_STACK__
 
 #include <Akpch.h>
+#include <Core/core.h>
 
 namespace Ak
 {
@@ -17,6 +18,10 @@ namespace Ak
 			explicit ComponentStack() = default;
 
 			void add_component(Component* component);
+
+			template <typename T, typename Args ...>
+			inline void add_component(Args&& ... args) { add_component(custom_malloc<T>(std::forward<Args>(args)...)); }
+
 			void remove_component(Component* component);	// Modifiers
 			void remove_component(const char* name);
 
