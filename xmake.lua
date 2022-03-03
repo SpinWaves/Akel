@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 02/03/2022
+-- Updated : 03/03/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -37,7 +37,7 @@ target("Akel")
 		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")
     end);
 target_end() -- optional but I think the code is cleaner with this
- 
+
 -- Editor Build
 target("Editor")
 	set_default(true)
@@ -60,7 +60,7 @@ target_end() -- optional but I think the code is cleaner with this
 target("RectDemo")
 	set_default(false)
     set_kind("binary")
-	add_packages("imgui_sdl_vk")
+	add_packages("imgui_sdl_vk", "shaderc")
     add_deps("Akel")
 	add_includedirs("Akel/src", "SandBox/rect/src", "libs/include")
     add_files("SandBox/rect/src/*.cpp")

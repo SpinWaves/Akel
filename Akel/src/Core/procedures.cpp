@@ -5,7 +5,6 @@
 
 #include <Core/core.h>
 #include <Audio/audio.h>
-#include <Shaders/build.h>
 
 namespace Ak
 {
@@ -43,7 +42,6 @@ namespace Ak
 		MemoryManager::useMemoryManager(project->use_memory_manager);
 		MemoryManager::init();
 
-		buildBasics2D();
 		return true;
     }
 }

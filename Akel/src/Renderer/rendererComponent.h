@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 02/03/2022
+// Updated : 03/03/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -60,7 +60,7 @@ namespace Ak
         }
     };
 
-    const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation" };
+    const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
     #ifdef AK_DEBUG
         constexpr const bool enableValidationLayers = true;
@@ -122,8 +122,7 @@ namespace Ak
 
             // Pipeline graphique
             void createGraphicsPipeline();
-            static std::vector<char> readFile(const std::string& filename);
-            VkShaderModule createShaderModule(const std::vector<char>& code);
+            VkShaderModule createShaderModule(const std::vector<uint32_t>& code);
 
             // Render pass
             void createRenderPass();
@@ -146,8 +145,8 @@ namespace Ak
             void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
             void createIndexBuffer();
 
-            std::string _vertexShader = Core::getMainDirPath() + "Akel/src/Shaders/basic_2D/basic_2D.vert.spv";
-            std::string _fragmentShader = Core::getMainDirPath() + "Akel/src/Shaders/basic_2D/basic_2D.frag.spv";
+            std::string _vertexShader = Core::getMainDirPath() + "Akel/src/Shaders/basic_2D/basic_2D.vert";
+            std::string _fragmentShader = Core::getMainDirPath() + "Akel/src/Shaders/basic_2D/basic_2D.frag";
 
             VkInstance instance;
             VkDebugUtilsMessengerEXT debugMessenger;

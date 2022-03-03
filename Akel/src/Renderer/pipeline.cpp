@@ -1,20 +1,18 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // Created : 05/06/2021
-// Updated : 02/03/2022
+// Updated : 03/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
+#include <Shaders/GLSL_compiler.h>
 
 namespace Ak
 {
     void RendererComponent::createGraphicsPipeline()
     {
-        auto vertShaderCode = readFile(_vertexShader.c_str());
-        auto fragShaderCode = readFile(_fragmentShader.c_str());
-
-		VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
-	    VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
+		VkShaderModule vertShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::vertex, _vertexShader, true));
+	    VkShaderModule fragShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::fragment, _fragmentShader, true));
 
 	    VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
 	    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -127,25 +125,7 @@ namespace Ak
         vkDestroyShaderModule(device, vertShaderModule, nullptr);
     }
 
-    std::vector<char> RendererComponent::readFile(const std::string& filename)
-    {
-        std::ifstream file(filename, std::ios::ate | std::ios::binary);
-
-        if(!file.is_open())
-			Core::log::report(FATAL_ERROR, "Vulkan : Failed to open shader file");
-
-        size_t fileSize = (size_t) file.tellg();
-        std::vector<char> buffer(fileSize);
-
-        file.seekg(0);
-        file.read(buffer.data(), fileSize);
-
-        file.close();
-
-        return std::move(buffer);
-    }
-
-    VkShaderModule RendererComponent::createShaderModule(const std::vector<char>& code)
+    VkShaderModule RendererComponent::createShaderModule(const std::vector<uint32_t>& code)
     {
         VkShaderModuleCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;

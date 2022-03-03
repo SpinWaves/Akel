@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 23/02/2022
+// Updated : 03/03/2022
 
 #include <Core/core.h>
 
@@ -51,7 +51,7 @@ namespace Ak::Core
     {
 		lockThreads(mutex);
 
-		char buffer[message.length() + 255];
+		char buffer[message.length() + 1024];
 		va_list args;
 		va_start(args, message);
 		vsprintf(buffer, std::move(message).c_str(), args);
@@ -99,7 +99,7 @@ namespace Ak::Core
     {
 		lockThreads(mutex);
 
-		char buffer[message.length() + 255];
+		char buffer[message.length() + 1024];
 		va_list args;
 		va_start(args, message);
 		vsprintf(buffer, message.c_str(), args);
@@ -180,7 +180,7 @@ namespace Ak
 {
     void FatalError(std::string message, ...)
 	{
-		char buffer[message.length() + 255];
+		char buffer[message.length() + 1024];
 		va_list args;
 		va_start(args, message);
 		vsprintf(buffer, std::move(message).c_str(), args);
@@ -190,7 +190,7 @@ namespace Ak
 	}
     void Error(std::string message, ...)
 	{
-		char buffer[message.length() + 255];
+		char buffer[message.length() + 1024];
 		va_list args;
 		va_start(args, message);
 		vsprintf(buffer, std::move(message).c_str(), args);
@@ -200,7 +200,7 @@ namespace Ak
 	}
     void Warning(std::string message, ...)
 	{
-		char buffer[message.length() + 255];
+		char buffer[message.length() + 1024];
 		va_list args;
 		va_start(args, message);
 		vsprintf(buffer, std::move(message).c_str(), args);
@@ -210,7 +210,7 @@ namespace Ak
 	}
     void Strong_Warning(std::string message, ...)
 	{
-		char buffer[message.length() + 255];
+		char buffer[message.length() + 1024];
 		va_list args;
 		va_start(args, message);
 		vsprintf(buffer, std::move(message).c_str(), args);
@@ -220,7 +220,7 @@ namespace Ak
 	}
     void Message(std::string message, ...)
 	{
-		char buffer[message.length() + 255];
+		char buffer[message.length() + 1024];
 		va_list args;
 		va_start(args, message);
 		vsprintf(buffer, std::move(message).c_str(), args);

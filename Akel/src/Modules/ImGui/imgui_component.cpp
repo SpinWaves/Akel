@@ -521,13 +521,22 @@ namespace Ak
 		wd->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(g_PhysicalDevice, wd->Surface, requestSurfaceImageFormat, (size_t)IM_ARRAYSIZE(requestSurfaceImageFormat), requestSurfaceColorSpace);
 
 		// Select Present Mode
+		VkPresentModeKHR* present_modes; 
 		if(Core::ProjectFile::getBoolValue("imgui_vk_unlimited_framerate"))
-			VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR };
+		{
+			present_modes = (VkPresentModeKHR*)malloc(sizeof(VkPresentModeKHR) * 3);
+			present_modes[0] = VK_PRESENT_MODE_MAILBOX_KHR;
+			present_modes[1] = VK_PRESENT_MODE_IMMEDIATE_KHR;
+			present_modes[2] = VK_PRESENT_MODE_FIFO_KHR;
+		}
 		else
-			VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_FIFO_KHR };
+		{
+			present_modes = (VkPresentModeKHR*)malloc(sizeof(VkPresentModeKHR));
+			present_modes[0] = VK_PRESENT_MODE_FIFO_KHR;
+		}
 
-		wd->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, wd->Surface, &present_modes[0], IM_ARRAYSIZE(present_modes));
-		//printf("[vulkan] Selected PresentMode = %d\n", wd->PresentMode);
+		wd->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, wd->Surface, present_modes, IM_ARRAYSIZE(present_modes));
+		free(present_modes); 
 
 		// Create SwapChain, RenderPass, Framebuffer, etc.
 		IM_ASSERT(g_MinImageCount >= 2);
