@@ -6,7 +6,7 @@
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "glslang", "vulkan-headers", "vulkan-loader", "vulkan-tools", "vulkan-validationlayers", "imgui_sdl_vk v1.83-docking")
+add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "shaderc", "vulkan-headers", "vulkan-loader", "vulkan-tools", "vulkan-validationlayers", "imgui_sdl_vk v1.83-docking")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
@@ -31,7 +31,7 @@ target("Akel")
 
 	set_pcxxheader("Akel/src/Akpch.h")
 	add_defines("SDL_MAIN_HANDLED")
-	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "glslang", "vulkan-headers", "vulkan-loader", "vulkan-validationlayers", "vulkan-tools", "imgui_sdl_vk")
+	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "shaderc", "vulkan-headers", "vulkan-loader", "vulkan-validationlayers", "vulkan-tools", "imgui_sdl_vk")
 
 	on_load(function(target)
 		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")

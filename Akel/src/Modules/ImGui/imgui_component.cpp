@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 15/02/2022
+// Updated : 03/02/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -17,7 +17,6 @@ namespace Ak
 	static void CleanupVulkan();
 	static void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data);
 	static void FramePresent(ImGui_ImplVulkanH_Window* wd);
-
 
 	static VkResult err;
 
@@ -283,14 +282,14 @@ namespace Ak
 		Core::log::report(ERROR, std::string("Imgui: Vulkan: VkResult = " + err));
 	}
 
-#ifdef IMGUI_VULKAN_DEBUG_REPORT
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debug_report(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage, void* pUserData)
 	{
+		if(!Core::ProjectFile::getBoolValue("imgui_vk_debug_report"))
+			return VK_FALSE;
 		(void)flags; (void)object; (void)location; (void)messageCode; (void)pUserData; (void)pLayerPrefix; // Unused arguments
 		Core::log::report(ERROR, std::string(std::string("ImGui: Vulkan: debug report from ObjectType: " + objectType) + "\nMessage:" + pMessage)); // Needs to be improved
 		return VK_FALSE;
 	}
-#endif // IMGUI_VULKAN_DEBUG_REPORT
 
 	static void SetupVulkan(const char** extensions, uint32_t extensions_count)
 	{
@@ -302,42 +301,46 @@ namespace Ak
 			create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 			create_info.enabledExtensionCount = extensions_count;
 			create_info.ppEnabledExtensionNames = extensions;
-	#ifdef IMGUI_VULKAN_DEBUG_REPORT
-			// Enabling validation layers
-			const char* layers[] = { "VK_LAYER_KHRONOS_validation" };
-			create_info.enabledLayerCount = 1;
-			create_info.ppEnabledLayerNames = layers;
 
-			// Enable debug report extension (we need additional storage, so we duplicate the user array to add our new extension to it)
-			const char** extensions_ext = (const char**)malloc(sizeof(const char*) * (extensions_count + 1));
-			memcpy(extensions_ext, extensions, extensions_count * sizeof(const char*));
-			extensions_ext[extensions_count] = "VK_EXT_debug_report";
-			create_info.enabledExtensionCount = extensions_count + 1;
-			create_info.ppEnabledExtensionNames = extensions_ext;
+			if(Core::ProjectFile::getBoolValue("imgui_vk_debug_report"))
+			{
+				// Enabling validation layers
+				const char* layers[] = { "VK_LAYER_KHRONOS_validation" };
+				create_info.enabledLayerCount = 1;
+				create_info.ppEnabledLayerNames = layers;
 
-			// Create Vulkan Instance
-			err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
-			check_vk_result(err);
-			free(extensions_ext);
+				// Enable debug report extension (we need additional storage, so we duplicate the user array to add our new extension to it)
+				const char** extensions_ext = (const char**)malloc(sizeof(const char*) * (extensions_count + 1));
+				memcpy(extensions_ext, extensions, extensions_count * sizeof(const char*));
+				extensions_ext[extensions_count] = "VK_EXT_debug_report";
+				create_info.enabledExtensionCount = extensions_count + 1;
+				create_info.ppEnabledExtensionNames = extensions_ext;
 
-			// Get the function pointer (required for any extensions)
-			auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkCreateDebugReportCallbackEXT");
-			IM_ASSERT(vkCreateDebugReportCallbackEXT != NULL);
+				// Create Vulkan Instance
+				err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
+				check_vk_result(err);
+				free(extensions_ext);
 
-			// Setup the debug report callback
-			VkDebugReportCallbackCreateInfoEXT debug_report_ci = {};
-			debug_report_ci.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-			debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
-			debug_report_ci.pfnCallback = debug_report;
-			debug_report_ci.pUserData = NULL;
-			err = vkCreateDebugReportCallbackEXT(g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
-			check_vk_result(err);
-	#else
-			// Create Vulkan Instance without any debug feature
-			err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
-			check_vk_result(err);
-			IM_UNUSED(g_DebugReport);
-	#endif
+				// Get the function pointer (required for any extensions)
+				auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkCreateDebugReportCallbackEXT");
+				IM_ASSERT(vkCreateDebugReportCallbackEXT != NULL);
+
+				// Setup the debug report callback
+				VkDebugReportCallbackCreateInfoEXT debug_report_ci = {};
+				debug_report_ci.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
+				debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+				debug_report_ci.pfnCallback = debug_report;
+				debug_report_ci.pUserData = NULL;
+				err = vkCreateDebugReportCallbackEXT(g_Instance, &debug_report_ci, g_Allocator, &g_DebugReport);
+				check_vk_result(err);
+			}
+			else
+			{
+				// Create Vulkan Instance without any debug feature
+				err = vkCreateInstance(&create_info, g_Allocator, &g_Instance);
+				check_vk_result(err);
+				IM_UNUSED(g_DebugReport);
+			}
 		}
 
 		// Select GPU
@@ -518,11 +521,11 @@ namespace Ak
 		wd->SurfaceFormat = ImGui_ImplVulkanH_SelectSurfaceFormat(g_PhysicalDevice, wd->Surface, requestSurfaceImageFormat, (size_t)IM_ARRAYSIZE(requestSurfaceImageFormat), requestSurfaceColorSpace);
 
 		// Select Present Mode
-	#ifdef IMGUI_UNLIMITED_FRAME_RATE
-		VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR };
-	#else
-		VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_FIFO_KHR };
-	#endif
+		if(Core::ProjectFile::getBoolValue("imgui_vk_unlimited_framerate"))
+			VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_MAILBOX_KHR, VK_PRESENT_MODE_IMMEDIATE_KHR, VK_PRESENT_MODE_FIFO_KHR };
+		else
+			VkPresentModeKHR present_modes[] = { VK_PRESENT_MODE_FIFO_KHR };
+
 		wd->PresentMode = ImGui_ImplVulkanH_SelectPresentMode(g_PhysicalDevice, wd->Surface, &present_modes[0], IM_ARRAYSIZE(present_modes));
 		//printf("[vulkan] Selected PresentMode = %d\n", wd->PresentMode);
 
