@@ -209,7 +209,7 @@ namespace Ak
             bool _instanceInitialized = false;
 
             std::vector<Vertex> vertices;
-            std::vector<uint32_t> indices;
+            std::vector<uint16_t> indices;
     };
 }
 

@@ -31,6 +31,8 @@ namespace Ak
 
             default : Core::log::report(ERROR, "GLSL Compiler : unknown shader type"); return "";
         }
+        shaderc::Compiler _compiler;
+        shaderc::CompileOptions _options;
         shaderc::PreprocessedSourceCompilationResult result = _compiler.PreprocessGlsl(readFile(filename), __kind, filename.c_str(), _options);
 
         if(result.GetCompilationStatus() != shaderc_compilation_status_success)
@@ -53,6 +55,8 @@ namespace Ak
 
             default : Core::log::report(ERROR, "GLSL Compiler : unknown shader type"); return "";
         }
+        shaderc::Compiler _compiler;
+        shaderc::CompileOptions _options;
 
         if(optimize)
             _options.SetOptimizationLevel(shaderc_optimization_level_size);
@@ -79,6 +83,8 @@ namespace Ak
 
             default : Core::log::report(ERROR, "GLSL Compiler : unknown shader type"); return std::move(std::vector<uint32_t>());
         }
+        shaderc::Compiler _compiler;
+        shaderc::CompileOptions _options;
 
         if(optimize)
             _options.SetOptimizationLevel(shaderc_optimization_level_size);

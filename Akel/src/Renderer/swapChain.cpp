@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/06/2021
-// Updated : 28/02/2022
+// Updated : 04/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -107,16 +107,11 @@ namespace Ak
 
     VkExtent2D RendererComponent::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
     {
-        if (capabilities.currentExtent.width != UINT32_MAX)
+        if(capabilities.currentExtent.width != UINT32_MAX)
             return capabilities.currentExtent;
-        else
-        {
-            VkExtent2D actualExtent = {1000, 563};
-
-            actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
-            actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
-
-            return actualExtent;
-        }
+        VkExtent2D actualExtent = {1000, 563};
+        actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
+        actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
+        return actualExtent;
     }
 }

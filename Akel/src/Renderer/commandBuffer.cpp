@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/06/2021
-// Updated : 28/02/2022
+// Updated : 04/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -48,7 +48,7 @@ namespace Ak
             renderPassInfo.renderArea.offset = {0, 0};
             renderPassInfo.renderArea.extent = swapChainExtent;
 
-            VkClearValue clearColor = {1.0f, 0.0f, 1.0f, 1.0f};
+            VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
             renderPassInfo.clearValueCount = 1;
             renderPassInfo.pClearValues = &clearColor;
 
