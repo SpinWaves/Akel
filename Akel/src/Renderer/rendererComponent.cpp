@@ -12,7 +12,7 @@ namespace Ak
     {
         useShader(internal);
     }
-    RendererComponent::RendererComponent(SDL_Window* win) : Component("__renderer_component"), window(win)
+    RendererComponent::RendererComponent(SDL_Window* win, shader internal) : Component("__renderer_component"), window(win)
     {
         useShader(internal);
     }

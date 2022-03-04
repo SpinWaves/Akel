@@ -73,15 +73,15 @@ namespace Ak
         basic_2D,
         basic_3D
         // More default shaders will come in the future
-    }
+    };
 
     class RendererComponent : public Component
     {
         public:
-            RendererComponent(SDL_Window* win);
-            RendererComponent();
-            RendererComponent(shader internal); 
             RendererComponent(SDL_Window* win, shader internal); 
+            RendererComponent(SDL_Window* win);
+            RendererComponent(shader internal); 
+            RendererComponent();
 
             void onAttach() override;
             void onRender() override;

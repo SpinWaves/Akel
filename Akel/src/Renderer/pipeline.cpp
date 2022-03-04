@@ -14,11 +14,11 @@ namespace Ak
 		switch(internal)
 		{
 			case shader::basic_2D : 
-				_vertexShader = getShaderPath() + "basic_2D/basic_2D.vert";
-				_fragmentShader = getShaderPath() + "basic_2D/basic_2D.frag";
+				_vertexShader = Core::getShaderPath() + "basic_2D/basic_2D.vert";
+				_fragmentShader = Core::getShaderPath() + "basic_2D/basic_2D.frag";
 			break;
 
-			case shader::basic_2D : Core::log::report(MESSAGE, "Renderer Component : there are no basic 3D shader yet"); break;
+			case shader::basic_3D : Core::log::report(MESSAGE, "Renderer Component : there are no basic 3D shader yet"); break;
 
 			default : Core::log::report(FATAL_ERROR, "Renderer Component : unable to find internal shader"); return;
 		}
@@ -149,8 +149,8 @@ namespace Ak
     {
         VkShaderModuleCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-        createInfo.codeSize = code.size();
-        createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+        createInfo.codeSize = code.size() * 4;
+        createInfo.pCode = code.data();
 
         VkShaderModule shaderModule;
         if(vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
