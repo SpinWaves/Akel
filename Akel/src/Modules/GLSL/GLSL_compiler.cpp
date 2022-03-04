@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/03/2022
-// Updated : 03/03/2022
+// Updated : 04/03/2022
 
 #include <Core/core.h>
-#include <Shaders/GLSL_compiler.h>
+#include <Modules/GLSL/GLSL_compiler.h>
 
 namespace Ak
 {

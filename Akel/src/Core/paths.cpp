@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 20/10/2021
+// Updated : 04/03/2022
 
 #include <Core/core.h>
 
@@ -33,7 +33,7 @@ namespace Ak::Core
     }
     std::string Paths::shaderPath()
     {
-        return MAIN_PATH"Akel/src/Shaders/";
+        return MAIN_PATH"Akel/src/Modules/GLSL/";
     }
 
     void Paths::setLogsDir(std::string path)

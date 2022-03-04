@@ -5,7 +5,7 @@
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
-#include <Shaders/GLSL_compiler.h>
+#include <Modules/GLSL/GLSL_compiler.h>
 
 namespace Ak
 {
