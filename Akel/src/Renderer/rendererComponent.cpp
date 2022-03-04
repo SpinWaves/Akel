@@ -1,13 +1,21 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // CREATED : 23/09/2021
-// Updated : 02/03/2022
+// Updated : 03/03/2022
 
 #include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
     RendererComponent::RendererComponent() : Component("__renderer_component") {}
+    RendererComponent::RendererComponent(shader internal) : Component("__renderer_component")
+    {
+        useShader(internal);
+    }
+    RendererComponent::RendererComponent(SDL_Window* win) : Component("__renderer_component"), window(win)
+    {
+        useShader(internal);
+    }
     RendererComponent::RendererComponent(SDL_Window* win) : Component("__renderer_component"), window(win) {}
 
     void RendererComponent::onAttach()

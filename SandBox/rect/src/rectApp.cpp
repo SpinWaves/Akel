@@ -18,7 +18,7 @@ class Rect : public Ak::Application
             //window->setSetting(Ak::winsets::size, 1280, 750);
             window->setSetting(Ak::winsets::resizable, false);
 
-            add_component<Ak::RendererComponent>(window->getNativeWindow());
+            add_component<Ak::RendererComponent>(window->getNativeWindow(), Ak::shader::basic_2D);
             add_component<FPSprinterComponent>();
         }
         ~Rect() = default;

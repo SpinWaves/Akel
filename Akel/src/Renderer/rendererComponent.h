@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 03/03/2022
+// Updated : 04/03/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -68,17 +68,27 @@ namespace Ak
         constexpr const bool enableValidationLayers = false;
     #endif
 
+    enum class shader
+    {
+        basic_2D,
+        basic_3D
+        // More default shaders will come in the future
+    }
+
     class RendererComponent : public Component
     {
         public:
             RendererComponent(SDL_Window* win);
             RendererComponent();
+            RendererComponent(shader internal); 
+            RendererComponent(SDL_Window* win, shader internal); 
 
             void onAttach() override;
             void onRender() override;
             void onQuit() override;
 
             inline void setShader(std::string vertexShader, std::string fragmentShader) { _vertexShader = std::move(vertexShader); _fragmentShader = std::move(fragmentShader); }
+            void useShader(shader internal);
             inline void render_to_window(SDL_Window* win) noexcept { window = win; }
 
             ~RendererComponent() = default;
@@ -145,8 +155,8 @@ namespace Ak
             void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
             void createIndexBuffer();
 
-            std::string _vertexShader = Core::getMainDirPath() + "Akel/src/Shaders/basic_2D/basic_2D.vert";
-            std::string _fragmentShader = Core::getMainDirPath() + "Akel/src/Shaders/basic_2D/basic_2D.frag";
+            std::string _vertexShader;
+            std::string _fragmentShader;
 
             VkInstance instance;
             VkDebugUtilsMessengerEXT debugMessenger;

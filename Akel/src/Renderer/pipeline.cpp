@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // Created : 05/06/2021
-// Updated : 03/03/2022
+// Updated : 04/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -9,8 +9,28 @@
 
 namespace Ak
 {
+	void RendererComponent::useShader(shader internal)
+	{
+		switch(internal)
+		{
+			case shader::basic_2D : 
+				_vertexShader = getShaderPath() + "basic_2D/basic_2D.vert";
+				_fragmentShader = getShaderPath() + "basic_2D/basic_2D.frag";
+			break;
+
+			case shader::basic_2D : Core::log::report(MESSAGE, "Renderer Component : there are no basic 3D shader yet"); break;
+
+			default : Core::log::report(FATAL_ERROR, "Renderer Component : unable to find internal shader"); return;
+		}
+	}
+
     void RendererComponent::createGraphicsPipeline()
     {
+		if(_vertexShader.empty())
+			Core::log::report(FATAL_ERROR, "Renderer Component Pipeline : no vertex shader given");
+		if(_fragmentShader.empty())
+			Core::log::report(FATAL_ERROR, "Renderer Component Pipeline : no fragment shader given");
+
 		VkShaderModule vertShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::vertex, _vertexShader, true));
 	    VkShaderModule fragShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::fragment, _fragmentShader, true));
 
