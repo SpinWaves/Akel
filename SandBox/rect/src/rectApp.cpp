@@ -22,7 +22,7 @@ class Rect : public Ak::Application
 
             Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(window->getNativeWindow(), Ak::shader::basic_2D);
             renderer->setClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            Ak::Entity2D rectangle(Models::quad, {-0.5f, -0.5f}, {1.0f, 1.0f}, Colors::red);
+            Ak::Entity2D rectangle(Models::quad, {-0.9f, -0.9f}, {0.4f, 0.4f}, Colors::red);
             renderer->add_entity(rectangle);
             add_component(renderer);
         }

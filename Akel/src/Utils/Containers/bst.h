@@ -1,16 +1,7 @@
 // This file is a part of Akel
-<<<<<<< HEAD
 // Authors : @kbz_8
 // Created : 17/11/2021
 // Updated : 29/01/2022
-=======
-// CREATED : 17/11/2021
-<<<<<<< HEAD
-// UPDATED : 08/01/2022
->>>>>>> working on path for jamallocator
-=======
-// UPDATED : 15/01/2022
->>>>>>> almost finishing JamAllocator 2.0.1 patch
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
@@ -71,36 +62,21 @@ namespace Ak
                 {
                     if(!st.empty())
                         return *st.top();
-<<<<<<< HEAD
                     Error("Binary Search Tree Iterator : operator * : Cannot return the top of an empty stack");
-=======
-                    else
-                        Error("Cannot return the top of an empty stack");
->>>>>>> almost finishing JamAllocator 2.0.1 patch
                 }
                 inline pointer operator->()
                 {
                     if(!st.empty())
                         return st.top();
-<<<<<<< HEAD
                     Error("Binary Search Tree Iterator : operator ->  : Cannot return the top of an empty stack");
                     return nullptr;
-=======
-                    else
-                        Error("Cannot return the top of an empty stack");
->>>>>>> almost finishing JamAllocator 2.0.1 patch
                 }
                 inline pointer get_node()
                 {
                     if(!st.empty())
                         return st.top();
-<<<<<<< HEAD
                     Error("Binary Search Tree Iterator : get_node() : Cannot return the top of an empty stack");
                     return nullptr;
-=======
-                    else
-                        Error("Cannot return the top of an empty stack");
->>>>>>> almost finishing JamAllocator 2.0.1 patch
                 }
 
                 inline friend bool operator== (const iterator& a, const iterator& b) { return a.st.top() == b.st.top(); }

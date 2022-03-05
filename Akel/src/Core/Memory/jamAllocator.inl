@@ -1,12 +1,7 @@
 // This file is a part of Akel
-<<<<<<< HEAD
 // Authors : @kbz_8
 // Created : 25/07/2021
 // Updated : 03/02/2022
-=======
-// CREATED : 25/07/2021
-// UPDATED : 15/01/2022
->>>>>>> almost finishing JamAllocator 2.0.1 patch
 
 #include <Core/log.h>
 #include <Maths/maths.h>
@@ -39,16 +34,7 @@ namespace Ak
 
         JamAllocator::flag finder;
         finder.size = sizeType;
-<<<<<<< HEAD
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
-=======
-        finder.offset = 0;
-<<<<<<< HEAD
-        BinarySearchTree<const JamAllocator::flag&>* node = nullptr;
->>>>>>> working on a patch for jamallocator
-=======
-        BinarySearchTree<JamAllocator::flag*>* node = nullptr;
->>>>>>> almost finishing JamAllocator 2.0.1 patch
         if(_freeSpaces != nullptr)
         {
             if(_freeSpaces->has_data())
@@ -56,11 +42,7 @@ namespace Ak
         }
         if(node != nullptr)
         {
-<<<<<<< HEAD
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (reinterpret_cast<uintptr_t>(node->getData()) - reinterpret_cast<uintptr_t>(_heap)));
-=======
-            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + node->getData()->offset);
->>>>>>> almost finishing JamAllocator 2.0.1 patch
             if(!_usedSpaces->has_data())
                 _usedSpaces = node;
             else
@@ -69,34 +51,13 @@ namespace Ak
         }
         if(ptr == nullptr) // If we haven't found free flag
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
             JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
             flag->size = sizeType;
             _memUsed += sizeof(JamAllocator::flag);
-=======
-            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
-=======
-            node = reinterpret_cast<BinarySearchTree<const JamAllocator::flag&>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
->>>>>>> working on a patch for jamallocator
             _memUsed += sizeof(_freeSpaces);
-=======
-            JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
-            flag->size = sizeType;
-            _memUsed += sizeof(JamAllocator::flag);
->>>>>>> almost finishing JamAllocator 2.0.1 patch
 
             node = reinterpret_cast<BinarySearchTree<JamAllocator::flag*>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
             init_node(node, flag);
-<<<<<<< HEAD
->>>>>>> working on path for jamallocator
-
-            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag*>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
-            init_node(node, flag);
-=======
-            flag->offset = _memUsed; // Set offset here to include node size
->>>>>>> almost finishing JamAllocator 2.0.1 patch
 
             if(_usedSpaces == nullptr || !_usedSpaces->has_data())
                 _usedSpaces = node;
@@ -135,54 +96,24 @@ namespace Ak
         if(std::is_class<T>::value)
             ptr->~T();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         JamAllocator::flag* finder = nullptr;
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
         size_t flag_size = sizeof(JamAllocator::flag);
         unsigned int better_flag = UINT_MAX;
-=======
-        JamAllocator::flag flag_ref;
-        const JamAllocator::flag* finder;
->>>>>>> working on a patch for jamallocator
-=======
-        JamAllocator::flag* finder = nullptr;
->>>>>>> almost finishing JamAllocator 2.0.1 patch
 
         lockThreads(mutex);
 
         auto it = _usedSpaces->root_it();
         if(!it.has_data()) // used space tree is not supposed to be empty here
         {
-<<<<<<< HEAD
             Core::log::report(ERROR, "Jam Allocator: an inconsistency was detected when a pointer was freed");
             return;
         }
 
-<<<<<<< HEAD
         unsigned int cache = 0;
 
         for(; it.has_data(); it.next()) // flag finder
-=======
-        if(finder)
-=======
-            if(ptr == (void*)(reinterpret_cast<uintptr_t>(_heap) + it->getData()->offset))
-                finder = it->getData();
-        }
-
-        bool oui = (void*)ptr == (void*)(finder + sizeof(JamAllocator::flag));
-        std::cout << ptr << "   " << finder + sizeof(JamAllocator::flag) << "    match : " << oui << std::endl;
-
-        if(finder != nullptr)
->>>>>>> almost finishing JamAllocator 2.0.1 patch
         {
-            debugPrint(it->getData());
-            _usedSpaces->remove(it.get_node(), false);
-        }
-        else
->>>>>>> working on a patch for jamallocator
-        {
-<<<<<<< HEAD
             if((cache = reinterpret_cast<uintptr_t>(ptr) - (reinterpret_cast<uintptr_t>(it->getData()) + flag_size)) >= 0)
             {
                 if(cache < better_flag)
@@ -199,14 +130,11 @@ namespace Ak
 
         if(finder == nullptr)
         {
-=======
->>>>>>> almost finishing JamAllocator 2.0.1 patch
             Core::log::report(ERROR, "JamAllocator : unable to find the flag of %p", ptr);
             unlockThreads(mutex);
             return;
         }
         
-<<<<<<< HEAD
         _usedSpaces->remove(node, false);
         
         if(_freeSpaces == nullptr || !_freeSpaces->has_data())
@@ -214,19 +142,6 @@ namespace Ak
         else
             _freeSpaces->add(node);
         
-=======
-        debugPrint("test2");
-        if(_freeSpaces == nullptr || !_freeSpaces->has_data())
-        {
-            debugPrint("test3");
-            _freeSpaces = it.get_node();
-        }
-        else
-        {
-            debugPrint("test4");
-            _freeSpaces->add(it.get_node());
-        }
->>>>>>> almost finishing JamAllocator 2.0.1 patch
         unlockThreads(mutex);
         ptr = nullptr;
     }

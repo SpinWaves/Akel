@@ -1,16 +1,7 @@
 // This file is a part of Akel
-<<<<<<< HEAD
 // Authors : @kbz_8
 // Created : 20/07/2021
 // Updated : 24/02/2022
-=======
-// CREATED : 20/07/2021
-<<<<<<< HEAD
-// UPDATED : 08/01/2022
->>>>>>> working on path for jamallocator
-=======
-// UPDATED : 15/01/2022
->>>>>>> almost finishing JamAllocator 2.0.1 patch
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -23,11 +14,7 @@
  *  - Size allocation (like malloc)
  */
 
-<<<<<<< HEAD
 // JamAllocator version 2.0.1
-=======
-// JamAllocator version 2.0.0
->>>>>>> working on path for jamallocator
 
 namespace Ak
 {
@@ -62,10 +49,6 @@ namespace Ak
             struct flag
             {
                 unsigned int size = 0;
-<<<<<<< HEAD
-=======
-                unsigned int offset = 0;
->>>>>>> almost finishing JamAllocator 2.0.1 patch
             };
 
             size_t _heapSize = 0;
@@ -77,28 +60,11 @@ namespace Ak
 
             bool _autoResize = false;
             int _allocator_number = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
+            
             BinarySearchTree<flag*>* _freeSpaces = nullptr;
             BinarySearchTree<flag*>* _usedSpaces = nullptr;
 
-<<<<<<< HEAD
             void init_node(BinarySearchTree<flag*>* node, flag* ptr);
-=======
-            void init_node(BinarySearchTree<flag&>* node, flag& ptr);
->>>>>>> working on path for jamallocator
-=======
-            BinarySearchTree<const flag&>* _freeSpaces;
-            BinarySearchTree<const flag&>* _usedSpaces;
-
-            void init_node(BinarySearchTree<const flag&>* node, const flag& ptr);
->>>>>>> working on a patch for jamallocator
-=======
-            BinarySearchTree<flag*>* _freeSpaces;
-            BinarySearchTree<flag*>* _usedSpaces;
-
-            void init_node(BinarySearchTree<flag*>* node, flag* ptr);
->>>>>>> almost finishing JamAllocator 2.0.1 patch
 
             inline static MutexHandel mutex;
     };
