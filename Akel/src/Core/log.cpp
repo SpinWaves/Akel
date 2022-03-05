@@ -1,7 +1,12 @@
 // This file is a part of Akel
+<<<<<<< HEAD
 // Authors : @kbz_8
 // Created : 03/04/2021
 // Updated : 03/03/2022
+=======
+// CREATED : 03/04/2021
+// UPDATED : 15/01/2022
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
 
 #include <Core/core.h>
 
@@ -62,6 +67,7 @@ namespace Ak::Core
 		{
 			switch(type)
 			{
+<<<<<<< HEAD
 				case MESSAGE: std::cout << blue << "[Akel log Message] " << buffer << def << '\n'; _type = "Message: "; break;
 				case WARNING:
 				{	
@@ -79,6 +85,12 @@ namespace Ak::Core
 				}
 				case ERROR: std::cout << red << "[Akel log Error] " << buffer << def << '\n'; _type = "Error: "; break;
 				case FATAL_ERROR: std::cout << red << "[Akel log Fatal Error] " << buffer << def << '\n'; _type = "Fatal Error: "; break;
+=======
+				case MESSAGE: std::cout << blue << "[Akel log] " << buffer << def << '\n'; _type = "Message: "; break;
+				case WARNING: std::cout << magenta << "[Akel log] " << buffer << def << '\n'; _type = "Warning: "; break;
+				case ERROR: std::cout << red << "[Akel log] " << buffer << def << '\n'; _type = "Error: "; break;
+				case FATAL_ERROR: std::cout << red << "[Akel log] " << buffer << def << '\n'; _type = "Fatal Error: "; break;
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
 
 				default: break;
 			}

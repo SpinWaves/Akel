@@ -1,7 +1,12 @@
 // This file is a part of Akel
+<<<<<<< HEAD
 // Authors : @kbz_8
 // Created : 17/11/2021
 // Updated : 28/01/2022
+=======
+// CREATED : 17/11/2021
+// UPDATED : 15/01/2022
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
 
 #include <Utils/Containers/bst.h>
 
@@ -21,7 +26,11 @@ namespace Ak
     template <typename T>
     void BinarySearchTree<T>::add(T&& data) // kiki bg
     {
+<<<<<<< HEAD
         if(_greater(std::forward<T>(data), _data))
+=======
+        if(_greater(data, _data))
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
         {
             if(_right != nullptr)
                 _right->add(std::forward<T>(data));
@@ -52,23 +61,21 @@ namespace Ak
             return;
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         if(_greater(node->getData(), _data))
 =======
         std::cout << node << "   " << node->getData().size << "     " << node->getData().offset << std::endl;
         std::cout << this << "   " << _data.size << "     " << _data.offset << '\n' << std::endl;
         if(node->getData() > _data)
 >>>>>>> working on path for jamallocator
+=======
+        if(_greater(node->getData(), _data))
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
         {
             if(_right != nullptr)
-            {
-                debugPrint("add");
                 _right->add(node);
-            }
             else
-            {
-                debugPrint("set");
                 _right = node;
-            }
         }
         else
         {
@@ -293,15 +300,23 @@ namespace Ak
         {
             Error("Binary Search Tree : unable to find an uninit node");
             return nullptr;
+<<<<<<< HEAD
         }
         if(_greater(std::forward<T>(data), _data))
+=======
+        if(_greater(data, _data))
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
         {
             if(_right != nullptr)
                 return _right->find(std::forward<T>(data));
             Error("Binary Search Tree : unable to find a node");
             return nullptr;
         }
+<<<<<<< HEAD
         else if(_less(std::forward<T>(data), _data))
+=======
+        else if(_less(data, _data))
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
         {
             if(_left != nullptr)
                 return _left->find(std::forward<T>(data));
@@ -315,7 +330,11 @@ namespace Ak
     template <typename T>
     BinarySearchTree<T>* BinarySearchTree<T>::find_parent(T&& data)
     {
+<<<<<<< HEAD
         if(_greater(std::forward<T>(data), _data))
+=======
+        if(_greater(data, _data))
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
         {
             if(_right != nullptr)
             {
@@ -326,7 +345,11 @@ namespace Ak
             Error("Binary Search Tree : unable to find the parent of a node");
             return nullptr;
         }
+<<<<<<< HEAD
         else if(_less(std::forward<T>(data), _data))
+=======
+        else if(_less(data, _data))
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
         {
             if(_left != nullptr)
             {

@@ -5,8 +5,12 @@
 // Updated : 24/02/2022
 =======
 // CREATED : 20/07/2021
+<<<<<<< HEAD
 // UPDATED : 08/01/2022
 >>>>>>> working on path for jamallocator
+=======
+// UPDATED : 15/01/2022
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
 
 #include <Core/core.h>
 
@@ -41,6 +45,7 @@ namespace Ak
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag*>* node, JamAllocator::flag* flag)
     {
         new ((void*)node) BinarySearchTree<JamAllocator::flag*>(std::move(flag)); // Give flag to node (node is not init, just allocated so we call his constructor)
@@ -58,6 +63,15 @@ namespace Ak
     {
         new ((void*)node) BinarySearchTree<const JamAllocator::flag&>(flag); // Give flag to node (node is not init, just allocated so we call his constructor)
 >>>>>>> working on a patch for jamallocator
+=======
+    void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag*>* node, JamAllocator::flag* flag)
+    {
+        new ((void*)node) BinarySearchTree<JamAllocator::flag*>(std::move(flag)); // Give flag to node (node is not init, just allocated so we call his constructor)
+        node->set_greater_operation([](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size  > curr_d->size; } );
+        node->set_equal_operation(  [](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size == curr_d->size; } );
+        node->set_less_operation(   [](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size  < curr_d->size; } );
+        _memUsed += sizeof(BinarySearchTree<JamAllocator::flag*>);
+>>>>>>> almost finishing JamAllocator 2.0.1 patch
     }
 
     void JamAllocator::increase_size(size_t Size)
