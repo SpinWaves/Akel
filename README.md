@@ -34,13 +34,10 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Memory protection system in case of crash
 
 # Coming soon...
-* Fully functionnal renderer using Vulkan API
-* Demos
+* Cube demo
 * Custom strings to replace std::string
 * Better ImGui component implementation using Akel Vulkan renderer
 * Custom shading language
-* More powerful allocators
-* Entity management
 * Models manager
 
 # Contribute
