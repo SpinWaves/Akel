@@ -4,6 +4,7 @@
 // Updated : 06/03/2022
 
 #include <Renderer/rendererComponent.h>
+#include <Graphics/matrixes.h>
 
 namespace Ak
 {
@@ -38,15 +39,16 @@ namespace Ak
 
     void RendererComponent::updateUniformBuffer(uint32_t currentImage)
     {
-        static auto startTime = std::chrono::high_resolution_clock::now();
-
-        auto currentTime = std::chrono::high_resolution_clock::now();
-        float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-
         UniformBufferObject ubo{};
-        ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        ubo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / (float) swapChainExtent.height, 0.1f, 10.0f);
+        
+        Matrixes::matrix_mode(matrix::model);
+        Matrixes::load_identity();
+        ubo.model = Matrixes::get_matrix(matrix::model);
+        
+        ubo.view = Matrixes::get_matrix(matrix::view);
+        
+        Matrixes::perspective(90, (float)(window->getSize().X/window->getSize().Y), 0.01, 1000);
+        ubo.proj = Matrixes::get_matrix(matrix::proj);
         ubo.proj[1][1] *= -1;
 
         void* data;

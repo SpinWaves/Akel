@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 04/07/2021
+// Updated : 06/03/2022
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -9,14 +9,10 @@
 #include <Akpch.h>
 #include <Platform/inputScanCode.h>
 
-enum ButtonACTION
-{
-    UP,
-    DOWN
-};
-
 namespace Ak
 {
+    enum class action { up, down };
+
     class Input
     {
         public:
@@ -24,46 +20,35 @@ namespace Ak
 
             void update();
 
-            bool getInKey(const SDL_Scancode touche, enum ButtonACTION type = UP) const;
+            inline bool getInKey(const SDL_Scancode key, action type = action::down) const noexcept { return type == action::down ? _keys[key].first : _keys[key].second; }
 
-            bool getInMouse(const Uint8 bouton, enum ButtonACTION type = UP) const;
-            bool getMovMouse() const;
+            inline bool getInMouse(const uint8_t button, action type = action::down) const noexcept { return type == action::down ? _mouse[button].first : _mouse[button].second; }
+            inline bool isMouseMoving() const noexcept { return _xRel || _yRel ? true : false; }
 
-            int getX() const;
-            int getY() const;
+            inline int getX() const noexcept { return _x; }
+            inline int getY() const noexcept { return _y; }
 
-            int getXRel() const;
-            int getYRel() const;
+            inline int getXRel() const noexcept { return _xRel; }
+            inline int getYRel() const noexcept { return _yRel; }
 
-            void activateTextInput(bool activate);
+            inline bool isEnded() const noexcept { return _end; }
+            inline void finish() noexcept { _end = true; }
 
-            std::string getTextEntry();
-            bool _isTyping = false;
+            inline SDL_Event* getNativeEvent() noexcept { return &_event; }
 
-            bool isEnded() const;
-            void finish();
-
-			SDL_Event* getNativeEvent()
-			{
-				return &evenements;
-			}
-
+            ~Input() = default;
 
         private:
-            SDL_Event evenements;
-            std::array<std::array<bool, 2>, AK_NUM_SCANCODES> _touches; // 0 = UP, 1 = DOWN
-            std::array<std::array<bool, 2>, 8> _boutonsSouris;		   // 0 = UP, 1 = DOWN
+            SDL_Event _event;
+            std::array<std::pair<bool, bool>, SDL_NUM_SCANCODES> _keys;
+            std::array<std::pair<bool, bool>, 8> _mouse;
 
-            std::string _text_input_string = " ";
-
-            int _x;
-            int _y; 
-            int _xRel; 
-            int _yRel; 
+            int _x = 0;
+            int _y = 0;
+            int _xRel = 0;
+            int _yRel = 0;
 
             bool _end = false;
-
-            bool _isTextInputAllow = false;
     };
 }
 

@@ -1,74 +1,58 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 18/08/2021
+// Updated : 06/03/2022
 
-#include <Utils/utils.h>
-#include <Renderer/renderer.h>
+#include <Utils/camera.h>
+#include <Graphics/matrixes.h>
 
 namespace Ak
 {
-	Camera3D::Camera3D() : Component()
+	Camera3D::Camera3D() : Component("__camera3D"), _up(0, 0, 1)
 	{
 		_position.SET(0, 0, 0);
-		_phi = -79;
-		_theta = 0;
-		VectorsFromAngles();
-		_up.SET(0, 1, 0);
-		_sensivity = 0.6;
-	}
-
-	void Camera3D::setPosition(int pos_x, int pos_y, int pos_z)
-	{
-		_position.SET(pos_x, pos_y, pos_z);
+		update_view();
 	}
 
 	void Camera3D::update()
 	{
-		_movement.SET(0, 0, 0);
 		_target = _position + _direction;
+		Matrixes::matrix_mode(matrix::view);
+    	Matrixes::lookAt(_position.X, _position.Y, _position.Z, _target.X, _target.Y, _target.Z, 0, 0, 1);
 	}
 
 	void Camera3D::onEvent(Input& input)
 	{
-		if(_grabMouse)
+		if(_isMouseGrabed)
 		{
 			_theta -= input.getXRel() * _sensivity;
 			_phi -= input.getYRel() * _sensivity;
-			VectorsFromAngles();
+			update_view();
 		}
-
-		if(input.getInKey(AK_KEY_F1, UP))
+		if(input.getInKey(SDL_SCANCODE_F1, action::up))
 		{
-			_grabMouse = _grabMouse? SDL_FALSE : SDL_TRUE;
-			SDL_SetRelativeMouseMode(_grabMouse);
+			_isMouseGrabed = _isMouseGrabed ? false : true;
+			SDL_SetRelativeMouseMode(_isMouseGrabed ? SDL_TRUE : SDL_FALSE);
 		}
-		if(!_grabMouse && input.getInMouse(1, UP))
+		if(!_isMouseGrabed && input.getInMouse(1))
 		{
-			_grabMouse = SDL_TRUE;
+			_isMouseGrabed = true;
 			SDL_SetRelativeMouseMode(SDL_TRUE);
 		}
 
-		realspeed = (input.getInKey(AK_KEY_EXECUTE))? 10 * _speed : _speed;
+		_mov.SET(0.0, 0.0, 0.0);
 
-		if(input.getInKey(AK_KEY_W) || input.getInKey(AK_KEY_UP))  			_movement += _forward.DirectCopy().NEGATE();
-		if(input.getInKey(AK_KEY_S) || input.getInKey(AK_KEY_DOWN))   		_movement += _forward.DirectCopy();
-		if(input.getInKey(AK_KEY_A) || input.getInKey(AK_KEY_LEFT))   		_movement += _left.DirectCopy();
-		if(input.getInKey(AK_KEY_D) || input.getInKey(AK_KEY_RIGHT))  		_movement += _left.DirectCopy().NEGATE();
-		if(input.getInKey(AK_KEY_LSHIFT) || input.getInKey(AK_KEY_RSHIFT))	_movement -= _up;
-		if(input.getInKey(AK_KEY_SPACE))									_movement += _up;
+		if(input.getInKey(AK_KEY_W) || input.getInKey(AK_KEY_UP))  			_mov -= _forward;
+		if(input.getInKey(AK_KEY_S) || input.getInKey(AK_KEY_DOWN))   		_mov += _forward;
+		if(input.getInKey(AK_KEY_D) || input.getInKey(AK_KEY_RIGHT))  		_mov -= _left;
+		if(input.getInKey(AK_KEY_A) || input.getInKey(AK_KEY_LEFT))   		_mov += _left;
+		if(input.getInKey(AK_KEY_LSHIFT) || input.getInKey(AK_KEY_RSHIFT))	_mov -= _up;
+		if(input.getInKey(AK_KEY_SPACE))									_mov += _up;
 
-		Move(_movement.X, _movement.Y, _movement.Z);     //update
+		_position += _mov * _speed;
 	}
 
-	void Camera3D::Move(double x, double y, double z)
-	{
-		_position.X += x * realspeed;
-		_position.Y += y * realspeed;
-		_position.Z += z * realspeed;
-	}
-
-	void Camera3D::VectorsFromAngles()
+	void Camera3D::update_view()
 	{
 		_phi = _phi > 89 ? 89 : _phi;
 		_phi = _phi < -89 ? -89 : _phi;
