@@ -50,7 +50,6 @@ namespace Ak
 
             renderPassInfo.clearValueCount = 1;
             renderPassInfo.pClearValues = &clearColor;
-            
 
             vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
@@ -61,6 +60,9 @@ namespace Ak
 
                     vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
                     vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, vertexBuffers, offsets);
+
+                    if(i != descriptorSets.size())
+                        vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[i], 0, nullptr);
 
                     if(elem.__data.indexData.size() != 0)
                     {

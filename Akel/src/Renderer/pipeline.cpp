@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // Created : 05/06/2021
-// Updated : 05/03/2022
+// Updated : 06/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -18,7 +18,10 @@ namespace Ak
 				_fragmentShader = Core::getShaderPath() + "basic_2D/basic_2D.frag";
 			break;
 
-			case shader::basic_3D : Core::log::report(MESSAGE, "Renderer Component : there are no basic 3D shader yet"); break;
+			case shader::basic_3D : 
+				_vertexShader = Core::getShaderPath() + "basic_3D/basic_3D.vert";
+				_fragmentShader = Core::getShaderPath() + "basic_3D/basic_3D.frag";
+			break;
 
 			default : Core::log::report(FATAL_ERROR, "Renderer Component : unable to find internal shader"); return;
 		}
@@ -91,8 +94,8 @@ namespace Ak
 	    rasterizer.rasterizerDiscardEnable = VK_FALSE;
 	    rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
 	    rasterizer.lineWidth = 1.0f;
-	    rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-	    rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+		rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+		rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 	    rasterizer.depthBiasEnable = VK_FALSE;
 
 	    VkPipelineMultisampleStateCreateInfo multisampling{};
@@ -115,10 +118,10 @@ namespace Ak
 	    colorBlending.blendConstants[2] = 0.0f;
 	    colorBlending.blendConstants[3] = 0.0f;
 
-	    VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-	    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	    pipelineLayoutInfo.setLayoutCount = 0;
-	    pipelineLayoutInfo.pushConstantRangeCount = 0;
+		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutInfo.setLayoutCount = 1;
+        pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 
 	    if(vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create pipeline layout");

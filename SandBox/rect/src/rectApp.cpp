@@ -23,12 +23,8 @@ class Rect : public Ak::Application
 
             Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(window, Ak::shader::basic_2D);
             renderer->setClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            Ak::Entity2D rectangle(Models::quad, {-0.9f, -0.9f}, {0.4f, 0.4f}, Colors::red);
-            Ak::Entity2D rectangle2(Models::quad, {0.0f, 0.0f}, {0.5f, 0.5f}, Colors::blue);
-            Ak::Entity2D triangle(Models::triangle, {0.5f, 0.0f}, {0.5f, 0.5f}, Colors::blue);
+            Ak::Entity2D rectangle(Models::quad, {-0.9f, -0.9f}, {0.5f, 0.5f}, Colors::red);
             renderer->add_entity(rectangle);
-            renderer->add_entity(rectangle2);
-            renderer->add_entity(triangle);
             add_component(renderer);
         }
         ~Rect() = default;

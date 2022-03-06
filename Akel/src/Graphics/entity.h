@@ -48,7 +48,7 @@ namespace Ak
 
 			struct EntityInternalData
 			{
-				std::vector<Vertex2D> vertexData;
+				std::vector<Vertex3D> vertexData;
 				VkBuffer vertexBuffer;
 				VkDeviceMemory vertexBufferMemory;
 				std::vector<uint16_t> indexData;

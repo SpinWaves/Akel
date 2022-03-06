@@ -29,6 +29,13 @@ namespace Ak
         std::vector<VkPresentModeKHR> presentModes;
     };
 
+    struct UniformBufferObject
+    {
+        glm::mat4 model;
+        glm::mat4 view;
+        glm::mat4 proj;
+    };
+
     const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
 
     #ifdef AK_DEBUG
@@ -131,6 +138,13 @@ namespace Ak
             void createVertexBuffer();
             void createIndexBuffer();
 
+            // UniformBuffer
+            void createDescriptorSetLayout();
+            void createUniformBuffers();
+            void updateUniformBuffer(uint32_t currentImage);
+            void createDescriptorPool();
+            void createDescriptorSets();
+
             std::vector<Entity2D> entities2D;
             std::vector<Entity3D> entities3D;
 
@@ -177,6 +191,13 @@ namespace Ak
             std::vector<VkFence> inFlightFences;
             std::vector<VkFence> imagesInFlight;
             size_t currentFrame = 0;
+
+            // UniformBuffer
+            VkDescriptorSetLayout descriptorSetLayout;
+            std::vector<VkBuffer> uniformBuffers;
+            std::vector<VkDeviceMemory> uniformBuffersMemory;
+            VkDescriptorPool descriptorPool;
+            std::vector<VkDescriptorSet> descriptorSets;
 
             WindowComponent* window = nullptr;
 
