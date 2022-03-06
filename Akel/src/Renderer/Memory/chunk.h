@@ -15,6 +15,7 @@ namespace Ak
         VkDeviceMemory memory = VK_NULL_HANDLE;
         VkDeviceSize offset = 0;
         VkDeviceSize size = 0;
+        VkBuffer buffer = VK_NULL_HANDLE;
         void* ptr = nullptr;
 
         bool operator == (Buffer const& buffer);

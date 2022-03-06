@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/06/2021
-// Updated : 02/03/2022
+// Updated : 06/03/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -9,7 +9,7 @@ namespace Ak
 {
     void RendererComponent::createSurface()
     {
-        if(SDL_Vulkan_CreateSurface(window, instance, &surface) != SDL_TRUE)
+        if(SDL_Vulkan_CreateSurface(window->getNativeWindow(), instance, &surface) != SDL_TRUE)
             Core::log::report(FATAL_ERROR, "Vulkan : Failed to create a surface : %s", SDL_GetError());
     }
 

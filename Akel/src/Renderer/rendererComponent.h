@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 05/03/2022
+// Updated : 06/03/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
 
 #include <Core/core.h>
 #include <Graphics/entity.h>
+#include <Platform/window.h>
 
 namespace Ak
 {
@@ -46,8 +47,8 @@ namespace Ak
     class RendererComponent : public Component
     {
         public:
-            RendererComponent(SDL_Window* win, shader internal); 
-            RendererComponent(SDL_Window* win);
+            RendererComponent(WindowComponent* win, shader internal); 
+            RendererComponent(WindowComponent* win);
             RendererComponent(shader internal); 
             RendererComponent();
 
@@ -57,12 +58,13 @@ namespace Ak
 
             inline void setShader(std::string vertexShader, std::string fragmentShader) { _vertexShader = std::move(vertexShader); _fragmentShader = std::move(fragmentShader); }
             void useShader(shader internal);
-            inline void render_to_window(SDL_Window* win) noexcept { window = win; }
+            inline void render_to_window(WindowComponent* win) noexcept { window = win; }
             
             inline void add_entity(Entity2D& entity) { entities2D.push_back(entity); }
             inline void add_entity(Entity3D& entity) { entities3D.push_back(entity); }
 
             inline void setClearColor(float r, float g, float b, float a) noexcept { clearColor.color.float32[0] = r; clearColor.color.float32[1] = g; clearColor.color.float32[2] = b; clearColor.color.float32[3] = a; }
+            inline static void requireFrameBufferResize() noexcept { framebufferResized = true; }
 
             ~RendererComponent() = default;
 
@@ -99,6 +101,7 @@ namespace Ak
             VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
             VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
             void cleanupSwapChain();
+            void recreateSwapChain();
 
             // Image views
             void createImageViews();
@@ -152,6 +155,7 @@ namespace Ak
             VkFormat swapChainImageFormat;
             VkExtent2D swapChainExtent;
             std::vector<VkFramebuffer> swapChainFramebuffers;
+            inline static bool framebufferResized = false;
 
             // Image views
             std::vector<VkImageView> swapChainImageViews;
@@ -174,7 +178,7 @@ namespace Ak
             std::vector<VkFence> imagesInFlight;
             size_t currentFrame = 0;
 
-            SDL_Window* window = nullptr;
+            WindowComponent* window = nullptr;
 
             bool _instanceInitialized = false;
 

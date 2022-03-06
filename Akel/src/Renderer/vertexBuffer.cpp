@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // Created : 23/09/2021
-// Updated : 05/03/2022
+// Updated : 06/03/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -35,6 +35,9 @@ namespace Ak
     {
         for(int i = 0; i < entities2D.size(); i++)
         {
+            if(entities2D[i].__data.indexData.size() == 0)
+                continue;
+            
             VkDeviceSize bufferSize = sizeof(entities2D[i].__data.indexData[0]) * entities2D[i].__data.indexData.size();
 
             VkBuffer stagingBuffer;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2021
-// Updated : 28/02/2022
+// Updated : 06/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Platform/platform.h>
@@ -13,7 +13,7 @@ namespace Ak
     std::vector<const char*> RendererComponent::getRequiredExtensions()
     {
         unsigned int count;
-        if(!SDL_Vulkan_GetInstanceExtensions(window, &count, nullptr))
+        if(!SDL_Vulkan_GetInstanceExtensions(window->getNativeWindow(), &count, nullptr))
 			Core::log::report(ERROR, "Vulkan : Cannot get instance extentions from window : %s",  SDL_GetError());
 
         std::vector<const char*> extensions = {
@@ -22,7 +22,7 @@ namespace Ak
         size_t additional_extension_count = extensions.size();
         extensions.resize(additional_extension_count + count);
 
-        if(!SDL_Vulkan_GetInstanceExtensions(window, &count, extensions.data() + additional_extension_count))
+        if(!SDL_Vulkan_GetInstanceExtensions(window->getNativeWindow(), &count, extensions.data() + additional_extension_count))
 			Core::log::report(ERROR, "Vulkan : Cannot get instance extentions from window : %s", SDL_GetError());
 
         if(enableValidationLayers)
@@ -38,10 +38,10 @@ namespace Ak
 
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = SDL_GetWindowTitle(window);
+        appInfo.pApplicationName = window->getTitle().c_str();
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "Akel";
-        appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+        appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);
         appInfo.apiVersion = VK_API_VERSION_1_2;
 
         VkInstanceCreateInfo createInfo{};

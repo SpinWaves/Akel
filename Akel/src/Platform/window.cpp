@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 02/03/2022
+// Updated : 06/03/2022
 
 #include <Platform/platform.h>
 
@@ -69,7 +69,7 @@ namespace Ak
 					SDL_HideWindow(_window);
 				break;
 			}
-			case winsets::vsync:  break; // TODO
+			case winsets::vsync: _vsync = value; break;
 			case winsets::maximize:
 			{
 				if(value)

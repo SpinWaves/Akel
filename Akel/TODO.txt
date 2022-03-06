@@ -7,3 +7,6 @@ Akel/src/Renderer/commandBuffer.cpp:
 
 Renderer:
     add entity 3D management
+
+WindowComponent:
+    getters like setters

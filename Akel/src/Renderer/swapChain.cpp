@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/06/2021
-// Updated : 04/03/2022
+// Updated : 06/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -67,7 +67,7 @@ namespace Ak
 
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
 
-        uint32_t formatCount;
+        uint32_t formatCount = 0;
         vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
 
         if(formatCount != 0)
@@ -90,28 +90,69 @@ namespace Ak
 
     VkPresentModeKHR RendererComponent::chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes)
     {
-        /*
-		if(!enableVsync)
-        */
-		return VK_PRESENT_MODE_IMMEDIATE_KHR;
-  /*
+		if(!window->getVsync())
+		    return VK_PRESENT_MODE_IMMEDIATE_KHR;
+
         for(const auto& availablePresentMode : availablePresentModes)
         {
             if(availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
                 return availablePresentMode;
         }
-
         return VK_PRESENT_MODE_FIFO_KHR;
-*/
     }
 
     VkExtent2D RendererComponent::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
     {
-        if(capabilities.currentExtent.width != UINT32_MAX)
+        if(capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
             return capabilities.currentExtent;
-        VkExtent2D actualExtent = {1000, 563};
-        actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
-        actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
+
+        int width, height;
+        SDL_Vulkan_GetDrawableSize(window->getNativeWindow(), &width, &height);
+
+        VkExtent2D actualExtent = {
+            static_cast<uint32_t>(width),
+            static_cast<uint32_t>(height)
+        };
+
+        actualExtent.width = std::clamp(actualExtent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+        actualExtent.height = std::clamp(actualExtent.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+
         return actualExtent;
+    }
+
+    void RendererComponent::recreateSwapChain()
+    {
+        int width = 0, height = 0;
+        SDL_Vulkan_GetDrawableSize(window->getNativeWindow(), &width, &height);
+        if(width == 0 || height == 0)
+            return;
+
+        cleanupSwapChain();
+
+        createSwapChain();
+        createImageViews();
+        createRenderPass();
+        createGraphicsPipeline();
+        createFramebuffers();
+        createCommandBuffers();
+    }
+
+    void RendererComponent::cleanupSwapChain()
+    {
+        vkDeviceWaitIdle(device);
+
+        for(size_t i = 0; i < swapChainFramebuffers.size(); i++)
+            vkDestroyFramebuffer(device, swapChainFramebuffers[i], nullptr);
+
+        vkFreeCommandBuffers(device, commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+
+        vkDestroyPipeline(device, graphicsPipeline, nullptr);
+        vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+        vkDestroyRenderPass(device, renderPass, nullptr);
+
+        for(size_t i = 0; i < swapChainImageViews.size(); i++)
+            vkDestroyImageView(device, swapChainImageViews[i], nullptr);
+
+        vkDestroySwapchainKHR(device, swapChain, nullptr);
     }
 }

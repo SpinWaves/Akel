@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2021
-// Updated : 05/03/2022
+// Updated : 06/03/2022
 
 #ifndef __AK_ENTITY__
 #define __AK_ENTITY__
@@ -14,6 +14,7 @@
 enum class Models
 {
 	quad,
+	triangle,
 	cube,
 };
 

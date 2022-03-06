@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // CREATED : 23/09/2021
-// Updated : 05/03/2022
+// Updated : 06/03/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -12,11 +12,11 @@ namespace Ak
     {
         useShader(internal);
     }
-    RendererComponent::RendererComponent(SDL_Window* win, shader internal) : Component("__renderer_component"), window(win)
+    RendererComponent::RendererComponent(WindowComponent* win, shader internal) : Component("__renderer_component"), window(win)
     {
         useShader(internal);
     }
-    RendererComponent::RendererComponent(SDL_Window* win) : Component("__renderer_component"), window(win) {}
+    RendererComponent::RendererComponent(WindowComponent* win) : Component("__renderer_component"), window(win) {}
 
     void RendererComponent::onAttach()
     {
@@ -51,20 +51,14 @@ namespace Ak
 
         uint32_t imageIndex;
         VkResult res = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
-        if(res != VK_SUCCESS && res != VK_TIMEOUT && res != VK_NOT_READY && res != VK_SUBOPTIMAL_KHR)
+        if(res == VK_ERROR_OUT_OF_DATE_KHR)
         {
-            switch(res)
-            {
-                case VK_ERROR_OUT_OF_HOST_MEMORY : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_OUT_OF_HOST_MEMORY)"); break;
-                case VK_ERROR_OUT_OF_DEVICE_MEMORY : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_OUT_OF_DEVICE_MEMORY)"); break;
-                case VK_ERROR_DEVICE_LOST : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_DEVICE_LOST)"); break;
-                case VK_ERROR_OUT_OF_DATE_KHR : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_OUT_OF_DATE_KHR)"); break;
-                case VK_ERROR_SURFACE_LOST_KHR : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_SURFACE_LOST_KHR)"); break;
-                case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error (VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT)"); break;
-
-                default : Core::log::report(FATAL_ERROR, "Vulkan : vkAquireNextImageKHR returned an error"); break;
-            }
+            recreateSwapChain();
+            return;
         }
+        else if(res != VK_SUCCESS)
+            Core::log::report(FATAL_ERROR, "Vulkan rendering : failed to acquire swap chain image");
+
 
         if(imagesInFlight[imageIndex] != VK_NULL_HANDLE)
             vkWaitForFences(device, 1, &imagesInFlight[imageIndex], VK_TRUE, UINT64_MAX);
@@ -90,7 +84,7 @@ namespace Ak
         vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
         if(vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS)
-			Core::log::report(FATAL_ERROR, "Vulkan : Failed to submit draw command buffer");
+			Core::log::report(FATAL_ERROR, "Vulkan rendering : failed to submit draw command buffer");
 
         VkPresentInfoKHR presentInfo{};
         presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -104,33 +98,30 @@ namespace Ak
 
         presentInfo.pImageIndices = &imageIndex;
 
-        vkQueuePresentKHR(presentQueue, &presentInfo);
+        res = vkQueuePresentKHR(presentQueue, &presentInfo);
+
+        if(res == VK_ERROR_OUT_OF_DATE_KHR || res == VK_SUBOPTIMAL_KHR || framebufferResized)
+        {
+            framebufferResized = false;
+            recreateSwapChain();
+        }
+        else if(res != VK_SUCCESS)
+            Core::log::report(FATAL_ERROR, "Vulkan rendering : failed to present swap chain image");
 
         currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
     }
 
     void RendererComponent::onQuit()
     {
-        vkDeviceWaitIdle(device);
-
-        for(auto framebuffer : swapChainFramebuffers)
-            vkDestroyFramebuffer(device, framebuffer, nullptr);
-
-        vkFreeCommandBuffers(device, commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
-
-        vkDestroyPipeline(device, graphicsPipeline, nullptr);
-        vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-        vkDestroyRenderPass(device, renderPass, nullptr);
-
-        for(auto imageView : swapChainImageViews)
-            vkDestroyImageView(device, imageView, nullptr);
-
-        vkDestroySwapchainKHR(device, swapChain, nullptr);
+        cleanupSwapChain();
 
         for(Entity2D& elem : entities2D)
         {
-            vkDestroyBuffer(device, elem.__data.indexBuffer, nullptr);
-            vkFreeMemory(device, elem.__data.indexBufferMemory, nullptr);
+            if(elem.__data.indexData.size() != 0)
+            {
+                vkDestroyBuffer(device, elem.__data.indexBuffer, nullptr);
+                vkFreeMemory(device, elem.__data.indexBufferMemory, nullptr);
+            }
 
             vkDestroyBuffer(device, elem.__data.vertexBuffer, nullptr);
             vkFreeMemory(device, elem.__data.vertexBufferMemory, nullptr);

@@ -1,20 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 28/02/2022
+// Updated : 06/03/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
 
 #include <Akpch.h>
 #include <Core/core.h>
-#include <Renderer/rendererComponent.h>
 #include <Maths/maths.h>
 #include <Platform/input.h>
 #include <Utils/utils.h>
 #include <Platform/messageBox.h>
 #include <Platform/input.h>
-
 
 #define AK_WINDOW_MAX_SIZE 0xFFFF
 #define AK_WINDOW_POS_CENTER 0xFFFE
@@ -58,6 +56,7 @@ namespace Ak
             inline const Maths::Vec2<uint16_t>& getPosition() const noexcept { return _position; }
             const Maths::Vec2<uint16_t>& getSize();
 			inline SDL_Window* getNativeWindow() const noexcept { return _window; }
+            inline bool getVsync() noexcept { return _vsync; }
 
             ~WindowComponent() override;
 
@@ -72,6 +71,7 @@ namespace Ak
             Maths::Vec2<uint16_t> _size;
 
             uint32_t _flags = 0;
+            bool _vsync = true;
 
             SDL_Surface* _icon = nullptr;
     };

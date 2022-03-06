@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 05/03/2022
+// Updated : 06/03/2022
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -26,22 +26,30 @@ namespace Ak
 		position = std::move(_position);
 		scale = std::move(_scale);
         uint32_t col_val = static_cast<uint32_t>(_color);
-        
-        color.SET(((col_val & R_MASK) >> 24) / 0xFF, ((col_val & G_MASK) >> 16) / 0xFF, ((col_val & B_MASK) >> 8) / 0xFF, ((col_val & A_MASK)) / 0xFF);
+        color.SET(static_cast<float>((col_val & R_MASK) >> 24) / 255, static_cast<float>((col_val & G_MASK) >> 16) / 255, static_cast<float>((col_val & B_MASK) >> 8) / 255, static_cast<float>((col_val & A_MASK)) / 255);
 
         switch(model)
         {
             case Models::quad :
                 __data.vertexData = {
-                    Vertex2D{position, color},
-                    Vertex2D{{position.X + scale.X, position.Y}, color},
-                    Vertex2D{{position.X + scale.X, position.Y + scale.Y}, color},
-                    Vertex2D{{position.X, position.Y + scale.Y}, color}
+                    {position, color},
+                    {{position.X + scale.X, position.Y}, color},
+                    {{position.X + scale.X, position.Y + scale.Y}, color},
+                    {{position.X, position.Y + scale.Y}, color}
                 };
                 __data.indexData = {0, 1, 2, 2, 3, 0};
             break;
 
-            case Models::cube : break;
+            case Models::triangle :
+                __data.vertexData = {
+                    {{position.X, position.Y + scale.Y}, color},
+                    {{position.X + scale.X, position.Y + scale.Y}, color},
+                    {{position.X - scale.X, position.Y + scale.Y}, color}
+                };
+                __data.indexData.clear();
+            break;
+
+            case Models::cube : Core::log::report(FATAL_ERROR, "Entity 2D : a cube cannot be a 2D entity, you may use the \"quad\" model"); break;
 
             default : Core::log::report(ERROR, "Entity 2D : bad model"); break;
         }

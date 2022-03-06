@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 13/07/2021
+// Updated : 06/03/2022
 
 #include <Platform/platform.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
@@ -40,6 +41,8 @@ namespace Ak
 
 		if(evenements.window.event == SDL_WINDOWEVENT_CLOSE) 
 			_end = true;
+        if(evenements.window.event == SDL_WINDOWEVENT_RESIZED)
+            RendererComponent::requireFrameBufferResize();
 
 		switch(evenements.type) 
 		{
@@ -77,11 +80,11 @@ namespace Ak
 
 		if(evenements.type == SDL_MOUSEMOTION) 
 		{
-				_x = evenements.motion.x;
-				_y = evenements.motion.y;
+            _x = evenements.motion.x;
+            _y = evenements.motion.y;
 
-				_xRel = evenements.motion.xrel;
-				_yRel = evenements.motion.yrel;
+            _xRel = evenements.motion.xrel;
+            _yRel = evenements.motion.yrel;
         }
     }
 
