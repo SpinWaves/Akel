@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // Created : 05/06/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -24,6 +24,19 @@ namespace Ak
 			break;
 
 			default : Core::log::report(FATAL_ERROR, "Renderer Component : unable to find internal shader"); return;
+		}
+	}
+
+	void RendererComponent::setFaceCulling(CullMode mode) noexcept
+	{
+		switch(mode)
+		{
+			case CullMode::none : cull_mode = VK_CULL_MODE_NONE; break;
+			case CullMode::front : cull_mode = VK_CULL_MODE_FRONT_BIT; break;
+			case CullMode::back : cull_mode = VK_CULL_MODE_BACK_BIT; break;
+			case CullMode::front_and_back : cull_mode = VK_CULL_MODE_FRONT_AND_BACK; break;
+
+			default : break;
 		}
 	}
 
@@ -94,8 +107,8 @@ namespace Ak
 	    rasterizer.rasterizerDiscardEnable = VK_FALSE;
 	    rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
 	    rasterizer.lineWidth = 1.0f;
-		rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-		rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+		rasterizer.cullMode = cull_mode;
+		rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
 	    rasterizer.depthBiasEnable = VK_FALSE;
 
 	    VkPipelineMultisampleStateCreateInfo multisampling{};

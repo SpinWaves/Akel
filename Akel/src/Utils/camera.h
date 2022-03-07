@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #ifndef __AK_CAMERA__
 #define __AK_CAMERA__ 
@@ -16,6 +16,8 @@ namespace Ak
 	{
 		public:
 			Camera3D();
+			Camera3D(Maths::Vec3<double> position);
+			Camera3D(double x, double y, double z);
 
 			void update() override;
 			void onEvent(Input& input) override;
@@ -24,8 +26,8 @@ namespace Ak
 			inline Maths::Vec3<double> getPosition() noexcept { return _position; }
 
 		private:
-			float _speed = 0.15f;
-			const float _sensivity = 0.8f;
+			const float _speed = 0.3f;
+			const float _sensivity = 1.2f;
 
 			void update_view();
 

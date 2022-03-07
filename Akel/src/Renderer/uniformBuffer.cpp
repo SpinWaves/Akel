@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // Created : 06/03/2022
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Graphics/matrixes.h>
@@ -28,7 +28,11 @@ namespace Ak
 
     void RendererComponent::createUniformBuffers()
     {
-        VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+        VkDeviceSize bufferSize;
+        if(mode == RenderingMode::render3D)
+            bufferSize = sizeof(UniformBufferObject3D);
+        else if(mode == RenderingMode::render2D)
+            bufferSize = sizeof(UniformBufferObject2D);
 
         uniformBuffers.resize(swapChainImages.size());
         uniformBuffersMemory.resize(swapChainImages.size());
@@ -39,22 +43,49 @@ namespace Ak
 
     void RendererComponent::updateUniformBuffer(uint32_t currentImage)
     {
-        UniformBufferObject ubo{};
-        
-        Matrixes::matrix_mode(matrix::model);
-        Matrixes::load_identity();
-        ubo.model = Matrixes::get_matrix(matrix::model);
-        
-        ubo.view = Matrixes::get_matrix(matrix::view);
-        
-        Matrixes::perspective(90, (float)(window->getSize().X/window->getSize().Y), 0.01, 1000);
-        ubo.proj = Matrixes::get_matrix(matrix::proj);
-        ubo.proj[1][1] *= -1;
+        if(mode == RenderingMode::render3D)
+        {
+            UniformBufferObject3D ubo;
+            
+            Matrixes::matrix_mode(matrix::model);
+            Matrixes::load_identity();
+            ubo.model = Matrixes::get_matrix(matrix::model);
+            
+            ubo.view = Matrixes::get_matrix(matrix::view);
+            
+            if(Matrixes::get_matrix(matrix::proj) == glm::mat4(1.0f))
+                Matrixes::perspective(80, (float)window->getSize().X/window->getSize().Y, 0.01, 1000);
+            ubo.proj = Matrixes::get_matrix(matrix::proj);
+            ubo.proj[1][1] *= -1;
+            Matrixes::matrix_mode(matrix::proj);
+            Matrixes::load_identity();
 
-        void* data;
-        vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
-            memcpy(data, &ubo, sizeof(ubo));
-        vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
+            void* data = nullptr;
+            vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
+                memcpy(data, &ubo, sizeof(ubo));
+            vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
+            return;
+        }
+        if(mode == RenderingMode::render2D)
+        {
+            UniformBufferObject2D ubo;
+            
+            Matrixes::matrix_mode(matrix::model);
+            Matrixes::load_identity();
+            ubo.model = Matrixes::get_matrix(matrix::model);
+            
+            if(Matrixes::get_matrix(matrix::proj) == glm::mat4(1.0f))
+                Matrixes::ortho(0.0f, (float)window->getSize().X, 0.0f, (float)window->getSize().Y);
+            ubo.proj = Matrixes::get_matrix(matrix::proj);
+            //ubo.proj[1][1] *= -1;
+            Matrixes::matrix_mode(matrix::proj);
+            Matrixes::load_identity();
+
+            void* data = nullptr;
+            vkMapMemory(device, uniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
+                memcpy(data, &ubo, sizeof(ubo));
+            vkUnmapMemory(device, uniformBuffersMemory[currentImage]);
+        }
     }
 
     void RendererComponent::createDescriptorPool()
@@ -91,7 +122,10 @@ namespace Ak
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = uniformBuffers[i];
             bufferInfo.offset = 0;
-            bufferInfo.range = sizeof(UniformBufferObject);
+            if(mode == RenderingMode::render3D)
+                bufferInfo.range = sizeof(UniformBufferObject3D);
+            else if(mode == RenderingMode::render2D)
+                bufferInfo.range = sizeof(UniformBufferObject2D);
 
             VkWriteDescriptorSet descriptorWrite{};
             descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;

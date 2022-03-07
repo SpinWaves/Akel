@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #ifndef __AK_ENTITY__
 #define __AK_ENTITY__
@@ -25,7 +25,7 @@ enum class Colors : uint32_t
 	green   = 0x00FF00FF,
 	yellow  = 0xFFFF00FF,
 	magenta = 0xFF00FFFF,
-	purple  = 0xF000FFFF,
+	purple  = 0x800080FF,
 	pink    = 0xFF00F0FF,
 	cyan    = 0x00FFFFFF,
 	black   = 0x000000FF,

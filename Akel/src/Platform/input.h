@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -19,6 +19,17 @@ namespace Ak
             Input();
 
             void update();
+            inline void reset() noexcept
+            {
+                _xRel = 0;
+                _yRel = 0;
+                for(int i = 0; i < SDL_NUM_SCANCODES; i++)
+                {
+                    _keys[i].second = false;
+                    if(i < _mouse.size())
+                        _mouse[i].second = false;
+                }
+            }
 
             inline bool getInKey(const SDL_Scancode key, action type = action::down) const noexcept { return type == action::down ? _keys[key].first : _keys[key].second; }
 
@@ -32,7 +43,7 @@ namespace Ak
             inline int getYRel() const noexcept { return _yRel; }
 
             inline bool isEnded() const noexcept { return _end; }
-            inline void finish() noexcept { _end = true; }
+            inline constexpr void finish() noexcept { _end = true; }
 
             inline SDL_Event* getNativeEvent() noexcept { return &_event; }
 
@@ -41,7 +52,7 @@ namespace Ak
         private:
             SDL_Event _event;
             std::array<std::pair<bool, bool>, SDL_NUM_SCANCODES> _keys;
-            std::array<std::pair<bool, bool>, 8> _mouse;
+            std::array<std::pair<bool, bool>, 5> _mouse;
 
             int _x = 0;
             int _y = 0;

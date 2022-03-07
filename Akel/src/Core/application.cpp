@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 02/03/2022
+// Updated : 07/03/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -28,14 +28,18 @@ namespace Ak
 			// separation between updates and rendering
 			if(_fps.make_update()) // updates
 			{
+				_in.reset();
 				while(SDL_PollEvent(_in.getNativeEvent()))
 				{
 					_in.update();
 					for(auto component : _components)
-						component->onEvent(_in);
+						component->onImGuiEvent(_in);
 				}
 				for(auto component : _components)
+				{
+					component->onEvent(_in);
 					component->update();
+				}
 			}
 			
 			// rendering

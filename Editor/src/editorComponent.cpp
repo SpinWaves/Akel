@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 07/11/2021
+// Updated : 07/03/2022
 
 #include <editorComponent.h>
 
@@ -36,9 +36,9 @@ void EditorComponent::onImGuiRender()
 		drawOptionsWindow();
 }
 
-void EditorComponent::onEvent(Ak::Input& input)
+void EditorComponent::onImGuiEvent(Ak::Input& input)
 {
-	Ak::ImGuiComponent::onEvent(input);
+	Ak::ImGuiComponent::onImGuiEvent(input);
 	if(!_running || _console->_sh.quit())
 		input.finish();
 }
