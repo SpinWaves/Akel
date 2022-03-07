@@ -95,7 +95,7 @@ namespace Ak
 
             ~RendererComponent() = default;
 
-        private:
+        protected:
             void createInstance();
 
             // Device
@@ -179,6 +179,7 @@ namespace Ak
             // Queues
             VkQueue graphicsQueue;
             VkQueue presentQueue;
+            uint32_t _queueFamily = (uint32_t)-1;
 
             // Vk surface
             VkSurfaceKHR surface;
@@ -189,6 +190,7 @@ namespace Ak
             VkFormat swapChainImageFormat;
             VkExtent2D swapChainExtent;
             std::vector<VkFramebuffer> swapChainFramebuffers;
+            SwapChainSupportDetails swapchainSupport;
             inline static bool framebufferResized = false;
 
             // Image views

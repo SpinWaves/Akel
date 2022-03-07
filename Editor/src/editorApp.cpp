@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 04/03/2022
+// Updated : 07/03/2022
 
 #include <AkEpch.h>
 #include <Akel_main.h>
@@ -13,8 +13,10 @@ class Editor : public Ak::Application
 		Editor() : Ak::Application("Akel_Editor")
 		{
 			Ak::Core::printEngineInfo();
-			add_component(Ak::memAlloc<Ak::AudioManager>());
-			add_component(Ak::memAlloc<EditorComponent>());
+			add_component<Ak::AudioManager>();
+			EditorComponent* editor = Ak::memAlloc<EditorComponent>();
+			add_component(editor);
+			add_component<Ak::ImGuiComponent>(editor);
 		}
 		~Editor() = default;
 };

@@ -5,15 +5,18 @@
 
 #include <editorComponent.h>
 
-EditorComponent::EditorComponent() : Ak::ImGuiComponent("Akel Editor")
+EditorComponent::EditorComponent() : Ak::WindowComponent()
 {
 	_eltm = Ak::make_shared_ptr_w<Ak::ELTM>(Ak::memAlloc<Ak::ELTM>(true));
 }
 
 void EditorComponent::onAttach()
 {
-	Ak::ImGuiComponent::setSettingsFilePath(std::string(Ak::Core::getMainDirPath() + "Editor/settings/editor.ini").c_str());
-	Ak::ImGuiComponent::onAttach();
+	Ak::WindowComponent::onAttach();
+	Ak::WindowComponent::setSetting(Ak::winsets::title, "Akel Editor");
+	Ak::WindowComponent::setSetting(Ak::winsets::resizable, true);
+	Ak::WindowComponent::setSetting(Ak::winsets::size, AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
+	Ak::WindowComponent::setSetting(Ak::winsets::maximize, true);
 
 	std::string language = "language";
 	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/langs.eltm");
@@ -36,16 +39,16 @@ void EditorComponent::onImGuiRender()
 		drawOptionsWindow();
 }
 
-void EditorComponent::onImGuiEvent(Ak::Input& input)
+void EditorComponent::onEvent(Ak::Input& input)
 {
-	Ak::ImGuiComponent::onImGuiEvent(input);
+	Ak::WindowComponent::onEvent(input);
 	if(!_running || _console->_sh.quit())
 		input.finish();
 }
 
 void EditorComponent::onQuit()
 {
-	Ak::ImGuiComponent::onQuit();
+	Ak::WindowComponent::onQuit();
 }
 
 void EditorComponent::drawMainMenuBar()
