@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // CREATED : 23/09/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -17,6 +17,18 @@ namespace Ak
         useShader(internal);
     }
     RendererComponent::RendererComponent(WindowComponent* win) : Component("__renderer_component"), window(win) {}
+
+    void RendererComponent::setRenderingMode(RenderingMode _mode) noexcept
+    {
+        mode = _mode;
+        if(mode == RenderingMode::render3D)
+            useShader(shader::basic_3D);
+        else if(mode == RenderingMode::render2D)
+            useShader(shader::basic_2D);
+        
+        if(_instanceInitialized)
+            recreateSwapChain();
+    }
 
     void RendererComponent::onAttach()
     {
@@ -119,16 +131,9 @@ namespace Ak
 
     void RendererComponent::onQuit()
     {
+        if(!_instanceInitialized)
+            return;
         cleanupSwapChain();
-
-        for(size_t i = 0; i < swapChainImages.size(); i++)
-        {
-            vkDestroyBuffer(device, uniformBuffers[i], nullptr);
-            vkFreeMemory(device, uniformBuffersMemory[i], nullptr);
-        }
-
-        vkDestroyDescriptorPool(device, descriptorPool, nullptr);
-        vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
 
         for(Entity2D& elem : entities2D)
         {

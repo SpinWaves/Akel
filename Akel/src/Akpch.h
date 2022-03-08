@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -91,5 +91,11 @@
 #include <exception>
 #include <function/function.h>
 #include <iterator>
+
+#ifndef M_PI
+    #define M_PI 3.141592653589793
+#endif
+
+#define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
 
 #endif // __AK_PCH__

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -14,7 +14,7 @@ namespace Ak
         {
             _keys[i].first = false;
             _keys[i].second = false;
-            if(i < 8)
+            if(i < _mouse.size())
             {
                 _mouse[i].first = false;
                 _mouse[i].second = false;
@@ -23,17 +23,7 @@ namespace Ak
     }
 
     void Input::update()
-    {
-        _xRel = 0;
-        _yRel = 0;
-
-        for(int i = 0; i < SDL_NUM_SCANCODES; i++)
-        {
-            _keys[i].second = false;
-            if(i < 8)
-                _mouse[i].second = false;
-        }
-        
+    { 
         if(_event.window.event == SDL_WINDOWEVENT_CLOSE) 
             _end = true;
 

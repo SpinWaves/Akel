@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 07/11/2021
+// Updated : 07/03/2022
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -17,8 +17,7 @@ namespace Ak
 			ImGuiComponent(const char* title = "ImGui window");
 
 			void onAttach() override;
-			void onEvent(Input& input) override;
-			void update() override {}
+			void onImGuiEvent(Input& input) override;
 			void onQuit() override;
 
 			void begin(); // Do not use, the application will call it for you

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -29,10 +29,16 @@ namespace Ak
         std::vector<VkPresentModeKHR> presentModes;
     };
 
-    struct UniformBufferObject
+    struct UniformBufferObject3D
     {
         glm::mat4 model;
         glm::mat4 view;
+        glm::mat4 proj;
+    };
+
+    struct UniformBufferObject2D
+    {
+        glm::mat4 model;
         glm::mat4 proj;
     };
 
@@ -50,6 +56,15 @@ namespace Ak
         basic_3D
         // More default shaders will come in the future
     };
+    enum class CullMode
+    {
+        none,
+        front,
+        back,
+        front_and_back
+    };
+
+    enum class RenderingMode : uint8_t { render2D, render3D };
 
     class RendererComponent : public Component
     {
@@ -63,6 +78,8 @@ namespace Ak
             void onRender() override;
             void onQuit() override;
 
+            inline void recreateRenderer() noexcept { onAttach(); }
+
             inline void setShader(std::string vertexShader, std::string fragmentShader) { _vertexShader = std::move(vertexShader); _fragmentShader = std::move(fragmentShader); }
             void useShader(shader internal);
             inline void render_to_window(WindowComponent* win) noexcept { window = win; }
@@ -70,8 +87,11 @@ namespace Ak
             inline void add_entity(Entity2D& entity) { entities2D.push_back(entity); }
             inline void add_entity(Entity3D& entity) { entities3D.push_back(entity); }
 
-            inline void setClearColor(float r, float g, float b, float a) noexcept { clearColor.color.float32[0] = r; clearColor.color.float32[1] = g; clearColor.color.float32[2] = b; clearColor.color.float32[3] = a; }
-            inline static void requireFrameBufferResize() noexcept { framebufferResized = true; }
+            inline void setBackgroundColor(float r, float g, float b, float a) noexcept { clearColor.color.float32[0] = r; clearColor.color.float32[1] = g; clearColor.color.float32[2] = b; clearColor.color.float32[3] = a; }
+            void setFaceCulling(CullMode mode) noexcept;
+            void setRenderingMode(RenderingMode _mode) noexcept;
+
+            inline static constexpr void requireFrameBufferResize() noexcept { framebufferResized = true; }
 
             ~RendererComponent() = default;
 
@@ -177,6 +197,7 @@ namespace Ak
             // Pipeline graphique
             VkPipelineLayout pipelineLayout;
             VkPipeline graphicsPipeline;
+            VkCullModeFlags cull_mode = VK_CULL_MODE_NONE;
 
             // Render pass
             VkRenderPass renderPass;
@@ -204,6 +225,8 @@ namespace Ak
             bool _instanceInitialized = false;
 
             VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
+
+            RenderingMode mode = RenderingMode::render3D;
     };
 }
 

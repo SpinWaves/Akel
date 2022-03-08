@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/06/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -129,8 +129,12 @@ namespace Ak
         createSwapChain();
         createImageViews();
         createRenderPass();
+        createDescriptorSetLayout();
         createGraphicsPipeline();
         createFramebuffers();
+        createUniformBuffers();
+        createDescriptorPool();
+        createDescriptorSets();
         createCommandBuffers();
     }
 
@@ -149,6 +153,15 @@ namespace Ak
 
         for(size_t i = 0; i < swapChainImageViews.size(); i++)
             vkDestroyImageView(device, swapChainImageViews[i], nullptr);
+
+        for(size_t i = 0; i < swapChainImages.size(); i++)
+        {
+            vkDestroyBuffer(device, uniformBuffers[i], nullptr);
+            vkFreeMemory(device, uniformBuffersMemory[i], nullptr);
+        }
+
+        vkDestroyDescriptorPool(device, descriptorPool, nullptr);
+        vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
 
         vkDestroySwapchainKHR(device, swapChain, nullptr);
     }

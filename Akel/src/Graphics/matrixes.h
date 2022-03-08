@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/03/2022
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #ifndef __AK_MATRIXES__
 #define __AK_MATRIXES__
@@ -20,7 +20,7 @@ namespace Ak
             inline static void perspective(float FOV, float aspect, float near_view, float far_view)
             { _proj = glm::perspective<float>(glm::radians(FOV), aspect, near_view, far_view); }
 
-            inline static void ortho(float left, float right, float top, float bottom) { _proj = glm::ortho<float>(left, right, bottom, top); }
+            inline static void ortho(float left, float right, float top, float bottom) { _proj = glm::ortho<float>(left, right, top, bottom); }
 
             inline static void matrix_mode(matrix type) noexcept { active_matrix = type; }
             static glm::mat4 get_matrix(matrix type);

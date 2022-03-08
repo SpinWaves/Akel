@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 06/03/2022
+// Updated : 07/03/2022
 
 #include <Utils/camera.h>
 #include <Graphics/matrixes.h>
@@ -13,11 +13,20 @@ namespace Ak
 		_position.SET(0, 0, 0);
 		update_view();
 	}
+	Camera3D::Camera3D(Maths::Vec3<double> position) :  Component("__camera3D"), _position(std::move(position)), _up(0, 0, 1)
+	{
+		update_view();
+	}
+	Camera3D::Camera3D(double x, double y, double z) : Component("__camera3D"), _up(0, 0, 1)
+	{
+		_position.SET(x, y, z);
+		update_view();
+	}
 
 	void Camera3D::update()
 	{
+		update_view();
 		_target = _position + _direction;
-		Matrixes::matrix_mode(matrix::view);
     	Matrixes::lookAt(_position.X, _position.Y, _position.Z, _target.X, _target.Y, _target.Z, 0, 0, 1);
 	}
 
@@ -27,14 +36,13 @@ namespace Ak
 		{
 			_theta -= input.getXRel() * _sensivity;
 			_phi -= input.getYRel() * _sensivity;
-			update_view();
 		}
 		if(input.getInKey(SDL_SCANCODE_F1, action::up))
 		{
 			_isMouseGrabed = _isMouseGrabed ? false : true;
 			SDL_SetRelativeMouseMode(_isMouseGrabed ? SDL_TRUE : SDL_FALSE);
 		}
-		if(!_isMouseGrabed && input.getInMouse(1))
+		if(!_isMouseGrabed && input.getInMouse(AK_MOUSE_BUTTON_LEFT))
 		{
 			_isMouseGrabed = true;
 			SDL_SetRelativeMouseMode(SDL_TRUE);
