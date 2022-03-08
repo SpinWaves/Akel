@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 09/07/2021
-// Updated : 03/11/2021
+// Updated : 08/03/2022
 
 #include <Panels/console.h>
 
@@ -25,18 +25,19 @@ void Console::open()
 	_is_open = _is_open ? false : true;
 }
 
-void Console::render(int width, int height)
+void Console::render(const Ak::Maths::Vec2<uint16_t>& pos, const Ak::Maths::Vec2<uint16_t>& size)
 {
-	_width = width;
-	_height = height / 4;
+	_width = size.X;
+	_height = size.Y / 4;
 
 	_WindowAlpha = 1.0f;
 	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, _WindowAlpha);
-	if(ImGui::Begin(_name.data(), &_is_open, ImGuiWindowFlags_NoScrollbar))
-    {
-		ImGui::SetWindowPos(ImVec2(0, height), ImGuiCond_FirstUseEver);
-		ImGui::SetWindowSize(ImVec2(width, _height), ImGuiCond_FirstUseEver);
+	
+	ImGui::SetNextWindowPos(ImVec2(pos.X, pos.Y + size.Y));
+	ImGui::SetNextWindowSize(ImVec2(_width, _height));
 
+	if(ImGui::Begin(_name.data(), &_is_open, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
+    {
 		logPart();
 		ImGui::Separator();
 		inputBar();

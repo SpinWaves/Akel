@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 03/11/2021
+// Updated : 08/03/2022
 
 #ifndef __AK_EDITOR_CONSOLE__
 #define __AK_EDITOR_CONSOLE__
@@ -13,7 +13,7 @@ class Console
 {
 	public:
 		explicit Console(std::string name, std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize = 256);
-		void render(int width, int height);
+		void render(const Ak::Maths::Vec2<uint16_t>& pos, const Ak::Maths::Vec2<uint16_t>& size);
 		void open();
 		~Console();
 

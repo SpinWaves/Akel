@@ -9,7 +9,7 @@
 #include <AkEpch.h>
 #include <Panels/panels.h>
 
-class EditorComponent : public Ak::ImGuiComponent
+class EditorComponent : public Ak::WindowComponent
 {
 	public:
 		EditorComponent();

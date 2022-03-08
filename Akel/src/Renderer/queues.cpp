@@ -21,7 +21,10 @@ namespace Ak
         for(const auto& queueFamily : queueFamilies)
         {
             if(queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+            {
                 indices.graphicsFamily = i;
+                _queueFamily = i;
+            }
 
             VkBool32 presentSupport = false;
             vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);

@@ -13,14 +13,13 @@ namespace Ak
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debug_report(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage, void* pUserData);
 	static void SetupVulkan(const char** extensions, uint32_t extensions_count);
 	static void SetupVulkanWindow(ImGui_ImplVulkanH_Window* wd, VkSurfaceKHR surface, int width, int height);
-	static void CleanupVulkanWindow();
 	static void CleanupVulkan();
 	static void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data);
 	static void FramePresent(ImGui_ImplVulkanH_Window* wd);
 
 	static VkResult err;
 
-	static VkAllocationCallbacks*   g_Allocator = NULL;
+	static VkAllocationCallbacks*   g_Allocator = nullptr;
 	static VkInstance               g_Instance = VK_NULL_HANDLE;
 	static VkPhysicalDevice         g_PhysicalDevice = VK_NULL_HANDLE;
 	static VkDevice                 g_Device = VK_NULL_HANDLE;
@@ -33,42 +32,36 @@ namespace Ak
 	static ImGui_ImplVulkanH_Window g_MainWindowData;
 	static uint32_t                 g_MinImageCount = 2;
 	static bool                     g_SwapChainRebuild = false;
+	static bool isInit = false;
 
 	static ImVec4 clear_color = ImVec4(0.180f, 0.180f, 0.180f, 1.000f);
-	static ImGui_ImplVulkanH_Window* _wd = &g_MainWindowData;
 
-	ImGuiComponent::ImGuiComponent(const char* title) : WindowComponent()
+	ImGuiComponent::ImGuiComponent(WindowComponent* win) : Component("__imguiComponent")
 	{
-		_title = title;
-		WindowComponent::setName("__imgui");
+		_win = win;
 	}
-
+	ImGuiComponent::ImGuiComponent() : Component("__imguiComponent") {}
+	
 	void ImGuiComponent::onAttach()
 	{
-		WindowComponent::create();
-		WindowComponent::setSetting(winsets::title, _title);
-		WindowComponent::setSetting(winsets::resizable, true);
-		WindowComponent::setSetting(winsets::size, AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
-		WindowComponent::setSetting(winsets::maximize, true);
-
 		// Setup Vulkan
 		uint32_t extensions_count = 0;
-		SDL_Vulkan_GetInstanceExtensions(_window, &extensions_count, NULL);
+		SDL_Vulkan_GetInstanceExtensions(_win->getNativeWindow(), &extensions_count, NULL);
 		const char** extensions = new const char*[extensions_count];
-		SDL_Vulkan_GetInstanceExtensions(_window, &extensions_count, extensions);
+		SDL_Vulkan_GetInstanceExtensions(_win->getNativeWindow(), &extensions_count, extensions);
 		SetupVulkan(extensions, extensions_count);
 		delete[] extensions;
 
 		// Create Window Surface
 		VkSurfaceKHR surface;
 		VkResult err;
-		if(SDL_Vulkan_CreateSurface(_window, g_Instance, &surface) == 0)
+		if(SDL_Vulkan_CreateSurface(_win->getNativeWindow(), g_Instance, &surface) == 0)
 			messageBox(FATAL_ERROR, "Unable to create ImGui window", "Failed to create Vulkan surface");
 
 		// Create Framebuffers
 		int w, h;
-		SDL_GetWindowSize(_window, &w, &h);
-		SetupVulkanWindow(_wd, surface, w, h);
+		SDL_GetWindowSize(_win->getNativeWindow(), &w, &h);
+		SetupVulkanWindow(&g_MainWindowData, surface, w, h);
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -86,8 +79,8 @@ namespace Ak
 			ImGui::SaveIniSettingsToDisk(_settingsFilePath);
 		}
 
-		io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Bold.ttf").c_str(), 18.0f);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Regular.ttf").c_str(), 18.0f);
+		io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Bold.ttf").c_str(), 19.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Regular.ttf").c_str(), 19.0f);
 
 		SetDarkThemeColors();
 
@@ -99,7 +92,7 @@ namespace Ak
 		}
 
 		// Setup Platform/Renderer bindings
-		ImGui_ImplSDL2_InitForVulkan(_window);
+		ImGui_ImplSDL2_InitForVulkan(_win->getNativeWindow());
 		ImGui_ImplVulkan_InitInfo init_info = {};
 			init_info.Instance = g_Instance;
 			init_info.PhysicalDevice = g_PhysicalDevice;
@@ -110,14 +103,14 @@ namespace Ak
 			init_info.DescriptorPool = g_DescriptorPool;
 			init_info.Allocator = g_Allocator;
 			init_info.MinImageCount = g_MinImageCount;
-			init_info.ImageCount = _wd->ImageCount;
+			init_info.ImageCount = g_MainWindowData.ImageCount;
 			init_info.CheckVkResultFn = check_vk_result;
-		ImGui_ImplVulkan_Init(&init_info, _wd->RenderPass);
+		ImGui_ImplVulkan_Init(&init_info, g_MainWindowData.RenderPass);
 
 		{
 			// Use any command queue
-			VkCommandPool command_pool = _wd->Frames[_wd->FrameIndex].CommandPool;
-			VkCommandBuffer command_buffer = _wd->Frames[_wd->FrameIndex].CommandBuffer;
+			VkCommandPool command_pool = g_MainWindowData.Frames[g_MainWindowData.FrameIndex].CommandPool;
+			VkCommandBuffer command_buffer = g_MainWindowData.Frames[g_MainWindowData.FrameIndex].CommandBuffer;
 
 			err = vkResetCommandPool(g_Device, command_pool, 0);
 			check_vk_result(err);
@@ -148,10 +141,10 @@ namespace Ak
 
 	void ImGuiComponent::begin()
 	{
-		if(g_SwapChainRebuild)
+		if(g_SwapChainRebuild && _win != nullptr)
         {
             int width, height;
-            SDL_GetWindowSize(_window, &width, &height);
+            SDL_GetWindowSize(_win->getNativeWindow(), &width, &height);
             if(width > 0 && height > 0)
             {
                 ImGui_ImplVulkan_SetMinImageCount(g_MinImageCount);
@@ -162,7 +155,7 @@ namespace Ak
         }
         // Start the Dear ImGui frame
         ImGui_ImplVulkan_NewFrame();
-        ImGui_ImplSDL2_NewFrame(_window);
+        ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 	}
 
@@ -174,12 +167,12 @@ namespace Ak
         const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
         if(!is_minimized)
         {
-            _wd->ClearValue.color.float32[0] = clear_color.x * clear_color.w;
-            _wd->ClearValue.color.float32[1] = clear_color.y * clear_color.w;
-            _wd->ClearValue.color.float32[2] = clear_color.z * clear_color.w;
-            _wd->ClearValue.color.float32[3] = clear_color.w;
-            FrameRender(_wd, draw_data);
-            FramePresent(_wd);
+            g_MainWindowData.ClearValue.color.float32[0] = clear_color.x * clear_color.w;
+            g_MainWindowData.ClearValue.color.float32[1] = clear_color.y * clear_color.w;
+            g_MainWindowData.ClearValue.color.float32[2] = clear_color.z * clear_color.w;
+            g_MainWindowData.ClearValue.color.float32[3] = clear_color.w;
+            FrameRender(&g_MainWindowData, draw_data);
+            FramePresent(&g_MainWindowData);
         }
 		ImGuiIO& io = ImGui::GetIO();
 		if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -196,14 +189,26 @@ namespace Ak
 
 	void ImGuiComponent::onQuit()
 	{
+		if(!isInit)
+			return;
 		err = vkDeviceWaitIdle(g_Device);
 		check_vk_result(err);
 		ImGui_ImplVulkan_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
 
-		CleanupVulkanWindow();
-		CleanupVulkan();
+		ImGui_ImplVulkanH_DestroyWindow(g_Instance, g_Device, &g_MainWindowData, g_Allocator);
+
+		vkDestroyDescriptorPool(g_Device, g_DescriptorPool, g_Allocator);
+
+		if(Core::ProjectFile::getBoolValue("imgui_vk_debug_report"))
+		{
+			auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkDestroyDebugReportCallbackEXT");
+			vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
+		}
+
+		vkDestroyDevice(g_Device, g_Allocator);
+		vkDestroyInstance(g_Instance, g_Allocator);
 	}
 
 	void ImGuiComponent::SetDarkThemeColors()
@@ -274,13 +279,60 @@ namespace Ak
 		style->WindowRounding = 4.0f;
 	}
 
+	const char* get_readable_error(VkResult err)
+	{
+		switch(err)
+		{
+			case VK_SUCCESS : return "VK_SUCCESS";
+			case VK_NOT_READY : return "VK_NOT_READY";
+			case VK_TIMEOUT : return "VK_TIMEOUT";
+			case VK_EVENT_SET : return "VK_EVENT_SET";
+			case VK_EVENT_RESET : return "VK_EVENT_RESET";
+			case VK_INCOMPLETE : return "VK_INCOMPLETE";
+			case VK_ERROR_OUT_OF_HOST_MEMORY : return "VK_ERROR_OUT_OF_HOST_MEMORY";
+			case VK_ERROR_OUT_OF_DEVICE_MEMORY : return "VK_ERROR_OUT_OF_DEVICE_MEMORY";
+			case VK_ERROR_INITIALIZATION_FAILED : return "VK_ERROR_INITIALIZATION_FAILED";
+			case VK_ERROR_DEVICE_LOST : return "VK_ERROR_DEVICE_LOST";
+			case VK_ERROR_MEMORY_MAP_FAILED : return "VK_ERROR_MEMORY_MAP_FAILED";
+			case VK_ERROR_LAYER_NOT_PRESENT : return "VK_ERROR_LAYER_NOT_PRESENT";
+			case VK_ERROR_EXTENSION_NOT_PRESENT : return "VK_ERROR_EXTENSION_NOT_PRESENT";
+			case VK_ERROR_FEATURE_NOT_PRESENT : return "VK_ERROR_FEATURE_NOT_PRESENT";
+			case VK_ERROR_INCOMPATIBLE_DRIVER : return "VK_ERROR_INCOMPATIBLE_DRIVER";
+			case VK_ERROR_TOO_MANY_OBJECTS : return "VK_ERROR_TOO_MANY_OBJECTS";
+			case VK_ERROR_FORMAT_NOT_SUPPORTED : return "VK_ERROR_FORMAT_NOT_SUPPORTED";
+			case VK_ERROR_FRAGMENTED_POOL : return "VK_ERROR_FRAGMENTED_POOL";
+			case VK_ERROR_UNKNOWN : return "VK_ERROR_UNKNOWN";
+			case VK_ERROR_OUT_OF_POOL_MEMORY : return "VK_ERROR_OUT_OF_POOL_MEMORY";
+			case VK_ERROR_INVALID_EXTERNAL_HANDLE : return "VK_ERROR_INVALID_EXTERNAL_HANDLE";
+			case VK_ERROR_FRAGMENTATION : return "VK_ERROR_FRAGMENTATION";
+			case VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS  : return "VK_ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS";
+			//case VK_PIPELINE_COMPILE_REQUIRED : return "VK_PIPELINE_COMPILE_REQUIRED";
+			case VK_ERROR_SURFACE_LOST_KHR : return "VK_ERROR_SURFACE_LOST_KHR";
+			case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR  : return "VK_ERROR_NATIVE_WINDOW_IN_USE_KHR";
+			case VK_SUBOPTIMAL_KHR : return "VK_SUBOPTIMAL_KHR";
+			case VK_ERROR_OUT_OF_DATE_KHR : return "VK_ERROR_OUT_OF_DATE_KHR";
+			case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR : return "VK_ERROR_INCOMPATIBLE_DISPLAY_KHR";
+			case VK_ERROR_VALIDATION_FAILED_EXT : return "VK_ERROR_VALIDATION_FAILED_EXT";
+			case VK_ERROR_INVALID_SHADER_NV : return "VK_ERROR_INVALID_SHADER_NV";
+			case VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT : return "VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT";
+			//case VK_ERROR_NOT_PERMITTED_KHR : return "VK_ERROR_NOT_PERMITTED_KHR";
+			case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT : return "VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT";
+			case VK_THREAD_IDLE_KHR : return "VK_THREAD_IDLE_KHR";
+			case VK_THREAD_DONE_KHR : return "VK_THREAD_DONE_KHR";
+			case VK_OPERATION_DEFERRED_KHR : return "VK_OPERATION_DEFERRED_KHR";
+			case VK_OPERATION_NOT_DEFERRED_KHR : return "VK_OPERATION_NOT_DEFERRED_KHR";
+
+			default: return " ";
+		}
+	}
+
 	static void check_vk_result(VkResult err)
 	{
 		if(err == 0)
 			return;
 		if(err < 0)
-			Core::log::report(FATAL_ERROR, std::string("Imgui: Vulkan: VkResult = " + err));
-		Core::log::report(ERROR, std::string("Imgui: Vulkan: VkResult = " + err));
+			Core::log::report(FATAL_ERROR, "Imgui Vulkan : watchdog triggered : %s", get_readable_error(err));
+		Core::log::report(ERROR, "Imgui Vulkan : watchdog triggered : %s", get_readable_error(err));
 	}
 
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debug_report(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage, void* pUserData)
@@ -288,7 +340,7 @@ namespace Ak
 		if(!Core::ProjectFile::getBoolValue("imgui_vk_debug_report"))
 			return VK_FALSE;
 		(void)flags; (void)object; (void)location; (void)messageCode; (void)pUserData; (void)pLayerPrefix; // Unused arguments
-		Core::log::report(ERROR, std::string(std::string("ImGui: Vulkan: debug report from ObjectType: " + objectType) + "\nMessage:" + pMessage)); // Needs to be improved
+		Core::log::report(ERROR, std::string("ImGui Vulkan : ") + pMessage);
 		return VK_FALSE;
 	}
 
@@ -499,6 +551,8 @@ namespace Ak
 			err = vkCreateDescriptorPool(g_Device, &pool_info, g_Allocator, &g_DescriptorPool);
 			check_vk_result(err);
 		}
+
+		isInit = true;
 	}
 
 	// All the ImGui_ImplVulkanH_XXX structures/functions are optional helpers used by the demo.
@@ -510,11 +564,8 @@ namespace Ak
 		// Check for WSI support
 		VkBool32 res;
 		vkGetPhysicalDeviceSurfaceSupportKHR(g_PhysicalDevice, g_QueueFamily, wd->Surface, &res);
-		if (res != VK_TRUE)
-		{
-			fprintf(stderr, "Error no WSI support on physical device 0\n");
-			exit(-1);
-		}
+		if(res != VK_TRUE)
+			Core::log::report(FATAL_ERROR, "ImGui Vulkan : no WSI support on physical device");
 
 		// Select Surface Format
 		const VkFormat requestSurfaceImageFormat[] = { VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM };
@@ -544,25 +595,6 @@ namespace Ak
 		ImGui_ImplVulkanH_CreateOrResizeWindow(g_Instance, g_PhysicalDevice, g_Device, wd, g_QueueFamily, g_Allocator, width, height, g_MinImageCount);
 	}
 
-	static void CleanupVulkan()
-	{
-		vkDestroyDescriptorPool(g_Device, g_DescriptorPool, g_Allocator);
-
-	#ifdef IMGUI_VULKAN_DEBUG_REPORT
-		// Remove the debug report callback
-		auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, "vkDestroyDebugReportCallbackEXT");
-		vkDestroyDebugReportCallbackEXT(g_Instance, g_DebugReport, g_Allocator);
-	#endif // IMGUI_VULKAN_DEBUG_REPORT
-
-		vkDestroyDevice(g_Device, g_Allocator);
-		vkDestroyInstance(g_Instance, g_Allocator);
-	}
-
-	static void CleanupVulkanWindow()
-	{
-		ImGui_ImplVulkanH_DestroyWindow(g_Instance, g_Device, &g_MainWindowData, g_Allocator);
-	}
-
 	static void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data)
 	{
 		VkResult err;
@@ -570,7 +602,7 @@ namespace Ak
 		VkSemaphore image_acquired_semaphore  = wd->FrameSemaphores[wd->SemaphoreIndex].ImageAcquiredSemaphore;
 		VkSemaphore render_complete_semaphore = wd->FrameSemaphores[wd->SemaphoreIndex].RenderCompleteSemaphore;
 		err = vkAcquireNextImageKHR(g_Device, wd->Swapchain, UINT64_MAX, image_acquired_semaphore, VK_NULL_HANDLE, &wd->FrameIndex);
-		if (err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
+		if(err == VK_ERROR_OUT_OF_DATE_KHR || err == VK_SUBOPTIMAL_KHR)
 		{
 			g_SwapChainRebuild = true;
 			return;
