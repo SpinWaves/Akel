@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 06/03/2022
+// Updated : 09/03/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -17,25 +17,26 @@
 #define AK_WINDOW_MAX_SIZE 0xFFFF
 #define AK_WINDOW_POS_CENTER 0xFFFE
 
+enum class win
+{
+    title,
+    size,
+    position,
+    fullscreen,
+    border,
+    brightness,
+    opacity,
+    resizable,
+    visible,
+    maximumSize,
+    minimumSize,
+    icon,
+    vsync,
+    maximize
+};
+
 namespace Ak
 {
-    enum class winsets
-    {
-        title,
-        size,
-        position,
-        fullscreen,
-        border,
-        brightness,
-        opacity,
-        resizable,
-        visible,
-        maximumSize,
-        minimumSize,
-        icon,
-        vsync,
-        maximize
-    };
 
     class WindowComponent : public Component
     {
@@ -46,12 +47,14 @@ namespace Ak
 			void onEvent(Input& input) override;
 			void onQuit() override;
 
-			void setSetting(winsets setting, const char* value);
-			void setSetting(winsets setting, bool value);
-			void setSetting(winsets setting, float value);
-			void setSetting(winsets setting, uint16_t x, uint16_t y);
+			void set(win setting, const char* value);
+			void set(win setting, bool value);
+			void set(win setting, float value);
+			void set(win setting, uint16_t x, uint16_t y);
 
             // Getters
+            std::variant get(win setting);
+
             inline const std::string& getTitle() const noexcept { return _title; }
             inline const Maths::Vec2<uint16_t>& getPosition() const noexcept { return _position; }
             const Maths::Vec2<uint16_t>& getSize();
