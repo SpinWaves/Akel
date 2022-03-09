@@ -17,27 +17,8 @@
 #define AK_WINDOW_MAX_SIZE 0xFFFF
 #define AK_WINDOW_POS_CENTER 0xFFFE
 
-enum class win
-{
-    title,
-    size,
-    position,
-    fullscreen,
-    border,
-    brightness,
-    opacity,
-    resizable,
-    visible,
-    maximumSize,
-    minimumSize,
-    icon,
-    vsync,
-    maximize
-};
-
 namespace Ak
 {
-
     class WindowComponent : public Component
     {
         public:
@@ -45,22 +26,32 @@ namespace Ak
 
 			void onAttach() override;
 			void onEvent(Input& input) override;
+            void update() override;
 			void onQuit() override;
 
-			void set(win setting, const char* value);
-			void set(win setting, bool value);
-			void set(win setting, float value);
-			void set(win setting, uint16_t x, uint16_t y);
+            union
+            {
+                std::string title = "Akel Window";
+                std::string icon = Core::getAssetsDirPath() + "logo.png";
+                
+                Maths::Vec2<uint16_t> size(1280, 750);
+                Maths::Vec2<uint16_t> pos(AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER);
+                Maths::Vec2<uint16_t> minSize(0, 0);
+                Maths::Vec2<uint16_t> maxSize(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
+                
+                float brightness;
+                float opacity;
 
-            // Getters
-            std::variant get(win setting);
+                bool fullscreen;
+                bool border;
+                bool resizable;
+                bool visible;
+                bool vsync;
+                bool maximize;
+            };
 
-            inline const std::string& getTitle() const noexcept { return _title; }
-            inline const Maths::Vec2<uint16_t>& getPosition() const noexcept { return _position; }
-            const Maths::Vec2<uint16_t>& getSize();
-			inline SDL_Window* getNativeWindow() const noexcept { return _window; }
-            inline bool getVsync() noexcept { return _vsync; }
-
+            inline SDL_Window* getNativeWindow() noexcept { return _window; }
+			
             ~WindowComponent() override;
 
 		protected:
@@ -68,14 +59,7 @@ namespace Ak
             SDL_Window* _window = nullptr;
 
         private:
-
-            std::string _title = "";
-            Maths::Vec2<uint16_t> _position;
-            Maths::Vec2<uint16_t> _size;
-
             uint32_t _flags = 0;
-            bool _vsync = true;
-
             SDL_Surface* _icon = nullptr;
     };
 }

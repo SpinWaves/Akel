@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 06/03/2022
+// Updated : 09/03/2022
 
 #include <Platform/platform.h>
 
@@ -19,12 +19,9 @@ namespace Ak
 
 	void WindowComponent::create()
 	{
-        _position.SET(0, 0);
-        _size.SET(0, 0);
-
         _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI;
 
-        _window = SDL_CreateWindow(_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, _flags);
+        _window = SDL_CreateWindow(title.c_str(), pos.x, pos.Y, size.X, size.Y, _flags);
         if(!_window)
             messageBox(FATAL_ERROR, "Unable to create a window", SDL_GetError());
 
