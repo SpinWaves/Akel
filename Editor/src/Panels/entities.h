@@ -9,9 +9,8 @@
 class Entities
 {
     public:
-        // TODO
+    
     private:
-        // TODO
 };
 
 #endif // __AK_EDITOR_ENTITIES__
