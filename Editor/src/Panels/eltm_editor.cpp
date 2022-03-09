@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 07/11/2021
+// Updated : 09/03/2022
 
 #include <Panels/eltm_editor.h>
 
@@ -27,7 +27,7 @@ void ELTM_editor::render(int width, int height)
 {
     _height = height;
     _width = width;
-	if(ImGui::Begin(_name.data(), &_is_open))
+	if(ImGui::Begin(_name.data(), &_is_open, ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
 		ImGui::SetWindowPos(ImVec2(50, 500), ImGuiCond_FirstUseEver);
 		ImGui::SetWindowSize(ImVec2(width - 100, height - 500), ImGuiCond_FirstUseEver);

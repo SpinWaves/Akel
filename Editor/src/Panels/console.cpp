@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 09/07/2021
-// Updated : 08/03/2022
+// Updated : 09/03/2022
 
 #include <Panels/console.h>
 
@@ -20,12 +20,7 @@ Console::Console(std::string name, std::shared_ptr<Ak::ELTM> eltm, size_t inputB
 	_sh.print("============================");
 }
 
-void Console::open()
-{
-	_is_open = _is_open ? false : true;
-}
-
-void Console::render(const Ak::Maths::Vec2<uint16_t>& pos, const Ak::Maths::Vec2<uint16_t>& size)
+void Console::render(Ak::Maths::Vec2<int>& pos, Ak::Maths::Vec2<int>& size)
 {
 	_width = size.X;
 	_height = size.Y / 4;
@@ -33,11 +28,11 @@ void Console::render(const Ak::Maths::Vec2<uint16_t>& pos, const Ak::Maths::Vec2
 	_WindowAlpha = 1.0f;
 	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, _WindowAlpha);
 	
-	ImGui::SetNextWindowPos(ImVec2(pos.X, pos.Y + size.Y));
-	ImGui::SetNextWindowSize(ImVec2(_width, _height));
-
-	if(ImGui::Begin(_name.data(), &_is_open, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
+	if(ImGui::Begin(_name.data(), nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
     {
+		ImGui::SetWindowPos(ImVec2(0, size.Y - _height));
+		ImGui::SetWindowSize(ImVec2(_width, _height));
+
 		logPart();
 		ImGui::Separator();
 		inputBar();

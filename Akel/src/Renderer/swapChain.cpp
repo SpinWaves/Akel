@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/06/2021
-// Updated : 07/03/2022
+// Updated : 09/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -90,7 +90,7 @@ namespace Ak
 
     VkPresentModeKHR RendererComponent::chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes)
     {
-		if(!window->getVsync())
+		if(!window->vsync)
 		    return VK_PRESENT_MODE_IMMEDIATE_KHR;
 
         for(const auto& availablePresentMode : availablePresentModes)

@@ -7,23 +7,17 @@ class FPSprinterComponent : public Ak::Component
         void update() override { std::cout << "fps : " << Ak::CounterFPS::getFPS() << " - ticks : " << Ak::CounterFPS::getTicks() << '\r' << std::flush; }
 };
 
-class Cube : public Ak::Application
+class Cube : public Ak::PlainApplication
 {
     public:
-        explicit Cube() : Ak::Application("Cube")
+        Cube() : Ak::PlainApplication("Cube using Akel Engine")
         {
-            Ak::WindowComponent* window = Ak::memAlloc<Ak::WindowComponent>();
-            add_component(window); // function inherited from Ak::Application
-            window->setSetting(Ak::winsets::title, "Cube using Akel Engine");
-            window->setSetting(Ak::winsets::resizable, true);
-            window->setSetting(Ak::winsets::vsync, false);
-            window->setSetting(Ak::winsets::size, 1280, 750);
+            window->vsync = false;
+            window->fetchSettings();
 
             add_component<FPSprinterComponent>();
             add_component<Ak::Camera3D>(-1, -1, 10);
 
-            Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(window, Ak::shader::basic_3D);
-            add_component(renderer);
             renderer->setBackgroundColor(0.49f, 0.66f, 0.85f, 1.0f);
 
             Ak::Entity2D rectangle(Models::quad, {0.0f, 0.0f}, {1.0f, 5.0f}, Colors::black);

@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 08/03/2022
+// Updated : 09/03/2022
 
 #include <editorComponent.h>
 
@@ -13,17 +13,17 @@ EditorComponent::EditorComponent() : Ak::WindowComponent()
 void EditorComponent::onAttach()
 {
 	Ak::WindowComponent::onAttach();
-	Ak::WindowComponent::setSetting(Ak::winsets::title, "Akel Editor");
-	Ak::WindowComponent::setSetting(Ak::winsets::resizable, true);
-	Ak::WindowComponent::setSetting(Ak::winsets::size, AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
-	Ak::WindowComponent::setSetting(Ak::winsets::maximize, true);
+	Ak::WindowComponent::title = "Akel Editor";
+	Ak::WindowComponent::resizable = true;
+	Ak::WindowComponent::maximize = true;
+	Ak::WindowComponent::fetchSettings();
 
 	std::string language = "language";
 	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/langs.eltm");
 	if(Ak::Core::ProjectFile::getStringValue(language) == "")
 		Ak::Core::ProjectFile::setStringValue(language, _eltm->getLocalText("Languages.English"));
 
-	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/Fr/main.eltm");
+	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
 	_console = Ak::make_unique_ptr_w<Console>(Ak::memAlloc<Console>(_eltm->getLocalText("Console.name"), _eltm));
 	_eltm_editor = Ak::make_unique_ptr_w<ELTM_editor>(Ak::memAlloc<ELTM_editor>(_eltm->getLocalText("ELTM_Editor.name")));
 }
@@ -31,8 +31,8 @@ void EditorComponent::onAttach()
 void EditorComponent::onImGuiRender()
 {
 	drawMainMenuBar();
-	_console->render(WindowComponent::getPosition(), WindowComponent::getSize());
-	_eltm_editor->render(WindowComponent::getSize().X, WindowComponent::getSize().Y);
+	_eltm_editor->render(Ak::WindowComponent::size.X, Ak::WindowComponent::size.Y);
+	_console->render(Ak::WindowComponent::pos, Ak::WindowComponent::size);
 	if(_showAbout)
 		drawAboutWindow();
 	if(_showOpt)
@@ -76,8 +76,6 @@ void EditorComponent::drawMainMenuBar()
 		}
 		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.panels").c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getLocalText("Console.name").c_str()))
-				_console->open();
 			if(ImGui::MenuItem(_eltm->getLocalText("ELTM_Editor.name").c_str()))
 				_eltm_editor->open();
 			ImGui::EndMenu();
@@ -105,7 +103,7 @@ void EditorComponent::drawMainMenuBar()
 				_showAbout = _showAbout ? false : true;
 			ImGui::EndMenu();
 		}
-		ImGui::SameLine(ImGui::GetColumnWidth(-1));
+		ImGui::SameLine(ImGui::GetColumnWidth(-5));
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 
 		ImGui::EndMainMenuBar();

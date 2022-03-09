@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2021
-// Updated : 06/03/2022
+// Updated : 09/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Platform/platform.h>
@@ -38,7 +38,7 @@ namespace Ak
 
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = window->getTitle().c_str();
+        appInfo.pApplicationName = window->title.c_str();
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "Akel";
         appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // Created : 06/03/2022
-// Updated : 07/03/2022
+// Updated : 09/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Graphics/matrixes.h>
@@ -54,7 +54,7 @@ namespace Ak
             ubo.view = Matrixes::get_matrix(matrix::view);
             
             if(Matrixes::get_matrix(matrix::proj) == glm::mat4(1.0f))
-                Matrixes::perspective(80, (float)window->getSize().X/window->getSize().Y, 0.01, 1000);
+                Matrixes::perspective(80, (float)window->size.X/window->size.Y, 0.01, 1000);
             ubo.proj = Matrixes::get_matrix(matrix::proj);
             ubo.proj[1][1] *= -1;
             Matrixes::matrix_mode(matrix::proj);
@@ -75,7 +75,7 @@ namespace Ak
             ubo.model = Matrixes::get_matrix(matrix::model);
             
             if(Matrixes::get_matrix(matrix::proj) == glm::mat4(1.0f))
-                Matrixes::ortho(0.0f, (float)window->getSize().X, 0.0f, (float)window->getSize().Y);
+                Matrixes::ortho(0.0f, (float)window->size.X, 0.0f, (float)window->size.Y);
             ubo.proj = Matrixes::get_matrix(matrix::proj);
             //ubo.proj[1][1] *= -1;
             Matrixes::matrix_mode(matrix::proj);

@@ -9,7 +9,13 @@ namespace Ak
 {
 	static SDL_DisplayMode DM;
 
-    WindowComponent::WindowComponent() : Component("__window_component") {}
+    WindowComponent::WindowComponent() : Component("__window_component")
+	{
+		size.SET(1280, 750);
+		pos.SET(AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER);
+		minSize.SET(0, 0);
+		maxSize.SET(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
+	}
 
 	void WindowComponent::onAttach()
 	{
@@ -20,8 +26,8 @@ namespace Ak
 	void WindowComponent::create()
 	{
         _flags = SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_ALLOW_HIGHDPI;
-
-        _window = SDL_CreateWindow(title.c_str(), pos.x, pos.Y, size.X, size.Y, _flags);
+		
+        _window = SDL_CreateWindow(title.c_str(), pos.X, pos.Y, size.X, size.Y, _flags);
         if(!_window)
             messageBox(FATAL_ERROR, "Unable to create a window", SDL_GetError());
 
@@ -29,122 +35,49 @@ namespace Ak
         SDL_SetWindowIcon(_window, _icon);
 	}
 
+	void WindowComponent::fetchSettings()
+	{
+		SDL_GetCurrentDisplayMode(0, &DM);
+		maxSize.X = maxSize.X == AK_WINDOW_MAX_SIZE ? DM.w : maxSize.X;
+		maxSize.Y = maxSize.Y == AK_WINDOW_MAX_SIZE ? DM.h : maxSize.Y;
+
+		size.X = size.X == AK_WINDOW_MAX_SIZE ? DM.w : size.X;
+		size.Y = size.Y == AK_WINDOW_MAX_SIZE ? DM.h : size.Y;
+
+        _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
+        SDL_SetWindowIcon(_window, _icon);
+		SDL_SetWindowTitle(_window, title.c_str());
+		SDL_SetWindowPosition(_window, pos.X, pos.Y);
+		SDL_SetWindowSize(_window, size.X, size.Y);
+		SDL_SetWindowMinimumSize(_window, minSize.X, minSize.Y);
+		SDL_SetWindowMaximumSize(_window, maxSize.X, maxSize.Y);
+		SDL_SetWindowBrightness(_window, brightness);
+		SDL_SetWindowOpacity(_window, opacity);
+		SDL_SetWindowFullscreen(_window, fullscreen ? SDL_TRUE : SDL_FALSE);
+		SDL_SetWindowResizable(_window, resizable ? SDL_TRUE : SDL_FALSE);
+		SDL_SetWindowBordered(_window, border ? SDL_TRUE : SDL_FALSE);
+		if(maximize) SDL_MaximizeWindow(_window);
+		if(minimize) SDL_MinimizeWindow(_window);
+		visible ? SDL_ShowWindow(_window) : SDL_HideWindow(_window);
+	}
+
+	void WindowComponent::update()
+	{
+		SDL_GetWindowPosition(_window, &pos.X, &pos.Y);
+		SDL_GetWindowSize(_window, &size.X, &size.Y);
+	}
+
 	void WindowComponent::onEvent(Input& input)
 	{
 		if(input.getInKey(AK_KEY_ESCAPE))
 			input.finish();
 	}
+
 	void WindowComponent::onQuit()
 	{
         SDL_FreeSurface(_icon);
         SDL_DestroyWindow(_window);
 	}
-
-	void WindowComponent::setSetting(winsets setting, const char* value)
-	{
-		switch(setting)
-		{
-			case winsets::title: SDL_SetWindowTitle(_window, value); break;
-			case winsets::icon: _icon = IMG_Load(value); SDL_SetWindowIcon(_window, _icon); break;
-
-			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
-		}
-	}
-	void WindowComponent::setSetting(winsets setting, bool value)
-	{
-		SDL_bool __value = value ? SDL_TRUE : SDL_FALSE;
-		switch(setting)
-		{
-			case winsets::fullscreen: SDL_SetWindowFullscreen(_window, __value); break;
-			case winsets::border:     SDL_SetWindowBordered(_window, __value); break;
-			case winsets::resizable:  SDL_SetWindowResizable(_window, __value); break;
-			case winsets::visible:
-			{
-				if(value)
-					SDL_ShowWindow(_window);
-				else
-					SDL_HideWindow(_window);
-				break;
-			}
-			case winsets::vsync: _vsync = value; break;
-			case winsets::maximize:
-			{
-				if(value)
-					SDL_MaximizeWindow(_window);
-				else
-					SDL_MinimizeWindow(_window);
-				break;
-			}
-
-			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
-		}
-	}
-	void WindowComponent::setSetting(winsets setting, float value)
-	{
-		switch(setting)
-		{
-			case winsets::brightness: SDL_SetWindowBrightness(_window, value); break;
-			case winsets::opacity: SDL_SetWindowOpacity(_window, value); break;
-
-			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
-		}
-	}
-	void WindowComponent::setSetting(winsets setting, uint16_t x, uint16_t y)
-	{
-		switch(setting)
-		{
-			case winsets::position:
-			{
-				if(x == AK_WINDOW_POS_CENTER)
-					x = SDL_WINDOWPOS_CENTERED;
-				if(y == AK_WINDOW_POS_CENTER)
-					y = SDL_WINDOWPOS_CENTERED;
-				SDL_SetWindowPosition(_window, x, y);
-				break;
-			}
-			case winsets::size:
-			{
-				SDL_GetCurrentDisplayMode(0, &DM);
-				if(x == AK_WINDOW_MAX_SIZE)
-					x = DM.w;
-				if(y == AK_WINDOW_MAX_SIZE)
-					y = DM.h;
-				SDL_SetWindowSize(_window, x, y);
-				break;
-			}
-			case winsets::maximumSize:
-			{
-				SDL_GetCurrentDisplayMode(0, &DM);
-				if(x == AK_WINDOW_MAX_SIZE)
-					x = DM.w;
-				if(y == AK_WINDOW_MAX_SIZE)
-					y = DM.h;
-				SDL_SetWindowMaximumSize(_window, x, y);
-				break;
-			}
-			case winsets::minimumSize: 
-			{
-				SDL_GetCurrentDisplayMode(0, &DM);
-				if(x == AK_WINDOW_MAX_SIZE)
-					x = DM.w;
-				if(y == AK_WINDOW_MAX_SIZE)
-					y = DM.h;
-				SDL_SetWindowMinimumSize(_window, x, y);
-				break;
-			}
-
-			default: Core::log::report(ERROR, "Unable to modify window's parameter"); break;
-		}
-	}
-
-    // ================ Getters ================ //
-    const Maths::Vec2<uint16_t>& WindowComponent::getSize()
-    {
-		int x, y = 0;
-		SDL_GetWindowSize(_window, &x, &y);
-		_size.SET(x, y);
-        return _size;
-    }
 
     WindowComponent::~WindowComponent(){}
 }

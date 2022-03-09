@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 07/02/2022
+// Updated : 09/03/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -69,8 +69,6 @@ namespace Ak
 		ImGuiIO& io = ImGui::GetIO();
 		(void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; 
 
 		if(_settingsFilePath != nullptr)		
 		{
@@ -83,13 +81,6 @@ namespace Ak
 		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Regular.ttf").c_str(), 19.0f);
 
 		SetDarkThemeColors();
-
-		ImGuiStyle& style = ImGui::GetStyle();
-		if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplSDL2_InitForVulkan(_win->getNativeWindow());
@@ -174,12 +165,6 @@ namespace Ak
             FrameRender(&g_MainWindowData, draw_data);
             FramePresent(&g_MainWindowData);
         }
-		ImGuiIO& io = ImGui::GetIO();
-		if(io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-        }
 	}
 
 	void ImGuiComponent::onImGuiEvent(Input& input)
@@ -254,8 +239,6 @@ namespace Ak
 		colors[ImGuiCol_TabActive]              = ImVec4(0.195f, 0.195f, 0.195f, 1.000f);
 		colors[ImGuiCol_TabUnfocused]           = ImVec4(0.098f, 0.098f, 0.098f, 1.000f);
 		colors[ImGuiCol_TabUnfocusedActive]     = ImVec4(0.195f, 0.195f, 0.195f, 1.000f);
-		colors[ImGuiCol_DockingPreview]         = ImVec4(1.000f, 0.391f, 0.000f, 0.781f);
-		colors[ImGuiCol_DockingEmptyBg]         = ImVec4(0.180f, 0.180f, 0.180f, 1.000f);
 		colors[ImGuiCol_PlotLines]              = ImVec4(0.469f, 0.469f, 0.469f, 1.000f);
 		colors[ImGuiCol_PlotLinesHovered]       = ImVec4(1.000f, 0.391f, 0.000f, 1.000f);
 		colors[ImGuiCol_PlotHistogram]          = ImVec4(0.586f, 0.586f, 0.586f, 1.000f);

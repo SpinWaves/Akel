@@ -15,7 +15,8 @@
 #include <Platform/input.h>
 
 #define AK_WINDOW_MAX_SIZE 0xFFFF
-#define AK_WINDOW_POS_CENTER 0xFFFE
+#define AK_WINDOW_MIN_SIZE 0
+#define AK_WINDOW_POS_CENTER 0x2FFF0000u
 
 namespace Ak
 {
@@ -27,32 +28,30 @@ namespace Ak
 			void onAttach() override;
 			void onEvent(Input& input) override;
             void update() override;
+            void fetchSettings();
 			void onQuit() override;
-
-            union
-            {
-                std::string title = "Akel Window";
-                std::string icon = Core::getAssetsDirPath() + "logo.png";
-                
-                Maths::Vec2<uint16_t> size(1280, 750);
-                Maths::Vec2<uint16_t> pos(AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER);
-                Maths::Vec2<uint16_t> minSize(0, 0);
-                Maths::Vec2<uint16_t> maxSize(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
-                
-                float brightness;
-                float opacity;
-
-                bool fullscreen;
-                bool border;
-                bool resizable;
-                bool visible;
-                bool vsync;
-                bool maximize;
-            };
-
             inline SDL_Window* getNativeWindow() noexcept { return _window; }
+
+            std::string title = "Akel Window";
+            std::string icon = Core::getAssetsDirPath() + "logo.png";;
+            
+            Maths::Vec2<int> size;
+            Maths::Vec2<int> pos;
+            Maths::Vec2<int> minSize;
+            Maths::Vec2<int> maxSize;
+            
+            float brightness = 1.0f;
+            float opacity = 1.0f;
+
+            bool fullscreen = false;
+            bool border = true;
+            bool resizable = true;
+            bool visible = true;
+            bool vsync = true;
+            bool maximize = false;
+            bool minimize = false;
 			
-            ~WindowComponent() override;
+            virtual ~WindowComponent();
 
 		protected:
 			void create();

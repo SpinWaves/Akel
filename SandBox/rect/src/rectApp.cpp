@@ -14,10 +14,11 @@ class Rect : public Ak::Application
         {
             Ak::WindowComponent* window = Ak::memAlloc<Ak::WindowComponent>();
             add_component(window); // function inherited from Ak::Application
-            window->setSetting(Ak::winsets::title, "Rectangle using Akel Engine");
-            window->setSetting(Ak::winsets::resizable, true);
-            window->setSetting(Ak::winsets::vsync, false);
-            window->setSetting(Ak::winsets::size, 1280, 750);
+            window->title = "Rectangle using Akel Engine";
+            window->resizable = true;
+            window->vsync = false;
+            window->size.SET(1280, 750);
+            window->fetchSettings();
 
             add_component<FPSprinterComponent>();
 
