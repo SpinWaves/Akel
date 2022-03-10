@@ -1,13 +1,12 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 09/07/2021
-// Updated : 09/03/2022
+// Updated : 10/03/2022
 
 #include <Panels/console.h>
 
-Console::Console(std::string name, std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize) : _sh(eltm)
+Console::Console(std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize) : Panel("__console"), _sh(eltm)
 {
-	_name = std::move(name);
 	_input.resize(inputBufferSize);
 	_inBufferSize = inputBufferSize;
 
@@ -20,22 +19,28 @@ Console::Console(std::string name, std::shared_ptr<Ak::ELTM> eltm, size_t inputB
 	_sh.print("============================");
 }
 
-void Console::render(Ak::Maths::Vec2<int>& pos, Ak::Maths::Vec2<int>& size)
+void Console::onEvent(Ak::Input& input)
 {
-	_width = size.X;
+	if(_sh.quit())
+		input.finish();
+}
+
+void Console::onUpdate(Ak::Maths::Vec2<int>& size)
+{
+	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
 	_height = size.Y / 4;
 
 	_WindowAlpha = 1.0f;
 	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, _WindowAlpha);
-	
-	if(ImGui::Begin(_name.data(), nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
+	if(ImGui::Begin(_eltm->getLocalText("Console.name").data(), nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
     {
-		ImGui::SetWindowPos(ImVec2(0, size.Y - _height));
+		ImGui::SetWindowPos(ImVec2((15 * size.X)/100, size.Y - _height));
 		ImGui::SetWindowSize(ImVec2(_width, _height));
 
 		logPart();
 		ImGui::Separator();
 		inputBar();
+
 
 		ImGui::End();
     }
@@ -118,9 +123,4 @@ int Console::InputCallback(ImGuiInputTextCallbackData *data)
 {
 	// TODO
     return 0;
-}
-
-Console::~Console()
-{
-	Ak::AudioManager::freeSound(ee);
 }

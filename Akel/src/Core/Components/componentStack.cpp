@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 23/02/2022
+// Updated : 10/03/2022
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -41,7 +41,7 @@ namespace Ak
 	{
 		for(auto elem : _components)
 		{
-			if(elem->getName() == name)
+			if(strcmp(elem->getName(), name))
 				return elem;
 		}
 	}

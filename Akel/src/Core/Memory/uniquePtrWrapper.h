@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/09/2021
-// Updated : 02/03/2022
+// Updated : 10/03/2022
 
 #ifndef __AK_UNIQUE_PTR_WRAPPER__
 #define __AK_UNIQUE_PTR_WRAPPER__
@@ -40,6 +40,9 @@ namespace Ak
             return unique_ptr_w<T>(ptr);
         return unique_ptr_w<T>(nullptr);
     }
+
+    template <typename T = void, typename ... Args>
+    inline unique_ptr_w<T> create_unique_ptr_w(Args&& ... args) noexcept { return make_unique_ptr_w<T>(memAlloc<T>(std::forward<Args>(args)...)); }
 }
 
 #endif // __AK_UNIQUE_PTR_WRAPPER__

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 09/03/2022
+// Updated : 10/03/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -69,6 +69,7 @@ namespace Ak
 		ImGuiIO& io = ImGui::GetIO();
 		(void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 
 		if(_settingsFilePath != nullptr)		
 		{
@@ -249,6 +250,8 @@ namespace Ak
 		colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(1.000f, 0.391f, 0.000f, 1.000f);
 		colors[ImGuiCol_NavWindowingDimBg]      = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
 		colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
+		colors[ImGuiCol_DockingPreview]         = ImVec4(1.000f, 0.391f, 0.000f, 0.781f);
+		colors[ImGuiCol_DockingEmptyBg]         = ImVec4(0.180f, 0.180f, 0.180f, 1.000f);
 
 		style->ChildRounding = 4.0f;
 		style->FrameBorderSize = 1.0f;

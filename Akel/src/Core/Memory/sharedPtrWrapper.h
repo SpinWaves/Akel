@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/07/2021
-// Updated : 10/09/2021
+// Updated : 10/03/2022
 
 #ifndef __AK_SHARED_PTR_WRAPPER__
 #define __AK_SHARED_PTR_WRAPPER__
@@ -44,6 +44,9 @@ namespace Ak
             return std::shared_ptr<T>(ptr, [](T* ptr) { memFree(ptr); });
         return std::shared_ptr<T>(ptr);
     }
+
+    template <typename T = void, typename ... Args>
+    inline std::shared_ptr<T> create_shared_ptr_w(Args&& ... args) noexcept { return make_shared_ptr_w<T>(memAlloc<T>(std::forward<Args>(args)...)); }
 }
 
 #endif // __AK_SHARED_PTR_WRAPPER__

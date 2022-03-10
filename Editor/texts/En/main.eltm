@@ -1,9 +1,11 @@
 // This file is a part of the Akel Editor
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 04/11/2021
+// Updated : 10/03/2022
 
 set lang = Language
+
+set window_title = Akel Editor
 
 begin module MainMenuBar
 
@@ -60,4 +62,24 @@ begin module ELTM_Editor
 
     set name = ELTM Editor
 
+end module
+
+begin module Entities
+	set name = Entities
+end module
+
+begin module EntitiesManager
+	set name = Entities Manager
+end module
+
+begin module RendererManager
+	set name = Renderer Manager
+end module
+
+begin module RenderStats
+	set name = Render Stats
+end module
+
+begin module Browser
+	set name = Content Browser
 end module

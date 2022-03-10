@@ -1,38 +1,47 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 09/03/2022
+// Updated : 10/03/2022
 
 #include <editorComponent.h>
 
 EditorComponent::EditorComponent() : Ak::WindowComponent()
 {
-	_eltm = Ak::make_shared_ptr_w<Ak::ELTM>(Ak::memAlloc<Ak::ELTM>(true));
+	_eltm = Ak::create_shared_ptr_w<Ak::ELTM>(true);
 }
 
 void EditorComponent::onAttach()
 {
-	Ak::WindowComponent::onAttach();
-	Ak::WindowComponent::title = "Akel Editor";
-	Ak::WindowComponent::resizable = true;
-	Ak::WindowComponent::maximize = true;
-	Ak::WindowComponent::fetchSettings();
-
 	std::string language = "language";
 	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/langs.eltm");
 	if(Ak::Core::ProjectFile::getStringValue(language) == "")
 		Ak::Core::ProjectFile::setStringValue(language, _eltm->getLocalText("Languages.English"));
-
 	_eltm->load(Ak::Core::getMainDirPath() + "Editor/texts/En/main.eltm");
-	_console = Ak::make_unique_ptr_w<Console>(Ak::memAlloc<Console>(_eltm->getLocalText("Console.name"), _eltm));
-	_eltm_editor = Ak::make_unique_ptr_w<ELTM_editor>(Ak::memAlloc<ELTM_editor>(_eltm->getLocalText("ELTM_Editor.name")));
+
+	Ak::WindowComponent::onAttach();
+	Ak::WindowComponent::title = _eltm->getLocalText("window_title");
+	Ak::WindowComponent::resizable = true;
+	Ak::WindowComponent::maximize = true;
+	Ak::WindowComponent::fetchSettings();
+
+	_stack = Ak::create_unique_ptr_w<PanelStack>();
+
+	_stack->add_panel<ELTM_editor>(_eltm->getLocalText("ELTM_Editor.name"), &_eltm_editor_input_buffer);
+	_stack->add_panel<Entities>(_eltm);
+	_stack->add_panel<EntitiesManager>(_eltm);
+	_stack->add_panel<RendererManager>(_eltm);
+	_stack->add_panel<RenderStats>(_eltm);
+	_stack->add_panel<Console>(_eltm);
+	_stack->add_panel<Browser>(_eltm);
 }
 
 void EditorComponent::onImGuiRender()
 {
 	drawMainMenuBar();
-	_eltm_editor->render(Ak::WindowComponent::size.X, Ak::WindowComponent::size.Y);
-	_console->render(Ak::WindowComponent::pos, Ak::WindowComponent::size);
+	
+	for(auto elem : _stack->_panels)
+		elem->onUpdate(size);
+
 	if(_showAbout)
 		drawAboutWindow();
 	if(_showOpt)
@@ -42,12 +51,20 @@ void EditorComponent::onImGuiRender()
 void EditorComponent::onImGuiEvent(Ak::Input& input)
 {
 	Ak::WindowComponent::onEvent(input);
-	if(!_running || _console->_sh.quit())
+	if(!_running)
 		input.finish();
+
+	for(auto elem : _stack->_panels)
+		elem->onEvent(input);
+	
+	_eltm_editor_input_buffer.clear();
 }
 
 void EditorComponent::onQuit()
 {
+	for(auto elem : _stack->_panels)
+		elem->onQuit();
+	_stack.reset(nullptr);
 	Ak::WindowComponent::onQuit();
 }
 
@@ -77,23 +94,22 @@ void EditorComponent::drawMainMenuBar()
 		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.panels").c_str()))
 		{
 			if(ImGui::MenuItem(_eltm->getLocalText("ELTM_Editor.name").c_str()))
-				_eltm_editor->open();
+				_stack->get_panel("__eltm_editor")->onOpen();
 			ImGui::EndMenu();
 		}
-		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.eltm_editor").c_str()))
+		if(_stack->get_panel("__eltm_editor")->isOpen() && ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.eltm_editor").c_str()))
 		{
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_load").c_str()))
 			{
 				auto file = pfd::open_file(_eltm->getLocalText("MainMenuBar.e_load"), Ak::Core::getMainDirPath(), { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All files", "*"});	
 				if(!file.result().empty())
-					_eltm_editor->load(file.result()[0]);
+					_eltm_editor_input_buffer = file.result()[0];
 			}
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_save").c_str()))
 			{
 			}
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_save_as").c_str()))
 			{
-				
 			}
 			ImGui::EndMenu();
 		}
@@ -103,8 +119,8 @@ void EditorComponent::drawMainMenuBar()
 				_showAbout = _showAbout ? false : true;
 			ImGui::EndMenu();
 		}
-		ImGui::SameLine(ImGui::GetColumnWidth(-5));
-		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
+		ImGui::SameLine(size.X - 100);
+		ImGui::Text("%.0f FPS", ImGui::GetIO().Framerate);
 
 		ImGui::EndMainMenuBar();
 	}
@@ -112,7 +128,7 @@ void EditorComponent::drawMainMenuBar()
 
 void EditorComponent::drawAboutWindow()
 {
-	if(ImGui::Begin(_eltm->getLocalText("MainMenuBar.about").data(), &_showAbout, ImGuiWindowFlags_NoResize))
+	if(ImGui::Begin(_eltm->getLocalText("MainMenuBar.about").data(), &_showAbout, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking))
 	{
 		ImGui::TextUnformatted(_eltm->getLocalText("MainMenuBar.version").data());
 		ImGui::End();

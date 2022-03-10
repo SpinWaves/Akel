@@ -1,12 +1,12 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 09/03/2022
+-- Updated : 10/03/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "shaderc", "vulkan-headers", "vulkan-loader", "vulkan-validationlayers", "imgui_sdl_vk v1.87")
+add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "shaderc", "vulkan-headers", "vulkan-loader", "vulkan-validationlayers", "imgui_sdl_vk v1.87-docking")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
