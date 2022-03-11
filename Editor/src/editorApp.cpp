@@ -28,10 +28,6 @@ Ak::AkelInstance Akel_init()
 		project.project_file_name = "editor";
         project.memory_manager_enable_fixed_allocator = false;
 		project.imgui_vk_unlimited_framerate = true;
+		project.main_app = new Editor;
 	return project;
-}
-
-Ak::Application* Akel_mainApplication()
-{
-	return Ak::memAlloc<Editor>();
 }

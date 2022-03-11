@@ -39,10 +39,6 @@ Ak::AkelInstance Akel_init()
         instance.project_file_path = Ak::Core::getMainDirPath() + "SandBox/cube";
         instance.project_file_name = "cube";
         instance.memory_manager_enable_fixed_allocator = false;
-    return instance;    
-}
-
-Ak::Application* Akel_mainApplication()
-{
-    return Ak::memAlloc<Cube>();
+        instance.main_plainApp = new Cube;
+    return instance;
 }

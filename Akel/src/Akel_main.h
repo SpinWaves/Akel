@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 09/03/2022
+// Updated : 11/03/2022
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 			Ak::Core::log::report(ERROR, "Something went wrong with Akel initialisation");
 			return -1;
 		}
-		auto app = Akel_mainApplication();
+		auto app = project.main_app != nullptr ? main_app : main_plainApp;
 	AK_END_SESSION();
 
 	AK_BEGIN_SESSION("Runtime");
@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 	AK_END_SESSION();
 
 	AK_BEGIN_SESSION("Shutdown");
-		Ak::memFree(app);
+		delete project.main_app != nullptr ? main_app : main_plainApp;
 		Ak::MemoryManager::end();
 	AK_END_SESSION();
 

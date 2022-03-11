@@ -19,10 +19,6 @@ Ak::AkelInstance Akel_init()
 		instance.project_file_name = "app";
 		instance.enable_warning_console_message = true;
         instance.use_memory_manager = true;
+        instance.main_app = new App;
     return instance;    
-}
-
-Ak::Application* Akel_mainApplication()
-{
-    return Ak::memAlloc<App>();
 }
