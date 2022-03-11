@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 10/03/2022
+// Updated : 11/03/2022
 
 #ifndef __AK_EDITOR_COMPONENT__
 #define __AK_EDITOR_COMPONENT__
@@ -27,7 +27,6 @@ class EditorComponent : public Ak::WindowComponent
 		void drawOptionsWindow();
 
 		bool _running = true;
-		ImGuiID dockspaceID = 0;
 		bool _showAbout = false;
 		bool _showOpt = false;
 		std::array<bool, 1> _opts;

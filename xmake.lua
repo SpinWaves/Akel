@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 10/03/2022
+-- Updated : 11/03/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -39,7 +39,7 @@ target("Akel")
 target_end() -- optional but I think the code is cleaner with this
 
 -- Editor Build
-target("Editor")
+target("Akel Studio")
 	set_default(true)
     set_kind("binary")
 	add_includedirs("Akel/src", "Editor/src", "libs/include")

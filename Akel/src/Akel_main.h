@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 			Ak::Core::log::report(ERROR, "Something went wrong with Akel initialisation");
 			return -1;
 		}
-		auto app = project.main_app != nullptr ? main_app : main_plainApp;
+		auto app = Akel_mainApplication();
 	AK_END_SESSION();
 
 	AK_BEGIN_SESSION("Runtime");
@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 	AK_END_SESSION();
 
 	AK_BEGIN_SESSION("Shutdown");
-		delete project.main_app != nullptr ? main_app : main_plainApp;
+		Ak::memFree(app);
 		Ak::MemoryManager::end();
 	AK_END_SESSION();
 

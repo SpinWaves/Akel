@@ -23,7 +23,7 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
         return;
 
 	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
-    _height = size.Y - size.Y/4;
+    _height = size.Y - size.Y/4 - 25;
 	if(ImGui::Begin(_name.data(), &_is_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
     {
 		ImGui::SetWindowPos(ImVec2((15 * size.X)/100, 25));
@@ -37,7 +37,7 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
 
 void ELTM_editor::editor()
 {
-    if(ImGui::BeginChild("Scrolling", ImVec2(0, _height - 100), true))
+    if(ImGui::BeginChild("Scrolling", ImVec2(0, _height - 75), true))
     {
         for(auto it = _eltm->getCurrentTexts().begin(); it!= _eltm->getCurrentTexts().end(); it++)
 			ImGui::TextUnformatted(std::string(it->first + " : " + it->second).data());

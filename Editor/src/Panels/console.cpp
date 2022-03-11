@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 09/07/2021
-// Updated : 10/03/2022
+// Updated : 11/03/2022
 
 #include <Panels/console.h>
 
@@ -27,24 +27,15 @@ void Console::onEvent(Ak::Input& input)
 
 void Console::onUpdate(Ak::Maths::Vec2<int>& size)
 {
-	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
 	_height = size.Y / 4;
-
-	_WindowAlpha = 1.0f;
-	ImGui::PushStyleVar(ImGuiStyleVar_Alpha, _WindowAlpha);
-	if(ImGui::Begin(_eltm->getLocalText("Console.name").data(), nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
+	if(ImGui::Begin(_eltm->getLocalText("Console.name").data(), nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
     {
-		ImGui::SetWindowPos(ImVec2((15 * size.X)/100, size.Y - _height));
-		ImGui::SetWindowSize(ImVec2(_width, _height));
-
 		logPart();
 		ImGui::Separator();
 		inputBar();
 
-
 		ImGui::End();
     }
-    ImGui::PopStyleVar();
 }
 
 void Console::logPart()

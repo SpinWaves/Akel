@@ -1,11 +1,11 @@
 // This file is a part of the Akel Editor
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 10/03/2022
+// Updated : 11/03/2022
 
 set lang = Langue
 
-set window_title = Akel Éditeur
+set window_title = Akel Studio
 
 begin module MainMenuBar
 
@@ -69,15 +69,23 @@ begin module Entities
 end module
 
 begin module EntitiesManager
-	set name = Gestionnaire d'entitées
+	set name = Inspecteur d'entitée
 end module
 
 begin module RendererManager
-	set name = Gestionnaire de rendu
+	set name = Rendu de la scène
 end module
 
-begin module RenderStats
-	set name = Statistiques de rendu
+begin module AudioManager
+	set name = Audio de la scène
+end module
+
+begin module MaterialEditor
+	set name = Éditeur de matériaux
+end module
+
+begin module Materials
+	set name = Materiaux
 end module
 
 begin module Browser

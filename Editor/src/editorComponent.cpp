@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 10/03/2022
+// Updated : 11/03/2022
 
 #include <editorComponent.h>
 
@@ -26,19 +26,22 @@ void EditorComponent::onAttach()
 
 	_stack = Ak::create_unique_ptr_w<PanelStack>();
 
+	_stack->add_panel<Docks>(_eltm);
 	_stack->add_panel<ELTM_editor>(_eltm->getLocalText("ELTM_Editor.name"), &_eltm_editor_input_buffer);
 	_stack->add_panel<Entities>(_eltm);
 	_stack->add_panel<EntitiesManager>(_eltm);
 	_stack->add_panel<RendererManager>(_eltm);
-	_stack->add_panel<RenderStats>(_eltm);
-	_stack->add_panel<Console>(_eltm);
+	_stack->add_panel<AudioManager>(_eltm);
+	_stack->add_panel<Materials>(_eltm);
+	_stack->add_panel<MaterialEditor>(_eltm);
 	_stack->add_panel<Browser>(_eltm);
+	_stack->add_panel<Console>(_eltm);
 }
 
 void EditorComponent::onImGuiRender()
 {
 	drawMainMenuBar();
-	
+
 	for(auto elem : _stack->_panels)
 		elem->onUpdate(size);
 

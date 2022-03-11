@@ -1,7 +1,7 @@
 // This file is a part of the Akel editor
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 07/03/2022
+// Updated : 11/03/2022
 
 #include <AkEpch.h>
 #include <Akel_main.h>
@@ -10,7 +10,7 @@
 class Editor : public Ak::Application
 {
 	public:
-		Editor() : Ak::Application("Akel_Editor")
+		Editor() : Ak::Application("Akel Studio")
 		{
 			Ak::Core::printEngineInfo();
 			add_component<Ak::AudioManager>();
@@ -28,6 +28,10 @@ Ak::AkelInstance Akel_init()
 		project.project_file_name = "editor";
         project.memory_manager_enable_fixed_allocator = false;
 		project.imgui_vk_unlimited_framerate = true;
-		project.main_app = new Editor;
 	return project;
+}
+
+Ak::Application* Akel_mainApplication()
+{
+	return Ak::memAlloc<Editor>();
 }
