@@ -7,13 +7,13 @@
 
 AudioManager::AudioManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__audio_manager")
 {
-  _eltm = eltm;
+    _eltm = eltm;
 }
 
 void AudioManager::onUpdate(Ak::Maths::Vec2<int>& size)
 {
-  if(ImGui::Begin(_eltm->getLocalText("AudioManager.name").c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
-  {
-    ImGui::End();
-  }
+    if(ImGui::Begin(_eltm->getLocalText("AudioManager.name").c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+    {
+        ImGui::End();
+    }
 }

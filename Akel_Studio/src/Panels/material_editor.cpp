@@ -12,8 +12,8 @@ MaterialEditor::MaterialEditor(std::shared_ptr<Ak::ELTM> eltm) : Panel("__entiti
 
 void MaterialEditor::onUpdate(Ak::Maths::Vec2<int>& size)
 {
-	if(ImGui::Begin(_eltm->getLocalText("MaterialEditor.name").c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+    if(ImGui::Begin(_eltm->getLocalText("MaterialEditor.name").c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
     {
-		ImGui::End();
+        ImGui::End();
     }
 }

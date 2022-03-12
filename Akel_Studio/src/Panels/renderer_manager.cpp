@@ -12,8 +12,8 @@ RendererManager::RendererManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__rend
 
 void RendererManager::onUpdate(Ak::Maths::Vec2<int>& size)
 {
-	if(ImGui::Begin(_eltm->getLocalText("RendererManager.name").c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
-  {
-		ImGui::End();
-  }
+    if(ImGui::Begin(_eltm->getLocalText("RendererManager.name").c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+    {
+        ImGui::End();
+    }
 }

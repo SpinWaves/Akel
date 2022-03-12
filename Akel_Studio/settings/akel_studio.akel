@@ -9,5 +9,5 @@ unique_ptr_wrapper_enable_debug_message = false
 imgui_vk_debug_report = true
 imgui_vk_unlimited_framerate = true
 use_memory_manager = true
-jamAllocator_size_0 = 4812
+jamAllocator_size_0 = 4924
 language = /home/bilbo/Documents/Programmation/C++/Akel/Akel_Studio/texts/En/main.eltm

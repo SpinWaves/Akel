@@ -90,6 +90,7 @@ end module
 
 begin module Browser
 	set name = Content Browser
+	set content = Current content
 end module
 
 begin module Scene

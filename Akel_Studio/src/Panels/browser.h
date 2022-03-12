@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 10/03/2022
+// Updated : 12/03/2022
 
 #ifndef __AK_STUDIO_BROWSER__
 #define __AK_STUDIO_BROWSER__
@@ -17,6 +17,16 @@ class Browser : public Panel
         void onUpdate(Ak::Maths::Vec2<int>& size) override;
 
         ~Browser() = default;
+
+    private:
+        void browser();
+        void content();
+        bool is_there_subdir(std::string dir);
+        std::string getSize(std::uintmax_t size);
+        void dir(std::string directory);
+        std::string _current_file;
+        std::string _parent = Ak::Core::getMainDirPath();
+        std::set<std::filesystem::directory_entry> _files;
 };
 
 #endif // __AK_STUDIO_BROWSER__
