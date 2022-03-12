@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 07/05/2021
-// Updated : 03/11/2021
+// Updated : 12/03/2022
 
 #ifndef __AK_STREAM_STACK__
 #define __AK_STREAM_STACK__
@@ -16,7 +16,7 @@ namespace Ak
 	class StreamStack
 	{
 		public:
-			void tokenize(const char* source, std::string file, std::string caller, size_t line_error)
+			void tokenize(std::string source, std::string file, std::string caller, size_t line_error)
 			{
 				_tokens.clear();
 
@@ -73,9 +73,8 @@ namespace Ak
 				}
 				else
 				{
-					std::string message = source;
-					message.append(" file not found");
-					ELTMerrors error = context_error(std::move(message), file, caller, line_error);
+					source.append(" file not found");
+					ELTMerrors error = context_error(std::move(source), file, caller, line_error);
 					std::cout << red << error.what() << def << std::endl;
 				}
 			}

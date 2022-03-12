@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 11/03/2022
+-- Updated : 12/03/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -42,17 +42,17 @@ target_end() -- optional but I think the code is cleaner with this
 target("Akel Studio")
 	set_default(true)
     set_kind("binary")
-	add_includedirs("Akel/src", "Editor/src", "libs/include")
+	add_includedirs("Akel/src", "Akel_Studio/src", "libs/include")
     add_deps("Akel")
-    add_files("Editor/src/**.cpp")
+    add_files("Akel_Studio/src/**.cpp")
 
 	add_packages("imgui_sdl_vk")
-	set_pcxxheader("Editor/src/AkEpch.h")
+	set_pcxxheader("Akel_Studio/src/AkSpch.h")
 
 	if is_mode("debug") then
-		add_defines("AK_EDITOR_DEBUG")
+		add_defines("AK_STUDIO_DEBUG")
 	elseif is_mode("release") then
-		add_defines("AK_EDITOR_RELEASE")
+		add_defines("AK_STUDIO_RELEASE")
 	end
 target_end() -- optional but I think the code is cleaner with this
 

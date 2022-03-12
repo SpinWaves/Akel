@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/05/2021
-// Updated : 03/11/2021
+// Updated : 12/03/2022
 
 #include <Modules/ELTM/eltm.h>
 
@@ -17,7 +17,7 @@ namespace Ak
 	bool ELTM::load(std::string file)
 	{
 		_file = file.c_str();
-		_stream.tokenize(_file);
+		_stream.tokenize(file);
 		static std::string __ELTM_MAIN_FILE;
 		std::string import_file;
 		std::string text;
@@ -376,6 +376,7 @@ namespace Ak
 				_line++;
 				j = 0;
 			}
+			text.pop_back();
 			if(_lastModuleName.empty())
 			{
 				_current_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;

@@ -1,0 +1,13 @@
+# This file is an Akel project file. It contains configuration parameters for the engine. = Editor/texts/En/main.eltm 
+# DO NOT MODIFY IT, OTHERWISE YOU WILL GET BAD PERFORMANCES,
+# BAD MEMORY OPTIMISATION OR EVEN YOUR PROJECT WILL NOT WORK ANYMORE!
+
+enable_warning_console_message = true
+vk_enable_message_validation_layer = false
+memory_manager_enable_fixed_allocator = false
+unique_ptr_wrapper_enable_debug_message = false
+imgui_vk_debug_report = true
+imgui_vk_unlimited_framerate = true
+use_memory_manager = true
+jamAllocator_size_0 = 4812
+language = /home/bilbo/Documents/Programmation/C++/Akel/Akel_Studio/texts/En/main.eltm

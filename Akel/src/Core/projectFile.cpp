@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 07/11/2021
+// Updated : 12/03/2022
 
 #include <Core/core.h>
 
@@ -96,24 +96,32 @@ namespace Ak::Core
 
     bool ProjectFile::getBoolValue(const std::string& key)
     {
+        if(!_data.count(key))
+            return false;
         if(std::holds_alternative<bool>(std::get<1>(_data[key])))
 	      return std::get<bool>(std::get<1>(_data[key]));
         return false;
     }
     int ProjectFile::getIntValue(const std::string& key)
     {
+        if(!_data.count(key))
+            return -1;
         if(std::holds_alternative<int>(std::get<1>(_data[key])))
 	      return std::get<int>(std::get<1>(_data[key]));
-        return 0;
+        return -1;
     }
     float ProjectFile::getFloatValue(const std::string& key)
     {
+        if(!_data.count(key))
+            return 0.0f;
         if(std::holds_alternative<float>(std::get<1>(_data[key])))
 	      return std::get<float>(std::get<1>(_data[key]));
         return 0.0f;
     }
     std::string ProjectFile::getStringValue(const std::string& key)
     {
+        if(!_data.count(key))
+            return "";
         if(std::holds_alternative<std::string>(std::get<1>(_data[key])))
 	      return std::get<std::string>(std::get<1>(_data[key]));
         return "";

@@ -10,27 +10,29 @@ Its use is not dissociable from C++ because it requires an instantiated context 
 
 Your ELTM code :
 
-	// comment
-	/*
-	   Long
-	   Comment
-	*/
+```kotlin
+// comment
+/*
+	Long
+	Comment
+*/
 
-	import someFile.tm
+import someFile.tm
 
-	set YourID = your text
-	set ID2 = (this is
-		   a very
-		   very long
-		   text)
-	set something = get(ID2)	// get() is used to get text from another ID
+set YourID = your text
+set ID2 = (that s
+		a very
+		very long
+		text)
+set something = get(ID2)	// get() is used to get text from another ID
 
-	begin module moduleName
+begin module moduleName
 
-		set yay = bla bla bla
-		set ouh = get(something)
+	set yay = bla bla bla
+	set ouh = get(something)
 
-	end module
+end module
+```
 
 ============================================================
 
