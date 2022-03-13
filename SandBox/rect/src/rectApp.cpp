@@ -40,6 +40,10 @@ Ak::AkelInstance Akel_init()
         instance.project_file_path = Ak::Core::getMainDirPath() + "SandBox/rect";
         instance.project_file_name = "rect";
         instance.memory_manager_enable_fixed_allocator = false;
-        instance.main_app = new Rect;
     return instance;    
+}
+
+Ak::Application* Akel_mainApplication()
+{
+	return Ak::memAlloc<Rect>();
 }

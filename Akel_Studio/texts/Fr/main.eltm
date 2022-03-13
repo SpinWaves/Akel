@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 12/03/2022
+// Updated : 13/03/2022
 
 set lang = Langue
 
@@ -72,6 +72,17 @@ end module
 
 begin module RendererManager
 	set name = Rendu de la scène
+	set render_sets = Paramètres de rendu
+
+	set culling = Face culling
+	set cull_none = Aucun
+	set cull_front = Avant
+	set cull_back = Arrière
+	set cull_front_and_back = Avant et arrière
+
+	set bg_color = Couleur d'arrière plan
+
+	set reload = Recharger le renderer
 end module
 
 begin module AudioManager

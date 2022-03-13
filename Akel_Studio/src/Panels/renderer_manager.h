@@ -17,6 +17,11 @@ class RendererManager : public Panel
         void onUpdate(Ak::Maths::Vec2<int>& size) override;
 
         ~RendererManager() = default;
+
+    private:
+        void render_sets();
+        bool _vsync = false;
+        std::string selected;
 };
 
 #endif // __AK_STUDIO_RENDERER_MANAGER__

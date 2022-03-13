@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 12/03/2022
+// Updated : 13/03/2022
 
 #include <Panels/browser.h>
 
@@ -53,11 +53,16 @@ std::string Browser::getSize(std::uintmax_t size)
         mantissa /= 1024.0;
 
     mantissa = std::ceil(mantissa * 10.0) / 10.;
-    std::string size_string = std::to_string((int)mantissa);
+
+    std::ostringstream out;
+    out.precision(2);
+    out << std::fixed << mantissa;
+    std::string size_string = out.str();
+    
     size_string.push_back(' ');
-    size_string.push_back("BKMGTPE"[i]);
-    if(size_string.back() != 'B')
-        size_string.append("bytes");
+    if(i != 0)
+        size_string.push_back("KMGTPE"[i - 1]);
+    size_string.append("bytes");
     return std::move(size_string);
 }
 
