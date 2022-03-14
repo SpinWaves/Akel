@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // CREATED : 23/09/2021
-// Updated : 07/03/2022
+// Updated : 14/03/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -40,6 +40,8 @@ namespace Ak
         createSurface();
         pickPhysicalDevice();
         createLogicalDevice();
+        if(_waitForBuild)
+            return;
         createSwapChain();
         createImageViews();
         createRenderPass();
@@ -163,5 +165,7 @@ namespace Ak
 
         vkDestroySurfaceKHR(instance, surface, nullptr);
         vkDestroyInstance(instance, nullptr);
+
+        _instanceInitialized = false;
     }
 }

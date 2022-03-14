@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Author : @kbz_8
 // Created : 05/06/2021
-// Updated : 07/03/2022
+// Updated : 14/03/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Core/core.h>
@@ -14,17 +14,25 @@ namespace Ak
 		switch(internal)
 		{
 			case shader::basic_2D : 
-				_vertexShader = Core::getShaderPath() + "basic_2D/basic_2D.vert";
-				_fragmentShader = Core::getShaderPath() + "basic_2D/basic_2D.frag";
+				vertShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::vertex, Core::getShaderPath() + "basic_2D/basic_2D.vert", true), true);
+				fragShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::vertex, Core::getShaderPath() + "basic_2D/basic_2D.frag", true), true);
 			break;
 
 			case shader::basic_3D : 
-				_vertexShader = Core::getShaderPath() + "basic_3D/basic_3D.vert";
-				_fragmentShader = Core::getShaderPath() + "basic_3D/basic_3D.frag";
+				vertShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::vertex, Core::getShaderPath() + "basic_3D/basic_3&D.vert", true), true);
+				fragShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::vertex, Core::getShaderPath() + "basic_3D/basic_3D.frag", true), true);
 			break;
 
 			default : Core::log::report(FATAL_ERROR, "Renderer Component : unable to find internal shader"); return;
 		}
+	}
+
+    void RendererComponent::useShader(ShaderType type, std::vector<uint32_t>& data)
+	{
+		if(type == ShaderType::vert)
+			vertShaderModule = createShaderModule(data, false);
+		else if(type == ShaderType::frag)
+			fragShaderModule = createShaderModule(data, false);
 	}
 
 	void RendererComponent::setFaceCulling(CullMode mode) noexcept
@@ -42,14 +50,6 @@ namespace Ak
 
     void RendererComponent::createGraphicsPipeline()
     {
-		if(_vertexShader.empty())
-			Core::log::report(FATAL_ERROR, "Renderer Component Pipeline : no vertex shader given");
-		if(_fragmentShader.empty())
-			Core::log::report(FATAL_ERROR, "Renderer Component Pipeline : no fragment shader given");
-
-		VkShaderModule vertShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::vertex, _vertexShader, true));
-	    VkShaderModule fragShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::fragment, _fragmentShader, true));
-
 	    VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
 	    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	    vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
@@ -75,7 +75,6 @@ namespace Ak
 	    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
 	    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
 	    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
-
 
 	    VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
 	    inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -161,11 +160,14 @@ namespace Ak
         vkDestroyShaderModule(device, vertShaderModule, nullptr);
     }
 
-    VkShaderModule RendererComponent::createShaderModule(const std::vector<uint32_t>& code)
+    VkShaderModule RendererComponent::createShaderModule(const std::vector<uint32_t>& code, bool isFromGLSLcompiler)
     {
         VkShaderModuleCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-        createInfo.codeSize = code.size() * 4; // times 4 because codeSize takes size in bytes, not uint32_ts
+		if(isFromGLSLcompiler)
+	    	createInfo.codeSize = code.size() * 4; // times 4 because codeSize takes size in bytes, not uint32_ts
+		else
+			createInfo.codeSize = code.size() * sizeof(uint32_t);
         createInfo.pCode = code.data();
 
         VkShaderModule shaderModule;

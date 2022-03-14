@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 14/03/2022
+// Updated : 07/03/2022
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -14,7 +14,7 @@ namespace Ak
 	class ImGuiComponent : public Component
 	{
 		public:
-			ImGuiComponent(RendererComponent* renderer);
+			ImGuiComponent(WindowComponent* window);
 			ImGuiComponent();
 
 			void onAttach() override;
@@ -35,7 +35,7 @@ namespace Ak
 			void SetDarkThemeColors();
 			const char* _settingsFilePath = nullptr;
 			static inline int _componentsInit = 0;
-			inline static RendererComponent* _ren = nullptr;
+			inline static WindowComponent* _win = nullptr;
 	};
 }
 

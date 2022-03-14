@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 12/03/2022
+// Updated : 14/03/2022
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -16,7 +16,10 @@ class Studio : public Ak::Application
 			add_component<Ak::AudioManager>();
 			StudioComponent* studio = Ak::memAlloc<StudioComponent>();
 			add_component(studio);
-			add_component<Ak::ImGuiComponent>(studio);
+            Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(studio);
+			renderer->waitForBuild();
+            add_component(renderer);
+			add_component<Ak::ImGuiComponent>(renderer);
 		}
 		~Studio() = default;
 };

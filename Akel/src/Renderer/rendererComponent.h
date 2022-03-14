@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 07/03/2022
+// Updated : 14/03/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -65,6 +65,7 @@ namespace Ak
     };
 
     enum class RenderingMode : uint8_t { render2D, render3D };
+    enum class ShaderType { vert, frag };
 
     class RendererComponent : public Component
     {
@@ -82,6 +83,7 @@ namespace Ak
 
             inline void setShader(std::string vertexShader, std::string fragmentShader) { _vertexShader = std::move(vertexShader); _fragmentShader = std::move(fragmentShader); }
             void useShader(shader internal);
+            void useShader(ShaderType type, std::vector<uint32_t>& data);
             inline void render_to_window(WindowComponent* win) noexcept { window = win; }
             
             inline void add_entity(Entity2D& entity) { entities2D.push_back(entity); }
@@ -92,10 +94,78 @@ namespace Ak
             void setRenderingMode(RenderingMode _mode) noexcept;
 
             inline static constexpr void requireFrameBufferResize() noexcept { framebufferResized = true; }
+            inline static void waitForBuild(bool value = true) noexcept { _waitForBuild = value; }
 
             ~RendererComponent() = default;
 
-        protected:
+            std::vector<Entity2D> entities2D;
+            std::vector<Entity3D> entities3D;
+
+            std::string _vertexShader;
+            std::string _fragmentShader;
+
+            VkInstance instance = VK_NULL_HANDLE;
+            VkDebugUtilsMessengerEXT debugMessenger;
+            VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+            VkDevice device;
+
+            // Queues
+            VkQueue graphicsQueue;
+            VkQueue presentQueue;
+            uint32_t _queueFamily = (uint32_t)-1;
+
+            // Vk surface
+            VkSurfaceKHR surface;
+
+            // Swap chain
+            VkSwapchainKHR swapChain;
+            std::vector<VkImage> swapChainImages;
+            VkFormat swapChainImageFormat;
+            VkExtent2D swapChainExtent;
+            std::vector<VkFramebuffer> swapChainFramebuffers;
+            SwapChainSupportDetails swapchainSupport;
+            inline static bool framebufferResized = false;
+
+            // Image views
+            std::vector<VkImageView> swapChainImageViews;
+
+            // Pipeline graphique
+            VkPipelineLayout pipelineLayout;
+            VkPipeline graphicsPipeline;
+            VkCullModeFlags cull_mode = VK_CULL_MODE_NONE;
+            VkShaderModule vertShaderModule;
+            VkShaderModule fragShaderModule;
+
+            // Render pass
+            VkRenderPass renderPass;
+
+            // Command buffer
+            VkCommandPool commandPool;
+            std::vector<VkCommandBuffer> commandBuffers;
+
+            // Rendering
+            std::vector<VkSemaphore> imageAvailableSemaphores;
+            std::vector<VkSemaphore> renderFinishedSemaphores;
+            std::vector<VkFence> inFlightFences;
+            std::vector<VkFence> imagesInFlight;
+            size_t currentFrame = 0;
+
+            // UniformBuffer
+            VkDescriptorSetLayout descriptorSetLayout;
+            std::vector<VkBuffer> uniformBuffers;
+            std::vector<VkDeviceMemory> uniformBuffersMemory;
+            VkDescriptorPool descriptorPool;
+            std::vector<VkDescriptorSet> descriptorSets;
+
+            WindowComponent* window = nullptr;
+
+            bool _instanceInitialized = false;
+
+            VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
+
+            RenderingMode mode = RenderingMode::render3D;
+            
+        private:
             void createInstance();
 
             // Device
@@ -135,7 +205,7 @@ namespace Ak
 
             // Pipeline graphique
             void createGraphicsPipeline();
-            VkShaderModule createShaderModule(const std::vector<uint32_t>& code);
+            VkShaderModule createShaderModule(const std::vector<uint32_t>& code, bool isFromGLSLcompiler);
 
             // Render pass
             void createRenderPass();
@@ -165,70 +235,7 @@ namespace Ak
             void createDescriptorPool();
             void createDescriptorSets();
 
-            std::vector<Entity2D> entities2D;
-            std::vector<Entity3D> entities3D;
-
-            std::string _vertexShader;
-            std::string _fragmentShader;
-
-            VkInstance instance;
-            VkDebugUtilsMessengerEXT debugMessenger;
-            VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-            VkDevice device;
-
-            // Queues
-            VkQueue graphicsQueue;
-            VkQueue presentQueue;
-            uint32_t _queueFamily = (uint32_t)-1;
-
-            // Vk surface
-            VkSurfaceKHR surface;
-
-            // Swap chain
-            VkSwapchainKHR swapChain;
-            std::vector<VkImage> swapChainImages;
-            VkFormat swapChainImageFormat;
-            VkExtent2D swapChainExtent;
-            std::vector<VkFramebuffer> swapChainFramebuffers;
-            SwapChainSupportDetails swapchainSupport;
-            inline static bool framebufferResized = false;
-
-            // Image views
-            std::vector<VkImageView> swapChainImageViews;
-
-            // Pipeline graphique
-            VkPipelineLayout pipelineLayout;
-            VkPipeline graphicsPipeline;
-            VkCullModeFlags cull_mode = VK_CULL_MODE_NONE;
-
-            // Render pass
-            VkRenderPass renderPass;
-
-            // Command buffer
-            VkCommandPool commandPool;
-            std::vector<VkCommandBuffer> commandBuffers;
-
-            // Rendering
-            std::vector<VkSemaphore> imageAvailableSemaphores;
-            std::vector<VkSemaphore> renderFinishedSemaphores;
-            std::vector<VkFence> inFlightFences;
-            std::vector<VkFence> imagesInFlight;
-            size_t currentFrame = 0;
-
-            // UniformBuffer
-            VkDescriptorSetLayout descriptorSetLayout;
-            std::vector<VkBuffer> uniformBuffers;
-            std::vector<VkDeviceMemory> uniformBuffersMemory;
-            VkDescriptorPool descriptorPool;
-            std::vector<VkDescriptorSet> descriptorSets;
-
-            WindowComponent* window = nullptr;
-
-            bool _instanceInitialized = false;
-
-            VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
-
-            RenderingMode mode = RenderingMode::render3D;
+            inline static bool _waitForBuild = false;
     };
 }
 

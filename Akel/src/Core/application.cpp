@@ -48,8 +48,8 @@ namespace Ak
 				__imgui.begin();
 				for(auto component : _components)
 				{
-					component->onRender();
 					component->onImGuiRender();
+					component->onRender();
 				}
 				__imgui.end();
 			}
