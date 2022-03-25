@@ -1,19 +1,15 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/09/2021
-// Updated : 10/12/2021
+// Updated : 25/03/2022
 
-#include <Renderer/Memory/chunk.h>
 #include <Core/core.h>
+#include <Renderer/Memory/chunk.h>
+
+#include <Renderer/Buffers/buffers.h>
 
 namespace Ak
 {
-    bool Buffer::operator == (Buffer const& buffer)
-    {
-        if(memory == buffer.memory && offset == buffer.offset && size == buffer.size && ptr == buffer.ptr)
-            return true;
-        return false;
-    }
 /*
     Chunk::Chunk(VkDeviceSize size, int memoryTypeIndex)
     {

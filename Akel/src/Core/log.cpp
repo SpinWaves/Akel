@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 03/03/2022
+// Updated : 25/03/2022
 
 #include <Core/core.h>
 
@@ -70,13 +70,7 @@ namespace Ak::Core
 					_type = "Warning: ";
 					break;
 				}
-				case STRONG_WARNING:
-				{
-					if(Core::ProjectFile::getBoolValue("enable_warning_console_message"))
-						std::cout << yellow << "[Akel log Strong Warning] " << buffer << def << '\n';
-					_type = "Strong Warning: ";
-					break;
-				}
+				case STRONG_WARNING: std::cout << yellow << "[Akel log Strong Warning] " << buffer << def << '\n'; _type = "Strong Warning: "; break;
 				case ERROR: std::cout << red << "[Akel log Error] " << buffer << def << '\n'; _type = "Error: "; break;
 				case FATAL_ERROR: std::cout << red << "[Akel log Fatal Error] " << buffer << def << '\n'; _type = "Fatal Error: "; break;
 
@@ -87,9 +81,51 @@ namespace Ak::Core
 		}
         if(type == FATAL_ERROR)
         {
-            std::set_terminate(TERMINATE);
+	        std::cout << bg_red << "FATAL ERROR: emergency abortion program " << '\n' << "Trying to free all instanciated allocators... " << bg_def << std::endl;
+			int allocators_leaks = 0;
+			for(auto& elem : MemoryManager::accessToControlUnit()->jamStack)
+			{
+				if(!elem.expired())
+				{
+					elem.lock()->destroy();
+					if(elem.lock()->is_init())
+						allocators_leaks++;
+				}
+			}
+			for(auto& elem : MemoryManager::accessToControlUnit()->fixedStack)
+			{
+				if(!elem.expired())
+				{
+					elem.lock()->destroy();
+					if(elem.lock()->is_init())
+						allocators_leaks++;
+				}
+			}
+			_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
+			_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: Trying to free all instanciated allocators..." << std::endl; // No need to flush, std::endl does it
+			if(allocators_leaks == 0)
+			{
+	        	std::cout << green << "All allocators have been correctly freed " << '\n' << "Program failed successfully ! " << def << std::endl;
+				if(_out.is_open())
+				{
+					_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: All allocators have been correctly freed" << std::endl; // No need to flush, std::endl does it
+					_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: Program failed successfully !" << std::endl; // No need to flush, std::endl does it
+					_out.close();
+				}
+			}
+			else
+			{
+				std::cout << bg_red << "Strong Fatal Error : Akel's core failed to free all instantiated allocators [" << allocators_leaks << " allocators leaked] " << bg_def << std::endl;
+				if(_out.is_open())
+				{
+					_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error : Strong Fatal Error: Akel's core failed to free all instantiated allocators [" << allocators_leaks << " allocators leaked] " << std::endl; // No need to flush, std::endl does it
+					_out.close();
+				}
+			}
+
 			unlockThreads(mutex);
-            std::terminate();
+
+			std::exit(EXIT_FAILURE);
         }
 
 		unlockThreads(mutex);
@@ -113,52 +149,6 @@ namespace Ak::Core
 		}
 
 		unlockThreads(mutex);
-    }
-
-    void log::TERMINATE() noexcept
-    {
-        std::cout << bg_red << "FATAL ERROR: emergency abortion program " << '\n' << "Trying to free all instanciated allocators... " << bg_def << std::endl;
-		int allocators_leaks = 0;
-		for(auto& elem : MemoryManager::accessToControlUnit()->jamStack)
-		{
-			if(!elem.expired())
-			{
-				elem.lock()->destroy();
-				if(elem.lock()->is_init())
-					allocators_leaks++;
-			}
-		}
-		for(auto& elem : MemoryManager::accessToControlUnit()->fixedStack)
-		{
-			if(!elem.expired())
-			{
-				elem.lock()->destroy();
-				if(elem.lock()->is_init())
-					allocators_leaks++;
-			}
-		}
-		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
-		_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: Trying to free all instanciated allocators..." << std::endl; // No need to flush, std::endl does it
-		if(allocators_leaks == 0)
-		{
-        	std::cout << green << "All allocators have been correctly freed " << '\n' << "Program failed successfully ! " << def << std::endl;
-			if(_out.is_open())
-			{
-				_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: All allocators have been correctly freed" << std::endl; // No need to flush, std::endl does it
-				_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: Program failed successfully !" << std::endl; // No need to flush, std::endl does it
-				_out.close();
-			}
-		}
-		else
-		{
-			std::cout << bg_red << "Strong Fatal Error : Akel's core failed to free all instantiated allocators [" << allocators_leaks << " allocators leaked] " << bg_def << std::endl;
-			if(_out.is_open())
-			{
-				_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error : Strong Fatal Error: Akel's core failed to free all instantiated allocators [" << allocators_leaks << " allocators leaked] " << std::endl; // No need to flush, std::endl does it
-				_out.close();
-			}
-		}
-        abort();
     }
 
     std::string log::getTime(std::string path)

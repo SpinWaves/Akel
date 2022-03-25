@@ -13,20 +13,13 @@
 namespace Ak
 {
     constexpr const int MAX_FRAMES_IN_FLIGHT = 2;
-
+    
     struct QueueFamilyIndices
     {
         std::optional<uint32_t> graphicsFamily;
         std::optional<uint32_t> presentFamily;
 
         inline bool isComplete() { return graphicsFamily.has_value() && presentFamily.has_value(); }
-    };
-
-	struct SwapChainSupportDetails
-    {
-        VkSurfaceCapabilitiesKHR capabilities;
-        std::vector<VkSurfaceFormatKHR> formats;
-        std::vector<VkPresentModeKHR> presentModes;
     };
 
     struct UniformBufferObject3D
@@ -104,34 +97,14 @@ namespace Ak
             std::string _vertexShader;
             std::string _fragmentShader;
 
-            VkInstance instance = VK_NULL_HANDLE;
             VkDebugUtilsMessengerEXT debugMessenger;
-            VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-            VkDevice device;
 
-            // Queues
             VkQueue graphicsQueue;
-            VkQueue presentQueue;
-            uint32_t _queueFamily = (uint32_t)-1;
 
-            // Vk surface
-            VkSurfaceKHR surface;
-
-            // Swap chain
-            VkSwapchainKHR swapChain;
-            std::vector<VkImage> swapChainImages;
-            VkFormat swapChainImageFormat;
-            VkExtent2D swapChainExtent;
-            std::vector<VkFramebuffer> swapChainFramebuffers;
-            SwapChainSupportDetails swapchainSupport;
-            inline static bool framebufferResized = false;
-
-            // Image views
             std::vector<VkImageView> swapChainImageViews;
 
             // Pipeline graphique
             VkPipelineLayout pipelineLayout;
-            VkPipeline graphicsPipeline;
             VkCullModeFlags cull_mode = VK_CULL_MODE_NONE;
             VkShaderModule vertShaderModule;
             VkShaderModule fragShaderModule;
@@ -154,7 +127,6 @@ namespace Ak
             VkDescriptorSetLayout descriptorSetLayout;
             std::vector<VkBuffer> uniformBuffers;
             std::vector<VkDeviceMemory> uniformBuffersMemory;
-            VkDescriptorPool descriptorPool;
             std::vector<VkDescriptorSet> descriptorSets;
 
             WindowComponent* window = nullptr;

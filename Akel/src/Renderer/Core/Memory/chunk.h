@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/09/2021
-// Updated : 10/12/2021
+// Updated : 25/03/2022
 
 #ifndef __AK_VULKAN_GPU_MEMORY_CHUNK__
 #define __AK_VULKAN_GPU_MEMORY_CHUNK__
@@ -10,16 +10,7 @@
 
 namespace Ak
 {
-    struct Buffer
-    {
-        VkDeviceMemory memory = VK_NULL_HANDLE;
-        VkDeviceSize offset = 0;
-        VkDeviceSize size = 0;
-        VkBuffer buffer = VK_NULL_HANDLE;
-        void* ptr = nullptr;
-
-        bool operator == (Buffer const& buffer);
-    };
+    class Buffer;
 
     class Chunk
     {

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 23/02/2022
+// Updated : 25/03/2022
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -33,7 +33,6 @@ namespace Ak
 
             private:
                 static std::string getTime(std::string path);
-                static void TERMINATE() noexcept;
                 inline static std::ofstream _out;
                 inline static std::string _type;
                 inline static MutexHandel mutex;
