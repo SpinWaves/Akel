@@ -39,7 +39,7 @@ namespace Ak
 		}
 	}
 
-    static void checkVk(VkResult result)
+    void checkVk(VkResult result)
     {
     	if(result >= 0)
     		return;

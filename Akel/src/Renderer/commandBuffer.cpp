@@ -1,80 +1,123 @@
 // This file is a part of Akel
 // Authors : @kbz_8
-// Created : 05/06/2021
-// Updated : 06/03/2022
+// Created : 27/03/2022
+// Updated : 27/03/2022
 
-#include <Renderer/rendererComponent.h>
-#include <Core/core.h>
+#include "commandBuffer.h"
+#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {
-    void RendererComponent::createCommandPool()
-    {
-        QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
+	CommandBuffer::CommandBuffer(bool begin, VkQueueFlagBits queueType, VkCommandBufferLevel bufferLevel) : _commandPool(Graphics::Get()->GetCommandPool()), _queueType(queueType)
+	{
+		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
 
-        VkCommandPoolCreateInfo poolInfo{};
-        poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+		VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
+		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		commandBufferAllocateInfo.commandPool = *_commandPool;
+		commandBufferAllocateInfo.level = bufferLevel;
+		commandBufferAllocateInfo.commandBufferCount = 1;
+		RCore::checkVk(vkAllocateCommandBuffers(*logicalDevice, &commandBufferAllocateInfo, &_commandBuffer));
 
-        if(vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool) != VK_SUCCESS)
-			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create command pool");
-    }
+		if(begin)
+			beginRecord();
+	}
 
-    void RendererComponent::createCommandBuffers()
-    {
-        commandBuffers.resize(swapChainFramebuffers.size());
+	void CommandBuffer::beginRecord(VkCommandBufferUsageFlags usage)
+	{
+		if(_is_recording)
+			return;
 
-        VkCommandBufferAllocateInfo allocInfo{};
-        allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.commandPool = commandPool;
-        allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandBufferCount = (uint32_t)commandBuffers.size();
+		VkCommandBufferBeginInfo beginInfo{};
+		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		beginInfo.flags = usage;
+		RCore::checkVk(vkBeginCommandBuffer(_commandBuffer, &beginInfo));
+		_is_recording = true;
+	}
 
-        if(vkAllocateCommandBuffers(device, &allocInfo, commandBuffers.data()) != VK_SUCCESS)
-			Core::log::report(FATAL_ERROR, "Vulkan : Failed to allocate command buffer");
+	void CommandBuffer::endRecord()
+	{
+		if(!_is_recording)
+			return;
 
-        for(size_t i = 0; i < commandBuffers.size(); i++)
-        {
-            VkCommandBufferBeginInfo beginInfo{};
-            beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		RCore::checkVk(vkEndCommandBuffer(_commandBuffer));
+		_is_recording = false;
+	}
 
-            if(vkBeginCommandBuffer(commandBuffers[i], &beginInfo) != VK_SUCCESS)
-                Core::log::report(FATAL_ERROR, "Vulkan : Failed to begin recording command buffer");
+	void CommandBuffer::passIdle()
+	{
+		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
+		auto queueSelected = getQueue();
 
-            VkRenderPassBeginInfo renderPassInfo{};
-            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-            renderPassInfo.renderPass = renderPass;
-            renderPassInfo.framebuffer = swapChainFramebuffers[i];
-            renderPassInfo.renderArea.offset = {0, 0};
-            renderPassInfo.renderArea.extent = swapChainExtent;
+		if(_is_recording)
+			endRecord();
 
-            renderPassInfo.clearValueCount = 1;
-            renderPassInfo.pClearValues = &clearColor;
+		VkSubmitInfo submitInfo{};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &_commandBuffer;
 
-            vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+		VkFenceCreateInfo fenceCreateInfo{};
+		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 
-                for(Entity2D& elem : entities2D)
-                {
-                    VkBuffer vertexBuffers[] = {elem.__data.vertexBuffer};
-                    VkDeviceSize offsets[] = {0};
+		VkFence fence;
+		RCore::checkVk(vkCreateFence(*logicalDevice, &fenceCreateInfo, nullptr, &fence));
+		RCore::checkVk(vkResetFences(*logicalDevice, 1, &fence));
+		RCore::checkVk(vkQueueSubmit(queueSelected, 1, &submitInfo, fence));
+		RCore::checkVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
 
-                    vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
-                    vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, vertexBuffers, offsets);
+		vkDestroyFence(*logicalDevice, fence, nullptr);
+	}
 
-                    if(i != descriptorSets.size())
-                        vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[i], 0, nullptr);
+	void CommandBuffer::pass(const VkSemaphore& waitSemaphore, const VkSemaphore& signalSemaphore, VkFence fence)
+	{
+		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
+		auto queueSelected = GetQueue();
 
-                    if(elem.__data.indexData.size() != 0)
-                    {
-                        vkCmdBindIndexBuffer(commandBuffers[i], elem.__data.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
-                        vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(elem.__data.indexData.size()), 1, 0, 0, 0);
-                    }
-                }
+		if(_is_recording)
+			endRecord();
 
-            vkCmdEndRenderPass(commandBuffers[i]);
+		VkSubmitInfo submitInfo{};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &_commandBuffer;
 
-            if(vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS)
-                Core::log::report(FATAL_ERROR, "Vulkan : Failed to end recording command buffer");
-        }
-    }
+		if(waitSemaphore != VK_NULL_HANDLE)
+		{
+			static VkPipelineStageFlags submitPipelineStages = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+
+			submitInfo.pWaitDstStageMask = &submitPipelineStages;
+			submitInfo.waitSemaphoreCount = 1;
+			submitInfo.pWaitSemaphores = &waitSemaphore;
+		}
+
+		if(signalSemaphore != VK_NULL_HANDLE)
+		{
+			submitInfo.signalSemaphoreCount = 1;
+			submitInfo.pSignalSemaphores = &signalSemaphore;
+		}
+
+		if(fence != VK_NULL_HANDLE)
+			RCore::checkVk(vkResetFences(*logicalDevice, 1, &fence));
+
+		RCore::checkVk(vkQueueSubmit(queueSelected, 1, &submitInfo, fence));
+	}
+
+	VkQueue CommandBuffer::getQueue() const
+	{
+		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
+
+		switch(queueType)
+		{
+			case VK_QUEUE_GRAPHICS_BIT: return logicalDevice->GetGraphicsQueue();
+			case VK_QUEUE_COMPUTE_BIT: return logicalDevice->GetComputeQueue();
+			default: return nullptr;
+		}
+	}
+
+	CommandBuffer::~CommandBuffer()
+	{
+		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
+		vkFreeCommandBuffers(*logicalDevice, _commandPool->getCommandPool(), 1, &_commandBuffer);
+	}
 }

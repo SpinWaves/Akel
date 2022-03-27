@@ -9,9 +9,14 @@
 #include <Akpch.h>
 #include <Renderer/Core/Memory/memory_GPU.h>
 
+#include "physicalDevice.h"
+#include "logicalDevice.h"
+#include "instance.h"
+#include "surface.h"
+
 namespace Ak::RCore
 {
-    static void checkVk(VkResult result);
+    void checkVk(VkResult result);
 
     struct SwapChainSupportDetails
     {
