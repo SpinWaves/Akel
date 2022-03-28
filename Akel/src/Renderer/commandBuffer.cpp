@@ -10,7 +10,7 @@ namespace Ak
 {
 	CommandBuffer::CommandBuffer(bool begin, VkQueueFlagBits queueType, VkCommandBufferLevel bufferLevel) : _commandPool(Graphics::Get()->GetCommandPool()), _queueType(queueType)
 	{
-		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
+		auto logicalDevice = Render_Core::get().getLogicalDevice();
 
 		VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
 		commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -46,7 +46,7 @@ namespace Ak
 
 	void CommandBuffer::passIdle()
 	{
-		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
+		auto logicalDevice = Render_Core::get().getLogicalDevice();
 		auto queueSelected = getQueue();
 
 		if(_is_recording)
@@ -71,8 +71,8 @@ namespace Ak
 
 	void CommandBuffer::pass(const VkSemaphore& waitSemaphore, const VkSemaphore& signalSemaphore, VkFence fence)
 	{
-		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
-		auto queueSelected = GetQueue();
+		auto logicalDevice = Render_Core::get().getLogicalDevice();
+		auto queueSelected = getQueue();
 
 		if(_is_recording)
 			endRecord();
@@ -105,19 +105,19 @@ namespace Ak
 
 	VkQueue CommandBuffer::getQueue() const
 	{
-		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
+		auto logicalDevice = Render_Core::get().getLogicalDevice();
 
 		switch(queueType)
 		{
-			case VK_QUEUE_GRAPHICS_BIT: return logicalDevice->GetGraphicsQueue();
-			case VK_QUEUE_COMPUTE_BIT: return logicalDevice->GetComputeQueue();
+			case VK_QUEUE_GRAPHICS_BIT: return logicalDevice->getGraphicsQueue();
+			case VK_QUEUE_COMPUTE_BIT: return logicalDevice->getComputeQueue();
 			default: return nullptr;
 		}
 	}
 
 	CommandBuffer::~CommandBuffer()
 	{
-		auto logicalDevice = Graphics::Get()->GetLogicalDevice();
+		auto logicalDevice = Render_Core::get().getLogicalDevice();
 		vkFreeCommandBuffers(*logicalDevice, _commandPool->getCommandPool(), 1, &_commandBuffer);
 	}
 }

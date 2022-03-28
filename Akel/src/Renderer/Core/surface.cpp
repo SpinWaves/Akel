@@ -9,7 +9,6 @@ namespace Ak
 {
 	Surface::Surface(const Instance* instance, const PhysicalDevice* physicalDevice) : _instance(instance), _physicalDevice(physicalDevice)
 	{
-		// Creates the surface.
 		if(SDL_Vulkan_CreateSurface(_instance->getHandledWindow()->getNativeWindow(), _instance, &_surface) != SDL_TRUE)
             Core::log::report(FATAL_ERROR, "Vulkan : Failed to create a surface : %s", SDL_GetError());
 		
@@ -27,8 +26,6 @@ namespace Ak
 		}
 		else
 		{
-			// Iterate over the list of available surface format and
-			// check for the presence of VK_FORMAT_B8G8R8A8_UNORM
 			bool found_B8G8R8A8_UNORM = false;
 
 			for(auto &surfaceFormat : surfaceFormats)
@@ -42,8 +39,6 @@ namespace Ak
 				}
 			}
 
-			// In case VK_FORMAT_B8G8R8A8_UNORM is not available
-			// select the first available color format
 			if(!found_B8G8R8A8_UNORM)
 			{
 				_format.format = surfaceFormats[0].format;

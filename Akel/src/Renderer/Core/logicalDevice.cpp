@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 27/03/2022
-// Updated : 27/03/2022
+// Updated : 28/03/2022
 
 #include "render_core.h"
 #include <Core/core.h>
@@ -27,7 +27,6 @@ namespace Ak
 
 		for(uint32_t i = 0; i < deviceQueueFamilyPropertyCount; i++)
 		{
-			// Check for graphics support.
 			if(deviceQueueFamilyProperties[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
 			{
 				graphicsFamily = i;
@@ -35,7 +34,6 @@ namespace Ak
 				supportedQueues |= VK_QUEUE_GRAPHICS_BIT;
 			}
 
-			// Check for presentation support.
 			VkBool32 presentSupport;
 			vkGetPhysicalDeviceSurfaceSupportKHR(*_physicalDevice, i, *_surface, &presentSupport);
 
@@ -45,7 +43,6 @@ namespace Ak
 				_presentFamily = i;
 			}
 
-			// Check for compute support.
 			if(deviceQueueFamilyProperties[i].queueFlags & VK_QUEUE_COMPUTE_BIT)
 			{
 				computeFamily = i;
@@ -53,7 +50,6 @@ namespace Ak
 				supportedQueues |= VK_QUEUE_COMPUTE_BIT;
 			}
 
-			// Check for transfer support.
 			if(deviceQueueFamilyProperties[i].queueFlags & VK_QUEUE_TRANSFER_BIT)
 			{
 				transferFamily = i;
@@ -112,16 +108,13 @@ namespace Ak
 		else
 			_transferFamily = _graphicsFamily;
 
-		// Enable sample rate shading filtering if supported.
 		if(physicalDeviceFeatures.sampleRateShading)
 			_enabledFeatures.sampleRateShading = VK_TRUE;
 
-		// Fill mode non solid is required for wireframe display.
 		if(physicalDeviceFeatures.fillModeNonSolid)
 		{
 			_enabledFeatures.fillModeNonSolid = VK_TRUE;
 
-			// Wide lines must be present for line width > 1.0f.
 			if(physicalDeviceFeatures.wideLines)
 				_enabledFeatures.wideLines = VK_TRUE;
 		} 
@@ -159,9 +152,6 @@ namespace Ak
 			_enabledFeatures.shaderStorageImageWriteWithoutFormat = VK_TRUE;
 		else
 			Core::log::report(WARNING, "selected GPU does not support shader storage write without format");
-
-		//_enabledFeatures.shaderClipDistance = VK_TRUE;
-		//_enabledFeatures.shaderCullDistance = VK_TRUE;
 
 		if(physicalDeviceFeatures.geometryShader)
 			_enabledFeatures.geometryShader = VK_TRUE;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 27/03/2022
-// Updated : 27/03/2022
+// Updated : 28/03/2022
 
 #include "physicalDevice.h"
 #include "instance.h"
@@ -29,14 +29,10 @@ namespace Ak
 
 	VkPhysicalDevice PhysicalDevice::choosePhysicalDevice(const std::vector<VkPhysicalDevice>& devices)
 	{
-		// Maps to hold devices and sort by rank.
 		std::multimap<uint32_t, VkPhysicalDevice> rankedDevices;
 
-		// Iterates through all devices and rate their suitability.
 		for(const auto &device : devices)
 			rankedDevices.emplace(scorePhysicalDevice(device), device);
-
-		// Checks to make sure the best candidate scored higher than 0  rbegin points to last element of ranked devices(highest rated), first is its rating.
 		if(rankedDevices.rbegin()->first > 0)
 			return rankedDevices.rbegin()->second;
 
@@ -47,18 +43,15 @@ namespace Ak
 	{
 		uint32_t score = 0;
 
-		// Checks if the requested extensions are supported.
 		uint32_t extensionPropertyCount = 0;
 		vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionPropertyCount, nullptr);
 		std::vector<VkExtensionProperties> extensionProperties(extensionPropertyCount);
 		vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionPropertyCount, extensionProperties.data());
 
-		// Iterates through all extensions requested.
 		for(const char *currentExtension : LogicalDevice::DeviceExtensions)
 		{
 			bool extensionFound = false;
 
-			// Checks if the extension is in the available extensions.
 			for(const auto &extension : extensionProperties)
 			{
 				if(strcmp(currentExtension, extension.extensionName) == 0)
@@ -68,22 +61,18 @@ namespace Ak
 				}
 			}
 
-			// Returns a score of 0 if this device is missing a required extension.
 			if(!extensionFound)
 				return 0;
 		}
 
-		// Obtain the device features and properties of the current device being rateds.
 		VkPhysicalDeviceProperties physicalDeviceProperties;
 		VkPhysicalDeviceFeatures physicalDeviceFeatures;
 		vkGetPhysicalDeviceProperties(_device, &physicalDeviceProperties);
 		vkGetPhysicalDeviceFeatures(_device, &physicalDeviceFeatures);
 
-		// Adds a large score boost for discrete GPUs (dedicated graphics cards).
 		if(physicalDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
 			score += 1000;
 
-		// Gives a higher score to devices with a higher maximum texture size.
 		score += physicalDeviceProperties.limits.maxImageDimension2D;
 		return score;
 	}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 14/03/2022
+// Updated : 28/03/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -12,202 +12,15 @@
 
 namespace Ak
 {
-    constexpr const int MAX_FRAMES_IN_FLIGHT = 2;
-    
-    struct QueueFamilyIndices
-    {
-        std::optional<uint32_t> graphicsFamily;
-        std::optional<uint32_t> presentFamily;
-
-        inline bool isComplete() { return graphicsFamily.has_value() && presentFamily.has_value(); }
-    };
-
-    struct UniformBufferObject3D
-    {
-        glm::mat4 model;
-        glm::mat4 view;
-        glm::mat4 proj;
-    };
-
-    struct UniformBufferObject2D
-    {
-        glm::mat4 model;
-        glm::mat4 proj;
-    };
-
-    const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
-
-    #ifdef AK_DEBUG
-        constexpr const bool enableValidationLayers = true;
-    #else
-        constexpr const bool enableValidationLayers = false;
-    #endif
-
-    enum class shader
-    {
-        basic_2D,
-        basic_3D
-        // More default shaders will come in the future
-    };
-    enum class CullMode
-    {
-        none,
-        front,
-        back,
-        front_and_back
-    };
-
-    enum class RenderingMode : uint8_t { render2D, render3D };
-    enum class ShaderType { vert, frag };
-
     class RendererComponent : public Component
     {
         public:
-            RendererComponent(WindowComponent* win, shader internal); 
-            RendererComponent(WindowComponent* win);
-            RendererComponent(shader internal); 
-            RendererComponent();
+             RendererComponent();
+             RendererComponent(WindowComponent* window);
 
-            void onAttach() override;
-            void onRender() override;
-            void onQuit() override;
-
-            inline void recreateRenderer() noexcept { onAttach(); }
-
-            inline void setShader(std::string vertexShader, std::string fragmentShader) { _vertexShader = std::move(vertexShader); _fragmentShader = std::move(fragmentShader); }
-            void useShader(shader internal);
-            void useShader(ShaderType type, std::vector<uint32_t>& data);
-            inline void render_to_window(WindowComponent* win) noexcept { window = win; }
-            
-            inline void add_entity(Entity2D& entity) { entities2D.push_back(entity); }
-            inline void add_entity(Entity3D& entity) { entities3D.push_back(entity); }
-
-            inline void setBackgroundColor(float r, float g, float b, float a) noexcept { clearColor.color.float32[0] = r; clearColor.color.float32[1] = g; clearColor.color.float32[2] = b; clearColor.color.float32[3] = a; }
-            void setFaceCulling(CullMode mode) noexcept;
-            void setRenderingMode(RenderingMode _mode) noexcept;
-
-            inline static constexpr void requireFrameBufferResize() noexcept { framebufferResized = true; }
-            inline static void waitForBuild(bool value = true) noexcept { _waitForBuild = value; }
-
-            ~RendererComponent() = default;
-
-            std::vector<Entity2D> entities2D;
-            std::vector<Entity3D> entities3D;
-
-            std::string _vertexShader;
-            std::string _fragmentShader;
-
-            VkDebugUtilsMessengerEXT debugMessenger;
-
-            VkQueue graphicsQueue;
-
-            std::vector<VkImageView> swapChainImageViews;
-
-            // Pipeline graphique
-            VkPipelineLayout pipelineLayout;
-            VkCullModeFlags cull_mode = VK_CULL_MODE_NONE;
-            VkShaderModule vertShaderModule;
-            VkShaderModule fragShaderModule;
-
-            // Render pass
-            VkRenderPass renderPass;
-
-            // Command buffer
-            VkCommandPool commandPool;
-            std::vector<VkCommandBuffer> commandBuffers;
-
-            // Rendering
-            std::vector<VkSemaphore> imageAvailableSemaphores;
-            std::vector<VkSemaphore> renderFinishedSemaphores;
-            std::vector<VkFence> inFlightFences;
-            std::vector<VkFence> imagesInFlight;
-            size_t currentFrame = 0;
-
-            // UniformBuffer
-            VkDescriptorSetLayout descriptorSetLayout;
-            std::vector<VkBuffer> uniformBuffers;
-            std::vector<VkDeviceMemory> uniformBuffersMemory;
-            std::vector<VkDescriptorSet> descriptorSets;
-
-            WindowComponent* window = nullptr;
-
-            bool _instanceInitialized = false;
-
-            VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
-
-            RenderingMode mode = RenderingMode::render3D;
-            
-        private:
-            void createInstance();
-
-            // Device
-            void pickPhysicalDevice();
-            bool isDeviceSuitable(VkPhysicalDevice device);
-
-            // Validation layers
-            void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
-            void setupDebugMessenger();
-            bool checkValidationLayerSupport();
-            std::vector<const char*> getRequiredExtensions();
-            static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
-            VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pCallback);
-            void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT callback, const VkAllocationCallbacks* pAllocator);
-
-            // Queue
-            QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
-
-            // Logical device
-            void createLogicalDevice();
-
-            // Vk surface
-            void createSurface();
-            VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
-
-            // Swap chain
-            void createSwapChain();
-            bool checkDeviceExtensionSupport(VkPhysicalDevice device);
-            SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
-            VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
-            VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
-            void cleanupSwapChain();
-            void recreateSwapChain();
-
-            // Image views
-            void createImageViews();
-
-            // Pipeline graphique
-            void createGraphicsPipeline();
-            VkShaderModule createShaderModule(const std::vector<uint32_t>& code, bool isFromGLSLcompiler);
-
-            // Render pass
-            void createRenderPass();
-
-            // FrameBuffer
-            void createFramebuffers();
-
-            // Command buffer
-            void createCommandPool();
-            void createCommandBuffers();
-
-            // Rendering
-            void drawFrame();
-            void createSemaphores();
-
-            // VertexBuffer
-            uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-            void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
-            void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
-            void createVertexBuffer();
-            void createIndexBuffer();
-
-            // UniformBuffer
-            void createDescriptorSetLayout();
-            void createUniformBuffers();
-            void updateUniformBuffer(uint32_t currentImage);
-            void createDescriptorPool();
-            void createDescriptorSets();
-
-            inline static bool _waitForBuild = false;
+             void onAttach() override;
+             void onRender() override;
+             void onQuit() override;
     };
 }
 
