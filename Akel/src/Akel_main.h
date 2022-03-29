@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 11/03/2022
+// Updated : 29/03/2022
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -21,10 +21,7 @@ int main(int argc, char** argv)
 	AK_BEGIN_SESSION("Start");
 		Ak::AkelInstance project = std::move(Akel_init());
 		if(!Ak::initAkel(&project))
-		{
-			Ak::Core::log::report(ERROR, "Something went wrong with Akel initialisation");
-			return -1;
-		}
+			Ak::Core::log::report(FATAL_ERROR, "Something went wrong with Akel initialisation");
 		auto app = Akel_mainApplication();
 	AK_END_SESSION();
 

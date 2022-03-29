@@ -96,12 +96,12 @@ namespace Ak
 		RCore::checkVk(vkCreateSwapchainKHR(*logicalDevice, &swapchainCreateInfo, nullptr, &_swapchain));
 
 		RCore::checkVk(vkGetSwapchainImagesKHR(*logicalDevice, _swapchain, &_imageCount, nullptr));
-		images.resize(_imageCount);
-		imageViews.resize(_imageCount);
+		_images.resize(_imageCount);
+		_imageViews.resize(_imageCount);
 		RCore::checkVk(vkGetSwapchainImagesKHR(*logicalDevice, _swapchain, &_imageCount, images.data()));
 
 		for(uint32_t i = 0; i < _imageCount; i++)
-			Image::CreateImageView(images.at(i), imageViews.at(i), VK_IMAGE_VIEW_TYPE_2D, surfaceFormat.format, VK_IMAGE_ASPECT_COLOR_BIT, 1, 0, 1, 0);
+			Image::CreateImageView(_images.at(i), _imageViews.at(i), VK_IMAGE_VIEW_TYPE_2D, surfaceFormat.format, VK_IMAGE_ASPECT_COLOR_BIT, 1, 0, 1, 0);
 
 		VkFenceCreateInfo fenceCreateInfo = {};
 		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
