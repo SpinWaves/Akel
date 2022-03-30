@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 27/03/2022
-// Updated : 27/03/2022
+// Updated : 30/03/2022
 
 #ifndef __AK_VK_PHYSICAL_DEVICE__
 #define __AK_VK_PHYSICAL_DEVICE__
@@ -12,7 +12,6 @@ namespace Ak
 {
 	class Instance;
 
-	// Represents vulkan physical device
 	class PhysicalDevice
 	{
 		public:

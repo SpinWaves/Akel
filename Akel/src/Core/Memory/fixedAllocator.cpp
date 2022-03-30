@@ -1,23 +1,21 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/07/2021
-// Updated : 06/12/2021
+// Updated : 30/03/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
 
 namespace Ak
 {
-    void FixedAllocator::init(size_t blockSize, size_t numBlocks)
+    void FixedAllocator::init(size_t blockSize, size_t numBlocks) : _mutex()
     {
         if(_heap != nullptr)
             return;
 
-        #if defined(Ak_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-              InitializeCriticalSection(&mutex);
-		#endif
-
         size_t Size = blockSize * numBlocks;
+
+        _mutex.lockThreads();
 
         _heap = malloc(Size); // Main allocation
 
@@ -25,19 +23,17 @@ namespace Ak
         _heap_size = Size;
         _bits.resize(numBlocks, false);
 
-        lockThreads(mutex);
-
         _allocator_number = MemoryManager::accessToControlUnit()->fixedStack.size();
         std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
         MemoryManager::accessToControlUnit()->fixedStack.emplace_back(weak_from_this());
 
-        unlockThreads(mutex);
+        _mutex.unlockThreads();
     }
 
     void FixedAllocator::resize(size_t numBlocks)
     {
-        lockThreads(mutex);
+        _mutex.lockThreads();
 
         size_t Size = size_t(_block_size * numBlocks);
 
@@ -46,7 +42,7 @@ namespace Ak
         _heap_size = Size;
         _bits.resize(numBlocks, false);
 
-        unlockThreads(mutex);
+        _mutex.unlockThreads();
 
         std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
@@ -77,12 +73,14 @@ namespace Ak
 
     void FixedAllocator::destroy()
     {
-        lockThreads(mutex);
+        if(_heap == nullptr)
+            return;
+        _mutex.lockThreads();
 
         std::free(_heap);
         _heap = nullptr;
 
-        unlockThreads(mutex);
+        _mutex.unlockThreads();
 
         //std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
         //Core::ProjectFile::setIntValue(key, _memUsed);
@@ -90,11 +88,6 @@ namespace Ak
 
     FixedAllocator::~FixedAllocator()
     {
-        if(_heap != nullptr)
-            destroy();
-
-        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-            DeleteCriticalSection(&mutex);
-        #endif
+        destroy();
     }
 }

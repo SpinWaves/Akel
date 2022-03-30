@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 23/06/2021
+// Updated : 30/03/2022
 
 #ifndef __AK_VEC2__
 #define __AK_VEC2__
@@ -87,7 +87,14 @@ namespace Ak::Maths
 
         double dot(Vec2 v);
     };
+    
+    using Vec2f = Vec2<float>;
+    using Vec2d = Vec2<double>;
+    using Vec2i = Vec2<int32_t>;
+    using Vec2ui = Vec2<uint32_t>;
+    using Vec2us = Vec2<uint16_t>;
 }
+
 
 #include <Maths/vec2.inl>
 

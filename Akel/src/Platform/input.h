@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 07/03/2022
+// Updated : 30/03/2022
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -12,6 +12,7 @@
 namespace Ak
 {
     enum class action { up, down };
+    class WindowComponent;
 
     class Input
     {
@@ -47,6 +48,8 @@ namespace Ak
 
             inline SDL_Event* getNativeEvent() noexcept { return &_event; }
 
+            inline static add_window(WindowComponent* window) { _windows.push_back(window); }
+
             ~Input() = default;
 
         private:
@@ -60,6 +63,10 @@ namespace Ak
             int _yRel = 0;
 
             bool _end = false;
+
+            uint32_t _current_window = 0;
+            
+            static std::vector<WindowComponent*> _windows;
     };
 }
 

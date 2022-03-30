@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 07/03/2022
+// Updated : 30/03/2022
 
 #include <Platform/platform.h>
-#include <Renderer/rendererComponent.h>
+#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {
@@ -27,8 +27,35 @@ namespace Ak
         if(_event.window.event == SDL_WINDOWEVENT_CLOSE) 
             _end = true;
 
-        if(_event.window.event == SDL_WINDOWEVENT_RESIZED)
-            RendererComponent::requireFrameBufferResize();
+        if(_event.type == SDL_MOUSEMOTION) 
+        {
+            _x = _event.motion.x;
+            _y = _event.motion.y;
+
+            _xRel = _event.motion.xrel;
+            _yRel = _event.motion.yrel;
+
+            _current_window = _event.motion.windowID;
+        }
+
+        if(_event.window.event == SDL_WINDOWEVENT_RESIZED || _event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+        {
+            Render_Core::get().requireFrameBufferResize();
+            for(auto win : _windows)
+            {
+                if(win._win_id == _current_window)
+                    win.size.SET(_event->window.data1, _event->window.data2);
+            }
+        }
+
+        if(_event.window.event == SDL_WINDOWEVENT_MOVED)
+        {
+            for(auto win : _windows)
+            {
+                if(win._win_id == _current_window)
+                    win.pos.SET(_event->window.data1, _event->window.data2);
+            }
+        }
 
         switch(_event.type) 
         {
@@ -53,15 +80,6 @@ namespace Ak
             break;
 
             default: break;
-        }
-
-        if(_event.type == SDL_MOUSEMOTION) 
-        {
-            _x = _event.motion.x;
-            _y = _event.motion.y;
-
-            _xRel = _event.motion.xrel;
-            _yRel = _event.motion.yrel;
         }
     }
 }

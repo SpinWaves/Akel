@@ -1,26 +1,40 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/07/2021
-// Updated : 23/02/2022
+// Updated : 30/03/2022
 
 #include <Utils/utils.h>
 
 namespace Ak
 {
-    void lockThreads(MutexHandel &lock)
+    Mutex::Mutex()
     {
         #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-            EnterCriticalSection(lock);
-        #else
-            lock.lock();
+              InitializeCriticalSection(&_mutex);
         #endif
     }
-    void unlockThreads(MutexHandel &lock)
+
+    void Mutex::lockThreads()
     {
         #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
-            LeaveCriticalSection(lock);
+            EnterCriticalSection(&_mutex);
         #else
-            lock.unlock();
+            _mutex.lock();
+        #endif
+    }
+    void Mutex::unlockThreads()
+    {
+        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+            LeaveCriticalSection(&_mutex);
+        #else
+            _mutex.unlock();
+        #endif
+    }
+
+    Mutex::~Mutex()
+    {
+        #if defined(AK_PLATFORM_WINDOWS) && defined(_MSC_VER) && _MSC_VER < 1900
+            DeleteCriticalSection(&_mutex);
         #endif
     }
 }

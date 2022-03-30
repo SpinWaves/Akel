@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 09/03/2022
+// Updated : 30/03/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -22,6 +22,8 @@ namespace Ak
 {
     class WindowComponent : public Component
     {
+        friend class Input;
+        
         public:
             WindowComponent();
 
@@ -33,7 +35,7 @@ namespace Ak
             inline SDL_Window* getNativeWindow() noexcept { return _window; }
 
             std::string title = "Akel Window";
-            std::string icon = Core::getAssetsDirPath() + "logo.png";;
+            std::string icon = Core::getAssetsDirPath() + "logo.png";
             
             Maths::Vec2<int> size;
             Maths::Vec2<int> pos;
@@ -51,7 +53,7 @@ namespace Ak
             bool maximize = false;
             bool minimize = false;
 			
-            virtual ~WindowComponent();
+            virtual ~WindowComponent() = default;
 
 		protected:
 			void create();
@@ -60,6 +62,7 @@ namespace Ak
         private:
             uint32_t _flags = 0;
             SDL_Surface* _icon = nullptr;
+            uint32_t _window_id = 0;
     };
 }
 

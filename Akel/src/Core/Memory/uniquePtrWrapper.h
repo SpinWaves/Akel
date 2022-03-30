@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/09/2021
-// Updated : 10/03/2022
+// Updated : 30/03/2022
 
 #ifndef __AK_UNIQUE_PTR_WRAPPER__
 #define __AK_UNIQUE_PTR_WRAPPER__
@@ -20,6 +20,8 @@ namespace Ak
     {
         void operator()(T* ptr)
         {
+            if(ptr == nullptr)
+                return;
             void* address = ptr;
             memFree(ptr);
 
@@ -34,12 +36,7 @@ namespace Ak
     using unique_ptr_w = std::unique_ptr<T, unique_ptr_w_deleter<T>>;
 
     template <typename T>
-    unique_ptr_w<T> make_unique_ptr_w(T* ptr) noexcept
-    {
-        if(ptr)
-            return unique_ptr_w<T>(ptr);
-        return unique_ptr_w<T>(nullptr);
-    }
+    inline unique_ptr_w<T> make_unique_ptr_w(T* ptr) noexcept { return unique_ptr_w<T>(ptr); }
 
     template <typename T = void, typename ... Args>
     inline unique_ptr_w<T> create_unique_ptr_w(Args&& ... args) noexcept { return make_unique_ptr_w<T>(memAlloc<T>(std::forward<Args>(args)...)); }

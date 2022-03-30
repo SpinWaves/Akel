@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 27/03/2022
+// Updated : 30/03/2022
 
 #ifndef __AK_VK_INSTANCE__
 #define __AK_VK_INSTANCE__
@@ -11,7 +11,7 @@
 namespace Ak
 {
 	class WindowComponent;
-	// Represents a vulkan instance
+
 	class Instance
 	{
 		public:

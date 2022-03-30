@@ -7,15 +7,15 @@
 #define __AK_SELF_INSTANCE__
 
 #include "core.h"
-#include <Utils/nonCopyable.h>
+#include <Utils/plateformUtils.h>
 
 namespace Ak
 {
 	template <typename T>
 	class SelfInstance : public non_copyable
 	{
-		public:
-			static T& get()
+		public:			
+			inline static T& get()
 			{
 				static T instance;
 				return instance;

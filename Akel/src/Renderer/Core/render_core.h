@@ -55,7 +55,6 @@ namespace Ak
             std::unique_ptr<Swapchain> swapchain;
 
             std::map<std::thread::id, std::shared_ptr<CommandPool>> commandPools;
-            /// Timer used to remove unused command pools.
             ElapsedTime elapsedPurge;
 
             VkPipelineCache pipelineCache = VK_NULL_HANDLE;

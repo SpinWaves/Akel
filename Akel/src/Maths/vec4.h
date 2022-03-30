@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 03/06/2021
+// Updated : 30/03/2022
 
 #ifndef __AK_VEC4__
 #define __AK_VEC4__
@@ -89,6 +89,12 @@ namespace Ak::Maths
 
         double dot(Vec4 v);
     };
+
+    using Vec4f = Vec4<float>;
+    using Vec4d = Vec4<double>;
+    using Vec4i = Vec4<int32_t>;
+    using Vec4ui = Vec4<uint32_t>;
+    using Vec4us = Vec4<uint16_t>;
 }
 
 #include <Maths/vec4.inl>

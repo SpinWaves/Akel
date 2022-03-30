@@ -1,18 +1,20 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 07/03/2022
+// Updated : 30/03/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
-#include <Platform/input.h>
 #include <Modules/ImGui/imgui_component.h>
-#include <Utils/utils.h>
 
 namespace Ak
 {
-	Application::Application(const char* name) : ComponentStack(), _in(), _fps()
+	Application::Application(const char* name) : ComponentStack(), non_copyable(), _in(), _fps()
 	{
+		if(_app_check)
+			Core::log::report(FATAL_ERROR, "you can only declare one application");
+		
+		_app_check = true;
 		_name = name;
 		_fps.init();
 		if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -26,6 +28,7 @@ namespace Ak
 		{
 			_fps.update();
 			// separation between updates and rendering
+
 			if(_fps.make_update()) // updates
 			{
 				_in.reset();
@@ -33,7 +36,10 @@ namespace Ak
 				{
 					_in.update();
 					for(auto component : _components)
-						component->onImGuiEvent(_in);
+					{
+						if(ImGuiComponent::getNumComp() != 0) // __imgui doesn't modify it because we don't attach it
+							component->onImGuiEvent(_in);
+					}
 				}
 				for(auto component : _components)
 				{
@@ -43,7 +49,7 @@ namespace Ak
 			}
 			
 			// rendering
-			if(ImGuiComponent::getNumComp() != 0) // __imgui doesn't modify it because we don't attach it
+			if(ImGuiComponent::getNumComp() != 0)
 			{
 				__imgui.begin();
 				for(auto component : _components)

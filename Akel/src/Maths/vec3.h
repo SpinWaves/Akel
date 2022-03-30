@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 23/06/2021
+// Updated : 30/03/2022
 
 #ifndef __AK_VEC3__
 #define __AK_VEC3__
@@ -90,6 +90,12 @@ namespace Ak::Maths
 
         Vec3 absolute();
     };
+
+    using Vec2f = Vec3<float>;
+    using Vec2d = Vec3<double>;
+    using Vec3i = Vec3<int32_t>;
+    using Vec3ui = Vec3<uint32_t>;
+    using Vec3us = Vec3<uint16_t>;
 }
 
 #include <Maths/vec3.inl>

@@ -1,9 +1,1 @@
 ouais j'ai la flemme mais faut le faire ._.
-
-Akel/src/Renderer/commandBuffer.cpp:
-    line 55 : VkDeviceSize offsets[entities2D.size()];
-              VkBuffer vertexBuffers[entities2D.size()];
-    switch to size known at compialtion time
-
-Renderer:
-    add entity 3D management
