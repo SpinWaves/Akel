@@ -6,7 +6,7 @@
 #ifndef __AK_VULKAN_GPU_MEMORY_CHUNK__
 #define __AK_VULKAN_GPU_MEMORY_CHUNK__
 
-#include <Akpch.h> // meow
+#include <Akpch.h>
 
 namespace Ak
 {
