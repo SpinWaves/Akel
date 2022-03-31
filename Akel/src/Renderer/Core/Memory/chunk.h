@@ -3,35 +3,19 @@
 // Created : 24/09/2021
 // Updated : 31/03/2022
 
-#ifndef __AK_VULKAN_GPU_MEMORY_CHUNK__
-#define __AK_VULKAN_GPU_MEMORY_CHUNK__
+#ifndef __AK_VK_GPU_MEMORY_CHUNK__
+#define __AK_VK_GPU_MEMORY_CHUNK__
 
 #include <Akpch.h>
 
 namespace Ak
 {
-    class Buffer;
-
-    class Chunk
+    struct GPU_Mem_Chunck
     {
-        public:
-            Chunk(VkDeviceSize size, int memoryTypeIndex);
-
-            bool alloc(VkDeviceSize size, Buffer& buffer, VkDeviceSize alignment = 1);
-            inline bool contains(const Buffer& buffer);
-            inline bool canHold(VkDeviceSize size);
-            void free(const Buffer& buffer);
-            inline int memoryTypeIndex() const noexcept { return _memoryTypeIndex; }
-
-        private:
-            VkDeviceMemory _memory = VK_NULL_HANDLE;
-            VkDeviceSize _size;
-            VkDeviceSize _memUsed = 0;
-            int _memoryTypeIndex = 0;
-            std::vector<Buffer> _usedBuffers;
-            std::vector<Buffer> _freeBuffers;
-            void* _ptr = nullptr;
+        VkDeviceMemory memory = VK_NULL_HANDLE;
+        unsigned int offset = 0;
+        unsigned int size = 0;
     };
 }
 
-#endif // __AK_VULKAN_GPU_MEMORY_CHUNK__
+#endif // __AK_VK_GPU_MEMORY_CHUNK__

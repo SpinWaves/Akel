@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 25/03/2022
+// Updated : 31/03/2022
 
-#ifndef __AK_BUFFERS__
-#define __AK_BUFFERS__
+#ifndef __AK_VK_BUFFERS__
+#define __AK_VK_BUFFERS__
 
 #include <Akpch.h>
 
@@ -40,4 +40,4 @@ namespace Ak
 	};
 }
 
-#endif // __AK_BUFFERS__
+#endif // __AK_VK_BUFFERS__

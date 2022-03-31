@@ -1,1 +1,6 @@
 ouais j'ai la flemme mais faut le faire ._.
+
+Renderer/Core/Memory/pages : 
+	- replace std::mutex by Ak::Mutex
+
+Same shit with Renderer/Core/Memory/heap
