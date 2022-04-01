@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 30/03/2022
+// Updated : 01/04/2022
 
 #include <Core/log.h>
 #include <Maths/maths.h>
@@ -33,7 +33,7 @@ namespace Ak
         finder.size = sizeType;
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
 
-        _mutex.lockThreads();
+        std::lock_guard<std::mutex> watchdog(_mutex);
 
         if(_freeSpaces != nullptr)
         {
@@ -67,8 +67,6 @@ namespace Ak
             _memUsed += sizeType;
         }
 
-        _mutex.unlockThreads();
-
         if(std::is_class<T>::value)
             new ((void*)ptr) T(std::forward<Args>(args)...);
 
@@ -101,7 +99,7 @@ namespace Ak
         size_t flag_size = sizeof(JamAllocator::flag);
         unsigned int better_flag = UINT_MAX;
 
-        _mutex.lockThreads();
+        std::lock_guard<std::mutex> watchdog(_mutex);
 
         auto it = _usedSpaces->root_it();
         if(!it.has_data()) // used space tree is not supposed to be empty here
@@ -131,7 +129,6 @@ namespace Ak
         if(finder == nullptr)
         {
             Core::log::report(ERROR, "JamAllocator : unable to find the flag of %p", ptr);
-            _mutex.unlockThreads();
             return;
         }
         
@@ -141,8 +138,7 @@ namespace Ak
             _freeSpaces = node;
         else
             _freeSpaces->add(node);
-        
-        _mutex.unlockThreads();
+
         ptr = nullptr;
     }
 }

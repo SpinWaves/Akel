@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/04/2021
-// Updated : 26/03/2022
+// Updated : 01/04/2022
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -20,7 +20,6 @@ using Ak_byte = char;
 #include <Utils/fps.h>
 #include <Utils/camera.h>
 #include <Utils/time.h>
-#include <Utils/platformUtils.h>
 #include <Utils/mStrings.h>
 #include <Utils/fStrings.h>
 #include <Utils/nonCopyable.h>

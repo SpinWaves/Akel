@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 30/03/2022
+// Updated : 01/04/2022
 
 #include <Core/core.h>
 
@@ -12,7 +12,7 @@ namespace Ak
         if(_heap != nullptr)
             return;
 
-        _mutex.lockThreads();
+        std::lock_guard<std::mutex> watchdog(_mutex);
 
         _heap = std::malloc(Size);
 
@@ -26,8 +26,6 @@ namespace Ak
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
         MemoryManager::accessToControlUnit()->jamStack.push_back(weak_from_this());
-
-        _mutex.unlockThreads();
     }
 
     void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag*>* node, JamAllocator::flag* flag)
@@ -47,7 +45,7 @@ namespace Ak
             return;
         }
 
-        _mutex.lockThreads();
+        std::lock_guard<std::mutex> watchdog(_mutex);
 
         if(Size > _heapSize)
         {
@@ -57,8 +55,6 @@ namespace Ak
             std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
             Core::ProjectFile::setIntValue(key, Size);
         }
-
-        _mutex.unlockThreads();
     }
 
     void JamAllocator::destroy()
@@ -66,7 +62,7 @@ namespace Ak
         if(_heap == nullptr)
             return;
 
-        _mutex.lockThreads();
+        std::lock_guard<std::mutex> watchdog(_mutex);
 
         _freeSpaces = nullptr;
         _usedSpaces = nullptr;
@@ -76,8 +72,6 @@ namespace Ak
         
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, _memUsed);
-
-        _mutex.unlockThreads();
     }
 
     JamAllocator::~JamAllocator()

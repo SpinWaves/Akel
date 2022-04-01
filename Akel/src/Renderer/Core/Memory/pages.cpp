@@ -96,7 +96,7 @@ namespace Ak
 	    if(requirements.size > size)
 	    	return {};
 	    
-	    std::lock_guard<std::mutex> lock(*_mutex);
+	    std::lock_guard<std::mutex> watchdog(*_mutex);
 
 	    GPU_Page::Flag* current = _head;
 
@@ -137,7 +137,7 @@ namespace Ak
 
 	void GPU_Page::free(GPU_Mem_Chunk allocation)
 	{
-	    std::lock_guard<std::mutex> locker(*_mutex);
+	    std::lock_guard<std::mutex> watchdog(*_mutex);
 
 	    GPU_Page::Flag* current = _head;
 

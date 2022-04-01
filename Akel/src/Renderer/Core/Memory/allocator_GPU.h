@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/09/2021
-// Updated : 31/03/2022
+// Updated : 01/04/2022
 
 #ifndef __AK_VK_ALLOCATOR_GPU__
 #define __AK_VK_ALLOCATOR_GPU__
@@ -12,6 +12,7 @@
 namespace Ak
 {
     class Buffer;
+    class GPU_Heap;
     
     class Allocator_GPU
     {
@@ -26,7 +27,7 @@ namespace Ak
             ~Allocator_GPU();
 
         private:
-            std::vector<Chunk> _chuncks;
+            std::vector<GPU_Heap> _heaps;
     };
 }
 

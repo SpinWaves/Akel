@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 30/03/2022
+// Updated : 01/04/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -66,7 +66,7 @@ namespace Ak
 
             void init_node(BinarySearchTree<flag*>* node, flag* ptr);
 
-            Mutex _mutex;
+            std::mutex _mutex;
     };
 }
 

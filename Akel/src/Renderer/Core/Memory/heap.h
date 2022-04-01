@@ -18,9 +18,9 @@ namespace Ak
 		public:
 			GPU_Heap(uint32_t heapIndex, size_t pageSize, VkPhysicalDeviceMemoryProperties& props, VkDevice device, VkAllocationCallbacks* callbacks, std::unordered_map<VkDeviceMemory, GPU_Page*>& pageMap);
 
-	        inline uint32_t const getIndex() const noexcept { return _heapIndex; }
+	    	inline uint32_t const getIndex() const noexcept { return _heapIndex; }
 	        bool const match(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags, uint32_t* typeIndex) const;
-	        GPU_Mem_Chunk alloc(VkMemoryRequirements requirements, uint32_t typeIndex);
+	        GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, uint32_t typeIndex);
 
 	    private:
 	        struct MemoryType
