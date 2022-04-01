@@ -7,27 +7,28 @@
 #define __AK_VK_ALLOCATOR_GPU__
 
 #include <Akpch.h>
-#include <Renderer/Memory/chunk.h>
+#include "heap.h"
+#include "chunk.h"
 
 namespace Ak
 {
-    class Buffer;
-    class GPU_Heap;
-    
     class Allocator_GPU
     {
         public:
-            Allocator_GPU();
+            Allocator_GPU(VkPhysicalDevice physicalDevice, VkDevice device, VkAllocationCallbacks* callbacks, size_t pageSize);
 
-            Buffer& allocBuffer(VkDeviceSize size);
-            inline bool canHold(VkDeviceSize size);
-            inline bool contains(Buffer& buffer);
-            void freeBuffer(const Buffer& buffer);
+            GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags);
+            void freeChunk(GPU_Mem_Chunk chunk);
 
-            ~Allocator_GPU();
+            ~Allocator_GPU() = default;
 
         private:
+            VkPhysicalDevice _physicalDevice;
+            VkDevice _device;
+            VkAllocationCallbacks* _callbacks;
+
             std::vector<GPU_Heap> _heaps;
+            std::unordered_map<VkDeviceMemory, GPU_Page*> _pageMap;
     };
 }
 
