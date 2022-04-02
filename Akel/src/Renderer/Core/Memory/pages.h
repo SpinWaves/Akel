@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 31/03/2022
+// Updated : 02/04/2022
 
 #ifndef __AK_VK_MEMORY_PAGES__
 #define __AK_VK_MEMORY_PAGES__
@@ -10,8 +10,6 @@
 
 namespace Ak
 {
-	class GPU_Mem_Chunk;
-
 	class GPU_Page
 	{
 		public:
@@ -19,8 +17,8 @@ namespace Ak
 			Page(Page&& page);
 
 			inline constexpr bool const match(uint32_t typeIndex) const noexcept { return _typeIndex == typeIndex; }
-			GPU_Mem_Chunk tryAlloc(VkMemoryRequirements requirements);
-			void free(GPU_Mem_Chunk chunk);
+			class GPU_Mem_Chunk tryAlloc(VkMemoryRequirements requirements);
+			void free(class GPU_Mem_Chunk chunk);
 			
 			~Page();
 

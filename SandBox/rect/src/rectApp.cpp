@@ -22,8 +22,7 @@ class Rect : public Ak::Application
 
             add_component<FPSprinterComponent>();
 
-            Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(window, Ak::shader::basic_2D);
-            renderer->setRenderingMode(Ak::RenderingMode::render2D);
+            Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(window);
             renderer->setBackgroundColor(0.49f, 0.66f, 0.85f, 1.0f);
 
             Ak::Entity2D rectangle(Models::quad, {50.0f, 50.0f}, {250.0f, 200.0f}, Colors::red);

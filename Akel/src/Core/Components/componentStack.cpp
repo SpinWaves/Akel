@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 10/03/2022
+// Updated : 02/04/2022
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -28,7 +28,7 @@ namespace Ak
 	{
 		for(size_t i = 0; i < _components.size(); i++)
 		{
-			if(_components[i]->getName() == name)
+			if(std::strcmp(_components[i]->getName(), name) == 0)
 			{
 				_components[i]->onQuit();
 				_components.erase(_components.begin() + i);
@@ -41,14 +41,9 @@ namespace Ak
 	{
 		for(auto elem : _components)
 		{
-			if(strcmp(elem->getName(), name))
+			if(std::strcmp(elem->getName(), name) == 0)
 				return elem;
 		}
-	}
-	Component* ComponentStack::get_component(size_t index)
-	{
-		if(index <= _components.size())
-			return _components[index];
 	}
 
 	ComponentStack::~ComponentStack()

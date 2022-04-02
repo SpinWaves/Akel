@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 30/03/2022
+// Updated : 02/04/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -30,9 +30,11 @@ namespace Ak
 			void onAttach() override;
 			void onEvent(Input& input) override;
             void update() override;
-            void fetchSettings();
 			void onQuit() override;
-            inline SDL_Window* getNativeWindow() noexcept { return _window; }
+            void fetchSettings();
+
+            inline std::shared_ptr<class RenderModule> getRenderModule() const { return _render_module; }
+            inline SDL_Window* getNativeWindow() const noexcept { return _window; }
 
             std::string title = "Akel Window";
             std::string icon = Core::getAssetsDirPath() + "logo.png";
@@ -63,6 +65,8 @@ namespace Ak
             uint32_t _flags = 0;
             SDL_Surface* _icon = nullptr;
             uint32_t _window_id = 0;
+            
+            std::shared_ptr<class RenderModule> _render_module;
     };
 }
 

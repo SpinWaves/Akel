@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 06/03/2022
+// Updated : 02/04/2022
 
 #include <Graphics/vertex.h>
 
@@ -30,6 +30,6 @@ namespace Ak
         attributeDescriptions[1].format = VK_FORMAT_R32G32B32A32_SFLOAT;
         attributeDescriptions[1].offset = offsetof(Vertex2D, color);
 
-        return std::move(attributeDescriptions);
+        return attributeDescriptions;
     }
 }

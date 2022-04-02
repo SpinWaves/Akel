@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 30/03/2022
-// Updated : 30/03/2022
+// Updated : 02/04/2022
 
 #ifndef __AK_VK_STAGE__
 #define __AK_VK_STAGE__
@@ -30,24 +30,24 @@ namespace Ak
 			const Descriptor* getDescriptor(const std::string &name) const;
 			const VkFramebuffer& getActiveFramebuffer(uint32_t activeSwapchainImage) const;
 
-			const std::vector<Attachment>& getAttachments() const { return _attachments; }
-			const std::vector<SubpassType>& getSubpasses() const { return _subpasses; }
+			inline const std::vector<Attachment>& getAttachments() const noexcept { return _attachments; }
+			inline const std::vector<SubpassType>& getSubpasses() const noexcept { return _subpasses; }
 
-			Viewport& getViewport() { return _viewport; }
-			void setViewport(const Viewport& viewport) { _viewport = viewport; }
+			inline Viewport& getViewport() noexcept { return _viewport; }
+			inline void setViewport(const Viewport& viewport) noexcept { _viewport = viewport; }
 
-			const RenderArea& getRenderArea() const { return _renderArea; }
+			inline const RenderArea& getRenderArea() const noexcept { return _renderArea; }
 
-			bool isOutOfDate() const { return _outOfDate; }
+			inline bool isOutOfDate() const noexcept { return _outOfDate; }
 
-			const Renderpass* getRenderpass() const { return _renderpass.get(); }
-			const ImageDepth* getDepthStencil() const { return _depthStencil.get(); }
-			const Framebuffers* getFramebuffers() const { return _framebuffers.get(); }
-			const std::vector<VkClearValue>& getClearValues() const { return _clearValues; }
-			uint32_t getAttachmentCount(uint32_t subpass) const { return _subpassAttachmentCount[subpass]; }
-			bool hasDepth() const { return _depthAttachment.has_value(); }
-			bool hasSwapchain() const { return _swapchainAttachment.has_value(); }
-			bool isMultisampled(uint32_t subpass) const { return _subpassMultisampled[subpass]; }
+			inline const Renderpass* getRenderpass() const noexcept { return _renderpass.get(); }
+			inline const ImageDepth* getDepthStencil() const noexcept { return _depthStencil.get(); }
+			inline const Framebuffers* getFramebuffers() const noexcept { return _framebuffers.get(); }
+			inline const std::vector<VkClearValue>& getClearValues() const noexcept { return _clearValues; }
+			inline uint32_t getAttachmentCount(uint32_t subpass) const noexcept { return _subpassAttachmentCount[subpass]; }
+			inline bool hasDepth() const noexcept { return _depthAttachment.has_value(); }
+			inline bool hasSwapchain() const noexcept { return _swapchainAttachment.has_value(); }
+			inline bool isMultisampled(uint32_t subpass) const noexcept { return _subpassMultisampled[subpass]; }
 
 		private:
 			std::vector<Attachment> _attachments;

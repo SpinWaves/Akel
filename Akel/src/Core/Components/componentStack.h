@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 30/03/2022
+// Updated : 02/04/2022
 
 #ifndef __AK_COMPONENTS_STACK__
 #define __AK_COMPONENTS_STACK__
@@ -28,7 +28,7 @@ namespace Ak
 			void remove_component(const char* name);
 
 			Component* get_component(const char* name);  // Accessors
-			Component* get_component(size_t index);
+			inline Component* get_component(size_t index) { return index <= _components.size() ? _components[index] : nullptr; }
 
 			inline std::vector<Component*>::iterator begin() { return _components.begin(); }
 			inline std::vector<Component*>::iterator end() { return _components.end(); }

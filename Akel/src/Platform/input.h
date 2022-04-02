@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 30/03/2022
+// Updated : 02/04/2022
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -46,7 +46,7 @@ namespace Ak
             inline bool isEnded() const noexcept { return _end; }
             inline constexpr void finish() noexcept { _end = true; }
 
-            inline SDL_Event* getNativeEvent() noexcept { return &_event; }
+            inline SDL_Event* getNativeEvent() const noexcept { return &_event; }
 
             inline static add_window(WindowComponent* window) { _windows.push_back(window); }
 
@@ -66,7 +66,7 @@ namespace Ak
 
             uint32_t _current_window = 0;
             
-            static std::vector<WindowComponent*> _windows;
+            inline static std::vector<WindowComponent*> _windows;
     };
 }
 

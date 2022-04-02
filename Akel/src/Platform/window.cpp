@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 30/03/2022
+// Updated : 02/04/2022
 
 #include <Platform/platform.h>
 
@@ -31,8 +31,10 @@ namespace Ak
         if(!_window)
             messageBox(FATAL_ERROR, "unable to create a window", SDL_GetError());
 
-       	SDL_GetWindowID(_window);
+       	_window_id = SDL_GetWindowID(_window);
        	Input::add_window(this);
+
+       	_render_module = create_shared_ptr_w<RenderModule>(title.c_str(), this);
 
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
@@ -46,6 +48,8 @@ namespace Ak
 
 		size.X = size.X == AK_WINDOW_MAX_SIZE ? DM.w : size.X;
 		size.Y = size.Y == AK_WINDOW_MAX_SIZE ? DM.h : size.Y;
+
+		_render_module->setName(title.c_str());
 
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);

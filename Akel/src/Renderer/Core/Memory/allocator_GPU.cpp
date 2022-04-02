@@ -36,12 +36,14 @@ namespace Ak
             }
         }
 
+        Core::log::report(ERROR, "GPU Allocator : cannot allocate a chunk of GPU memory, not enought free space available");
+
         return {};
     }
 
     void Allocator_GPU::freeChunk(GPU_Mem_Chunk allocation)
     {
-        if(pageMap.count(allocation.memory) == 0)
+        if(_pageMap.count(allocation.memory) == 0)
             return;
         GPU_Page* page = _pageMap[allocation.memory];
         page->free(allocation);

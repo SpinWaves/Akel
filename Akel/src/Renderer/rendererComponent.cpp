@@ -1,11 +1,30 @@
 // This file is a part of Akel
-// Author : @kbz_8
-// CREATED : 23/09/2021
-// Updated : 28/03/2022
+// Authors : @kbz_8
+// Created : 23/09/2021
+// Updated : 02/04/2022
 
 #include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-    RendererComponent::RendererComponent() : Component("__renderer_component") {}
+    RendererComponent::RendererComponent() : Component("__renderer_component"), _module_handler() {}
+    RendererComponent::RendererComponent(const WindowComponent* window) : Component("__renderer_component"), _module_handler()
+    {
+        add_window(window);
+    }
+
+    void RendererComponent::onAttach()
+    {
+        
+    }
+
+    void RendererComponent::onRender()
+    {
+        
+    }
+
+    void RendererComponent::onQuit()
+    {
+        
+    }
 }
