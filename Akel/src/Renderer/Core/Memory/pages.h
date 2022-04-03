@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 02/04/2022
+// Updated : 03/04/2022
 
 #ifndef __AK_VK_MEMORY_PAGES__
 #define __AK_VK_MEMORY_PAGES__
 
 #include <Akpch.h>
+#include <Core/Memory/unique_ptr_wrapper.h>
 
 namespace Ak
 {
@@ -40,7 +41,7 @@ namespace Ak
 
 			Flag* _head = nullptr;
 	        size_t _size = 0;
-	        std::mutex* _mutex = nullptr;
+	        unsique_ptr_w<std::mutex> _mutex;
 	        VkDevice _device = VK_NULL_HANDLE;
 	        VkDeviceMemory _memory = VK_NULL_HANDLE;
 	        VkAllocationCallbacks* _callbacks = nullptr;

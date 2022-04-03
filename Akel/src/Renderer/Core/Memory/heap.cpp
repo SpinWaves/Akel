@@ -11,7 +11,7 @@ namespace Ak
     {
         _heapIndex = heapIndex;
         _pageSize = pageSize;
-        _mutex.reset(memAlloc<std::mutex>());
+        _mutex = create_unique_ptr_w<std::mutex>();
         _callbacks = callbacks;
         _device = device;
 

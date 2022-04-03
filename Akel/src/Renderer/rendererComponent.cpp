@@ -10,7 +10,6 @@ namespace Ak
     RendererComponent::RendererComponent() : Component("__renderer_component"), _module_handler() {}
     RendererComponent::RendererComponent(const WindowComponent* window) : Component("__renderer_component"), _module_handler()
     {
-        add_window(window);
     }
 
     void RendererComponent::onAttach()

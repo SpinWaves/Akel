@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 02/04/2022
+// Updated : 03/04/2022
 
 #include <Platform/platform.h>
 
@@ -34,8 +34,6 @@ namespace Ak
        	_window_id = SDL_GetWindowID(_window);
        	Input::add_window(this);
 
-       	_render_module = create_shared_ptr_w<RenderModule>(title.c_str(), this);
-
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
 	}
@@ -49,8 +47,6 @@ namespace Ak
 		size.X = size.X == AK_WINDOW_MAX_SIZE ? DM.w : size.X;
 		size.Y = size.Y == AK_WINDOW_MAX_SIZE ? DM.h : size.Y;
 
-		_render_module->setName(title.c_str());
-
         _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
 		SDL_SetWindowTitle(_window, title.c_str());
@@ -63,8 +59,16 @@ namespace Ak
 		SDL_SetWindowFullscreen(_window, fullscreen ? SDL_TRUE : SDL_FALSE);
 		SDL_SetWindowResizable(_window, resizable ? SDL_TRUE : SDL_FALSE);
 		SDL_SetWindowBordered(_window, border ? SDL_TRUE : SDL_FALSE);
-		if(maximize) SDL_MaximizeWindow(_window);
-		if(minimize) SDL_MinimizeWindow(_window);
+		if(maximize)
+		{
+			SDL_MaximizeWindow(_window);
+			minimize = false;
+		}
+		if(minimize)
+		{
+			SDL_MinimizeWindow(_window);
+			maximize = false;
+		}
 		visible ? SDL_ShowWindow(_window) : SDL_HideWindow(_window);
 	}
 

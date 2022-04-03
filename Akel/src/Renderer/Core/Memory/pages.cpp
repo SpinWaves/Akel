@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 31/03/2022
+// Updated : 03/04/2022
 
 #include <Core/core.h>
 #include "GPU_Pages.h"
@@ -60,7 +60,7 @@ namespace Ak
 	GPU_Page::GPU_Page(VkDevice device, size_t size, uint32_t typeIndex, std::unordered_map<VkDeviceMemory, GPU_Page*>& pageMap, VkAllocationCallbacks* callbacks)
 	{
 	    _size = size;
-	    _mutex = memAlloc<std::mutex>();
+	    _mutex = create_unique_ptr_w<std::mutex>();
 	    _device = device;
 	    _callbacks = callbacks;
 	    _typeIndex = typeIndex;
@@ -171,7 +171,5 @@ namespace Ak
 	    	memFree(current);
 	        current = next;
 	    }
-
-	    memFree(_mutex);
 	}
 }

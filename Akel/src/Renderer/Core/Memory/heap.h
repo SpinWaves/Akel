@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 02/04/2022
+// Updated : 03/04/2022
 
 #ifndef __AK_VK_GPU_HEAP__
 #define __AK_VK_GPU_HEAP__
 
 #include <Akpch.h>
+#include <Core/Memory/unique_ptr_wrapper.h>
 
 namespace Ak
 {
@@ -34,7 +35,7 @@ namespace Ak
 
 	        std::vector<MemoryType> _memoryTypes;
 	        std::vector<GPU_Page> _pages;
-	        std::unique_ptr<std::mutex> _mutex;
+	        unique_ptr_w<std::mutex> _mutex;
 	};
 }
 

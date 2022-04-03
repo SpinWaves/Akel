@@ -1,19 +1,20 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 28/03/2022
+// Updated : 03/04/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
 
 #include <Akpch.h>
-#include <Renderer/Core/Memory/memory_GPU.h>
 #include <Core/core.h>
+#include "Memory/memory_GPU.h"
 
-#include "physicalDevice.h"
-#include "logicalDevice.h"
-#include "instance.h"
-#include "surface.h"
+#include "vk_queues.h"
+#include "vk_device.h"
+#include "vk_surface.h"
+#include "vk_instance.h"
+#include "vk_validation_layers.h"
 
 namespace Ak
 {
@@ -22,54 +23,46 @@ namespace Ak
         void checkVk(VkResult result);
     }
 
+    #ifdef AK_DEBUG
+        constexpr const bool enableValidationLayers = true;
+    #else
+        constexpr const bool enableValidationLayers = false;
+    #endif
+
+    const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
+
+    class WindowComponent;
+
     /**
      * Render_Core is a singleton that is not meant to be created anywhere
-     */ 
+     */
     class Render_Core : public SelfInstance<Render_Core>
     {
         public:
-            const std::shared_ptr<CommandPool>& getCommandPool(const std::thread::id &threadId = std::this_thread::get_id());
-            const Descriptor* getAttachment(const std::string &name) const;
-            const Swapchain* getSwapchain() const { return swapchain.get(); }
-            const VkPipelineCache& getPipelineCache() const { return pipelineCache; }
-            const PhysicalDevice* getPhysicalDevice() const { return physicalDevice.get(); }
-            const Surface* getSurface() const { return surface.get(); }
-            const LogicalDevice* getLogicalDevice() const { return logicalDevice.get(); }
+            void init(WindowComponent* window);
 
-            constexpr void requireFrameBufferResize() noexcept { framebufferResized = true; }
+            inline WindowComponent* getWindow() const noexcept { return _window; }
+            inline void setWindow(WindowComponent* window) noexcept { _window = window; }
+
+            inline std::shared_ptr<Instance> getInstance() const { return _instance; }
+            inline std::shared_ptr<Device>   getDevice()   const { return _device; }
+            inline std::shared_ptr<Surface>  getSurface()  const { return _surface; }
+            inline std::shared_ptr<Queues>   getQueue()    const { return _queues; }
+            inline std::shared_ptr<ValidationLayers> getLayers() const { return _layers; }
+
+            inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
 
         private:
             Render_Core();
 
-            void createPipelineCache();
-            void resetRenderStages();
-            void recreateSwapchain();
-            void recreateCommandBuffers();
-            void recreatePass(RenderStage& renderStage);
-            void recreateAttachmentsMap();
-            bool startRenderpass(RenderStage& renderStage);
-            void endRenderpass(RenderStage& renderStage);
+            std::shared_ptr<Device> _device;
+            std::shared_ptr<Queues> _queues;
+            std::shared_ptr<Surface> _surface;
+            std::shared_ptr<Instance> _instance;
+            std::shared_ptr<ValidationLayers> _layers;
 
-            std::unique_ptr<Renderer> renderer;
-            std::map<std::string, const Descriptor*> attachments;
-            std::unique_ptr<Swapchain> swapchain;
-
-            std::map<std::thread::id, std::shared_ptr<CommandPool>> commandPools;
-            ElapsedTime elapsedPurge;
-
-            VkPipelineCache pipelineCache = VK_NULL_HANDLE;
-            std::vector<VkSemaphore> presentCompletes;
-            std::vector<VkSemaphore> renderCompletes;
-            std::vector<VkFence> flightFences;
-            std::size_t currentFrame = 0;
-            bool framebufferResized = false;
-
-            std::vector<std::unique_ptr<CommandBuffer>> commandBuffers;
-
-            std::unique_ptr<Instance> instance;
-            std::unique_ptr<PhysicalDevice> physicalDevice;
-            std::unique_ptr<Surface> surface;
-            std::unique_ptr<LogicalDevice> logicalDevice;
+            WindowComponent* _window = nullptr;
+            bool _framebufferResized = false;
     };
 }
 

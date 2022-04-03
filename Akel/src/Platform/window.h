@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 02/04/2022
+// Updated : 03/04/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -33,7 +33,6 @@ namespace Ak
 			void onQuit() override;
             void fetchSettings();
 
-            inline std::shared_ptr<class RenderModule> getRenderModule() const { return _render_module; }
             inline SDL_Window* getNativeWindow() const noexcept { return _window; }
 
             std::string title = "Akel Window";
@@ -57,16 +56,14 @@ namespace Ak
 			
             virtual ~WindowComponent() = default;
 
-		protected:
-			void create();
+        protected:
+            void create();
             SDL_Window* _window = nullptr;
 
         private:
             uint32_t _flags = 0;
             SDL_Surface* _icon = nullptr;
             uint32_t _window_id = 0;
-            
-            std::shared_ptr<class RenderModule> _render_module;
     };
 }
 
