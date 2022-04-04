@@ -7,12 +7,16 @@
 #define __AK_VK_SWAPCHAIN__
 
 #include <Akcph.h>
-#include <vk_framebuffer.h>
+#include "vk_imageview.h"
+#include "vk_framebuffer.h"
 
 namespace Ak
 {
     class SwapChain
     {
+        friend class FrameBuffer;
+        friend class ImageView;
+
         public:
             struct SwapChainSupportDetails
             {
@@ -28,12 +32,16 @@ namespace Ak
             VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
             VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
+            inline VkSwapchainKHR& operator()() const noexcept { return _swapChain; }
+            inline VkSwapchainKHR& get() const noexcept { return _swapChain; }
+
         private:
             VkSwapchainKHR _swapChain;
             std::vector<VkImage> _swapChainImages;
             VkFormat _swapChainImageFormat;
             VkExtent2D _swapChainExtent;
             std::vector<FrameBuffer> _framebuffers;
+            std::vector<ImageView> _imageViews;
     };
 }
 

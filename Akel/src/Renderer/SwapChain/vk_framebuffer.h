@@ -7,14 +7,18 @@
 #define __AK_VK_FRAMEBUFFER__
 
 #include <Akpch.h>
+#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {
     class FrameBuffer
     {
         public:
+            void init(class SwapChain* swapchain, class ImageView& image);
+            inline void destroy() noexcept { vkDestroyFramebuffer(Render_Core::get().getDevice()->get(), _framebuffer, nullptr); }
 
         private:
+            VkFramebuffer _framebuffer;
     };
 }
 

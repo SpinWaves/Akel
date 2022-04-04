@@ -22,7 +22,7 @@ namespace Ak
 
         VkSwapchainCreateInfoKHR createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-        createInfo.surface = surface;
+        createInfo.surface = Render_Core::get().getSurface()->get();
 
         createInfo.minImageCount = imageCount;
         createInfo.imageFormat = surfaceFormat.format;
@@ -50,20 +50,32 @@ namespace Ak
 
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-        if(vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) != VK_SUCCESS)
-			Core::log::report(FATAL_ERROR, "Vulkan : Failed to create swap chain");
+        VkDevice device = Render_Core::get().getDevice()->get();
 
-        vkGetSwapchainImagesKHR(device, swapChain, &imageCount, nullptr);
+        if(vkCreateSwapchainKHR(device, &createInfo, nullptr, &_swapChain) != VK_SUCCESS)
+			Core::log::report(FATAL_ERROR, "Vulkan : failed to create swap chain");
+
+        vkGetSwapchainImagesKHR(device, _swapChain, &imageCount, nullptr);
         swapChainImages.resize(imageCount);
-        vkGetSwapchainImagesKHR(device, swapChain, &imageCount, swapChainImages.data());
+        vkGetSwapchainImagesKHR(device, _swapChain, &imageCount, _swapChainImages.data());
 
         swapChainImageFormat = surfaceFormat.format;
         swapChainExtent = extent;
+
+        _imageViews.resize(_swapChainImages.size());
+        for(size_t i = 0; i < _swapChainImages.size(); i++)
+            _imageViews.init(this, _swapChainImages[i]);
+
+        _framebuffers.resize(_imageViews.size());
+
+        for(size_t i = 0; i < _swapChainImageViews.size(); i++)
+            _framebuffers.init(this, _imageViews[i]);
     }
 
     Swapchain::SwapChainSupportDetails Swapchain::querySwapChainSupport(VkPhysicalDevice device)
     {
         Swapchain::SwapChainSupportDetails details;
+        VkSurfaceKHR surface = Render_Core::get().getSurface()->get();
 
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
 
@@ -123,27 +135,12 @@ namespace Ak
 
         vkDeviceWaitIdle(device);
 
-        for(size_t i = 0; i < swapChainFramebuffers.size(); i++)
-            vkDestroyFramebuffer(device, swapChainFramebuffers[i], nullptr);
+        for(auto& frameBuffer : _framebuffers)
+            frameBuffer.destroy();
 
-        vkFreeCommandBuffers(device, commandPool, static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+        for(auto& imageView : _imageViews)
+            imageView.destroy();
 
-        vkDestroyPipeline(device, graphicsPipeline, nullptr);
-        vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-        vkDestroyRenderPass(device, renderPass, nullptr);
-
-        for(size_t i = 0; i < swapChainImageViews.size(); i++)
-            vkDestroyImageView(device, swapChainImageViews[i], nullptr);
-
-        for(size_t i = 0; i < swapChainImages.size(); i++)
-        {
-            vkDestroyBuffer(device, uniformBuffers[i], nullptr);
-            vkFreeMemory(device, uniformBuffersMemory[i], nullptr);
-        }
-
-        vkDestroyDescriptorPool(device, descriptorPool, nullptr);
-        vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
-
-        vkDestroySwapchainKHR(device, swapChain, nullptr);
+        vkDestroySwapchainKHR(device, _swapChain, nullptr);
     }
 }
