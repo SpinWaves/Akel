@@ -9,9 +9,6 @@ namespace Ak
 {
 	void GraphicPipeline::init()
     {
-        VkShaderModule vertShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::vertex, _vertexShader, true));
-        VkShaderModule fragShaderModule = createShaderModule(GLSL_Compiler::compileToSPIRV(GLSL::fragment, _fragmentShader, true));
-
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
@@ -30,8 +27,6 @@ namespace Ak
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         vertexInputInfo.vertexBindingDescriptionCount = 0;
         vertexInputInfo.vertexAttributeDescriptionCount = 0;
-        auto bindingDescription = Vertex2D::getBindingDescription();
-        auto attributeDescriptions = Vertex2D::getAttributeDescriptions();
 
         vertexInputInfo.vertexBindingDescriptionCount = 1;
         vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
@@ -47,14 +42,14 @@ namespace Ak
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = (float) swapChainExtent.width;
-        viewport.height = (float) swapChainExtent.height;
+        viewport.width = (float) Render_Core::get().getSwapCahin()->_swapChainExtent.width;
+        viewport.height = (float) Render_Core::get().getSwapCahin()->_swapChainExtent.height;
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor{};
         scissor.offset = {0, 0};
-        scissor.extent = swapChainExtent;
+        scissor.extent = Render_Core::get().getSwapCahin()->_swapChainExtent;
 
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -98,8 +93,8 @@ namespace Ak
         pipelineLayoutInfo.setLayoutCount = 0;
         pipelineLayoutInfo.pushConstantRangeCount = 0;
 
-        if(vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
-            Core::log::report(FATAL_ERROR, "Vulkan : Failed to create pipeline layout");
+        if(vkCreatePipelineLayout(Render_Core::get().getDevice()->get(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
+            Core::log::report(FATAL_ERROR, "Vulkan : failed to create pipeline layout");
 
         VkGraphicsPipelineCreateInfo pipelineInfo{};
         pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -111,15 +106,12 @@ namespace Ak
         pipelineInfo.pRasterizationState = &rasterizer;
         pipelineInfo.pMultisampleState = &multisampling;
         pipelineInfo.pColorBlendState = &colorBlending;
-        pipelineInfo.layout = pipelineLayout;
+        pipelineInfo.layout = _pipelineLayout;
         pipelineInfo.renderPass = renderPass;
         pipelineInfo.subpass = 0;
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-        if(vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS)
+        if(vkCreateGraphicsPipelines(Render_Core::get().getDevice()->get(), VK_NULL_HANDLE, 1, &_pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : Failed to create graphics pipeline");
-
-        vkDestroyShaderModule(device, fragShaderModule, nullptr);
-        vkDestroyShaderModule(device, vertShaderModule, nullptr);
     }
 }
