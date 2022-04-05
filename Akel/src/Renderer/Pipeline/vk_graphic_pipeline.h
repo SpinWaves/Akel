@@ -3,8 +3,8 @@
 // Created : 04/04/2022
 // Updated : 05/04/2022
 
-#ifndef __AK_VK_PIPELINE__
-#define __AK_VK_PIPELINE__
+#ifndef __AK_VK_GRAPHIC_PIPELINE__
+#define __AK_VK_GRAPHIC_PIPELINE__
 
 #include <Akpch.h>
 #include "vk_shader.h"
@@ -12,11 +12,11 @@
 
 namespace Ak
 {
-	class Pipeline
+	class GraphicPipeline
 	{
 		public:
 			void init();
-			inline void destroy() noexcept 
+			inline void destroy() noexcept
 			{
 				vkDestroyPipeline(Render_Core::get().getDevice()->get(), _graphicsPipeline, nullptr);
 				vkDestroyPipelineLayout(Render_Core::get().getDevice()->get(), _pipelineLayout, nullptr);
@@ -29,4 +29,4 @@ namespace Ak
 	};
 }
 
-#endif // __AK_VK_PIPELINE__
+#endif // __AK_VK_GRAPHIC_PIPELINE__
