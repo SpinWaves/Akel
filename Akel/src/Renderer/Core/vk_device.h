@@ -14,7 +14,11 @@ namespace Ak
 	{
 		public:
 			void init();
-			inline void destroy() noexcept { vkDestroyDevice(_device, nullptr); }
+			inline void destroy() noexcept
+			{
+				static_assert(_device != VK_NULL_HANDLE, "trying to destroy an uninit device");
+				vkDestroyDevice(_device, nullptr);
+			}
 
 			inline VkDevice& operator()() const noexcept { return _device; }
 			inline VkDevice& get() const noexcept { return _device; }

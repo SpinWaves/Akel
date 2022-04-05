@@ -112,6 +112,6 @@ namespace Ak
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
         if(vkCreateGraphicsPipelines(Render_Core::get().getDevice()->get(), VK_NULL_HANDLE, 1, &_pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS)
-            Core::log::report(FATAL_ERROR, "Vulkan : Failed to create graphics pipeline");
+            Core::log::report(FATAL_ERROR, "Vulkan : failed to create graphics pipeline");
     }
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 01/04/2022
+// Updated : 05/04/2022
 
 #include <Core/log.h>
 #include <Maths/maths.h>
@@ -68,7 +68,7 @@ namespace Ak
         }
 
         if(std::is_class<T>::value)
-            new ((void*)ptr) T(std::forward<Args>(args)...);
+            ::new ((void*)ptr) T(std::forward<Args>(args)...);
 
     	return ptr;
     }

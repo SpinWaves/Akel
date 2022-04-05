@@ -18,13 +18,16 @@ namespace Ak
 			void init();
 			inline void destroy() noexcept
 			{
+				static_assert(_pipeline != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
 				vkDestroyPipeline(Render_Core::get().getDevice()->get(), _graphicsPipeline, nullptr);
+				
+				static_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline layout");
 				vkDestroyPipelineLayout(Render_Core::get().getDevice()->get(), _pipelineLayout, nullptr);
 			}
 
 		private:
-			VkPipelineLayout _pipelineLayout;
-			VkPipeline _graphicsPipeline;
+			VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
+			VkPipeline _graphicsPipeline = VK_NULL_HANDLE;
 			VkPipelineCache _cache;
 	};
 }

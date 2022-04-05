@@ -40,6 +40,8 @@ namespace Ak
     class Render_Core : public SelfInstance<Render_Core>
     {
         public:
+            Render_Core();
+
             void init(WindowComponent* window);
 
             inline WindowComponent* getWindow() const noexcept { return _window; }
@@ -55,8 +57,6 @@ namespace Ak
             inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
 
         private:
-            Render_Core();
-
             std::shared_ptr<Device> _device;
             std::shared_ptr<Queues> _queues;
             std::shared_ptr<Surface> _surface;
