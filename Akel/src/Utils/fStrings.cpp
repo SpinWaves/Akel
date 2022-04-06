@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 11/12/2021
+// Updated : 06/04/2022
 
 #include <Utils/fStrings.h>
 #include <Core/core.h>
@@ -44,12 +44,16 @@ namespace Ak
 
     size_t fString::size() noexcept
     {
+        if(_string == nullptr)
+            return 0;
         int Size = 0;
         while(_string[Size] != '\0') Size++;
         return Size;
     }
     size_t fString::length() noexcept
     {
+        if(_string == nullptr)
+            return 0;
         int Size = 0;
         while(_string[Size] != '\0') Size++;
         return Size;

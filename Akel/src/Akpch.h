@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 07/03/2022
+// Updated : 06/04/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -20,7 +20,6 @@
 
 // Vulkan
 #include <vulkan/vulkan.h>
-#include <volk.h>
 #include <SDL2/SDL_vulkan.h>
 
 // SPIR-V

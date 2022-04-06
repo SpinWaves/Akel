@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 25/03/2022
+// Updated : 06/04/2022
 
 #include <Core/core.h>
 
@@ -9,7 +9,7 @@ namespace Ak::Core
 {
 	void log::Init() // Remove ten days old files
 	{
-		lockThreads(mutex);
+		std::lock_guard<std::mutex> watchdog(*mutex);
 
 		std::string name = "";
 		int date = 0;
@@ -43,13 +43,11 @@ namespace Ak::Core
 			_out << std::endl;
 			_out.close();
 		}
-
-		unlockThreads(mutex);
 	}
 
     void log::report(enum LogType type, std::string message, ...)
     {
-		lockThreads(mutex);
+		std::lock_guard<std::mutex> watchdog(mutex);
 
 		char buffer[message.length() + 1024];
 		va_list args;
@@ -123,17 +121,13 @@ namespace Ak::Core
 				}
 			}
 
-			unlockThreads(mutex);
-
 			std::exit(EXIT_FAILURE);
         }
-
-		unlockThreads(mutex);
 	}
 
     void log::report(std::string message, ...)
     {
-		lockThreads(mutex);
+		std::lock_guard<std::mutex> watchdog(mutex);
 
 		char buffer[message.length() + 1024];
 		va_list args;
@@ -147,8 +141,6 @@ namespace Ak::Core
             _out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- "<< buffer << std::endl;  // No need to flush, std::endl does it
 			_out.close();
 		}
-
-		unlockThreads(mutex);
     }
 
     std::string log::getTime(std::string path)

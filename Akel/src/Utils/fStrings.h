@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 11/12/2021
+// Updated : 06/04/2022
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
@@ -53,12 +53,12 @@ namespace Ak
 
             size_t size() noexcept;
             size_t length() noexcept;
-            inline bool empty() noexcept { return size() == 0; }
+            inline bool empty() noexcept { return _string == nullptr || _string[0] == '\0' ? true : false; }
 
             // Getters
             inline const char& operator[](unsigned int index) const noexcept { return _string[index]; }
             inline const char& at(unsigned int index) const noexcept { return _string[index]; }
-            inline const char& back()  const noexcept { return _string[sizeof(_string) - 1]; }
+            inline const char& back()  const noexcept { return _string[size() - 1]; }
             inline const char& front() const noexcept { return _string[0]; }
             inline const char* data()  const noexcept { return _string; }
             inline const char* c_str() const noexcept { return _string; }
@@ -78,6 +78,9 @@ namespace Ak
 
             inline iterator begin() { return iterator(&_string[0]); }
             inline iterator end()   { return iterator(&_string[size()]); }
+
+            inline bool operator==(const fString& str) noexcept { return std::strcmp(_string, str.c_str()) == 0; }
+            inline bool operator!=(const fString& str) noexcept { return !*this == str; }
 
             ~fString() = default;
 

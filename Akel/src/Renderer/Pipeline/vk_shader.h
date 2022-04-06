@@ -34,8 +34,8 @@ namespace Ak
 			~Shader() = default;
 
 		private:
-			const fString _name;
 			VkShaderModule _shader = VK_NULL_HANDLE;
+			const fString _name;
 			type _type;
 	};
 }
