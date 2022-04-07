@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 04/04/2022
+// Updated : 07/04/2022
 
 #include "vk_swapchain.h"
 #include <Renderer/Core/render_core.h>
@@ -10,7 +10,7 @@ namespace Ak
 {
     void Swapchain::init()
     {
-        Swapchain::SwapChainSupportDetails swapChainSupport = querySwapChainSupport(Render_Core::get().getDevice()->getPhysicalDevice());
+        Swapchain::SwapChainSupportDetails swapChainSupport = querySwapChainSupport(Render_Core::get().getDevice().getPhysicalDevice());
 
         VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
         VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
@@ -22,7 +22,7 @@ namespace Ak
 
         VkSwapchainCreateInfoKHR createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-        createInfo.surface = Render_Core::get().getSurface()->get();
+        createInfo.surface = Render_Core::get().getSurface().get();
 
         createInfo.minImageCount = imageCount;
         createInfo.imageFormat = surfaceFormat.format;
@@ -31,7 +31,7 @@ namespace Ak
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-        Queues::QueueFamilyIndices indices = Render_Core::get().getQueues()->findQueueFamilies(Render_Core::get().getDevice()->getPhysicalDevice());
+        Queues::QueueFamilyIndices indices = Render_Core::get().getQueues().findQueueFamilies(Render_Core::get().getDevice().getPhysicalDevice());
         uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
         if(indices.graphicsFamily != indices.presentFamily)
@@ -50,7 +50,7 @@ namespace Ak
 
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
-        VkDevice device = Render_Core::get().getDevice()->get();
+        VkDevice device = Render_Core::get().getDevice().get();
 
         if(vkCreateSwapchainKHR(device, &createInfo, nullptr, &_swapChain) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create swap chain");
@@ -75,7 +75,7 @@ namespace Ak
     Swapchain::SwapChainSupportDetails Swapchain::querySwapChainSupport(VkPhysicalDevice device)
     {
         Swapchain::SwapChainSupportDetails details;
-        VkSurfaceKHR surface = Render_Core::get().getSurface()->get();
+        VkSurfaceKHR surface = Render_Core::get().getSurface().get();
 
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
 
@@ -102,7 +102,7 @@ namespace Ak
 
     VkPresentModeKHR Swapchain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes)
     {
-		if(!Render_Core::get().getWindow()->getVsync())
+		if(!Render_Core::get().getWindow()->vsync)
 		    return VK_PRESENT_MODE_IMMEDIATE_KHR;
 
         for(const auto& availablePresentMode : availablePresentModes)
@@ -131,7 +131,7 @@ namespace Ak
 
     void Swapchain::destroy()
     {
-        VkDevice device = Render_Core::get().getDevice()->get();
+        VkDevice device = Render_Core::get().getDevice().get();
 
         vkDeviceWaitIdle(device);
 

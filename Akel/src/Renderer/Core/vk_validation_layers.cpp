@@ -26,8 +26,8 @@ namespace Ak
 
 	VkResult ValidationLayers::createDebugUtilsMessengerEXT(const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator)
 	{
-		auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(Render_Core::get().getInstance()->get(), "vkCreateDebugUtilsMessengerEXT");
-        return func != nullptr ? func(Render_Core::get().getInstance()->get(), pCreateInfo, pAllocator, _debugMessenger) : VK_ERROR_EXTENSION_NOT_PRESENT;
+		auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(Render_Core::get().getInstance().get(), "vkCreateDebugUtilsMessengerEXT");
+        return func != nullptr ? func(Render_Core::get().getInstance().get(), pCreateInfo, pAllocator, _debugMessenger) : VK_ERROR_EXTENSION_NOT_PRESENT;
 	}
 	void ValidationLayers::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
 	{
@@ -56,8 +56,8 @@ namespace Ak
 	}
 	void ValidationLayers::destroyDebugUtilsMessengerEXT(const VkAllocationCallbacks* pAllocator)
 	{
-		auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(Render_Core::get().getInstance()->get(), "vkDestroyDebugUtilsMessengerEXT");
+		auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(Render_Core::get().getInstance().get(), "vkDestroyDebugUtilsMessengerEXT");
 		if(func != nullptr)
-			func(Render_Core::get().getInstance()->get(), _debugMessenger, pAllocator);
+			func(Render_Core::get().getInstance().get(), _debugMessenger, pAllocator);
 	}
 }

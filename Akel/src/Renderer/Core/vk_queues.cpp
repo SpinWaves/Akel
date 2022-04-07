@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 03/04/2022
+// Updated : 07/04/2022
 
 #include "vk_queues.h"
 
@@ -24,7 +24,7 @@ namespace Ak
 				indices.graphicsFamily = i;
 
 			VkBool32 presentSupport = false;
-			vkGetPhysicalDeviceSurfaceSupportKHR(device, i, Render_Core::get().getSurface()->get(), &presentSupport);
+			vkGetPhysicalDeviceSurfaceSupportKHR(device, i, Render_Core::get().getSurface().get(), &presentSupport);
 
 			if(presentSupport)
 				indices.presentFamily = i;

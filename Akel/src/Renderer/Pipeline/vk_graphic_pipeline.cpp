@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 05/04/2022
+// Updated : 07/04/2022
 
 #include "vk_graphic_pipeline.h"
 
@@ -42,14 +42,14 @@ namespace Ak
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = (float) Render_Core::get().getSwapCahin()->_swapChainExtent.width;
-        viewport.height = (float) Render_Core::get().getSwapCahin()->_swapChainExtent.height;
+        viewport.width = (float) Render_Core::get().getSwapCahin()._swapChainExtent.width;
+        viewport.height = (float) Render_Core::get().getSwapCahin()._swapChainExtent.height;
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor{};
         scissor.offset = {0, 0};
-        scissor.extent = Render_Core::get().getSwapCahin()->_swapChainExtent;
+        scissor.extent = Render_Core::get().getSwapCahin()._swapChainExtent;
 
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -93,7 +93,7 @@ namespace Ak
         pipelineLayoutInfo.setLayoutCount = 0;
         pipelineLayoutInfo.pushConstantRangeCount = 0;
 
-        if(vkCreatePipelineLayout(Render_Core::get().getDevice()->get(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
+        if(vkCreatePipelineLayout(Render_Core::get().getDevice().get(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create pipeline layout");
 
         VkGraphicsPipelineCreateInfo pipelineInfo{};
@@ -111,7 +111,7 @@ namespace Ak
         pipelineInfo.subpass = 0;
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-        if(vkCreateGraphicsPipelines(Render_Core::get().getDevice()->get(), VK_NULL_HANDLE, 1, &_pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS)
+        if(vkCreateGraphicsPipelines(Render_Core::get().getDevice().get(), VK_NULL_HANDLE, 1, &_pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create graphics pipeline");
     }
 }

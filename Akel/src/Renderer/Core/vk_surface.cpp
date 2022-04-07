@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 03/04/2022
+// Updated : 07/04/2022
 
 #include "vk_surface.h"
 
@@ -9,7 +9,7 @@ namespace Ak
 {
 	void Surface::createSurface()
 	{
-		if(SDL_Vulkan_CreateSurface(Render_Core::get().getWindow()->getNativeWindow(), Render_Core::get().getInstance()->get(), &_surface) != SDL_TRUE)
+		if(SDL_Vulkan_CreateSurface(Render_Core::get().getWindow()->getNativeWindow(), Render_Core::get().getInstance().get(), &_surface) != SDL_TRUE)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create a surface : %s", SDL_GetError());
 	}
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 03/04/2022
+// Updated : 07/04/2022
 
 #include <Core/core.h>
 #include "vk_instance.h"
@@ -11,7 +11,7 @@ namespace Ak
 {
 	void Instance::createInstance()
 	{
-		if(enableValidationLayers && !Render_Core::get().getLayers()->checkValidationLayerSupport())
+		if(enableValidationLayers && !Render_Core::get().getLayers().checkValidationLayerSupport())
 			Core::log::report(ERROR, "Vulkan : validations layers are enabled but not available");
 
         VkApplicationInfo appInfo{};
