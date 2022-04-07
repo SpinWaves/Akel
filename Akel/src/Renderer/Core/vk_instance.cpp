@@ -9,7 +9,7 @@
 
 namespace Ak
 {
-	void Instance::createInstance()
+	void Instance::init()
 	{
 		if(enableValidationLayers && !Render_Core::get().getLayers().checkValidationLayerSupport())
 			Core::log::report(ERROR, "Vulkan : validations layers are enabled but not available");

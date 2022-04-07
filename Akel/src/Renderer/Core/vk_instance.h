@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 05/04/2022
+// Updated : 07/04/2022
 
 #ifndef __AK_VK_INSTANCE__
 #define __AK_VK_INSTANCE__
@@ -14,7 +14,7 @@ namespace Ak
 	{
 		public:
 
-			void createInstance();
+			void init();
 			inline void destroy() noexcept
 			{
 				static_assert(_instance != VK_NULL_HANDLE, "trying to destroy an uninit instance");
