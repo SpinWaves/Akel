@@ -26,7 +26,7 @@ namespace Ak
 				static_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
 				vkDestroyShaderModule(Render_Core::get().getDevice()->get(), _shader, nullptr);
 			}
-
+ 
 			inline const fString& getName() const { return _name; }
 			inline const VkShaderModule& getShaderModule() const noexcept { return _shader; }
 			inline const type getType() const noexcept { return _type; }

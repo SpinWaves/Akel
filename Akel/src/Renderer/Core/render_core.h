@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 07/04/2022
+// Updated : 10/04/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -31,6 +31,8 @@ namespace Ak
     #endif
 
     const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
+    
+    constexpr const int MAX_FRAMES_IN_FLIGHT = 2;
 
     class WindowComponent;
 
@@ -54,6 +56,8 @@ namespace Ak
             inline const SwapChain& getSwapChain() const { return _swapchain; }
             inline const ValidationLayers& getLayers() const { return _layers; }
 
+            inline GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags) { return _allocator.allocChunk(requirements, flags); }
+
             inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
 
         private:
@@ -62,6 +66,7 @@ namespace Ak
             Surface _surface;
             Instance _instance;
             SwapChain _swapchain;
+            Allocator_GPU _allocator;
             ValidationLayers _layers;
 
             WindowComponent* _window = nullptr;

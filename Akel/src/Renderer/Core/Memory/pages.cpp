@@ -110,10 +110,7 @@ namespace Ak
 	            size_t unalign = start % requirements.alignment;
 	            size_t align;
 
-	            if(unalign == 0)
-	                align = 0;
-	            else
-	                align = requirements.alignment - unalign;
+	            align = unalign ? 0 : align = requirements.alignment - unalign;
 
 	            start += align;
 	            available -= align;

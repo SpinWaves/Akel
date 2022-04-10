@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 03/04/2022
+// Updated : 10/04/2022
 
 #include "vk_device.h"
 #include "render_core.h"
@@ -14,7 +14,7 @@ namespace Ak
 	{
 		pickPhysicalDevice();
 
-		Queues::QueueFamilyIndices indices = Render_Core::get().getQueue()->findQueueFamilies(_physicalDevice);
+		Queues::QueueFamilyIndices indices = Render_Core::get().getQueue().findQueueFamilies(_physicalDevice);
 
 		std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 		std::set<uint32_t> uniqueQueueFamilies = {indices.graphicsFamily.value(), indices.presentFamily.value()};
@@ -61,13 +61,13 @@ namespace Ak
 	void Device::pickPhysicalDevice()
 	{
 		uint32_t deviceCount = 0;
-		vkEnumeratePhysicalDevices(Render_Core::get().getInstance()->get(), &deviceCount, nullptr);
+		vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &deviceCount, nullptr);
 
 		if(deviceCount == 0)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to find GPUs with Vulkan support");
 
 		std::vector<VkPhysicalDevice> devices(deviceCount);
-		vkEnumeratePhysicalDevices(Render_Core::get().getInstance()->get(), &deviceCount, devices.data());
+		vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &deviceCount, devices.data());
 
 		for(const auto& device : devices)
 		{
@@ -83,7 +83,7 @@ namespace Ak
 	}
 	bool Device::isDeviceSuitable(VkPhysicalDevice device)
 	{
-		Queues::QueueFamilyIndices indices = Render_Core::get().getQueue()->findQueueFamilies(device);
+		Queues::QueueFamilyIndices indices = Render_Core::get().getQueue().findQueueFamilies(device);
 
 		bool extensionsSupported = checkDeviceExtensionSupport(device);
 

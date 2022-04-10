@@ -38,7 +38,7 @@ namespace Ak
         return false;
     }
 
-    GPU_Mem_Chunk GPU_Heap::Alloc(VkMemoryRequirements requirements, uint32_t typeIndex)
+    GPU_Mem_Chunk GPU_Heap::allocChunk(VkMemoryRequirements requirements, uint32_t typeIndex)
     {
         std::lock_guard<std::mutex> watchdog(*_mutex);
 
