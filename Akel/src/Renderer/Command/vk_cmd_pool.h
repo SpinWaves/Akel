@@ -17,7 +17,7 @@ namespace Ak
 			void init();
 			inline void destroy()
 			{
-				static_assert(!_cmd_pool != VK_NULL_HANDLE, "trying to destroy an uninit command pool");
+				static_assert(_cmd_pool != VK_NULL_HANDLE, "trying to destroy an uninit command pool");
 				vkDestroyCommandPool(Render_Core::get().getDevice().get(), _cmd_pool, nullptr);
 			}
 
