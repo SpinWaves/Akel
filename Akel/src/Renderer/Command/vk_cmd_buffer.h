@@ -17,7 +17,7 @@ namespace Ak
 			void init();
 			inline void destroy()
 			{
-				static_assert(!_cmd_buffer != VK_NULL_HANDLE, "trying to destroy an uninit command buffer");
+				static_assert(_cmd_buffer != VK_NULL_HANDLE, "trying to destroy an uninit command buffer");
 				vkFreeCommandBuffers(Render_Core::get().getDevice().get(), Render_Core::get().getCmdPool().get(), 1, &_cmd_buffer);
 			}
 
