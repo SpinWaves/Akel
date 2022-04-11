@@ -1,7 +1,7 @@
 // this file is a part of akel
 // authors : @kbz_8
 // created : 10/04/2022
-// updated : 10/04/2022
+// updated : 11/04/2022
 
 #include "vk_render_pass.h"
 
@@ -37,5 +37,33 @@ namespace Ak
 
 		if(vkCreateRenderPass(Render_Core::get().getDevice().get(), &renderPassInfo, nullptr, &_renderPass) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create render pass");
+	}
+
+	void RenderPass::begin()
+	{
+		if(_is_running)
+			return;
+
+		VkRenderPassBeginInfo renderPassInfo{};
+		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		renderPassInfo.renderPass = renderPass;
+		renderPassInfo.framebuffer = Render_Core::get().getSwapChain()._framebuffers[Render_Core::get().getActiveImageIndex()];
+		renderPassInfo.renderArea.offset = {0, 0};
+		renderPassInfo.renderArea.extent = Render_Core::get().getSwapChain()._swapChainExtent;
+
+		renderPassInfo.clearValueCount = 1;
+		renderPassInfo.pClearValues = &Render_Core::get().getClearValue();
+		vkCmdBeginRenderPass(Render_Core::get().getCmdBuffer().get(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+		_is_running = true;
+	}
+
+	void RenderPass::end()
+	{
+		if(!_is_running)
+			return;
+
+		vkCmdEndRenderPass(Render_Core::get().getCmdBuffer().get());
+		_is_running = false;
 	}
 }

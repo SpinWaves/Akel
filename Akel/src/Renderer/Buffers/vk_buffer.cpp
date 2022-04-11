@@ -1,14 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 10/04/2022
+// Updated : 11/04/2022
 
 #include "vk_buffer.h"
 
 namespace Ak
 {
-	void Buffer::create(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags const void* data)
+	void Buffer::create(VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, const void* data)
 	{
+		_usage = usage;
+		_flags = flags;
+
 		VkBufferCreateInfo bufferInfo{};
 		bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 		bufferInfo.size = _mem_chunck.size;
@@ -28,8 +31,7 @@ namespace Ak
 		allocInfo.allocationSize = memRequirements.size;
 		allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
-		if(vkAllocateMemory(device, &allocInfo, nullptr, &_mem_chunck.memory) != VK_SUCCESS)
-			Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate buffer memory");
+		_mem_chunck = Render_Core::get().allocChunck(memRequirements, flags);
 
 		if(data != nulptr)
 		{
@@ -55,7 +57,62 @@ namespace Ak
 
 	void Buffer::storeInGPU()
 	{
+		Buffer newBuffer;
+		newBuffer.create(_usage, flags);
 
+		VkCommandBufferAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		allocInfo.commandPool = Render_Core::get().getCommandPool().get();
+		allocInfo.commandBufferCount = 1;
+
+		VkCommandBuffer commandBuffer;
+		vkAllocateCommandBuffers(Render_Core::get().getDevice().get(), &allocInfo, &commandBuffer);
+
+		VkCommandBufferBeginInfo beginInfo{};
+		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+		vkBeginCommandBuffer(commandBuffer, &beginInfo);
+
+		VkBufferCopy copyRegion{};
+		copyRegion.size = _size;
+		vkCmdCopyBuffer(commandBuffer, _buffer, newBuffer._buffer, 1, &copyRegion);
+
+		vkEndCommandBuffer(commandBuffer);
+
+		VkSubmitInfo submitInfo{};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &commandBuffer;
+
+		vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+		vkQueueWaitIdle(graphicsQueue);
+
+		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), Render_Core::get().getCmdPool().get(), 1, &commandBuffer);
+
+		this->swap(newBuffer);
+
+		newBuffer.destroy();
+	}
+
+	void Buffer::swap(Buffer& buffer)
+	{
+		VkBuffer temp_b = _buffer;
+		_buffer = buffer._buffer;
+		buffer._buffer = temp_b;
+
+		GPU_Mem_Chunk temp_c = _mem_chunck;
+		_mem_chunck = buffer._mem_chunck;
+		buffer._mem_chunck = temp_c;
+
+		VkBufferUsageFlags temp_u = _usage;
+		_usage = buffer._usage;
+		buffer._usage = temp_u;
+
+		VkMemoryPropertyFlags temp_f = _flags;
+		_flags = buffer._flags;
+		buffer._flags = temp_f;
 	}
 
 	uint32_t Buffer::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)

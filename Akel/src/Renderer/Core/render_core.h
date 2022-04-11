@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 10/04/2022
+// Updated : 11/04/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -49,14 +49,17 @@ namespace Ak
             inline WindowComponent* getWindow() const noexcept { return _window; }
             inline void setWindow(WindowComponent* window) noexcept { _window = window; }
 
-            inline const Instance&  getInstance()  const { return _instance; }
-            inline const Device&    getDevice()    const { return _device; }
-            inline const Surface&   getSurface()   const { return _surface; }
-            inline const Queues&    getQueue()     const { return _queues; }
-            inline const SwapChain& getSwapChain() const { return _swapchain; }
-            inline const ValidationLayers& getLayers() const { return _layers; }
+            inline Instance&  getInstance()  const { return _instance; }
+            inline Device&    getDevice()    const { return _device; }
+            inline Surface&   getSurface()   const { return _surface; }
+            inline Queues&    getQueue()     const { return _queues; }
+            inline SwapChain& getSwapChain() const { return _swapchain; }
+            inline ValidationLayers& getLayers()  const { return _layers; }
+            inline VkClearValue& getClearValue()  const { return _clearColor; }
+            inline uint32_t getActiveImageIndex() const { return _active_image_index; }
 
             inline GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags) { return _allocator.allocChunk(requirements, flags); }
+            inline void freeChunck(GPU_Mem_Chunk chunck) { _allocator.freeChunck(chunck); }
 
             inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
 
@@ -68,9 +71,12 @@ namespace Ak
             SwapChain _swapchain;
             Allocator_GPU _allocator;
             ValidationLayers _layers;
+            VkClearValue _clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
 
             WindowComponent* _window = nullptr;
             bool _framebufferResized = false;
+
+            uint32_t _active_image_index = 0;
     };
 }
 
