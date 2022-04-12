@@ -26,7 +26,6 @@ namespace Ak
 
         private:
             VkDescriptorSet _desc_set = VK_NULL_HANDLE;
-            VkDescriptorSetLayout _layout = VK_NULL_HANDLE;
     };
 }
 

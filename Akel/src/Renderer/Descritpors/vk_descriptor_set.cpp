@@ -10,7 +10,7 @@ namespace Ak
     void DescriptorSet::init()
     {
         auto device = Render_Core::get().getDevice().get();
-        std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
+
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = descriptorPool;
@@ -21,7 +21,7 @@ namespace Ak
             Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate descriptor set");
 
         VkDescriptorBufferInfo bufferInfo{};
-        bufferInfo.buffer = uniformBuffers[i];
+        bufferInfo.buffer = Render_Core::get().getUBO();
         bufferInfo.offset = 0;
         bufferInfo.range = sizeof(UBO);
 
