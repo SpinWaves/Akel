@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 25/03/2022
+// Updated : 12/04/2022
 
 #include "render_core.h"
 
@@ -46,4 +46,29 @@ namespace Ak
 
     	Core::log::report(FATAL_ERROR, std::move(std::string("Vulkan error : " + verbaliseResultVk(result))));
     }
+
+	void Render_Core::init()
+	{
+		_device.init();
+		_queues.init();
+		_surface.init();
+		_cmd_pool.init();
+		_instance.init();
+		_swapchain.init();
+		_allocator.init();
+		_layers.init();
+		//_cmd_buffers;
+	}
+
+	void Render_Core::destroy()
+	{
+		_device.destroy();
+		_queues.destroy();
+		_surface.destroy();
+		_cmd_pool.destroy();
+		_instance.destroy();
+		_swapchain.destroy();
+		_allocator.destroy();
+		_layers.destroy();
+	}
 }

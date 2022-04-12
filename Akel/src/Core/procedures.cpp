@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 03/03/2022
+// Updated : 12/04/2022
 
-#include <Core/core.h>
 #include <Audio/audio.h>
+#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {
@@ -41,6 +41,8 @@ namespace Ak
 
 		MemoryManager::useMemoryManager(project->use_memory_manager);
 		MemoryManager::init();
+
+		Render_Core::get().init();
 
 		return true;
     }

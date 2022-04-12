@@ -1,21 +1,21 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 14/03/2022
+// Updated : 12/04/2022
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
 
 #include <Akpch.h>
-#include <Renderer/rendererComponent.h>
+#include <Platform/window.h>
 
 namespace Ak
 {
 	class ImGuiComponent : public Component
 	{
+		friend class Application;
 		public:
-			ImGuiComponent(RendererComponent* renderer);
-			ImGuiComponent();
+			ImGuiComponent(WindowComponent* window);
 
 			void onAttach() override;
 			void onImGuiEvent(Input& input) override;
@@ -32,10 +32,12 @@ namespace Ak
 			virtual ~ImGuiComponent() = default;
 
 		private:
+			ImGuiComponent();
+			
 			void SetDarkThemeColors();
 			const char* _settingsFilePath = nullptr;
 			static inline int _componentsInit = 0;
-			inline static RendererComponent* _ren = nullptr;
+			WindowComponent* _win = nullptr;
 	};
 }
 
