@@ -14,7 +14,7 @@ namespace Ak
     class DescriptorSet
     {
         public:
-            void init();
+            void init(class UBO* ubo);
             inline void destroy()
             {
                 static_assert(_desc_set != VK_NULL_HANDLE, "trying to destroy an uninit descriptor set");

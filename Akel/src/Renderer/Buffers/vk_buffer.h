@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 11/04/2022
+// Updated : 12/04/2022
 
 #ifndef __AK_VK_BUFFER__
 #define __AK_VK_BUFFER__
@@ -15,7 +15,7 @@ namespace Ak
 	class Buffer
 	{
 		public:
-			void create(VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, const void* data = nullptr);
+			void create(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, const void* data = nullptr);
 			inline void destroy() noexcept
 			{
 				static_assert(_buffer != VK_NULL_HANDLE, "trying to destroy an uninit video buffer");
@@ -34,6 +34,7 @@ namespace Ak
 			inline void unmapMemory() noexcept { vkUnmapMemory(Render_Core::get().getDevice().get(), _buffer); }
 
 			inline unsigned int getSize() const noexcept { return _mem_chunck.size; }
+			inline unsigned int getOffset() const noexcept { return _mem_chunck.offset; }
 			inline VkDeviceMemory getDeviceMemory() const noexcept { return _mem_chunck.memory; }
 			inline VkBuffer& operator()() const noexcept { return _buffer; }
 			inline VkBuffer& get() const noexcept { return _buffer; }

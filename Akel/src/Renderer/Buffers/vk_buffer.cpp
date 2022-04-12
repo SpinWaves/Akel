@@ -1,16 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 11/04/2022
+// Updated : 12/04/2022
 
 #include "vk_buffer.h"
 
 namespace Ak
 {
-	void Buffer::create(VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, const void* data)
+	void Buffer::create(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, const void* data)
 	{
 		_usage = usage;
 		_flags = flags;
+		_mem_chunck.size = size;
 
 		VkBufferCreateInfo bufferInfo{};
 		bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;

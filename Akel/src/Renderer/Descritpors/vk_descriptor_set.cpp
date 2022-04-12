@@ -4,10 +4,11 @@
 // Updated : 12/04/2022
 
 #include "vk_descriptor_set.h"
+#include <Buffer/vk_ubo.h>
 
 namespace Ak
 {
-    void DescriptorSet::init()
+    void DescriptorSet::init(UBO* ubo)
     {
         auto device = Render_Core::get().getDevice().get();
 
@@ -21,8 +22,8 @@ namespace Ak
             Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate descriptor set");
 
         VkDescriptorBufferInfo bufferInfo{};
-        bufferInfo.buffer = Render_Core::get().getUBO();
-        bufferInfo.offset = 0;
+        bufferInfo.buffer = ubo->get();
+        bufferInfo.offset = ubo->getOffset();
         bufferInfo.range = sizeof(UBO);
 
         VkWriteDescriptorSet descriptorWrite{};
