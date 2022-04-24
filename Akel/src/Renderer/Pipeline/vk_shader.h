@@ -19,15 +19,57 @@ namespace Ak
 			class Uniform
 			{
 				public:
+					Uniform(int32_t binding = -1, int32_t offset = -1, int32_t size = -1, int32_t type = -1, bool readOnly = false, bool writeOnly = false, VkShaderStageFlags stageFlags = 0) :
+						_binding(binding),
+						_offset(offset),
+						_size(size),
+						_type(type),
+						_readOnly(readOnly),
+						_writeOnly(writeOnly),
+						_stageFlags(stageFlags)
+					{}
+
+					inline int32_t getBinding() const noexcept { return _binding; }
+					inline int32_t getOffset() const noexcept { return _offset; }
+					inline int32_t getSize() const noexcept { return _size; }
+					inline int32_t getType() const noexcept { return _type; }
+					inline bool isReadOnly() const noexcept { return _readOnly; }
+					inline bool isWriteOnly() const noexcept { return _writeOnly; }
+					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
+
+					inline bool operator==(const Uniform &rhs) const { return binding == rhs.binding && offset == rhs.offset && size == rhs.size && glType == rhs.glType && readOnly == rhs.readOnly && writeOnly == rhs.writeOnly && stageFlags == rhs.stageFlags; }
+					inline bool operator!=(const Uniform &rhs) const { return !operator==(rhs); }
 
 				private:
+					int32_t _binding;
+					int32_t _offset;
+					int32_t _size;
+					int32_t _type;
+					bool _readOnly;
+					bool _writeOnly;
+					VkShaderStageFlags _stageFlags;
 			};
 
 			class Uniform_block
 			{
 				public:
+					UniformBlock(int32_t binding = -1, int32_t size = -1, VkShaderStageFlags stageFlags = 0) : _binding(binding), _size(size), _stageFlags(stageFlags) {}
+
+					inline int32_t getBinding() const noexcept { return binding; }
+					inline int32_t getSize() const noexcept { return size; }
+					inline VkShaderStageFlags getStageFlags() const noexcept { return stageFlags; }
+					inline const std::unordered_map<std::string, Uniform>& getUniforms() const noexcept { return uniforms; }
+
+					inline std::optional<Uniform> getUniform(const std::string &name) const { return (auto it = uniforms.find(name)) == uniforms.end() ? std::nullopt : it->second; }
+
+					inline bool operator==(const UniformBlock &rhs) const { return binding == rhs.binding && size == rhs.size && stageFlags == rhs.stageFlags && type == rhs.type && uniforms == rhs.uniforms; }
+					inline bool operator!=(const UniformBlock &rhs) const { return !operator==(rhs); }
 
 				private:
+					int32_t _binding;
+					int32_t _size;
+					VkShaderStageFlags _stageFlags;
+					std::unordered_map<std::string, Uniform> _uniforms;
 			};
 
 			class Vertex_input

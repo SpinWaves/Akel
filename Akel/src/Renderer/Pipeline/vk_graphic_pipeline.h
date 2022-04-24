@@ -6,13 +6,11 @@
 #ifndef __AK_VK_GRAPHIC_PIPELINE__
 #define __AK_VK_GRAPHIC_PIPELINE__
 
-#include <Akpch.h>
-#include "vk_shader.h"
-#include <Renderer/Core/render_core.h>
+#include "vk_pipeline.h"
 
 namespace Ak
 {
-	class GraphicPipeline
+	class GraphicPipeline : public Pipeline
 	{
 		public:
 			void init();
@@ -25,10 +23,16 @@ namespace Ak
 				vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
 			}
 
+			inline const Shader& getShader() const override { return _shader; }
+			inline const VkPipeline& getPipeline() const override { return _graphicsPipeline; }
+			inline const VkPipelineLayout& getPipelineLayout() const override { return _pipelineLayout; }
+
 		private:
 			VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
 			VkPipeline _graphicsPipeline = VK_NULL_HANDLE;
-			VkPipelineCache _cache;
+			VkPipelineCache _cache = VK_NULL_HANDLE;
+
+			Shader _shader;
 	};
 }
 

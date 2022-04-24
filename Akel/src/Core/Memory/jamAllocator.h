@@ -50,10 +50,11 @@ namespace Ak
             {
                 unsigned int size = 0;
             };
+            
+            std::vector<std::pair<void*, unsigned int>> _resises;
 
             size_t _heapSize = 0;
             size_t _memUsed = 0;
-            std::vector<std::pair<void*, unsigned int>> _resises;
 
             void* _heap = nullptr;
             void* _heapEnd = nullptr;
