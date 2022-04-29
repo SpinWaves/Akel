@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 03/04/2022
+// Updated : 29/04/2022
 
 #ifndef __AK_VK_GPU_HEAP__
 #define __AK_VK_GPU_HEAP__
@@ -31,7 +31,7 @@ namespace Ak
 	        size_t _pageSize = 0;
 	        VkDevice _device = VK_NULL_HANDLE;
 	        VkAllocationCallbacks* _callbacks = nullptr;
-	        std::unordered_map<VkDeviceMemory, class GPU_Page*>& _pageMap;
+	        std::unordered_map<VkDeviceMemory, GPU_Page*>& _pageMap;
 
 	        std::vector<MemoryType> _memoryTypes;
 	        std::vector<GPU_Page> _pages;

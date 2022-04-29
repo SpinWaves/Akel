@@ -64,7 +64,7 @@ namespace Ak
             inline SwapChain& getSwapChain() const { return _swapchain; }
             inline ValidationLayers& getLayers()   const { return _layers; }
             inline VkClearValue& getClearValue()   const { return _clearColor; }
-            inline CmdPool&   getCmdBuffer(int i)  const { return _cmd_buffers[i]; }
+            inline CmdBuffer& getCmdBuffer(int i)  const { return _cmd_buffers[i]; }
             inline CmdBuffer& getActiveCmdBuffer() const { return _cmd_buffers[_active_image_index]; }
             inline uint32_t getActiveImageIndex()  const { return _active_image_index; }
 

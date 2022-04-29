@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 12/04/2022
+// Updated : 29/04/2022
 
 #ifndef __AK_VK_DESCRIPTOR_SET_LAYOUT__
 #define __AK_VK_DESCRIPTOR_SET_LAYOUT__
@@ -14,7 +14,9 @@ namespace Ak
     class DescriptorSetLayout
     {
         public:
-            void init();
+            enum class type { uniform_buffer, dynamique_uniform_buffer, image_sampler };
+
+            void init(type t = type::uniform_buffer);
             inline void destroy()
             {
                 static_assert(_layout != VK_NULL_HANDLE, "trying to destroy an uninit descriptor set layout");

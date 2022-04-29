@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/03/2022
-// Updated : 04/03/2022
+// Updated : 27/04/2022
 
 #ifndef __AK_SHADERS_BUILD__
 #define __AK_SHADERS_BUILD__
@@ -15,16 +15,16 @@ namespace Ak
     class GLSL_Compiler
     {
         public:
-            GLSL_Compiler() = delete;
+            GLSL_Compiler() = default;
             
-            static std::string checkShader(GLSL kind, const std::string& filename);
-            static std::string compileToSPIRVasm(GLSL kind, const std::string& filename, bool optimize = false);
-            static std::vector<uint32_t> compileToSPIRV(GLSL kind, const std::string& filename, bool optimize = false);
+            std::string checkShader(GLSL kind, const std::string& filename);
+            std::string compileToSPIRVasm(GLSL kind, const std::string& filename, bool optimize = false);
+            std::vector<uint32_t> compileToSPIRV(GLSL kind, const std::string& filename, bool optimize = false);
 
-            ~GLSL_Compiler() = delete;
+            ~GLSL_Compiler() = default;
 
         private:
-            static std::string readFile(const std::string& filename); 
+            std::string readFile(const std::string& filename); 
     };
 }
 

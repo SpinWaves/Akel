@@ -11,7 +11,7 @@ var in_color : vec3 = location(1);
 
 fn main()
 {
-    for var i : int = 0 to 10 step 2 do
+    const for(var i : int = 0; i < 10; i++)
     {
         // do stuff
     }
@@ -22,5 +22,10 @@ fn main()
 
 fn main()
 {
+    const if()
+    {
+
+    }
+
     return vec4(in_color.x, in_color.y, in_color.z, 1.0);
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/03/2022
-// Updated : 04/03/2022
+// Updated : 27/04/2022
 
 #include <Core/core.h>
 #include <Modules/GLSL/GLSL_compiler.h>
@@ -13,11 +13,9 @@ namespace Ak
         std::ifstream file(filename, std::ios::binary);
 
         if(!file.is_open())
-            Core::log::report(FATAL_ERROR, "GLSL Compiler : Failed to open shader file");
+            Core::log::report(FATAL_ERROR, "GLSL Compiler : failed to open shader file");
 
-        std::string code = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-
-        return std::move(code);
+        return std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     }
 
     std::string GLSL_Compiler::checkShader(GLSL kind, const std::string& filename)
@@ -81,7 +79,7 @@ namespace Ak
             case GLSL::fragment : __kind = shaderc_fragment_shader; break;
             case GLSL::geometry : __kind = shaderc_geometry_shader; break;
 
-            default : Core::log::report(ERROR, "GLSL Compiler : unknown shader type"); return std::move(std::vector<uint32_t>());
+            default : Core::log::report(ERROR, "GLSL Compiler : unknown shader type"); return sstd::vector<uint32_t>();
         }
         shaderc::Compiler _compiler;
         shaderc::CompileOptions _options;
@@ -94,7 +92,7 @@ namespace Ak
         if(module.GetCompilationStatus() != shaderc_compilation_status_success)
         {
             Core::log::report(ERROR, std::move(std::string("GLSL Compiler : ") + module.GetErrorMessage()));
-            return std::move(std::vector<uint32_t>());
+            return std::vector<uint32_t>();
         }
 
         return {module.cbegin(), module.cend()};

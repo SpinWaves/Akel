@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 12/04/2022
+// Updated : 29/04/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
 
 #include <Akpch.h>
 #include <Renderer/Core/render_core.h>
+#include <Renderer/Descriptors/vk_descriptor_set_layout.h>
 
 namespace Ak
 {
@@ -41,13 +42,13 @@ namespace Ak
 					inline bool operator!=(const Uniform &rhs) const { return !operator==(rhs); }
 
 				private:
+					VkShaderStageFlags _stageFlags;
 					int32_t _binding;
 					int32_t _offset;
 					int32_t _size;
 					int32_t _type;
 					bool _readOnly;
 					bool _writeOnly;
-					VkShaderStageFlags _stageFlags;
 			};
 
 			class Uniform_block
@@ -66,10 +67,10 @@ namespace Ak
 					inline bool operator!=(const UniformBlock &rhs) const { return !operator==(rhs); }
 
 				private:
+					std::unordered_map<std::string, Uniform> _uniforms;
+					VkShaderStageFlags _stageFlags;
 					int32_t _binding;
 					int32_t _size;
-					VkShaderStageFlags _stageFlags;
-					std::unordered_map<std::string, Uniform> _uniforms;
 			};
 
 			class Vertex_input
@@ -79,6 +80,8 @@ namespace Ak
 
 					const std::vector<VkVertexInputBindingDescription>& getBindingDescriptions() const { return _binding; }
 					const std::vector<VkVertexInputAttributeDescription>& getAttributeDescriptions() const { return _attributes; }
+
+					inline bool operator<(const Vertex_input &rhs) const { return bindingDescriptions.front()._bindings < rhs.bindingDescriptions.front()._bindings; }
 
 				private:
 					std::vector<VkVertexInputBindingDescription> _bindings;
@@ -108,28 +111,52 @@ namespace Ak
 					int32_t _offset = 0;
 					int32_t _format = 0;
 			};
-
+ 
 			enum class type { vertex, fragment, geometry, tesselation };
 
 			Shader(const fString path, type t);
 
 			void generate();
-			inline void destroy()
+			inline void destroy() noexcept
 			{
 				static_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
 				vkDestroyShaderModule(Render_Core::get().getDevice().get(), _shader, nullptr);
+
+				for(auto& desc : _desc_sets)
+					desc.destroy();
+
+				static_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline layout");
+				vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
 			}
  
 			inline const fString& getName() const { return _name; }
 			inline const VkShaderModule& getShaderModule() const noexcept { return _shader; }
 			inline const type getType() const noexcept { return _type; }
 
+			inline const std::unordered_map<fString, Uniform>& getUniforms() const { return _uniforms; };
+			inline const std::unordered_map<fString, Uniform_block>& getUniformBlocks() const { return _uniformBlocks; };
+			inline const std::unordered_map<fString, Attribute>& getAttributes() const { return _attributes; };
+
+			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() const { return _desc_sets; }
+
+			inline std::optional<Uniform> getUniform(const fString name) const { return auto it = _uniforms.find(name); it != _uniforms.end() ? it->second : std::nullopt; }
+			inline std::optional<Uniform_block> getUniformBlock(const fString name) const { return auto it = _uniformBlocks.find(name); it != _uniformBlocks.end() ? it->second : std::nullopt; }
+			inline std::optional<Attribute> getAttribute(const fString name) const { return auto it = _attributes.find(name); it != _attributes.end() ? it->second : std::nullopt; }
+
 			~Shader() = default;
 
 		private:
+			std::unordered_map<fString, Uniform_block> _uniformBlocks;
+			std::unordered_map<fString, Uniform> _uniforms;
+			std::unordered_map<fString, Attribute> _attributes;
+
+			std::vector<DescriptorSetLayout> _desc_sets;
+
+			VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
 			VkShaderModule _shader = VK_NULL_HANDLE;
-			const fString _name;
+
 			type _type;
+			const fString _name;
 	};
 }
 

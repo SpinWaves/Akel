@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 06/04/2022
+// Updated : 29/04/2022
 
 #include <Utils/fStrings.h>
 #include <Core/core.h>
@@ -10,15 +10,42 @@ namespace Ak
 {
     fString::fString(const char* str)
     {
-        _string = str;
+        if(str == nullptr)
+        {
+            _string = nullptr;
+            return;
+        }
+
+        char c = str[0];
+        while(c != '\0')
+        {
+            _string[_size] = str[_size];
+            _size++;
+            c = str[_size];
+        }
+        _string[_size] = '\0';
     }
-    fString::fString(const fString& str)
+    
+    fString::fString(mString&& str) : _string(memAlloc<char>(str.size())), _size(str.size())
     {
-        _string = str.c_str();
+        for(int i = 0; i < str.size(); i++)
+            _string[i] = str[i];
     }
-    fString::fString(fString&& str)
+    fString::fString(mString&& str) : _string(memAlloc<char>(str.size())), _size(str.size())
     {
-        _string = std::move(str).c_str();
+        for(int i = 0; i < str.size(); i++)
+            _string[i] = str[i];
+    }
+
+    fString::fString(std::string& str) : _string(memAlloc<char>(str.size())), _size(str.size())
+    {
+        for(int i = 0; i < str.size(); i++)
+            _string[i] = str[i];
+    }
+    fString::fString(std::string&& str) : _string(memAlloc<char>(str.size())), _size(str.size())
+    {
+        for(int i = 0; i < str.size(); i++)
+            _string[i] = str[i];
     }
 
     fString& fString::operator=(const fString& str)
@@ -40,23 +67,6 @@ namespace Ak
         }
         _string = str;
         return *this;
-    }
-
-    size_t fString::size() noexcept
-    {
-        if(_string == nullptr)
-            return 0;
-        int Size = 0;
-        while(_string[Size] != '\0') Size++;
-        return Size;
-    }
-    size_t fString::length() noexcept
-    {
-        if(_string == nullptr)
-            return 0;
-        int Size = 0;
-        while(_string[Size] != '\0') Size++;
-        return Size;
     }
     
     size_t fString::find(const char* str, size_t pos)
@@ -85,14 +95,7 @@ namespace Ak
         }
         return npos;
     }
-    size_t fString::find(fString&& str, size_t pos)
-    {
-        return this->find(std::move(str).c_str(), pos);
-    }
-    size_t fString::find(const fString& str, size_t pos)
-    {
-        return this->find(str.c_str(), pos);
-    }
+    
     size_t fString::find(char c, size_t pos)
     {
         size_t ret = npos;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 12/04/2022
+// Updated : 29/04/2022
 
 #ifndef __AK_VK_GRAPHIC_PIPELINE__
 #define __AK_VK_GRAPHIC_PIPELINE__
@@ -17,10 +17,7 @@ namespace Ak
 			inline void destroy() noexcept
 			{
 				static_assert(_pipeline != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
-				vkDestroyPipeline(Render_Core::get().getDevice().get(), _graphicsPipeline, nullptr);
-				
-				static_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline layout");
-				vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
+				vkDestroyPipeline(Render_Core::get().getDevice().get(), _graphicsPipeline, nullptr);				
 			}
 
 			inline const Shader& getShader() const override { return _shader; }
@@ -28,7 +25,6 @@ namespace Ak
 			inline const VkPipelineLayout& getPipelineLayout() const override { return _pipelineLayout; }
 
 		private:
-			VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
 			VkPipeline _graphicsPipeline = VK_NULL_HANDLE;
 			VkPipelineCache _cache = VK_NULL_HANDLE;
 

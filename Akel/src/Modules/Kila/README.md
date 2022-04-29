@@ -3,7 +3,7 @@
 Kila is a shading language made for Akel engine. It is an oriented object programming language.
 
 Example of Kila program
-```java
+```kotlin
 // Global part
 var pos: vec3 = location(0); // location is equivalent to layout in GLSL
 var color: vec4 = location(1);

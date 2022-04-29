@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 12/04/2022
+// Updated : 29/04/2022
 
 #include "vk_buffer.h"
 
@@ -59,7 +59,7 @@ namespace Ak
 	void Buffer::storeInGPU()
 	{
 		Buffer newBuffer;
-		newBuffer.create(_usage, flags);
+		newBuffer.create(_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -114,6 +114,15 @@ namespace Ak
 		VkMemoryPropertyFlags temp_f = _flags;
 		_flags = buffer._flags;
 		buffer._flags = temp_f;
+	}
+
+	void Buffer::flush(VkDeviceSize size, VkDeviceSize offset)
+	{
+		VkMappedMemoryRange mappedRange{};
+		mappedRange.memory = _mem_chunck.memory;
+		mappedRange.offset = offset;
+		mappedRange.size = size;
+		vkFlushMappedMemoryRanges(Render_Core::get().getDevice().get(), 1, &mappedRange);
 	}
 
 	uint32_t Buffer::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)

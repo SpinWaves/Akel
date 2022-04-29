@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 12/04/2022
+// Updated : 29/04/2022
 
 #ifndef __AK_VK_BUFFER__
 #define __AK_VK_BUFFER__
@@ -26,12 +26,14 @@ namespace Ak
 			void storeInGPU() noexcept;
 			uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
-			inline void mapMemory(void** data = nullptr) noexcept
+			inline void mapMem(void* data = nullptr, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0) noexcept
 			{
-				if(vkMapMemory(Render_Core::get().getDevice().get(), _buffer, 0, _mem_chunck.size, 0, *data) != VK_SUCCESS)
+				if(vkMapMemory(Render_Core::get().getDevice().get(), _buffer, offset, size, 0, data) != VK_SUCCESS)
 					Core::log::report(FATAL_ERROR, "Vulkan : failed to map a buffer");
 			}
-			inline void unmapMemory() noexcept { vkUnmapMemory(Render_Core::get().getDevice().get(), _buffer); }
+			inline void unmapMem() noexcept { vkUnmapMemory(Render_Core::get().getDevice().get(), _buffer); }
+
+			void flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
 
 			inline unsigned int getSize() const noexcept { return _mem_chunck.size; }
 			inline unsigned int getOffset() const noexcept { return _mem_chunck.offset; }
