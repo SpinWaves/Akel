@@ -1,18 +1,47 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 29/04/2022
+// Updated : 30/04/2022
 
 #include "vk_buffer.h"
 
 namespace Ak
 {
-	void Buffer::create(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags, const void* data)
+	void Buffer::create(Buffer::kind type, VkDeviceSize size, VkBufferUsageFlags usage, const void* data)
 	{
-		_usage = usage;
-		_flags = flags;
+		if constexpr(type == Buffer::kind::constant)
+		{
+			if(data == nullptr)
+			{
+				Core::log::report(ERROR, "Vulkan : trying to create constant buffer without data (constant buffers cannot be modified after creation)");
+				return;
+			}
+			_usage = usage | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+			_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+		}
+		else
+		{
+			_usage = usage;
+			_flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+		}
+
 		_mem_chunck.size = size;
 
+		createBuffer(_usage, _flags);
+
+		if constexpr(type == Buffer::kind::constant)
+		{
+			void* mapped = nullptr;
+			mapMem(mapped);
+				std::memcpy(mapped, data, _mem_chunck.size);
+			unmapMem();
+
+			pushToGPU();
+		}
+	}
+
+	void Buffer::createBuffer(VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
+	{
 		VkBufferCreateInfo bufferInfo{};
 		bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 		bufferInfo.size = _mem_chunck.size;
@@ -30,36 +59,20 @@ namespace Ak
 		VkMemoryAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		allocInfo.allocationSize = memRequirements.size;
-		allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
+		allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits);
 
-		_mem_chunck = Render_Core::get().allocChunck(memRequirements, flags);
-
-		if(data != nulptr)
-		{
-			void* mapped = nullptr;
-			mapMemory(&mapped);
-			std::memcpy(mapped, data, _mem_chunck.size);
-
-			if((properties & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == 0)
-			{
-				VkMappedMemoryRange mappedMemoryRange = {};
-				mappedMemoryRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-				mappedMemoryRange.memory = _mem_chunck.memory;
-				mappedMemoryRange.offset = _mem_chunck.offset;
-				mappedMemoryRange.size = _mem_chunck.size;
-				vkFlushMappedMemoryRanges(device, 1, &mappedMemoryRange);
-			}
-
-			unmapMemory();
-		}
+		_mem_chunck = Render_Core::get().allocChunck(memRequirements, properties);
 
 		vkBindBufferMemory(device, _buffer, _mem_chunck.memory, _mem_chunck.offset);
 	}
 
-	void Buffer::storeInGPU()
+	void Buffer::pushToGPU()
 	{
 		Buffer newBuffer;
-		newBuffer.create(_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+		newBuffer._mem_chunck.size = this->_mem_chunck.size;
+		newBuffer._usage = (this->_usage & VK_BUFFER_USAGE_TRANSFER_SRC_BIT) | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+		newBuffer._flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		newBuffer.createBuffer(newBuffer._usage, newBuffer._flags);
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -125,14 +138,14 @@ namespace Ak
 		vkFlushMappedMemoryRanges(Render_Core::get().getDevice().get(), 1, &mappedRange);
 	}
 
-	uint32_t Buffer::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
+	uint32_t Buffer::findMemoryType(uint32_t typeFilter)
     {
 		VkPhysicalDeviceMemoryProperties memProperties;
 		vkGetPhysicalDeviceMemoryProperties(Render_Core::get().getDevice().getPhysicalDevice(), &memProperties);
 
 		for(uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
 		{
-			if((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
+			if((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & _flags) == _flags)
 				return i;
 		}
 

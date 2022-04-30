@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/03/2022
-// Updated : 27/04/2022
+// Updated : 30/04/2022
 
 #ifndef __AK_SHADERS_BUILD__
 #define __AK_SHADERS_BUILD__
@@ -10,7 +10,7 @@
 
 namespace Ak
 {
-    enum class GLSL { vertex, fragment, geometry };
+    enum class GLSL { vertex, fragment, geometry, tesselation_evaluation, tesselation_control, compute };
 
     class GLSL_Compiler
     {
@@ -24,7 +24,10 @@ namespace Ak
             ~GLSL_Compiler() = default;
 
         private:
-            std::string readFile(const std::string& filename); 
+            std::string readFile(const std::string& filename);
+            
+            shaderc::Compiler _compiler;
+            shaderc::CompileOptions _options;
     };
 }
 

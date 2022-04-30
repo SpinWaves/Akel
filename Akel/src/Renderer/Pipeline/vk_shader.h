@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 29/04/2022
+// Updated : 30/04/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -112,9 +112,11 @@ namespace Ak
 					int32_t _format = 0;
 			};
  
-			enum class type { vertex, fragment, geometry, tesselation };
+			enum class type { vertex, fragment, geometry, tesselation_evaluation, tesselation_control, compute };
+			enum class lang { glsl, spirv }; // more languages will be added
 
-			Shader(const fString path, type t);
+			Shader(const std::filesystem::path path, lang l, type t);
+			Shader(const std::filesystem::path path, lang l);
 
 			void generate();
 			inline void destroy() noexcept
@@ -155,8 +157,9 @@ namespace Ak
 			VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
 			VkShaderModule _shader = VK_NULL_HANDLE;
 
+			const std::filesystem::path _file;
 			type _type;
-			const fString _name;
+			lang _lang;
 	};
 }
 

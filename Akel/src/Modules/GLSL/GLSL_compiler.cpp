@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/03/2022
-// Updated : 27/04/2022
+// Updated : 30/04/2022
 
 #include <Core/core.h>
 #include <Modules/GLSL/GLSL_compiler.h>
@@ -29,8 +29,7 @@ namespace Ak
 
             default : Core::log::report(ERROR, "GLSL Compiler : unknown shader type"); return "";
         }
-        shaderc::Compiler _compiler;
-        shaderc::CompileOptions _options;
+        
         shaderc::PreprocessedSourceCompilationResult result = _compiler.PreprocessGlsl(readFile(filename), __kind, filename.c_str(), _options);
 
         if(result.GetCompilationStatus() != shaderc_compilation_status_success)

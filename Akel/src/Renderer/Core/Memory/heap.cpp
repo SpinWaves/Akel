@@ -1,13 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 01/04/2022
+// Updated : 30/04/2022
 
 #include "heap.h"
 
 namespace Ak
 {
-	GPU_Heap::GPU_Heap(uint32_t heapIndex, size_t pageSize, VkPhysicalDeviceMemoryProperties& props, VkDevice device, VkAllocationCallbacks* callbacks, std::unordered_map<VkDeviceMemory, Page*>& pageMap) : pageMap(pageMap)
+	GPU_Heap::GPU_Heap(uint32_t heapIndex, size_t pageSize, VkPhysicalDeviceMemoryProperties& props, VkDevice device, VkAllocationCallbacks* callbacks, std::unordered_map<VkDeviceMemory, Page*>& pageMap) : _pageMap(pageMap)
     {
         _heapIndex = heapIndex;
         _pageSize = pageSize;
