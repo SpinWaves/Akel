@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 29/04/2022
+// Updated : 01/05/2022
 
 #include <Utils/fStrings.h>
 #include <Core/core.h>
@@ -31,6 +31,7 @@ namespace Ak
         for(int i = 0; i < str.size(); i++)
             _string[i] = str[i];
     }
+    
     fString::fString(mString&& str) : _string(memAlloc<char>(str.size())), _size(str.size())
     {
         for(int i = 0; i < str.size(); i++)
@@ -55,9 +56,10 @@ namespace Ak
             Core::log::report(ERROR, "fString: fStrings are constants strings that cannot be changed. To use operator \"=\" on a fString it needs to be empty");
             return *this;
         }
-        _string = std::move(str).c_str();
+        _string = str.c_str();
         return *this;
     }
+
     fString& fString::operator=(const char* str)
     {
         if(_string != nullptr)
@@ -72,7 +74,6 @@ namespace Ak
     size_t fString::find(const char* str, size_t pos)
     {
         const size_t n = (size_t)std::strlen(str);
-        const size_t size = this->size();
 
         if(n == 0)
             return pos <= size ? pos : npos;
@@ -80,17 +81,17 @@ namespace Ak
             return npos;
 
         const char& elem0 = str[0];
-        const char* first = _string + pos;
-        const char* const last = _string + size;
-        size_t len = size - pos;
+        const char* first = _string.get() + pos;
+        const char* const last = _string.get() + _size;
+        size_t len = _size - pos;
 
         while(len >= n)
         {
-            first = static_cast<const char*>(memchr(first, elem0, len - n + 1));
+            first = static_cast<const char*>(std::memchr(first, elem0, len - n + 1));
             if(!first)
                 return npos;
             if(compare(first, str, n) == 0)
-                return first - _string;
+                return first - _string.get();
             len = last - ++first;
         }
         return npos;
@@ -98,17 +99,15 @@ namespace Ak
     
     size_t fString::find(char c, size_t pos)
     {
-        size_t ret = npos;
-        const size_t size = this->size();
-        if(pos < size)
+        if(pos < _size)
         {
-            const size_t n = size - pos;
-            const char* p = static_cast<const char*>(memchr(_string + pos, c, n));
+            const char* p = static_cast<const char*>(std::memchr(_string.get() + pos, c, _size - pos));
             if(p)
-                ret = p - _string;
+                return p - _string.get();
         }
-        return ret;
+        return npos;
     }
+
     int fString::compare(const char* p, const char* q, size_t n)
     {
         while(n--)
@@ -119,32 +118,25 @@ namespace Ak
         }
         return 0;
     }
+    
     size_t fString::rfind(const char* str, size_t pos)
     {   
         const size_t n = (size_t)std::strlen(str);
-        const size_t size = this->size();
-        if(n <= size)
+        if(n <= _size)
         {
-            pos = std::min(size_t(size - n), pos);
+            pos = std::min(size_t(size_ - n), pos);
             do
             {
-                if(compare(_string + pos, str, n) == 0)
+                if(compare(_string.get() + pos, str, n) == 0)
                     return pos;
             } while(pos-- > 0);
         }
         return npos;
     }
-    size_t fString::rfind(fString&& str, size_t pos)
-    {
-        return this->rfind(std::move(str).c_str(), pos);
-    }
-    size_t fString::rfind(const fString& str, size_t pos)
-    {
-        return this->rfind(str.c_str(), pos);
-    }
+    
     size_t fString::rfind(char c, size_t pos)
     {
-        size_t size = this->size();
+        size_t size = _size;
         if(size)
         {
             if(size-- > pos)

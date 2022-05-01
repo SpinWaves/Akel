@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 30/04/2022
+// Updated : 01/05/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -113,10 +113,8 @@ namespace Ak
 			};
  
 			enum class type { vertex, fragment, geometry, tesselation_evaluation, tesselation_control, compute };
-			enum class lang { glsl, spirv }; // more languages will be added
 
-			Shader(const std::filesystem::path path, lang l, type t);
-			Shader(const std::filesystem::path path, lang l);
+			Shader(const std::vector<uint32_t> byte_code, type t);
 
 			void generate();
 			inline void destroy() noexcept
@@ -131,7 +129,6 @@ namespace Ak
 				vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
 			}
  
-			inline const fString& getName() const { return _name; }
 			inline const VkShaderModule& getShaderModule() const noexcept { return _shader; }
 			inline const type getType() const noexcept { return _type; }
 
@@ -157,10 +154,13 @@ namespace Ak
 			VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
 			VkShaderModule _shader = VK_NULL_HANDLE;
 
-			const std::filesystem::path _file;
+			const std::vector<uint32_t> _byte_code;
 			type _type;
 			lang _lang;
 	};
+
+	Shader load_spirv_shader_from_file(const fString& path, Shader::type t);
+	Shader load_spirv_shader_from_file(const fString& path);
 }
 
 #endif // __AK_VK_SHADER__

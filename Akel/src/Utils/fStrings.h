@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 29/04/2022
+// Updated : 01/05/2022
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
@@ -48,6 +48,7 @@ namespace Ak
 
             fString() : _string(nullptr) {}
             fString(const char* str);
+
             fString(const fString& str) : _string(str._string), _size(str._size) {}
             fString(fString&& str) : _string(str._string), _size(std::move(str)._size) {}
 
@@ -71,12 +72,12 @@ namespace Ak
             inline bool empty() noexcept { return _string == nullptr || _string[0] == '\0' ? true : false; }
 
             // Getters
-            inline const char& operator[](unsigned int index) const noexcept { return _string[index]; }
-            inline const char& at(unsigned int index) const noexcept { return _string[index]; }
-            inline const char back()  const noexcept { return _string[size() - 1]; }
-            inline const char front() const noexcept { return _string[0]; }
-            inline const char* data()  const noexcept { return &_string[0]; }
-            inline const char* c_str() const noexcept { return &_string[0]; }
+            inline char operator[](unsigned int index) const noexcept { return _string[index]; }
+            inline char at(unsigned int index) const noexcept { return _string[index]; }
+            inline char back()  const noexcept { return _string[_size - 1]; }
+            inline char front() const noexcept { return _string[0]; }
+            inline const char* data()  const noexcept { return _string.get(); }
+            inline const char* c_str() const noexcept { return _string.get(); }
 
             // Finders
             size_t find(const char* str, size_t pos = 0);
@@ -85,17 +86,26 @@ namespace Ak
             size_t find(char c, size_t pos = 0);
 
             size_t rfind(const char* str, size_t pos = npos);
-            size_t rfind(fString&& str, size_t pos = npos);
-            size_t rfind(const fString& str, size_t pos = npos);
+            size_t rfind(fString&& str, size_t pos) { return this->rfind(std::move(str).c_str(), pos); }
+            size_t rfind(const fString& str, size_t pos) { return this->rfind(str.c_str(), pos); }
             size_t rfind(char c, size_t pos = npos);
 
             inline friend std::ostream& operator<<(std::ostream& target, const fString& str) { return target << str.c_str(); }
 
             inline iterator begin() { return iterator(&_string[0]); }
-            inline iterator end()   { return iterator(&_string[size()]); }
+            inline iterator end()   { return iterator(&_string[_size]); }
 
-            inline bool operator==(const fString& str) noexcept { return std::strcmp(_string, str.c_str()) == 0; }
-            inline bool operator!=(const fString& str) noexcept { return !*this == str; }
+            inline bool operator==(fString str) noexcept { return std::strcmp(_string.get(), std::move(str).c_str()) == 0; }
+            inline bool operator!=(fString str) noexcept { return !operator==(std::move(str)); }
+
+            inline bool operator==(std::string& str) noexcept { return std::strcmp(_string.get(), str.c_str()) == 0; }
+            inline bool operator!=(std::string& str) noexcept { return !operator==(str); }
+
+            inline bool operator==(mString str) noexcept { return std::strcmp(_string.get(), std::move(str).c_str()) == 0; }
+            inline bool operator!=(mString str) noexcept { return !operator==(std::move(str)); }
+
+            inline bool operator==(const char* str) noexcept { return std::strcmp(_string.get(), str) == 0; }
+            inline bool operator!=(const char* str) noexcept { return !operator==(str); }
 
             ~fString() = default;
 

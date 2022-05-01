@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 30/04/2022
+// Updated : 01/05/2022
 
 #include "vk_graphic_pipeline.h"
 
@@ -10,48 +10,36 @@
 
 namespace Ak
 {
-	Shader::Shader(const std::filesystem::path path, Shader::lang l, Shader::type t) : _file(std::move(path)), _type(t), _lang(l) {}
-	Shader::Shader(const std::filesystem::path path, Shader::lang l) : _file(std::move(path)), _lang(l)
+	Shader load_spirv_shader_from_file(const fString& path, Shader::type t)
 	{
-		if(l != Shader::lang::glsl)
-			Core::log::report(FATAL_ERROR, "Vulkan : unable to deduce the type of a shader from its extension (works only for GLSL shaders)");
 
-		auto fileExt = _file.extension().string();
+	}
+
+	Shader load_spirv_shader_from_file(const fString& path)
+	{
+		fString fileExt = 
 		for(int i = 0; i < fileExt.size(); i++)
 			fileExt[i] = std::tolower(fileExt[i]);
 
-		if(fileExt == ".comp") { _type = Shader::type::compute; return; }
-		if(fileExt == ".vert") { _type = Shader::type::vertex; return; }
-		if(fileExt == ".tesc") { _type = Shader::type::tesselation_control; return; }
-		if(fileExt == ".tese") { _type = Shader::type::tesselation_evaluation; return; }
-		if(fileExt == ".geom") { _type = Shader::type::geometry; return; }
-		if(fileExt == ".frag") { _type = Shader::type::fragment; return; }
+		Shader::type type;
 
-		Core::log::report(FATAL_ERROR, "Vulkan : unable to deduce the type of a shader from its extension (unrecognised GLSL extension : %s)", fileExt.c_str());
+		if(fileExt == ".comp")		type = Shader::type::compute
+		else if(fileExt == ".vert") type = Shader::type::vertex;
+		else if(fileExt == ".tesc") type = Shader::type::tesselation_control;
+		else if(fileExt == ".tese") type = Shader::type::tesselation_evaluation;
+		else if(fileExt == ".geom") type = Shader::type::geometry;
+		else if(fileExt == ".frag") type = Shader::type::fragment;
+		else Core::log::report(FATAL_ERROR, "Vulkan : unable to deduce the type of a shader from its extension (unrecognised GLSL extension : %s)", fileExt.c_str());
 	}
+
+	Shader::Shader(const std::vector<uint32_t> byte_code, Shader::type t) : _byte_code(std::move(byte_code)), _type(t) {}
 
 	void Shader::generate()
 	{
-		const std::vector<uint32_t> byte_code;
-
-		if(_lang == Shader::lang::glsl)
-		{
-			GLSL_Compiler comp;
-			switch(_type)
-			{
-				case Shader::type::vertex: byte_code = comp.compileToSPIRV(GLSL::vertex, _name.c_str(), true); break;
-				case Shader::type::fragment: byte_code = comp.compileToSPIRV(GLSL::fragment, _name.c_str(), true); break;
-				case Shader::type::geometry: byte_code = comp.compileToSPIRV(GLSL::geometry, _name.c_str(), true); break;
-				case Shader::type::tesselation_evaluation: byte_code = comp.compileToSPIRV(GLSL::tesselation_evaluation, _name.c_str(), true); break;
-				case Shader::type::tesselation_control: byte_code = comp.compileToSPIRV(GLSL::tesselation_control, _name.c_str(), true); break;
-				case Shader::type::compute: byte_code = comp.compileToSPIRV(GLSL::compute, _name.c_str(), true); break;
-			}
-		}
-		
 		VkShaderModuleCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-		createInfo.codeSize = byte_code.size() * (_lang == Shader::lang::glsl ? 4 : 1);
-		createInfo.pCode = byte_code.data();
+		createInfo.codeSize = _byte_code.size();
+		createInfo.pCode = _byte_code.data();
 
 		if(vkCreateShaderModule(Render_Core::get().getDevice().get(), &createInfo, nullptr, &_shader) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create shader module");

@@ -4,49 +4,47 @@ Kila is a shading language made for Akel engine. It is an oriented object progra
 
 Example of Kila program
 ```kotlin
-// Global part
 var pos: vec3 = location(0); // location is equivalent to layout in GLSL
 var color: vec4 = location(1);
 
-@entry vert // vertex shader
+uniform(0) 
+{
+    var view: mat4;
+    var proj: mat4;
+    var model: mat4;
+} viewData;
 
-uniform var view: mat4;
-uniform var proj: mat4;
-uniform var model: mat4;
-
+@entry vert // entry function of the vertex shader
 fn main() -> vec4 // return value is the position of the pixel
 {
-    pos = vec3(model * vec4(pos, 1.0));
-    return proj * view * vec4(pos, 1.0);
+    pos = vec3(viewData.model * vec4(pos, 1.0));
+    return viewData.proj * viewData.view * vec4(pos, 1.0);
 }
-
-@entry frag // fragment shader
 
 class Light
 {
-    public:
-        // "fn" are static functions and "mtd" are object methods
+    // "fn" are static functions and "mtd" are object methods
 
-        fn Light(var pos: vec3, var color: vec3, var radius: float) -> Light
-        {
-            _pos = pos;
-            _color = color;
-            _radius = radius;
-        }
+    pub fn Light(var pos: vec3, var color: vec3, var radius: float) -> Light
+    {
+        _pos = pos;
+        _color = color;
+        _radius = radius;
+    }
 
-        mtd get_result() -> vec3
-        {
-            /* Some light calculations */
-            
-            return light;
-        }
+    pub mtd get_result() -> vec3
+    {
+        /* Some light calculations */
+        
+        return light;
+    }
     
-    private:
-        var _pos: vec3;
-        var _color: vec3;
-        var _radius: float;
+    var _pos: vec3;
+    var _color: vec3;
+    var _radius: float;
 }
 
+@entry frag // entry function of the fragment shader
 fn main() -> vec4 // return value is the color of the pixel
 {
     obj light = Light(vec3(0, 10, 5), vec3(255, 255, 255), 15.7);
