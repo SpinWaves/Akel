@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 01/05/2022
+// Updated : 02/05/2022
 
 #include "vk_graphic_pipeline.h"
 
@@ -17,7 +17,7 @@ namespace Ak
 
 	Shader load_spirv_shader_from_file(const fString& path)
 	{
-		fString fileExt = 
+		fString fileExt(path, rfind('.', -4), -4);
 		for(int i = 0; i < fileExt.size(); i++)
 			fileExt[i] = std::tolower(fileExt[i]);
 
@@ -29,7 +29,7 @@ namespace Ak
 		else if(fileExt == ".tese") type = Shader::type::tesselation_evaluation;
 		else if(fileExt == ".geom") type = Shader::type::geometry;
 		else if(fileExt == ".frag") type = Shader::type::fragment;
-		else Core::log::report(FATAL_ERROR, "Vulkan : unable to deduce the type of a shader from its extension (unrecognised GLSL extension : %s)", fileExt.c_str());
+		else Core::log::report(FATAL_ERROR, "Vulkan : unable to deduce the type of a shader from its extension (unrecognised shader extension : %s)", fileExt.c_str());
 	}
 
 	Shader::Shader(const std::vector<uint32_t> byte_code, Shader::type t) : _byte_code(std::move(byte_code)), _type(t) {}

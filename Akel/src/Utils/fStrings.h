@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 01/05/2022
+// Updated : 02/05/2022
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
@@ -47,16 +47,16 @@ namespace Ak
             inline static const size_t npos = -1;
 
             fString() : _string(nullptr) {}
-            fString(const char* str);
+            fString(const char* str, size_t pos = 0, size_t len = npos);
 
-            fString(const fString& str) : _string(str._string), _size(str._size) {}
-            fString(fString&& str) : _string(str._string), _size(std::move(str)._size) {}
+            fString(const fString& str, size_t pos = 0, size_t len = npos) : _string(str._string.get() + pos), _size(len == npos ? str._size : len) {}
+            fString(fString&& str, size_t pos = 0, size_t len = npos) : _string(str._string.get() + pos), _size((len == npos ? std::move(str)._size : len) {}
 
-            fString(mString&& str);
-            fString(mString&& str);
+            fString(mString& str, size_t pos = 0, size_t len = npos);
+            fString(mString&& str, size_t pos = 0, size_t len = npos);
 
-            fString(std::string& str);
-            fString(std::string&& str);
+            fString(std::string& str, size_t pos = 0, size_t len = npos);
+            fString(std::string&& str, size_t pos = 0, size_t len = npos);
 
             fString& operator=(const fString& str);
             fString& operator=(const char* str);

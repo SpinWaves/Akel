@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 01/05/2022
+// Updated : 02/05/2022
 
 #include <Utils/fStrings.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-    fString::fString(const char* str)
+    fString::fString(const char* str, size_t pos, size_t len)
     {
         if(str == nullptr)
         {
@@ -16,9 +16,11 @@ namespace Ak
             return;
         }
 
-        char c = str[0];
+        char c = str[pos];
         while(c != '\0')
         {
+            if(len != npos && _size == len)
+                break;
             _string[_size] = str[_size];
             _size++;
             c = str[_size];
@@ -26,27 +28,27 @@ namespace Ak
         _string[_size] = '\0';
     }
     
-    fString::fString(mString&& str) : _string(memAlloc<char>(str.size())), _size(str.size())
+    fString::fString(mString&& str, size_t pos, size_t len) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
     {
-        for(int i = 0; i < str.size(); i++)
-            _string[i] = str[i];
+        for(int i = 0; i < len == npos ? str._size : len; i++)
+            _string[i] = str[i + pos];
     }
     
-    fString::fString(mString&& str) : _string(memAlloc<char>(str.size())), _size(str.size())
+    fString::fString(mString&& str, size_t pos, size_t len) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
     {
-        for(int i = 0; i < str.size(); i++)
-            _string[i] = str[i];
+        for(int i = 0; i < len == npos ? str._size : len; i++)
+            _string[i] = str[i + pos];
     }
 
-    fString::fString(std::string& str) : _string(memAlloc<char>(str.size())), _size(str.size())
+    fString::fString(std::string& str, size_t pos, size_t len) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
     {
-        for(int i = 0; i < str.size(); i++)
-            _string[i] = str[i];
+        for(int i = 0; i < len == npos ? str._size : len; i++)
+            _string[i] = str[i + pos];
     }
-    fString::fString(std::string&& str) : _string(memAlloc<char>(str.size())), _size(str.size())
+    fString::fString(std::string&& str, size_t pos, size_t len) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
     {
-        for(int i = 0; i < str.size(); i++)
-            _string[i] = str[i];
+        for(int i = 0; i < len == npos ? str._size : len; i++)
+            _string[i] = str[i + pos];
     }
 
     fString& fString::operator=(const fString& str)
