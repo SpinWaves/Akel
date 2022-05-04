@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 01/05/2022
+// Updated : 04/05/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -159,8 +159,8 @@ namespace Ak
 			lang _lang;
 	};
 
-	Shader load_spirv_shader_from_file(const fString& path, Shader::type t);
-	Shader load_spirv_shader_from_file(const fString& path);
+	Shader load_spirv_from_file(const fString& path, Shader::type t);
+	Shader load_spirv_from_file(const fString& path);
 }
 
 #endif // __AK_VK_SHADER__

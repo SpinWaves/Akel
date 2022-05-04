@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/10/2021
-// Updated : 29/04/2022
+// Updated : 04/05/2022
 
 #ifndef __AK_MUTABLE_STRINGS__
 #define __AK_MUTABLE_STRINGS__
@@ -13,19 +13,49 @@ namespace Ak
     class mString
     {
         public:
+            struct iterator
+            {
+                using iterator_category = std::forward_iterator_tag;
+                using difference_type   = std::ptrdiff_t;
+                using value_type        = const char;
+                using pointer           = const char*;
+                using reference         = const char&;
+            
+                iterator(pointer ptr) : _ptr(ptr) {}
+                inline reference operator*() const noexcept { return *_ptr; }
+                inline pointer operator->() noexcept { return _ptr; }
+
+                // Prefix increment
+                inline iterator& operator++() { _ptr++; return *this; }  
+
+                // Postfix increment
+                inline iterator operator++(int) { iterator tmp = *this; ++(*this); return tmp; }
+
+                inline friend bool operator== (const iterator& a, const iterator& b) { return a._ptr == b._ptr; }
+                inline friend bool operator!= (const iterator& a, const iterator& b) { return a._ptr != b._ptr; }
+
+                private:
+                    pointer _ptr;
+            };
+
             inline static const size_t npos = -1;
-            /**
-             * mStrings are transmitted by value and not by copy and 
-             * rvalue reference because the costs are either the same or higher
-             * copy lvalue: 5e-06 sec
-             * move rvalue: 1e-06 sec
-             * by value (passing a lvalue): 2e-06 sec
-             * by value (passing a rvalue): 1e-06 sec
-             */
-            explicit mString();
-            explicit mString(const char* str);
-            explicit mString(const mString& str); // A constructor cannot accept a object passed by value
-            explicit mString(mString&& str);
+
+            mString();
+            mString(const char* str);
+            mString(const mString& str);
+            mString(mString&& str);
+
+            fString() : _string(nullptr) {}
+            fString(const char* str, size_t pos = 0, size_t len = npos);
+
+            fString(const fString& str, size_t pos = 0, size_t len = npos) : _string(str._string.get() + pos), _size(len == npos ? str._size : len) {}
+            fString(fString&& str, size_t pos = 0, size_t len = npos) : _string(str._string.get() + pos), _size((len == npos ? std::move(str)._size : len) {}
+
+            fString(mString& str, size_t pos = 0, size_t len = npos);
+            fString(mString&& str, size_t pos = 0, size_t len = npos);
+
+            fString(std::string& str, size_t pos = 0, size_t len = npos);
+            fString(std::string&& str, size_t pos = 0, size_t len = npos);
 
             mString& operator=(mString str);
             mString& operator=(const char* str);
