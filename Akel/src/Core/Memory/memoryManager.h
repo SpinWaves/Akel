@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 29/04/2022
+// Updated : 06/05/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -36,7 +36,7 @@ namespace Ak
             static T* alloc(Args&& ... args);
             
             template <typename T = void>
-            static T* alloc(size_t size);
+            static T* allocSize(size_t size);
 
             template <typename T = void>
             static void free(T* ptr);
@@ -157,7 +157,7 @@ namespace Ak
     inline T* memAlloc(Args&& ... args) { return MemoryManager::alloc<T>(std::forward<Args>(args)...); }
 
     template <typename T = void>
-    inline T* memAlloc(size_t size) { return MemoryManager::alloc<T>(size); }
+    inline T* memAllocSize(size_t size) { return MemoryManager::allocSize<T>(size); }
 
     template <typename T = void>
     inline void memFree(T* ptr) { MemoryManager::free(ptr); }
