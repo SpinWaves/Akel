@@ -28,9 +28,7 @@ namespace Ak
 
 	Shader load_spirv_from_file(const fString& path)
 	{
-		mString fileExt(path, path.rfind('.', -4), -4);
-		for(int i = 0; i < fileExt.size(); i++)
-			fileExt[i] = std::tolower(fileExt[i]);
+		fString fileExt(path, path.rfind('.', -4), -4, [](char c) { return std::tolower(c); });
 
 		Shader::type type;
 

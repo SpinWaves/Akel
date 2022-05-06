@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/11/2021
-// Updated : 24/02/2022
+// Updated : 06/05/2022
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -17,8 +17,7 @@ namespace Ak::Kl
         kw_fn,
         kw_class,
         kw_public,
-        kw_private,
-        kw_struct,
+        kw_pub,
         kw_mtd,
         kw_var,
         kw_obj,
@@ -28,14 +27,11 @@ namespace Ak::Kl
         kw_for,
 		kw_while,
 		kw_do,
-        kw_to,
-        kw_by,
 		kw_break,
 		kw_continue,
 		kw_return,
         kw_location,
         kw_uniform,
-        kw_operator,
 
         end_line,
         type_specifier,
@@ -106,7 +102,6 @@ namespace Ak::Kl
         
         vert,
         frag,
-        global,
 
         statment_if,
         statment_else,
@@ -120,27 +115,12 @@ namespace Ak::Kl
 	std::optional<Tokens> get_operator(StreamStack& stream);
 	std::optional<Macro_Tokens> get_macro(const std::string& word);
 
-	inline bool operator==(const identifier& id1, const identifier& id2)
-    {
-		return id1.name == id2.name;
-	}
-	
-	inline bool operator!=(const identifier& id1, const identifier& id2)
-    {
-		return id1.name != id2.name;
-	}
+	inline bool operator==(const identifier& id1, const identifier& id2) { return id1.name == id2.name; }
+	inline bool operator!=(const identifier& id1, const identifier& id2) { return id1.name != id2.name; }
+	inline constexpr bool operator==(const eof&, const eof&) noexcept { return true; }
+	inline constexpr bool operator!=(const eof&, const eof&) noexcept { return false; }
 
-	inline constexpr bool operator==(const eof&, const eof&) noexcept
-    {
-		return true;
-	}
-	
-	inline constexpr bool operator!=(const eof&, const eof&) noexcept
-    {
-		return false;
-	}
-
-    using token_value = std::variant<Tokens, identifier, double, eof, Macro_Tokens>;
+    using token_value = std::variant<Tokens, identifier, double, int, float, eof, Macro_Tokens>;
 
     class Token
     {
@@ -152,8 +132,7 @@ namespace Ak::Kl
                 {Tokens::kw_fn, "fn"},
                 {Tokens::kw_class, "class"},
                 {Tokens::kw_public, "public"},
-                {Tokens::kw_private, "private"},
-                {Tokens::kw_struct, "struct"},
+                {Tokens::kw_pub, "pub"},
                 {Tokens::kw_mtd, "mtd"},
                 {Tokens::kw_var, "var"},
                 {Tokens::kw_obj, "obj"},
@@ -163,14 +142,11 @@ namespace Ak::Kl
                 {Tokens::kw_for, "for"},
                 {Tokens::kw_while, "while"},
                 {Tokens::kw_do, "do"},
-                {Tokens::kw_to, "to"},
-                {Tokens::kw_by, "by"},
                 {Tokens::kw_break, "break"},
                 {Tokens::kw_continue, "continue"},
                 {Tokens::kw_return, "return"},
                 {Tokens::kw_location, "location"},
                 {Tokens::kw_uniform, "uniform"},
-                {Tokens::kw_operator, "operator"},
 
                 {Tokens::t_void, "void"},
                 {Tokens::t_int, "int"},
@@ -201,7 +177,6 @@ namespace Ak::Kl
                 {Macro_Tokens::entry, "entry"},
                 {Macro_Tokens::vert, "vert"},
                 {Macro_Tokens::frag, "frag"},
-                {Macro_Tokens::global, "global"},
 
                 {Macro_Tokens::statment_if, "if"},
                 {Macro_Tokens::statment_else, "else"},
@@ -251,14 +226,18 @@ namespace Ak::Kl
 			};
 
             inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }
-            inline bool is_number() const { return std::holds_alternative<double>(_value); }
+            inline bool is_double() const { return std::holds_alternative<double>(_value); }
+            inline bool is_int() const { return std::holds_alternative<int>(_value); }
+            inline bool is_float() const { return std::holds_alternative<float>(_value); }
             inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
             inline bool is_macro() const { return std::holds_alternative<Macro_Tokens>(_value); }
             inline bool is_eof() const { return std::holds_alternative<eof>(_value); }
 
             inline Tokens get_token() const { return std::get<Tokens>(_value); }
             inline const identifier& get_identifier() const { return std::get<identifier>(_value); }
-            inline double get_number() const { return std::get<double>(_value); }
+            inline double get_double() const { return std::get<double>(_value); }
+            inline double get_int() const { return std::get<int>(_value); }
+            inline double get_float() const { return std::get<float>(_value); }
             inline Macro_Tokens get_macro() const { return std::get<Macro_Tokens>(_value); }
             inline const token_value& get_value() const { return _value; }
         
@@ -272,4 +251,4 @@ namespace Ak::Kl
     };
 }
 
-#endif // __AK_KToken::ILA_TOKENS__
+#endif // __AK_KILA_TOKENS__

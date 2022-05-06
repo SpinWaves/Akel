@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 02/05/2022
+// Updated : 06/05/2022
 
 #include <Utils/fStrings.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-    fString::fString(const char* str, size_t pos, size_t len)
+    fString::fString(const char* str, size_t pos, size_t len, func::function<char(char)> modifier)
     {
         if(str == nullptr)
         {
@@ -21,34 +21,78 @@ namespace Ak
         {
             if(len != npos && _size == len)
                 break;
-            _string[_size] = str[_size];
+            if(modifier != nullptr)
+                _string[_size] = modifier(c);
+            else
+                _string[_size] = c;
             _size++;
-            c = str[_size];
+            c = str[_size + pos];
         }
         _string[_size] = '\0';
     }
-    
-    fString::fString(mString&& str, size_t pos, size_t len) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
+
+    fString::fString(const fString& str, size_t pos = 0, size_t len = npos, func::function<char(char)> modifier) : _size(len == npos ? str._size : len)
     {
         for(int i = 0; i < len == npos ? str._size : len; i++)
-            _string[i] = str[i + pos];
+        {
+            if(modifier != nullptr)
+                _string[i] = modifier(str[i + pos]);
+            else
+                _string[i] = str[i + pos];
+        }
+    }
+    fString::fString(fString&& str, size_t pos = 0, size_t len = npos, func::function<char(char)> modifier) : _size((len == npos ? str._size : len) 
+    {
+        for(int i = 0; i < len == npos ? str._size : len; i++)
+        {
+            if(modifier != nullptr)
+                _string[i] = modifier(str[i + pos]);
+            else
+                _string[i] = str[i + pos];
+        }
     }
     
-    fString::fString(mString&& str, size_t pos, size_t len) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
+    fString::fString(mString&& str, size_t pos, size_t len, func::function<char(char)> modifier) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
     {
         for(int i = 0; i < len == npos ? str._size : len; i++)
-            _string[i] = str[i + pos];
+        {
+            if(modifier != nullptr)
+                _string[i] = modifier(str[i + pos]);
+            else
+                _string[i] = str[i + pos];
+        }
+    }
+    
+    fString::fString(mString&& str, size_t pos, size_t len, func::function<char(char) modifier) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
+    {
+        for(int i = 0; i < len == npos ? str._size : len; i++)
+        {
+            if(modifier != nullptr)
+                _string[i] = modifier(str[i + pos]);
+            else
+                _string[i] = str[i + pos];
+        }
     }
 
-    fString::fString(std::string& str, size_t pos, size_t len) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
+    fString::fString(std::string& str, size_t pos, size_t len, func::function<char(char) modifier) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
     {
         for(int i = 0; i < len == npos ? str._size : len; i++)
-            _string[i] = str[i + pos];
+        {
+            if(modifier != nullptr)
+                _string[i] = modifier(str[i + pos]);
+            else
+                _string[i] = str[i + pos];
+        }
     }
-    fString::fString(std::string&& str, size_t pos, size_t len) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
+    fString::fString(std::string&& str, size_t pos, size_t len, func::function<char(char) modifier) : _string(memAlloc<char>(len == npos ? str._size : len)), _size(len == npos ? str._size : len)
     {
         for(int i = 0; i < len == npos ? str._size : len; i++)
-            _string[i] = str[i + pos];
+        {
+            if(modifier != nullptr)
+                _string[i] = modifier(str[i + pos]);
+            else
+                _string[i] = str[i + pos];
+        }
     }
 
     fString& fString::operator=(const fString& str)

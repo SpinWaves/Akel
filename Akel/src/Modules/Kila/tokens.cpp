@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/11/2021
-// Updated : 13/11/2021
+// Updated : 06/05/2022
 
 #include <Modules/Kila/tokens.h>
 
@@ -9,16 +9,12 @@ namespace Ak::Kl
 {
 	std::optional<Tokens> get_keyword(const std::string& word)
 	{
-		if(!Token::kw_tokens.have(word))
-			return std::nullopt;
-		return std::make_optional(Token::kw_tokens[word]);
+		return !Token::kw_tokens.have(word) ? std::nullopt : std::make_optional(Token::kw_tokens[word]);
 	}
 
 	std::optional<Macro_Tokens> get_macro(const std::string& word)
 	{
-		if(!Token::macros_token.have(word))
-			return std::nullopt;
-		return std::make_optional(Token::macros_token[word]);
+		return !Token::macros_token.have(word) ? std::nullopt : std::make_optional(Token::macros_token[word]);
 	}
 
 	std::optional<Tokens> get_operator(StreamStack& stream)
