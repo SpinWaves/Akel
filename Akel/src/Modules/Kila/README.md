@@ -1,6 +1,6 @@
 # Kila
 
-Kila is a shading language made for Akel engine. It is based on LUA and is rather simple to learn.
+Kila is a shading language made for Akel engine. It is based on Lua and is rather simple to learn.
 
 Example of Kila program
 
