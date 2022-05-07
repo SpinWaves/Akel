@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 04/05/2022
+// Updated : 07/05/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -119,28 +119,28 @@ namespace Ak
 			void generate();
 			inline void destroy() noexcept
 			{
-				static_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
+				Ak_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
 				vkDestroyShaderModule(Render_Core::get().getDevice().get(), _shader, nullptr);
 
 				for(auto& desc : _desc_sets)
 					desc.destroy();
 
-				static_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline layout");
+				Ak_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline layout");
 				vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
 			}
  
-			inline const VkShaderModule& getShaderModule() const noexcept { return _shader; }
-			inline const type getType() const noexcept { return _type; }
+			inline const VkShaderModule& getShaderModule() noexcept { return _shader; }
+			inline const type getType() noexcept { return _type; }
 
-			inline const std::unordered_map<fString, Uniform>& getUniforms() const { return _uniforms; };
-			inline const std::unordered_map<fString, Uniform_block>& getUniformBlocks() const { return _uniformBlocks; };
-			inline const std::unordered_map<fString, Attribute>& getAttributes() const { return _attributes; };
+			inline const std::unordered_map<fString, Uniform>& getUniforms() { return _uniforms; };
+			inline const std::unordered_map<fString, Uniform_block>& getUniformBlocks() { return _uniformBlocks; };
+			inline const std::unordered_map<fString, Attribute>& getAttributes() { return _attributes; };
 
-			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() const { return _desc_sets; }
+			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _desc_sets; }
 
-			inline std::optional<Uniform> getUniform(const fString name) const { return auto it = _uniforms.find(name); it != _uniforms.end() ? it->second : std::nullopt; }
-			inline std::optional<Uniform_block> getUniformBlock(const fString name) const { return auto it = _uniformBlocks.find(name); it != _uniformBlocks.end() ? it->second : std::nullopt; }
-			inline std::optional<Attribute> getAttribute(const fString name) const { return auto it = _attributes.find(name); it != _attributes.end() ? it->second : std::nullopt; }
+			inline std::optional<Uniform> getUniform(const fString name) { return auto it = _uniforms.find(name); it != _uniforms.end() ? it->second : std::nullopt; }
+			inline std::optional<Uniform_block> getUniformBlock(const fString name) { return auto it = _uniformBlocks.find(name); it != _uniformBlocks.end() ? it->second : std::nullopt; }
+			inline std::optional<Attribute> getAttribute(const fString name) { return auto it = _attributes.find(name); it != _attributes.end() ? it->second : std::nullopt; }
 
 			~Shader() = default;
 

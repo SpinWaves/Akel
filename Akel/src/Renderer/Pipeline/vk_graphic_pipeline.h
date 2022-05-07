@@ -16,7 +16,7 @@ namespace Ak
 			void init();
 			inline void destroy() noexcept
 			{
-				static_assert(_pipeline != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
+				Ak_assert(_pipeline != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
 				vkDestroyPipeline(Render_Core::get().getDevice().get(), _graphicsPipeline, nullptr);				
 			}
 

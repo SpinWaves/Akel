@@ -1,18 +1,15 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 03/04/2022
+// Updated : 07/05/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
 
-#include <Akpch.h>
-#include <Core/core.h>
-#include <Maths/maths.h>
-#include <Platform/input.h>
-#include <Utils/utils.h>
+#include <Core/Components/baseComponent.h>
 #include <Platform/messageBox.h>
-#include <Platform/input.h>
+#include <Maths/maths.h>
+#include <Utils/utils.h>
 
 #define AK_WINDOW_MAX_SIZE 0xFFFF
 #define AK_WINDOW_MIN_SIZE 0
@@ -28,7 +25,7 @@ namespace Ak
             WindowComponent();
 
 			void onAttach() override;
-			void onEvent(Input& input) override;
+			void onEvent(class Input& input) override;
             void update() override;
 			void onQuit() override;
             void fetchSettings();

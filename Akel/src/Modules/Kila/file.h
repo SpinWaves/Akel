@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 15/11/2021
+// Updated : 07/05/2021
 
 #ifndef __AK_KILA_FILE__
 #define __AK_KILA_FILE__
@@ -22,8 +22,8 @@ namespace Ak::Kl
             ~File();
 
         private:
-            FILE* _fp;
             std::string _path;
+            FILE* _fp;
     };
 }
 

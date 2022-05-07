@@ -14,51 +14,48 @@ namespace Ak::Kl
 {
     enum class Tokens
     {
-        kw_function,
+		kw_do,
         kw_end,
         kw_for,
-		kw_while,
-		kw_do,
 		kw_break,
-		kw_continue,
+		kw_while,
 		kw_return,
-        kw_location,
+        kw_import,
+        kw_export,
         kw_uniform,
+		kw_continue,
+        kw_location,
+        kw_function,
 
-        type_specifier,
+        dot,
+        comma,
+        colon,
+        square_b,
+        square_e,
         bracket_b,
         bracket_e,
         embrace_b,
         embrace_e,
-        comma,
-        dot,
-        square_b,
-        square_e,
 
+        t_int,
         t_void,
-        
-        t_i8
-        t_i16
-        t_i32,
-        t_i64,
-
-        t_f32,
-        t_f64
-        
+        t_uint,
         t_bool,
-        
-        t_unsigned,
-        
         t_vec2,
         t_vec3,
         t_vec4,
         t_mat2,
         t_mat3,
         t_mat4,
+        t_float,
+
+        b_true,
+        b_false,
 
         statment_if,
+        statment_then,
         statment_else,
-        statment_elif,
+        statment_elseif,
 
         add_assign,
         sub_assign,
@@ -80,11 +77,11 @@ namespace Ak::Kl
         le,
         ge,
 
-        ret_type,
+        arrow,
 
+        logical_or,
         logical_not,
         logical_and,
-        logical_or
     };
 
     struct eof{};
@@ -98,7 +95,7 @@ namespace Ak::Kl
 	inline constexpr bool operator==(const eof&, const eof&) noexcept { return true; }
 	inline constexpr bool operator!=(const eof&, const eof&) noexcept { return false; }
 
-    using token_value = std::variant<Tokens, identifier, double, long long, eof>;
+    using token_value = std::variant<Tokens, identifier, float, int, uint32_t, eof>;
 
     class Token
     {
@@ -107,58 +104,64 @@ namespace Ak::Kl
 
 			static inline duets_array<Tokens, std::string> kw_tokens
 			{
-                {Tokens::kw_function, "function"},
+                {Tokens::kw_do, "do"},
                 {Tokens::kw_end, "end"},
                 {Tokens::kw_for, "for"},
                 {Tokens::kw_while, "while"},
-                {Tokens::kw_do, "do"},
                 {Tokens::kw_break, "break"},
-                {Tokens::kw_continue, "continue"},
                 {Tokens::kw_return, "return"},
-                {Tokens::kw_location, "location"},
+                {Tokens::kw_import, "import"},
+                {Tokens::kw_export, "export"},
                 {Tokens::kw_uniform, "uniform"},
+                {Tokens::kw_continue, "continue"},
+                {Tokens::kw_function, "function"},
+                {Tokens::kw_location, "location"},
 
-                {Tokens::t_void, "void"},
                 {Tokens::t_int, "int"},
-                {Tokens::t_float, "float"},
+                {Tokens::t_void, "void"},
+                {Tokens::t_uint, "uint"},
                 {Tokens::t_bool, "bool"},
-                {Tokens::t_unsigned, "unsigned"},
                 {Tokens::t_vec2, "vec2"},
                 {Tokens::t_vec3, "vec3"},
                 {Tokens::t_vec4, "vec4"},
                 {Tokens::t_mat2, "mat2"},
                 {Tokens::t_mat3, "mat3"},
                 {Tokens::t_mat4, "mat4"},
+                {Tokens::t_float, "float"},
+
+                {Tokens::logical_or, "or"},
+                {Tokens::logical_not, "not"},
+                {Tokens::logical_and, "and"},
+
+                {Tokens::b_true, "true"},
+                {Tokens::b_false, "false"},
 
                 {Tokens::statment_if, "if"},
+                {Tokens::statment_then, "then"},
                 {Tokens::statment_else, "else"},
-                {Tokens::statment_elif, "elif"}
+                {Tokens::statment_elif, "elseif"}
 			};
 
 			static inline duets_array<Tokens, std::string> operators_token
 			{
-                {Tokens::comma, ","},
                 {Tokens::dot, "."},
-                {Tokens::type_specifier, ":"},
+                {Tokens::comma, ","},
+                {Tokens::colon, ":"},
+                {Tokens::square_e, "]"},
+                {Tokens::square_b, "["},
                 {Tokens::bracket_b, "("},
                 {Tokens::bracket_e, ")"},
                 {Tokens::embrace_b, "{"},
                 {Tokens::embrace_e, "}"},
-                {Tokens::square_b, "["},
-                {Tokens::square_e, "]"},
 
-                {Tokens::ret_type, "->"},
+                {Tokens::arrow, "->"},
 
+                {Tokens::gt, ">"},
+                {Tokens::lt, "<"},
                 {Tokens::eq, "=="},
                 {Tokens::ne, "!="},
-                {Tokens::lt, "<"},
-                {Tokens::gt, ">"},
                 {Tokens::le, "<="},
                 {Tokens::ge, ">="},
-
-                {Tokens::logical_not, "not"},
-                {Tokens::logical_and, "and"},
-                {Tokens::logical_or, "or"},
 
                 {Tokens::add_assign, "+="},
                 {Tokens::sub_assign, "-="},
@@ -175,22 +178,22 @@ namespace Ak::Kl
 			};
 
             inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }
-            inline bool is_double() const { return std::holds_alternative<double>(_value); }
             inline bool is_int() const { return std::holds_alternative<int>(_value); }
+            inline bool is_uint() const { return std::holds_alternative<uint32_t>(_value); }
             inline bool is_float() const { return std::holds_alternative<float>(_value); }
             inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
             inline bool is_eof() const { return std::holds_alternative<eof>(_value); }
 
             inline Tokens get_token() const { return std::get<Tokens>(_value); }
             inline const identifier& get_identifier() const { return std::get<identifier>(_value); }
-            inline double get_double() const { return std::get<double>(_value); }
-            inline double get_int() const { return std::get<int>(_value); }
-            inline double get_float() const { return std::get<float>(_value); }
+            inline int get_int() const { return std::get<int>(_value); }
+            inline uint32_t get_uint() const { return std::get<uint32_t>(_value); }
+            inline float get_float() const { return std::get<float>(_value); }
             inline const token_value& get_value() const { return _value; }
         
             inline size_t get_line_number() const noexcept { return _line; }
 
-	        bool has_value(token_value value) const { return _value == std::move(value); }
+	        inline bool has_value(token_value value) const noexcept { return _value == std::move(value); }
 
         private:
             token_value _value;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/11/2021
-// Updated : 06/05/2022
+// Updated : 07/05/2022
 
 #include <Modules/Kila/tokens.h>
 
@@ -17,12 +17,6 @@ namespace Ak::Kl
 		std::string c;
 		c.push_back(char(stream()));
 		c.push_back(char(stream()));
-		c.push_back(char(stream()));
-		if(Token::operators_token.have(c))
-			return std::make_optional(Token::operators_token[std::move(c)]);
-
-		stream.push_back(c[2]);
-		c.pop_back();
 		if(Token::operators_token.have(c))
 			return std::make_optional(Token::operators_token[std::move(c)]);
 

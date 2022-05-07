@@ -1,7 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/04/2022
-// Updated : 29/04/2022
+// Updated : 07/05/2022
+
+#include "vk_ibo.h"
 
 namespace Ak
 {

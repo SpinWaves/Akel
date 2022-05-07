@@ -45,18 +45,6 @@ namespace Ak
             mString(const mString& str);
             mString(mString&& str);
 
-            fString() : _string(nullptr) {}
-            fString(const char* str, size_t pos = 0, size_t len = npos);
-
-            fString(const fString& str, size_t pos = 0, size_t len = npos) : _string(str._string.get() + pos), _size(len == npos ? str._size : len) {}
-            fString(fString&& str, size_t pos = 0, size_t len = npos) : _string(str._string.get() + pos), _size((len == npos ? std::move(str)._size : len) {}
-
-            fString(mString& str, size_t pos = 0, size_t len = npos);
-            fString(mString&& str, size_t pos = 0, size_t len = npos);
-
-            fString(std::string& str, size_t pos = 0, size_t len = npos);
-            fString(std::string&& str, size_t pos = 0, size_t len = npos);
-
             mString& operator=(mString str);
             mString& operator=(const char* str);
 

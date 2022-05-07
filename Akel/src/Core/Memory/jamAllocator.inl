@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 29/04/2022
+// Updated : 07/05/2022
 
 #include <Core/log.h>
 #include <Maths/maths.h>
@@ -81,7 +81,7 @@ namespace Ak
             Core::log::report(FATAL_ERROR, "Jam Allocator: you need to initialize the allocator before asking him to give you memory");
             return nullptr;
         }
-        if(!canHold(sizeType))
+        if(!canHold(size))
         {
             if(_autoResize)
                 increase_size(_heapSize * (4/3));
@@ -132,7 +132,7 @@ namespace Ak
         }
 
         if(std::is_class<T>::value)
-            ::new ((void*)ptr) T(std::forward<Args>(args)...);
+            ::new ((void*)ptr) T;
 
         return ptr;
     }

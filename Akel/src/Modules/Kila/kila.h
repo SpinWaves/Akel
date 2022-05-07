@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/11/2021
-// Updated : 14/11/2021
+// Updated : 07/05/2021
 
 #ifndef __AK_KILA__
 #define __AK_KILA__
@@ -14,6 +14,5 @@
 #include <Modules/Kila/warnings.h>
 #include <Modules/Kila/file.h>
 #include <Modules/Kila/parser.h>
-#include <Modules/Kila/macros.h>
 
 #endif // __AK_KILA__

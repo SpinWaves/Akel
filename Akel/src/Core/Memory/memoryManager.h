@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 06/05/2022
+// Updated : 07/05/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -74,7 +74,7 @@ namespace Ak
     }
 
     template <typename T = void>
-    T* MemoryManager::alloc(size_t size)
+    T* MemoryManager::allocSize(size_t size)
     {
         if(_use && __jam.is_init())
         {

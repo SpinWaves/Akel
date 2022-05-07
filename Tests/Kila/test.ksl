@@ -1,31 +1,13 @@
-// Test commentary
-@get import.ksl
-@get import2.ksl
+location(0) local pos: vec3
+location(1) local color: vec4
 
-@set define 12
+uniform(0) viewData = { view: mat4, model: mat4, proj: mat4 }
 
-var in_pos : vec2 = location(0);
-var in_color : vec3 = location(1);
+function Vmain() -> vec4
+    pos = vec3(vewData.model * vec4(pos, 1.0))
+    return vewData.proj * vewData.view * vec4(pos, 1.0)
+end
 
-@entry vert
-
-fn main()
-{
-    const for(var i : int = 0; i < 10; i++)
-    {
-        // do stuff
-    }
-    return vec4(in_pos.x, in_pos.y, 0.0, 1.0);
-}
-
-@entry frag
-
-fn main()
-{
-    const if()
-    {
-
-    }
-
-    return vec4(in_color.x, in_color.y, in_color.z, 1.0);
-}
+function Fmain() -> vec4
+    return color
+end

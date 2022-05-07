@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 15/11/2021
+// Updated : 07/05/2021
 
 #ifndef __AK_KILA_STREAM_STACK__
 #define __AK_KILA_STREAM_STACK__
@@ -26,10 +26,10 @@ namespace Ak::Kl
             ~StreamStack() = default;
 
         private:
-            const func::function<int()>& _input;
-            std::stack<int> _stack;
-            size_t _line;
             std::vector<std::string> _files;
+            std::stack<int> _stack;
+            const func::function<int()>& _input;
+            size_t _line;
     };
 }
 

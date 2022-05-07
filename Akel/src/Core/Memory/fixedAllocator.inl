@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/08/2021
-// Updated : 30/03/2022
+// Updated : 07/05/2022
 
 #include <Core/Memory/fixedAllocator.h>
 #include <Core/log.h>
@@ -22,20 +22,17 @@ namespace Ak
             }
         }
 
-        _mutex.lockThreads();
+        std::lock_guard<std::mutex> watchdog(_mutex);
 
         *_it = true;
 
         if(std::is_class<T>::value)
         {
             T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * (std::distance(_it, _bits.rend()) - 1));
-            _mutex.unlockThreads();
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
 
             return ptr;
         }
-
-        _mutex.unlockThreads();
 
         return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * (std::distance(_it, _bits.rend()) - 1));
     }
@@ -50,14 +47,12 @@ namespace Ak
             return;
         }
 
-        _mutex.lockThreads();
+        std::lock_guard<std::mutex> watchdog(_mutex);
 
         if(std::is_class<T>::value)
             ptr->~T();
 
         const size_t index = (reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(_heap)) / _block_size;
         _bits[index] = false;
-
-        _mutex.unlockThreads();
     }
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 12/03/2022
+// Updated : 07/05/2022
 
 #include <Core/core.h>
 
@@ -11,6 +11,7 @@ namespace Ak::Core
 {
 	void ProjectFile::initProjFile()
     {
+        _dir = getMainDirPath();
 		if(_dir.back() != '/')
 			_dir.push_back('/');
         std::filesystem::path f(__FILEPATH);

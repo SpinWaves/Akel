@@ -22,9 +22,6 @@
 #include <vulkan/vulkan.h>
 #include <SDL2/SDL_vulkan.h>
 
-// SPIR-V
-#include <spirv_reflect.h>
-
 // ImGui
 #include <imgui.h>
 #include <imgui_impl_sdl.h>

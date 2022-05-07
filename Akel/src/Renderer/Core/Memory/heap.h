@@ -1,13 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 29/04/2022
+// Updated : 07/05/2022
 
 #ifndef __AK_VK_GPU_HEAP__
 #define __AK_VK_GPU_HEAP__
 
 #include <Akpch.h>
-#include <Core/Memory/unique_ptr_wrapper.h>
+#include <Core/Memory/uniquePtrWrapper.h>
 
 namespace Ak
 {

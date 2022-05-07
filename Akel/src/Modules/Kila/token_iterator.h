@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/11/2021
-// Updated : 12/11/2021
+// Updated : 07/05/2021
 
 #ifndef __AK_KILA_TOKEN_ITERATOR__
 #define __AK_KILA_TOKEN_ITERATOR__
@@ -19,14 +19,9 @@ namespace Ak::Kl
             tk_iterator(std::deque<Token>& tokens);
             tk_iterator(StreamStack& tokens);
 
-            inline const Token& operator*() const noexcept
-            {
-                return _current;
-            }
-            inline const Token* operator->() const noexcept
-            {
-                return &_current;
-            }
+            inline const Token& operator*() const noexcept { return _current; }
+            inline const Token* operator->() const noexcept { return &_current; }
+            inline bool operator()() const noexcept { return !_current.is_eof(); }
             inline tk_iterator& operator++()
             {
                 _current = _get_next_token();
@@ -37,10 +32,6 @@ namespace Ak::Kl
                 tk_iterator old = *this;
                 operator++();
                 return old;
-            }
-            inline bool operator()() const noexcept
-            {
-                return !_current.is_eof();
             }
 	
         private:
