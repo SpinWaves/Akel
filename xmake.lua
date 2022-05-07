@@ -1,12 +1,12 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 05/04/2022
+-- Updated : 07/05/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "shaderc", "vulkan-headers", "vulkan-loader", "vulkan-validationlayers", "imgui_sdl_vk v1.87-docking")
+add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "spirv-reflect", "vulkan-headers", "vulkan-loader", "vulkan-validationlayers", "imgui_sdl_vk v1.87-docking")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
@@ -31,7 +31,7 @@ target("Akel")
 
 	set_pcxxheader("Akel/src/Akpch.h")
 	add_defines("SDL_MAIN_HANDLED")
-	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "shaderc", "vulkan-headers", "vulkan-loader", "vulkan-validationlayers", "imgui_sdl_vk")
+	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "spirv-reflect", "libsndfile", "openal-soft", "vulkan-headers", "vulkan-loader", "vulkan-validationlayers", "imgui_sdl_vk")
 
 	on_load(function(target)
 		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")

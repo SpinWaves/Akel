@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 06/04/2022
+// Updated : 07/05/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -23,7 +23,7 @@
 #include <SDL2/SDL_vulkan.h>
 
 // SPIR-V
-#include <shaderc/shaderc.hpp>
+#include <spirv_reflect.h>
 
 // ImGui
 #include <imgui.h>
@@ -40,13 +40,14 @@
 #include <chrono>
 #include <algorithm>
 
-// MultiThreading
-#include <thread>
-#include <mutex>
-
 #ifdef AK_PLATFORM_WINDOWS
     #include <windows.h>
 #endif
+
+// MultiThreading
+#include <thread>
+#include <mutex>
+#include <atomic>
 
 // Memory
 #include <memory>
