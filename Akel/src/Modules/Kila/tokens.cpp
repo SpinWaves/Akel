@@ -12,16 +12,17 @@ namespace Ak::Kl
 		return !Token::kw_tokens.have(word) ? std::nullopt : std::make_optional(Token::kw_tokens[word]);
 	}
 
-	std::optional<Macro_Tokens> get_macro(const std::string& word)
-	{
-		return !Token::macros_token.have(word) ? std::nullopt : std::make_optional(Token::macros_token[word]);
-	}
-
 	std::optional<Tokens> get_operator(StreamStack& stream)
 	{
 		std::string c;
 		c.push_back(char(stream()));
 		c.push_back(char(stream()));
+		c.push_back(char(stream()));
+		if(Token::operators_token.have(c))
+			return std::make_optional(Token::operators_token[std::move(c)]);
+
+		stream.push_back(c[2]);
+		c.pop_back();
 		if(Token::operators_token.have(c))
 			return std::make_optional(Token::operators_token[std::move(c)]);
 

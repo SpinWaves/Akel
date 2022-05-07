@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/11/2021
-// Updated : 06/05/2022
+// Updated : 07/05/2022
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -14,16 +14,8 @@ namespace Ak::Kl
 {
     enum class Tokens
     {
-        kw_fn,
-        kw_class,
-        kw_public,
-        kw_pub,
-        kw_mtd,
-        kw_var,
-        kw_obj,
-        kw_switch,
-        kw_case,
-		kw_default,
+        kw_function,
+        kw_end,
         kw_for,
 		kw_while,
 		kw_do,
@@ -33,10 +25,9 @@ namespace Ak::Kl
         kw_location,
         kw_uniform,
 
-        end_line,
         type_specifier,
-        brecket_b,
-        brecket_e,
+        bracket_b,
+        bracket_e,
         embrace_b,
         embrace_e,
         comma,
@@ -45,10 +36,19 @@ namespace Ak::Kl
         square_e,
 
         t_void,
-        t_int,
-        t_float,
+        
+        t_i8
+        t_i16
+        t_i32,
+        t_i64,
+
+        t_f32,
+        t_f64
+        
         t_bool,
+        
         t_unsigned,
+        
         t_vec2,
         t_vec3,
         t_vec4,
@@ -59,9 +59,6 @@ namespace Ak::Kl
         statment_if,
         statment_else,
         statment_elif,
-
-        inc,
-		dec,
 
         add_assign,
         sub_assign,
@@ -83,44 +80,25 @@ namespace Ak::Kl
         le,
         ge,
 
-        question,
+        ret_type,
+
         logical_not,
         logical_and,
         logical_or
     };
 
-    enum class Macro_Tokens
-    {
-        macro,
-        set,
-        unset,
-        get,
-        getonce,
-        endif,
-
-        entry,
-        
-        vert,
-        frag,
-
-        statment_if,
-        statment_else,
-        statment_elif
-    };
-    
     struct eof{};
     struct identifier { std::string name; };
 
     std::optional<Tokens> get_keyword(const std::string& word);
 	std::optional<Tokens> get_operator(StreamStack& stream);
-	std::optional<Macro_Tokens> get_macro(const std::string& word);
 
 	inline bool operator==(const identifier& id1, const identifier& id2) { return id1.name == id2.name; }
 	inline bool operator!=(const identifier& id1, const identifier& id2) { return id1.name != id2.name; }
 	inline constexpr bool operator==(const eof&, const eof&) noexcept { return true; }
 	inline constexpr bool operator!=(const eof&, const eof&) noexcept { return false; }
 
-    using token_value = std::variant<Tokens, identifier, double, int, float, eof, Macro_Tokens>;
+    using token_value = std::variant<Tokens, identifier, double, long long, eof>;
 
     class Token
     {
@@ -129,16 +107,8 @@ namespace Ak::Kl
 
 			static inline duets_array<Tokens, std::string> kw_tokens
 			{
-                {Tokens::kw_fn, "fn"},
-                {Tokens::kw_class, "class"},
-                {Tokens::kw_public, "public"},
-                {Tokens::kw_pub, "pub"},
-                {Tokens::kw_mtd, "mtd"},
-                {Tokens::kw_var, "var"},
-                {Tokens::kw_obj, "obj"},
-                {Tokens::kw_switch, "switch"},
-                {Tokens::kw_case, "case"},
-                {Tokens::kw_default, "default"},
+                {Tokens::kw_function, "function"},
+                {Tokens::kw_end, "end"},
                 {Tokens::kw_for, "for"},
                 {Tokens::kw_while, "while"},
                 {Tokens::kw_do, "do"},
@@ -165,37 +135,19 @@ namespace Ak::Kl
                 {Tokens::statment_elif, "elif"}
 			};
 
-			static inline duets_array<Macro_Tokens, std::string> macros_token
-            {
-                {Macro_Tokens::macro, "@"},
-                
-                {Macro_Tokens::set, "set"},
-                {Macro_Tokens::unset, "unset"},
-                {Macro_Tokens::get, "get"},
-                {Macro_Tokens::getonce, "getonce"},
-
-                {Macro_Tokens::entry, "entry"},
-                {Macro_Tokens::vert, "vert"},
-                {Macro_Tokens::frag, "frag"},
-
-                {Macro_Tokens::statment_if, "if"},
-                {Macro_Tokens::statment_else, "else"},
-                {Macro_Tokens::statment_elif, "elif"},
-                {Macro_Tokens::endif, "endif"}
-            };
-
 			static inline duets_array<Tokens, std::string> operators_token
 			{
-                {Tokens::end_line, ";"},
                 {Tokens::comma, ","},
                 {Tokens::dot, "."},
                 {Tokens::type_specifier, ":"},
-                {Tokens::brecket_b, "("},
-                {Tokens::brecket_e, ")"},
+                {Tokens::bracket_b, "("},
+                {Tokens::bracket_e, ")"},
                 {Tokens::embrace_b, "{"},
                 {Tokens::embrace_e, "}"},
                 {Tokens::square_b, "["},
                 {Tokens::square_e, "]"},
+
+                {Tokens::ret_type, "->"},
 
                 {Tokens::eq, "=="},
                 {Tokens::ne, "!="},
@@ -204,13 +156,10 @@ namespace Ak::Kl
                 {Tokens::le, "<="},
                 {Tokens::ge, ">="},
 
-                {Tokens::question, "?"},
-                {Tokens::logical_not, "!"},
-                {Tokens::logical_and, "&&"},
-                {Tokens::logical_or, "||"},
+                {Tokens::logical_not, "not"},
+                {Tokens::logical_and, "and"},
+                {Tokens::logical_or, "or"},
 
-                {Tokens::inc, "++"},
-                {Tokens::dec, "--"},
                 {Tokens::add_assign, "+="},
                 {Tokens::sub_assign, "-="},
                 {Tokens::mul_assign, "*="},
@@ -230,7 +179,6 @@ namespace Ak::Kl
             inline bool is_int() const { return std::holds_alternative<int>(_value); }
             inline bool is_float() const { return std::holds_alternative<float>(_value); }
             inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
-            inline bool is_macro() const { return std::holds_alternative<Macro_Tokens>(_value); }
             inline bool is_eof() const { return std::holds_alternative<eof>(_value); }
 
             inline Tokens get_token() const { return std::get<Tokens>(_value); }
@@ -238,7 +186,6 @@ namespace Ak::Kl
             inline double get_double() const { return std::get<double>(_value); }
             inline double get_int() const { return std::get<int>(_value); }
             inline double get_float() const { return std::get<float>(_value); }
-            inline Macro_Tokens get_macro() const { return std::get<Macro_Tokens>(_value); }
             inline const token_value& get_value() const { return _value; }
         
             inline size_t get_line_number() const noexcept { return _line; }
