@@ -6,7 +6,7 @@
 Akel is a game engine made for fun by a young french man.
 Currently at an early stage, it is still in development and still needs some work to turn it into something.
 An editor (like Unity or UnrealEngine) is in development, facilitating the creation of games. However, it will be necessary to wait for some time until this one is sufficiently developed (as well as the engine itself) to make games easily.
-Akel is designed to be extremely easy to use. Not being the most powerful, it goes the way of simplicity of use, both on the editor side and on the code side.
+Akel is designed to be easy to use. Not being the most powerful, it goes the way of simplicity of use, both on the editor side and on the code side.
 
 # Getting started
 Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, although it has not been tested on this OS (no information about MacOS, I have to find out). It is used with [xmake](https://xmake.io/#/). A compiler that supports C++17 is required because Akel uses C++17 features. Dependencies are provided (SDL2, ImGui, Vulkan, ...) by xmake.
