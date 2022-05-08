@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/09/2021
-// Updated : 31/03/2022
+// Updated : 08/05/2022
 
 #ifndef __AK_VK_GPU_MEMORY_CHUNK__
 #define __AK_VK_GPU_MEMORY_CHUNK__
@@ -10,7 +10,7 @@
 
 namespace Ak
 {
-    struct GPU_Mem_Chunck
+    struct GPU_Mem_Chunk
     {
         VkDeviceMemory memory = VK_NULL_HANDLE;
         unsigned int offset = 0;

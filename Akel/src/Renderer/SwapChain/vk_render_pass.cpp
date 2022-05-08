@@ -1,7 +1,7 @@
 // this file is a part of akel
 // authors : @kbz_8
 // created : 10/04/2022
-// updated : 11/04/2022
+// updated : 08/05/2022
 
 #include "vk_render_pass.h"
 
@@ -65,5 +65,11 @@ namespace Ak
 
 		vkCmdEndRenderPass(Render_Core::get().getCmdBuffer().get());
 		_is_running = false;
+	}
+
+	void RenderPass::destroy() noexcept
+	{
+		Ak_assert(_renderPass != VK_NULL_HANDLE, "trying to destroy an uninit render pass");
+		vkDestroyRenderPass(Render_Core::get().getDevice().get(), _renderPass, nullptr);
 	}
 }

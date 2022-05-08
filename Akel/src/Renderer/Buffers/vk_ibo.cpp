@@ -7,7 +7,7 @@
 
 namespace Ak
 {
-	void IBO::setData(uint32_t size, const void* data)
+	void IBO::setData(uint32_t size, const uint32_t* data)
 	{
 		if(size > _mem_chunck.size)
 			Core::log::report(ERROR, "Vulkan : trying to store to much data in an index buffer (%d on %d)", size, _mem_chunck.size);

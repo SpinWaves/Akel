@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 07/05/2022
+// Updated : 08/05/2022
 
 #ifndef __AK_VK_BUFFER__
 #define __AK_VK_BUFFER__
@@ -18,19 +18,14 @@ namespace Ak
 			enum class kind { constant, dynamic };
 
 			void create(kind type, VkDeviceSize size, VkBufferUsageFlags usage, const void* data = nullptr);
-			inline void destroy() noexcept
-			{
-				static_assert(_buffer != VK_NULL_HANDLE, "trying to destroy an uninit video buffer");
-				vkDestroyBuffer(Render_Core::get().getDevice().get(), _buffer, nullptr);
-				Render_Core::get().freeChunck(_mem_chunck);
-			}
+			void destroy() noexcept;
 
-			inline void mapMem(void* data = nullptr, VkDeviceSize size = VK_WHOLE_SIZE) noexcept
+			inline void mapMem(void* data = nullptr, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0) noexcept
 			{
-				if(vkMapMemory(Render_Core::get().getDevice().get(), _buffer, _mem_chunck.offset, size, 0, data) != VK_SUCCESS)
+				if(vkMapMemory(Render_Core::get().getDevice().get(), _mem_chunck.memory, _mem_chunck.offset + offset, size, 0, &data) != VK_SUCCESS)
 					Core::log::report(ERROR, "Vulkan : failed to map a buffer");
 			}
-			inline void unmapMem() noexcept { vkUnmapMemory(Render_Core::get().getDevice().get(), _buffer); }
+			inline void unmapMem() noexcept { vkUnmapMemory(Render_Core::get().getDevice().get(), _mem_chunck.memory); }
 
 			void flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
 
@@ -42,13 +37,15 @@ namespace Ak
 
 			void swap(Buffer& buffer);
 
+		protected:
+			GPU_Mem_Chunk _mem_chunck;
+			VkBuffer _buffer = VK_NULL_HANDLE;
+
 		private:
 			void createBuffer(VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
 			uint32_t findMemoryType(uint32_t typeFilter);
 			void pushToGPU() noexcept;
 
-			GPU_Mem_Chunk _mem_chunck;
-			VkBuffer _buffer = VK_NULL_HANDLE;
 			VkBufferUsageFlags _usage;
 			VkMemoryPropertyFlags _flags;
 	};

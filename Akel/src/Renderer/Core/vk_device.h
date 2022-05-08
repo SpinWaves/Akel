@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 07/05/2022
+// Updated : 08/05/2022
 
 #ifndef __AK_VK_DEVICE__
 #define __AK_VK_DEVICE__
@@ -14,11 +14,7 @@ namespace Ak
 	{
 		public:
 			void init();
-			inline void destroy() noexcept
-			{
-				Ak_assert(_device != VK_NULL_HANDLE, "trying to destroy an uninit device");
-				vkDestroyDevice(_device, nullptr);
-			}
+			void destroy() noexcept;
 
 			inline VkDevice& operator()() noexcept { return _device; }
 			inline VkDevice& get() noexcept { return _device; }

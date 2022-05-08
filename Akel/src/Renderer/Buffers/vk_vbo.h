@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/04/2022
-// Updated : 30/04/2022
+// Updated : 08/05/2022
 
 #ifndef __AK_VK_VBO__
 #define __AK_VK_VBO__
@@ -18,7 +18,7 @@ namespace Ak
 			void setData(uint32_t size, const void* data);
 			void setSubData(uint32_t offset, uint32_t size, const void* data);
 
-			inline void bind() noexcept { vkCmdBindVertexBuffers(Render_Core::get().getActiveCmdBuffer().get(), 0, 1, &_buffer, &_mem_chunck.offset); }
+			inline void bind() noexcept { vkCmdBindVertexBuffers(Render_Core::get().getActiveCmdBuffer().get(), 0, 1, &_buffer, reinterpret_cast<VkDeviceSize*>(&_mem_chunck.offset)); }
 
 		private:
 			uint32_t _used_size = 0;
@@ -28,7 +28,7 @@ namespace Ak
 	{
 		public:
 			inline void create(uint32_t size, const void* data) { Buffer::create(Buffer::kind::constant, size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, data); }
-			inline void bind() noexcept { vkCmdBindVertexBuffers(Render_Core::get().getActiveCmdBuffer().get(), 0, 1, &_buffer, &_mem_chunck.offset); }
+			inline void bind() noexcept { vkCmdBindVertexBuffers(Render_Core::get().getActiveCmdBuffer().get(), 0, 1, &_buffer, reinterpret_cast<VkDeviceSize*>(&_mem_chunck.offset)); }
 	};
 }
 

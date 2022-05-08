@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 03/04/2022
+// Updated : 08/05/2022
 
 #include <Core/core.h>
-#include "GPU_Pages.h"
+#include "pages.h"
+#include "chunk.h"
 
 namespace Ak
 {
@@ -47,7 +48,7 @@ namespace Ak
 	{
 	    if(free)
 	    {
-	       	GPU_GPU_Page::Flag* current = this->next;
+	       	GPU_Page::Flag* current = this->next;
 	        while(current != nullptr && current->free)
 	        {
 	            size += current->size;
@@ -72,18 +73,18 @@ namespace Ak
 	    info.allocationSize = size;
 	    info.memoryTypeIndex = typeIndex;
 
-	    vkAllocateMemory(device, &info, callbacks, &memory);
+	    vkAllocateMemory(device, &info, callbacks, &_memory);
 
-	    pageMap.insert({ memory, this });
+	    pageMap.insert({ _memory, this });
 	}
 
 	GPU_Page::GPU_Page(GPU_Page&& other)
 	{
-	    _head = other._head;
+	    _head = std::move(other._head);
 	    _size = other._size;
-	    _mutex = other._mutex;
+	    _mutex = std::move(other._mutex);
 	    _device = other._device;
-	    _memory = other._memory;
+	    _memory = std::move(other._memory);
 	    _callbacks = other._callbacks;
 
 	    other._head = nullptr;
@@ -93,7 +94,7 @@ namespace Ak
 
 	GPU_Mem_Chunk GPU_Page::tryAlloc(VkMemoryRequirements requirements)
 	{
-	    if(requirements.size > size)
+	    if(requirements.size > _size)
 	    	return {};
 	    
 	    std::lock_guard<std::mutex> watchdog(*_mutex);
@@ -119,7 +120,7 @@ namespace Ak
 	            {
 	                current->split(start, requirements.size);
 	                GPU_Mem_Chunk result;
-	                result.memory = memory;
+	                result.memory = _memory;
 	                result.offset = start;
 	                result.size = requirements.size;
 	                return result;

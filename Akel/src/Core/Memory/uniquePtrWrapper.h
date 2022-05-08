@@ -11,6 +11,10 @@
 namespace Ak
 {
     void Message(std::string message, ...);
+    template <typename T>
+    void memFree(T*);
+    template <typename T, typename ... Args>
+    T* memAlloc(Args&& ... args);
 
     /**
      * Using a struct as a deleter requires as much memory as using a lambda expression (without std::function).

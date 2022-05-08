@@ -5,7 +5,7 @@
 
 #include "allocator_GPU.h"
 #include "pages.h"
-#include "chunck.h"
+#include "chunk.h"
 #include <Core/core.h>
 
 namespace Ak
@@ -23,7 +23,7 @@ namespace Ak
             _heaps.emplace_back(static_cast<uint32_t>(i), pageSize, props, device, callbacks, _pageMap);
     }
 
-    GPU_Mem_Chunk Allocator_GPU::allocChunck(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags)
+    GPU_Mem_Chunk Allocator_GPU::allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags)
     {
         for(size_t i = 0; i < _heaps.size(); i++)
         {

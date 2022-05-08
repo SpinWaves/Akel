@@ -14,7 +14,7 @@
 
 namespace Ak
 {
-    enum class render_mode { 2D, 3D };
+    enum class render_mode { mode_2D, mode_3D };
 
     class RendererComponent : public Component
     {

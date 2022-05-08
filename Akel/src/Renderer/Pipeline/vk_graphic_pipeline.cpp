@@ -1,24 +1,27 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 07/04/2022
+// Updated : 08/05/2022
 
 #include "vk_graphic_pipeline.h"
+#include "vk_shader.h"
 
 namespace Ak
 {
 	void GraphicPipeline::init()
     {
+        //_shader = memAlloc<Shader>();
+
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-        vertShaderStageInfo.module = vertShaderModule;
+        vertShaderStageInfo.module = VK_NULL_HANDLE;
         vertShaderStageInfo.pName = "main";
 
         VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
         fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-        fragShaderStageInfo.module = fragShaderModule;
+        fragShaderStageInfo.module = VK_NULL_HANDLE;
         fragShaderStageInfo.pName = "main";
 
         VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
@@ -29,10 +32,9 @@ namespace Ak
         vertexInputInfo.vertexAttributeDescriptionCount = 0;
 
         vertexInputInfo.vertexBindingDescriptionCount = 1;
-        vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-        vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
-        vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
-
+        vertexInputInfo.vertexAttributeDescriptionCount = -1;//static_cast<uint32_t>(attributeDescriptions.size());
+        vertexInputInfo.pVertexBindingDescriptions = VK_NULL_HANDLE;//&bindingDescription;
+        vertexInputInfo.pVertexAttributeDescriptions = nullptr;//attributeDescriptions.data();
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -42,14 +44,14 @@ namespace Ak
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = (float) Render_Core::get().getSwapCahin()._swapChainExtent.width;
-        viewport.height = (float) Render_Core::get().getSwapCahin()._swapChainExtent.height;
+        viewport.width = (float) Render_Core::get().getSwapChain()._swapChainExtent.width;
+        viewport.height = (float) Render_Core::get().getSwapChain()._swapChainExtent.height;
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor{};
         scissor.offset = {0, 0};
-        scissor.extent = Render_Core::get().getSwapCahin()._swapChainExtent;
+        scissor.extent = Render_Core::get().getSwapChain()._swapChainExtent;
 
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -107,11 +109,19 @@ namespace Ak
         pipelineInfo.pMultisampleState = &multisampling;
         pipelineInfo.pColorBlendState = &colorBlending;
         pipelineInfo.layout = _pipelineLayout;
-        pipelineInfo.renderPass = renderPass;
+        pipelineInfo.renderPass = Render_Core::get().getRenderPass().get();
         pipelineInfo.subpass = 0;
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-        if(vkCreateGraphicsPipelines(Render_Core::get().getDevice().get(), VK_NULL_HANDLE, 1, &_pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS)
+        if(vkCreateGraphicsPipelines(Render_Core::get().getDevice().get(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create graphics pipeline");
+    }
+
+    void GraphicPipeline::destroy() noexcept
+    {
+        Ak_assert(_graphicsPipeline != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
+        vkDestroyPipeline(Render_Core::get().getDevice().get(), _graphicsPipeline, nullptr);
+        if(_shader == nullptr)
+            memFree(_shader);
     }
 }

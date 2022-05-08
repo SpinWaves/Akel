@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 07/04/2022
+// Updated : 08/05/2022
 
 #include <Core/core.h>
 #include "vk_instance.h"
+#include <Platform/window.h>
 #include "render_core.h"
 
 namespace Ak
@@ -36,7 +37,7 @@ namespace Ak
         {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             createInfo.ppEnabledLayerNames = validationLayers.data();
-            populateDebugMessengerCreateInfo(debugCreateInfo);
+            Render_Core::get().getLayers().populateDebugMessengerCreateInfo(debugCreateInfo);
             createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
         }
         else
@@ -66,5 +67,11 @@ namespace Ak
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 
         return extensions;
+    }
+
+    void Instance::destroy() noexcept
+    {
+        Ak_assert(_instance != VK_NULL_HANDLE, "trying to destroy an uninit instance");
+        vkDestroyInstance(_instance, nullptr);
     }
 }

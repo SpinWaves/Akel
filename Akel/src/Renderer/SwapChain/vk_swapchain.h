@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 07/05/2022
+// Updated : 08/05/2022
 
 #ifndef __AK_VK_SWAPCHAIN__
 #define __AK_VK_SWAPCHAIN__
@@ -28,7 +28,7 @@ namespace Ak
             };
 
             void init();
-            void destroy();
+            void destroy() noexcept;
 
             SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
             VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
@@ -37,6 +37,7 @@ namespace Ak
             inline VkSwapchainKHR& operator()() noexcept { return _swapChain; }
             inline VkSwapchainKHR& get() noexcept { return _swapChain; }
             inline std::vector<FrameBuffer>& getFrameBuffers() { return _framebuffers; }
+            inline size_t getImagesNumber() const noexcept { return _swapChainImages.size(); }
 
         private:
             VkSwapchainKHR _swapChain;

@@ -1,9 +1,8 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 10/04/2022
+// Updated : 08/05/2022
 
-#include "vk_device.h"
 #include "render_core.h"
 
 namespace Ak
@@ -54,8 +53,8 @@ namespace Ak
 		if(vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create logcal device");
 
-		vkGetDeviceQueue(_device, indices.graphicsFamily.value(), 0, &graphicsQueue);
-		vkGetDeviceQueue(_device, indices.presentFamily.value(), 0, &presentQueue);
+		vkGetDeviceQueue(_device, indices.graphicsFamily.value(), 0, &Render_Core::get().getQueue().getGraphic());
+		vkGetDeviceQueue(_device, indices.presentFamily.value(), 0, &Render_Core::get().getQueue().getPresent());
 	}
 
 	void Device::pickPhysicalDevice()
@@ -90,7 +89,7 @@ namespace Ak
 		bool swapChainAdequate = false;
 		if(extensionsSupported)
 		{
-			SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device);
+			SwapChain::SwapChainSupportDetails swapChainSupport = Render_Core::get().getSwapChain().querySwapChainSupport(device);
 			swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
 		}
 
@@ -110,5 +109,11 @@ namespace Ak
 			requiredExtensions.erase(extension.extensionName);
 
 		return requiredExtensions.empty();
+	}
+
+	void Device::destroy() noexcept
+	{
+		Ak_assert(_device != VK_NULL_HANDLE, "trying to destroy an uninit device");
+		vkDestroyDevice(_device, nullptr);
 	}
 }

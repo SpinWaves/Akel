@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 12/04/2022
+// Updated : 08/05/2022
 
 #include "vk_descriptor_set.h"
-#include <Buffer/vk_ubo.h>
+#include <Renderer/Buffers/vk_ubo.h>
 
 namespace Ak
 {
@@ -14,7 +14,7 @@ namespace Ak
 
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = descriptorPool;
+        allocInfo.descriptorPool = Render_Core::get().getDescPool().get();
         allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
         allocInfo.pSetLayouts = layouts.data();
 
@@ -36,5 +36,11 @@ namespace Ak
         descriptorWrite.pBufferInfo = &bufferInfo;
 
         vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
+    }
+
+    void DescriptorSet::destroy() noexcept
+    {
+        Ak_assert(_desc_set != VK_NULL_HANDLE, "trying to destroy an uninit descriptor set");
+        vkFreeDescriptorSets(Render_Core::get().getDevice().get(), Render_Core::get().getDescPool().get(), 1, &_desc_set);
     }
 }

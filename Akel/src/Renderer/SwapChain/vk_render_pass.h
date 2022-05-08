@@ -1,7 +1,7 @@
 // this file is a part of akel
 // authors : @kbz_8
 // created : 10/04/2022
-// updated : 07/05/2022
+// updated : 08/05/2022
 
 #ifndef __AK_VK_RENDER_PASS__
 #define __AK_VK_RENDER_PASS__
@@ -15,12 +15,7 @@ namespace Ak
 	{
 		public:
 			void init();
-
-			inline void destroy() noexcept
-			{
-				Ak_assert(_renderPass != VK_NULL_HANDLE, "trying to destroy an uninit render pass");
-				vkDestroyRenderPass(Render_Core::get().getDevice().get(), _renderPass, nullptr);
-			}
+			void destroy() noexcept;
 
 			void begin();
 			void end();

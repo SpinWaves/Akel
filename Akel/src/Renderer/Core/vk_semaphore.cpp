@@ -12,7 +12,7 @@ namespace Ak
 		_imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
 		_renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
 		_inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
-		_imagesInFlight.resize(swapChainImages.size(), VK_NULL_HANDLE);
+		_imagesInFlight.resize(Render_Core::get().getSwapChain().getImagesNumber(), VK_NULL_HANDLE);
 
 		VkSemaphoreCreateInfo semaphoreInfo{};
 		semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;

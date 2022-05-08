@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 30/04/2022
+// Updated : 08/05/2022
 
 #include "vk_buffer.h"
 
@@ -9,7 +9,7 @@ namespace Ak
 {
 	void Buffer::create(Buffer::kind type, VkDeviceSize size, VkBufferUsageFlags usage, const void* data)
 	{
-		if constexpr(type == Buffer::kind::constant)
+		if(type == Buffer::kind::constant)
 		{
 			if(data == nullptr)
 			{
@@ -29,7 +29,7 @@ namespace Ak
 
 		createBuffer(_usage, _flags);
 
-		if constexpr(type == Buffer::kind::constant)
+		if(type == Buffer::kind::constant)
 		{
 			void* mapped = nullptr;
 			mapMem(mapped);
@@ -38,6 +38,13 @@ namespace Ak
 
 			pushToGPU();
 		}
+	}
+
+	void Buffer::destroy() noexcept
+	{
+		Ak_assert(_buffer != VK_NULL_HANDLE, "trying to destroy an uninit video buffer");
+		vkDestroyBuffer(Render_Core::get().getDevice().get(), _buffer, nullptr);
+		Render_Core::get().freeChunk(_mem_chunck);
 	}
 
 	void Buffer::createBuffer(VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
@@ -61,12 +68,12 @@ namespace Ak
 		allocInfo.allocationSize = memRequirements.size;
 		allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits);
 
-		_mem_chunck = Render_Core::get().allocChunck(memRequirements, properties);
+		_mem_chunck = Render_Core::get().allocChunk(memRequirements, properties);
 
 		vkBindBufferMemory(device, _buffer, _mem_chunck.memory, _mem_chunck.offset);
 	}
 
-	void Buffer::pushToGPU()
+	void Buffer::pushToGPU() noexcept
 	{
 		Buffer newBuffer;
 		newBuffer._mem_chunck.size = this->_mem_chunck.size;
@@ -74,14 +81,17 @@ namespace Ak
 		newBuffer._flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 		newBuffer.createBuffer(newBuffer._usage, newBuffer._flags);
 
+		auto cmdpool = Render_Core::get().getCmdPool().get();
+		auto device = Render_Core::get().getDevice().get();
+
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocInfo.commandPool = Render_Core::get().getCommandPool().get();
+		allocInfo.commandPool = cmdpool;
 		allocInfo.commandBufferCount = 1;
 
 		VkCommandBuffer commandBuffer;
-		vkAllocateCommandBuffers(Render_Core::get().getDevice().get(), &allocInfo, &commandBuffer);
+		vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer);
 
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -90,7 +100,7 @@ namespace Ak
 		vkBeginCommandBuffer(commandBuffer, &beginInfo);
 
 		VkBufferCopy copyRegion{};
-		copyRegion.size = _size;
+		copyRegion.size = this->_mem_chunck.size;
 		vkCmdCopyBuffer(commandBuffer, _buffer, newBuffer._buffer, 1, &copyRegion);
 
 		vkEndCommandBuffer(commandBuffer);
@@ -100,10 +110,12 @@ namespace Ak
 		submitInfo.commandBufferCount = 1;
 		submitInfo.pCommandBuffers = &commandBuffer;
 
+		auto graphicsQueue = Render_Core::get().getQueue().getGraphic();
+
 		vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
 		vkQueueWaitIdle(graphicsQueue);
 
-		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), Render_Core::get().getCmdPool().get(), 1, &commandBuffer);
+		vkFreeCommandBuffers(device, cmdpool, 1, &commandBuffer);
 
 		this->swap(newBuffer);
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/05/2021
-// Updated : 22/01/2022
+// Updated : 08/05/2022
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__
@@ -23,9 +23,10 @@ namespace Ak
 			using iterator = typename std::vector<__type>::const_iterator;
 			using const_iterator = iterator;
 
+			duets_array() = default;
 			duets_array(std::initializer_list<__type> duets)
 			{
-				assert(duets.size() <= _array.max_size());
+				Ak_assert(duets.size() <= _array.max_size());
 				_array = std::move(duets);
 			}
 			duets_array& operator= (const duets_array&& array) noexcept

@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 07/05/2022
+// Updated : 08/05/2022
 
 #include "vk_cmd_buffer.h"
+#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {
@@ -19,7 +20,7 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate command buffer");
 	}
 
-	void CmdBuffer::destroy()
+	void CmdBuffer::destroy() noexcept
 	{
 		Ak_assert(_cmd_buffer != VK_NULL_HANDLE, "trying to destroy an uninit command buffer");
 		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), Render_Core::get().getCmdPool().get(), 1, &_cmd_buffer);

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 06/05/2022
+// Updated : 08/05/2022
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
@@ -76,8 +76,8 @@ namespace Ak
             inline char at(unsigned int index) const noexcept { return _string[index]; }
             inline char back()  const noexcept { return _string[_size - 1]; }
             inline char front() const noexcept { return _string[0]; }
-            inline const char* data()  const noexcept { return _string.get(); }
-            inline const char* c_str() const noexcept { return _string.get(); }
+            inline const char* data()  const noexcept { return _string; }
+            inline const char* c_str() const noexcept { return _string; }
 
             // Finders
             size_t find(const char* str, size_t pos = 0);
@@ -95,24 +95,39 @@ namespace Ak
             inline iterator begin() { return iterator(&_string[0]); }
             inline iterator end()   { return iterator(&_string[_size]); }
 
-            inline bool operator==(fString str) noexcept { return std::strcmp(_string.get(), std::move(str).c_str()) == 0; }
+            inline bool operator==(fString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) == 0; }
             inline bool operator!=(fString str) noexcept { return !operator==(std::move(str)); }
-
-            inline bool operator==(std::string& str) noexcept { return std::strcmp(_string.get(), str.c_str()) == 0; }
+            inline bool operator==(std::string& str) noexcept { return std::strcmp(_string, str.c_str()) == 0; }
             inline bool operator!=(std::string& str) noexcept { return !operator==(str); }
-
-            inline bool operator==(mString str) noexcept { return std::strcmp(_string.get(), std::move(str).c_str()) == 0; }
+            inline bool operator==(mString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) == 0; }
             inline bool operator!=(mString str) noexcept { return !operator==(std::move(str)); }
-
-            inline bool operator==(const char* str) noexcept { return std::strcmp(_string.get(), str) == 0; }
+            inline bool operator==(const char* str) noexcept { return std::strcmp(_string, str) == 0; }
             inline bool operator!=(const char* str) noexcept { return !operator==(str); }
 
-            ~fString() = default;
+            inline bool operator>(fString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) > 0; }
+            inline bool operator<(fString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) < 0; }
+            inline bool operator>(std::string& str) noexcept { return std::strcmp(_string, str.c_str()) > 0; }
+            inline bool operator<(std::string& str) noexcept { return std::strcmp(_string, str.c_str()) < 0; }
+            inline bool operator>(mString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) > 0; }
+            inline bool operator<(mString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) < 0; }
+            inline bool operator>(const char* str) noexcept { return std::strcmp(_string, str) > 0; }
+            inline bool operator<(const char* str) noexcept { return std::strcmp(_string, str) < 0; }
+
+            inline bool operator>=(fString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) > -1; }
+            inline bool operator<=(fString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) < 1; }
+            inline bool operator>=(std::string& str) noexcept { return std::strcmp(_string, str.c_str()) > -1; }
+            inline bool operator<=(std::string& str) noexcept { return std::strcmp(_string, str.c_str()) < 1; }
+            inline bool operator>=(mString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) > -1; }
+            inline bool operator<=(mString str) noexcept { return std::strcmp(_string, std::move(str).c_str()) < 1; }
+            inline bool operator>=(const char* str) noexcept { return std::strcmp(_string, str) > -1; }
+            inline bool operator<=(const char* str) noexcept { return std::strcmp(_string, str) < 1; }
+
+            ~fString();
 
         private:
             static int compare(const char* p, const char* q, size_t n);
             
-            const unique_ptr_w<char[]> _string;
+            const char* _string;
             unsigned int _size = 0;
     };
 }

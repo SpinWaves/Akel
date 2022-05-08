@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 12/04/2022
+// Updated : 08/05/2022
 
 #include "render_core.h"
 
@@ -39,23 +39,24 @@ namespace Ak
 		}
 	}
 
-    void checkVk(VkResult result)
-    {
-    	if(result >= 0)
-    		return;
+	void checkVk(VkResult result)
+	{
+		if(result >= 0)
+			return;
 
-    	Core::log::report(FATAL_ERROR, std::move(std::string("Vulkan error : " + verbaliseResultVk(result))));
-    }
+		Core::log::report(FATAL_ERROR, "Vulkan error : %s", verbaliseResultVk(result));
+	}
+
+	Render_Core::Render_Core() : _device(), _queues(), _surface(), _cmd_pool(), _swapchain(), _instance(), _allocator(_device.getPhysicalDevice(), _device.get(), nullptr, 4096), _layers()
+	{}
 
 	void Render_Core::init()
 	{
 		_device.init();
-		_queues.init();
-		_surface.init();
+		_surface.create();
 		_cmd_pool.init();
 		_instance.init();
 		_swapchain.init();
-		_allocator.init();
 		_layers.init();
 		//_cmd_buffers;
 	}
@@ -63,12 +64,10 @@ namespace Ak
 	void Render_Core::destroy()
 	{
 		_device.destroy();
-		_queues.destroy();
 		_surface.destroy();
 		_cmd_pool.destroy();
 		_instance.destroy();
 		_swapchain.destroy();
-		_allocator.destroy();
 		_layers.destroy();
 	}
 }

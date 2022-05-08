@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 07/05/2022
+// Updated : 08/05/2022
 
 #ifndef __AK_VK_IMAGE_VIEW__
 #define __AK_VK_IMAGE_VIEW__
@@ -14,11 +14,7 @@ namespace Ak
 	{
 		public:
 			void init(class SwapChain* swapchain, VkImage& image);
-			inline void destroy() noexcept
-			{
-				Ak_assert(_image != VK_NULL_HANDLE, "trying to destroy an uninit image view");
-				vkDestroyImageView(Render_Core::get().getDevice().get(), _image, nullptr);
-			}
+			void destroy() noexcept;
 
             inline VkImageView& operator()() noexcept { return _image; }
             inline VkImageView& get() noexcept { return _image; }

@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 07/05/2022
+// Updated : 08/05/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
 
 #include <Akpch.h>
 #include <Renderer/Core/render_core.h>
+#include <Utils/Containers/duetsArray.h>
 #include <Renderer/Descriptors/vk_descriptor_set_layout.h>
 
 namespace Ak
@@ -38,7 +39,7 @@ namespace Ak
 					inline bool isWriteOnly() const noexcept { return _writeOnly; }
 					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
 
-					inline bool operator==(const Uniform &rhs) const { return binding == rhs.binding && offset == rhs.offset && size == rhs.size && glType == rhs.glType && readOnly == rhs.readOnly && writeOnly == rhs.writeOnly && stageFlags == rhs.stageFlags; }
+					inline bool operator==(const Uniform &rhs) const { return _binding == rhs._binding && _offset == rhs._offset && _size == rhs._size && _type == rhs._type && _readOnly == rhs._readOnly && _writeOnly == rhs._writeOnly && _stageFlags == rhs._stageFlags; }
 					inline bool operator!=(const Uniform &rhs) const { return !operator==(rhs); }
 
 				private:
@@ -54,17 +55,17 @@ namespace Ak
 			class Uniform_block
 			{
 				public:
-					UniformBlock(int32_t binding = -1, int32_t size = -1, VkShaderStageFlags stageFlags = 0) : _binding(binding), _size(size), _stageFlags(stageFlags) {}
+					Uniform_block(int32_t binding = -1, int32_t size = -1, VkShaderStageFlags stageFlags = 0) : _binding(binding), _size(size), _stageFlags(stageFlags) {}
 
-					inline int32_t getBinding() const noexcept { return binding; }
-					inline int32_t getSize() const noexcept { return size; }
-					inline VkShaderStageFlags getStageFlags() const noexcept { return stageFlags; }
-					inline const std::unordered_map<std::string, Uniform>& getUniforms() const noexcept { return uniforms; }
+					inline int32_t getBinding() const noexcept { return _binding; }
+					inline int32_t getSize() const noexcept { return _size; }
+					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
+					inline const std::unordered_map<std::string, Uniform>& getUniforms() const noexcept { return _uniforms; }
 
-					inline std::optional<Uniform> getUniform(const std::string &name) const { return (auto it = uniforms.find(name)) == uniforms.end() ? std::nullopt : it->second; }
+					inline std::optional<Uniform> getUniform(const std::string &name) const { auto it = _uniforms.find(name); return it == _uniforms.end() ? std::nullopt : std::make_optional(it->second); }
 
-					inline bool operator==(const UniformBlock &rhs) const { return binding == rhs.binding && size == rhs.size && stageFlags == rhs.stageFlags && type == rhs.type && uniforms == rhs.uniforms; }
-					inline bool operator!=(const UniformBlock &rhs) const { return !operator==(rhs); }
+					inline bool operator==(const Uniform_block &rhs) const { return _binding == rhs._binding && _size == rhs._size && _stageFlags == rhs._stageFlags && _uniforms == rhs._uniforms; }
+					inline bool operator!=(const Uniform_block &rhs) const { return !operator==(rhs); }
 
 				private:
 					std::unordered_map<std::string, Uniform> _uniforms;
@@ -78,10 +79,10 @@ namespace Ak
 				public:
 					Vertex_input(std::vector<VkVertexInputBindingDescription> bindings = {}, std::vector<VkVertexInputAttributeDescription> attributes = {}) : _bindings(std::move(bindings)), _attributes(std::move(attributes)) {}
 
-					const std::vector<VkVertexInputBindingDescription>& getBindingDescriptions() const { return _binding; }
+					const std::vector<VkVertexInputBindingDescription>& getBindingDescriptions() const { return _bindings; }
 					const std::vector<VkVertexInputAttributeDescription>& getAttributeDescriptions() const { return _attributes; }
 
-					inline bool operator<(const Vertex_input &rhs) const { return bindingDescriptions.front()._bindings < rhs.bindingDescriptions.front()._bindings; }
+					inline bool operator<(const Vertex_input& rhs) const { return _bindings.front().binding < rhs._bindings.front().binding; }
 
 				private:
 					std::vector<VkVertexInputBindingDescription> _bindings;
@@ -101,7 +102,7 @@ namespace Ak
 					inline bool operator==(const Attribute &rhs) const noexcept { return _binding == rhs._binding && _location == rhs._location && _offset == rhs._offset && _format == rhs._format; }
 					inline bool operator!=(const Attribute &rhs) const noexcept { return !operator==(rhs); }
 
-					inline VkVertexInputAttributeDescription convert_to_vk_vertex_input_attribute() const noexcept { return VkVertexInputAttributeDescription{_binding, _location, _format, _offset}; }
+					inline VkVertexInputAttributeDescription convert_to_vk_vertex_input_attribute() const noexcept { return VkVertexInputAttributeDescription{_binding, _location, static_cast<VkFormat>(_format), _offset}; }
 
 					Attribute() = default;
 
@@ -117,37 +118,27 @@ namespace Ak
 			Shader(const std::vector<uint32_t> byte_code, type t);
 
 			void generate();
-			inline void destroy() noexcept
-			{
-				Ak_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
-				vkDestroyShaderModule(Render_Core::get().getDevice().get(), _shader, nullptr);
-
-				for(auto& desc : _desc_sets)
-					desc.destroy();
-
-				Ak_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline layout");
-				vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
-			}
+			void destroy() noexcept;
  
 			inline const VkShaderModule& getShaderModule() noexcept { return _shader; }
 			inline const type getType() noexcept { return _type; }
 
-			inline const std::unordered_map<fString, Uniform>& getUniforms() { return _uniforms; };
-			inline const std::unordered_map<fString, Uniform_block>& getUniformBlocks() { return _uniformBlocks; };
-			inline const std::unordered_map<fString, Attribute>& getAttributes() { return _attributes; };
+			inline const duets_array<fString, Uniform>& getUniforms() { return _uniforms; }
+			inline const duets_array<fString, Uniform_block>& getUniformBlocks() { return _uniformBlocks; }
+			inline const duets_array<fString, Attribute>& getAttributes() { return _attributes; }
 
 			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _desc_sets; }
 
-			inline std::optional<Uniform> getUniform(const fString name) { return auto it = _uniforms.find(name); it != _uniforms.end() ? it->second : std::nullopt; }
-			inline std::optional<Uniform_block> getUniformBlock(const fString name) { return auto it = _uniformBlocks.find(name); it != _uniformBlocks.end() ? it->second : std::nullopt; }
-			inline std::optional<Attribute> getAttribute(const fString name) { return auto it = _attributes.find(name); it != _attributes.end() ? it->second : std::nullopt; }
+			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.have(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
+			inline std::optional<Uniform_block> getUniformBlock(fString name) { return _uniformBlocks.have(name) ? std::make_optional(_uniformBlocks[name]) : std::nullopt; }
+			inline std::optional<Attribute> getAttribute(fString name) { return _attributes.have(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
 
 			~Shader() = default;
 
 		private:
-			std::unordered_map<fString, Uniform_block> _uniformBlocks;
-			std::unordered_map<fString, Uniform> _uniforms;
-			std::unordered_map<fString, Attribute> _attributes;
+			duets_array<fString, Uniform_block> _uniformBlocks;
+			duets_array<fString, Uniform> _uniforms;
+			duets_array<fString, Attribute> _attributes;
 
 			std::vector<DescriptorSetLayout> _desc_sets;
 
@@ -156,11 +147,10 @@ namespace Ak
 
 			const std::vector<uint32_t> _byte_code;
 			type _type;
-			lang _lang;
 	};
 
-	Shader load_spirv_from_file(const fString& path, Shader::type t);
-	Shader load_spirv_from_file(const fString& path);
+	Shader load_spirv_from_file(fString path, Shader::type t);
+	Shader load_spirv_from_file(fString path);
 }
 
 #endif // __AK_VK_SHADER__
