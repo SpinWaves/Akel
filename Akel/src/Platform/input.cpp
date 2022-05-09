@@ -43,8 +43,8 @@ namespace Ak
             Render_Core::get().requireFrameBufferResize();
             for(auto win : _windows)
             {
-                if(win._win_id == _current_window)
-                    win.size.SET(_event->window.data1, _event->window.data2);
+                if(win->_window_id == _current_window)
+                    win->size.SET(_event.window.data1, _event.window.data2);
             }
         }
 
@@ -52,8 +52,8 @@ namespace Ak
         {
             for(auto win : _windows)
             {
-                if(win._win_id == _current_window)
-                    win.pos.SET(_event->window.data1, _event->window.data2);
+                if(win->_window_id == _current_window)
+                    win->pos.SET(_event.window.data1, _event.window.data2);
             }
         }
 

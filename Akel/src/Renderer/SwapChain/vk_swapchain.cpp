@@ -1,17 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 08/05/2022
+// Updated : 09/05/2022
 
 #include <Renderer/Core/render_core.h>
+#include <Platform/window.h>
 
 namespace Ak
 {
-    void Swapchain::init()
+    void SwapChain::init()
     {
-        Swapchain::SwapChainSupportDetails swapChainSupport = querySwapChainSupport(Render_Core::get().getDevice().getPhysicalDevice());
+        SwapChain::SwapChainSupportDetails swapChainSupport = querySwapChainSupport(Render_Core::get().getDevice().getPhysicalDevice());
 
-        VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
+        VkSurfaceFormatKHR surfaceFormat = Render_Core::get().getSurface().chooseSwapSurfaceFormat(swapChainSupport.formats);
         VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
         VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
 
@@ -30,7 +31,7 @@ namespace Ak
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-        Queues::QueueFamilyIndices indices = Render_Core::get().getQueues().findQueueFamilies(Render_Core::get().getDevice().getPhysicalDevice());
+        Queues::QueueFamilyIndices indices = Render_Core::get().getQueue().findQueueFamilies(Render_Core::get().getDevice().getPhysicalDevice());
         uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
         if(indices.graphicsFamily != indices.presentFamily)
@@ -55,25 +56,25 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create swap chain");
 
         vkGetSwapchainImagesKHR(device, _swapChain, &imageCount, nullptr);
-        swapChainImages.resize(imageCount);
+        _swapChainImages.resize(imageCount);
         vkGetSwapchainImagesKHR(device, _swapChain, &imageCount, _swapChainImages.data());
 
-        swapChainImageFormat = surfaceFormat.format;
-        swapChainExtent = extent;
+        _swapChainImageFormat = surfaceFormat.format;
+        _swapChainExtent = extent;
 
         _imageViews.resize(_swapChainImages.size());
         for(size_t i = 0; i < _swapChainImages.size(); i++)
-            _imageViews.init(this, _swapChainImages[i]);
+            _imageViews[i].init(this, _swapChainImages[i]);
 
         _framebuffers.resize(_imageViews.size());
 
-        for(size_t i = 0; i < _swapChainImageViews.size(); i++)
-            _framebuffers.init(this, _imageViews[i]);
+        for(size_t i = 0; i < _swapChainImages.size(); i++)
+            _framebuffers[i].init(this, _imageViews[i]);
     }
 
-    Swapchain::SwapChainSupportDetails Swapchain::querySwapChainSupport(VkPhysicalDevice device)
+    SwapChain::SwapChainSupportDetails SwapChain::querySwapChainSupport(VkPhysicalDevice device)
     {
-        Swapchain::SwapChainSupportDetails details;
+        SwapChain::SwapChainSupportDetails details;
         VkSurfaceKHR surface = Render_Core::get().getSurface().get();
 
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
@@ -99,7 +100,7 @@ namespace Ak
         return details;
     }
 
-    VkPresentModeKHR Swapchain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes)
+    VkPresentModeKHR SwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes)
     {
 		if(!Render_Core::get().getWindow()->vsync)
 		    return VK_PRESENT_MODE_IMMEDIATE_KHR;
@@ -112,7 +113,7 @@ namespace Ak
         return VK_PRESENT_MODE_FIFO_KHR;
     }
 
-    VkExtent2D Swapchain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
+    VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
     {
         if(capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
             return capabilities.currentExtent;
@@ -128,7 +129,7 @@ namespace Ak
         return actualExtent;
     }
 
-    void Swapchain::destroy() noexcept
+    void SwapChain::destroy() noexcept
     {
         VkDevice device = Render_Core::get().getDevice().get();
 

@@ -1,29 +1,32 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 07/05/2022
+// Updated : 09/06/2022
 
-#include <Core/log.h>
 #include <Maths/maths.h>
 
 namespace Ak
 {
+    void FatalError(std::string message, ...);
+    void Error(std::string message, ...);
+    void Warning(std::string message, ...);
+
     template <typename T = void, typename ... Args>
     T* JamAllocator::alloc(Args&& ... args)
     {
         if(_heap == nullptr)
         {
-            Core::log::report(FATAL_ERROR, "Jam Allocator: you need to initialize the allocator before asking him to give you memory");
+            FatalError("Jam Allocator: you need to initialize the allocator before asking him to give you memory");
             return nullptr;
         }
         size_t sizeType = sizeof(T);
         if(!canHold(sizeType))
         {
-            if(_autoResize)
-                increase_size(_heapSize * (4/3));
-            else
+            //if(_autoResize)
+            //    increase_size(_heapSize * (4/3));
+            //else
             {
-                Core::log::report(FATAL_ERROR, "Jam Allocator: the requested allocation is too large for the allocator, free up memory or increase the size of the allocator");
+                FatalError("Jam Allocator: the requested allocation is too large for the allocator (%d > %d), free up memory or increase the size of the allocator", sizeType, _heapSize - _memUsed);
                 return nullptr;
             }
         }
@@ -33,7 +36,7 @@ namespace Ak
         finder.size = sizeType;
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
         if(_freeSpaces != nullptr)
         {
@@ -67,8 +70,11 @@ namespace Ak
             _memUsed += sizeType;
         }
 
+        watchdog.unlock();
+
         if(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
+
 
     	return ptr;
     }
@@ -78,16 +84,16 @@ namespace Ak
     {
         if(_heap == nullptr)
         {
-            Core::log::report(FATAL_ERROR, "Jam Allocator: you need to initialize the allocator before asking him to give you memory");
+            FatalError("Jam Allocator: you need to initialize the allocator before asking him to give you memory");
             return nullptr;
         }
         if(!canHold(size))
         {
-            if(_autoResize)
-                increase_size(_heapSize * (4/3));
-            else
+            //if(_autoResize)
+            //    increase_size(_heapSize * (4/3));
+            //else
             {
-                Core::log::report(FATAL_ERROR, "Jam Allocator: the requested allocation is too large for the allocator, free up memory or increase the size of the allocator");
+                FatalError("Jam Allocator: the requested allocation is too large for the allocator (%d > %d), free up memory or increase the size of the allocator", size, _heapSize - _memUsed);
                 return nullptr;
             }
         }
@@ -97,7 +103,7 @@ namespace Ak
         finder.size = size;
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
         if(_freeSpaces != nullptr)
         {
@@ -131,8 +137,7 @@ namespace Ak
             _memUsed += size;
         }
 
-        if(std::is_class<T>::value)
-            ::new ((void*)ptr) T;
+        watchdog.unlock();
 
         return ptr;
     }
@@ -142,17 +147,17 @@ namespace Ak
     {
         if(ptr == nullptr)
         {
-            Core::log::report(WARNING, "Jam Allocator: you cannot free a nullptr");
+            Warning("Jam Allocator: you cannot free a nullptr");
             return;
         }
         if(_heap == nullptr)
         {
-            Core::log::report(WARNING, "Jam Allocator: trying to free a pointer with an uninitialised allocator");
+            Warning("Jam Allocator: trying to free a pointer with an uninitialised allocator");
             return;
         }
         if(!contains((void*)ptr))
         {
-            Core::log::report(WARNING, "Jam Allocator: a pointer allocated by another allocator is trying to be freed");
+            Warning("Jam Allocator: a pointer allocated by another allocator is trying to be freed");
             return;
         }
         if(std::is_class<T>::value)
@@ -163,12 +168,13 @@ namespace Ak
         size_t flag_size = sizeof(JamAllocator::flag);
         unsigned int better_flag = UINT_MAX;
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
         auto it = _usedSpaces->root_it();
         if(!it.has_data()) // used space tree is not supposed to be empty here
         {
-            Core::log::report(ERROR, "Jam Allocator: an inconsistency was detected when a pointer was freed");
+            Error("Jam Allocator: an inconsistency was detected when a pointer was freed");
+            watchdog.unlock();
             return;
         }
 
@@ -192,7 +198,8 @@ namespace Ak
 
         if(finder == nullptr)
         {
-            Core::log::report(ERROR, "JamAllocator : unable to find the flag of %p", ptr);
+            Error("JamAllocator : unable to find the flag of %p", ptr);
+            watchdog.unlock();
             return;
         }
         
@@ -204,5 +211,7 @@ namespace Ak
             _freeSpaces->add(node);
 
         ptr = nullptr;
+
+        watchdog.unlock();
     }
 }

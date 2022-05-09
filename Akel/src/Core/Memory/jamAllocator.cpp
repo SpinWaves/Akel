@@ -1,18 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 01/04/2022
+// Updated : 09/05/2022
 
 #include <Core/core.h>
 
 namespace Ak
 {
-    void JamAllocator::init(size_t Size) : _mutex()
+    void JamAllocator::init(size_t Size)
     {
         if(_heap != nullptr)
             return;
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
         _heap = std::malloc(Size);
 
@@ -45,7 +45,7 @@ namespace Ak
             return;
         }
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
         if(Size > _heapSize)
         {
@@ -62,7 +62,7 @@ namespace Ak
         if(_heap == nullptr)
             return;
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
         _freeSpaces = nullptr;
         _usedSpaces = nullptr;

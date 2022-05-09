@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/08/2021
-// Updated : 08/05/2022
-
-#include <Core/log.h>
+// Updated : 09/05/2022
 
 namespace Ak
 {
+    void Error(std::string message, ...);
+    void Warning(std::string message, ...);
+
     template <typename T = void, typename ... Args>
     T* FixedAllocator::alloc(Args&& ... args)
     {
@@ -16,12 +17,12 @@ namespace Ak
                 resize(_bits.size() * 2);
             else
             {
-                Core::log::report(ERROR, "Fixed Allocator: unable to alloc block, no more block free");
+                Error("Fixed Allocator: unable to alloc block, no more block free");
                 return nullptr;
             }
         }
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex);
 
         *_it = true;
 
@@ -41,12 +42,12 @@ namespace Ak
     {
         if(!contains(ptr))
         {
-            Core::log::report(WARNING, "Fixed Allocator: a pointer allocated by another allocator will be freed, this may be an error");
+            Warning("Fixed Allocator: a pointer allocated by another allocator will be freed, this may be an error");
             delete ptr;
             return;
         }
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex);
 
         if(std::is_class<T>::value)
             ptr->~T();

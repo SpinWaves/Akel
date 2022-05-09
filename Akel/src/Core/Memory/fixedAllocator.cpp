@@ -1,21 +1,21 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/07/2021
-// Updated : 01/04/2022
+// Updated : 09/05/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
 
 namespace Ak
 {
-    void FixedAllocator::init(size_t blockSize, size_t numBlocks) : _mutex()
+    void FixedAllocator::init(size_t blockSize, size_t numBlocks)
     {
         if(_heap != nullptr)
             return;
 
         size_t Size = blockSize * numBlocks;
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex);
 
         _heap = malloc(Size); // Main allocation
 
@@ -31,7 +31,7 @@ namespace Ak
 
     void FixedAllocator::resize(size_t numBlocks)
     {
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex);
 
         size_t Size = size_t(_block_size * numBlocks);
 
@@ -70,7 +70,7 @@ namespace Ak
         if(_heap == nullptr)
             return;
 
-        std::lock_guard<std::mutex> watchdog(_mutex);
+        std::unique_lock<std::mutex> watchdog(_mutex);
 
         std::free(_heap);
         _heap = nullptr;

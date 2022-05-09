@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 08/05/2022
+// Updated : 09/05/2022
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
@@ -127,7 +127,7 @@ namespace Ak
         private:
             static int compare(const char* p, const char* q, size_t n);
             
-            const char* _string;
+            char* _string;
             unsigned int _size = 0;
     };
 }

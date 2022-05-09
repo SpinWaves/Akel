@@ -14,18 +14,21 @@ namespace Ak
 
 	ImGuiComponent::ImGuiComponent(WindowComponent* win) : Component("__imguiComponent")
 	{
+		/*
 		if(win == nullptr)
 		{
 			Core::log::report(ERROR, "ImGui : nullptr passed as window");
 			return;
 		}
 		_win = win;
+		*/
 	}
 
 	ImGuiComponent::ImGuiComponent() : Component("__imguiComponent") {}
 
 	void ImGuiComponent::onAttach()
 	{
+		/*
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -52,9 +55,9 @@ namespace Ak
 			init_info.Instance = Render_Core::get().getInstance().get();
 			init_info.PhysicalDevice = Render_Core::get().getDevice().getPhysicalDevice();
 			init_info.Device = Render_Core::get().getDevice().get();
-			init_info.QueueFamily = /*TODO*/;
+			init_info.QueueFamily = ;//TODO
 			init_info.Queue = Render_Core::get().getQueue().getGraphic();
-			init_info.DescriptorPool = /*TODO*/;
+			init_info.DescriptorPool = ;//TODO
 			init_info.Allocator = nullptr;
 			init_info.MinImageCount = _ren->swapchainSupport.capabilities.minImageCount;
 			init_info.ImageCount = _ren->swapchainSupport.capabilities.maxImageCount;
@@ -68,10 +71,12 @@ namespace Ak
 		}
 
 		_componentsInit++;
+		*/
 	}
 
 	void ImGuiComponent::begin()
 	{
+		/*
 		if(_ren->framebufferResized && _win != nullptr)
         {
 			ImGui_ImplVulkan_SetMinImageCount(_ren->swapchainSupport.capabilities.minImageCount);
@@ -81,29 +86,34 @@ namespace Ak
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
+       	*/
 	}
 
 	void ImGuiComponent::end()
 	{
+		/*
 		// Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();
         const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
         if(!is_minimized)
 			ImGui_ImplVulkan_RenderDrawData(draw_data, Render_Core::get().getActiveCmdBuffer().get());
+		*/
 	}
 
 	void ImGuiComponent::onImGuiEvent(Input& input)
 	{
-		ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
+		//ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
 	}
 
 	void ImGuiComponent::onQuit()
 	{
+		/*
 		vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		ImGui_ImplVulkan_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
+		*/
 	}
 
 	void ImGuiComponent::SetDarkThemeColors()

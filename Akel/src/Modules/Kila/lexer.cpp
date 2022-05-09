@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 07/05/2022
+// Updated : 09/05/2022
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
@@ -53,22 +53,13 @@ namespace Ak::Kl
         
         if(std::optional<Tokens> t = get_keyword(word))
             return Token(*t, line);
-        else
+        if(std::isdigit(word.front()))
         {
-            if(std::isdigit(word.front()))
-            {
-                char* endptr;
-                double num = strtol(word.c_str(), &endptr, 0);
-                if(*endptr != 0)
-                {
-                    num = strtod(word.c_str(), &endptr);
-                    if(*endptr != 0)
-                        unexpected_error(endptr, stream.getline()).expose();
-                }
-                return Token(num, line);
-            } 
-            return Token(identifier{std::move(word)}, line);
-        }
+            if(word.find('.') != std::string::npos)
+                return Token(std::stod(word), line);
+            return Token(std::stoll(word), line);
+        } 
+        return Token(identifier{std::move(word)}, line);
     }
     
     Token fetch_operator(StreamStack& stream)
@@ -77,14 +68,11 @@ namespace Ak::Kl
 
         if(std::optional<Tokens> t = get_operator(stream))
             return Token(*t, line);
-        else
-        {
-            std::string unexpected;
-            unsigned int err_line_number = stream.getline();
-            for(int c = stream(); get_char_type(c) == char_type::punct; c = stream())
-                unexpected.push_back(char(c));
-            unexpected_error(unexpected.c_str(), err_line_number).expose();
-        }
+        std::string unexpected;
+        unsigned int err_line_number = stream.getline();
+        for(int c = stream(); get_char_type(c) == char_type::punct; c = stream())
+            unexpected.push_back(char(c));
+        unexpected_error(unexpected.c_str(), err_line_number).expose();
     }
 
     void skip_line_comment(StreamStack& stream)

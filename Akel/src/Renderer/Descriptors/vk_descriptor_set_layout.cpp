@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 08/05/2022
+// Updated : 09/05/2022
 
 #include "vk_descriptor_set_layout.h"
+#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {

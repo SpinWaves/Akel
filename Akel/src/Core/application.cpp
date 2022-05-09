@@ -13,6 +13,7 @@ namespace Ak
 	{
 		if(_app_check)
 			Core::log::report(FATAL_ERROR, "you can only declare one application");
+		_app_check = true;
 		
 		_name = name;
 		_fps.init();

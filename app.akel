@@ -2,9 +2,14 @@
 # DO NOT MODIFY IT, OTHERWISE YOU WILL GET BAD PERFORMANCES,
 # BAD MEMORY OPTIMISATION OR EVEN YOUR PROJECT WILL NOT WORK ANYMORE!
 
+enable_warning_console_message = true
+vk_enable_message_validation_layer = false
+memory_manager_enable_fixed_allocator = true
+unique_ptr_wrapper_enable_debug_message = false
+imgui_vk_debug_report = true
+imgui_vk_unlimited_framerate = false
 use_memory_manager = true
 fixedAllocator_size_0 = 1600
 fixedAllocator_size_1 = 6400
 fixedAllocator_size_2 = 38400
-jamAllocator_size_0 = 2000
-enable_warning_console_message = true
+jamAllocator_size_0 = 1392

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/05/2021
-// Updated : 08/05/2022
+// Updated : 09/05/2022
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__
@@ -26,7 +26,7 @@ namespace Ak
 			duets_array() = default;
 			duets_array(std::initializer_list<__type> duets)
 			{
-				Ak_assert(duets.size() <= _array.max_size());
+				_array.reserve(duets.size());
 				_array = std::move(duets);
 			}
 			duets_array& operator= (const duets_array&& array) noexcept
@@ -48,7 +48,7 @@ namespace Ak
 					if(_array[i].first == duet)
 						return _array[i].second;
 				}
-				return _sDefault;
+				return default_t<__second>::get();
 			}
 			constexpr const __first& operator[](__second duet) noexcept
 			{
@@ -57,13 +57,13 @@ namespace Ak
 					if(_array[i].second == duet)
 						return _array[i].first;
 				}
-				return _fDefault;
+				return default_t<__first>::get();
 			}
 			constexpr const __type& operator[](int index) noexcept
 			{
 				if(index < _array.size())
 						return _array[index];
-				return _dDefault;
+				return default_t<__type>::get();
 			}
 			constexpr const __second& at(__first duet) noexcept
 			{
@@ -155,17 +155,12 @@ namespace Ak
 			friend std::ostream& operator<<(std::ostream& target, const duets_array& source)
 			{
 				for(int i = 0; i < source.size(); i++)
-				{
 					target << source[i].first << "	" << source[i].second << std::endl;
-				}
 				return target;
 			}
 
 		private:
 			std::vector<__type> _array;
-			const __first _fDefault = default_t<__first>::get();
-			const __second _sDefault = default_t<__second>::get();
-			const __type _dDefault = default_t<__type>::get();
 	};
 }
 

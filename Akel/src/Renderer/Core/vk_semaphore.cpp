@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 07/05/2022
+// Updated : 09/05/2022
 
 #include "vk_semaphore.h"
+#include "render_core.h"
 
 namespace Ak
 {

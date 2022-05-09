@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/11/2021
-// Updated : 07/05/2022
+// Updated : 09/05/2022
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -18,6 +18,7 @@ namespace Ak::Kl
         kw_end,
         kw_for,
 		kw_break,
+        kw_local,
 		kw_while,
 		kw_return,
         kw_import,
@@ -95,7 +96,7 @@ namespace Ak::Kl
 	inline constexpr bool operator==(const eof&, const eof&) noexcept { return true; }
 	inline constexpr bool operator!=(const eof&, const eof&) noexcept { return false; }
 
-    using token_value = std::variant<Tokens, identifier, float, int, uint32_t, eof>;
+    using token_value = std::variant<Tokens, identifier, double, long long, eof>;
 
     class Token
     {
@@ -108,6 +109,7 @@ namespace Ak::Kl
                 {Tokens::kw_end, "end"},
                 {Tokens::kw_for, "for"},
                 {Tokens::kw_while, "while"},
+                {Tokens::kw_local, "local"},
                 {Tokens::kw_break, "break"},
                 {Tokens::kw_return, "return"},
                 {Tokens::kw_import, "import"},
@@ -139,7 +141,7 @@ namespace Ak::Kl
                 {Tokens::statment_if, "if"},
                 {Tokens::statment_then, "then"},
                 {Tokens::statment_else, "else"},
-                {Tokens::statment_elif, "elseif"}
+                {Tokens::statment_elseif, "elseif"}
 			};
 
 			static inline duets_array<Tokens, std::string> operators_token
@@ -178,17 +180,15 @@ namespace Ak::Kl
 			};
 
             inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }
-            inline bool is_int() const { return std::holds_alternative<int>(_value); }
-            inline bool is_uint() const { return std::holds_alternative<uint32_t>(_value); }
-            inline bool is_float() const { return std::holds_alternative<float>(_value); }
+            inline bool is_integer() const { return std::holds_alternative<long long>(_value); }
+            inline bool is_floating_point() const { return std::holds_alternative<double>(_value); }
             inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
             inline bool is_eof() const { return std::holds_alternative<eof>(_value); }
 
             inline Tokens get_token() const { return std::get<Tokens>(_value); }
             inline const identifier& get_identifier() const { return std::get<identifier>(_value); }
-            inline int get_int() const { return std::get<int>(_value); }
-            inline uint32_t get_uint() const { return std::get<uint32_t>(_value); }
-            inline float get_float() const { return std::get<float>(_value); }
+            inline long long get_integer() const { return std::get<long long>(_value); }
+            inline double get_floating_point() const { return std::get<double>(_value); }
             inline const token_value& get_value() const { return _value; }
         
             inline size_t get_line_number() const noexcept { return _line; }

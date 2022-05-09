@@ -7,7 +7,7 @@ class App : public Ak::Application
     public:
         explicit App() : Ak::Application("Kila test")
         {
-            add_component(Ak::memAlloc<Comp>());
+            add_component<Comp>();
         }
         ~App() = default;
 };
@@ -19,6 +19,10 @@ Ak::AkelInstance Akel_init()
 		instance.project_file_name = "app";
 		instance.enable_warning_console_message = true;
         instance.use_memory_manager = true;
-        instance.main_app = new App;
     return instance;    
+}
+
+Ak::Application* Akel_mainApplication()
+{
+    return Ak::memAlloc<App>();
 }

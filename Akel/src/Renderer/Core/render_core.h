@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 08/05/2022
+// Updated : 09/05/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -16,6 +16,7 @@
 #include "vk_instance.h"
 #include "vk_semaphore.h"
 #include "vk_validation_layers.h"
+
 #include <Renderer/Command/vk_cmd_pool.h>
 #include <Renderer/Command/vk_cmd_buffer.h>
 #include <Renderer/SwapChain/vk_swapchain.h>
@@ -37,7 +38,7 @@ namespace Ak
         constexpr const bool enableValidationLayers = false;
     #endif
 
-    const std::vector<const char*> validationLayers = {"VK_LAYER_KHRONOS_validation"};
+    const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
     
     constexpr const int MAX_FRAMES_IN_FLIGHT = 2;
 
@@ -49,9 +50,8 @@ namespace Ak
         public:
             Render_Core();
             void init();
-            void destroy();
-
             void init(class WindowComponent* window);
+            void destroy();
 
             inline const class WindowComponent* getWindow() const noexcept { return _window; }
             inline void setWindow(class WindowComponent* window) noexcept { _window = window; }

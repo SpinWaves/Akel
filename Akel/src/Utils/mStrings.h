@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/10/2021
-// Updated : 04/05/2022
+// Updated : 09/05/2022
 
 #ifndef __AK_MUTABLE_STRINGS__
 #define __AK_MUTABLE_STRINGS__
@@ -62,7 +62,7 @@ namespace Ak
             char pop_back();
 
             // Getters
-            char operator[](unsigned int index);
+            inline char operator[](unsigned int index) { return _string[index]; }
             inline const char* c_str() { return &_string[0]; }
 
             ~mString() = default;

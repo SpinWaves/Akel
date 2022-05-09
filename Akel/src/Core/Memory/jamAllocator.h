@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 29/04/2022
+// Updated : 09/05/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -14,7 +14,7 @@
  *  - Size allocation (like malloc)
  */
 
-// JamAllocator version 2.0.1
+// JamAllocator version 2.0.2
 
 namespace Ak
 {
@@ -28,10 +28,10 @@ namespace Ak
 
             void init(size_t Size);
 
-            inline constexpr bool canHold(size_t Size) noexcept { return Size > _heapSize - _memUsed; }
-            inline constexpr void auto_increase_size(bool set) noexcept { _autoResize = set; }
-            inline constexpr bool contains(void* ptr) noexcept { return ptr >= _heap && ptr <= _heapEnd; }
-            inline constexpr bool is_init() noexcept { return _heap != nullptr; }
+            inline bool canHold(size_t Size) noexcept { return Size + _memUsed < _heapSize; }
+            inline void auto_increase_size(bool set) noexcept { _autoResize = set; }
+            inline bool contains(void* ptr) noexcept { return ptr >= _heap && ptr <= _heapEnd; }
+            inline bool is_init() noexcept { return _heap != nullptr; }
 
             void increase_size(size_t Size);
             void destroy();

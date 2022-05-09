@@ -1,13 +1,12 @@
 // this file is a part of akel
 // authors : @kbz_8
 // created : 10/04/2022
-// updated : 08/05/2022
+// updated : 09/05/2022
 
 #ifndef __AK_VK_RENDER_PASS__
 #define __AK_VK_RENDER_PASS__
 
 #include <Akpch.h>
-#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {

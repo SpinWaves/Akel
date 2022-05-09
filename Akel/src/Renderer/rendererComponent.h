@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 07/05/2022
+// Updated : 09/05/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -22,7 +22,7 @@ namespace Ak
             RendererComponent();
             RendererComponent(WindowComponent* window);
 
-            void renderingMode(render_mode mode);
+            inline void renderingMode(render_mode mode) noexcept { _mode = mode; }
 
             void loadCustomShader(const fString& path, Shader::type type);
             void loadCustomShader(const fString& path);
@@ -32,6 +32,9 @@ namespace Ak
             void onAttach() override;
             void onRender() override;
             void onQuit() override;
+
+        private:
+            render_mode _mode;
     };
 }
 

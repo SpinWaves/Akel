@@ -6,7 +6,7 @@
 class Comp : public Ak::Component
 {
     public:
-        explicit Comp();
+        Comp();
 
         void onAttach() override;
         void update() override;

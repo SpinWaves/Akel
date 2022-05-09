@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 07/05/2022
+// Updated : 09/05/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -96,5 +96,14 @@
 #endif
 
 #define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
+
+#ifdef AK_RELEASE
+    #define static_assert(con, id) (void)(0)
+    #define assert(con) (void)(0)
+    #define Ak_assert(con, msg) (void)(0)
+#elif defined(AK_DEBUG)
+    namespace Ak { void FatalError(std::string message, ...); }
+    #define Ak_assert(con, msg) if(!bool(con)) Ak::FatalError("Assertion failed with message : %s", msg)
+#endif
 
 #endif // __AK_PCH__

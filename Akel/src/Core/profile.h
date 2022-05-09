@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/06/2021
-// Updated : 07/04/2022
+// Updated : 09/05/2022
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -98,16 +98,6 @@
 #elif defined(__APPLE__) || defined(__MACH__)
 	#define AK_PLATFORM_OSX
 	#define forceinline __attribute__((always_inline))
-#endif
-
-#ifdef AK_RELEASE
-	#define static_assert(con, id) (void)(0)
-	#define assert(con) (void)(0)
-	#define Ak_assert(con) (void)(0)
-	#define Ak_assert(con, msg) (void)(0)
-#elif defined(AK_DEBUG)
-	#define Ak_assert(con) if(!bool(con)) Core::log::report(FATAL_ERROR, "Assertion failed")
-	#define Ak_assert(con, msg) if(!bool(con)) Core::log::report(FATAL_ERROR, "Assertion failed with message : %s", msg)
 #endif
 
 #endif // __AK_PROFILE_CORE__

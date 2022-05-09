@@ -42,7 +42,7 @@ namespace Ak
 		MemoryManager::useMemoryManager(project->use_memory_manager);
 		MemoryManager::init();
 
-		Render_Core::get().init();
+		//Render_Core::get().init();
 
 		return true;
     }
