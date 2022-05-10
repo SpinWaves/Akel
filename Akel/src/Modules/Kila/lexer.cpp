@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 09/05/2022
+// Updated : 10/05/2022
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
@@ -89,15 +89,13 @@ namespace Ak::Kl
     
     void skip_block_comment(StreamStack& stream)
     {
-        bool closing = false;
         char c = 0;
         int line = stream.getline();
         do
         {
             c = stream();
-            if(closing && c == ']')
+            if(c == ']' && stream() == ']')
                 return;
-            closing = (c == ']');
         } while(get_char_type(c) != char_type::eof);
 
         stream.push_back(c);
@@ -126,7 +124,7 @@ namespace Ak::Kl
                             if(c1 == '-')
                             {
                                 c1 = stream();
-                                if(c == '[' && stream() == '[')
+                                if(c1 == '[' && stream() == '[')
                                     skip_block_comment(stream);
                                 else
                                     skip_line_comment(stream);
