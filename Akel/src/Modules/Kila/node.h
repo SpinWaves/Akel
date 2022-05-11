@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/05/2022
-// Updated : 10/05/2022
+// Updated : 11/05/2022
 
 #ifndef __AK_KILA_NODE__
 #define __AK_KILA_NODE__
@@ -9,6 +9,7 @@
 #include <Akpch.h>
 #include "tokens.h"
 #include "compiler_context.h"
+#include <Core/core.h>
 
 namespace Ak::Kl
 {
@@ -51,7 +52,7 @@ namespace Ak::Kl
 	};
 
 	struct Node;
-	using node_ptr = std::unique_ptr<Node>;
+	using node_ptr = unique_ptr_w<Node>;
 	using node_value = std::variant<node_op, double, long long, identifier>;
 
 	struct Node
