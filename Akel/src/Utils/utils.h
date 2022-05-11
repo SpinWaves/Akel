@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/04/2021
-// Updated : 01/04/2022
+// Updated : 11/05/2022
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -56,6 +56,15 @@ namespace Ak
 	{
 		static T get() { return T(); }
 	};
+
+	template<class... Ts>
+	struct overloaded : Ts...
+	{
+		using Ts::operator()...;
+	};
+
+	template<class... Ts>
+	overloaded(Ts...) -> overloaded<Ts...>;
 }
 
 #endif // __AK_UTILS__

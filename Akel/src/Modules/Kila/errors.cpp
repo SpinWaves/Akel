@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 25/02/2022
+// Updated : 11/05/2022
 
 #include <Modules/Kila/errors.h>
 
@@ -55,12 +55,6 @@ namespace Ak::Kl
     {
         std::string dest(strlen(message) + 42, '\0');
         sprintf(&dest[0], "Kila error : parsing error : unexpected '%s'", message);
-        return Error(std::move(dest), line);
-    }
-	Error unexpected_macro_error(const char* message, size_t line)
-    {
-        std::string dest(strlen(message) + 51, '\0');
-        sprintf(&dest[0], "Kila error : parsing error : unexpected '%s' as macro", message);
         return Error(std::move(dest), line);
     }
     Error unexpected_syntax_error(const char* message, size_t line)

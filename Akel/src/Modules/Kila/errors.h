@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 13/11/2021
+// Updated : 11/05/2022
 
 #ifndef __AK_KILA_ERRORS__
 #define __AK_KILA_ERRORS__
@@ -31,7 +31,6 @@ namespace Ak::Kl
 	Error compiler_error(const char* message, size_t line);
 
 	Error unexpected_error(const char* unexpected, size_t line);
-	Error unexpected_macro_error(const char* unexpected, size_t line);
 	Error unexpected_syntax_error(const char* unexpected, size_t line);
 	Error expected_syntax_error(const char* expected, size_t line);
 	Error undeclared_error(const char* undeclared, size_t line);

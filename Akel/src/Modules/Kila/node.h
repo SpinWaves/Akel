@@ -44,9 +44,11 @@ namespace Ak::Kl
 		
 		land,
 		lor,
-		lnot,    
+		lnot,
 
 		call,
+		index,
+		init,
 
 		//import
 	};

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/05/2022
-// Updated : 10/05/2022
+// Updated : 11/05/2022
 
 #ifndef __AK_KILA_TYPES__
 #define __AK_KILA_TYPES__
@@ -18,8 +18,10 @@ namespace Ak::Kl
 	};
 
 	struct function_type;
+	struct matrix_type;
+	struct init_list_type;
 
-	using type = std::variant<simple_type, function_type>;
+	using type = std::variant<simple_type, matrix_type, function_type, init_list_type>;
 	using type_handle = const type*;
 
 	struct matrix_type
@@ -60,9 +62,9 @@ namespace Ak::Kl
 			};
 			std::set<type, types_less> _types;
 
-			static type void_type;
-			static type floating_type;
-			static type integer_type;
+			static type void_type = simple_type::nothing;
+			static type floating_type = simple_type::floating;
+			static type integer_type = simple_type::integer;
 	};
 
 	namespace std { std::string to_string(type_handle t); }
