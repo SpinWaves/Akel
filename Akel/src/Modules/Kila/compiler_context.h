@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/05/2022
-// Updated : 11/05/2022
+// Updated : 12/05/2022
 
 #ifndef __AK_KILA_COMPILER_CONTEXT__
 #define __AK_KILA_COMPILER_CONTEXT__
@@ -74,7 +74,7 @@ namespace Ak::Kl
 	class local_variable_lookup: public identifier_lookup
 	{
 		public:
-			local_variable_lookup(std::unique_ptr<local_variable_lookup> parent_lookup) : _parent(std::move(parent_lookup)), _next_identifier_index(_parent ? _parent->_next_identifier_index : 1) {}
+			local_variable_lookup(Unique_ptr<local_variable_lookup> parent_lookup) : _parent(std::move(parent_lookup)), _next_identifier_index(_parent ? _parent->_next_identifier_index : 1) {}
 			inline const identifier_info* find(const std::string& name) const override
 			{
 				if(const identifier_info* ret = identifier_lookup::find(name))
@@ -85,10 +85,10 @@ namespace Ak::Kl
 			{
 				return insert_identifier(std::move(name), type_id, _next_identifier_index++, identifier_scope::local_variable);
 			}
-			inline unique_ptr_w<local_variable_lookup> detach_parent() { return std::move(_parent); }
+			inline Unique_ptr<local_variable_lookup> detach_parent() { return std::move(_parent); }
 
 		private:
-			unique_ptr_w<local_variable_lookup> _parent;
+			Unique_ptr<local_variable_lookup> _parent;
 			int _next_identifier_index;
 	};
 
@@ -169,14 +169,19 @@ namespace Ak::Kl
 			function_lookup _functions;
 			global_variable_lookup _globals;
 			param_lookup* _params;
-			unique_ptr_w<local_variable_lookup> _locals;
+			Unique_ptr<local_variable_lookup> _locals;
 			type_registry _types;
 
 			inline void enter_function()
 			{
-				return _functions.create_identifier(name, type_id);
+				Unique_ptr<param_lookup> params = create_Unique_ptr<param_lookup>();
+				_params = params.get();
+				_locals.reset(params.get());
 			}
-			void enter_scope();
+			inline void enter_scope()
+			{
+				_locals = create_Unique_ptr<local_variable_lookup>(std::move(_locals));
+			}
 			void leave_scope();
 	};
 }

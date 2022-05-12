@@ -37,7 +37,7 @@ namespace Ak
 
 	        std::vector<MemoryType> _memoryTypes;
 	        std::vector<GPU_Page> _pages;
-	        unique_ptr_w<std::mutex> _mutex;
+	        Unique_ptr<std::mutex> _mutex;
 	};
 }
 

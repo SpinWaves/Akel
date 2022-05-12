@@ -24,7 +24,7 @@ void StudioComponent::onAttach()
 	Ak::WindowComponent::maximize = true;
 	Ak::WindowComponent::fetchSettings();
 
-	_stack = Ak::create_unique_ptr_w<PanelStack>();
+	_stack = Ak::create_Unique_ptr<PanelStack>();
 
 	_stack->add_panel<Docks>(_eltm);
 	_stack->add_panel<Scene>(_eltm);

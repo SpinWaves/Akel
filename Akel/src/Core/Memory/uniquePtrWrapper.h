@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/09/2021
-// Updated : 07/05/2022
+// Updated : 12/05/2022
 
-#ifndef __AK_UNIQUE_PTR_WRAPPER__
-#define __AK_UNIQUE_PTR_WRAPPER__
+#ifndef __AK_Unique_ptrRAPPER__
+#define __AK_Unique_ptrRAPPER__
 
 #include <Core/projectFile.h>
 
@@ -16,33 +16,79 @@ namespace Ak
     template <typename T, typename ... Args>
     T* memAlloc(Args&& ... args);
 
-    /**
-     * Using a struct as a deleter requires as much memory as using a lambda expression (without std::function).
-     * Because of this, the unique_ptr has the same size as a raw pointer (8 bytes for 64-bit systems)
-     */
     template <typename T>
-    struct unique_ptr_w_deleter
+    class Unique_ptr
     {
-        void operator()(T* ptr)
-        {
-            void* address = ptr;
-            memFree(ptr);
+        public:
+            constexpr Unique_ptr() noexcept {}
+            constexpr Unique_ptr(std::nullptr_t) noexcept {}
+            explicit Unique_ptr(T* ptr) noexcept
+            {
+                if(_ptr != nullptr)
+                    memFree(_ptr);
+                _ptr = ptr;
+            }
+            Unique_ptr(Unique_ptr&& ptr) noexcept
+            {
+                if(_ptr != nullptr)
+                    memFree(_ptr);
+                _ptr = ptr._ptr;
+                ptr._ptr = nullptr;
+            }
+            Unique_ptr(const Unique_ptr& ptr) = delete;
 
-		    if(Core::ProjectFile::getBoolValue("unique_ptr_wrapper_enable_debug_message"))
-                Message("unique_ptr_w : pointer freed %p", address);
+            inline T* get() noexcept { return _ptr; }
 
-            address = nullptr;
-        }
+            inline void swap(const Unique_ptr<T>& ptr) noexcept
+            {
+                T* temp = _ptr;
+                _ptr = ptr._ptr;
+                ptr._ptr = temp;
+            }
+
+            inline void reset(T* ptr = nullptr) noexcept
+            {
+                if(_ptr != nullptr)
+                    memFree(_ptr);
+                _ptr = ptr;
+            }
+
+            inline T* release() noexcept
+            {
+                T* temp = _ptr;
+                _ptr = nullptr;
+                return temp;
+            }
+
+            inline explicit operator bool() const noexcept { return _ptr != nullptr; }
+
+            inline Unique_ptr& operator=(Unique_ptr&& ptr) noexcept
+            {
+                reset(ptr.release());
+                return *this;
+            }
+
+            inline Unique_ptr& operator=(std::nullptr_t) noexcept { reset(nullptr); }
+            inline Unique_ptr& operator=(const Unique_ptr&) = delete;
+
+            inline T* operator->() const noexcept { return _ptr; }
+            inline T& operator*() const noexcept { return *_ptr; }
+
+            ~Unique_ptr()
+            {
+                if(_ptr != nullptr)
+                    memFree(_ptr);
+            }
+
+        private:
+            T* _ptr = nullptr;
     };
 
     template <typename T>
-    using unique_ptr_w = std::unique_ptr<T, unique_ptr_w_deleter<T>>;
-
-    template <typename T>
-    inline unique_ptr_w<T> make_unique_ptr_w(T* ptr) noexcept { return unique_ptr_w<T>(ptr); }
+    inline Unique_ptr<T> make_Unique_ptr(T* ptr) noexcept { return Unique_ptr<T>(ptr); }
 
     template <typename T = void, typename ... Args>
-    inline unique_ptr_w<T> create_unique_ptr_w(Args&& ... args) noexcept { return make_unique_ptr_w<T>(memAlloc<T>(std::forward<Args>(args)...)); }
+    inline Unique_ptr<T> create_Unique_ptr(Args&& ... args) noexcept { return make_Unique_ptr<T>(memAlloc<T>(std::forward<Args>(args)...)); }
 }
 
-#endif // __AK_UNIQUE_PTR_WRAPPER__
+#endif // __AK_Unique_ptrRAPPER__

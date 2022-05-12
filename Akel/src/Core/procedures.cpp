@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 12/04/2022
+// Updated : 12/05/2022
 
 #include <Audio/audio.h>
 #include <Renderer/Core/render_core.h>
@@ -35,7 +35,6 @@ namespace Ak
 		Core::ProjectFile::setBoolValue("enable_warning_console_message", project->enable_warning_console_message);
 		Core::ProjectFile::setBoolValue("vk_enable_message_validation_layer", project->vk_enable_message_validation_layer);
 		Core::ProjectFile::setBoolValue("memory_manager_enable_fixed_allocator", project->memory_manager_enable_fixed_allocator);
-		Core::ProjectFile::setBoolValue("unique_ptr_wrapper_enable_debug_message", project->unique_ptr_wrapper_enable_debug_message);
 		Core::ProjectFile::setBoolValue("imgui_vk_debug_report", project->imgui_vk_debug_report);
 		Core::ProjectFile::setBoolValue("imgui_vk_unlimited_framerate", project->imgui_vk_unlimited_framerate);
 

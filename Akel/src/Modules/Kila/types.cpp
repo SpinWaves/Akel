@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/05/2022
-// Updated : 11/05/2022
+// Updated : 12/05/2022
 
 #include "types.h"
+#include <Utils/utils.h>
 
 namespace Ak::Kl
 {
@@ -31,12 +32,8 @@ namespace Ak::Kl
 					return ft1.param_type_id.size() < ft2.param_type_id.size();
 
 				for(size_t i = 0; i < ft1.param_type_id.size(); ++i)
-				{
 					if(ft1.param_type_id[i].type_id != ft2.param_type_id[i].type_id)
 						return ft1.param_type_id[i].type_id < ft2.param_type_id[i].type_id;
-					if(ft1.param_type_id[i].by_ref != ft2.param_type_id[i].by_ref)
-						return ft2.param_type_id[i].by_ref;
-				}
 
 				return false;
 			}
@@ -50,7 +47,7 @@ namespace Ak::Kl
 
 				for(size_t i = 0; i < ilt1.inner_type_id.size(); ++i)
 					if(ilt1.inner_type_id[i] != ilt2.inner_type_id[i])
-					return ilt1.inner_type_id[i] < ilt2.inner_type_id[i];
+						return ilt1.inner_type_id[i] < ilt2.inner_type_id[i];
 			}
 		}
 
@@ -65,7 +62,7 @@ namespace Ak::Kl
 				switch(t)
 				{
 					case simple_type::nothing: return type_registry::get_void_handle();
-					case simple_type::floating_type:  return type_registry::get_floating_handle();
+					case simple_type::floating:  return type_registry::get_floating_handle();
 					case simple_type::integer:  return type_registry::get_integer_handle();
 				}
 			},
@@ -73,51 +70,52 @@ namespace Ak::Kl
 		}, t);
 	}
 
-	namespace std
+}
+
+namespace std
+{
+	std::string to_string(Ak::Kl::type_handle t)
 	{
-		std::string to_string(type_handle t)
-		{
-			return std::visit(overloaded{
-				[](simple_type st)
+		return std::visit(Ak::overloaded{
+			[](Ak::Kl::simple_type st)
+			{
+				switch(st)
 				{
-					switch(st)
-					{
-						case simple_type::nothing: return std::string("void");
-						case simple_type::floating_type:  return std::string("floating");
-						case simple_type::integer: return std::string("integer");
-					}
-				},
-				[](const matrix_type& at)
+					case Ak::Kl::simple_type::nothing: return std::string("void");
+					case Ak::Kl::simple_type::floating:  return std::string("float");
+					case Ak::Kl::simple_type::integer: return std::string("int");
+				}
+			},
+			[](const Ak::Kl::matrix_type& at)
+			{
+				std::string ret = to_string(at.inner_type_id);
+				ret += "[]";
+				return ret;
+			},
+			[](const Ak::Kl::function_type& ft)
+			{
+				std::string ret = to_string(ft.return_type_id) + "(";
+				const char* separator = "";
+				for(const Ak::Kl::function_type::param& p: ft.param_type_id)
 				{
-					std::string ret = to_string(at.inner_type_id);
-					ret += "[]";
-					return ret;
-				},
-				[](const function_type& ft)
+					ret += separator + std::string("arg : ") + to_string(p.type_id);
+					separator = ", ";
+				}
+				ret += ")";
+				return ret;
+			},
+			[](const Ak::Kl::init_list_type& ilt)
+			{
+				std::string ret = "{ ";
+				const char* separator = "";
+				for(Ak::Kl::type_handle it : ilt.inner_type_id)
 				{
-					std::string ret = to_string(ft.return_type_id) + "(";
-					const char* separator = "";
-					for(const function_type::param& p: ft.param_type_id)
-					{
-						ret += separator + std::string("arg : ") + to_string(p.type_id);
-						separator = ", ";
-					}
-					ret += ")";
-					return ret;
-				},
-				[](const init_list_type& ilt)
-				{
-					std::string ret = "{ ";
-					const char* separator = "";
-					for(type_handle it : ilt.inner_type_id)
-					{
-						ret += separator + to_string(it);
-						separator = ", ";
-					}
-					ret += "} ";
-					return ret;
-				},
-			}, *t);
-		}
+					ret += separator + to_string(it);
+					separator = ", ";
+				}
+				ret += "} ";
+				return ret;
+			},
+		}, *t);
 	}
 }

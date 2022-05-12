@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/05/2022
-// Updated : 11/05/2022
+// Updated : 12/05/2022
 
 #include "node.h"
 #include "errors.h"
+#include <Utils/utils.h>
 
 namespace Ak::Kl
 {
@@ -47,19 +48,19 @@ namespace Ak::Kl
 	Node::Node(compiler_context& context, node_value value, std::vector<node_ptr> children, size_t line_number) : _value(std::move(value)), _children(std::move(children)), _line_number(line_number)
 	{
 		const type_handle void_handle = type_registry::get_void_handle();
-		const type_handle number_handle = type_registry::get_number_handle();
-		const type_handle string_handle = type_registry::get_string_handle();
+		const type_handle floating_handle = type_registry::get_floating_handle();
+		const type_handle integer_handle = type_registry::get_integer_handle();
 	    
 		std::visit(overloaded
 		{
 			[&](const std::string& value)
 			{
-				_type_id = string_handle;
+				_type_id = integer_handle;
 				_lvalue = false;
 			},
 			[&](double value)
 			{
-				_type_id = number_handle;
+				_type_id = floating_handle;
 				_lvalue = false;
 			},
 			[&](const identifier& value)
@@ -83,12 +84,12 @@ namespace Ak::Kl
 					case node_op::positive:
 					case node_op::negative:
 					case node_op::lnot:
-						_type_id = number_handle;
+						_type_id = floating_handle;
 						_lvalue = false;
-						_children[0]->check_conversion(number_handle, false);
+						_children[0]->check_conversion(floating_handle, false);
 					break;
 					case node_op::size:
-						_type_id = number_handle;
+						_type_id = floating_handle;
 						_lvalue = false;
 					break;
 					case node_op::add:
@@ -98,10 +99,10 @@ namespace Ak::Kl
 					case node_op::mod:
 					case node_op::land:
 					case node_op::lor:
-						_type_id = number_handle;
+						_type_id = floating_handle;
 						_lvalue = false;
-						_children[0]->check_conversion(number_handle, false);
-						_children[1]->check_conversion(number_handle, false);
+						_children[0]->check_conversion(floating_handle, false);
+						_children[1]->check_conversion(floating_handle, false);
 					break;
 					case node_op::eq:
 					case node_op::ne:
@@ -109,17 +110,17 @@ namespace Ak::Kl
 					case node_op::gt:
 					case node_op::le:
 					case node_op::ge:
-						_type_id = number_handle;
+						_type_id = floating_handle;
 						_lvalue = false;
-						if(!_children[0]->is_number() || !_children[1]->is_number())
+						if(!_children[0]->is_floating_point() || !_children[1]->is_floating_point())
 						{
-							_children[0]->check_conversion(string_handle, false);
-							_children[1]->check_conversion(string_handle, false);
+							_children[0]->check_conversion(integer_handle, false);
+							_children[1]->check_conversion(integer_handle, false);
 						}
 						else
 						{
-							_children[0]->check_conversion(number_handle, false);
-							_children[1]->check_conversion(number_handle, false);
+							_children[0]->check_conversion(floating_handle, false);
+							_children[1]->check_conversion(floating_handle, false);
 						}
 					break;
 					case node_op::assign:
@@ -133,10 +134,10 @@ namespace Ak::Kl
 					case node_op::mul_assign:
 					case node_op::div_assign:
 					case node_op::mod_assign:
-						_type_id = number_handle;
+						_type_id = floating_handle;
 						_lvalue = true;
-						_children[0]->check_conversion(number_handle, true);
-						_children[1]->check_conversion(number_handle, false);
+						_children[0]->check_conversion(floating_handle, true);
+						_children[1]->check_conversion(floating_handle, false);
 					break;
 					case node_op::comma:
 						for(int i = 0; i < int(_children.size()) - 1; ++i)

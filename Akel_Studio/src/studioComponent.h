@@ -34,7 +34,7 @@ class StudioComponent : public Ak::WindowComponent
 		std::string _eltm_editor_input_buffer;
 
 		std::shared_ptr<Ak::ELTM> _eltm;
-		Ak::unique_ptr_w<PanelStack> _stack;
+		Ak::Unique_ptr<PanelStack> _stack;
 };
 
 #endif // __AK_STUDIO_COMPONENT__

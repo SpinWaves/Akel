@@ -61,7 +61,7 @@ namespace Ak
 	GPU_Page::GPU_Page(VkDevice device, size_t size, uint32_t typeIndex, std::unordered_map<VkDeviceMemory, GPU_Page*>& pageMap, VkAllocationCallbacks* callbacks)
 	{
 	    _size = size;
-	    _mutex = create_unique_ptr_w<std::mutex>();
+	    _mutex = create_Unique_ptr<std::mutex>();
 	    _device = device;
 	    _callbacks = callbacks;
 	    _typeIndex = typeIndex;

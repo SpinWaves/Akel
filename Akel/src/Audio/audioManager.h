@@ -35,7 +35,7 @@ namespace Ak
             ~AudioManager() = default;
 
         private:
-            static inline unique_ptr_w<OpenAL> _al;
+            static inline Unique_ptr<OpenAL> _al;
             static inline bool _is_init = false;
     };
 }

@@ -78,7 +78,7 @@ namespace Ak
             ~Vector();
 
         private:
-            unique_ptr_w<T> _array;
+            Unique_ptr<T> _array;
             size_t _size = 0;
     };
 }

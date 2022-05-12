@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/05/2022
-// Updated : 11/05/2022
+// Updated : 12/05/2022
 
 #ifndef __AK_KILA_NODE__
 #define __AK_KILA_NODE__
@@ -54,7 +54,7 @@ namespace Ak::Kl
 	};
 
 	struct Node;
-	using node_ptr = unique_ptr_w<Node>;
+	using node_ptr = Unique_ptr<Node>;
 	using node_value = std::variant<node_op, double, long long, identifier>;
 
 	struct Node
@@ -63,12 +63,12 @@ namespace Ak::Kl
 
 		inline const node_value& get_value() const { return _value; }
 
-		inline bool is_node_operation() const { return std::holds_alternative<node_operation>(_value); }
+		inline bool is_node_op() const { return std::holds_alternative<node_op>(_value); }
 		inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
 		inline bool is_floating_point() const { return std::holds_alternative<double>(_value); }
 		inline bool is_integer() const { return std::holds_alternative<long long>(_value); }
 
-		inline node_operation get_node_operation() const { return std::get<node_operation>(_value); }
+		inline node_op get_node_op() const { return std::get<node_op>(_value); }
 		inline std::string_view get_identifier() const { return std::get<identifier>(_value).name; }
 		inline double get_floating_point() const { return std::get<double>(_value); }
 		inline long long get_integer() const { return std::get<long long>(_value); }

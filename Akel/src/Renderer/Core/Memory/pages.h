@@ -41,7 +41,7 @@ namespace Ak
 
 			Flag* _head = nullptr;
 	        size_t _size = 0;
-	        unique_ptr_w<std::mutex> _mutex;
+	        Unique_ptr<std::mutex> _mutex;
 	        VkDevice _device = VK_NULL_HANDLE;
 	        VkDeviceMemory _memory = VK_NULL_HANDLE;
 	        VkAllocationCallbacks* _callbacks = nullptr;

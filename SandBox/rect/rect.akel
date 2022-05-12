@@ -10,6 +10,5 @@ jamAllocator_size_0 = 2392
 enable_warning_console_message = true
 vk_enable_message_validation_layer = false
 memory_manager_enable_fixed_allocator = false
-unique_ptr_wrapper_enable_debug_message = false
 imgui_vk_debug_report = true
 imgui_vk_unlimited_framerate = false

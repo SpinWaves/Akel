@@ -11,7 +11,7 @@
 
 namespace Ak::Kl
 {
-	using node_ptr = unique_ptr_w<class Node>;
+	using node_ptr = Unique_ptr<class Node>;
 	node_ptr parse_nodes_tree(class compiler_context& context, class tk_iterator& it, type_handle type_id, bool allow_comma);
 }
 

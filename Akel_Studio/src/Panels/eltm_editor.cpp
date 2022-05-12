@@ -7,7 +7,7 @@
 
 ELTM_editor::ELTM_editor(const std::string& name, std::string* input_buffer) : Panel("__eltm_editor")
 {
-	_eltm = Ak::make_unique_ptr_w<Ak::ELTM>(Ak::memAlloc<Ak::ELTM>(true));
+	_eltm = Ak::make_Unique_ptr<Ak::ELTM>(Ak::memAlloc<Ak::ELTM>(true));
     _name = name;
     _input_buffer = input_buffer;
 }
