@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/05/2022
-// Updated : 12/05/2022
+// Updated : 13/05/2022
 
 #ifndef __AK_KILA_TYPES__
 #define __AK_KILA_TYPES__
@@ -14,7 +14,8 @@ namespace Ak::Kl
 	{
 		nothing,
 		floating,
-		integer
+		integer,
+		boolean
 	};
 
 	struct function_type;
@@ -54,6 +55,7 @@ namespace Ak::Kl
 			inline static type_handle get_void_handle() { return &void_type; }
 			inline static type_handle get_floating_handle() { return &floating_type; }
 			inline static type_handle get_integer_handle() { return &integer_type; }
+			inline static type_handle get_boolean_handle() { return &boolean_type; }
 
 		private:
 			struct types_less
@@ -65,6 +67,7 @@ namespace Ak::Kl
 			inline static type void_type = simple_type::nothing;
 			inline static type floating_type = simple_type::floating;
 			inline static type integer_type = simple_type::integer;
+			inline static type boolean_type = simple_type::boolean;
 	};
 
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 10/05/2022
+// Updated : 13/05/2022
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
@@ -52,13 +52,19 @@ namespace Ak::Kl
         stream.push_back(c);
         
         if(std::optional<Tokens> t = get_keyword(word))
+        {
+            if(t->has_value(Tokens::b_true))
+                return Token(true, line);
+            if(t->has_value(Tokens::b_false))
+                return Token(false, line);
             return Token(*t, line);
+        }
         if(std::isdigit(word.front()))
         {
             if(word.find('.') != std::string::npos)
                 return Token(std::stod(word), line);
             return Token(std::stoll(word), line);
-        } 
+        }
         return Token(identifier{std::move(word)}, line);
     }
     

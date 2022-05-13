@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 11/05/2022
+// Updated : 13/05/2022
 
 #include <Modules/Kila/errors.h>
 
@@ -77,9 +77,18 @@ namespace Ak::Kl
     }
     Error wrong_type_error(const char* message, const char* destination, bool lvalue, size_t line)
     {
-        std::string dest(strlen(message) + 32, '\0');
-        sprintf(&dest[0], "Kila error : wrong type error : %s", message);
-        return Error(std::move(dest), line);
+        std::string dest = "Kila error : wrong type : '";
+        if(lvalue)
+            dest += message;
+        else
+        {
+            dest += "cannot convert '";
+            dest += message;
+            dest += "' to '";
+            dest += destination;
+        }
+        dest += '\'';
+        return Error(std::move(dest), libe);
     }
     Error already_declared_error(const char* message, size_t line)
     {

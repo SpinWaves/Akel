@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/05/2022
-// Updated : 12/05/2022
+// Updated : 13/05/2022
 
 #ifndef __AK_KILA_NODE__
 #define __AK_KILA_NODE__
@@ -55,7 +55,7 @@ namespace Ak::Kl
 
 	struct Node;
 	using node_ptr = Unique_ptr<Node>;
-	using node_value = std::variant<node_op, double, long long, identifier>;
+	using node_value = std::variant<node_op, double, long long, bool, identifier>;
 
 	struct Node
 	{
@@ -67,11 +67,13 @@ namespace Ak::Kl
 		inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
 		inline bool is_floating_point() const { return std::holds_alternative<double>(_value); }
 		inline bool is_integer() const { return std::holds_alternative<long long>(_value); }
+		inline bool is_boolean() const { return std::holds_alternative<bool>(_value); }
 
 		inline node_op get_node_op() const { return std::get<node_op>(_value); }
 		inline std::string_view get_identifier() const { return std::get<identifier>(_value).name; }
 		inline double get_floating_point() const { return std::get<double>(_value); }
 		inline long long get_integer() const { return std::get<long long>(_value); }
+		inline bool get_boolean() const { return std::get<bool>(_value); }
 		inline const std::vector<node_ptr>& get_children() const { return _children; }
 		inline type_handle get_type_id() const { return _type_id; }
 

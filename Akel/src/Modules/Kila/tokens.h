@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/11/2021
-// Updated : 09/05/2022
+// Updated : 13/05/2022
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -96,7 +96,7 @@ namespace Ak::Kl
 	inline constexpr bool operator==(const eof&, const eof&) noexcept { return true; }
 	inline constexpr bool operator!=(const eof&, const eof&) noexcept { return false; }
 
-    using token_value = std::variant<Tokens, identifier, double, long long, eof>;
+    using token_value = std::variant<Tokens, identifier, double, long long, bool, eof>;
 
     class Token
     {
@@ -182,6 +182,7 @@ namespace Ak::Kl
             inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }
             inline bool is_integer() const { return std::holds_alternative<long long>(_value); }
             inline bool is_floating_point() const { return std::holds_alternative<double>(_value); }
+            inline bool is_boolean() const { return std::holds_alternative<bool>(_value); }
             inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
             inline bool is_eof() const { return std::holds_alternative<eof>(_value); }
 
@@ -189,6 +190,7 @@ namespace Ak::Kl
             inline const identifier& get_identifier() const { return std::get<identifier>(_value); }
             inline long long get_integer() const { return std::get<long long>(_value); }
             inline double get_floating_point() const { return std::get<double>(_value); }
+            inline bool get_boolean() const { return std::get<bool>(_value); }
             inline const token_value& get_value() const { return _value; }
         
             inline size_t get_line_number() const noexcept { return _line; }

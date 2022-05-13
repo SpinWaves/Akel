@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/05/2022
-// Updated : 12/05/2022
+// Updated : 13/05/2022
 
 #include "types.h"
 #include <Utils/utils.h>
@@ -64,6 +64,7 @@ namespace Ak::Kl
 					case simple_type::nothing: return type_registry::get_void_handle();
 					case simple_type::floating:  return type_registry::get_floating_handle();
 					case simple_type::integer:  return type_registry::get_integer_handle();
+					case simple_type::boolean:  return type_registry::get_boolean_handle();
 				}
 			},
 			[this](const auto& t) { return &(*(_types.insert(t).first)); }
@@ -81,9 +82,10 @@ namespace std
 			{
 				switch(st)
 				{
-					case Ak::Kl::simple_type::nothing: return std::string("void");
-					case Ak::Kl::simple_type::floating:  return std::string("float");
-					case Ak::Kl::simple_type::integer: return std::string("int");
+					case Ak::Kl::simple_type::nothing:  return std::string("void");
+					case Ak::Kl::simple_type::floating: return std::string("float");
+					case Ak::Kl::simple_type::integer:  return std::string("int");
+					case Ak::Kl::simple_type::boolean:  return std::string("bool");
 				}
 			},
 			[](const Ak::Kl::matrix_type& at)
