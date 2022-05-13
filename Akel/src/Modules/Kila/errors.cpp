@@ -88,7 +88,7 @@ namespace Ak::Kl
             dest += destination;
         }
         dest += '\'';
-        return Error(std::move(dest), libe);
+        return Error(std::move(dest), line);
     }
     Error already_declared_error(const char* message, size_t line)
     {

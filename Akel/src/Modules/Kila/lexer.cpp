@@ -53,9 +53,9 @@ namespace Ak::Kl
         
         if(std::optional<Tokens> t = get_keyword(word))
         {
-            if(t->has_value(Tokens::b_true))
+            if(*t == Tokens::b_true)
                 return Token(true, line);
-            if(t->has_value(Tokens::b_false))
+            if(*t == Tokens::b_false)
                 return Token(false, line);
             return Token(*t, line);
         }

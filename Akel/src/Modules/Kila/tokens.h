@@ -17,6 +17,7 @@ namespace Ak::Kl
 		kw_do,
         kw_end,
         kw_for,
+        kw_len,
 		kw_break,
         kw_local,
 		kw_while,
@@ -108,6 +109,7 @@ namespace Ak::Kl
                 {Tokens::kw_do, "do"},
                 {Tokens::kw_end, "end"},
                 {Tokens::kw_for, "for"},
+                {Tokens::kw_len, "len"},
                 {Tokens::kw_while, "while"},
                 {Tokens::kw_local, "local"},
                 {Tokens::kw_break, "break"},
@@ -201,6 +203,26 @@ namespace Ak::Kl
             token_value _value;
             unsigned int _line = 0;
     };
+
+}
+
+namespace std
+{
+    inline std::string to_string(Ak::Kl::Tokens t) { return Ak::Kl::Token::kw_tokens.have(t) ? std::move(std::string(Ak::Kl::Token::kw_tokens[t])) : std::move(std::string(Ak::Kl::Token::operators_token[t])); }
+
+    inline std::string to_string(const Ak::Kl::token_value& t)
+    {
+        return std::visit(Ak::overloaded
+        {
+            [](Ak::Kl::Tokens rt) { return to_string(rt); },
+            [](double d) { return to_string(d); },
+            [](long long d) { return to_string(d); },
+            [](bool d) { return to_string(d); },
+            [](const std::string& str) { return str; },
+            [](const Ak::Kl::identifier& id) { return id.name; },
+            [](Ak::Kl::eof) { return std::string("<EOF>"); }
+        }, t);
+    }
 }
 
 #endif // __AK_KILA_TOKENS__

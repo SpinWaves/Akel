@@ -38,6 +38,8 @@ void Comp::update()
             std::cout << "Int        : " << it->get_integer() << std::endl;
         if(it->is_floating_point())
             std::cout << "Float      : " << it->get_floating_point() << std::endl;
+        if(it->is_boolean())
+            std::cout << "Bool       : " << it->get_boolean() << std::endl;
         if(it->is_identifier())
             std::cout << "Identifier : " << it->get_identifier().name << std::endl;
     }

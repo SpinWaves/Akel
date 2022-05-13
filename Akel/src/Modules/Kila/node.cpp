@@ -94,7 +94,7 @@ namespace Ak::Kl
 						_lvalue = false;
 						_children[0]->check_conversion(floating_handle, false);
 					break;
-					case node_op::size:
+					case node_op::len:
 						_type_id = integer_handle;
 						_lvalue = false;
 					break;
@@ -110,7 +110,7 @@ namespace Ak::Kl
 							_children[0]->check_conversion(integer_handle, false);
 							_children[1]->check_conversion(integer_handle, false);
 						}
-						else if(!_children[0]->is_integer_point() || !_children[1]->is_integer_point())
+						else if(!_children[0]->is_integer() || !_children[1]->is_integer())
 						{
 							_type_id = floating_handle;
 							_children[0]->check_conversion(floating_handle, false);
@@ -134,7 +134,7 @@ namespace Ak::Kl
 							_children[0]->check_conversion(integer_handle, false);
 							_children[1]->check_conversion(integer_handle, false);
 						}
-						else if(!_children[0]->is_integer_point() || !_children[1]->is_integer_point())
+						else if(!_children[0]->is_integer() || !_children[1]->is_integer())
 						{
 							_children[0]->check_conversion(floating_handle, false);
 							_children[1]->check_conversion(floating_handle, false);
@@ -191,7 +191,7 @@ namespace Ak::Kl
 							if(ft->param_type_id.size() + 1 != _children.size())
 								semantic_error(std::string("wrong number of arguments. Expected " + std::to_string(ft->param_type_id.size()) + ", given " + std::to_string(_children.size() - 1)).c_str(), _line_number).expose();
 							for(size_t i = 0; i < ft->param_type_id.size(); i++)
-								_children[i + 1]->check_conversion(ft->param_type_id[i].type_id, ft->param_type_id[i].by_ref);
+								_children[i + 1]->check_conversion(ft->param_type_id[i].type_id, false);
 						}
 						else
 						{

@@ -48,6 +48,7 @@ namespace Ak::Kl
 
 		call,
 		index,
+		len,
 		init,
 
 		//import
@@ -78,6 +79,8 @@ namespace Ak::Kl
 		inline type_handle get_type_id() const { return _type_id; }
 
 		inline size_t get_line_number() const { return _line_number; }
+
+		inline bool is_lvalue() const noexcept { return _lvalue; }
 
 		void check_conversion(type_handle type_id, bool lvalue) const;
 

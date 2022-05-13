@@ -52,7 +52,7 @@ namespace Ak::Kl
 				case node_op::call: precedence = operator_precedence::postfix; break;
 				case node_op::positive:
 				case node_op::negative:
-				case node_op::size:
+				case node_op::len:
 				case node_op::lnot: precedence = operator_precedence::prefix; break;
 				case node_op::mul:
 				case node_op::div:
@@ -88,7 +88,7 @@ namespace Ak::Kl
 				case node_op::positive:
 				case node_op::negative:
 				case node_op::lnot:
-				case node_op::size:
+				case node_op::len:
 				case node_op::call: number_of_operands = 1; break;
 
 				default: number_of_operands = 2; break;
@@ -123,7 +123,7 @@ namespace Ak::Kl
 			case Tokens::comma: return operator_info(node_op::comma, line_number);
 			case Tokens::bracket_b: return operator_info(node_op::call, line_number);
 			case Tokens::square_b: return operator_info(node_op::index, line_number);
-			case Tokens::kw_size: return operator_info(node_op::size, line_number);
+			case Tokens::kw_len: return operator_info(node_op::len, line_number);
 			case Tokens::embrace_b: return operator_info(node_op::init, line_number);
 
 			default: unexpected_syntax_error(std::to_string(token).c_str(), line_number).expose();
@@ -174,7 +174,7 @@ namespace Ak::Kl
 			operand_stack.pop();
 		}
 
-		operand_stack.push(create_Unique_ptr<node>(context, operator_stack.top().operation, std::move(operands), operator_stack.top().line_number));
+		operand_stack.push(create_Unique_ptr<Node>(context, operator_stack.top().operation, std::move(operands), operator_stack.top().line_number));
 		operator_stack.pop();
 	}
 
@@ -195,7 +195,7 @@ namespace Ak::Kl
 				{
 					//open round bracket is misinterpreted as a function call
 					++it;
-					operand_stack.push(parse_expression_tree_impl(context, it, true, false));
+					operand_stack.push(parse_nodes_tree_impl(context, it, true, false));
 					if(it->has_value(Tokens::bracket_e))
 					{
 						expected_operand = false;
@@ -222,7 +222,7 @@ namespace Ak::Kl
 								syntax_error("expected ',', or closing '}'", it->get_line_number()).expose();
 						}
 					}
-					operand_stack.push(create_Unique_ptr<node>(context, node_op::init, std::move(children), it->get_line_number()));
+					operand_stack.push(create_Unique_ptr<Node>(context, node_op::init, std::move(children), it->get_line_number()));
 					expected_operand = false;
 					continue;
 				}
@@ -247,7 +247,7 @@ namespace Ak::Kl
 								size_t line_number = argument->get_line_number();
 								std::vector<node_ptr> argument_vector;
 								argument_vector.push_back(std::move(argument));
-								argument = create_Unique_ptr<node>(context, node_op::param, std::move(argument_vector), line_number);
+								argument = create_Unique_ptr<Node>(context, node_op::param, std::move(argument_vector), line_number);
 
 								operand_stack.push(std::move(argument));
 
@@ -280,12 +280,14 @@ namespace Ak::Kl
 			{
 				if(!expected_operand)
 					unexpected_syntax_error(std::to_string(it->get_value()).c_str(), it->get_line_number()).expose();
-				if(it->is_number())
-					operand_stack.push(create_Unique_ptr<node>(context, it->get_number(), std::vector<node_ptr>(), it->get_line_number()));
-				else if(it->is_string()) 
-					operand_stack.push(create_Unique_ptr<node>(context, it->get_string(), std::vector<node_ptr>(), it->get_line_number()));
+				if(it->is_floating_point())
+					operand_stack.push(create_Unique_ptr<Node>(context, it->get_floating_point(), std::vector<node_ptr>(), it->get_line_number()));
+				else if(it->is_integer()) 
+					operand_stack.push(create_Unique_ptr<Node>(context, it->get_integer(), std::vector<node_ptr>(), it->get_line_number()));
+				else if(it->is_boolean()) 
+					operand_stack.push(create_Unique_ptr<Node>(context, it->get_boolean(), std::vector<node_ptr>(), it->get_line_number()));
 				else
-					operand_stack.push(create_Unique_ptr<node>(context, it->get_identifier(), std::vector<node_ptr>(), it->get_line_number()));
+					operand_stack.push(create_Unique_ptr<Node>(context, it->get_identifier(), std::vector<node_ptr>(), it->get_line_number()));
 				expected_operand = false;
 			}
 		}
