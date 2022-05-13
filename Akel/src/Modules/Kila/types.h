@@ -20,12 +20,18 @@ namespace Ak::Kl
 
 	struct function_type;
 	struct matrix_type;
+	struct table_type;
 	struct init_list_type;
 
-	using type = std::variant<simple_type, matrix_type, function_type, init_list_type>;
+	using type = std::variant<simple_type, matrix_type, function_type, table_type, init_list_type>;
 	using type_handle = const type*;
 
 	struct matrix_type
+	{
+		type_handle inner_type_id;
+	};
+
+	struct table_type
 	{
 		type_handle inner_type_id;
 	};

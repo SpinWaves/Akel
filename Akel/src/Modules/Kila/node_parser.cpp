@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/05/2022
-// Updated : 12/05/2022
+// Updated : 13/05/2022
 
 #include "node.h"
 #include "lexer.h"
@@ -90,7 +90,6 @@ namespace Ak::Kl
 				case node_op::lnot:
 				case node_op::size:
 				case node_op::call: number_of_operands = 1; break;
-				case node_op::ternary: number_of_operands = 3; break;
 
 				default: number_of_operands = 2; break;
 			}
@@ -175,7 +174,7 @@ namespace Ak::Kl
 			operand_stack.pop();
 		}
 
-		operand_stack.push(std::make_unique<node>(context, operator_stack.top().operation, std::move(operands), operator_stack.top().line_number));
+		operand_stack.push(create_Unique_ptr<node>(context, operator_stack.top().operation, std::move(operands), operator_stack.top().line_number));
 		operator_stack.pop();
 	}
 
@@ -212,18 +211,18 @@ namespace Ak::Kl
 					std::vector<node_ptr> children;
 					if(!it->has_value(Tokens::embrace_e))
 					{
-						while (true)
+						while(true)
 						{
 							children.push_back(parse_nodes_tree_impl(context, it, false, false));
 							if(it->has_value(Tokens::embrace_e))
-							break;
+								break;
 							else if(it->has_value(Tokens::comma))
-							++it;
+								++it;
 							else
-							syntax_error("expected ',', or closing '}'", it->get_line_number()).expose();
+								syntax_error("expected ',', or closing '}'", it->get_line_number()).expose();
 						}
 					}
-					operand_stack.push(std::make_unique<node>(context, node_op::init, std::move(children), it->get_line_number()));
+					operand_stack.push(create_Unique_ptr<node>(context, node_op::init, std::move(children), it->get_line_number()));
 					expected_operand = false;
 					continue;
 				}
@@ -248,7 +247,7 @@ namespace Ak::Kl
 								size_t line_number = argument->get_line_number();
 								std::vector<node_ptr> argument_vector;
 								argument_vector.push_back(std::move(argument));
-								argument = std::make_unique<node>(context, node_op::param, std::move(argument_vector), line_number);
+								argument = create_Unique_ptr<node>(context, node_op::param, std::move(argument_vector), line_number);
 
 								operand_stack.push(std::move(argument));
 
@@ -268,7 +267,7 @@ namespace Ak::Kl
 						++it;
 						operand_stack.push(parse_nodes_tree_impl(context, it, true, false));
 						if(!it->has_value(Tokens::square_e))
-							syntax_error("expected closing ]'", it->get_line_number()).expose();
+							syntax_error("expected closing ']'", it->get_line_number()).expose();
 					break;
 
 					default: break;
@@ -282,11 +281,11 @@ namespace Ak::Kl
 				if(!expected_operand)
 					unexpected_syntax_error(std::to_string(it->get_value()).c_str(), it->get_line_number()).expose();
 				if(it->is_number())
-					operand_stack.push(std::make_unique<node>(context, it->get_number(), std::vector<node_ptr>(), it->get_line_number()));
+					operand_stack.push(create_Unique_ptr<node>(context, it->get_number(), std::vector<node_ptr>(), it->get_line_number()));
 				else if(it->is_string()) 
-					operand_stack.push(std::make_unique<node>(context, it->get_string(), std::vector<node_ptr>(), it->get_line_number()));
+					operand_stack.push(create_Unique_ptr<node>(context, it->get_string(), std::vector<node_ptr>(), it->get_line_number()));
 				else
-					operand_stack.push(std::make_unique<node>(context, it->get_identifier(), std::vector<node_ptr>(), it->get_line_number()));
+					operand_stack.push(create_Unique_ptr<node>(context, it->get_identifier(), std::vector<node_ptr>(), it->get_line_number()));
 				expected_operand = false;
 			}
 		}

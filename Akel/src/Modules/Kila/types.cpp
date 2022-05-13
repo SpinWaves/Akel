@@ -37,10 +37,11 @@ namespace Ak::Kl
 
 				return false;
 			}
-			case 3: 
+			case 3: return std::get<3>(t1).inner_type_id < std::get<3>(t2).inner_type_id;
+			case 4: 
 			{
-				const init_list_type& ilt1 = std::get<3>(t1);
-				const init_list_type& ilt2 = std::get<3>(t2);
+				const init_list_type& ilt1 = std::get<4>(t1);
+				const init_list_type& ilt2 = std::get<4>(t2);
 
 				if(ilt1.inner_type_id.size() != ilt2.inner_type_id.size())
 					return ilt1.inner_type_id.size() < ilt2.inner_type_id.size();
@@ -89,6 +90,12 @@ namespace std
 				}
 			},
 			[](const Ak::Kl::matrix_type& at)
+			{
+				std::string ret = to_string(at.inner_type_id);
+				ret += "[]";
+				return ret;
+			},
+			[](const Ak::Kl::table_type& at)
 			{
 				std::string ret = to_string(at.inner_type_id);
 				ret += "[]";

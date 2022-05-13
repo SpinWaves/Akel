@@ -121,24 +121,6 @@ namespace Ak::Kl
 					break;
 					case node_op::land:
 					case node_op::lor:
-						_type_id = boolean_handle;
-						_lvalue = false;
-						if(!_children[0]->is_floating_point() || !_children[1]->is_floating_point())
-						{
-							_children[0]->check_conversion(integer_handle, false);
-							_children[1]->check_conversion(integer_handle, false);
-						}
-						else if(!_children[0]->is_integer_point() || !_children[1]->is_integer_point())
-						{
-							_children[0]->check_conversion(floating_handle, false);
-							_children[1]->check_conversion(floating_handle, false);
-						}
-						else
-						{
-							_children[0]->check_conversion(boolean_handle, false);
-							_children[1]->check_conversion(boolean_handle, false);
-						}
-					break;
 					case node_op::eq:
 					case node_op::ne:
 					case node_op::lt:
