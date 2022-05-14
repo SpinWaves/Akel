@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/11/2021
-// Updated : 13/05/2022
+// Updated : 14/05/2022
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -20,7 +20,9 @@ namespace Ak::Kl
         kw_len,
 		kw_break,
         kw_local,
+        kw_const,
 		kw_while,
+        kw_struct,
 		kw_return,
         kw_import,
         kw_export,
@@ -39,9 +41,8 @@ namespace Ak::Kl
         embrace_b,
         embrace_e,
 
-        t_int,
+        t_num,
         t_void,
-        t_uint,
         t_bool,
         t_vec2,
         t_vec3,
@@ -49,7 +50,6 @@ namespace Ak::Kl
         t_mat2,
         t_mat3,
         t_mat4,
-        t_float,
 
         b_true,
         b_false,
@@ -97,7 +97,7 @@ namespace Ak::Kl
 	inline constexpr bool operator==(const eof&, const eof&) noexcept { return true; }
 	inline constexpr bool operator!=(const eof&, const eof&) noexcept { return false; }
 
-    using token_value = std::variant<Tokens, identifier, double, long long, bool, eof>;
+    using token_value = std::variant<Tokens, identifier, double, bool, eof>;
 
     class Token
     {
@@ -112,7 +112,9 @@ namespace Ak::Kl
                 {Tokens::kw_len, "len"},
                 {Tokens::kw_while, "while"},
                 {Tokens::kw_local, "local"},
+                {Tokens::kw_const, "const"},
                 {Tokens::kw_break, "break"},
+                {Tokens::kw_struct, "struct"},
                 {Tokens::kw_return, "return"},
                 {Tokens::kw_import, "import"},
                 {Tokens::kw_export, "export"},
@@ -121,9 +123,8 @@ namespace Ak::Kl
                 {Tokens::kw_function, "function"},
                 {Tokens::kw_location, "location"},
 
-                {Tokens::t_int, "int"},
+                {Tokens::t_num, "num"},
                 {Tokens::t_void, "void"},
-                {Tokens::t_uint, "uint"},
                 {Tokens::t_bool, "bool"},
                 {Tokens::t_vec2, "vec2"},
                 {Tokens::t_vec3, "vec3"},
@@ -131,7 +132,6 @@ namespace Ak::Kl
                 {Tokens::t_mat2, "mat2"},
                 {Tokens::t_mat3, "mat3"},
                 {Tokens::t_mat4, "mat4"},
-                {Tokens::t_float, "float"},
 
                 {Tokens::logical_or, "or"},
                 {Tokens::logical_not, "not"},
@@ -182,16 +182,14 @@ namespace Ak::Kl
 			};
 
             inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }
-            inline bool is_integer() const { return std::holds_alternative<long long>(_value); }
-            inline bool is_floating_point() const { return std::holds_alternative<double>(_value); }
+            inline bool is_number() const { return std::holds_alternative<double>(_value); }
             inline bool is_boolean() const { return std::holds_alternative<bool>(_value); }
             inline bool is_identifier() const { return std::holds_alternative<identifier>(_value); }
             inline bool is_eof() const { return std::holds_alternative<eof>(_value); }
 
             inline Tokens get_token() const { return std::get<Tokens>(_value); }
             inline const identifier& get_identifier() const { return std::get<identifier>(_value); }
-            inline long long get_integer() const { return std::get<long long>(_value); }
-            inline double get_floating_point() const { return std::get<double>(_value); }
+            inline double get_number() const { return std::get<double>(_value); }
             inline bool get_boolean() const { return std::get<bool>(_value); }
             inline const token_value& get_value() const { return _value; }
         
@@ -216,7 +214,6 @@ namespace std
         {
             [](Ak::Kl::Tokens rt) { return to_string(rt); },
             [](double d) { return to_string(d); },
-            [](long long d) { return to_string(d); },
             [](bool d) { return to_string(d); },
             [](const std::string& str) { return str; },
             [](const Ak::Kl::identifier& id) { return id.name; },

@@ -8,7 +8,11 @@ Example of Kila program
 location(0) local pos: vec3
 location(1) local color: vec4
 
-uniform(0) viewData = { view: mat4, model: mat4, proj: mat4 }
+uniform(0) struct viewData 
+    view: mat4
+    model: mat4
+    proj: mat4
+end
 
 function Vmain() -> vec4
     pos = vec3(vewData.model * vec4(pos, 1.0))
