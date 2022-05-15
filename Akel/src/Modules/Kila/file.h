@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 07/05/2021
+// Updated : 15/05/2022
 
 #ifndef __AK_KILA_FILE__
 #define __AK_KILA_FILE__
@@ -11,7 +11,7 @@ namespace Ak::Kl
     class File
     {
         public:
-            explicit File(const char* path);
+            File(const char* path);
             File(const File&) = delete;
 
             void operator=(const File&) = delete;
@@ -23,7 +23,7 @@ namespace Ak::Kl
 
         private:
             std::string _path;
-            FILE* _fp;
+            FILE* _fp = nullptr;
     };
 }
 

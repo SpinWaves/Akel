@@ -31,6 +31,9 @@ void Comp::update()
             else if(Ak::Kl::Token::operators_token.have(it->get_token()))
             {
                 std::cout << "Operator   : ";
+                if(it->get_token() == Ak::Kl::Tokens::endline)
+                    std::cout << "endline" << std::endl;
+                else
                 std::cout << Ak::Kl::Token::operators_token[it->get_token()] << std::endl;
             }
         }

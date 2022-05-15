@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 14/05/2022
+// Updated : 15/05/2022
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
@@ -22,6 +22,8 @@ namespace Ak::Kl
     {
         if(c < 0)
             return char_type::eof;
+        if(c == '\n')
+            return char_type::punct;
         if(std::isspace(c))
             return char_type::space;
         if(std::isalpha(c) || std::isdigit(c) || char(c) == '_')

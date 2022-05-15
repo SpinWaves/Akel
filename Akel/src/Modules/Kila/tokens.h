@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/11/2021
-// Updated : 14/05/2022
+// Updated : 15/05/2022
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -18,8 +18,8 @@ namespace Ak::Kl
         kw_end,
         kw_for,
         kw_len,
+        kw_mut,
 		kw_break,
-        kw_local,
         kw_const,
 		kw_while,
         kw_struct,
@@ -84,6 +84,8 @@ namespace Ak::Kl
         logical_or,
         logical_not,
         logical_and,
+
+        endline
     };
 
     struct eof{};
@@ -110,14 +112,14 @@ namespace Ak::Kl
                 {Tokens::kw_end, "end"},
                 {Tokens::kw_for, "for"},
                 {Tokens::kw_len, "len"},
+                {Tokens::kw_mut, "mut"},
                 {Tokens::kw_while, "while"},
-                {Tokens::kw_local, "local"},
-                {Tokens::kw_const, "const"},
                 {Tokens::kw_break, "break"},
                 {Tokens::kw_struct, "struct"},
                 {Tokens::kw_return, "return"},
                 {Tokens::kw_import, "import"},
                 {Tokens::kw_export, "export"},
+                {Tokens::kw_const, "constval"},
                 {Tokens::kw_uniform, "uniform"},
                 {Tokens::kw_continue, "continue"},
                 {Tokens::kw_function, "function"},
@@ -179,6 +181,8 @@ namespace Ak::Kl
                 {Tokens::div, "/"},
                 {Tokens::mod, "%"},
                 {Tokens::assign, "="},
+
+                {Tokens::endline, "\n"}
 			};
 
             inline bool is_keyword() const { return std::holds_alternative<Tokens>(_value); }
