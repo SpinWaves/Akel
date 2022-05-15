@@ -16,6 +16,8 @@
 #include <Modules/Kila/types.h>
 #include <Modules/Kila/compiler_context.h>
 #include <Modules/Kila/node.h>
+#include <Modules/Kila/functions.h>
+#include <Modules/Kila/compiler.h>
 #include <Modules/Kila/node_parser.h>
 
 #endif // __AK_KILA__

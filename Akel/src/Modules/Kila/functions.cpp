@@ -8,8 +8,7 @@
 #include "compiler_context.h"
 #include "errors.h"
 #include "lexer.h"
-#include "tk_iterator.h"
-#include "runtime.h"
+#include "token_iterator.h"
 
 namespace Ak::Kl
 {
@@ -23,30 +22,23 @@ namespace Ak::Kl
 		ret.name = parse_declaration_name(ctx, it);
 
 		{
-			ctx.function();
+			auto _ = ctx.function();
 
 			parse_token_value(ctx, it, Tokens::bracket_b);
-
-			bool isarray = false;
 
 			while(!it->has_value(Tokens::bracket_e))
 			{
 				if(!ret.params.empty())
 					parse_token_value(ctx, it, Tokens::comma);
 
-				isarray = false;
-
 				std::string name = parse_declaration_name(ctx, it);
 				ret.params.push_back(name);
 
-				parse_token_value(ctx, it, Tokens::type_specifier);
+				parse_token_value(ctx, it, Tokens::colon);
 
 				type_handle t = parse_type(ctx, it);
 
-				if(isarray)
-					t = ctx.get_handle(array_type{t});
-
-				ft.param_type_id.push_back({t, byref});
+				ft.param_type_id.push_back({t});
 			}
 			++it;
 		}
@@ -58,7 +50,7 @@ namespace Ak::Kl
 		{
 			++it;
 			parse_token_value(ctx, it, Tokens::square_e);
-			ft.return_type_id = ctx.get_handle(array_type{ft.return_type_id});
+			ft.return_type_id = ctx.get_handle(table_type{ft.return_type_id});
 		}
 
 		ret.type_id = ctx.get_handle(ft);
@@ -76,9 +68,21 @@ namespace Ak::Kl
 
 		while(nesting && !it->is_eof())
 		{
-			if(it->has_value(Tokens::end)))
-				nesting--;
+			if(it->is_keyword())
+			{
+				switch(it->get_token())
+				{
+					case Tokens::statment_then:
+					case Tokens::statment_else:
+					case Tokens::kw_repeat:
+					case Tokens::kw_do: nesting++; break;
 
+					case Tokens::kw_until:
+					case Tokens::kw_end: nesting--; break;
+
+					default : break;
+				}
+			}
 			_tokens.push_back(*it);
 			++it;
 		}

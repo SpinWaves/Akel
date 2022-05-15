@@ -12,10 +12,6 @@
 
 namespace Ak::Kl
 {
-	class compiler_context;
-	class runtime;
-	class tk_iterator;
-
 	struct function_declaration
 	{
 		std::vector<std::string> params;
@@ -23,12 +19,12 @@ namespace Ak::Kl
 		type_handle type_id;
 	};
 
-	function_declaration parse_function_declaration(compiler_context& ctx, tk_iterator& it);
+	function_declaration parse_function_declaration(class compiler_context& ctx, class tk_iterator& it);
 
 	class function_body
 	{
 		public:
-			function_body(compiler_context& ctx, tk_iterator& it);
+			function_body(class compiler_context& ctx, class tk_iterator& it);
 			function_body(function_body&& orig) noexcept;
 
 			inline const function_declaration& get_decl() const { return _decl; }
