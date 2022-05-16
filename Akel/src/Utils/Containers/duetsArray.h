@@ -113,7 +113,7 @@ namespace Ak
 			{
 				_array.clear();
 			}
-			bool have(const __first& duet)
+			bool has(const __first& duet)
 			{
 				for(int i = 0; i < _array.size(); i++)
 				{
@@ -122,7 +122,7 @@ namespace Ak
 				}
 				return false;
 			}
-			bool have(const __second& duet)
+			bool has(const __second& duet)
 			{
 				for(int i = 0; i < _array.size(); i++)
 				{

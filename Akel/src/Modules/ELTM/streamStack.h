@@ -49,7 +49,7 @@ namespace Ak
 						std::istringstream iss(subData);
 						while(iss >> data)			// get word after word from the line
 						{
-							if(Token::keyword_token.have(data))
+							if(Token::keyword_token.has(data))
 								tempo.push_back(std::make_pair(index_count, Token(Token::keyword_token[std::move(data)])));
 							else
 							{

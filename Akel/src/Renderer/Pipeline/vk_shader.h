@@ -128,9 +128,9 @@ namespace Ak
 
 			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _desc_sets; }
 
-			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.have(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
-			inline std::optional<Uniform_block> getUniformBlock(fString name) { return _uniformBlocks.have(name) ? std::make_optional(_uniformBlocks[name]) : std::nullopt; }
-			inline std::optional<Attribute> getAttribute(fString name) { return _attributes.have(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
+			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.has(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
+			inline std::optional<Uniform_block> getUniformBlock(fString name) { return _uniformBlocks.has(name) ? std::make_optional(_uniformBlocks[name]) : std::nullopt; }
+			inline std::optional<Attribute> getAttribute(fString name) { return _attributes.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
 
 			~Shader() = default;
 

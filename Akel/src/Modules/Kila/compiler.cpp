@@ -1,15 +1,38 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 15/05/2022
+// Updated : 16/05/2022
 
+#include "file.h"
 #include "compiler.h"
 #include "errors.h"
 #include "token_iterator.h"
+#include "stream_stack"
 #include "compiler_context.h"
 
 namespace Ak::Kl
 {
+	std::vector<uint32_t> Compiler::generateSpirV(const std::string& code)
+	{
+		get_character get = [&]()
+		{
+			static size_t pos = 0;
+			return code[pos++];
+		};
+
+		StreamStack stream(&get);
+		tk_iterator it(stream);
+	}
+
+	std::string Compiler::loadFile(const std::string& path)
+	{
+		File f(path);
+		std::string ret;
+		while(!f.is_eof())
+			ret.push_back((char)f());
+		return ret;
+	}
+
 	inline Error unexpected_syntax(const tk_iterator& it)
 	{
 		return unexpected_syntax_error(std::to_string(it->get_value()).c_str(), it->get_line_number());

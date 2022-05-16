@@ -214,7 +214,7 @@ namespace Ak::Kl
 
 namespace std
 {
-    inline std::string to_string(Ak::Kl::Tokens t) { return Ak::Kl::Token::kw_tokens.have(t) ? std::move(std::string(Ak::Kl::Token::kw_tokens[t])) : std::move(std::string(Ak::Kl::Token::operators_token[t])); }
+    inline std::string to_string(Ak::Kl::Tokens t) { return Ak::Kl::Token::kw_tokens.has(t) ? std::move(std::string(Ak::Kl::Token::kw_tokens[t])) : std::move(std::string(Ak::Kl::Token::operators_token[t])); }
 
     inline std::string to_string(const Ak::Kl::token_value& t)
     {

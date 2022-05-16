@@ -9,7 +9,7 @@ namespace Ak::Kl
 {
 	std::optional<Tokens> get_keyword(const std::string& word)
 	{
-		return !Token::kw_tokens.have(word) ? std::nullopt : std::make_optional(Token::kw_tokens[word]);
+		return !Token::kw_tokens.has(word) ? std::nullopt : std::make_optional(Token::kw_tokens[word]);
 	}
 
 	std::optional<Tokens> get_operator(StreamStack& stream)
@@ -17,12 +17,12 @@ namespace Ak::Kl
 		std::string c;
 		c.push_back(char(stream()));
 		c.push_back(char(stream()));
-		if(Token::operators_token.have(c))
+		if(Token::operators_token.has(c))
 			return std::make_optional(Token::operators_token[std::move(c)]);
 
 		stream.push_back(c[1]);
 		c.pop_back();
-		if(Token::operators_token.have(c))
+		if(Token::operators_token.has(c))
 			return std::make_optional(Token::operators_token[std::move(c)]);
 
 		return std::nullopt;

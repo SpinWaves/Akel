@@ -23,12 +23,12 @@ void Comp::update()
     {
         if(it->is_keyword())
         {
-            if(Ak::Kl::Token::kw_tokens.have(it->get_token()))
+            if(Ak::Kl::Token::kw_tokens.has(it->get_token()))
             {
                 std::cout << "Keyword    : ";
                 std::cout << Ak::Kl::Token::kw_tokens[it->get_token()] << std::endl;
             }
-            else if(Ak::Kl::Token::operators_token.have(it->get_token()))
+            else if(Ak::Kl::Token::operators_token.has(it->get_token()))
             {
                 std::cout << "Operator   : ";
                 if(it->get_token() == Ak::Kl::Tokens::endline)

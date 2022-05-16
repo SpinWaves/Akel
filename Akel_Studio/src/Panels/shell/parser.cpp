@@ -22,12 +22,12 @@ uint16_t Parser::parse(std::string command)
 	_stream << command;
 	std::string data;
 	_stream >> data;
-	if(_keywords.have(data))
+	if(_keywords.has(data))
 	{
 		if(_stream >> data) // Args management
 		{
 			_stream.clear();
-			if(_keywords.have(data))
+			if(_keywords.has(data))
 				return static_cast<uint16_t>(_keywords[std::string(command.begin(), command.begin() + command.find(" "))]) | static_cast<uint8_t>(_keywords[data]);
 			else
 				return static_cast<uint16_t>(_keywords[std::string(command.begin(), command.begin() + command.find(" "))]) | static_cast<uint8_t>(Commands::error);
