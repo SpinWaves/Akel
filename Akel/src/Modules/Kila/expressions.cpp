@@ -37,7 +37,7 @@ namespace Ak::Kl
         private:
             int _idx;
     };
-
+    
     template<typename R>
     class function_expression: public expression<R>
     {

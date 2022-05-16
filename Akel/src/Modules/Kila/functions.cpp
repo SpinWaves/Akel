@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 15/05/2022
+// Updated : 16/05/2022
 
 #include "functions.h"
 #include "compiler.h"
@@ -16,7 +16,7 @@ namespace Ak::Kl
 	{
 		function_declaration ret;
 
-		parse_token_value(ctx, it, Tokens::kw_function);
+		parse_token_value(it, Tokens::kw_function);
 
 		function_type ft;
 		ret.name = parse_declaration_name(ctx, it);
@@ -24,17 +24,17 @@ namespace Ak::Kl
 		{
 			auto _ = ctx.function();
 
-			parse_token_value(ctx, it, Tokens::bracket_b);
+			parse_token_value(it, Tokens::bracket_b);
 
 			while(!it->has_value(Tokens::bracket_e))
 			{
 				if(!ret.params.empty())
-					parse_token_value(ctx, it, Tokens::comma);
+					parse_token_value(it, Tokens::comma);
 
 				std::string name = parse_declaration_name(ctx, it);
 				ret.params.push_back(name);
 
-				parse_token_value(ctx, it, Tokens::colon);
+				parse_token_value(it, Tokens::colon);
 
 				type_handle t = parse_type(ctx, it);
 
@@ -43,13 +43,13 @@ namespace Ak::Kl
 			++it;
 		}
 
-		parse_token_value(ctx, it, Tokens::arrow);
+		parse_token_value(it, Tokens::arrow);
 		ft.return_type_id = parse_type(ctx, it);
 
 		if(it->has_value(Tokens::square_b))
 		{
 			++it;
-			parse_token_value(ctx, it, Tokens::square_e);
+			parse_token_value(it, Tokens::square_e);
 			ft.return_type_id = ctx.get_handle(table_type{ft.return_type_id});
 		}
 

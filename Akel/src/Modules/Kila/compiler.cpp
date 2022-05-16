@@ -68,7 +68,7 @@ namespace Ak::Kl
 			switch(it->get_token())
 			{
 				case Tokens::square_b:
-					parse_token_value(ctx, ++it, Tokens::square_e);
+					parse_token_value(++it, Tokens::square_e);
 					t = ctx.get_handle(table_type{t});
 				break;
 				
@@ -79,7 +79,7 @@ namespace Ak::Kl
 		return t;
 	}
 
-	void parse_token_value(compiler_context&, tk_iterator& it, const token_value& value)
+	void parse_token_value(tk_iterator& it, const token_value& value)
 	{
 		if(it->has_value(value))
 		{

@@ -15,7 +15,7 @@ namespace Ak::Kl
 {
 	type_handle parse_type(class compiler_context& ctx, class tk_iterator& it);
 	std::string parse_declaration_name(class compiler_context& ctx, class tk_iterator& it);
-	void parse_token_value(class compiler_context& ctx, class tk_iterator& it, const token_value& value);
+	void parse_token_value(class tk_iterator& it, const token_value& value);
 
 	class Compiler
 	{
