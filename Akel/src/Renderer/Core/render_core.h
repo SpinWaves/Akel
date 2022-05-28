@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 09/05/2022
+// Updated : 28/05/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -50,7 +50,6 @@ namespace Ak
         public:
             Render_Core();
             void init();
-            void init(class WindowComponent* window);
             void destroy();
 
             inline const class WindowComponent* getWindow() const noexcept { return _window; }
@@ -74,6 +73,7 @@ namespace Ak
             inline void freeChunk(GPU_Mem_Chunk& chunck) { _allocator.freeChunk(chunck); }
 
             inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
+            inline bool isFrameBufferResizeRequested() const noexcept { return _framebufferResized; }
 
         private:
             Device _device;

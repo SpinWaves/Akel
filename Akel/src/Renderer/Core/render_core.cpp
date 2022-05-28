@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 08/05/2022
+// Updated : 28/05/2022
 
 #include "render_core.h"
 
@@ -41,13 +41,14 @@ namespace Ak
 
 	void checkVk(VkResult result)
 	{
-		if(result >= 0)
-			return;
-
-		Core::log::report(FATAL_ERROR, "Vulkan error : %s", verbaliseResultVk(result));
+		if(result < 0)
+			Core::log::report(FATAL_ERROR, "Vulkan error : %s", verbaliseResultVk(result));
 	}
 
-	Render_Core::Render_Core() : _device(), _queues(), _surface(), _cmd_pool(), _swapchain(), _instance(), _allocator(_device.getPhysicalDevice(), _device.get(), nullptr, 4096), _layers()
+	Render_Core::Render_Core() : _device(), _queues(), _surface(),
+								 _cmd_pool(), _swapchain(), _instance(),
+								 _allocator(_device.getPhysicalDevice(),
+								 _device.get(), nullptr, 4096), _layers()
 	{}
 
 	void Render_Core::init()

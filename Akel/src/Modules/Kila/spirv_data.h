@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/05/2022
-// Updated : 14/05/2022
+// Updated : 27/05/2022
 
 #ifndef __AK_KILA_SPIR_V_DATA__
 #define __AK_KILA_SPIR_V_DATA__
 
 namespace Ak::Kl
 {
-	enum class SpvOp
+	enum class Spv
 	{
 		OpNop = 0,
 		OpUndef = 1,

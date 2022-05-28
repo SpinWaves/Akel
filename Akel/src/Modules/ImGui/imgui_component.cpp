@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 12/04/2022
+// Updated : 28/05/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -12,23 +12,10 @@ namespace Ak
 {
 	static ImVec4 clear_color = ImVec4(0.180f, 0.180f, 0.180f, 1.000f);
 
-	ImGuiComponent::ImGuiComponent(WindowComponent* win) : Component("__imguiComponent")
-	{
-		/*
-		if(win == nullptr)
-		{
-			Core::log::report(ERROR, "ImGui : nullptr passed as window");
-			return;
-		}
-		_win = win;
-		*/
-	}
-
 	ImGuiComponent::ImGuiComponent() : Component("__imguiComponent") {}
 
 	void ImGuiComponent::onAttach()
 	{
-		/*
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -50,17 +37,17 @@ namespace Ak
 		SetDarkThemeColors();
 
 		// Setup Platform/Renderer bindings
-		ImGui_ImplSDL2_InitForVulkan(_ren->window->getNativeWindow());
+		ImGui_ImplSDL2_InitForVulkan(Render_Core::get().getWindow()->getNativeWindow());
 		ImGui_ImplVulkan_InitInfo init_info{};
 			init_info.Instance = Render_Core::get().getInstance().get();
 			init_info.PhysicalDevice = Render_Core::get().getDevice().getPhysicalDevice();
 			init_info.Device = Render_Core::get().getDevice().get();
-			init_info.QueueFamily = ;//TODO
+			init_info.QueueFamily = Render_Core::get().getQueue().getFamilies().graphicsFamily;//TODO
 			init_info.Queue = Render_Core::get().getQueue().getGraphic();
 			init_info.DescriptorPool = ;//TODO
 			init_info.Allocator = nullptr;
-			init_info.MinImageCount = _ren->swapchainSupport.capabilities.minImageCount;
-			init_info.ImageCount = _ren->swapchainSupport.capabilities.maxImageCount;
+			init_info.MinImageCount = Render_Core::get().getSwapChain().getSupport().capabilities.minImageCount;
+			init_info.ImageCount = Render_Core::get().getSwapChain().getSupport().capabilities.maxImageCount;
 			init_info.CheckVkResultFn = RCore::checkVK;
 		ImGui_ImplVulkan_Init(&init_info, Render_Core::get().getRenderPass().get());
 
@@ -71,49 +58,43 @@ namespace Ak
 		}
 
 		_componentsInit++;
-		*/
 	}
 
 	void ImGuiComponent::begin()
 	{
-		/*
-		if(_ren->framebufferResized && _win != nullptr)
+		if(Render_Core::get().isFrameBufferResizeRequested() && Render_Core::get().getWindow() != nullptr)
         {
-			ImGui_ImplVulkan_SetMinImageCount(_ren->swapchainSupport.capabilities.minImageCount);
-			ImGui_ImplVulkanH_CreateOrResizeWindow(Render_Core::get().getInstance().get(), Render_Core::get().getDevice().getPhysicalDevice(), Render_Core::get().getDevice().get(), nullptr, , nullptr, _win->size.X, _win->size.Y, _ren->swapchainSupport.capabilities.minImageCount);
+        	auto support = Render_Core::get().getSwapChain().getSupport();
+			ImGui_ImplVulkan_SetMinImageCount(support.capabilities.minImageCount);
+			ImGui_ImplVulkanH_CreateOrResizeWindow(Render_Core::get().getInstance().get(), Render_Core::get().getDevice().getPhysicalDevice(), Render_Core::get().getDevice().get(), nullptr, Render_Core::get().getQueue().getFamilies().graphicsFamily, nullptr, Render_Core::get().getWindow()->size.X, Render_Core::get().getWindow()->size.Y, support.capabilities.minImageCount);
         }
         // Start the Dear ImGui frame
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
-       	*/
 	}
 
 	void ImGuiComponent::end()
 	{
-		/*
 		// Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();
         const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
         if(!is_minimized)
 			ImGui_ImplVulkan_RenderDrawData(draw_data, Render_Core::get().getActiveCmdBuffer().get());
-		*/
 	}
 
 	void ImGuiComponent::onImGuiEvent(Input& input)
 	{
-		//ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
+		ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
 	}
 
 	void ImGuiComponent::onQuit()
 	{
-		/*
 		vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		ImGui_ImplVulkan_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
-		*/
 	}
 
 	void ImGuiComponent::SetDarkThemeColors()

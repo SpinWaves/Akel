@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 09/05/2022
+// Updated : 28/05/2022
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -10,15 +10,15 @@ namespace Ak
 {
     void SwapChain::init()
     {
-        SwapChain::SwapChainSupportDetails swapChainSupport = querySwapChainSupport(Render_Core::get().getDevice().getPhysicalDevice());
+        _swapChainSupport = querySwapChainSupport(Render_Core::get().getDevice().getPhysicalDevice());
 
-        VkSurfaceFormatKHR surfaceFormat = Render_Core::get().getSurface().chooseSwapSurfaceFormat(swapChainSupport.formats);
-        VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
-        VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
+        VkSurfaceFormatKHR surfaceFormat = Render_Core::get().getSurface().chooseSwapSurfaceFormat(_swapChainSupport.formats);
+        VkPresentModeKHR presentMode = chooseSwapPresentMode(_swapChainSupport.presentModes);
+        VkExtent2D extent = chooseSwapExtent(_swapChainSupport.capabilities);
 
-        uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
-        if(swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount)
-            imageCount = swapChainSupport.capabilities.maxImageCount;
+        uint32_t imageCount = _swapChainSupport.capabilities.minImageCount + 1;
+        if(_swapChainSupport.capabilities.maxImageCount > 0 && imageCount > _swapChainSupport.capabilities.maxImageCount)
+            imageCount = _swapChainSupport.capabilities.maxImageCount;
 
         VkSwapchainCreateInfoKHR createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -43,7 +43,7 @@ namespace Ak
 		else
             createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-        createInfo.preTransform = swapChainSupport.capabilities.currentTransform;
+        createInfo.preTransform = _swapChainSupport.capabilities.currentTransform;
         createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
         createInfo.presentMode = presentMode;
         createInfo.clipped = VK_TRUE;

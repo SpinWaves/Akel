@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 09/05/2022
+// Updated : 28/05/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -27,27 +27,31 @@ namespace Ak
 		return Shader(std::move(data), t);
 	}
 
-	Shader load_spirv_from_file(fString path)
-	{
-		fString fileExt(path, path.rfind('.', -4), -4, [](char c) { return std::tolower(c); });
-
-		Shader::type type;
-
-		if(fileExt == ".comp")		type = Shader::type::compute;
-		else if(fileExt == ".vert") type = Shader::type::vertex;
-		else if(fileExt == ".tesc") type = Shader::type::tesselation_control;
-		else if(fileExt == ".tese") type = Shader::type::tesselation_evaluation;
-		else if(fileExt == ".geom") type = Shader::type::geometry;
-		else if(fileExt == ".frag") type = Shader::type::fragment;
-		else Core::log::report(FATAL_ERROR, "Vulkan : unable to deduce the type of a shader from its extension (unrecognised shader extension : %s)", fileExt.c_str());
-
-		return load_spirv_from_file(path, type);
-	}
-
 	Shader::Shader(const std::vector<uint32_t> byte_code, Shader::type t) : _byte_code(std::move(byte_code)), _type(t) {}
 
 	void Shader::generate()
 	{
+		SpvReflectShaderModule module = {};
+		SpvReflectResult result = spvReflectCreateShaderModule(sizeof(k_sample_spv), k_sample_spv, &module);
+		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to create a Spir-V reflect shader module");
+
+		uint32_t count = 0;
+		std::vector<SpvReflectDescriptorSet*> sets(count);
+		result = spvReflectEnumerateDescriptorSets(&module, &count, sets.data());
+		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to enumerate descriptor sets");
+
+		for(auto set : sets)
+		{
+			auto set2 = spvReflectGetDescriptorSet(&module, set->set, &result);
+			Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to get descriptor set");
+			Ak_assert(set == set2, "Renderer Shader : somehting messed up while getting descripor set from a shader");
+			(void)set2;
+
+			_uniforms.set_duet(set->block.name, {set->block.binding, set->block.offset, set->block.size, , set->block.});
+		}
+
+		spvReflectDestroyShaderModule(&module);
+
 		VkShaderModuleCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		createInfo.codeSize = _byte_code.size();

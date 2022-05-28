@@ -1,16 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 08/05/2022
+// Updated : 28/05/2022
 
 #include "render_core.h"
 
 namespace Ak
 {
-	Queues::QueueFamilyIndices Queues::findQueueFamilies(VkPhysicalDevice device)
+	void Queues::findQueueFamilies(VkPhysicalDevice device)
     {
-		Queues::QueueFamilyIndices indices;
-
 		uint32_t queueFamilyCount = 0;
 		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
@@ -21,19 +19,17 @@ namespace Ak
 		for(const auto& queueFamily : queueFamilies)
 		{
 			if(queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-				indices.graphicsFamily = i;
+				_families.graphicsFamily = i;
 
 			VkBool32 presentSupport = false;
 			vkGetPhysicalDeviceSurfaceSupportKHR(device, i, Render_Core::get().getSurface().get(), &presentSupport);
 
 			if(presentSupport)
-				indices.presentFamily = i;
+				_families.presentFamily = i;
 
-			if(indices.isComplete())
+			if(_families.isComplete())
 				break;
 			i++;
 		}
-
-		return indices;
 	}
 }

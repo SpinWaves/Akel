@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 09/05/2022
+// Updated : 28/05/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -20,13 +20,11 @@ namespace Ak
 			class Uniform
 			{
 				public:
-					Uniform(int32_t binding = -1, int32_t offset = -1, int32_t size = -1, int32_t type = -1, bool readOnly = false, bool writeOnly = false, VkShaderStageFlags stageFlags = 0) :
+					Uniform(int32_t binding = -1, int32_t offset = -1, int32_t size = -1, int32_t type = -1, VkShaderStageFlags stageFlags = 0) :
 						_binding(binding),
 						_offset(offset),
 						_size(size),
 						_type(type),
-						_readOnly(readOnly),
-						_writeOnly(writeOnly),
 						_stageFlags(stageFlags)
 					{}
 
@@ -34,11 +32,9 @@ namespace Ak
 					inline int32_t getOffset() const noexcept { return _offset; }
 					inline int32_t getSize() const noexcept { return _size; }
 					inline int32_t getType() const noexcept { return _type; }
-					inline bool isReadOnly() const noexcept { return _readOnly; }
-					inline bool isWriteOnly() const noexcept { return _writeOnly; }
 					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
 
-					inline bool operator==(const Uniform &rhs) const { return _binding == rhs._binding && _offset == rhs._offset && _size == rhs._size && _type == rhs._type && _readOnly == rhs._readOnly && _writeOnly == rhs._writeOnly && _stageFlags == rhs._stageFlags; }
+					inline bool operator==(const Uniform &rhs) const { return _binding == rhs._binding && _offset == rhs._offset && _size == rhs._size && _type == rhs._type && _stageFlags == rhs._stageFlags; }
 					inline bool operator!=(const Uniform &rhs) const { return !operator==(rhs); }
 
 				private:
@@ -47,8 +43,6 @@ namespace Ak
 					int32_t _offset;
 					int32_t _size;
 					int32_t _type;
-					bool _readOnly;
-					bool _writeOnly;
 			};
 
 			class Uniform_block
@@ -149,7 +143,6 @@ namespace Ak
 	};
 
 	Shader load_spirv_from_file(fString path, Shader::type t);
-	Shader load_spirv_from_file(fString path);
 }
 
 #endif // __AK_VK_SHADER__

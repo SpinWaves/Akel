@@ -1,7 +1,7 @@
 // This file is a part of the Akel
 // Authors : @kbz_8
 // Created : 16/10/2021
-// Updated : 12/05/2022
+// Updated : 28/05/2022
 
 #ifndef __AK_PARAMETER_STRUCT__
 #define __AK_PARAMETER_STRUCT__

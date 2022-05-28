@@ -25,7 +25,7 @@ namespace Ak::Kl
 			std::vector<uint32_t> generateSpirV(std::string code);
 			inline std::vector<uint32_t> generateSpirVFromFile(const std::string& path) { return generateSpirV(loadFile(path)); }
 
-			constexpr ~Compiler() = default;
+			~Compiler() = default;
 
 		private:
 			std::string loadFile(const std::string& path);

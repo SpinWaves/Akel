@@ -8,7 +8,7 @@ Example of Kila program
 location(0) local pos: vec3
 location(1) local color: vec4
 
-uniform(0) struct viewData 
+uniform viewData
     view: mat4
     model: mat4
     proj: mat4
