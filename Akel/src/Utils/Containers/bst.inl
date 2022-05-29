@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2021
-// Updated : 28/01/2022
+// Updated : 29/05/2022
 
 #include <Utils/Containers/bst.h>
 
@@ -10,9 +10,9 @@ namespace Ak
     void Error(std::string message, ...);
     void Warning(std::string message, ...);
 
-    template <typename T = void, typename ... Args>
+    template <typename T, typename ... Args>
     T* memAlloc(Args&& ... args);
-    template <typename T = void>
+    template <typename T>
     void memFree(T* ptr);
 
     template <typename T>

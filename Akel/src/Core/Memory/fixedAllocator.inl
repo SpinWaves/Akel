@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/08/2021
-// Updated : 09/05/2022
+// Updated : 29/05/2022
 
 namespace Ak
 {
     void Error(std::string message, ...);
     void Warning(std::string message, ...);
 
-    template <typename T = void, typename ... Args>
+    template <class T, typename ... Args>
     T* FixedAllocator::alloc(Args&& ... args)
     {
         if(!canAlloc())
@@ -37,7 +37,7 @@ namespace Ak
         return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * (std::distance(_it, _bits.rend()) - 1));
     }
 
-    template <typename T = void>
+    template <class T>
     void FixedAllocator::free(T* ptr)
     {
         if(!contains(ptr))

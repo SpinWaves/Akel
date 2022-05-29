@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 28/05/2022
+// Updated : 29/05/2022
 
 #include <Audio/audio.h>
 #include <Renderer/Core/render_core.h>
@@ -41,7 +41,7 @@ namespace Ak
 		MemoryManager::useMemoryManager(project->use_memory_manager);
 		MemoryManager::init();
 
-		Render_Core::get().init();
+		//Render_Core::get().init();
 
 		return true;
     }

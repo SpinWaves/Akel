@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 09/06/2022
+// Updated : 29/06/2022
 
 #include <Maths/maths.h>
 
@@ -11,7 +11,7 @@ namespace Ak
     void Error(std::string message, ...);
     void Warning(std::string message, ...);
 
-    template <typename T = void, typename ... Args>
+    template <class T, typename ... Args>
     T* JamAllocator::alloc(Args&& ... args)
     {
         if(_heap == nullptr)
@@ -79,7 +79,7 @@ namespace Ak
     	return ptr;
     }
 
-    template <typename T = void>
+    template <class T>
     T* JamAllocator::alloc(size_t size)
     {
         if(_heap == nullptr)
@@ -142,7 +142,7 @@ namespace Ak
         return ptr;
     }
 
-    template <typename T = void>
+    template <class T>
     void JamAllocator::free(T* ptr)
     {
         if(ptr == nullptr)

@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 28/05/2022
+// Updated : 29/05/2022
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
 
 #include <Akpch.h>
 #include <Platform/input.h>
+#include <Core/core.h>
 
 namespace Ak
 {

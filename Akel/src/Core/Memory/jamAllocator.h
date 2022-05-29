@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 09/05/2022
+// Updated : 29/05/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -36,13 +36,13 @@ namespace Ak
             void increase_size(size_t Size);
             void destroy();
 
-            template <typename T = void, typename ... Args>
+            template <class T = void, typename ... Args>
             T* alloc(Args&& ... args);
 
-            template <typename T = void>
+            template <class T = void>
             T* alloc(size_t size);
 
-            template <typename T = void>
+            template <class T = void>
             void free(T* ptr);
 
             ~JamAllocator();

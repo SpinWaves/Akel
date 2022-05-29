@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 02/04/2022
+// Updated : 29/04/2022
 
 #ifndef __AK_COMPONENTS_STACK__
 #define __AK_COMPONENTS_STACK__
@@ -11,13 +11,13 @@
 namespace Ak
 {
 	class Component;
-	template <typename T, typename ... Args>
-	T* memAlloc(Args&& ... args); 
+	template <class T = void, typename ... Args>
+	T* memAlloc(Args&& ... args);
 
 	class ComponentStack
 	{
 		public:
-			explicit ComponentStack() = default;
+			ComponentStack() = default;
 
 			void add_component(Component* component);
 

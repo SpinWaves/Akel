@@ -1,13 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 28/05/2022
+// Updated : 29/05/2022
 
 #include "render_core.h"
 
 namespace Ak
 {
-	void Queues::findQueueFamilies(VkPhysicalDevice device)
+	Queues::QueueFamilyIndices Queues::findQueueFamilies(VkPhysicalDevice device)
     {
 		uint32_t queueFamilyCount = 0;
 		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
@@ -31,5 +31,6 @@ namespace Ak
 				break;
 			i++;
 		}
+		return _families;
 	}
 }

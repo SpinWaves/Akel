@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 07/05/2022
+// Updated : 29/05/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -32,13 +32,13 @@ namespace Ak
 
             static std::shared_ptr<ControlUnit>& accessToControlUnit() { return control_unit; }
 
-            template <typename T = void, typename ... Args>
+            template <class T = void, typename ... Args>
             static T* alloc(Args&& ... args);
             
-            template <typename T = void>
+            template <class T = void>
             static T* allocSize(size_t size);
 
-            template <typename T = void>
+            template <class T = void>
             static void free(T* ptr);
 
             ~MemoryManager() = delete;
@@ -51,7 +51,7 @@ namespace Ak
             inline static bool _use = true;
     };
 
-    template <typename T = void, typename ... Args>
+    template <class T, typename ... Args>
     T* MemoryManager::alloc(Args&& ... args)
     {
         if(_use && __jam.is_init())
@@ -73,7 +73,7 @@ namespace Ak
         return new T(std::forward<Args>(args)...);
     }
 
-    template <typename T = void>
+    template <class T>
     T* MemoryManager::allocSize(size_t size)
     {
         if(_use && __jam.is_init())
@@ -97,7 +97,7 @@ namespace Ak
         return new T(size);
     }
 
-    template <typename T = void>
+    template <class T>
     void MemoryManager::free(T* ptr)
     {
         if(_use)
@@ -152,14 +152,13 @@ namespace Ak
         ::delete ptr;
     }
 
-
-    template <typename T = void, typename ... Args>
+    template <class T, typename ... Args>
     inline T* memAlloc(Args&& ... args) { return MemoryManager::alloc<T>(std::forward<Args>(args)...); }
 
-    template <typename T = void>
+    template <class T>
     inline T* memAllocSize(size_t size) { return MemoryManager::allocSize<T>(size); }
 
-    template <typename T = void>
+    template <class T>
     inline void memFree(T* ptr) { MemoryManager::free(ptr); }
 }
 

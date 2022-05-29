@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 28/05/2022
+// Updated : 29/05/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -16,6 +16,7 @@ namespace Ak
 
 	void ImGuiComponent::onAttach()
 	{
+		/*
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -56,12 +57,13 @@ namespace Ak
 			vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 			ImGui_ImplVulkan_DestroyFontUploadObjects();
 		}
-
+*/
 		_componentsInit++;
 	}
 
 	void ImGuiComponent::begin()
 	{
+		/*
 		if(Render_Core::get().isFrameBufferResizeRequested() && Render_Core::get().getWindow() != nullptr)
         {
         	auto support = Render_Core::get().getSwapChain().getSupport();
@@ -72,29 +74,34 @@ namespace Ak
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
+        */
 	}
 
 	void ImGuiComponent::end()
 	{
+		/*
 		// Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();
         const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
         if(!is_minimized)
 			ImGui_ImplVulkan_RenderDrawData(draw_data, Render_Core::get().getActiveCmdBuffer().get());
+			*/
 	}
 
 	void ImGuiComponent::onImGuiEvent(Input& input)
 	{
-		ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
+	//	ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
 	}
 
 	void ImGuiComponent::onQuit()
 	{
+		/*
 		vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		ImGui_ImplVulkan_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
+		*/
 	}
 
 	void ImGuiComponent::SetDarkThemeColors()

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 16/05/2022
+// Updated : 29/05/2022
 
 #ifndef __AK_KILA_COMPILER__
 #define __AK_KILA_COMPILER__
@@ -22,7 +22,7 @@ namespace Ak::Kl
 		public:
 			constexpr Compiler() = default;
 
-			std::vector<uint32_t> generateSpirV(std::string code);
+			std::vector<uint32_t> generateSpirV(const std::string& code);
 			inline std::vector<uint32_t> generateSpirVFromFile(const std::string& path) { return generateSpirV(loadFile(path)); }
 
 			~Compiler() = default;

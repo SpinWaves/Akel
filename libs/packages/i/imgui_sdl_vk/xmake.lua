@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 05/10/2021
--- Updated : 09/03/2022
+-- Updated : 21/05/2022
 
 package("imgui_sdl_vk")
 
@@ -30,7 +30,7 @@ package("imgui_sdl_vk")
     end
 
     on_load("macosx", "linux", "windows", "mingw", "android", "iphoneos", function(package)
-        package:add("deps", "libsdl", "vulkan-headers", "vulkan-loader", "vulkan-tools")
+        package:add("deps", "libsdl", "vulkan-loader")
 
         if package:version_str():find("-docking", 1, true) then
             package:set("urls", {"https://github.com/ocornut/imgui.git"})
@@ -41,7 +41,7 @@ package("imgui_sdl_vk")
         local configs = {}
         configs.kind = "shared"
         local xmake_lua
-        local pkgs = "\"libsdl\", \"vulkan-headers\", \"vulkan-loader\", \"vulkan-tools\""
+        local pkgs = "\"libsdl\", \"vulkan-loader\", \"vulkan-tools\""
         xmake_lua = format([[
             add_rules("mode.debug", "mode.release")
             add_rules("utils.install.cmake_importfiles")

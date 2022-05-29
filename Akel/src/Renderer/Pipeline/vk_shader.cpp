@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 28/05/2022
+// Updated : 29/05/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -36,18 +36,25 @@ namespace Ak
 		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to create a Spir-V reflect shader module");
 
 		uint32_t count = 0;
+		result = spvReflectEnumerateDescriptorSets(&module, &count, nullptr);
+		
 		std::vector<SpvReflectDescriptorSet*> sets(count);
 		result = spvReflectEnumerateDescriptorSets(&module, &count, sets.data());
 		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to enumerate descriptor sets");
 
-		for(auto set : sets)
+		for(int i = 0; i < sets.size(); i++) // for some obscure reason range-based for loops don't want to compile with sets :/
 		{
-			auto set2 = spvReflectGetDescriptorSet(&module, set->set, &result);
+			auto set2 = spvReflectGetDescriptorSet(&module, sets[i]->set, &result);
 			Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to get descriptor set");
-			Ak_assert(set == set2, "Renderer Shader : somehting messed up while getting descripor set from a shader");
-			(void)set2;
+			Ak_assert(sets[i] == set2, "Renderer Shader : somehting messed up while getting descripor set from a shader");
 
-			_uniforms.set_duet(set->block.name, {set->block.binding, set->block.offset, set->block.size, , set->block.});
+			for(int j = 0; j < sets[i]->binding_count; j++)
+			{
+				if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+				{
+					_uniformBlocks.set_duet(sets[i]->bindings[j]->name, {sets[i]->bindings[j]->binding, sets[i]->bindings[j]->size});
+				}
+			}
 		}
 
 		spvReflectDestroyShaderModule(&module);

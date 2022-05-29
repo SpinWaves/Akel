@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 18/07/2021
-// Updated : 08/05/2022
+// Updated : 29/05/2022
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
@@ -24,10 +24,10 @@ namespace Ak
             void destroy();
             inline constexpr bool is_init() noexcept { return _heap != nullptr; }
 
-            template <typename T = void, typename ... Args>
+            template <class T = void, typename ... Args>
             T* alloc(Args&& ... args);
 
-            template <typename T = void>
+            template <class T = void>
             void free(T* ptr);
 
             ~FixedAllocator();

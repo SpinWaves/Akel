@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 27/05/2022
+// Updated : 29/05/2022
 
 #include "file.h"
 #include "compiler.h"
@@ -14,7 +14,7 @@ namespace Ak::Kl
 {
 	std::vector<uint32_t> Compiler::generateSpirV(const std::string& code)
 	{
-		get_character get = [&]()
+		func::function<int()> get = [&]()
 		{
 			static size_t pos = 0;
 			return code[pos++];
@@ -26,7 +26,7 @@ namespace Ak::Kl
 
 	std::string Compiler::loadFile(const std::string& path)
 	{
-		File f(path);
+		File f(path.c_str());
 		std::string ret;
 		while(!f.is_eof())
 			ret.push_back((char)f());
