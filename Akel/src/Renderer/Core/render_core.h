@@ -49,18 +49,21 @@ namespace Ak
     {
         public:
             Render_Core();
+
             void init();
             void destroy();
+
+            void update();
 
             inline const class WindowComponent* getWindow() const noexcept { return _window; }
             inline void setWindow(class WindowComponent* window) noexcept { _window = window; }
 
-            inline Instance&  getInstance()  { return _instance; }
-            inline Device&    getDevice()    { return _device; }
-            inline Surface&   getSurface()   { return _surface; }
-            inline Queues&    getQueue()     { return _queues; }
-            inline CmdPool&   getCmdPool()   { return _cmd_pool; }
-            inline SwapChain& getSwapChain() { return _swapchain; }
+            inline Instance&  getInstance()    { return _instance; }
+            inline Device&    getDevice()      { return _device; }
+            inline Surface&   getSurface()     { return _surface; }
+            inline Queues&    getQueue()       { return _queues; }
+            inline CmdPool&   getCmdPool()     { return _cmd_pool; }
+            inline SwapChain& getSwapChain()   { return _swapchain; }
             inline RenderPass& getRenderPass() { return _pass; }
             inline ValidationLayers& getLayers()   { return _layers; }
             inline DescriptorPool& getDescPool()   { return _desc_pool; }

@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 21/05/2022
+-- Updated : 30/05/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -31,7 +31,9 @@ target("Akel")
 
 	set_pcxxheader("Akel/src/Akpch.h")
 	add_defines("SDL_MAIN_HANDLED")
-	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "spirv-reflect", "libsndfile", "openal-soft", "vulkan-loader", "imgui_sdl_vk")
+	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-loader")
+	add_packages("spirv-reflect", { public = true })
+	add_packages("imgui_sdl_vk", { public = true })
 
 	on_load(function(target)
 		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")
@@ -46,7 +48,6 @@ target("Akel Studio")
     add_deps("Akel")
     add_files("Akel_Studio/src/**.cpp")
 
-	add_packages("imgui_sdl_vk")
 	set_pcxxheader("Akel_Studio/src/AkSpch.h")
 
 	if is_mode("debug") then
@@ -54,34 +55,31 @@ target("Akel Studio")
 	elseif is_mode("release") then
 		add_defines("AK_STUDIO_RELEASE")
 	end
-target_end() -- optional but I think the code is cleaner with this
+target_end()
 
 -- Rectangle Demo Build
 target("RectDemo")
 	set_default(false)
     set_kind("binary")
-	add_packages("imgui_sdl_vk")
     add_deps("Akel")
 	add_includedirs("Akel/src", "SandBox/rect/src", "libs/include")
     add_files("SandBox/rect/src/*.cpp")
-target_end() -- optional but I think the code is cleaner with this
+target_end()
 
 -- Cube Demo Build
 target("CubeDemo")
 	set_default(false)
     set_kind("binary")
-	add_packages("imgui_sdl_vk")
     add_deps("Akel")
 	add_includedirs("Akel/src", "SandBox/cube/src", "libs/include")
     add_files("SandBox/cube/src/*.cpp")
-target_end() -- optional but I think the code is cleaner with this
+target_end()
 
 -- Kila tester Build
 target("Kila_tester")
 	set_default(false)
     set_kind("binary")
-	add_packages("imgui_sdl_vk")
     add_deps("Akel")
 	add_includedirs("Akel/src", "Tests/Kila", "libs/include")
     add_files("Tests/Kila/*.cpp")
-target_end() -- optional but I think the code is cleaner with this
+target_end()

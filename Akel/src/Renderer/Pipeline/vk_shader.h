@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 28/05/2022
+// Updated : 30/05/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -20,50 +20,28 @@ namespace Ak
 			class Uniform
 			{
 				public:
-					Uniform(int32_t binding = -1, int32_t offset = -1, int32_t size = -1, int32_t type = -1, VkShaderStageFlags stageFlags = 0) :
+					Uniform(int32_t binding = -1, int32_t set = -1, int32_t offset = -1, int32_t size = -1, VkShaderStageFlags stageFlags = 0) :
 						_binding(binding),
+						_set(set),
 						_offset(offset),
 						_size(size),
-						_type(type),
 						_stageFlags(stageFlags)
 					{}
 
 					inline int32_t getBinding() const noexcept { return _binding; }
 					inline int32_t getOffset() const noexcept { return _offset; }
 					inline int32_t getSize() const noexcept { return _size; }
-					inline int32_t getType() const noexcept { return _type; }
+					inline int32_t getSet() const noexcept { return _set; }
 					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
 
-					inline bool operator==(const Uniform &rhs) const { return _binding == rhs._binding && _offset == rhs._offset && _size == rhs._size && _type == rhs._type && _stageFlags == rhs._stageFlags; }
+					inline bool operator==(const Uniform &rhs) const { return _binding == rhs._binding && _offset == rhs._offset && _size == rhs._size && _set == rhs._set && _stageFlags == rhs._stageFlags; }
 					inline bool operator!=(const Uniform &rhs) const { return !operator==(rhs); }
 
 				private:
 					VkShaderStageFlags _stageFlags;
 					int32_t _binding;
+					int32_t _set;
 					int32_t _offset;
-					int32_t _size;
-					int32_t _type;
-			};
-
-			class Uniform_block
-			{
-				public:
-					Uniform_block(int32_t binding = -1, int32_t size = -1, VkShaderStageFlags stageFlags = 0) : _binding(binding), _size(size), _stageFlags(stageFlags) {}
-
-					inline int32_t getBinding() const noexcept { return _binding; }
-					inline int32_t getSize() const noexcept { return _size; }
-					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
-					inline const std::unordered_map<std::string, Uniform>& getUniforms() const noexcept { return _uniforms; }
-
-					inline std::optional<Uniform> getUniform(const std::string &name) const { auto it = _uniforms.find(name); return it == _uniforms.end() ? std::nullopt : std::make_optional(it->second); }
-
-					inline bool operator==(const Uniform_block &rhs) const { return _binding == rhs._binding && _size == rhs._size && _stageFlags == rhs._stageFlags && _uniforms == rhs._uniforms; }
-					inline bool operator!=(const Uniform_block &rhs) const { return !operator==(rhs); }
-
-				private:
-					std::unordered_map<std::string, Uniform> _uniforms;
-					VkShaderStageFlags _stageFlags;
-					int32_t _binding;
 					int32_t _size;
 			};
 
@@ -117,19 +95,16 @@ namespace Ak
 			inline const type getType() noexcept { return _type; }
 
 			inline const duets_array<fString, Uniform>& getUniforms() { return _uniforms; }
-			inline const duets_array<fString, Uniform_block>& getUniformBlocks() { return _uniformBlocks; }
 			inline const duets_array<fString, Attribute>& getAttributes() { return _attributes; }
 
 			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _desc_sets; }
 
 			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.has(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
-			inline std::optional<Uniform_block> getUniformBlock(fString name) { return _uniformBlocks.has(name) ? std::make_optional(_uniformBlocks[name]) : std::nullopt; }
 			inline std::optional<Attribute> getAttribute(fString name) { return _attributes.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
 
 			~Shader() = default;
 
 		private:
-			duets_array<fString, Uniform_block> _uniformBlocks;
 			duets_array<fString, Uniform> _uniforms;
 			duets_array<fString, Attribute> _attributes;
 

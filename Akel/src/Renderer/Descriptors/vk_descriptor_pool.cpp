@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 09/05/2022
+// Updated : 30/05/2022
 
 #include "vk_descriptor_pool.h"
 #include <Renderer/Core/render_core.h>
 
 namespace Ak
 {
-    void DescriptorPool::init()
+    void DescriptorPool::init(size_t n)
     {
         VkDescriptorPoolSize poolSize{};
         poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -16,7 +16,7 @@ namespace Ak
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        poolInfo.poolSizeCount = 1;
+        poolInfo.poolSizeCount = n;
         poolInfo.pPoolSizes = &poolSize;
         poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
 

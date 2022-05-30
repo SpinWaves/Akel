@@ -1,22 +1,23 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 29/05/2022
+// Updated : 30/05/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
 #include <Platform/messageBox.h>
 #include <Renderer/Core/render_core.h>
+#include <Platform/window.h>
 
 namespace Ak
 {
 	static ImVec4 clear_color = ImVec4(0.180f, 0.180f, 0.180f, 1.000f);
+	VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
 
 	ImGuiComponent::ImGuiComponent() : Component("__imguiComponent") {}
 
 	void ImGuiComponent::onAttach()
 	{
-		/*
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -37,19 +38,45 @@ namespace Ak
 
 		SetDarkThemeColors();
 
+		if(descriptorPool != VK_NULL_HANDLE)
+		{
+			VkDescriptorPoolSize pool_sizes[] =
+			{
+				{ VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+				{ VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+				{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+				{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+				{ VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+			};
+			VkDescriptorPoolCreateInfo pool_info = {};
+			pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+			pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+			pool_info.maxSets = 1000 * ARRAY_SIZE(pool_sizes);
+			pool_info.poolSizeCount = (uint32_t)ARRAY_SIZE(pool_sizes);
+			pool_info.pPoolSizes = pool_sizes;
+			RCore::checkVk(vkCreateDescriptorPool(Render_Core::get().getDevice().get(), &pool_info, nullptr, &descriptorPool));
+		}
+
 		// Setup Platform/Renderer bindings
 		ImGui_ImplSDL2_InitForVulkan(Render_Core::get().getWindow()->getNativeWindow());
 		ImGui_ImplVulkan_InitInfo init_info{};
 			init_info.Instance = Render_Core::get().getInstance().get();
 			init_info.PhysicalDevice = Render_Core::get().getDevice().getPhysicalDevice();
 			init_info.Device = Render_Core::get().getDevice().get();
-			init_info.QueueFamily = Render_Core::get().getQueue().getFamilies().graphicsFamily;//TODO
+			init_info.QueueFamily = *Render_Core::get().getQueue().getFamilies().graphicsFamily;
 			init_info.Queue = Render_Core::get().getQueue().getGraphic();
-			init_info.DescriptorPool = ;//TODO
+			init_info.DescriptorPool = descriptorPool;
 			init_info.Allocator = nullptr;
 			init_info.MinImageCount = Render_Core::get().getSwapChain().getSupport().capabilities.minImageCount;
 			init_info.ImageCount = Render_Core::get().getSwapChain().getSupport().capabilities.maxImageCount;
-			init_info.CheckVkResultFn = RCore::checkVK;
+			init_info.CheckVkResultFn = RCore::checkVk;
+		std::cout << bool(Render_Core::get().getRenderPass().get() == VK_NULL_HANDLE) << std::endl;
 		ImGui_ImplVulkan_Init(&init_info, Render_Core::get().getRenderPass().get());
 
 		{
@@ -57,51 +84,46 @@ namespace Ak
 			vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 			ImGui_ImplVulkan_DestroyFontUploadObjects();
 		}
-*/
+
 		_componentsInit++;
 	}
 
 	void ImGuiComponent::begin()
 	{
-		/*
 		if(Render_Core::get().isFrameBufferResizeRequested() && Render_Core::get().getWindow() != nullptr)
         {
         	auto support = Render_Core::get().getSwapChain().getSupport();
 			ImGui_ImplVulkan_SetMinImageCount(support.capabilities.minImageCount);
-			ImGui_ImplVulkanH_CreateOrResizeWindow(Render_Core::get().getInstance().get(), Render_Core::get().getDevice().getPhysicalDevice(), Render_Core::get().getDevice().get(), nullptr, Render_Core::get().getQueue().getFamilies().graphicsFamily, nullptr, Render_Core::get().getWindow()->size.X, Render_Core::get().getWindow()->size.Y, support.capabilities.minImageCount);
+			ImGui_ImplVulkanH_CreateOrResizeWindow(Render_Core::get().getInstance().get(), Render_Core::get().getDevice().getPhysicalDevice(), Render_Core::get().getDevice().get(), nullptr, *Render_Core::get().getQueue().getFamilies().graphicsFamily, nullptr, Render_Core::get().getWindow()->size.X, Render_Core::get().getWindow()->size.Y, support.capabilities.minImageCount);
         }
         // Start the Dear ImGui frame
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
-        */
 	}
 
 	void ImGuiComponent::end()
 	{
-		/*
 		// Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();
         const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
         if(!is_minimized)
 			ImGui_ImplVulkan_RenderDrawData(draw_data, Render_Core::get().getActiveCmdBuffer().get());
-			*/
 	}
 
 	void ImGuiComponent::onImGuiEvent(Input& input)
 	{
-	//	ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
+		ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
 	}
 
 	void ImGuiComponent::onQuit()
 	{
-		/*
 		vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		ImGui_ImplVulkan_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
-		*/
+		vkDestroyDescriptorPool(Render_Core::get().getDevice().get(), descriptorPool, nullptr);
 	}
 
 	void ImGuiComponent::SetDarkThemeColors()

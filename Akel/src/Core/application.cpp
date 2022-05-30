@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 30/03/2022
+// Updated : 30/05/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -54,8 +54,8 @@ namespace Ak
 				__imgui.begin();
 				for(auto component : _components)
 				{
-					component->onImGuiRender();
 					component->onRender();
+					component->onImGuiRender();
 				}
 				__imgui.end();
 			}

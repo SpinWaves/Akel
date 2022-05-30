@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 12/03/2022
+// Updated : 30/05/2022
 
 #include <Panels/eltm_editor.h>
 
 ELTM_editor::ELTM_editor(const std::string& name, std::string* input_buffer) : Panel("__eltm_editor")
 {
-	_eltm = Ak::make_Unique_ptr<Ak::ELTM>(Ak::memAlloc<Ak::ELTM>(true));
+	_eltm = Ak::make_shared_ptr_w<Ak::ELTM>(Ak::memAlloc<Ak::ELTM>(true));
     _name = name;
     _input_buffer = input_buffer;
 }

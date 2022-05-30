@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/09/2021
-// Updated : 01/04/2022
+// Updated : 30/05/2022
 
 #include "allocator_GPU.h"
 #include "pages.h"
@@ -10,7 +10,7 @@
 
 namespace Ak
 {
-    Allocator_GPU::Allocator_GPU(VkPhysicalDevice physicalDevice, VkDevice device, VkAllocationCallbacks* callbacks, size_t pageSize)
+    void Allocator_GPU::init(VkPhysicalDevice physicalDevice, VkDevice device, VkAllocationCallbacks* callbacks, size_t pageSize)
     {
         _physicalDevice = physicalDevice;
         _device = device;

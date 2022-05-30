@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 29/05/2022
+// Updated : 30/05/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -21,6 +21,9 @@
 // Vulkan
 #include <vulkan/vulkan.h>
 #include <SDL2/SDL_vulkan.h>
+
+// Spir-V
+#include <spirv_reflect.h>
 
 // ImGui
 #include <imgui.h>
