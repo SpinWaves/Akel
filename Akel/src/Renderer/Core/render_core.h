@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 28/05/2022
+// Updated : 30/05/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -73,7 +73,7 @@ namespace Ak
             inline uint32_t getActiveImageIndex()  { return _active_image_index; }
 
             inline GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags) { return _allocator.allocChunk(requirements, flags); }
-            inline void freeChunk(GPU_Mem_Chunk& chunck) { _allocator.freeChunk(chunck); }
+            inline void freeChunk(GPU_Mem_Chunk& chunk) { _allocator.freeChunk(chunk); }
 
             inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
             inline bool isFrameBufferResizeRequested() const noexcept { return _framebufferResized; }
@@ -86,6 +86,7 @@ namespace Ak
             CmdPool _cmd_pool;
             Instance _instance;
             SwapChain _swapchain;
+            Semahpore _semaphore;
             Allocator_GPU _allocator;
             ValidationLayers _layers;
             DescriptorPool _desc_pool;

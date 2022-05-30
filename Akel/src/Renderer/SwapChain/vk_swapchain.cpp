@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 28/05/2022
+// Updated : 30/05/2022
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -127,6 +127,17 @@ namespace Ak
         actualExtent.height = std::clamp(actualExtent.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
 
         return actualExtent;
+    }
+
+    void SwapChain::recreate()
+    {
+        vkDeviceWaitIdle(Render_Core::get().getDevice().get());
+
+        destroy();
+        Render_Core::get().getRenderPass().destroy();
+
+        init();
+        Render_Core::get().getRenderPass().init();
     }
 
     void SwapChain::destroy() noexcept

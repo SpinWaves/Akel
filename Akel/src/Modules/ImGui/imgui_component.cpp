@@ -76,7 +76,6 @@ namespace Ak
 			init_info.MinImageCount = Render_Core::get().getSwapChain().getSupport().capabilities.minImageCount;
 			init_info.ImageCount = Render_Core::get().getSwapChain().getSupport().capabilities.maxImageCount;
 			init_info.CheckVkResultFn = RCore::checkVk;
-		std::cout << bool(Render_Core::get().getRenderPass().get() == VK_NULL_HANDLE) << std::endl;
 		ImGui_ImplVulkan_Init(&init_info, Render_Core::get().getRenderPass().get());
 
 		{

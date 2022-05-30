@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 28/05/2022
+// Updated : 30/05/2022
 
 #ifndef __AK_VK_SWAPCHAIN__
 #define __AK_VK_SWAPCHAIN__
@@ -29,6 +29,8 @@ namespace Ak
 
             void init();
             void destroy() noexcept;
+
+            void recreate();
 
             SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
             VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
