@@ -28,6 +28,7 @@ namespace Ak
             };
 
             void init();
+            void initFB();
             void destroy() noexcept;
 
             void recreate();

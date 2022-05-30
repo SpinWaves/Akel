@@ -6,6 +6,7 @@
 #include <Core/core.h>
 #include <Utils/utils.h>
 #include <Modules/ImGui/imgui_component.h>
+#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {
@@ -48,6 +49,7 @@ namespace Ak
 				}
 			}
 			
+			Render_Core::get().beginFrame();
 			// rendering
 			if(ImGuiComponent::getNumComp() != 0)
 			{
@@ -64,6 +66,7 @@ namespace Ak
 				for(auto component : _components)
 					component->onRender();
 			}
+			Render_Core::get().endFrame();
 		}
 
 		for(auto component : _components)

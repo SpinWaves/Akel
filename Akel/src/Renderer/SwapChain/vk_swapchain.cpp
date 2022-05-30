@@ -65,7 +65,10 @@ namespace Ak
         _imageViews.resize(_swapChainImages.size());
         for(size_t i = 0; i < _swapChainImages.size(); i++)
             _imageViews[i].init(this, _swapChainImages[i]);
+    }
 
+    void SwapChain::initFB()
+    {
         _framebuffers.resize(_imageViews.size());
 
         for(size_t i = 0; i < _swapChainImages.size(); i++)

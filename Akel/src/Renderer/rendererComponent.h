@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 09/05/2022
+// Updated : 30/05/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -11,6 +11,7 @@
 #include <Platform/window.h>
 #include <Utils/fStrings.h>
 #include "Pipeline/vk_shader.h"
+#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {
@@ -19,13 +20,11 @@ namespace Ak
     class RendererComponent : public Component
     {
         public:
-            RendererComponent();
             RendererComponent(WindowComponent* window);
 
             inline void renderingMode(render_mode mode) noexcept { _mode = mode; }
 
             void loadCustomShader(const fString& path, Shader::type type);
-            void loadCustomShader(const fString& path);
 
             void switchToShader(size_t index);
 
@@ -35,6 +34,7 @@ namespace Ak
 
         private:
             render_mode _mode;
+            WindowComponent* _window = nullptr;
     };
 }
 

@@ -38,7 +38,7 @@ namespace Ak
 
 		SetDarkThemeColors();
 
-		if(descriptorPool != VK_NULL_HANDLE)
+		if(descriptorPool == VK_NULL_HANDLE)
 		{
 			VkDescriptorPoolSize pool_sizes[] =
 			{
@@ -79,7 +79,10 @@ namespace Ak
 		ImGui_ImplVulkan_Init(&init_info, Render_Core::get().getRenderPass().get());
 
 		{
+			Render_Core::get().getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 			ImGui_ImplVulkan_CreateFontsTexture(Render_Core::get().getActiveCmdBuffer().get());
+			Render_Core::get().getActiveCmdBuffer().endRecord();
+
 			vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 			ImGui_ImplVulkan_DestroyFontUploadObjects();
 		}

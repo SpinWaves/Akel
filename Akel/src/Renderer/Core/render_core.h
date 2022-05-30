@@ -39,7 +39,7 @@ namespace Ak
     #endif
 
     const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
-    
+
     constexpr const int MAX_FRAMES_IN_FLIGHT = 2;
 
     /**
@@ -53,7 +53,8 @@ namespace Ak
             void init();
             void destroy();
 
-            void update();
+            void beginFrame();
+            void endFrame();
 
             inline const class WindowComponent* getWindow() const noexcept { return _window; }
             inline void setWindow(class WindowComponent* window) noexcept { _window = window; }
@@ -64,6 +65,7 @@ namespace Ak
             inline Queues&    getQueue()       { return _queues; }
             inline CmdPool&   getCmdPool()     { return _cmd_pool; }
             inline SwapChain& getSwapChain()   { return _swapchain; }
+            inline Semaphore& getSemaphore()   { return _semaphore; }
             inline RenderPass& getRenderPass() { return _pass; }
             inline ValidationLayers& getLayers()   { return _layers; }
             inline DescriptorPool& getDescPool()   { return _desc_pool; }
@@ -86,7 +88,7 @@ namespace Ak
             CmdPool _cmd_pool;
             Instance _instance;
             SwapChain _swapchain;
-            Semahpore _semaphore;
+            Semaphore _semaphore;
             Allocator_GPU _allocator;
             ValidationLayers _layers;
             DescriptorPool _desc_pool;
@@ -97,6 +99,8 @@ namespace Ak
             bool _framebufferResized = false;
 
             uint32_t _active_image_index = 0;
+            uint32_t _image_index = 0;
+            bool _is_init = false;
     };
 }
 

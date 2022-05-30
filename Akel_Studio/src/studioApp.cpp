@@ -17,8 +17,8 @@ class Studio : public Ak::Application
 
 			StudioComponent* studio = Ak::memAlloc<StudioComponent>();
 			add_component(studio);
-			Ak::Render_Core::get().setWindow(studio);
 
+			add_component<Ak::RendererComponent>(studio);
 			add_component<Ak::ImGuiComponent>();
 		}
 		~Studio() = default;
