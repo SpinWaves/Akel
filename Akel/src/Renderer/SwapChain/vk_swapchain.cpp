@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 30/05/2022
+// Updated : 31/05/2022
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -63,16 +63,23 @@ namespace Ak
         _swapChainExtent = extent;
 
         _imageViews.resize(_swapChainImages.size());
+
         for(size_t i = 0; i < _swapChainImages.size(); i++)
-            _imageViews[i].init(this, _swapChainImages[i]);
+        {
+            _imageViews[i] = memAlloc<ImageView>();
+            _imageViews[i]->init(this, _swapChainImages[i]);
+        }
     }
 
     void SwapChain::initFB()
     {
         _framebuffers.resize(_imageViews.size());
 
-        for(size_t i = 0; i < _swapChainImages.size(); i++)
-            _framebuffers[i].init(this, _imageViews[i]);
+        for(size_t i = 0; i < _imageViews.size(); i++)
+        {
+            _framebuffers[i] = memAlloc<FrameBuffer>();
+            _framebuffers[i]->init(this, *_imageViews[i]);
+        }
     }
 
     SwapChain::SwapChainSupportDetails SwapChain::querySwapChainSupport(VkPhysicalDevice device)
@@ -149,11 +156,17 @@ namespace Ak
 
         vkDeviceWaitIdle(device);
 
-        for(auto& frameBuffer : _framebuffers)
-            frameBuffer.destroy();
+        for(size_t i = 0; i < _swapChainImages.size(); i++)
+        {
+            _framebuffers[i]->destroy();
+            memFree(_framebuffers[i]);
+        }
 
-        for(auto& imageView : _imageViews)
-            imageView.destroy();
+        for(size_t i = 0; i < _swapChainImages.size(); i++)
+        {
+            _imageViews[i]->destroy();
+            memFree(_imageViews[i]);
+        }
 
         vkDestroySwapchainKHR(device, _swapChain, nullptr);
     }

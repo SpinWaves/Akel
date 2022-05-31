@@ -11,7 +11,6 @@ namespace Ak::Core
 {
 	void ProjectFile::initProjFile()
     {
-        _dir = getMainDirPath();
 		if(_dir.back() != '/')
 			_dir.push_back('/');
         std::filesystem::path f(__FILEPATH);

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 30/05/2022
+// Updated : 31/05/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -70,8 +70,8 @@ namespace Ak
             inline ValidationLayers& getLayers()   { return _layers; }
             inline DescriptorPool& getDescPool()   { return _desc_pool; }
             inline VkClearValue& getClearValue()   { return _clearColor; }
-            inline CmdBuffer& getCmdBuffer(int i)  { return _cmd_buffers[i]; }
-            inline CmdBuffer& getActiveCmdBuffer() { return _cmd_buffers[_active_image_index]; }
+            inline CmdBuffer& getCmdBuffer(int i)  { return *_cmd_buffers[i]; }
+            inline CmdBuffer& getActiveCmdBuffer() { return *_cmd_buffers[_active_image_index]; }
             inline uint32_t getActiveImageIndex()  { return _active_image_index; }
 
             inline GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags) { return _allocator.allocChunk(requirements, flags); }
@@ -92,7 +92,7 @@ namespace Ak
             Allocator_GPU _allocator;
             ValidationLayers _layers;
             DescriptorPool _desc_pool;
-            std::vector<CmdBuffer> _cmd_buffers;
+            std::vector<CmdBuffer*> _cmd_buffers;
             VkClearValue _clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
 
             class WindowComponent* _window = nullptr;

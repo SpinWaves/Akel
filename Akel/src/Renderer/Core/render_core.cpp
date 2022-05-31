@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 30/05/2022
+// Updated : 31/05/2022
 
 #include "render_core.h"
 
@@ -70,8 +70,11 @@ namespace Ak
 		_cmd_pool.init();
 		
 		_cmd_buffers.resize(MAX_FRAMES_IN_FLIGHT);
-		for(auto cmd : _cmd_buffers)
-			cmd.init();
+		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+		{
+			_cmd_buffers[i] = memAlloc<CmdBuffer>();
+			_cmd_buffers[i]->init();
+		}
 
 		_semaphore.init();
 
@@ -97,9 +100,9 @@ namespace Ak
 
 		vkResetFences(_device(), 1, &_semaphore.getInFlightFence(_active_image_index));
 
-		vkResetCommandBuffer(_cmd_buffers[_active_image_index].get(), 0);
+		vkResetCommandBuffer(_cmd_buffers[_active_image_index]->get(), 0);
 
-		_cmd_buffers[_active_image_index].beginRecord();
+		_cmd_buffers[_active_image_index]->beginRecord();
 		_pass.begin();
 	}
 
@@ -108,19 +111,19 @@ namespace Ak
 		if(!_is_init)
 			return;
 		_pass.end();
-		_cmd_buffers[_active_image_index].endRecord();
+		_cmd_buffers[_active_image_index]->endRecord();
 
 		VkSubmitInfo submitInfo{};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-		VkSemaphore waitSemaphores[] = { _semaphore.getRenderImageSemaphore(_active_image_index) };
+		VkSemaphore waitSemaphores[] = { _semaphore.getImageSemaphore(_active_image_index) };
 		VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 		submitInfo.waitSemaphoreCount = 1;
 		submitInfo.pWaitSemaphores = waitSemaphores;
 		submitInfo.pWaitDstStageMask = waitStages;
 
 		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &_cmd_buffers[_active_image_index].get();
+		submitInfo.pCommandBuffers = &_cmd_buffers[_active_image_index]->get();
 
 		VkSemaphore signalSemaphores[] = { _semaphore.getRenderImageSemaphore(_active_image_index) };
 		submitInfo.signalSemaphoreCount = 1;
@@ -156,8 +159,11 @@ namespace Ak
 
 	void Render_Core::destroy()
 	{
-		for(auto cmd : _cmd_buffers)
-			cmd.destroy();
+		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+		{
+			_cmd_buffers[i]->destroy();
+			memFree(_cmd_buffers[i]);
+		}
 		_semaphore.destroy();
 		_pass.destroy();
 		_swapchain.destroy();

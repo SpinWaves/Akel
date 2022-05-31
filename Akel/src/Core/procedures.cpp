@@ -8,6 +8,11 @@
 
 namespace Ak
 {
+	namespace Core
+	{
+		std::string getMainDirPath();
+	}
+	
     bool initAkel(AkelInstance* project)
     {
 		#if defined(AK_64BITS)
@@ -30,6 +35,8 @@ namespace Ak
 			Core::ProjectFile::setName(project->project_file_name);
 		if(project->project_file_path != "")
 			Core::ProjectFile::setDir(project->project_file_path);
+		else
+			Core::ProjectFile::setDir(Core::getMainDirPath());
 		Core::ProjectFile::initProjFile();
 
 		Core::ProjectFile::setBoolValue("enable_warning_console_message", project->enable_warning_console_message);

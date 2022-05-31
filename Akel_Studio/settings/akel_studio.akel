@@ -1,4 +1,4 @@
-# This file is an Akel project file. It contains configuration parameters for the engine. = Editor/texts/En/main.eltm 
+# This file is an Akel project file. It contains configuration parameters for the engine.
 # DO NOT MODIFY IT, OTHERWISE YOU WILL GET BAD PERFORMANCES,
 # BAD MEMORY OPTIMISATION OR EVEN YOUR PROJECT WILL NOT WORK ANYMORE!
 
@@ -9,4 +9,4 @@ imgui_vk_debug_report = true
 imgui_vk_unlimited_framerate = true
 use_memory_manager = true
 jamAllocator_size_0 = 16777216
-language = /home/bilbo/Documents/Programmation/C++/Akel/Akel_Studio/texts/En/main.eltm
+language = /home/malo/Documents/Programmation/C++/Akel/Akel_Studio/texts/En/main.eltm

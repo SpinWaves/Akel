@@ -1,7 +1,7 @@
 // this file is a part of akel
 // authors : @kbz_8
 // created : 10/04/2022
-// updated : 09/05/2022
+// updated : 31/05/2022
 
 #include "vk_render_pass.h"
 #include <Renderer/Core/render_core.h>
@@ -48,12 +48,12 @@ namespace Ak
 		VkRenderPassBeginInfo renderPassInfo{};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 		renderPassInfo.renderPass = _renderPass;
-		renderPassInfo.framebuffer = Render_Core::get().getSwapChain()._framebuffers[Render_Core::get().getActiveImageIndex()].get();
-		renderPassInfo.renderArea.offset = {0, 0};
+		renderPassInfo.framebuffer = Render_Core::get().getSwapChain()._framebuffers[Render_Core::get().getActiveImageIndex()]->get();
+		renderPassInfo.renderArea.offset = { 0, 0 };
 		renderPassInfo.renderArea.extent = Render_Core::get().getSwapChain()._swapChainExtent;
-
 		renderPassInfo.clearValueCount = 1;
 		renderPassInfo.pClearValues = &Render_Core::get().getClearValue();
+
 		vkCmdBeginRenderPass(Render_Core::get().getActiveCmdBuffer().get(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 		_is_running = true;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 30/05/2022
+// Updated : 31/05/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -93,11 +93,7 @@ namespace Ak
 	void ImGuiComponent::begin()
 	{
 		if(Render_Core::get().isFrameBufferResizeRequested() && Render_Core::get().getWindow() != nullptr)
-        {
-        	auto support = Render_Core::get().getSwapChain().getSupport();
-			ImGui_ImplVulkan_SetMinImageCount(support.capabilities.minImageCount);
-			ImGui_ImplVulkanH_CreateOrResizeWindow(Render_Core::get().getInstance().get(), Render_Core::get().getDevice().getPhysicalDevice(), Render_Core::get().getDevice().get(), nullptr, *Render_Core::get().getQueue().getFamilies().graphicsFamily, nullptr, Render_Core::get().getWindow()->size.X, Render_Core::get().getWindow()->size.Y, support.capabilities.minImageCount);
-        }
+			ImGui_ImplVulkan_SetMinImageCount(Render_Core::get().getSwapChain().getSupport().capabilities.minImageCount);
         // Start the Dear ImGui frame
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplSDL2_NewFrame();
@@ -109,8 +105,7 @@ namespace Ak
 		// Rendering
         ImGui::Render();
         ImDrawData* draw_data = ImGui::GetDrawData();
-        const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
-        if(!is_minimized)
+        if(!(draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f))
 			ImGui_ImplVulkan_RenderDrawData(draw_data, Render_Core::get().getActiveCmdBuffer().get());
 	}
 
