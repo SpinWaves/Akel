@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2021
-// Updated : 29/05/2022
+// Updated : 01/06/2022
 
 #include <Utils/Containers/bst.h>
 
@@ -19,7 +19,7 @@ namespace Ak
     BinarySearchTree<T>::BinarySearchTree(T&& data) : _data(std::forward<T>(data)), is_init(true) {}
 
     template <typename T>
-    void BinarySearchTree<T>::add(T&& data) // kiki bg
+    void BinarySearchTree<T>::add(T&& data)
     {
         if(_greater(std::forward<T>(data), _data))
         {
@@ -60,6 +60,7 @@ namespace Ak
         }
         else
         {
+            std::cout << node << std::endl;
             if(_left != nullptr)
                 _left->add(node);
             else

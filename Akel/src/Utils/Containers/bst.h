@@ -29,6 +29,7 @@ namespace Ak
                 {
                     while(node != nullptr)
                     {
+                        //std::cout << "bst node : " << node << std::endl;
                         st.push(node);
                         node = node->getLeft();
                     }
@@ -121,7 +122,6 @@ namespace Ak
 
         private:
             T _data;
-            bool is_init = false;
             
             // Using function pointers and not func::function or std::function due to their size (32 bytes)
             bool (*_greater)(T, T) = [](T new_data, T current_data){ return new_data  > current_data; };
@@ -130,6 +130,8 @@ namespace Ak
 
             BinarySearchTree<T>* _left = nullptr;
             BinarySearchTree<T>* _right = nullptr;
+            
+            bool is_init = false;
     };
 }
 

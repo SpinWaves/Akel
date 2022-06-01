@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 29/06/2022
+// Updated : 01/06/2022
 
 #include <Maths/maths.h>
 
@@ -173,7 +173,7 @@ namespace Ak
         auto it = _usedSpaces->root_it();
         if(!it.has_data()) // used space tree is not supposed to be empty here
         {
-            Error("Jam Allocator: an inconsistency was detected when a pointer was freed");
+            Error("Jam Allocator : an inconsistency was detected when a pointer was freed");
             watchdog.unlock();
             return;
         }
@@ -186,7 +186,6 @@ namespace Ak
             {
                 if(cache < better_flag)
                 {
-                    std::cout << it->getData() << std::endl;
                     finder = it->getData();
                     node = it.get_node();
                     better_flag = cache;
@@ -195,6 +194,8 @@ namespace Ak
                     break;
             }
         }
+
+        //std::cout << node << " : " << finder->size << std::endl;
 
         if(finder == nullptr)
         {

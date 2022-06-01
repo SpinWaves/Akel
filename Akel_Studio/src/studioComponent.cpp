@@ -1,14 +1,11 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 31/05/2022
+// Updated : 01/06/2022
 
 #include <studioComponent.h>
 
-StudioComponent::StudioComponent() : Ak::WindowComponent()
-{
-	_eltm = Ak::create_shared_ptr_w<Ak::ELTM>(true);
-}
+StudioComponent::StudioComponent() : Ak::WindowComponent(), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>(true)) {}
 
 void StudioComponent::onAttach()
 {
@@ -21,7 +18,7 @@ void StudioComponent::onAttach()
 	Ak::WindowComponent::onAttach();
 	Ak::WindowComponent::title = _eltm->getLocalText("window_title");
 	Ak::WindowComponent::resizable = true;
-	Ak::WindowComponent::maximize = true;
+	Ak::WindowComponent::maximize = false;
 	Ak::WindowComponent::vsync = false;
 	Ak::WindowComponent::fetchSettings();
 
