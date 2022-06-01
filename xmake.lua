@@ -30,10 +30,17 @@ target("Akel")
 	add_defines("MAIN_PATH=\"$(projectdir)/\"")
 
 	set_pcxxheader("Akel/src/Akpch.h")
+	
 	add_defines("SDL_MAIN_HANDLED")
-	add_packages("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-loader")
+
+	add_packages("libsdl_image",  { public = true })
+	add_packages("libsdl", 		  { public = true })
+	add_packages("libsdl_ttf",    { public = true })
+	add_packages("libsndfile",    { public = true })
+	add_packages("openal-soft",   { public = true })
+	add_packages("vulkan-loader", { public = true })
 	add_packages("spirv-reflect", { public = true })
-	add_packages("imgui_sdl_vk", { public = true })
+	add_packages("imgui_sdl_vk",  { public = true })
 
 	on_load(function(target)
 		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")
