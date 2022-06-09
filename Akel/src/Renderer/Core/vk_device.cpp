@@ -52,9 +52,6 @@ namespace Ak
 
 		if(vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create logcal device");
-
-		vkGetDeviceQueue(_device, indices.graphicsFamily.value(), 0, &Render_Core::get().getQueue().getGraphic());
-		vkGetDeviceQueue(_device, indices.presentFamily.value(), 0, &Render_Core::get().getQueue().getPresent());
 	}
 
 	void Device::pickPhysicalDevice()

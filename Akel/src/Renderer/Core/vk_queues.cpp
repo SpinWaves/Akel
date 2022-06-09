@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 29/05/2022
+// Updated : 09/09/2022
 
 #include "render_core.h"
 
@@ -14,6 +14,8 @@ namespace Ak
 
 		std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
 		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+		_families = Queues::QueueFamilyIndices{};
 
 		int i = 0;
 		for(const auto& queueFamily : queueFamilies)
@@ -32,5 +34,13 @@ namespace Ak
 			i++;
 		}
 		return _families;
+	}
+
+	void Queues::init()
+	{
+		if(!_families())
+			findQueueFamilies(Render_Core::get().getDevice().getPhysical());
+		vkGetDeviceQueue(Render_Core::get().getDevice().get(), _families.graphicsFamily.value(), 0, &_graphicsQueue);
+		vkGetDeviceQueue(Render_Core::get().getDevice().get(), _families.presentFamily.value(), 0, &_presentQueue);
 	}
 }

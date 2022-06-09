@@ -96,7 +96,7 @@ namespace Ak
 			return;
 		}
 		else if(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
-			Core::log::report(FATAL_ERROR, "Vulkan error : failed to acquire swap chain image");
+			Core::log::report(FATAL_ERROR, "Vulkan error : failed to acquire swapchain image");
 
 		vkResetFences(_device(), 1, &_semaphore.getInFlightFence(_active_image_index));
 
