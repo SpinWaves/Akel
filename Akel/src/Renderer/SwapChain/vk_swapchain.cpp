@@ -53,7 +53,7 @@ namespace Ak
         VkDevice device = Render_Core::get().getDevice().get();
 
         if(vkCreateSwapchainKHR(device, &createInfo, nullptr, &_swapChain) != VK_SUCCESS)
-			Core::log::report(FATAL_ERROR, "Vulkan : failed to create swap chain");
+			Core::log::report(FATAL_ERROR, "Vulkan : failed to create swapchain");
 
         vkGetSwapchainImagesKHR(device, _swapChain, &imageCount, nullptr);
         _swapChainImages.resize(imageCount);

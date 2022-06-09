@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 01/06/2022
+// Updated : 06/06/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -12,7 +12,7 @@
 namespace Ak
 {
 	static ImVec4 clear_color = ImVec4(0.180f, 0.180f, 0.180f, 1.000f);
-	VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
+	static VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
 
 	ImGuiComponent::ImGuiComponent() : Component("__imguiComponent") {}
 
@@ -92,8 +92,6 @@ namespace Ak
 
 	void ImGuiComponent::begin()
 	{
-		if(Render_Core::get().isFrameBufferResizeRequested() && Render_Core::get().getWindow() != nullptr)
-			ImGui_ImplVulkan_SetMinImageCount(Render_Core::get().getSwapChain().getSupport().capabilities.minImageCount);
         // Start the Dear ImGui frame
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplSDL2_NewFrame();
