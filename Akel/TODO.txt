@@ -1,1 +1,3 @@
 ouais j'ai la flemme mais faut le faire ._.
+
+- make subrenderers for multiple windows support

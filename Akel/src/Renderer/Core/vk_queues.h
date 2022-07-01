@@ -24,11 +24,10 @@ namespace Ak
 			QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
 			void init();
-			void destroy();
 
 			inline VkQueue& getGraphic() noexcept { return _graphicsQueue; }
 			inline VkQueue& getPresent() noexcept { return _presentQueue; }
-			inline QueueFamilyIndices getFamilies() noexcept { return _families; }
+			inline QueueFamilyIndices getFamilies() noexcept { return *_families; }
 
 		private:
 			VkQueue _graphicsQueue;

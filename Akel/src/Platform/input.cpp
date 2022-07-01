@@ -40,6 +40,7 @@ namespace Ak
 
         if(_event.window.event == SDL_WINDOWEVENT_RESIZED || _event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
         {
+            std::cout << "test0" << std::endl;
             Render_Core::get().requireFrameBufferResize();
             for(auto win : _windows)
             {

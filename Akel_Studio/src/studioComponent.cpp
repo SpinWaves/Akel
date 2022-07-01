@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 01/06/2022
+// Updated : 16/06/2022
 
 #include <studioComponent.h>
 
@@ -18,9 +18,9 @@ void StudioComponent::onAttach()
 	Ak::WindowComponent::onAttach();
 	Ak::WindowComponent::title = _eltm->getLocalText("window_title");
 	Ak::WindowComponent::resizable = true;
-	Ak::WindowComponent::maximize = false;
+	Ak::WindowComponent::maximize = true;
 	Ak::WindowComponent::vsync = false;
-	Ak::WindowComponent::fetchSettings();
+	//Ak::WindowComponent::fetchSettings();
 
 	_stack = Ak::create_Unique_ptr<PanelStack>();
 

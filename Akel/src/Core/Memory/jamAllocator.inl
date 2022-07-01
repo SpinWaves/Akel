@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 01/06/2022
+// Updated : 16/06/2022
 
 #include <Maths/maths.h>
 
@@ -43,21 +43,22 @@ namespace Ak
             if(_freeSpaces->has_data())
                node = _freeSpaces->find(&finder);
         }
+
         if(node != nullptr)
         {
+            _freeSpaces->remove(node, false);
             ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (reinterpret_cast<uintptr_t>(node->getData()) - reinterpret_cast<uintptr_t>(_heap)));
             if(!_usedSpaces->has_data())
                 _usedSpaces = node;
             else
                 _usedSpaces->add(node); // Give node to Used Spaces Tree
-            _freeSpaces->remove(node, false);
         }
+
         if(ptr == nullptr) // If we haven't found free flag
         {
             JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
             flag->size = sizeType;
             _memUsed += sizeof(JamAllocator::flag);
-            _memUsed += sizeof(_freeSpaces);
 
             node = reinterpret_cast<BinarySearchTree<JamAllocator::flag*>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
             init_node(node, flag);
@@ -74,7 +75,6 @@ namespace Ak
 
         if(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
-
 
     	return ptr;
     }

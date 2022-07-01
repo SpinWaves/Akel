@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 30/05/2022
+// Updated : 13/06/2022
 
 #include <Audio/audio.h>
 #include <Renderer/Core/render_core.h>
+#include "softwareInfo.h"
 
 namespace Ak
 {
@@ -31,12 +32,16 @@ namespace Ak
 			Core::log::report("architecture: 32bits");
 		#endif
 
+		if(!Core::isVulkanSupported())
+			Core::log::report(FATAL_ERROR, "Vulkan is not supported");
+
 		if(project->project_file_name != "")
 			Core::ProjectFile::setName(project->project_file_name);
 		if(project->project_file_path != "")
 			Core::ProjectFile::setDir(project->project_file_path);
 		else
 			Core::ProjectFile::setDir(Core::getMainDirPath());
+		
 		Core::ProjectFile::initProjFile();
 
 		Core::ProjectFile::setBoolValue("enable_warning_console_message", project->enable_warning_console_message);

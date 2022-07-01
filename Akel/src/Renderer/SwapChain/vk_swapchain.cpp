@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 01/06/2022
+// Updated : 16/06/2022
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -142,44 +142,32 @@ namespace Ak
     void SwapChain::recreate()
     {
         vkDeviceWaitIdle(Render_Core::get().getDevice().get());
-        //std::cout << "end" << std::endl;
 
         destroy();
-        //std::cout << "end1" << std::endl;
         Render_Core::get().getRenderPass().destroy();
-        //std::cout << "end2" << std::endl;
 
         init();
-        //std::cout << "end3" << std::endl;
         Render_Core::get().getRenderPass().init();
-        //std::cout << "end4" << std::endl;
     }
 
     void SwapChain::destroy() noexcept
     {
-        //std::cout << "oui0" << std::endl;
         VkDevice device = Render_Core::get().getDevice().get();
 
         vkDeviceWaitIdle(device);
-        //std::cout << "oui1" << std::endl;
 
         for(size_t i = 0; i < _framebuffers.size(); i++)
         {
             _framebuffers[i]->destroy();
-        //std::cout << "oui2" << std::endl;
             memFree(_framebuffers[i]);
-        //std::cout << "oui3" << std::endl;
         }
 
         for(size_t i = 0; i < _imageViews.size(); i++)
         {
             _imageViews[i]->destroy();
-        std::cout << _imageViews[i] << std::endl;
             memFree(_imageViews[i]);
-        //std::cout << "oui5" << std::endl;
         }
 
         vkDestroySwapchainKHR(device, _swapChain, nullptr);
-        //std::cout << "oui6" << std::endl;
     }
 }

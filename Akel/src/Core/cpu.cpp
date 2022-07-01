@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/04/2021
-// Updated : 26/06/2021
+// Updated : 13/06/2022
 
 #include <Core/core.h>
 #include <Platform/platform.h>
@@ -15,12 +15,26 @@ namespace Ak::Core
         #if defined(__clang__) || defined(__GNUC__) || defined(__MINGW32__) || defined(__MINGW34__)
             __asm__
             (
-                #include "CPUID_GCC.inline-asm"
+                "cpuid" 
+                :   "=a" (regs[0]), 
+                    "=b" (regs[1]), 
+                    "=c" (regs[2]), 
+                    "=d" (regs[3])
+
+                :   "a" (funcId), 
+                    "c" (subFuncId)
             );
         #else   // MSVC or BORLANDC
             __asm
             {
-                #include "CPUID_MSVC.inline-asm"
+                mov eax, funcId;
+                mov ecx, subFuncId;
+                cpuid;
+
+                mov regs[0], eax;
+                mov regs[1], ebx;
+                mov regs[2], ecx;
+                mov regs[3], edx;
             }
         #endif
     }

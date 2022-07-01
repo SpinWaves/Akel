@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2021
-// Updated : 01/06/2022
+// Updated : 13/06/2022
 
 #include <Utils/Containers/bst.h>
 
@@ -60,7 +60,6 @@ namespace Ak
         }
         else
         {
-            std::cout << node << std::endl;
             if(_left != nullptr)
                 _left->add(node);
             else

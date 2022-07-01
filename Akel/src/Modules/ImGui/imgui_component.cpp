@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 06/06/2022
+// Updated : 16/06/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -40,8 +40,7 @@ namespace Ak
 
 		if(descriptorPool == VK_NULL_HANDLE)
 		{
-			VkDescriptorPoolSize pool_sizes[] =
-			{
+			VkDescriptorPoolSize pool_sizes[] = {
 				{ VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
 				{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
 				{ VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
@@ -54,6 +53,7 @@ namespace Ak
 				{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
 				{ VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
 			};
+
 			VkDescriptorPoolCreateInfo pool_info = {};
 			pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 			pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;

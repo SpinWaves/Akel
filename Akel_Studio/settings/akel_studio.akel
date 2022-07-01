@@ -9,4 +9,4 @@ imgui_vk_debug_report = true
 imgui_vk_unlimited_framerate = true
 use_memory_manager = true
 jamAllocator_size_0 = 16777216
-language = /home/malo/Documents/Programmation/C++/Akel/Akel_Studio/texts/En/main.eltm
+language = /home/bilbo/Documents/Programmation/C++/Akel/Akel_Studio/texts/En/main.eltm
