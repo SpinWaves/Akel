@@ -161,6 +161,9 @@ namespace Ak
 
 	void Render_Core::destroy()
 	{
+		if(!_is_init)
+			return;
+		
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
 			_cmd_buffers[i]->destroy();

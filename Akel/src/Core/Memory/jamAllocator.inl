@@ -171,9 +171,8 @@ namespace Ak
         std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
         auto it = _usedSpaces->root_it();
-        if(!it.has_data()) // used space tree is not supposed to be empty here
+        if(!it.has_data())
         {
-            Error("Jam Allocator : an inconsistency was detected when a pointer was freed");
             watchdog.unlock();
             return;
         }
@@ -194,8 +193,6 @@ namespace Ak
                     break;
             }
         }
-
-        //std::cout << node << " : " << finder->size << std::endl;
 
         if(finder == nullptr)
         {

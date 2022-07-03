@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 16/06/2022
+// Updated : 03/07/2022
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -110,7 +110,7 @@ namespace Ak
         return details;
     }
 
-    VkPresentModeKHR SwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes)
+    VkPresentModeKHR SwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
     {
 		if(!Render_Core::get().getWindow()->vsync)
 		    return VK_PRESENT_MODE_IMMEDIATE_KHR;

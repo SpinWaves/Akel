@@ -30,7 +30,6 @@ Ak::AkelInstance Akel_init()
 		project.project_file_path = std::string(Ak::Core::getMainDirPath() + "Akel_Studio/settings");
 		project.project_file_name = "akel_studio";
         project.memory_manager_enable_fixed_allocator = false;
-		project.imgui_vk_unlimited_framerate = true;
 	return project;
 }
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 30/05/2022
+// Updated : 03/07/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -93,6 +93,7 @@
 #include <function/function.h>
 #include <iterator>
 #include <iomanip>
+#include <numeric>
 
 #ifndef M_PI
     #define M_PI 3.141592653589793
@@ -108,5 +109,7 @@
     namespace Ak { void FatalError(std::string message, ...); }
     #define Ak_assert(con, msg) if(!bool(con)) Ak::FatalError("Assertion failed with message : %s", msg)
 #endif
+
+#define AK_DIV_BY_2(x) (Ak_assert(std::numeric_limits<decltype(x)>::is_integer, "AK_DIV_BY_2(x) can only divide integers"); x >> 1)
 
 #endif // __AK_PCH__

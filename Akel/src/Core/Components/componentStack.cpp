@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 29/04/2022
+// Updated : 03/07/2022
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -54,13 +54,10 @@ namespace Ak
 			isCustomAlloc = false;
 			for(auto& jam : MemoryManager::accessToControlUnit()->jamStack)
 			{
-				std::cout << "test : " << elem << std::endl;
 				if(!jam.expired())
 				{
-					std::cout << "alloc : " << elem << std::endl;
 					if(jam.lock()->contains(elem))
 					{
-						std::cout << "elem : " << elem << std::endl;
 						jam.lock()->free(elem);
 						isCustomAlloc = true;
 						break;

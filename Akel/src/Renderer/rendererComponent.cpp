@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 30/05/2022
+// Updated : 03/07/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -22,6 +22,6 @@ namespace Ak
 
     void RendererComponent::onQuit()
     {
-        Render_Core::get().destroy();
+        
     }
 }

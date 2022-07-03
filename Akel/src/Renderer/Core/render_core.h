@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 08/06/2022
+// Updated : 03/07/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -56,7 +56,7 @@ namespace Ak
             void beginFrame();
             void endFrame();
 
-            inline const class WindowComponent* getWindow() const noexcept { return _window; }
+            inline class WindowComponent* getWindow() noexcept { return _window; }
             inline void setWindow(class WindowComponent* window) noexcept { _window = window; }
 
             inline Instance&  getInstance()    { return _instance; }

@@ -1,7 +1,7 @@
 // This file is a part of the Akel
 // Authors : @kbz_8
 // Created : 16/10/2021
-// Updated : 28/05/2022
+// Updated : 03/07/2022
 
 #ifndef __AK_PARAMETER_STRUCT__
 #define __AK_PARAMETER_STRUCT__
@@ -19,8 +19,6 @@ namespace Ak
         bool vk_enable_message_validation_layer = false;
         bool use_system_dialog_boxes = false;
         bool enable_warning_console_message = true;
-        bool imgui_vk_debug_report = true;
-        bool imgui_vk_unlimited_framerate = false;
     };
 }
 

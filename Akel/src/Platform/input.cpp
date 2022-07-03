@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 30/03/2022
+// Updated : 03/07/2022
 
 #include <Platform/platform.h>
 #include <Renderer/Core/render_core.h>
@@ -40,7 +40,6 @@ namespace Ak
 
         if(_event.window.event == SDL_WINDOWEVENT_RESIZED || _event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
         {
-            std::cout << "test0" << std::endl;
             Render_Core::get().requireFrameBufferResize();
             for(auto win : _windows)
             {
