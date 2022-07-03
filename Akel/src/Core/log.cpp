@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 09/05/2022
+// Updated : 02/07/2022
 
 #include <Core/core.h>
 
@@ -152,7 +152,7 @@ namespace Ak::Core
         path.append(std::to_string(time.month));
 		path.append("-");
         path.append(std::to_string(time.year));
-        path.append(".log");
+        path.append(".akel.log");
 
         return std::move(path);
     }

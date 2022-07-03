@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 16/06/2022
+// Updated : 03/07/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -80,8 +80,18 @@ namespace Ak
 
 		{
 			Render_Core::get().getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+
 			ImGui_ImplVulkan_CreateFontsTexture(Render_Core::get().getActiveCmdBuffer().get());
+
+			VkSubmitInfo end_info = {};
+			end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+			end_info.commandBufferCount = 1;
+			end_info.pCommandBuffers = &Render_Core::get().getActiveCmdBuffer().get();
+
 			Render_Core::get().getActiveCmdBuffer().endRecord();
+
+			if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &end_info, VK_NULL_HANDLE) != VK_SUCCESS)
+				Core::log::report(FATAL_ERROR, "Imgui Vulkan error : failed to submit font command buffer");
 
 			vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 			ImGui_ImplVulkan_DestroyFontUploadObjects();

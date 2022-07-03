@@ -27,9 +27,12 @@ namespace Ak
 
                 void fillStack(pointer node)
                 {
+                    std::vector<pointer> checker;
                     while(node != nullptr)
                     {
-                        //std::cout << "bst node : " << node << std::endl;
+                        checker.push_back(node);
+                        if(std::find(checker.begin(), checker.end(), node) != checker.end())
+                            return;
                         st.push(node);
                         node = node->getLeft();
                     }

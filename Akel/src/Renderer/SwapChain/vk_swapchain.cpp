@@ -141,13 +141,12 @@ namespace Ak
 
     void SwapChain::recreate()
     {
-        vkDeviceWaitIdle(Render_Core::get().getDevice().get());
-
         destroy();
         Render_Core::get().getRenderPass().destroy();
 
         init();
         Render_Core::get().getRenderPass().init();
+        initFB();
     }
 
     void SwapChain::destroy() noexcept
