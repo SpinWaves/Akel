@@ -142,7 +142,6 @@ namespace Ak
 		presentInfo.waitSemaphoreCount = 1;
 		presentInfo.pWaitSemaphores = signalSemaphores;
 
-		VkSwapchainKHR swapChains[] = { _swapchain() };
 		presentInfo.swapchainCount = 1;
 		presentInfo.pSwapchains = &_swapchain();
 

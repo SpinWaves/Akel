@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 04/07/2022
+// Updated : 05/07/2022
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -167,7 +167,7 @@ namespace Ak
 
     void SwapChain::destroy() noexcept
     {
-        if(_swapChain == VK_NULL_HANDLE)
+        if(_swapChain == VK_NULL_HANDLE && _imageViews[0] == nullptr)
             return;
         
         vkDeviceWaitIdle(Render_Core::get().getDevice().get());
@@ -176,9 +176,11 @@ namespace Ak
         {
             _imageViews[i]->destroy();
             memFree(_imageViews[i]);
+            _imageViews[i] = nullptr;
         }
 
-        vkDestroySwapchainKHR(Render_Core::get().getDevice().get(), _swapChain, nullptr);
+        if(_swapChain != VK_NULL_HANDLE)
+            vkDestroySwapchainKHR(Render_Core::get().getDevice().get(), _swapChain, nullptr);
         _swapChain = VK_NULL_HANDLE;
     }
 }

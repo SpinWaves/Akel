@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 03/07/2022
+// Updated : 05/07/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -193,6 +193,6 @@ namespace Ak
 		style->ScrollbarSize = 13.0f;
 		style->TabBorderSize = 1.0f;
 		style->TabRounding = 0.0f;
-		style->WindowRounding = 0.0f;
+		style->WindowRounding = 4.0f;
 	}
 }

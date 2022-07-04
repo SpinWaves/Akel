@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 03/07/2022
+// Updated : 05/07/2022
 
 set lang = Language
 
@@ -106,4 +106,6 @@ end module
 
 begin module Scene
 	set name = Scene
+	set aspect = Aspect
+		set free_aspect = Free
 end module
