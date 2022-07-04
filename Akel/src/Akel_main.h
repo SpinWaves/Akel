@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
 	AK_BEGIN_SESSION("Shutdown");
 		Ak::memFree(app);
-        Ak::Render_Core::get().destroy();
+		Ak::Render_Core::get().destroy();
 		Ak::MemoryManager::end();
 	AK_END_SESSION();
 

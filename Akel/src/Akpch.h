@@ -105,7 +105,7 @@
     #define static_assert(con, id) (void)(0)
     #define assert(con) (void)(0)
     #define Ak_assert(con, msg) (void)(0)
-#elif defined(AK_DEBUG)
+#else
     namespace Ak { void FatalError(std::string message, ...); }
     #define Ak_assert(con, msg) if(!bool(con)) Ak::FatalError("Assertion failed with message : %s", msg)
 #endif

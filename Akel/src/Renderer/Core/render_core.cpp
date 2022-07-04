@@ -163,17 +163,23 @@ namespace Ak
 
 	void Render_Core::destroy()
 	{
+		std::mutex mutex;
+        std::unique_lock<std::mutex> watchdog(mutex, std::try_to_lock);
+
 		if(!_is_init)
 			return;
-		
+
+        vkDeviceWaitIdle(_device());
+
+		_swapchain.destroyFB();
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
 			_cmd_buffers[i]->destroy();
 			memFree(_cmd_buffers[i]);
 		}
-		_semaphore.destroy();
 		_pass.destroy();
 		_swapchain.destroy();
+		_semaphore.destroy();
 		_cmd_pool.destroy();
 		_device.destroy();
 		_layers.destroy();

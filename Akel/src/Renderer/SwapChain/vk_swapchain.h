@@ -30,6 +30,7 @@ namespace Ak
             void init();
             void initFB();
             void destroy() noexcept;
+            void destroyFB() noexcept;
 
             void recreate();
 

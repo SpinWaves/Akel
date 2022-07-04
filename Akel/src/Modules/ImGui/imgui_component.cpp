@@ -79,12 +79,12 @@ namespace Ak
 
 		Render_Core::get().getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
-		ImGui_ImplVulkan_CreateFontsTexture(Render_Core::get().getActiveCmdBuffer().get());
+			ImGui_ImplVulkan_CreateFontsTexture(Render_Core::get().getActiveCmdBuffer().get());
 
-		VkSubmitInfo end_info = {};
-		end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-		end_info.commandBufferCount = 1;
-		end_info.pCommandBuffers = &Render_Core::get().getActiveCmdBuffer().get();
+			VkSubmitInfo end_info{};
+			end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+			end_info.commandBufferCount = 1;
+			end_info.pCommandBuffers = &Render_Core::get().getActiveCmdBuffer().get();
 
 		Render_Core::get().getActiveCmdBuffer().endRecord();
 

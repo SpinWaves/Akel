@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 03/07/2022
+// Updated : 04/07/2022
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -141,6 +141,7 @@ namespace Ak
 
     void SwapChain::recreate()
     {
+        destroyFB();
         destroy();
         Render_Core::get().getRenderPass().destroy();
 
@@ -149,17 +150,27 @@ namespace Ak
         initFB();
     }
 
-    void SwapChain::destroy() noexcept
+    void SwapChain::destroyFB() noexcept
     {
-        VkDevice device = Render_Core::get().getDevice().get();
+        if(_framebuffers[0] == nullptr)
+            return;
 
-        vkDeviceWaitIdle(device);
-
+        vkDeviceWaitIdle(Render_Core::get().getDevice().get());
+            
         for(size_t i = 0; i < _framebuffers.size(); i++)
         {
             _framebuffers[i]->destroy();
             memFree(_framebuffers[i]);
+            _framebuffers[i] = nullptr;
         }
+    }
+
+    void SwapChain::destroy() noexcept
+    {
+        if(_swapChain == VK_NULL_HANDLE)
+            return;
+        
+        vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 
         for(size_t i = 0; i < _imageViews.size(); i++)
         {
@@ -167,6 +178,7 @@ namespace Ak
             memFree(_imageViews[i]);
         }
 
-        vkDestroySwapchainKHR(device, _swapChain, nullptr);
+        vkDestroySwapchainKHR(Render_Core::get().getDevice().get(), _swapChain, nullptr);
+        _swapChain = VK_NULL_HANDLE;
     }
 }
