@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 03/07/2022
+// Updated : 04/07/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -53,7 +53,7 @@ namespace Ak
             void init();
             void destroy();
 
-            void beginFrame();
+            bool beginFrame();
             void endFrame();
 
             inline class WindowComponent* getWindow() noexcept { return _window; }

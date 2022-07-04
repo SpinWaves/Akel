@@ -193,6 +193,6 @@ namespace Ak
 		style->ScrollbarSize = 13.0f;
 		style->TabBorderSize = 1.0f;
 		style->TabRounding = 0.0f;
-		style->WindowRounding = 4.0f;
+		style->WindowRounding = 0.0f;
 	}
 }

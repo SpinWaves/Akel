@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 03/07/2022
+// Updated : 04/07/2022
 
 #include <Panels/renderer_manager.h>
 
@@ -53,7 +53,7 @@ void RendererManager::render_sets()
             ImGui::EndCombo();
         }
         
-        static ImVec4 color = ImVec4(44.0f / 255.0f, 44.0f / 255.0f, 44.0f / 255.0f, 255.0f / 255.0f);
+        static ImVec4 color = ImVec4(Ak::Render_Core::get().getClearValue().color.float32[0], Ak::Render_Core::get().getClearValue().color.float32[1], Ak::Render_Core::get().getClearValue().color.float32[2], Ak::Render_Core::get().getClearValue().color.float32[3]);
         ImGui::ColorEdit4("##picker", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
         Ak::Render_Core::get().getClearValue().color.float32[0] = color.x;
         Ak::Render_Core::get().getClearValue().color.float32[1] = color.y;
@@ -61,7 +61,8 @@ void RendererManager::render_sets()
         ImGui::SameLine();
         ImGui::Text(_eltm->getLocalText("RendererManager.bg_color").c_str());
 
-        ImGui::Button(_eltm->getLocalText("RendererManager.reload").c_str());
+        if(ImGui::Button(_eltm->getLocalText("RendererManager.reload").c_str()))
+            Ak::Render_Core::get().requireFrameBufferResize();
 
         bool vsync_save = _vsync;
         ImGui::Checkbox("Vsync", &_vsync);

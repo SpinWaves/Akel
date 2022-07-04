@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 10/03/2022
+// Updated : 04/07/2022
 
 #ifndef __AK_STUDIO_ELTM_EDITOR__
 #define __AK_STUDIO_ELTM_EDITOR__
@@ -21,7 +21,7 @@ class ELTM_editor : public Panel
     private:
         std::string _file;
         std::string _name;
-        bool _is_open = true;
+        bool _is_open = false;
 
         std::string* _input_buffer = nullptr;
 

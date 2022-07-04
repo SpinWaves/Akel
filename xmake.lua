@@ -34,7 +34,7 @@ target("Akel")
 	add_defines("SDL_MAIN_HANDLED")
 
 	add_packages("libsdl_image",  { public = true })
-	add_packages("libsdl", 		  { public = true })
+	add_packages("libsdl",		  { public = true })
 	add_packages("libsdl_ttf",    { public = true })
 	add_packages("libsndfile",    { public = true })
 	add_packages("openal-soft",   { public = true })

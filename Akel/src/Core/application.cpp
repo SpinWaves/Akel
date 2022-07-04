@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 30/05/2022
+// Updated : 04/07/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -49,24 +49,26 @@ namespace Ak
 				}
 			}
 			
-			Render_Core::get().beginFrame();
-			// rendering
-			if(ImGuiComponent::getNumComp() != 0)
+			if(Render_Core::get().beginFrame())
 			{
-				__imgui.begin();
-				for(auto component : _components)
+				// rendering
+				if(ImGuiComponent::getNumComp() != 0)
 				{
-					component->onRender();
-					component->onImGuiRender();
+					__imgui.begin();
+					for(auto component : _components)
+					{
+						component->onRender();
+						component->onImGuiRender();
+					}
+					__imgui.end();
 				}
-				__imgui.end();
+				else
+				{
+					for(auto component : _components)
+						component->onRender();
+				}
+				Render_Core::get().endFrame();
 			}
-			else
-			{
-				for(auto component : _components)
-					component->onRender();
-			}
-			Render_Core::get().endFrame();
 		}
 
 		for(auto component : _components)

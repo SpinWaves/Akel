@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 03/07/2022
+// Updated : 04/07/2022
 
 #include <Platform/platform.h>
 #include <Renderer/Core/render_core.h>
@@ -45,6 +45,37 @@ namespace Ak
             {
                 if(win->_window_id == _current_window)
                     win->size.SET(_event.window.data1, _event.window.data2);
+            }
+        }
+
+        if(_event.window.event == SDL_WINDOWEVENT_MINIMIZED)
+        {
+            Render_Core::get().requireFrameBufferResize();
+            for(auto win : _windows)
+            {
+                if(win->_window_id == _current_window)
+                    win->minimize = true;
+            }
+        }
+        else if(_event.window.event == SDL_WINDOWEVENT_MAXIMIZED)
+        {
+            Render_Core::get().requireFrameBufferResize();
+            for(auto win : _windows)
+            {
+                if(win->_window_id == _current_window)
+                    win->maximize = true;
+            }
+        }
+        else if(_event.window.event == SDL_WINDOWEVENT_RESTORED)
+        {
+            Render_Core::get().requireFrameBufferResize();
+            for(auto win : _windows)
+            {
+                if(win->_window_id == _current_window)
+                {
+                    win->minimize = false;
+                    win->maximize = false;
+                }
             }
         }
 

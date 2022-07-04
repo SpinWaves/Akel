@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 16/06/2022
+// Updated : 04/07/2022
 
 #include "render_core.h"
 
@@ -83,10 +83,10 @@ namespace Ak
 		_is_init = true;
 	}
 
-	void Render_Core::beginFrame()
+	bool Render_Core::beginFrame()
 	{
 		if(!_is_init)
-			return;
+			return false;
 		vkWaitForFences(_device(), 1, &_semaphore.getInFlightFence(_active_image_index), VK_TRUE, UINT64_MAX);
 
 		_image_index = 0;
@@ -95,7 +95,7 @@ namespace Ak
 		if(result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
 			_swapchain.recreate();
-			return;
+			return false;
 		}
 		else if(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to acquire swapchain image");
@@ -106,6 +106,8 @@ namespace Ak
 
 		_cmd_buffers[_active_image_index]->beginRecord();
 		_pass.begin();
+
+		return true;
 	}
 
 	void Render_Core::endFrame()

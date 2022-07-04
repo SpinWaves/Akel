@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 12/03/2022
+// Updated : 04/07/2022
 
 #include <Panels/docks.h>
 
@@ -68,7 +68,6 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
 		ImGui::End();
     }
 
-
 	_width = (19 * size.X)/100;
     _height = size.Y - (50 * size.Y)/100;
 
@@ -99,19 +98,19 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
 	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
     _height = size.Y - size.Y/4 - 25;
 
-	if(ImGui::Begin("SceneDockSpace", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking))
+	if(ImGui::Begin("SceneDockSpace", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground))
     {
-		ImGui::SetWindowPos(ImVec2((15 * size.X)/100, 25));
-		ImGui::SetWindowSize(ImVec2(_width, _height));
+		ImGui::SetWindowPos(ImVec2((15 * size.X)/100 - 1, 25 - 1));
+		ImGui::SetWindowSize(ImVec2(_width + 2, _height + 2));
 
         ImGuiID dockspace_id = ImGui::GetID("MySceneDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton);
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoWindowMenuButton);
 
         static int first_times_scene = 0;
         if(first_times_scene < 2)
         {
             ImGui::DockBuilderRemoveNode(dockspace_id);
-            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoWindowMenuButton);
+            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoWindowMenuButton);
 
             ImGui::DockBuilderDockWindow(_eltm->getLocalText("ELTM_Editor.name").data(), dockspace_id);
             ImGui::DockBuilderDockWindow(_eltm->getLocalText("Scene.name").data(), dockspace_id);
@@ -122,5 +121,6 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
 
 		ImGui::End();
     }
+
     ImGui::PopStyleVar();
 }
