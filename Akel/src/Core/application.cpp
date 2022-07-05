@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 04/07/2022
+// Updated : 05/07/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -24,7 +24,6 @@ namespace Ak
 
 	void Application::run()
 	{
-		ImGuiComponent __imgui;
 		while(!_in.isEnded()) // Main loop
 		{
 			_fps.update();
@@ -38,7 +37,7 @@ namespace Ak
 					_in.update();
 					for(auto component : _components)
 					{
-						if(ImGuiComponent::getNumComp() != 0) // __imgui doesn't modify it because we don't attach it
+						if(ImGuiComponent::getNumComp() != 0)
 							component->onImGuiEvent(_in);
 					}
 				}
@@ -54,13 +53,20 @@ namespace Ak
 				// rendering
 				if(ImGuiComponent::getNumComp() != 0)
 				{
-					__imgui.begin();
+					ImGui_ImplVulkan_NewFrame();
+					ImGui_ImplSDL2_NewFrame();
+					ImGui::NewFrame();
+
 					for(auto component : _components)
 					{
 						component->onRender();
 						component->onImGuiRender();
 					}
-					__imgui.end();
+
+					ImGui::Render();
+					ImDrawData* draw_data = ImGui::GetDrawData();
+					if(!(draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f))
+						ImGui_ImplVulkan_RenderDrawData(draw_data, Render_Core::get().getActiveCmdBuffer().get());
 				}
 				else
 				{

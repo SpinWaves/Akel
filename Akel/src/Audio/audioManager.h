@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/08/2021
-// Updated : 15/02/2022
+// Updated : 05/07/2022
 
 #ifndef __AK_AUDIO_MANAGER__
 #define __AK_AUDIO_MANAGER__
@@ -14,6 +14,7 @@
 namespace Ak
 {
     using audioFile = ALuint;
+    constexpr audioFile null_audio = 0;
 
     class AudioManager : public Component
     {

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 10/03/2022
+// Updated : 05/07/2022
 
 #ifndef __AK_STUDIO_RENDERER_MANAGER__
 #define __AK_STUDIO_RENDERER_MANAGER__
@@ -20,8 +20,9 @@ class RendererManager : public Panel
 
     private:
         void render_sets();
-        bool _vsync = false;
+        void render_stats();
         std::string selected;
+        Ak::Core::GPU _gpu;
 };
 
 #endif // __AK_STUDIO_RENDERER_MANAGER__

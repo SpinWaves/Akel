@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 03/07/2022
+// Updated : 05/07/2022
 
 #include <studioComponent.h>
 
@@ -19,8 +19,12 @@ void StudioComponent::onAttach()
 	Ak::WindowComponent::title = _eltm->getLocalText("window_title");
 	Ak::WindowComponent::resizable = true;
 	Ak::WindowComponent::maximize = true;
-	Ak::WindowComponent::vsync = false;
+	Ak::WindowComponent::vsync = true;
 	Ak::WindowComponent::fetchSettings();
+
+	Ak::Render_Core::get().getClearValue().color.float32[0] = 0.62745098;
+	Ak::Render_Core::get().getClearValue().color.float32[1] = 0.878431373;
+	Ak::Render_Core::get().getClearValue().color.float32[2] = 0.909803922;
 
 	_stack = Ak::create_Unique_ptr<PanelStack>();
 
@@ -37,8 +41,15 @@ void StudioComponent::onAttach()
 	_stack->add_panel<Console>(_eltm);
 }
 
+void StudioComponent::setContext()
+{
+    ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
+}
+
 void StudioComponent::onImGuiRender()
 {
+	ImGuizmo::BeginFrame();
+
 	drawMainMenuBar();
 
 	for(auto elem : _stack->_panels)
@@ -122,7 +133,7 @@ void StudioComponent::drawMainMenuBar()
 			ImGui::EndMenu();
 		}
 		ImGui::SameLine(size.X - 100);
-		ImGui::Text("%.0f FPS", ImGui::GetIO().Framerate);
+		ImGui::Text("%d FPS", Ak::CounterFPS::getFPS());
 
 		ImGui::EndMainMenuBar();
 	}

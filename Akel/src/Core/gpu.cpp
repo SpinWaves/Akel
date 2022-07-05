@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 26/06/2021
+// Updated : 05/07/2021
 
 #include <Core/core.h>
 #include <Platform/platform.h>
@@ -11,12 +11,18 @@ namespace Ak::Core
 {
     GPU::GPU()
     {   
-        vendors[0x1002] = "AMD";
-        vendors[0x1010] = "ImgTec";
-        vendors[0x10DE] = "NVIDIA";
-        vendors[0x13B5] = "ARM";
-        vendors[0x5143] = "Qualcomm";
-        vendors[0x8086] = "INTEL";
+        _vendors[0x1002] = "AMD";
+        _vendors[0x1010] = "ImgTec";
+        _vendors[0x10DE] = "Nvidia";
+        _vendors[0x13B5] = "ARM";
+        _vendors[0x5143] = "Qualcomm";
+        _vendors[0x8086] = "Intel";
+
+        _types[0] = "Other";
+        _types[1] = "Integrated";
+        _types[2] = "Graphics Card";
+        _types[3] = "Virtual";
+        _types[4] = "CPU";
 
         VkInstanceCreateInfo createInfo{};
         createInfo.enabledLayerCount = 0;
@@ -32,26 +38,10 @@ namespace Ak::Core
             vkEnumeratePhysicalDevices(_instance, &_deviceCount, _devices.data());
             vkGetPhysicalDeviceProperties(_devices[0], &_deviceProperties);
         }
-    }
 
-    uint32_t GPU::getNumberOfDevices()
-    {
-        return _deviceCount;
-    }
-
-    std::string GPU::getModelName()
-    {
-        return std::string(_deviceProperties.deviceName);
-    }
-
-    std::string GPU::getVendorName()
-    {
-        return vendors[_deviceProperties.vendorID];
-    }
-
-    uint32_t GPU::getVulkanVersion()
-    {
-        return _deviceProperties.apiVersion;
+        auto FN_vkEnumerateInstanceVersion = PFN_vkEnumerateInstanceVersion(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
+        if(vkEnumerateInstanceVersion)
+            vkEnumerateInstanceVersion(&_instanceVersion );
     }
 
     GPU::~GPU()

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 09/05/2022
+// Updated : 05/07/2022
 
 #include <Utils/camera.h>
 #include <Graphics/matrixes.h>
@@ -40,7 +40,7 @@ namespace Ak
 		}
 		if(input.getInKey(SDL_SCANCODE_F1, action::up))
 		{
-			_isMouseGrabed = _isMouseGrabed ? false : true;
+			_isMouseGrabed = !_isMouseGrabed;
 			SDL_SetRelativeMouseMode(_isMouseGrabed ? SDL_TRUE : SDL_FALSE);
 		}
 		if(!_isMouseGrabed && input.getInMouse(AK_MOUSE_BUTTON_LEFT))

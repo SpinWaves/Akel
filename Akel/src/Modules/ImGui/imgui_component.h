@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 06/06/2022
+// Updated : 05/07/2022
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -20,9 +20,6 @@ namespace Ak
 			void onAttach() override;
 			void onImGuiEvent(Input& input) override;
 			void onQuit() override;
-
-			void begin(); // Do not use, the application will call it for you
-			void end(); // Do not use, the application will call it for you
 
 			// Needs to be called before onAttach() to work
 			// Calling it without parameter will reset to the default path

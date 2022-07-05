@@ -76,19 +76,28 @@ begin module RendererManager
 	set name = Scene Renderer
 	set render_sets = Render settings
 
-	set culling = Face culling
-	set cull_none = None
-	set cull_front = Front
-	set cull_back = Back
-	set cull_front_and_back = Front and back
+		set culling = Face culling
+		set cull_none = None
+		set cull_front = Front
+		set cull_back = Back
+		set cull_front_and_back = Front and back
 
-	set bg_color = Background color
+		set bg_color = Background color
 
-	set reload = Reload renderer
+		set reload = Reload renderer
+
+	set stats = Render statistics
+		set n_devices = Number of graphical devices : %d
+		set vendor = Vendor : %s
+		set model = GPU in use : %s
+		set model_type = Type : %s
+		set vulkan_v = Vulkan version : %s
 end module
 
 begin module AudioManager
 	set name = Scene Audio
+	set play = Play song
+	set load = Load song
 end module
 
 begin module MaterialEditor

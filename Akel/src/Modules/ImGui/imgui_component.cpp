@@ -97,23 +97,6 @@ namespace Ak
 		_componentsInit++;
 	}
 
-	void ImGuiComponent::begin()
-	{
-        // Start the Dear ImGui frame
-        ImGui_ImplVulkan_NewFrame();
-        ImGui_ImplSDL2_NewFrame();
-        ImGui::NewFrame();
-	}
-
-	void ImGuiComponent::end()
-	{
-		// Rendering
-        ImGui::Render();
-        ImDrawData* draw_data = ImGui::GetDrawData();
-        if(!(draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f))
-			ImGui_ImplVulkan_RenderDrawData(draw_data, Render_Core::get().getActiveCmdBuffer().get());
-	}
-
 	void ImGuiComponent::onImGuiEvent(Input& input)
 	{
 		ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
@@ -193,6 +176,6 @@ namespace Ak
 		style->ScrollbarSize = 13.0f;
 		style->TabBorderSize = 1.0f;
 		style->TabRounding = 0.0f;
-		style->WindowRounding = 4.0f;
+		style->WindowRounding = 0.0f;
 	}
 }

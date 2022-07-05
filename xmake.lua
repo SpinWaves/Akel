@@ -1,12 +1,12 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 02/07/2022
+-- Updated : 05/07/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "spirv-reflect", "vulkan-loader", "imgui_sdl_vk v1.87-docking")
+add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "spirv-reflect", "vulkan-loader", "imgui_sdl_vk v1.87-docking", "imguizmo_shared")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
@@ -41,19 +41,21 @@ target("Akel")
 	add_packages("vulkan-loader", { public = true })
 	add_packages("spirv-reflect", { public = true })
 	add_packages("imgui_sdl_vk",  { public = true })
-
+	
 	on_load(function(target)
 		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")
     end);
 target_end() -- optional but I think the code is cleaner with this
 
--- Editor Build
+-- Akel Studio Build
 target("Akel_Studio")
 	set_default(true)
     set_kind("binary")
 	add_includedirs("Akel/src", "Akel_Studio/src", "libs/include")
     add_deps("Akel")
     add_files("Akel_Studio/src/**.cpp")
+
+	add_packages("imguizmo_shared")
 
 	set_pcxxheader("Akel_Studio/src/AkSpch.h")
 

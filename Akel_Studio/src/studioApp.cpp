@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 30/05/2022
+// Updated : 06/07/2022
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -18,8 +18,10 @@ class Studio : public Ak::Application
 			StudioComponent* studio = Ak::memAlloc<StudioComponent>();
 			add_component(studio);
 
-			add_component<Ak::RendererComponent>(studio);
+			add_component<Ak::RendererComponent>(static_cast<Ak::WindowComponent*>(studio));
 			add_component<Ak::ImGuiComponent>();
+			
+			studio->setContext();
 		}
 		~Studio() = default;
 };
