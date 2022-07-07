@@ -8,5 +8,5 @@ memory_manager_enable_fixed_allocator = false
 imgui_vk_debug_report = true
 imgui_vk_unlimited_framerate = true
 use_memory_manager = true
-jamAllocator_size_0 = 7184
-language = /home/bilbo/Documents/Programmation/C++/Akel/Akel_Studio/texts/En/main.eltm
+jamAllocator_size_0 = 7284
+language = /home/malo/Documents/Programmation/C++/Akel/Akel_Studio/texts/En/main.eltm

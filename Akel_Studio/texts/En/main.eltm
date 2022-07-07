@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 05/07/2022
+// Updated : 07/07/2022
 
 set lang = Language
 
@@ -70,6 +70,10 @@ end module
 
 begin module EntitiesManager
 	set name = Entity Inspector
+	set transform = Transfom
+		set pos = Position
+		set rot = Rotation
+		set sca = Scale
 end module
 
 begin module RendererManager
