@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 07/07/2022
+// Updated : 08/07/2022
 
 #include <Panels/entities_manager.h>
 
@@ -27,9 +27,9 @@ void EntitiesManager::onUpdate(Ak::Maths::Vec2<int>& size)
 
 void EntitiesManager::render_transform()
 {
-	if(ImGui::CollapsingHeader(_eltm->getLocalText("EntitiesManager.transform").c_str(), ImGuiTreeNodeFlags_None))
+	if(ImGui::CollapsingHeader(_eltm->getLocalText("EntitiesManager.transform").c_str(), ImGuiTreeNodeFlags_SpanFullWidth))
     {
-		if(ImGui::BeginChild("entity_manager_texts", ImVec2(ImGui::CalcTextSize(_eltm->getLocalText("EntitiesManager.pos").c_str()).x + 5, 90), false, ImGuiWindowFlags_HorizontalScrollbar))
+		if(ImGui::BeginChild("entity_manager_texts", ImVec2(ImGui::CalcTextSize(_eltm->getLocalText("EntitiesManager.pos").c_str()).x + 5, 90), false))
 		{
 			ImGui::Text(_eltm->getLocalText("EntitiesManager.pos").c_str());
 			ImGui::Separator();
@@ -42,16 +42,19 @@ void EntitiesManager::render_transform()
 
         ImGui::SameLine(0);
 
-		if(ImGui::BeginChild("entity_manager_drags", ImVec2(300, 90), false, ImGuiWindowFlags_HorizontalScrollbar))
+		if(ImGui::BeginChild("entity_manager_drags", ImVec2(150, 90), false))
 		{
 			static float v[3];
-			ImGui::DragFloat3("", v);
+			ImGui::SetNextItemWidth(150);
+			ImGui::DragFloat3("0", v);
 
 			static float v1[3];
-			ImGui::DragFloat3("", v1);
+			ImGui::SetNextItemWidth(150);
+			ImGui::DragFloat3("1", v1);
 
 			static float v2[3];
-			ImGui::DragFloat3("", v2);
+			ImGui::SetNextItemWidth(150);
+			ImGui::DragFloat3("2", v2);
 
 			ImGui::EndChild();
 		}

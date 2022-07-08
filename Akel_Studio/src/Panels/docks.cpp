@@ -1,9 +1,11 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 04/07/2022
+// Updated : 08/07/2022
 
 #include <Panels/docks.h>
+
+bool reload_docks = true;
 
 Docks::Docks(std::shared_ptr<Ak::ELTM> eltm) : Panel("__docks")
 {
@@ -26,6 +28,8 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton);
 
         static int first_times_console = 0;
+        if(reload_docks)
+            first_times_console = 0;
         if(first_times_console < 2)
         {
             ImGui::DockBuilderRemoveNode(dockspace_id);
@@ -53,6 +57,8 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton);
 
         static int first_times_render = 0;
+        if(reload_docks)
+            first_times_render = 0;
         if(first_times_render < 2)
         {
             ImGui::DockBuilderRemoveNode(dockspace_id);
@@ -80,6 +86,8 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton);
 
         static int first_times_materials = 0;
+        if(reload_docks)
+            first_times_materials = 0;
         if(first_times_materials < 2)
         {
             ImGui::DockBuilderRemoveNode(dockspace_id);
@@ -107,6 +115,8 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoWindowMenuButton);
 
         static int first_times_scene = 0;
+        if(reload_docks)
+            first_times_scene = 0;
         if(first_times_scene < 2)
         {
             ImGui::DockBuilderRemoveNode(dockspace_id);
@@ -114,6 +124,7 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
 
             ImGui::DockBuilderDockWindow(_eltm->getLocalText("ELTM_Editor.name").data(), dockspace_id);
             ImGui::DockBuilderDockWindow(_eltm->getLocalText("Scene.name").data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(_eltm->getLocalText("MainMenuBar.options").data(), dockspace_id);
             ImGui::DockBuilderFinish(dockspace_id);
 
             first_times_scene++;
@@ -123,4 +134,6 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
     }
 
     ImGui::PopStyleVar();
+
+    reload_docks = false;
 }

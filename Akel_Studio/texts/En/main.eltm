@@ -1,11 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 07/07/2022
-
-set lang = Language
+// Updated : 08/07/2022
 
 set window_title = Akel Studio
+
+set yes = Yes
+set no = No
+
+set are_you_sure_quit = Do you really want to quit ?
 
 begin module MainMenuBar
 
@@ -32,6 +35,13 @@ begin module MainMenuBar
 
 end module
 
+begin module Settings
+	set general = General
+		set language = Language
+		set onQuit = Validation window at closing
+		set dont_ask_next_time = Don't ask next time
+end module
+
 begin module errors
 
 	set consoleMainWin = Akel Editor: Unable to create console
@@ -49,7 +59,7 @@ begin module Console
 	set helpHistory = \thistory command is used to print the console history since the last clear
 	set helpBuild = \tbuild command is used to build the project loaded
 	set helpSysShell = \tsysShell command is used to switch to a system shell
-	set helpQuit = \tquit command is used to quit the editor
+	set helpQuit = \tquit command is used to quit the Akel Studio
 	set help = (\t help clear: get(helpClear)\n
 				\t help history: get(helpHistory)\n
 				\t help build: get(helpBuild)\n

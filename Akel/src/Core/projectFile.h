@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 07/05/2022
+// Updated : 08/07/2022
 
 #ifndef __AK_PROJECT_FILE__
 #define __AK_PROJECT_FILE__
@@ -29,6 +29,8 @@ namespace Ak::Core
             static void setIntValue(const std::string& key, const int value);
             static void setBoolValue(const std::string& key, const bool value);
             static void setFloatValue(const std::string& key, const float value);
+
+            inline static bool keyExists(const std::string& key) { return _data.count(key); }
 
             ~ProjectFile() = delete;
 

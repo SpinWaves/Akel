@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 13/03/2022
+// Updated : 08/07/2022
 
 #include <Panels/browser.h>
 
@@ -37,7 +37,7 @@ void Browser::browser()
             _files.clear(); 
         }
         ImGui::Separator();
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 2.0f);
             dir(_parent);
         ImGui::PopStyleVar();
 
@@ -63,7 +63,7 @@ std::string Browser::getSize(std::uintmax_t size)
     if(i != 0)
         size_string.push_back("KMGTPE"[i - 1]);
     size_string.append("bytes");
-    return std::move(size_string);
+    return size_string;
 }
 
 void Browser::content()
@@ -114,7 +114,7 @@ void Browser::dir(std::string directory)
     }
     for(const std::string& dire : dirs)
     {
-        if(ImGui::TreeNodeEx(dire.c_str(), !is_there_subdir(full_path + '/' + dire) ? ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_Framed : ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_Framed))
+        if(ImGui::TreeNodeEx(dire.c_str(), ImGuiTreeNodeFlags_SpanFullWidth | (!is_there_subdir(full_path + '/' + dire) ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow)))
         {
             dir(std::move(std::string(full_path + "/" + dire)));
             ImGui::TreePop();

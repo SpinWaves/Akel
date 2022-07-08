@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/05/2021
-// Updated : 03/11/2021
+// Updated : 08/07/2022
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -18,6 +18,15 @@ namespace Ak
 		public:
 			explicit ELTM(bool is_global = true);
 			bool load(std::string file);
+			inline bool reload(std::string file)
+			{
+				_texts.clear();
+				_current_texts.clear();
+				_modules.clear();
+				_current_modules.clear();
+				return load(std::move(file));
+			}
+
 			static std::string getText(const std::string& ID, size_t line, const std::string& file, const std::string& function)
 			{
 				if(_isError)

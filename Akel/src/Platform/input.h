@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 07/05/2022
+// Updated : 08/07/2022
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -44,6 +44,7 @@ namespace Ak
 
             inline bool isEnded() const noexcept { return _end; }
             inline constexpr void finish() noexcept { _end = true; }
+            inline constexpr void run() noexcept { _end = false; }
 
             inline SDL_Event* getNativeEvent() noexcept { return &_event; }
 

@@ -1,11 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 07/07/2022
-
-set lang = Langue
+// Updated : 08/07/2022
 
 set window_title = Akel Studio
+
+set yes = Oui
+set no = Non
+
+set are_you_sure_quit = Voulez vous vraiment quitter ?
 
 begin module MainMenuBar
 
@@ -30,6 +33,13 @@ begin module MainMenuBar
 
 	set panels = Paneaux
 
+end module
+
+begin module Settings
+	set general = Général
+		set language = Langue
+		set onQuit = Fenêtre de validation à la fermeture
+		set dont_ask_next_time = Ne pas demander la prohcaine fois
 end module
 
 begin module errors
