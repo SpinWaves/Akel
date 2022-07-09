@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 08/07/2022
+// Updated : 09/07/2022
 
 #ifndef __AK_STUDIO_COMPONENT__
 #define __AK_STUDIO_COMPONENT__
@@ -27,9 +27,10 @@ class StudioComponent : public Ak::WindowComponent
 		void drawMainMenuBar();
 		void drawAboutWindow();
 		void drawOptionsWindow();
-		void draw_lang_settings();
+		void draw_general_settings();
 
 		std::string _eltm_editor_input_buffer;
+		uint8_t _eltm_editor_save = 0;
 
 		std::shared_ptr<Ak::ELTM> _eltm;
 		Ak::Unique_ptr<PanelStack> _stack;

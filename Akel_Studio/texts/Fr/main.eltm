@@ -1,12 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 08/07/2022
+// Updated : 09/07/2022
 
 set window_title = Akel Studio
 
 set yes = Oui
 set no = Non
+
+set lang_name = Français
 
 set are_you_sure_quit = Voulez vous vraiment quitter ?
 
@@ -39,7 +41,6 @@ begin module Settings
 	set general = Général
 		set language = Langue
 		set onQuit = Fenêtre de validation à la fermeture
-		set dont_ask_next_time = Ne pas demander la prohcaine fois
 end module
 
 begin module errors
@@ -70,6 +71,9 @@ end module
 
 begin module ELTM_Editor
     set name = Éditeur d'ELTM
+	set text = Texte
+	set version = ELTM version 1.1.2
+	set add = Ajouter un nouvel ID
 end module
 
 begin module Entities

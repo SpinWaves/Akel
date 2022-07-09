@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 07/07/2022
+// Updated : 09/07/2022
 
 #include <Panels/renderer_manager.h>
 
 RendererManager::RendererManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__renderer_manager"), _gpu()
 {
-    _eltm = eltm;
+    _eltm = std::move(eltm);
     selected = _eltm->getLocalText("RendererManager.cull_none");
 }
 

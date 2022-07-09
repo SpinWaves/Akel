@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 11/03/2022
+// Updated : 09/07/2022
 
 #include <Panels/materials.h>
 
 Materials::Materials(std::shared_ptr<Ak::ELTM> eltm) : Panel("__materials")
 {
-    _eltm = eltm;
+    _eltm = std::move(eltm);
 }
 
 void Materials::onUpdate(Ak::Maths::Vec2<int>& size)

@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 05/07/2022
+// Updated : 09/07/2022
 
 #include <Panels/audio_manager.h>
 
 AudioManager::AudioManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__audio_manager")
 {
-    _eltm = eltm;
+    _eltm = std::move(eltm);
 }
 
 void AudioManager::onUpdate(Ak::Maths::Vec2<int>& size)

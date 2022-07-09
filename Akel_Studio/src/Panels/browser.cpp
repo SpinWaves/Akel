@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 08/07/2022
+// Updated : 09/07/2022
 
 #include <Panels/browser.h>
 
 Browser::Browser(std::shared_ptr<Ak::ELTM> eltm) : Panel("__browser")
 {
-    _eltm = eltm;
+    _eltm = std::move(eltm);
 }
 
 void Browser::onUpdate(Ak::Maths::Vec2<int>& size)

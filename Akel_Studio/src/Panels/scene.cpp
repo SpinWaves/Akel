@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 06/07/2022
+// Updated : 09/07/2022
 
 #include <Panels/scene.h>
 
 Scene::Scene(std::shared_ptr<Ak::ELTM> eltm) : Panel("__scene")
 {
-    _eltm = eltm;
+    _eltm = std::move(eltm);
 }
 
 void Scene::onUpdate(Ak::Maths::Vec2<int>& size)

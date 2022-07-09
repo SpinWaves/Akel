@@ -1,17 +1,17 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 08/07/2022
+// Updated : 09 /07/2022
 
 #include <studioComponent.h>
 
 Ak::Unique_ptr<Ak::ELTM> _lang_eltm(nullptr);
 
-StudioComponent::StudioComponent() : Ak::WindowComponent(), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>(true)) {}
+StudioComponent::StudioComponent() : Ak::WindowComponent(), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>(false)) {}
 
 void StudioComponent::onAttach()
 {
-	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>(true);
+	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>(false);
 	_lang_eltm->load(Ak::Core::getMainDirPath() + "Akel_Studio/texts/langs.eltm");
 
 	if(!Ak::Core::ProjectFile::keyExists("language"))
@@ -36,7 +36,7 @@ void StudioComponent::onAttach()
 
 	_stack->add_panel<Docks>(_eltm);
 	_stack->add_panel<Scene>(_eltm);
-	_stack->add_panel<ELTM_editor>(_eltm->getLocalText("ELTM_Editor.name"), &_eltm_editor_input_buffer);
+	_stack->add_panel<ELTM_editor>(_eltm, &_eltm_editor_input_buffer, &_eltm_editor_save);
 	_stack->add_panel<Entities>(_eltm);
 	_stack->add_panel<EntitiesManager>(_eltm);
 	_stack->add_panel<RendererManager>(_eltm);
@@ -68,19 +68,13 @@ void StudioComponent::onImGuiRender()
 	if(_showOpt)
 		drawOptionsWindow();
 
-	if(!realquit && (!_running && Ak::Core::ProjectFile::getBoolValue("on_quit_window")))
+	if(!realquit && !_running)
         ImGui::OpenPopup(_eltm->getLocalText("are_you_sure_quit").c_str());
 
-	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-	ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
 	if(ImGui::BeginPopupModal(_eltm->getLocalText("are_you_sure_quit").c_str(), NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
-		bool dont_ask_me_next_time = Ak::Core::ProjectFile::getBoolValue("on_quit_window");
-		ImGui::Checkbox(_eltm->getLocalText("Settings.dont_ask_next_time").c_str(), &dont_ask_me_next_time);
-		if(dont_ask_me_next_time != Ak::Core::ProjectFile::getBoolValue("on_quit_window"))
-			Ak::Core::ProjectFile::setBoolValue("on_quit_window", dont_ask_me_next_time);
-
 		if(ImGui::Button(_eltm->getLocalText("yes").c_str(), ImVec2(120, 0)))
 		{
 			_running = false;
@@ -136,9 +130,7 @@ void StudioComponent::drawMainMenuBar()
 		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.file").c_str()))
 		{
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.open").c_str(), "Ctrl+O"))
-			{
 				auto file = pfd::open_file(_eltm->getLocalText("MainMenuBar.open"), Ak::Core::getMainDirPath(), { "Akel projects (.akel)", "*.akel" });	
-			}
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.save").c_str(), "Ctrl+S")) { /* Do stuff */ }
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.quit").c_str()))
 				_running = false;
@@ -149,7 +141,7 @@ void StudioComponent::drawMainMenuBar()
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.addFile").c_str())) { /* Do stuff */ }
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.build").c_str()))   { /* Do stuff */ }
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.options").c_str()))
-				_showOpt = _showOpt ? false : true;
+				_showOpt = !_showOpt;
 			ImGui::EndMenu();
 		}
 		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.panels").c_str()))
@@ -167,11 +159,9 @@ void StudioComponent::drawMainMenuBar()
 					_eltm_editor_input_buffer = file.result()[0];
 			}
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_save").c_str()))
-			{
-			}
+				_eltm_editor_save = 1;
 			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_save_as").c_str()))
-			{
-			}
+				_eltm_editor_save = 2;
 			ImGui::EndMenu();
 		}
 		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.help").c_str()))
@@ -198,26 +188,25 @@ void StudioComponent::drawAboutWindow()
 
 extern bool reload_docks;
 
-void StudioComponent::draw_lang_settings()
+void StudioComponent::draw_general_settings()
 {
 	ImGui::Text(_eltm->getLocalText("Settings.language").data());
-	ImGui::Separator();
-
-	if(ImGui::BeginListBox("##combo"))
+	ImGui::SameLine();
+	static std::string selected = _eltm->getLocalText("lang_name");
+	if(ImGui::BeginCombo("##combo", selected.c_str()))
 	{
-		static std::string item_current_idx = Ak::Core::ProjectFile::getStringValue("language");
 		for(auto&& [lang, path] : _lang_eltm->getCurrentTexts())
 		{
-			if(ImGui::Selectable(lang.c_str(), item_current_idx == Ak::Core::getMainDirPath() + path))
+			if(ImGui::Selectable(lang.c_str(), selected == lang))
 			{
 				_eltm->reload(Ak::Core::getMainDirPath() + path);
 				Ak::Core::ProjectFile::setStringValue("language", Ak::Core::getMainDirPath() + path);
-				item_current_idx = Ak::Core::ProjectFile::getStringValue("language");
+				selected = lang;
 				reload_docks = true;
 			}
 		}
 
-		ImGui::EndListBox();
+		ImGui::EndCombo();
 	}
 
 	ImGui::Separator();
@@ -247,7 +236,7 @@ void StudioComponent::drawOptionsWindow()
 		{
 			switch(selected)
 			{
-				case 0: draw_lang_settings(); break;
+				case 0: draw_general_settings(); break;
 
 				default : break;
 			}

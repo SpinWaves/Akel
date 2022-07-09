@@ -5,9 +5,7 @@
 enable_warning_console_message = true
 vk_enable_message_validation_layer = false
 memory_manager_enable_fixed_allocator = false
-imgui_vk_debug_report = true
-imgui_vk_unlimited_framerate = true
 use_memory_manager = true
-jamAllocator_size_0 = 7616
-language = /home/malo/Documents/Programmation/C++/Akel/Akel_Studio/texts/Fr/main.eltm
+jamAllocator_size_0 = 7720
+language = /home/malo/Documents/Programmation/C++/Akel/Akel_Studio/texts/En/main.eltm
 on_quit_window = false
