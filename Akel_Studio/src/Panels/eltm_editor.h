@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 09/07/2022
+// Updated : 10/07/2022
 
 #ifndef __AK_STUDIO_ELTM_EDITOR__
 #define __AK_STUDIO_ELTM_EDITOR__
@@ -20,8 +20,8 @@ class ELTM_editor : public Panel
         ~ELTM_editor() = default;
 
     private:
-        std::unordered_map<std::string, std::string> _texts;
-        std::unordered_map<std::string, std::unordered_map<std::string, std::string>> _modules;
+        std::vector<std::pair<std::string, std::string>> _texts;
+        std::vector<std::pair<std::string, std::vector<std::pair<std::string, std::string>>>> _modules;
         
         std::string _file;
         std::string* _input_buffer = nullptr;
