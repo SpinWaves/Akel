@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 09/06/2022
+// Updated : 22/07/2022
 
 #include "render_core.h"
+#include <Core/core.h>
 
 namespace Ak
 {
@@ -42,7 +43,7 @@ namespace Ak
 		createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
 		createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
-		if constexpr(enableValidationLayers)
+        if(enableValidationLayers && !Core::ProjectFile::getBoolValue("vk_force_disable_validation_layers"))
 		{
 			createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
 			createInfo.ppEnabledLayerNames = validationLayers.data();

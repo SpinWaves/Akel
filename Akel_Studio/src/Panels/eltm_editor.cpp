@@ -40,6 +40,7 @@ const char* eltm_writter_formating(std::string text)
 
 void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
 {
+	/*
     if(!_input_buffer->empty())
     {
         if(!_loader->reload(*_input_buffer))
@@ -129,6 +130,7 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
         }
         *_save = 0;
     }
+	*/
 }
 
 void ELTM_editor::onQuit()

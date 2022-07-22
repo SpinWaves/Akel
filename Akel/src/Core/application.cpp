@@ -18,8 +18,8 @@ namespace Ak
 		
 		_name = name;
 		_fps.init();
-		if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
-			Core::log::report(FATAL_ERROR, "SDL error : unable to init all subsystems : %s", SDL_GetError());
+//		if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
+//			Core::log::report(FATAL_ERROR, "SDL error : unable to init all subsystems : %s", SDL_GetError());
 	}
 
 	void Application::run()
@@ -65,7 +65,7 @@ namespace Ak
 
 					ImGui::Render();
 					ImDrawData* draw_data = ImGui::GetDrawData();
-					if(!(draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f))
+					if(draw_data->DisplaySize.x >= 0.0f && draw_data->DisplaySize.y >= 0.0f)
 						ImGui_ImplVulkan_RenderDrawData(draw_data, Render_Core::get().getActiveCmdBuffer().get());
 				}
 				else

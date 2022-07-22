@@ -1,16 +1,19 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 09/05/2022
+// Updated : 22/05/2022
 
 #include "vk_validation_layers.h"
 #include "render_core.h"
+#include <Core/core.h>
 
 namespace Ak
 {
 	void ValidationLayers::init()
 	{
 		if constexpr(!enableValidationLayers)
+			return;
+		if(Core::ProjectFile::getBoolValue("vk_force_disable_validation_layers"))
 			return;
 
 		VkDebugUtilsMessengerCreateInfoEXT createInfo;
@@ -48,8 +51,11 @@ namespace Ak
 
 	void ValidationLayers::destroy()
 	{
-		if constexpr(enableValidationLayers)
-			destroyDebugUtilsMessengerEXT(nullptr);
+		if constexpr(!enableValidationLayers)
+			return;
+		if(Core::ProjectFile::getBoolValue("vk_force_disable_validation_layers"))
+			return;
+		destroyDebugUtilsMessengerEXT(nullptr);
 	}
 
 	VkResult ValidationLayers::createDebugUtilsMessengerEXT(const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator)

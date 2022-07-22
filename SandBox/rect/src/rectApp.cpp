@@ -23,11 +23,15 @@ class Rect : public Ak::Application
             add_component<FPSprinterComponent>();
 
             Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(window);
-            renderer->setBackgroundColor(0.49f, 0.66f, 0.85f, 1.0f);
 
+            Ak::Render_Core::get().getClearValue().color.float32[0] = 128 / 255;
+            Ak::Render_Core::get().getClearValue().color.float32[1] = 175 / 255;
+            Ak::Render_Core::get().getClearValue().color.float32[2] = 255 / 255;
+        //    renderer->setBackgroundColor(0.49f, 0.66f, 0.85f, 1.0f);
+/*
             Ak::Entity2D rectangle(Models::quad, {50.0f, 50.0f}, {250.0f, 200.0f}, Colors::red);
             renderer->add_entity(rectangle);
-            
+  */          
             add_component(renderer);
         }
         ~Rect() = default;
@@ -39,6 +43,7 @@ Ak::AkelInstance Akel_init()
         instance.project_file_path = Ak::Core::getMainDirPath() + "SandBox/rect";
         instance.project_file_name = "rect";
         instance.memory_manager_enable_fixed_allocator = false;
+		instance.vk_force_disable_validation_layers = true; // TODO : remove that
     return instance;    
 }
 

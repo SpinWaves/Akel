@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 03/07/2022
+// Updated : 22/07/2022
 
 #include <Audio/audio.h>
 #include <Renderer/Core/render_core.h>
@@ -46,6 +46,7 @@ namespace Ak
 
 		Core::ProjectFile::setBoolValue("enable_warning_console_message", project->enable_warning_console_message);
 		Core::ProjectFile::setBoolValue("vk_enable_message_validation_layer", project->vk_enable_message_validation_layer);
+		Core::ProjectFile::setBoolValue("vk_force_disable_validation_layers", project->vk_force_disable_validation_layers);
 		Core::ProjectFile::setBoolValue("memory_manager_enable_fixed_allocator", project->memory_manager_enable_fixed_allocator);
 
 		MemoryManager::useMemoryManager(project->use_memory_manager);

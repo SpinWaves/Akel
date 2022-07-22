@@ -41,7 +41,7 @@ target("Akel")
 	add_packages("vulkan-loader", { public = true })
 	add_packages("spirv-reflect", { public = true })
 	add_packages("imgui_sdl_vk",  { public = true })
-	
+
 	on_load(function(target)
 		os.cp("$(projectdir)/libs/packages/i/imgui_sdl_vk/install/libimgui_sdl_vk.so", "build/$(os)_$(arch)/")
     end);
