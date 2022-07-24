@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 09/07/2022
+// Updated : 24/07/2022
 
 set window_title = Akel Studio
 
@@ -10,6 +10,7 @@ set no = Non
 
 set lang_name = Français
 
+set really = Vraiment ?
 set are_you_sure_quit = Voulez vous vraiment quitter ?
 
 begin module MainMenuBar

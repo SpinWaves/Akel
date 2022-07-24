@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 09/04/2022
+// Updated : 24/07/2022
 
 #include <Maths/maths.h>
+#include <Core/profile.h>
 
 namespace Ak::Maths
 {
@@ -30,12 +31,14 @@ namespace Ak::Maths
         return y * (1.5f - ((number * 0.5f) * y * y));
     }
 
-    float fsqrt(float number)
+    forceinline float fsqrt(float number)
     {
-        float y = number;
-        long i = *(long*)&y;
-        i = 0x5f3759df - (i >> 1);
-        y = *(float*)&i;
-        return y * (1.5f - ((number * 0.5f) * y * y));
+        #if (defined(__clang__) || defined(__GNUC__) || defined(__MINGW32__) || defined(__MINGW34__)) && defined(__SSE2__) && defined(AK_x86)
+            asm("sqrtss %xmm0, %xmm0");
+        #elif defined(_M_IX86_FP) && _M_IX86_FP == 2
+            __asm { sqrtss xmm0, number; }
+        #else
+            return sqrt(number);
+        #endif
     }
 }

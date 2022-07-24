@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/06/2021
-// Updated : 09/05/2022
+// Updated : 24/07/2022
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -41,11 +41,13 @@
 #endif
 
 #if defined(__x86_64__) || defined(_M_X64)
+	#define AK_x86
 	#define AK_x86_64
 	#ifndef AK_64BITS
 		#define AK_64BITS
 	#endif
 #elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
+	#define AK_x86
 	#define AK_x86_32
 	#ifndef AK_32BITS
 		#define AK_32BITS
@@ -98,6 +100,9 @@
 #elif defined(__APPLE__) || defined(__MACH__)
 	#define AK_PLATFORM_OSX
 	#define forceinline __attribute__((always_inline))
+#elsif not defined(forceinline)
+	#define AK_PLATFORM_UNDEFINED
+	#define forceinline inline
 #endif
 
 #endif // __AK_PROFILE_CORE__

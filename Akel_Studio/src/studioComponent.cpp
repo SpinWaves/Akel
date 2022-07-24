@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 09 /07/2022
+// Updated : 24/07/2022
 
 #include <studioComponent.h>
 
@@ -69,12 +69,13 @@ void StudioComponent::onImGuiRender()
 		drawOptionsWindow();
 
 	if(!realquit && !_running)
-        ImGui::OpenPopup(_eltm->getLocalText("are_you_sure_quit").c_str());
+        ImGui::OpenPopup(_eltm->getLocalText("really").c_str());
 
 	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-	if(ImGui::BeginPopupModal(_eltm->getLocalText("are_you_sure_quit").c_str(), NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	if(ImGui::BeginPopupModal(_eltm->getLocalText("really").c_str(), NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
+		ImGui::Text(_eltm->getLocalText("are_you_sure_quit").c_str());
 		if(ImGui::Button(_eltm->getLocalText("yes").c_str(), ImVec2(120, 0)))
 		{
 			_running = false;
