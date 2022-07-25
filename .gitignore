@@ -2,5 +2,5 @@ build/
 build-int/
 .xmake/
 imgui.ini
-Editor/settings/
+Akel_Studio/settings/
 *.akel
