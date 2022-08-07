@@ -20,8 +20,9 @@ class ELTM_editor : public Panel
         ~ELTM_editor() = default;
 
     private:
-        std::vector<std::pair<std::string, std::string>> _texts;
-        std::vector<std::pair<std::string, std::vector<std::pair<std::string, std::string>>>> _modules;
+		using text_type = std::vector<std::pair<std::string, std::string>>;
+        text_type _texts;
+        std::vector<std::pair<std::string, text_type>> _modules;
         
         std::string _file;
         std::string* _input_buffer = nullptr;

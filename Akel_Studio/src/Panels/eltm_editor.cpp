@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 10/07/2022
+// Updated : 07/08/2022
 
 #include <Panels/eltm_editor.h>
 
@@ -40,25 +40,24 @@ const char* eltm_writter_formating(std::string text)
 
 void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
 {
-	/*
     if(!_input_buffer->empty())
     {
         if(!_loader->reload(*_input_buffer))
             Ak::Core::log::report(ERROR, "ELTM editor: Couldn't load %s", _input_buffer->c_str());
-        _file = *_input_buffer;
-        _texts.clear();
-        for(auto it = _loader->getCurrentTexts().begin(); it != _loader->getCurrentTexts().end(); ++it)
-            _texts.emplace_back(it->first, it->second);
-        _modules.clear();
-        for(auto it = _loader->getCurrentModules().begin(); it != _loader->getCurrentModules().end(); ++it)
-        {
-            for(auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
-                _modules.emplace_back(it->first, { std::make_pair(it2->first, it2->second) });
-        }
+		else
+		{
+			_file = *_input_buffer;
+			_texts.clear();
+			for(auto it = _loader->getCurrentTexts().begin(); it != _loader->getCurrentTexts().end(); ++it)
+				_texts.emplace_back(it->first, it->second);
+			_modules.clear();
+			for(auto it = _loader->getCurrentModules().begin(); it != _loader->getCurrentModules().end(); ++it)
+				for(auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+					_modules.emplace_back(it->first, ELTM_editor::text_type{ std::make_pair(it2->first, it2->second) });
+		}
     }
     if(!_is_open)
         return;
-
 	if(ImGui::Begin(_eltm->getLocalText("ELTM_Editor.name").c_str(), &_is_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
     {
         ImGui::Text("File : %s", _file.c_str());
@@ -82,7 +81,7 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
                 if(it != _modules.end())
                     it->second.emplace_back(id2, text);
                 else
-                    _modules.emplace_back(mod, { std::make_pair(id2, text) });
+                    _modules.emplace_back(mod, ELTM_editor::text_type{ std::make_pair(id2, text) });
             }
             else
                 _texts.emplace_back(id, text);
@@ -130,7 +129,6 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
         }
         *_save = 0;
     }
-	*/
 }
 
 void ELTM_editor::onQuit()
@@ -150,12 +148,12 @@ void ELTM_editor::editor()
             ImGui::TableSetupColumn(_eltm->getLocalText("ELTM_Editor.text").c_str(), ImGuiTableColumnFlags_NoHide);
             ImGui::TableHeadersRow();
 
-            for(auto it = _texts.end(); it!= _texts.begin(); --it)
+            for(auto it = _texts.end(); it != _texts.begin(); --it)
             {
                 ImGui::TableNextRow();
                 ImGui::TableNextColumn();
 
-                ImGui::TextUnformatted(it->first.data());
+                ImGui::TextUnformatted(it->first.c_str());
                 ImGui::TableNextColumn();
                 if(it->second.find('\n') != std::string::npos)
                     ImGui::InputTextMultiline(std::string("##" + it->first).c_str(), it->second.data(), it->second.capacity(), {0, 0}, ImGuiInputTextFlags_CallbackResize | ImGuiInputTextFlags_AllowTabInput, InputCallback, (void*)&it->second);
