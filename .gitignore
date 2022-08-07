@@ -4,3 +4,4 @@ build-int/
 imgui.ini
 Akel_Studio/settings/
 *.akel
+*.swp
