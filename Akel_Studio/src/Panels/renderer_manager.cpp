@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 09/07/2022
+// Updated : 07/08/2022
 
 #include <Panels/renderer_manager.h>
 
@@ -68,7 +68,10 @@ void RendererManager::render_sets()
         bool vsync_save = Ak::Render_Core::get().getWindow()->vsync;
         ImGui::Checkbox("Vsync", &Ak::Render_Core::get().getWindow()->vsync);
         if(vsync_save != Ak::Render_Core::get().getWindow()->vsync)
+		{
             Ak::Render_Core::get().getWindow()->fetchSettings();
+			Ak::Core::ProjectFile::setBoolValue("vsync", !vsync_save);
+		}
         
         ImGui::TreePop();
     }

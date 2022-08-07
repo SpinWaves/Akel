@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 24/07/2022
+// Updated : 07/08/2022
 
 #include <studioComponent.h>
 
@@ -18,6 +18,8 @@ void StudioComponent::onAttach()
 		Ak::Core::ProjectFile::setStringValue("language", Ak::Core::getMainDirPath() + _lang_eltm->getLocalText("English"));
 	if(!Ak::Core::ProjectFile::keyExists("on_quit_window"))
 		Ak::Core::ProjectFile::setBoolValue("on_quit_window", true);
+	if(!Ak::Core::ProjectFile::keyExists("vsync"))
+		Ak::Core::ProjectFile::setBoolValue("vsync", true);
 	
 	_eltm->load(std::move(Ak::Core::ProjectFile::getStringValue("language")));
 
@@ -25,7 +27,7 @@ void StudioComponent::onAttach()
 	Ak::WindowComponent::title = _eltm->getLocalText("window_title");
 	Ak::WindowComponent::resizable = true;
 	Ak::WindowComponent::maximize = true;
-	Ak::WindowComponent::vsync = true;
+	Ak::WindowComponent::vsync = Ak::Core::ProjectFile::getBoolValue("vsync");
 	Ak::WindowComponent::fetchSettings();
 
 	Ak::Render_Core::get().getClearValue().color.float32[0] = 0.62745098;
