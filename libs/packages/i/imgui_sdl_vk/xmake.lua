@@ -1,7 +1,7 @@
 -- This file is a part of Akel
--- Authors : @kbz_8
--- Created : 05/10/2021
--- Updated : 21/05/2022
+-- Author : @kbz_8
+-- Created : 08/08/2022
+-- Updated : 08/08/2022
 
 package("imgui_sdl_vk")
 
@@ -38,8 +38,6 @@ package("imgui_sdl_vk")
     end)
 
     on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos", function(package, target)
-        local configs = {}
-        configs.kind = "shared"
         local xmake_lua
         local pkgs = "\"libsdl\", \"vulkan-loader\", \"vulkan-tools\""
         xmake_lua = format([[
@@ -47,7 +45,7 @@ package("imgui_sdl_vk")
             add_rules("utils.install.cmake_importfiles")
             add_requires(%s)
             target("imgui_sdl_vk")
-                set_kind("shared")
+                set_kind("static")
                 add_files("*.cpp", "backends/imgui_impl_sdl.cpp", "backends/imgui_impl_vulkan.cpp")
                 add_packages(%s)
                 add_includedirs(".")
@@ -59,4 +57,3 @@ package("imgui_sdl_vk")
         import("package.tools.xmake").install(package, configs)
         os.cp(path.join(package:installdir(), "lib"), path.join(os.scriptdir(), "install"))
     end)
- 
