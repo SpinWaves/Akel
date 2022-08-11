@@ -20,7 +20,7 @@ class Studio : public Ak::Application
 
 			add_component<Ak::RendererComponent>(static_cast<Ak::WindowComponent*>(studio));
 			add_component<Ak::ImGuiComponent>();
-			
+	
 			studio->setContext();
 		}
 		~Studio() = default;
@@ -32,7 +32,6 @@ Ak::AkelInstance Akel_init()
 		project.project_file_path = std::string(Ak::Core::getMainDirPath() + "Akel_Studio/settings");
 		project.project_file_name = "akel_studio";
         project.memory_manager_enable_fixed_allocator = false;
-		project.vk_force_disable_validation_layers = true; // TODO : remove that
 	return project;
 }
 

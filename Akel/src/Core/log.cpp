@@ -1,24 +1,38 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 02/07/2022
+// Updated : 11/08/2022
 
 #include <Core/core.h>
 
 namespace Ak::Core
 {
-	void log::Init() // Remove ten days old files
+	void log::Init(std::string path) // Removes ten days old files
 	{
 		std::lock_guard<std::mutex> watchdog(mutex);
 
 		std::string name = "";
 		int date = 0;
-		size_t finder = 0;
+		size_t finder;
 
-		for(auto& p: std::filesystem::directory_iterator(getLogsDirPath()))
+		if((finder = path.rfind('/')) == std::string::npos)
+		{
+			std::cout << red << "[Akel log Fatal Error] invalid path for logs directory" << reset << std::endl;
+			std::exit(EXIT_FAILURE);
+		}
+		path.erase(finder + 1);
+		path.append(".akel_logs/");
+		_log_dir = std::move(path);
+		if(!std::filesystem::exists(_log_dir))
+		{
+			std::filesystem::create_directory(_log_dir);
+			return;
+		}
+
+		for(auto& p: std::filesystem::directory_iterator(_log_dir))
 		{
 			name.clear();
-			name.append(p.path().string(), getLogsDirPath().length(), p.path().string().length());
+			name.append(p.path().string(), _log_dir.length(), p.path().string().length());
 
 			if(name[0] == 's') // Looking for "session", the only alternative is ".gitignore" so it just needs to find if first char is "s"
 			{
@@ -37,7 +51,7 @@ namespace Ak::Core
 				}
 			}
 		}
-		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
+		_out.open(getTime().c_str(), std::ios::app);
 		if(_out.is_open())
 		{
 			_out << std::endl;
@@ -55,7 +69,7 @@ namespace Ak::Core
 		vsprintf(buffer, std::move(message).c_str(), args);
 		va_end(args);
 
-		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
+		_out.open(getTime().c_str(), std::ios::app);
         if(_out.is_open())
 		{
 			switch(type)
@@ -75,7 +89,6 @@ namespace Ak::Core
 				default: break;
 			}
             _out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << _type << buffer << std::endl; // No need to flush, std::endl does it
-			_out.close();
 		}
         if(type == FATAL_ERROR)
         {
@@ -99,7 +112,6 @@ namespace Ak::Core
 						allocators_leaks++;
 				}
 			}
-			_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
 			_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: Trying to free all instanciated allocators..." << std::endl; // No need to flush, std::endl does it
 			if(allocators_leaks == 0)
 			{
@@ -108,21 +120,19 @@ namespace Ak::Core
 				{
 					_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: All allocators have been correctly freed" << std::endl; // No need to flush, std::endl does it
 					_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: Program failed successfully !" << std::endl; // No need to flush, std::endl does it
-					_out.close();
 				}
 			}
 			else
 			{
 				std::cout << bg_red << "Strong Fatal Error : Akel's core failed to free all instantiated allocators [" << allocators_leaks << " allocators leaked] " << bg_def << std::endl;
 				if(_out.is_open())
-				{
 					_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error : Strong Fatal Error: Akel's core failed to free all instantiated allocators [" << allocators_leaks << " allocators leaked] " << std::endl; // No need to flush, std::endl does it
-					_out.close();
-				}
 			}
 
+			_out.close();
 			std::exit(EXIT_FAILURE);
         }
+		_out.close();
 	}
 
     void log::report(std::string message, ...)
@@ -135,7 +145,7 @@ namespace Ak::Core
 		vsprintf(buffer, message.c_str(), args);
 		va_end(args);
 
-		_out.open(getTime(getLogsDirPath()).c_str(), std::ios::app);
+		_out.open(getTime().c_str(), std::ios::app);
         if(_out.is_open())
 		{
             _out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- "<< buffer << std::endl;  // No need to flush, std::endl does it
@@ -143,18 +153,19 @@ namespace Ak::Core
 		}
     }
 
-    std::string log::getTime(std::string path)
+    std::string log::getTime()
     {
 		__time time = Time::getCurrentTime();
-		path.append("session-");
-        path.append(std::to_string(time.day));
-		path.append("-");
-        path.append(std::to_string(time.month));
-		path.append("-");
-        path.append(std::to_string(time.year));
-        path.append(".akel.log");
-
-        return std::move(path);
+		std::string copy = _log_dir;
+		copy.append("session-");
+        copy.append(std::to_string(time.day));
+		copy.append("-");
+        copy.append(std::to_string(time.month));
+		copy.append("-");
+        copy.append(std::to_string(time.year));
+        copy.append(".akel.log");
+        
+		return copy;
     }
 }
 

@@ -1,13 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 08/05/2022
+// Updated : 11/08/2022
 
 #ifndef __AK_VK_GPU_HEAP__
 #define __AK_VK_GPU_HEAP__
 
 #include <Akpch.h>
-#include <Core/Memory/uniquePtrWrapper.h>
 #include "chunk.h"
 #include "pages.h"
 
@@ -21,6 +20,8 @@ namespace Ak
 	    	inline uint32_t const getIndex() const noexcept { return _heapIndex; }
 	        bool const match(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags, uint32_t* typeIndex) const;
 	        GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, uint32_t typeIndex);
+
+			~GPU_Heap() = default;
 
 	    private:
 	        struct MemoryType
@@ -37,7 +38,7 @@ namespace Ak
 
 	        std::vector<MemoryType> _memoryTypes;
 	        std::vector<GPU_Page> _pages;
-	        Unique_ptr<std::mutex> _mutex;
+	        std::mutex _mutex;
 	};
 }
 

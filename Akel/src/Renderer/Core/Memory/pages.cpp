@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 08/05/2022
+// Updated : 11/08/2022
 
 #include <Core/core.h>
 #include "pages.h"
@@ -61,7 +61,6 @@ namespace Ak
 	GPU_Page::GPU_Page(VkDevice device, size_t size, uint32_t typeIndex, std::unordered_map<VkDeviceMemory, GPU_Page*>& pageMap, VkAllocationCallbacks* callbacks)
 	{
 	    _size = size;
-	    _mutex = create_Unique_ptr<std::mutex>();
 	    _device = device;
 	    _callbacks = callbacks;
 	    _typeIndex = typeIndex;
@@ -82,13 +81,11 @@ namespace Ak
 	{
 	    _head = std::move(other._head);
 	    _size = other._size;
-	    _mutex = std::move(other._mutex);
 	    _device = other._device;
 	    _memory = std::move(other._memory);
 	    _callbacks = other._callbacks;
 
 	    other._head = nullptr;
-	    other._mutex = nullptr;
 	    other._memory = VK_NULL_HANDLE;
 	}
 
@@ -97,7 +94,7 @@ namespace Ak
 	    if(requirements.size > _size)
 	    	return {};
 	    
-	    std::lock_guard<std::mutex> watchdog(*_mutex);
+	    std::lock_guard<std::mutex> watchdog(_mutex);
 
 	    GPU_Page::Flag* current = _head;
 
@@ -135,7 +132,7 @@ namespace Ak
 
 	void GPU_Page::free(GPU_Mem_Chunk allocation)
 	{
-	    std::lock_guard<std::mutex> watchdog(*_mutex);
+	    std::lock_guard<std::mutex> watchdog(_mutex);
 
 	    GPU_Page::Flag* current = _head;
 

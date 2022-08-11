@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 04/03/2022
+// Updated : 11/08/2022
 
 #include <Core/core.h>
 
@@ -13,7 +13,7 @@ namespace Ak::Core
     }
     std::string Paths::logDirPath()
     {
-        return MAIN_PATH"Logs/";
+		log::getLogPath();
     }
     std::string Paths::assetsDirPath()
     {

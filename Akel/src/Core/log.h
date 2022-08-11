@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 06/04/2022
+// Updated : 11/08/2022
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -24,18 +24,21 @@ namespace Ak
     {
         class log
         {
+			friend class Paths;
             public:
                 log() = delete;
-                static void Init();
+                static void Init(std::string path);
                 static void report(enum LogType type, std::string message, ...);
                 static void report(std::string message, ...);
                 ~log() = delete;
 
             private:
-                static std::string getTime(std::string path);
+				inline static const std::string& getLogPath() { return _log_dir; };
+                static std::string getTime();
                 inline static std::ofstream _out;
                 inline static std::string _type;
                 inline static std::mutex mutex;
+				inline static std::string _log_dir;
         };
     }
 
