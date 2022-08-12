@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
-// Created : 31/03/2022
-// Updated : 11/08/2022
+// Created : 12/08/2022
+// Updated : 12/08/2022
 
 #ifndef __AK_VK_GPU_HEAP__
 #define __AK_VK_GPU_HEAP__
@@ -16,6 +16,7 @@ namespace Ak
 	{
 		public:
 			GPU_Heap(uint32_t heapIndex, size_t pageSize, VkPhysicalDeviceMemoryProperties& props, VkDevice device, VkAllocationCallbacks* callbacks, std::unordered_map<VkDeviceMemory, GPU_Page*>& pageMap);
+			GPU_Heap(GPU_Heap&&) = default;
 
 	    	inline uint32_t const getIndex() const noexcept { return _heapIndex; }
 	        bool const match(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags, uint32_t* typeIndex) const;
@@ -38,7 +39,6 @@ namespace Ak
 
 	        std::vector<MemoryType> _memoryTypes;
 	        std::vector<GPU_Page> _pages;
-	        std::mutex _mutex;
 	};
 }
 

@@ -1,7 +1,7 @@
 build/
-build-int/
 .xmake/
 imgui.ini
 Akel_Studio/settings/
+Akel_Studio/build/
 *.akel
 *.swp

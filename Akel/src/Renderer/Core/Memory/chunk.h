@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/09/2021
-// Updated : 08/05/2022
+// Updated : 12/08/2022
 
 #ifndef __AK_VK_GPU_MEMORY_CHUNK__
 #define __AK_VK_GPU_MEMORY_CHUNK__

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/09/2021
-// Updated : 30/05/2022
+// Updated : 12/08/2022
 
 #ifndef __AK_VK_ALLOCATOR_GPU__
 #define __AK_VK_ALLOCATOR_GPU__
@@ -28,6 +28,7 @@ namespace Ak
 
             std::vector<GPU_Heap> _heaps;
             std::unordered_map<VkDeviceMemory, GPU_Page*> _pageMap;
+	        std::mutex _mutex;
     };
 }
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 05/07/2022
+// Updated : 13/08/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -32,8 +32,8 @@ namespace Ak
 			ImGui::SaveIniSettingsToDisk(_settingsFilePath);
 		}
 
-		io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Bold.ttf").c_str(), 19.0f);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getFontsDirPath() + "opensans/OpenSans-Regular.ttf").c_str(), 19.0f);
+		io.Fonts->AddFontFromFileTTF(std::string(Core::getMainDirPath() + "../../../Ressources/fonts/opensans/OpenSans-Bold.ttf").c_str(), 19.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF(std::string(Core::getMainDirPath() + "../../../Ressources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 19.0f);
 
 		SetDarkThemeColors();
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 09/07/2021
-// Updated : 09/07/2022
+// Updated : 12/08/2022
 
 #include <Panels/console.h>
 
@@ -12,7 +12,7 @@ Console::Console(std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize) : Panel
 
     _eltm = std::move(eltm);
 
-	ee = Ak::AudioManager::loadSound(Ak::Core::getSoundsDirPath() + "42.wav");
+	ee = Ak::AudioManager::loadSound(Ak::Core::getMainDirPath() + "../../ressources/sounds/42.wav");
 
 	_sh.print("============================");
 	_sh.print(_eltm->getLocalText("Console.welcome"));

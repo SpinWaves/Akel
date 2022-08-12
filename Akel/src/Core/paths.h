@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 20/10/2021
+// Updated : 12/08/2022
 
 #ifndef __AK_PATHS__
 #define __AK_PATHS__
@@ -10,42 +10,24 @@
 
 namespace Ak::Core
 {
-    struct Paths
+    class Paths
     {
-        Paths() = delete;
+		public:
+			Paths() = delete;
+			inline static void init(const char* path)
+			{
+				_main_path = path;
+				_main_path.remove_filename();
+			}
+			inline static std::string mainDirPath() { return _main_path; }
+			inline static std::string logDirPath();
+			~Paths() = delete;
 
-        static std::string mainDirPath();
-        static std::string logDirPath();
-        static std::string assetsDirPath();
-        static std::string ressourcesDirPath();
-        static std::string soundsDirPath();
-        static std::string fontsDirPath();
-        static std::string shaderPath();
-        static void setLogsDir(std::string path);
-        static void setFontsDir(std::string path);
-        static void setAssetsDir(std::string path);
-        static void setSoundsDir(std::string path);
-
-        ~Paths() = delete;
-
-        private:
-            inline static std::string logs;
-            inline static std::string assets;
-            inline static std::string sounds;
-            inline static std::string fonts;
+		private:
+			inline static std::filesystem::path _main_path;
     };
-    std::string getMainDirPath();
-    std::string getAssetsDirPath();
-    std::string getLogsDirPath();
-    std::string getRessourcesDirPath();
-    std::string getSoundsDirPath();
-    std::string getFontsDirPath();
-    std::string getShaderPath();
-
-    void setLogsDir(std::string path);
-    void setFontsDir(std::string path);
-    void setAssetsDir(std::string path);
-    void setSoundsDir(std::string path);
+    inline std::string getMainDirPath() { return Paths::mainDirPath(); }
+	inline std::string getLogsDirPath() { return Paths::logDirPath(); }
 }
 
 #endif // __AK_PATHS__

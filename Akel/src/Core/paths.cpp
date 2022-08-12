@@ -1,107 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
-// Created : 03/04/2021
-// Updated : 11/08/2022
+// Created : 12/08/2022
+// Updated : 12/08/2022
 
 #include <Core/core.h>
 
 namespace Ak::Core
 {
-    std::string Paths::mainDirPath()
-    {
-        return MAIN_PATH;
-    }
-    std::string Paths::logDirPath()
-    {
-		log::getLogPath();
-    }
-    std::string Paths::assetsDirPath()
-    {
-        return MAIN_PATH"Ressources/assets/";
-    }
-    std::string Paths::soundsDirPath()
-    {
-        return MAIN_PATH"Ressources/sounds/";
-    }
-    std::string Paths::fontsDirPath()
-    {
-        return MAIN_PATH"Ressources/fonts/";
-    }
-    std::string Paths::ressourcesDirPath()
-    {
-        return MAIN_PATH"Ressources/";
-    }
-    std::string Paths::shaderPath()
-    {
-        return MAIN_PATH"Akel/src/Modules/GLSL/";
-    }
-
-    void Paths::setLogsDir(std::string path)
-    {
-        logs = std::move(path);
-    }
-    void Paths::setFontsDir(std::string path)
-    {
-        fonts = std::move(path);
-    }
-    void Paths::setAssetsDir(std::string path)
-    {
-        assets = std::move(path);
-    }
-    void Paths::setSoundsDir(std::string path)
-    {
-        sounds = std::move(path);
-    }
-
-// =============================================================== //
-
-    std::string getMainDirPath()
-    {
-        return Paths::mainDirPath();
-    }
-    std::string getAssetsDirPath()
-    {
-        return Paths::assetsDirPath();
-    }
-
-    std::string getLogsDirPath()
-    {
-        return Paths::logDirPath();
-    }
-
-    std::string getRessourcesDirPath()
-    {
-        return Paths::ressourcesDirPath();
-    }
-    std::string getSoundsDirPath()
-    {
-        return Paths::soundsDirPath();
-    }
-
-    std::string getFontsDirPath()
-    {
-        return Paths::fontsDirPath();
-    }
-
-    std::string getShaderPath()
-    {
-        return Paths::shaderPath();
-    }
-
-    void setLogsDir(std::string path)
-    {
-        Paths::setLogsDir(std::move(path));
-    }
-    void setFontsDir(std::string path)
-    {
-        Paths::setFontsDir(std::move(path));
-    }
-    void setAssetsDir(std::string path)
-    {
-        Paths::setAssetsDir(std::move(path));
-    }
-    void setSoundsDir(std::string path)
-    {
-        Paths::setSoundsDir(std::move(path));
-    }
+	std::string Paths::logDirPath()
+	{
+		return log::getLogPath();
+	}
 }

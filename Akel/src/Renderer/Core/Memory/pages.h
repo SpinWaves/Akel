@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 11/08/2022
+// Updated : 12/08/2022
 
 #ifndef __AK_VK_MEMORY_PAGES__
 #define __AK_VK_MEMORY_PAGES__
@@ -14,7 +14,7 @@ namespace Ak
 	{
 		public:
 			GPU_Page(VkDevice device, size_t size, uint32_t typeIndex, std::unordered_map<VkDeviceMemory, GPU_Page*>& pageMap, VkAllocationCallbacks* callbacks);
-			GPU_Page(GPU_Page&& page);
+			GPU_Page(GPU_Page&&);
 
 			inline constexpr bool const match(uint32_t typeIndex) const noexcept { return _typeIndex == typeIndex; }
 			class GPU_Mem_Chunk tryAlloc(VkMemoryRequirements requirements);
@@ -40,7 +40,6 @@ namespace Ak
 
 			Flag* _head = nullptr;
 	        size_t _size = 0;
-	        std::mutex _mutex;
 	        VkDevice _device = VK_NULL_HANDLE;
 	        VkDeviceMemory _memory = VK_NULL_HANDLE;
 	        VkAllocationCallbacks* _callbacks = nullptr;

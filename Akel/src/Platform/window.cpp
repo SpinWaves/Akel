@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 04/07/2022
+// Updated : 12/08/2022
 
 #include <Platform/platform.h>
 #include <Renderer/Core/render_core.h>
+#include <Utils/logo_ico.h>
 
 namespace Ak
 {
@@ -35,7 +36,7 @@ namespace Ak
        	_window_id = SDL_GetWindowID(_window);
        	Input::add_window(this);
 
-        _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
+		_icon = SDL_CreateRGBSurfaceFrom(static_cast<void*>(logo_icon_data), logo_icon_width, logo_icon_height, 24, 3 * logo_icon_width, 0x000000ff, 0x0000ff00, 0x00ff0000, 0);
         SDL_SetWindowIcon(_window, _icon);
 	}
 
@@ -48,7 +49,6 @@ namespace Ak
 		size.X = size.X == AK_WINDOW_MAX_SIZE ? DM.w : size.X;
 		size.Y = size.Y == AK_WINDOW_MAX_SIZE ? DM.h : size.Y;
 
-        _icon = IMG_Load(std::string(Core::getAssetsDirPath() + "logo.png").c_str());
         SDL_SetWindowIcon(_window, _icon);
 		SDL_SetWindowTitle(_window, title.c_str());
 		SDL_SetWindowPosition(_window, pos.X, pos.Y);

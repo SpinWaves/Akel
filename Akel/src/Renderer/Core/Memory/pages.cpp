@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 11/08/2022
+// Updated : 12/08/2022
 
 #include <Core/core.h>
 #include "pages.h"
@@ -94,8 +94,6 @@ namespace Ak
 	    if(requirements.size > _size)
 	    	return {};
 	    
-	    std::lock_guard<std::mutex> watchdog(_mutex);
-
 	    GPU_Page::Flag* current = _head;
 
 	    while(current)
@@ -132,8 +130,6 @@ namespace Ak
 
 	void GPU_Page::free(GPU_Mem_Chunk allocation)
 	{
-	    std::lock_guard<std::mutex> watchdog(_mutex);
-
 	    GPU_Page::Flag* current = _head;
 
 	    while(current)

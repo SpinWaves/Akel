@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 11/08/2022
+-- Updated : 12/08/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -11,7 +11,7 @@ add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft"
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
 
-set_objectdir("build-int/$(os)_$(arch)")
+set_objectdir("build/objects/$(os)_$(arch)")
 set_targetdir("build/$(os)_$(arch)")
 
 -- Lib Akel Build
@@ -51,6 +51,9 @@ target("Akel_Studio")
     add_deps("Akel")
 	
     add_files("Akel_Studio/src/**.cpp")
+
+	set_objectdir("Akel_Studio/build/objects/$(os)_$(arch)")
+	set_targetdir("Akel_Studio/build/$(os)_$(arch)")
 
 	add_packages("imguizmo_sdl_vk")
 	add_packages("spirv-reflect")

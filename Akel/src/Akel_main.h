@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 11/08/2022
+// Updated : 12/08/2022
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -16,6 +16,7 @@ extern Ak::Application* Akel_mainApplication();
 
 int main(int argc, char** argv)
 {
+	Ak::Core::Paths::init(argv[0]);
 	Ak::Core::log::Init(argv[0]);
 
 	AK_BEGIN_SESSION("Start");

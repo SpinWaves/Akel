@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 11/08/2022
+// Updated : 12/08/2022
 
 #include "heap.h"
 
@@ -39,8 +39,6 @@ namespace Ak
 
     GPU_Mem_Chunk GPU_Heap::allocChunk(VkMemoryRequirements requirements, uint32_t typeIndex)
     {
-        std::lock_guard<std::mutex> watchdog(_mutex);
-
         for(size_t i = 0; i < _pages.size(); i++)
         {
             if(_pages[i].match(typeIndex))

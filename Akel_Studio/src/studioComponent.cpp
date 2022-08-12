@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 07/08/2022
+// Updated : 13/08/2022
 
 #include <studioComponent.h>
 
@@ -12,7 +12,7 @@ StudioComponent::StudioComponent() : Ak::WindowComponent(), _eltm(Ak::create_sha
 void StudioComponent::onAttach()
 {
 	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>(false);
-	_lang_eltm->load(Ak::Core::getMainDirPath() + "Akel_Studio/texts/langs.eltm");
+	_lang_eltm->load(Ak::Core::getMainDirPath() + "../../texts/langs.eltm");
 
 	if(!Ak::Core::ProjectFile::keyExists("language"))
 		Ak::Core::ProjectFile::setStringValue("language", Ak::Core::getMainDirPath() + _lang_eltm->getLocalText("English"));
@@ -30,7 +30,7 @@ void StudioComponent::onAttach()
 	Ak::WindowComponent::vsync = Ak::Core::ProjectFile::getBoolValue("vsync");
 	Ak::WindowComponent::fetchSettings();
 
-	Ak::Render_Core::get().getClearValue().color.float32[0] = 0.62745098;
+	Ak::Render_Core::get().getClearValue().color.float32[0] = 0.627450980;
 	Ak::Render_Core::get().getClearValue().color.float32[1] = 0.878431373;
 	Ak::Render_Core::get().getClearValue().color.float32[2] = 0.909803922;
 
