@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 12/08/2022
+// Updated : 13/08/2022
 
 #include <Platform/platform.h>
 #include <Renderer/Core/render_core.h>
@@ -36,7 +36,19 @@ namespace Ak
        	_window_id = SDL_GetWindowID(_window);
        	Input::add_window(this);
 
-		_icon = SDL_CreateRGBSurfaceFrom(static_cast<void*>(logo_icon_data), logo_icon_width, logo_icon_height, 24, 3 * logo_icon_width, 0x000000ff, 0x0000ff00, 0x00ff0000, 0);
+		#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+			uint32_t rmask = 0xff000000;
+			uint32_t gmask = 0x00ff0000;
+			uint32_t bmask = 0x0000ff00;
+			uint32_t amask = 0x000000ff;
+		#else
+			uint32_t rmask = 0x000000ff;
+			uint32_t gmask = 0x0000ff00;
+			uint32_t bmask = 0x00ff0000;
+			uint32_t amask = 0xff000000;
+		#endif
+
+		_icon = SDL_CreateRGBSurfaceFrom(static_cast<void*>(logo_icon_data), logo_size, logo_size, 32, 4 * logo_size, rmask, gmask, bmask, amask);
         SDL_SetWindowIcon(_window, _icon);
 	}
 
