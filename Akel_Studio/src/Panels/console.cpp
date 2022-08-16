@@ -1,9 +1,10 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 09/07/2021
-// Updated : 12/08/2022
+// Updated : 16/08/2022
 
 #include <Panels/console.h>
+#include <Fonts/material_font.h>
 
 Console::Console(std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize) : Panel("__console"), _sh(eltm)
 {
@@ -12,7 +13,7 @@ Console::Console(std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize) : Panel
 
     _eltm = std::move(eltm);
 
-	ee = Ak::AudioManager::loadSound(Ak::Core::getMainDirPath() + "../../ressources/sounds/42.wav");
+	ee = Ak::AudioManager::loadSound(Ak::Core::getMainDirPath() + "ressources/sounds/42.wav");
 
 	_sh.print("============================");
 	_sh.print(_eltm->getLocalText("Console.welcome"));
@@ -28,7 +29,7 @@ void Console::onEvent(Ak::Input& input)
 void Console::onUpdate(Ak::Maths::Vec2<int>& size)
 {
 	_height = size.Y / 4;
-	if(ImGui::Begin(_eltm->getLocalText("Console.name").data(), nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
+	if(ImGui::Begin(std::string(AKS_ICON_MD_TERMINAL" " + _eltm->getLocalText("Console.name")).data(), nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings))
     {
 		logPart();
 		ImGui::Separator();

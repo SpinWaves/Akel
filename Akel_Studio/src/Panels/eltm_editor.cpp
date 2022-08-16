@@ -1,9 +1,10 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 07/08/2022
+// Updated : 16/08/2022
 
 #include <Panels/eltm_editor.h>
+#include <Fonts/material_font.h>
 
 ELTM_editor::ELTM_editor(std::shared_ptr<Ak::ELTM> eltm, std::string* input_buffer, uint8_t* save) : Panel("__eltm_editor")
 {
@@ -58,7 +59,7 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
     }
     if(!_is_open)
         return;
-	if(ImGui::Begin(_eltm->getLocalText("ELTM_Editor.name").c_str(), &_is_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+	if(ImGui::Begin(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getLocalText("ELTM_Editor.name")).c_str(), &_is_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
     {
         ImGui::Text("File : %s", _file.c_str());
 
@@ -69,7 +70,7 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
         static std::string id;
         static std::string text;
 
-        if(ImGui::Button(_eltm->getLocalText("ELTM_Editor.add").c_str()))
+        if(ImGui::Button(std::string(AKS_ICON_MD_TEXT_INCREASE" " + _eltm->getLocalText("ELTM_Editor.add")).c_str()))
         {
             size_t found = 0;
             if((found = id.find('.')) != std::string::npos)

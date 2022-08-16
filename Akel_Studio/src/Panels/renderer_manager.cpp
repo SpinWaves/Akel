@@ -1,9 +1,10 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 07/08/2022
+// Updated : 16/08/2022
 
 #include <Panels/renderer_manager.h>
+#include <Fonts/material_font.h>
 
 RendererManager::RendererManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__renderer_manager"), _gpu()
 {
@@ -13,7 +14,7 @@ RendererManager::RendererManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__rend
 
 void RendererManager::onUpdate(Ak::Maths::Vec2<int>& size)
 {
-    if(ImGui::Begin(_eltm->getLocalText("RendererManager.name").c_str(), nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+    if(ImGui::Begin(std::string(AKS_ICON_MD_TV" " + _eltm->getLocalText("RendererManager.name")).c_str(), nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
     {
         render_sets();
         render_stats();
@@ -24,7 +25,7 @@ void RendererManager::onUpdate(Ak::Maths::Vec2<int>& size)
 
 void RendererManager::render_sets()
 {
-    if(ImGui::TreeNodeEx(_eltm->getLocalText("RendererManager.render_sets").c_str(), ImGuiTreeNodeFlags_Framed))
+    if(ImGui::TreeNodeEx(std::string(AKS_ICON_MD_DISPLAY_SETTINGS" " + _eltm->getLocalText("RendererManager.render_sets")).c_str(), ImGuiTreeNodeFlags_Framed))
     {
         ImGui::Text(_eltm->getLocalText("RendererManager.culling").c_str());
         ImGui::SameLine();
@@ -79,7 +80,7 @@ void RendererManager::render_sets()
 
 void RendererManager::render_stats()
 {
-    if(ImGui::TreeNodeEx(_eltm->getLocalText("RendererManager.stats").c_str(), ImGuiTreeNodeFlags_Framed))
+    if(ImGui::TreeNodeEx(std::string(AKS_ICON_MD_QUERY_STATS" " + _eltm->getLocalText("RendererManager.stats")).c_str(), ImGuiTreeNodeFlags_Framed))
     {
         ImGui::Text(_eltm->getLocalText("RendererManager.vulkan_v").c_str(), _gpu.getVulkanVersion().c_str());
         ImGui::Text(_eltm->getLocalText("RendererManager.n_devices").c_str(), _gpu.getNumberOfDevices());

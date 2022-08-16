@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 13/08/2022
+// Updated : 14/08/2022
 
 #include <Platform/platform.h>
 #include <Renderer/Core/render_core.h>
@@ -10,6 +10,18 @@
 namespace Ak
 {
 	static SDL_DisplayMode DM;
+
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		static const uint32_t rmask = 0xff000000;
+		static const uint32_t gmask = 0x00ff0000;
+		static const uint32_t bmask = 0x0000ff00;
+		static const uint32_t amask = 0x000000ff;
+	#else
+		static const uint32_t rmask = 0x000000ff;
+		static const uint32_t gmask = 0x0000ff00;
+		static const uint32_t bmask = 0x00ff0000;
+		static const uint32_t amask = 0xff000000;
+	#endif
 
     WindowComponent::WindowComponent() : Component("__window_component")
 	{
@@ -36,18 +48,6 @@ namespace Ak
        	_window_id = SDL_GetWindowID(_window);
        	Input::add_window(this);
 
-		#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-			uint32_t rmask = 0xff000000;
-			uint32_t gmask = 0x00ff0000;
-			uint32_t bmask = 0x0000ff00;
-			uint32_t amask = 0x000000ff;
-		#else
-			uint32_t rmask = 0x000000ff;
-			uint32_t gmask = 0x0000ff00;
-			uint32_t bmask = 0x00ff0000;
-			uint32_t amask = 0xff000000;
-		#endif
-
 		_icon = SDL_CreateRGBSurfaceFrom(static_cast<void*>(logo_icon_data), logo_size, logo_size, 32, 4 * logo_size, rmask, gmask, bmask, amask);
         SDL_SetWindowIcon(_window, _icon);
 	}
@@ -61,7 +61,12 @@ namespace Ak
 		size.X = size.X == AK_WINDOW_MAX_SIZE ? DM.w : size.X;
 		size.Y = size.Y == AK_WINDOW_MAX_SIZE ? DM.h : size.Y;
 
-        SDL_SetWindowIcon(_window, _icon);
+		if(icon == "default_Akel_icon")
+			_icon = SDL_CreateRGBSurfaceFrom(static_cast<void*>(logo_icon_data), logo_size, logo_size, 32, 4 * logo_size, rmask, gmask, bmask, amask);
+		else
+			_icon = IMG_Load(icon.c_str());
+
+		SDL_SetWindowIcon(_window, _icon);
 		SDL_SetWindowTitle(_window, title.c_str());
 		SDL_SetWindowPosition(_window, pos.X, pos.Y);
 		SDL_SetWindowSize(_window, size.X, size.Y);

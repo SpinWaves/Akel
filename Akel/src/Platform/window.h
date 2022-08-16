@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 12/08/2022
+// Updated : 14/08/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -33,7 +33,7 @@ namespace Ak
             inline SDL_Window* getNativeWindow() const noexcept { return _window; }
 
             std::string title = "Akel Window";
-            std::string icon = "default Akel icon";
+            std::string icon = "default_Akel_icon";
             
             Maths::Vec2<int> size;
             Maths::Vec2<int> pos;

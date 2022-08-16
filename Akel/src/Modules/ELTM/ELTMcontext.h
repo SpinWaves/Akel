@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/05/2021
-// Updated : 08/07/2022
+// Updated : 16/08/2022
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -95,19 +95,10 @@ namespace Ak
 				return "error";
 			}
 
-			const char* getFile()
-			{
-				return _file;
-			}
+			const char* getFile() const noexcept { return _file; }
 
-			std::unordered_map<std::string, std::string>& getCurrentTexts()
-			{
-				return _current_texts;
-			}
-			std::unordered_map<std::string, std::unordered_map<std::string, std::string>>& getCurrentModules()
-			{
-				return _current_modules;
-			}
+			inline std::unordered_map<std::string, std::string>& getCurrentTexts() { return _current_texts; }
+			inline std::unordered_map<std::string, std::unordered_map<std::string, std::string>>& getCurrentModules() { return _current_modules; }
 
 			~ELTM() = default;
 

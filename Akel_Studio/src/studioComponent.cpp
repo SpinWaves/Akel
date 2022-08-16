@@ -1,9 +1,10 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 13/08/2022
+// Updated : 16/08/2022
 
 #include <studioComponent.h>
+#include <Fonts/material_font.h>
 
 Ak::Unique_ptr<Ak::ELTM> _lang_eltm(nullptr);
 
@@ -12,7 +13,7 @@ StudioComponent::StudioComponent() : Ak::WindowComponent(), _eltm(Ak::create_sha
 void StudioComponent::onAttach()
 {
 	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>(false);
-	_lang_eltm->load(Ak::Core::getMainDirPath() + "../../texts/langs.eltm");
+	_lang_eltm->load(Ak::Core::getMainDirPath() + "texts/langs.eltm");
 
 	if(!Ak::Core::ProjectFile::keyExists("language"))
 		Ak::Core::ProjectFile::setStringValue("language", Ak::Core::getMainDirPath() + _lang_eltm->getLocalText("English"));
@@ -130,46 +131,46 @@ void StudioComponent::drawMainMenuBar()
 {
 	if(ImGui::BeginMainMenuBar())
 	{
-		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.file").c_str()))
+		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_FOLDER" " + _eltm->getLocalText("MainMenuBar.file")).c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.open").c_str(), "Ctrl+O"))
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_FILE_OPEN" " + _eltm->getLocalText("MainMenuBar.open")).c_str(), "Ctrl+O"))
 				auto file = pfd::open_file(_eltm->getLocalText("MainMenuBar.open"), Ak::Core::getMainDirPath(), { "Akel projects (.akel)", "*.akel" });	
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.save").c_str(), "Ctrl+S")) { /* Do stuff */ }
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.quit").c_str()))
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE" " + _eltm->getLocalText("MainMenuBar.save")).c_str(), "Ctrl+S")) { /* Do stuff */ }
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_CLOSE" " + _eltm->getLocalText("MainMenuBar.quit")).c_str()))
 				_running = false;
 			ImGui::EndMenu();
 		}
-		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.edit").c_str()))
+		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_TUNE" " + _eltm->getLocalText("MainMenuBar.edit")).c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.addFile").c_str())) { /* Do stuff */ }
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.build").c_str()))   { /* Do stuff */ }
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.options").c_str()))
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_NOTE_ADD" " + _eltm->getLocalText("MainMenuBar.addFile")).c_str())) { /* Do stuff */ }
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_BUILD_CIRCLE" " + _eltm->getLocalText("MainMenuBar.build")).c_str()))   { /* Do stuff */ }
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SETTINGS" " + _eltm->getLocalText("MainMenuBar.options")).c_str()))
 				_showOpt = !_showOpt;
 			ImGui::EndMenu();
 		}
-		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.panels").c_str()))
+		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_GRID_VIEW" " + _eltm->getLocalText("MainMenuBar.panels")).c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getLocalText("ELTM_Editor.name").c_str()))
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getLocalText("ELTM_Editor.name")).c_str()))
 				_stack->get_panel("__eltm_editor")->onOpen();
 			ImGui::EndMenu();
 		}
-		if(_stack->get_panel("__eltm_editor")->isOpen() && ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.eltm_editor").c_str()))
+		if(_stack->get_panel("__eltm_editor")->isOpen() && ImGui::BeginMenu(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getLocalText("MainMenuBar.eltm_editor")).c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_load").c_str()))
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_FILE_OPEN" " + _eltm->getLocalText("MainMenuBar.e_load")).c_str()))
 			{
 				auto file = pfd::open_file(_eltm->getLocalText("MainMenuBar.e_load"), Ak::Core::getMainDirPath(), { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All files", "*"});	
 				if(!file.result().empty())
 					_eltm_editor_input_buffer = file.result()[0];
 			}
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_save").c_str()))
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE" " + _eltm->getLocalText("MainMenuBar.e_save")).c_str()))
 				_eltm_editor_save = 1;
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.e_save_as").c_str()))
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE_AS" " + _eltm->getLocalText("MainMenuBar.e_save_as")).c_str()))
 				_eltm_editor_save = 2;
 			ImGui::EndMenu();
 		}
-		if(ImGui::BeginMenu(_eltm->getLocalText("MainMenuBar.help").c_str()))
+		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_HELP" " + _eltm->getLocalText("MainMenuBar.help")).c_str()))
 		{
-			if(ImGui::MenuItem(_eltm->getLocalText("MainMenuBar.about").c_str()))
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_INFO" " + _eltm->getLocalText("MainMenuBar.about")).c_str()))
 				_showAbout = _showAbout ? false : true;
 			ImGui::EndMenu();
 		}
@@ -193,7 +194,7 @@ extern bool reload_docks;
 
 void StudioComponent::draw_general_settings()
 {
-	ImGui::Text(_eltm->getLocalText("Settings.language").data());
+	ImGui::Text(std::string(AKS_ICON_MD_LANGUAGE" " + _eltm->getLocalText("Settings.language")).data());
 	ImGui::SameLine();
 	static std::string selected = _eltm->getLocalText("lang_name");
 	if(ImGui::BeginCombo("##combo", selected.c_str()))
@@ -222,13 +223,13 @@ void StudioComponent::draw_general_settings()
 
 void StudioComponent::drawOptionsWindow()
 {
-	if(ImGui::Begin(_eltm->getLocalText("MainMenuBar.options").data(), &_showOpt, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+	if(ImGui::Begin(std::string(AKS_ICON_MD_SETTINGS" " + _eltm->getLocalText("MainMenuBar.options")).data(), &_showOpt, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
 	{
 		static int selected = -1;
 		
     	if(ImGui::BeginChild("Panel", ImVec2(200, 0), true))
 		{
-			if(ImGui::Selectable(_eltm->getLocalText("Settings.general").data(), selected == 0))
+			if(ImGui::Selectable(std::string(AKS_ICON_MD_TUNE" " + _eltm->getLocalText("Settings.general")).data(), selected == 0))
 				selected = 0;
 			ImGui::EndChild();
 		}

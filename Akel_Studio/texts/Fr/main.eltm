@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 24/07/2022
+// Updated : 16/08/2022
 
 set window_title = Akel Studio
 
@@ -128,6 +128,7 @@ end module
 begin module Browser
 	set name = Navigateur de contenu
 	set content = Contenu actuel
+	set folders = Dossiers
 end module
 
 begin module Scene

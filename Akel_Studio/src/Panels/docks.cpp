@@ -1,9 +1,10 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 09/07/2022
+// Updated : 16/08/2022
 
 #include <Panels/docks.h>
+#include <Fonts/material_font.h>
 
 bool reload_docks = true;
 
@@ -36,8 +37,8 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
             ImGui::DockBuilderRemoveNode(dockspace_id);
             ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoWindowMenuButton);
 
-            ImGui::DockBuilderDockWindow(_eltm->getLocalText("Console.name").data(), dockspace_id);
-            ImGui::DockBuilderDockWindow(_eltm->getLocalText("Browser.name").data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_TERMINAL" " + _eltm->getLocalText("Console.name")).data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_FOLDER_OPEN" " + _eltm->getLocalText("Browser.name")).data(), dockspace_id);
             ImGui::DockBuilderFinish(dockspace_id);
 
             first_times_console++;
@@ -65,8 +66,8 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
             ImGui::DockBuilderRemoveNode(dockspace_id);
             ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoWindowMenuButton);
 
-            ImGui::DockBuilderDockWindow(_eltm->getLocalText("AudioManager.name").data(), dockspace_id);
-            ImGui::DockBuilderDockWindow(_eltm->getLocalText("RendererManager.name").data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_VOLUME_UP" " + _eltm->getLocalText("AudioManager.name")).data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_TV" " + _eltm->getLocalText("RendererManager.name")).data(), dockspace_id);
             ImGui::DockBuilderFinish(dockspace_id);
 
             first_times_render++;
@@ -94,8 +95,8 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
             ImGui::DockBuilderRemoveNode(dockspace_id);
             ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoWindowMenuButton);
 
-            ImGui::DockBuilderDockWindow(_eltm->getLocalText("MaterialEditor.name").data(), dockspace_id);
-            ImGui::DockBuilderDockWindow(_eltm->getLocalText("Materials.name").data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_DRAW" " + _eltm->getLocalText("MaterialEditor.name")).data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_CATEGORY" " + _eltm->getLocalText("Materials.name")).data(), dockspace_id);
             ImGui::DockBuilderFinish(dockspace_id);
 
             first_times_materials++;
@@ -123,9 +124,9 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
             ImGui::DockBuilderRemoveNode(dockspace_id);
             ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoWindowMenuButton);
 
-            ImGui::DockBuilderDockWindow(_eltm->getLocalText("ELTM_Editor.name").data(), dockspace_id);
-            ImGui::DockBuilderDockWindow(_eltm->getLocalText("Scene.name").data(), dockspace_id);
-            ImGui::DockBuilderDockWindow(_eltm->getLocalText("MainMenuBar.options").data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getLocalText("ELTM_Editor.name")).data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_SPORTS_ESPORTS" " + _eltm->getLocalText("Scene.name")).data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_SETTINGS" " + _eltm->getLocalText("MainMenuBar.options")).data(), dockspace_id);
             ImGui::DockBuilderFinish(dockspace_id);
 
             first_times_scene++;

@@ -53,7 +53,7 @@ target("Akel_Studio")
     add_files("Akel_Studio/src/**.cpp")
 
 	set_objectdir("Akel_Studio/build/objects/$(os)_$(arch)")
-	set_targetdir("Akel_Studio/build/$(os)_$(arch)")
+	set_targetdir("Akel_Studio/")
 
 	add_packages("imguizmo_sdl_vk")
 	add_packages("spirv-reflect")
