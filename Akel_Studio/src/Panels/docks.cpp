@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 16/08/2022
+// Updated : 17/08/2022
 
 #include <Panels/docks.h>
 #include <Fonts/material_font.h>
@@ -127,6 +127,8 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
             ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getLocalText("ELTM_Editor.name")).data(), dockspace_id);
             ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_SPORTS_ESPORTS" " + _eltm->getLocalText("Scene.name")).data(), dockspace_id);
             ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_SETTINGS" " + _eltm->getLocalText("MainMenuBar.options")).data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_INFO" " + _eltm->getLocalText("MainMenuBar.about")).data(), dockspace_id);
+
             ImGui::DockBuilderFinish(dockspace_id);
 
             first_times_scene++;

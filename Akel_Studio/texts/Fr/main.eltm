@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 16/08/2022
+// Updated : 17/08/2022
 
 set window_title = Akel Studio
 
@@ -27,7 +27,10 @@ begin module MainMenuBar
 
 	set help = Aide
 		set about = À propos
-			set version = Éditeur version 0.0.1\nAkel version 0.0.1
+			set version = Akel version 0.0.1\nAkel Studio version 0.0.1
+			set license = Licence MIT X11
+			set website = Site Web
+			set code = Code source
 
 	set eltm_editor = Éditeur d'ELTM
 		set e_load = Charger un fichier

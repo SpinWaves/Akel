@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 03/07/2022
+// Updated : 17/08/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -42,6 +42,7 @@
 
 #ifdef AK_PLATFORM_WINDOWS
     #include <windows.h>
+	#include <shellapi.h>
 #endif
 
 // MultiThreading

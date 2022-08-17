@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 16/08/2022
+// Updated : 17/08/2022
 
 #include <Panels/renderer_manager.h>
 #include <Fonts/material_font.h>
@@ -63,7 +63,7 @@ void RendererManager::render_sets()
         ImGui::SameLine();
         ImGui::Text(_eltm->getLocalText("RendererManager.bg_color").c_str());
 
-        if(ImGui::Button(_eltm->getLocalText("RendererManager.reload").c_str()))
+        if(ImGui::Button(std::string(AKS_ICON_MD_REFRESH" " + _eltm->getLocalText("RendererManager.reload")).c_str()))
             Ak::Render_Core::get().requireFrameBufferResize();
 
         bool vsync_save = Ak::Render_Core::get().getWindow()->vsync;

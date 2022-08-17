@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 16/08/2022
+// Updated : 18/08/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -183,9 +183,18 @@ void StudioComponent::drawMainMenuBar()
 
 void StudioComponent::drawAboutWindow()
 {
-	if(ImGui::Begin(_eltm->getLocalText("MainMenuBar.about").data(), &_showAbout, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking))
+	if(ImGui::Begin(std::string(AKS_ICON_MD_INFO" " + _eltm->getLocalText("MainMenuBar.about")).data(), &_showAbout, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
 	{
+		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - ImGui::CalcTextSize(_eltm->getLocalText("MainMenuBar.version").data()).x - 10, ImGui::GetWindowHeight() - ImGui::GetTextLineHeightWithSpacing() * 2));
 		ImGui::TextUnformatted(_eltm->getLocalText("MainMenuBar.version").data());
+
+		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() / 1.75f, size.Y - (size.Y / 1.2f)));
+		ImGui::TextUnformatted(_eltm->getLocalText("MainMenuBar.about_text").data());
+
+		AkImGui::WebLink(_eltm->getLocalText("MainMenuBar.license").data(), "https://akel-engine.com/license/", ImVec2(ImGui::GetWindowWidth()/2 - ImGui::GetWindowWidth()/10 - ImGui::CalcTextSize(_eltm->getLocalText("MainMenuBar.license").data()).x/2, ImGui::GetWindowHeight() - ImGui::GetWindowHeight()/4));
+		AkImGui::WebLink(_eltm->getLocalText("MainMenuBar.website").data(), "https://akel-engine.com/", ImVec2(ImGui::GetWindowWidth()/2 - ImGui::CalcTextSize(_eltm->getLocalText("MainMenuBar.website").data()).x/2, ImGui::GetWindowHeight() - ImGui::GetWindowHeight()/4));
+		AkImGui::WebLink(_eltm->getLocalText("MainMenuBar.code").data(), "https://github.com/Spinwaves/Akel", ImVec2(ImGui::GetWindowWidth()/2 + ImGui::GetWindowWidth()/10 - ImGui::CalcTextSize(_eltm->getLocalText("MainMenuBar.code").data()).x/2, ImGui::GetWindowHeight() - ImGui::GetWindowHeight()/4));
+
 		ImGui::End();
 	}
 }

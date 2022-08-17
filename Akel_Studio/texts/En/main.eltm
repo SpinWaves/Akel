@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 16/08/2022
+// Updated : 18/08/2022
 
 set window_title = Akel Studio
 
@@ -27,7 +27,17 @@ begin module MainMenuBar
 
 	set help = Help
 		set about = About
-			set version = Editor version 0.0.1\nAkel version 0.0.1
+			set version = Akel version 0.0.1\t \tAkel Studio version 0.0.1
+			set license = License MIT X11
+			set website = WebSite
+			set code = Source code
+			set about_text = (	Akel is a game engine made for fun by a young french man.
+								\nIt is designed to be very easy to use. Not being the most
+								\npowerful, it goes the way of simplicity of use, both on
+								\nthe editor side and on the code side.
+								\nIt is completly free and open-source and you can contribute
+								\nto its code by yourself if you want to.\n \n \n
+								Akel Studio is the editor of Akel made with Akel and ImGui)
 
 	set eltm_editor = ELTM editor
 		set e_load = Load File
