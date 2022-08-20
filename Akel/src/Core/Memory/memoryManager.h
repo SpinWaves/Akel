@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 29/05/2022
+// Updated : 20/08/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -19,8 +19,6 @@ namespace Ak
                 std::vector<std::weak_ptr<FixedAllocator>> fixedStack;
             };
 
-            inline static std::shared_ptr<ControlUnit> control_unit;
-
         public:
             MemoryManager() = delete;
 
@@ -29,8 +27,8 @@ namespace Ak
 
             static void useMemoryManager(bool set = true);
             inline static bool isMemoryManagerUsed() noexcept { return _use; }
-
-            static std::shared_ptr<ControlUnit>& accessToControlUnit() { return control_unit; }
+            inline static std::shared_ptr<ControlUnit>& accessToControlUnit() { return control_unit; }
+			inline static bool is_init() noexcept { return _is_init; }
 
             template <class T = void, typename ... Args>
             static T* alloc(Args&& ... args);
@@ -44,11 +42,13 @@ namespace Ak
             ~MemoryManager() = delete;
 
         private:
+            inline static std::shared_ptr<ControlUnit> control_unit;
             inline static JamAllocator __jam;
             inline static FixedAllocator __fixed1;
             inline static FixedAllocator __fixed2;
             inline static FixedAllocator __fixed3;
             inline static bool _use = true;
+            inline static bool _is_init = false;
     };
 
     template <class T, typename ... Args>

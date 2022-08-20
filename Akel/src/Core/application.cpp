@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 12/08/2022
+// Updated : 20/08/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -10,13 +10,13 @@
 
 namespace Ak
 {
-	Application::Application(const char* name) : ComponentStack(), non_copyable(), _in(), _fps()
+	Application::Application(const char* name) : ComponentStack(), non_copyable(), _in(), _fps(), _name(name)
 	{
+		std::cout << name << " " << _name << std::endl;
 		if(_app_check)
 			Core::log::report(FATAL_ERROR, "you can only declare one application");
 		_app_check = true;
 		
-		_name = name;
 		_fps.init();
 		if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
 			Core::log::report(FATAL_ERROR, "SDL error : unable to init all subsystems : %s", SDL_GetError());
@@ -24,6 +24,7 @@ namespace Ak
 
 	void Application::run()
 	{
+		std::cout << "app name :" << _name << "." << std::endl;
 		while(!_in.isEnded()) // Main loop
 		{
 			_fps.update();
@@ -76,7 +77,10 @@ namespace Ak
 				Render_Core::get().endFrame();
 			}
 		}
+	}
 
+	void Application::destroy()
+	{
 		for(auto component : _components)
 			component->onQuit();
 	}
@@ -88,6 +92,8 @@ namespace Ak
 
 	Application::~Application()
 	{
+		if(_name.size() != 0)
+			destroy();
 		if(SDL_WasInit(SDL_INIT_EVERYTHING))
 			SDL_Quit();
 	}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 11/08/2022
+// Updated : 20/08/2022
 
 #include <Core/core.h>
 
@@ -34,7 +34,7 @@ namespace Ak::Core
 			name.clear();
 			name.append(p.path().string(), _log_dir.length(), p.path().string().length());
 
-			if(name[0] == 's') // Looking for "session", the only alternative is ".gitignore" so it just needs to find if first char is "s"
+			if(name[0] == 's')
 			{
 				if((finder = name.find("-")) != std::string::npos)
 				{
@@ -92,24 +92,27 @@ namespace Ak::Core
 		}
         if(type == FATAL_ERROR)
         {
-	        std::cout << bg_red << "FATAL ERROR: emergency abortion program " << '\n' << "Trying to free all instanciated allocators... " << bg_def << std::endl;
+	        std::cout << bg_red << "FATAL ERROR: emergency abortion program " << '\n' << "Trying to free all instanciated allocators... " << std::endl << bg_def;
 			int allocators_leaks = 0;
-			for(auto& elem : MemoryManager::accessToControlUnit()->jamStack)
+			if(MemoryManager::is_init())
 			{
-				if(!elem.expired())
+				for(auto& elem : MemoryManager::accessToControlUnit()->jamStack)
 				{
-					elem.lock()->destroy();
-					if(elem.lock()->is_init())
-						allocators_leaks++;
+					if(!elem.expired())
+					{
+						elem.lock()->destroy();
+						if(elem.lock()->is_init())
+							allocators_leaks++;
+					}
 				}
-			}
-			for(auto& elem : MemoryManager::accessToControlUnit()->fixedStack)
-			{
-				if(!elem.expired())
+				for(auto& elem : MemoryManager::accessToControlUnit()->fixedStack)
 				{
-					elem.lock()->destroy();
-					if(elem.lock()->is_init())
-						allocators_leaks++;
+					if(!elem.expired())
+					{
+						elem.lock()->destroy();
+						if(elem.lock()->is_init())
+							allocators_leaks++;
+					}
 				}
 			}
 			_out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- Fatal Error: Trying to free all instanciated allocators..." << std::endl; // No need to flush, std::endl does it
@@ -130,7 +133,7 @@ namespace Ak::Core
 			}
 
 			_out.close();
-			std::exit(EXIT_FAILURE);
+			std::exit(0);
         }
 		_out.close();
 	}

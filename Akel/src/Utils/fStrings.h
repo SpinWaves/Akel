@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 09/05/2022
+// Updated : 20/08/2022
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
@@ -90,7 +90,7 @@ namespace Ak
             size_t rfind(const fString& str, size_t pos) { return this->rfind(str.c_str(), pos); }
             size_t rfind(char c, size_t pos = npos);
 
-            inline friend std::ostream& operator<<(std::ostream& target, const fString& str) { return target << str.c_str(); }
+			inline friend std::ostream& operator<<(std::ostream& target, const fString& str) { return target << str.c_str(); }
 
             inline iterator begin() { return iterator(&_string[0]); }
             inline iterator end()   { return iterator(&_string[_size]); }

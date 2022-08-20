@@ -1,11 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 30/05/2022
+// Updated : 20/08/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
+#include <Utils/assert.h>
 
 #include <Utils/fStrings.h>
 

@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 22/07/2022
+// Updated : 20/08/2022
 
 #include "render_core.h"
 #include <Core/core.h>
+#include <Utils/assert.h>
 
 namespace Ak
 {

@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 30/05/2022
+// Updated : 20/08/2022
 
 #include "vk_descriptor_pool.h"
 #include <Renderer/Core/render_core.h>
+#include <Utils/assert.h>
 
 namespace Ak
 {

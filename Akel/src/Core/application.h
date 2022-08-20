@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 09/05/2022
+// Updated : 20/08/2022
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -11,6 +11,7 @@
 #include <Core/Components/components.h>
 #include <Utils/fps.h>
 #include <Utils/nonCopyable.h>
+#include <Utils/fStrings.h>
 
 namespace Ak
 {
@@ -20,10 +21,11 @@ namespace Ak
 			Application(const char* name = "application");
 			void run();
 			void end();
+			void destroy();
 			~Application();
 
 		private:
-			const char* _name = nullptr;
+			fString _name;
 			Input _in;
 			CounterFPS _fps;
 			inline static bool _app_check = false;

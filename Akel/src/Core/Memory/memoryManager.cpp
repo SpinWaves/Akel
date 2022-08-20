@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 02/03/2022
+// Updated : 20/08/2022
 
 #include <Utils/utils.h>
 #include <Core/core.h>
@@ -10,6 +10,8 @@ namespace Ak
 {
     void MemoryManager::init()
     {
+		if(_is_init)
+			return;
         control_unit = std::make_shared<ControlUnit>();
         if(_use)
         {
@@ -25,10 +27,13 @@ namespace Ak
             }
             __jam.init(4096 * 4096);
             __jam.auto_increase_size(true);
+			_is_init = true;
         }
     }
     void MemoryManager::end()
     {
+		if(!_is_init)
+			return;
         if(_use)
         {
             if(Core::ProjectFile::getBoolValue("memory_manager_enable_fixed_allocator"))
@@ -38,6 +43,7 @@ namespace Ak
                 __fixed3.destroy();
             }
             __jam.destroy();
+			_is_init = false;
         }
     }
 

@@ -1,11 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 22/05/2022
+// Updated : 20/08/2022
 
 #include <Core/core.h>
 #include "vk_instance.h"
 #include <Platform/window.h>
+#include <Utils/assert.h>
 #include "render_core.h"
 
 namespace Ak

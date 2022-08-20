@@ -5,6 +5,7 @@
 
 #include "vk_render_pass.h"
 #include <Renderer/Core/render_core.h>
+#include <Utils/assert.h>
 
 namespace Ak
 {
