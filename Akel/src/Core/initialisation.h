@@ -1,17 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 16/10/2021
+// Updated : 21/08/2022
 
-#ifndef __AK_CORE_INIT__
-#define __AK_CORE_INIT__
+#ifndef __AK_INITIALISATION__
+#define __AK_INITIALISATION__
 
 #include <Akpch.h>
-#include <Core/parameterStruct.h>
+#include <Core/instance.h>
 
 namespace Ak
 {
     bool initAkel(AkelInstance* project);
 }
 
-#endif // __AK_CORE_INIT__
+#endif // __AK_INITIALISATION__

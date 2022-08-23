@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 20/08/2022
+// Updated : 21/08/2022
 
 #include <Utils/fStrings.h>
 #include <Core/core.h>
@@ -16,27 +16,23 @@ namespace Ak
             return;
         }
 
-        _string = memAllocSize<char>(len == npos ? std::strlen(str) : len - pos);
+        _string = memAllocSize<char>(len == npos ? std::strlen(str) - pos : len - pos);
 
-        char c = str[pos];
-        while(c != '\0')
+        char c;
+        while((c = str[_size + pos]))
         {
             if(len != npos && _size == len)
                 break;
             if(modifier != nullptr)
-                _string[_size] = modifier(c);
+                _string[_size++] = modifier(c);
             else
-                _string[_size] = c;
-            _size++;
-            c = str[_size + pos];
+                _string[_size++] = c;
         }
-		_size++;
-        _string[_size - 1] = '\0';
     }
 
-    fString::fString(const fString& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str._size : len)
+    fString::fString(const fString& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str._size - pos : len - pos)
     {
-        _string = memAllocSize<char>(_size - pos);
+        _string = memAllocSize<char>(_size);
         for(int i = 0; i < _size; i++)
         {
             if(modifier != nullptr)

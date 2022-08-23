@@ -1,12 +1,12 @@
 // This file is a part of the Akel
 // Authors : @kbz_8
 // Created : 16/10/2021
-// Updated : 22/07/2022
+// Updated : 21/08/2022
 
-#ifndef __AK_PARAMETER_STRUCT__
-#define __AK_PARAMETER_STRUCT__
+#ifndef __AK_INSTANCE__
+#define __AK_INSTANCE__
 
-#include <Core/core.h>
+#include <Akpch.h>
 
 namespace Ak
 {
@@ -23,4 +23,4 @@ namespace Ak
     };
 }
 
-#endif // __AK_PARAMETER_STRUCT__
+#endif // __AK_INSTANCE__

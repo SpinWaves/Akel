@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 04/07/2022
+// Updated : 21/08/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
 
 #include <Akpch.h>
 #include <Core/core.h>
+#include <Utils/selfInstance.h>
 #include "Memory/allocator_GPU.h"
 
 #include "vk_queues.h"
@@ -43,7 +44,7 @@ namespace Ak
     constexpr const int MAX_FRAMES_IN_FLIGHT = 2;
 
     /**
-     * Render_Core is a singleton that is not meant to be created anywhere
+     * Render_Core is a singleton that is not meant to be created anywhere by the user
      */
     class Render_Core : public SelfInstance<Render_Core>
     {
@@ -59,14 +60,14 @@ namespace Ak
             inline class WindowComponent* getWindow() noexcept { return _window; }
             inline void setWindow(class WindowComponent* window) noexcept { _window = window; }
 
-            inline Instance&  getInstance()    { return _instance; }
-            inline Device&    getDevice()      { return _device; }
-            inline Surface&   getSurface()     { return _surface; }
-            inline Queues&    getQueue()       { return _queues; }
-            inline CmdPool&   getCmdPool()     { return _cmd_pool; }
-            inline SwapChain& getSwapChain()   { return _swapchain; }
-            inline Semaphore& getSemaphore()   { return _semaphore; }
-            inline RenderPass& getRenderPass() { return _pass; }
+            inline Instance&  getInstance()		   { return _instance; }
+            inline Device&    getDevice()		   { return _device; }
+            inline Surface&   getSurface()		   { return _surface; }
+            inline Queues&    getQueue()		   { return _queues; }
+            inline CmdPool&   getCmdPool()		   { return _cmd_pool; }
+            inline SwapChain& getSwapChain()	   { return _swapchain; }
+            inline Semaphore& getSemaphore()	   { return _semaphore; }
+            inline RenderPass& getRenderPass()	   { return _pass; }
             inline ValidationLayers& getLayers()   { return _layers; }
             inline DescriptorPool& getDescPool()   { return _desc_pool; }
             inline VkClearValue& getClearValue()   { return _clearColor; }

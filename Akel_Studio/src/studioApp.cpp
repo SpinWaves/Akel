@@ -1,17 +1,18 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 17/08/2022
+// Updated : 23/08/2022
 
 #include <AkSpch.h>
 #include <Akel_main.h>
 #include <studioComponent.h>
+#include <camera.h>
 #include <Fonts/material_font.h>
 
 class Studio : public Ak::Application
 {
 	public:
-		Studio() : Ak::Application("Akel Studio")
+		Studio() : Ak::Application()
 		{
 			Ak::Core::printEngineInfo();
 			add_component<Ak::AudioManager>();
@@ -37,6 +38,8 @@ class Studio : public Ak::Application
 			io.Fonts->AddFontDefault();
 			
 			imgui->generateFonts();
+
+			add_component<SceneCamera>(-5, 3, -5, &studio->size);
 		}
 		~Studio() = default;
 };

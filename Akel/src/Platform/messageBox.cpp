@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 07/05/2022
+// Updated : 21/08/2022
 
 #include <Platform/platform.h>
 
@@ -12,7 +12,7 @@ namespace Ak
         SDL_MessageBoxButtonData buttons[] = {{SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 1, "Ok"}, {0, 0, "More details"}};
 
         const SDL_MessageBoxColorScheme colorScheme = {
-            { /* .colors (.r, .g, .b) */
+            {
                 /* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
                 {56, 54, 53},
                 /* [SDL_MESSAGEBOX_COLOR_TEXT] */

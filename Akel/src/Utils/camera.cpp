@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 05/07/2022
+// Updated : 23/08/2022
 
 #include <Utils/camera.h>
 #include <Graphics/matrixes.h>
@@ -9,16 +9,16 @@
 
 namespace Ak
 {
-	Camera3D::Camera3D() : Component("__camera3D"), _up(0, 0, 1)
+	Camera3D::Camera3D() : Component("__camera3D"), _up(0, 1, 0)
 	{
 		_position.SET(0, 0, 0);
 		update_view();
 	}
-	Camera3D::Camera3D(Maths::Vec3<double> position) :  Component("__camera3D"), _position(std::move(position)), _up(0, 0, 1)
+	Camera3D::Camera3D(Maths::Vec3<double> position) :  Component("__camera3D"), _position(std::move(position)), _up(0, 1, 0)
 	{
 		update_view();
 	}
-	Camera3D::Camera3D(double x, double y, double z) : Component("__camera3D"), _up(0, 0, 1)
+	Camera3D::Camera3D(double x, double y, double z) : Component("__camera3D"), _up(0, 1, 0)
 	{
 		_position.SET(x, y, z);
 		update_view();
@@ -28,7 +28,7 @@ namespace Ak
 	{
 		update_view();
 		_target = _position + _direction;
-    	Matrixes::lookAt(_position.X, _position.Y, _position.Z, _target.X, _target.Y, _target.Z, 0, 0, 1);
+    	Matrixes::lookAt(_position.X, _position.Y, _position.Z, _target.X, _target.Y, _target.Z, 0, 1, 0);
 	}
 
 	void Camera3D::onEvent(Input& input)
@@ -38,12 +38,12 @@ namespace Ak
 			_theta -= input.getXRel() * _sensivity;
 			_phi -= input.getYRel() * _sensivity;
 		}
-		if(input.getInKey(SDL_SCANCODE_F1, action::up))
+		if(input.getInKey(SDL_SCANCODE_ESCAPE, action::up))
 		{
-			_isMouseGrabed = !_isMouseGrabed;
-			SDL_SetRelativeMouseMode(_isMouseGrabed ? SDL_TRUE : SDL_FALSE);
+			_isMouseGrabed = false;
+			SDL_SetRelativeMouseMode(SDL_FALSE);
 		}
-		if(!_isMouseGrabed && input.getInMouse(AK_MOUSE_BUTTON_LEFT))
+		if(input.getInMouse(AK_MOUSE_BUTTON_LEFT))
 		{
 			_isMouseGrabed = true;
 			SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -67,8 +67,8 @@ namespace Ak
 		_phi = _phi < -89 ? -89 : _phi;
 
 		_direction.X = cos(_phi * M_PI / 180) * cos(_theta * M_PI / 180);
-		_direction.Y = cos(_phi * M_PI / 180) * sin(_theta * M_PI / 180);	// Spherical coordinate system
-		_direction.Z = sin(_phi * M_PI / 180);
+		_direction.Y = sin(_phi * M_PI / 180);								// Spherical coordinate system
+		_direction.Z = cos(_phi * M_PI / 180) * sin(-_theta * M_PI / 180);
 
 		_left = _up.crossProduct(_direction);
 		_left.normalize();

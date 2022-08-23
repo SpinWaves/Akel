@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 16/08/2022
+// Updated : 23/08/2022
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -10,6 +10,28 @@ Scene::Scene(std::shared_ptr<Ak::ELTM> eltm) : Panel("__scene")
 {
     _eltm = std::move(eltm);
 }
+
+static float objectMatrix[4][16] = {
+  { 1.f, 0.f, 0.f, 0.f,
+    0.f, 1.f, 0.f, 0.f,
+    0.f, 0.f, 1.f, 0.f,
+    0.f, 0.f, 0.f, 1.f },
+
+  { 1.f, 0.f, 0.f, 0.f,
+  0.f, 1.f, 0.f, 0.f,
+  0.f, 0.f, 1.f, 0.f,
+  2.f, 0.f, 0.f, 1.f },
+
+  { 1.f, 0.f, 0.f, 0.f,
+  0.f, 1.f, 0.f, 0.f,
+  0.f, 0.f, 1.f, 0.f,
+  2.f, 0.f, 2.f, 1.f },
+
+  { 1.f, 0.f, 0.f, 0.f,
+  0.f, 1.f, 0.f, 0.f,
+  0.f, 0.f, 1.f, 0.f,
+  0.f, 0.f, 2.f, 1.f }
+};
 
 void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 {
@@ -56,17 +78,18 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
         
         draw_list->AddRectFilled(ImVec2(0, 0), ImVec2((15 * size.X)/100 + aspect_width, size.Y), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.180f, 0.180f, 0.180f, 1.000f))));
         draw_list->AddRectFilled(ImVec2(size.X, 0), ImVec2(size.X - (19 * size.X)/100 - aspect_width, size.Y), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.180f, 0.180f, 0.180f, 1.000f))));
+
+		float windowWidth = (float)ImGui::GetWindowWidth();
+		float windowHeight = (float)ImGui::GetWindowHeight();
+		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y - 200, windowWidth, windowHeight + 400);
         
-        ImGuizmo::Enable(true);
-        ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
-        ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, size.X, size.Y);
+        ImGuizmo::SetDrawlist();
 
-        Ak::Matrixes::perspective(90, (float)(size.X / size.Y), 0.01, 100);
-    	Ak::Matrixes::lookAt(0, 0, 0, 1, 1, -1, 0, 0, 1);
+        Ak::Matrixes::perspective(90, (float)(size.X / size.Y), 0.01, 1000);
 
-        ImGuizmo::DrawGrid(glm::value_ptr(Ak::Matrixes::get_matrix(Ak::matrix::view)), glm::value_ptr(Ak::Matrixes::get_matrix(Ak::matrix::proj)), glm::value_ptr(glm::mat4(1.0f)), 100.f);
+		ImGuizmo::DrawGrid(glm::value_ptr(Ak::Matrixes::get_matrix(Ak::matrix::view)), glm::value_ptr(Ak::Matrixes::get_matrix(Ak::matrix::proj)), glm::value_ptr(glm::mat4(1.0f)), 1000.f);
+		ImGuizmo::DrawCubes(glm::value_ptr(Ak::Matrixes::get_matrix(Ak::matrix::view)), glm::value_ptr(Ak::Matrixes::get_matrix(Ak::matrix::proj)), &objectMatrix[0][0], 1);
 
         ImGui::End();
-        ImGuizmo::Enable(false);
     }
 }

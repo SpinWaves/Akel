@@ -1,13 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 20/08/2022
+// Updated : 21/08/2022
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
 
 #include "mStrings.h"
-#include <Core/Memory/uniquePtrWrapper.h>
 
 namespace Ak
 {
@@ -69,7 +68,7 @@ namespace Ak
 
             inline size_t size() noexcept { return _size; }
             inline size_t length() noexcept { return _size; }
-            inline bool empty() noexcept { return _string == nullptr || _string[0] == '\0' ? true : false; }
+            inline bool empty() noexcept { return _string == nullptr || _string[0] == '\0'; }
 
             // Getters
             inline char operator[](unsigned int index) const noexcept { return _string[index]; }
@@ -90,7 +89,7 @@ namespace Ak
             size_t rfind(const fString& str, size_t pos) { return this->rfind(str.c_str(), pos); }
             size_t rfind(char c, size_t pos = npos);
 
-			inline friend std::ostream& operator<<(std::ostream& target, const fString& str) { return target << str.c_str(); }
+			inline friend std::ostream& operator<<(std::ostream& target, const fString& str) { return target << str._string; }
 
             inline iterator begin() { return iterator(&_string[0]); }
             inline iterator end()   { return iterator(&_string[_size]); }
@@ -128,7 +127,7 @@ namespace Ak
             static int compare(const char* p, const char* q, size_t n);
             
             char* _string;
-            unsigned int _size = 0;
+            size_t _size = 0;
     };
 }
 

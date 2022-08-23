@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 18/08/2022
+// Updated : 23/08/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -60,6 +60,7 @@ static bool realquit = false;
 void StudioComponent::onImGuiRender()
 {
 	ImGuizmo::BeginFrame();
+	ImGuizmo::Enable(true);
 
 	drawMainMenuBar();
 

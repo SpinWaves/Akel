@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 20/08/2022
+// Updated : 21/08/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -10,9 +10,8 @@
 
 namespace Ak
 {
-	Application::Application(const char* name) : ComponentStack(), non_copyable(), _in(), _fps(), _name(name)
+	Application::Application() : ComponentStack(), non_copyable(), _in(), _fps()
 	{
-		std::cout << name << " " << _name << std::endl;
 		if(_app_check)
 			Core::log::report(FATAL_ERROR, "you can only declare one application");
 		_app_check = true;
@@ -24,7 +23,6 @@ namespace Ak
 
 	void Application::run()
 	{
-		std::cout << "app name :" << _name << "." << std::endl;
 		while(!_in.isEnded()) // Main loop
 		{
 			_fps.update();
@@ -83,6 +81,7 @@ namespace Ak
 	{
 		for(auto component : _components)
 			component->onQuit();
+		_app_check = false;
 	}
 
 	void Application::end()
@@ -92,7 +91,7 @@ namespace Ak
 
 	Application::~Application()
 	{
-		if(_name.size() != 0)
+		if(_app_check)
 			destroy();
 		if(SDL_WasInit(SDL_INIT_EVERYTHING))
 			SDL_Quit();
