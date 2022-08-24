@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 23/08/2022
+// Updated : 24/08/2022
 
 #include <Panels/entities_manager.h>
 #include <Fonts/material_font.h>
@@ -9,6 +9,8 @@
 EntitiesManager::EntitiesManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__entities_manager")
 {
     _eltm = std::move(eltm);
+	Ak::Matrixes::matrix_mode(Ak::matrix::model);
+	Ak::Matrixes::load_identity();
 }
 
 void EntitiesManager::onUpdate(Ak::Maths::Vec2<int>& size)
@@ -45,17 +47,24 @@ void EntitiesManager::render_transform()
 
 		if(ImGui::BeginChild("entity_manager_drags", ImVec2(150, 90), false))
 		{
-			static float v[3];
+			Ak::Matrixes::matrix_mode(Ak::matrix::model);
+			Ak::Matrixes::load_identity();
+
+			static float v[3] = { 0.0f, 0.0f, 0.0f };
 			ImGui::SetNextItemWidth(150);
 			ImGui::DragFloat3("0", v);
 
-			static float v1[3];
+			Ak::Matrixes::translate3D(v[0], v[1], v[2]);
+
+			static float v1[3] = { 0.0f, 0.0f, 0.0f };
 			ImGui::SetNextItemWidth(150);
 			ImGui::DragFloat3("1", v1);
 
-			static float v2[3];
+			static float v2[3] = { 1.0f, 1.0f, 1.0f };
 			ImGui::SetNextItemWidth(150);
 			ImGui::DragFloat3("2", v2);
+
+			Ak::Matrixes::scale3D(v2[0], v2[1], v2[2]);
 
 			ImGui::EndChild();
 		}

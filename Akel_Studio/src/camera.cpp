@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 23/08/2022
-// Updated : 23/08/2022
+// Updated : 24/08/2022
 
 #include "camera.h"
 
@@ -21,34 +21,27 @@ void SceneCamera::update()
 
 void SceneCamera::onEvent(Ak::Input& input)
 {
-	if(_isMouseGrabed)
+	if(	input.getInMouse(AK_MOUSE_BUTTON_RIGHT) &&
+		input.getX() > (15 * _window_size->X)/100 - 1 && input.getX() < _window_size->X - (19 * _window_size->X)/100 &&
+		input.getY() > 75 && input.getY() < _window_size->Y - _window_size->Y/4)
 	{
 		_theta -= input.getXRel() * _sensivity;
 		_phi -= input.getYRel() * _sensivity;
 		SDL_WarpMouseInWindow(Ak::Render_Core::get().getWindow()->getNativeWindow(), _window_size->X / 2, _window_size->Y / 2);
 		SDL_ShowCursor(SDL_DISABLE);
+
+		_mov.SET(0.0, 0.0, 0.0);
+
+		if(input.getInKey(AK_KEY_W) || input.getInKey(AK_KEY_UP))  			_mov -= _forward;
+		if(input.getInKey(AK_KEY_S) || input.getInKey(AK_KEY_DOWN))   		_mov += _forward;
+		if(input.getInKey(AK_KEY_D) || input.getInKey(AK_KEY_RIGHT))  		_mov -= _left;
+		if(input.getInKey(AK_KEY_A) || input.getInKey(AK_KEY_LEFT))   		_mov += _left;
+		if(input.getInKey(AK_KEY_LSHIFT) || input.getInKey(AK_KEY_RSHIFT))	_mov -= _up;
+		if(input.getInKey(AK_KEY_SPACE))									_mov += _up;
+
+		_speed = input.getInKey(AK_KEY_Q) ? 1.5f : 0.3f;
+		_position += _mov * _speed;
 	}
-	if(input.getInKey(SDL_SCANCODE_ESCAPE))
-	{
-		_isMouseGrabed = false;
-		SDL_ShowCursor(SDL_ENABLE);
-	}
-	if(	input.getInMouse(AK_MOUSE_BUTTON_LEFT) &&
-		input.getX() > (15 * _window_size->X)/100 - 1 && input.getX() < _window_size->X - (19 * _window_size->X)/100 &&
-		input.getY() > 75 && input.getY() < _window_size->Y - _window_size->Y/4)
-		_isMouseGrabed = true;
-
-	_mov.SET(0.0, 0.0, 0.0);
-
-	if(input.getInKey(AK_KEY_W) || input.getInKey(AK_KEY_UP))  			_mov -= _forward;
-	if(input.getInKey(AK_KEY_S) || input.getInKey(AK_KEY_DOWN))   		_mov += _forward;
-	if(input.getInKey(AK_KEY_D) || input.getInKey(AK_KEY_RIGHT))  		_mov -= _left;
-	if(input.getInKey(AK_KEY_A) || input.getInKey(AK_KEY_LEFT))   		_mov += _left;
-	if(input.getInKey(AK_KEY_LSHIFT) || input.getInKey(AK_KEY_RSHIFT))	_mov -= _up;
-	if(input.getInKey(AK_KEY_SPACE))									_mov += _up;
-
-	_speed = input.getInKey(AK_KEY_Q) ? 1.5f : 0.3f;
-	_position += _mov * _speed;
 }
 
 void SceneCamera::update_view()

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 23/08/2022
-// Updated : 23/08/2022
+// Updated : 24/08/2022
 
 #ifndef __AK_STUDIO_CAMERA__
 #define __AK_STUDIO_CAMERA__
@@ -27,7 +27,6 @@ class SceneCamera : public Ak::Component
 			double _theta = -45;
 			double _phi = -20;
 
-			bool _isMouseGrabed = false;
 			Ak::Maths::Vec2<int>* _window_size = nullptr;
 			Ak::Maths::Vec3<double> _position;
 			Ak::Maths::Vec3<double> _left;

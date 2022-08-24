@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/03/2022
-// Updated : 07/03/2022
+// Updated : 24/08/2022
 
 #ifndef __AK_MATRIXES__
 #define __AK_MATRIXES__
@@ -30,7 +30,10 @@ namespace Ak
             { _view = glm::lookAt(glm::vec3(pos_x, pos_y, pos_z), glm::vec3(target_x, target_y, target_z), glm::vec3(up_x, up_y, up_z)); }
             
             static void load_identity();
-            inline static void translate3D(double x, double y, double z) { _model = glm::translate(_model, glm::vec3(x, y, z)); }
+
+            inline static void translate3D(float x, float y, float z) { _model = glm::translate(_model, glm::vec3(x, y, z)); }
+            inline static void rotate3D(float radian_angle, float x = 0, float y = 0, float z = 0) { _model = glm::rotate(_model, radian_angle, glm::vec3(x, y, z)); }
+            inline static void scale3D(float x, float y, float z) { _model = glm::scale(_model, glm::vec3(x, y, z)); }
 
             ~Matrixes() = delete;
 
