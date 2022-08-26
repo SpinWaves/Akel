@@ -1,37 +1,37 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 24/08/2022
+// Updated : 26/08/2022
 
-set window_title = Akel Studio
+let window_title = Akel Studio
 
-set yes = Yes
-set no = No
+let yes = Yes
+let no = No
 
-set lang_name = English
+let lang_name = English
 
-set really = Really ?
-set are_you_sure_quit = Do you really want to quit ?
+let really = Really ?
+let are_you_sure_quit = Do you really want to quit ?
 
 begin module MainMenuBar
 
-	set file = File
-		set quit = Quit
-		set open = Open
-		set save = Save
+	let file = File
+		let quit = Quit
+		let open = Open
+		let save = Save
 
-	set edit = Edit
-		set addFile = Add file to project
-		set build = Build the project
-        set options = Settings
+	let edit = Edit
+		let addFile = Add file to project
+		let build = Build the project
+        let options = Settings
 
-	set help = Help
-		set about = About
-			set version = Akel version 0.0.1\t \tAkel Studio version 0.0.1
-			set license = License MIT X11
-			set website = WebSite
-			set code = Source code
-			set about_text = (	Akel is a game engine made for fun by a young french man.
+	let help = Help
+		let about = About
+			let version = Akel version 0.0.1\t \tAkel Studio version 0.0.1
+			let license = License MIT X11
+			let website = WebSite
+			let code = Source code
+			let about_text = (	Akel is a game engine made for fun by a young french man.
 								\nIt is designed to be very easy to use. Not being the most
 								\npowerful, it goes the way of simplicity of use, both on
 								\nthe editor side and on the code side. It is completly
@@ -39,40 +39,40 @@ begin module MainMenuBar
 								\nby yourself if you want to.\n \n \n
 								Akel Studio is the editor of Akel made with Akel and ImGui)
 
-	set eltm_editor = ELTM editor
-		set e_load = Load File
-		set e_save = Save
-		set e_save_as = Save As
+	let eltm_editor = ELTM editor
+		let e_load = Load File
+		let e_save = Save
+		let e_save_as = Save As
 
-	set panels = Panels
+	let panels = Panels
 
 end module
 
 begin module Settings
-	set general = General
-		set language = Language
-		set onQuit = Validation window at closing
+	let general = General
+		let language = Language
+		let onQuit = Validation window at closing
 end module
 
 begin module errors
 
-	set consoleMainWin = Akel Editor: Unable to create console
-	set consoleUnknownCommand = Unknown command
+	let consoleMainWin = Akel Editor: Unable to create console
+	let consoleUnknownCommand = Unknown command
 
 end module
 
 begin module Console
 
-	set name = Console
-	set input = Input
-	set welcome = Welcome to Akel Editor !
+	let name = Console
+	let input = Input
+	let welcome = Welcome to Akel Editor !
 
-	set helpClear = \tclear command is used to delete the contents of the console
-	set helpHistory = \thistory command is used to print the console history since the last clear
-	set helpBuild = \tbuild command is used to build the project loaded
-	set helpSysShell = \tsysShell command is used to switch to a system shell
-	set helpQuit = \tquit command is used to quit the Akel Studio
-	set help = (\t help clear: get(helpClear)\n
+	let helpClear = \tclear command is used to delete the contents of the console
+	let helpHistory = \thistory command is used to print the console history since the last clear
+	let helpBuild = \tbuild command is used to build the project loaded
+	let helpSysShell = \tsysShell command is used to switch to a system shell
+	let helpQuit = \tquit command is used to quit the Akel Studio
+	let help = (\t help clear: get(helpClear)\n
 				\t help history: get(helpHistory)\n
 				\t help build: get(helpBuild)\n
 				\t help sysShell: get(helpSysShell)\n
@@ -81,70 +81,70 @@ begin module Console
 end module
 
 begin module ELTM_Editor
-    set name = ELTM Editor
-	set text = Text
-	set version = ELTM version 1.1.2
-	set add = Add new ID
+    let name = ELTM Editor
+	let text = Text
+	let version = ELTM version 1.1.2
+	let add = Add new ID
 end module
 
 begin module Entities
-	set name = Entities
+	let name = Entities
 end module
 
 begin module EntitiesManager
-	set name = Entity Inspector
-	set transform = Transfom
-		set pos = Position
-		set rot = Rotation
-		set sca = Scale
+	let name = Entity Inspector
+	let transform = Transfom
+		let pos = Position
+		let rot = Rotation
+		let sca = Scale
 end module
 
 begin module RendererManager
-	set name = Scene Renderer
-	set render_sets = Render settings
+	let name = Scene Renderer
+	let render_lets = Render lettings
 
-		set culling = Face culling
-		set cull_none = None
-		set cull_front = Front
-		set cull_back = Back
-		set cull_front_and_back = Front and back
+		let culling = Face culling
+		let cull_none = None
+		let cull_front = Front
+		let cull_back = Back
+		let cull_front_and_back = Front and back
 
-		set bg_color = Background color
+		let bg_color = Background color
 
-		set reload = Reload renderer
+		let reload = Reload renderer
 
-	set stats = Render statistics
-		set n_devices = Number of graphical devices : %d
-		set vendor = Vendor : %s
-		set model = GPU in use : %s
-		set model_type = Type : %s
-		set vulkan_v = Vulkan version : %s
+	let stats = Render statistics
+		let n_devices = Number of graphical devices : %d
+		let vendor = Vendor : %s
+		let model = GPU in use : %s
+		let model_type = Type : %s
+		let vulkan_v = Vulkan version : %s
 end module
 
 begin module AudioManager
-	set name = Scene Audio
-	set play = Play song
-	set load = Load song
+	let name = Scene Audio
+	let play = Play song
+	let load = Load song
 end module
 
 begin module MaterialEditor
-	set name = Material Editor
+	let name = Material Editor
 end module
 
 begin module Materials
-	set name = Materials
+	let name = Materials
 end module
 
 begin module Browser
-	set name = Content Browser
-	set content = Current content
-	set folders = Folders
+	let name = Content Browser
+	let content = Current content
+	let folders = Folders
 end module
 
 begin module Scene
-	set name = Scene
-	set aspect = Aspect
-		set free_aspect = Free
-	set view = View
-		set grid = Grid
+	let name = Scene
+	let aspect = Aspect
+		let free_aspect = Free
+	let view = View
+		let grid = Grid
 end module

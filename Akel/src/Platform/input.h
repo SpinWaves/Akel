@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 08/07/2022
+// Updated : 26/08/2022
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -11,7 +11,7 @@
 
 namespace Ak
 {
-    enum class action { up, down };
+    enum class action : uint8_t { up = (1 << 1), down = (1 << 2) };
 
     class Input
     {
@@ -25,16 +25,16 @@ namespace Ak
                 _yRel = 0;
                 for(int i = 0; i < SDL_NUM_SCANCODES; i++)
                 {
-                    _keys[i].second = false;
+                    _keys[i] ^= static_cast<uint8_t>(action::up);
                     if(i < _mouse.size())
-                        _mouse[i].second = false;
+						_mouse[i] ^= static_cast<uint8_t>(action::up);
                 }
             }
 
-            inline bool getInKey(const SDL_Scancode key, action type = action::down) const noexcept { return type == action::down ? _keys[key].first : _keys[key].second; }
+            inline bool getInKey(const SDL_Scancode key, action type = action::down) const noexcept { return _keys[key] & static_cast<uint8_t>(type); }
 
-            inline bool getInMouse(const uint8_t button, action type = action::down) const noexcept { return type == action::down ? _mouse[button].first : _mouse[button].second; }
-            inline bool isMouseMoving() const noexcept { return _xRel || _yRel ? true : false; }
+            inline bool getInMouse(const uint8_t button, action type = action::down) const noexcept { return _mouse[button] & static_cast<uint8_t>(type); }
+            inline bool isMouseMoving() const noexcept { return _xRel || _yRel; }
 
             inline int getX() const noexcept { return _x; }
             inline int getY() const noexcept { return _y; }
@@ -54,8 +54,8 @@ namespace Ak
 
         private:
             SDL_Event _event;
-            std::array<std::pair<bool, bool>, SDL_NUM_SCANCODES> _keys;
-            std::array<std::pair<bool, bool>, 5> _mouse;
+            std::array<uint8_t, SDL_NUM_SCANCODES> _keys;
+            std::array<uint8_t, 5> _mouse;
 
             int _x = 0;
             int _y = 0;

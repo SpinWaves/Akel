@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 04/07/2022
+// Updated : 26/08/2022
 
 #include <Platform/platform.h>
 #include <Renderer/Core/render_core.h>
@@ -10,16 +10,7 @@ namespace Ak
 {
     Input::Input()
     {
-        for(int i = 0; i < SDL_NUM_SCANCODES; i++)
-        {
-            _keys[i].first = false;
-            _keys[i].second = false;
-            if(i < _mouse.size())
-            {
-                _mouse[i].first = false;
-                _mouse[i].second = false;
-            }
-        }
+		reset();
     }
 
     void Input::update()
@@ -90,25 +81,10 @@ namespace Ak
 
         switch(_event.type) 
         {
-            case SDL_KEYDOWN: 
-                _keys[_event.key.keysym.scancode].first = true;
-                _keys[_event.key.keysym.scancode].second = false;
-            break;
-
-            case SDL_KEYUP: 
-                _keys[_event.key.keysym.scancode].first = false;
-                _keys[_event.key.keysym.scancode].second = true;
-            break;
-
-            case SDL_MOUSEBUTTONDOWN: 
-                _mouse[_event.button.button].first = true;
-                _mouse[_event.button.button].second = false;
-            break;
-
-            case SDL_MOUSEBUTTONUP: 
-                _mouse[_event.button.button].first = false;
-                _mouse[_event.button.button].second = true;
-            break;
+            case SDL_KEYDOWN:			_keys[_event.key.keysym.scancode] = static_cast<uint8_t>(action::down); break;
+            case SDL_KEYUP:				_keys[_event.key.keysym.scancode] = static_cast<uint8_t>(action::up); break;
+            case SDL_MOUSEBUTTONDOWN:	_mouse[_event.button.button] = static_cast<uint8_t>(action::down); break;
+            case SDL_MOUSEBUTTONUP:		_mouse[_event.button.button] = static_cast<uint8_t>(action::up); break;
 
             default: break;
         }

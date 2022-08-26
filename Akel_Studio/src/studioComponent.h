@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 09/07/2022
+// Updated : 26/08/2022
 
 #ifndef __AK_STUDIO_COMPONENT__
 #define __AK_STUDIO_COMPONENT__
@@ -18,6 +18,8 @@ class StudioComponent : public Ak::WindowComponent
 		void onImGuiRender() override;
 		void onImGuiEvent(Ak::Input& input) override;
 		void onQuit() override;
+
+		void generateFontTextures(Ak::ImGuiComponent* imgui);
 
 		void setContext();
 

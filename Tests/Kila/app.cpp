@@ -5,7 +5,7 @@
 class App : public Ak::Application
 {
     public:
-        explicit App() : Ak::Application("Kila test")
+        explicit App() : Ak::Application()
         {
             add_component<Comp>();
         }

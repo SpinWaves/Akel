@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 21/08/2022
+// Updated : 26/08/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -17,7 +17,7 @@ namespace Ak
 		_app_check = true;
 		
 		_fps.init();
-		if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
+		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 			Core::log::report(FATAL_ERROR, "SDL error : unable to init all subsystems : %s", SDL_GetError());
 	}
 
@@ -34,9 +34,9 @@ namespace Ak
 				while(SDL_PollEvent(_in.getNativeEvent()))
 				{
 					_in.update();
-					for(auto component : _components)
+					if(ImGuiComponent::getNumComp())
 					{
-						if(ImGuiComponent::getNumComp() != 0)
+						for(auto component : _components)
 							component->onImGuiEvent(_in);
 					}
 				}
@@ -50,7 +50,7 @@ namespace Ak
 			if(Render_Core::get().beginFrame())
 			{
 				// rendering
-				if(ImGuiComponent::getNumComp() != 0)
+				if(ImGuiComponent::getNumComp())
 				{
 					ImGui_ImplVulkan_NewFrame();
 					ImGui_ImplSDL2_NewFrame();
@@ -93,7 +93,6 @@ namespace Ak
 	{
 		if(_app_check)
 			destroy();
-		if(SDL_WasInit(SDL_INIT_EVERYTHING))
-			SDL_Quit();
+		SDL_Quit();
 	}
 }

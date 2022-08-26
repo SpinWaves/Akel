@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/05/2021
-// Updated : 16/08/2022
+// Updated : 26/08/2022
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -16,7 +16,7 @@ namespace Ak
 	class ELTM
 	{
 		public:
-			explicit ELTM(bool is_global = true);
+			ELTM(bool is_global = true);
 			bool load(std::string file);
 			inline bool reload(std::string file)
 			{
@@ -27,19 +27,18 @@ namespace Ak
 				return load(std::move(file));
 			}
 
-			static std::string getText(const std::string& ID, size_t line, const std::string& file, const std::string& function)
+			inline static std::string getText(const std::string& ID, std::size_t line, const std::string& file, const std::string& function)
 			{
 				if(_isError)
 					return "error";
-
 				if(_texts.count(ID))
 					return _texts[ID];
 
-				std::string moduleName = "";
-				std::string moduleID = "";
-				size_t found = 0;
+				std::string moduleName;
+				std::string moduleID;
+				std::size_t found;
 
-				if((found = ID.find(".")) != std::string::npos)
+				if((found = ID.find('.')) != std::string::npos)
 				{
 					moduleName.append(ID, 0, found);
 					if(_modules.count(moduleName))
@@ -48,16 +47,11 @@ namespace Ak
 						if(_modules[moduleName].count(moduleID))
 							return _modules[moduleName][moduleID];
 					}
-					else
-					{
-						ELTMerrors error = context_error(std::string("undefined module name : " + moduleName), file, function, line);
-						std::cout << red << error.what() << def << std::endl;
-						return "error";
-					}
+					context_error(std::move(std::string("undefined module name : " + moduleName)), file, function, line).expose();
+					return "error";
 				}
 
-				ELTMerrors error = context_error(std::string("undefined ID : " + ID), file, function, line);
-				std::cout << red << error.what() << def << std::endl;
+				context_error(std::move(std::string("undefined ID : " + ID)), file, function, line).expose();
 				return "error";
 			}
 
@@ -95,7 +89,7 @@ namespace Ak
 				return "error";
 			}
 
-			const char* getFile() const noexcept { return _file; }
+			const std::string& getFile() const noexcept { return _file; }
 
 			inline std::unordered_map<std::string, std::string>& getCurrentTexts() { return _current_texts; }
 			inline std::unordered_map<std::string, std::unordered_map<std::string, std::string>>& getCurrentModules() { return _current_modules; }
@@ -105,24 +99,19 @@ namespace Ak
 		private:
 			bool setID(bool isNewID);
 
-			static inline bool _isError = false;
-			bool _is_global = true;
-
 			static inline std::unordered_map<std::string, std::string> _texts;
 			std::unordered_map<std::string, std::string> _current_texts;
 			static inline std::unordered_map<std::string, std::unordered_map<std::string, std::string>> _modules;
 			std::unordered_map<std::string, std::unordered_map<std::string, std::string>> _current_modules;
+			
 			std::vector<ELTM> _imports;
 
 			StreamStack _stream;
-			const char* _file;
+			std::string _file;
+			std::size_t _line = 0;
 
-			std::string _lastModuleName = "";
-
-			std::array<bool, 2> _comments;
-			size_t _last_line_long_comment = 0;
-
-			size_t _line = 0;
+			static inline bool _isError = false;
+			bool _is_global = true;
 	};
 
 	#undef getText

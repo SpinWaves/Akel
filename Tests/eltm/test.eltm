@@ -1,0 +1,5 @@
+let test = "this is a test file"
+
+begin module myModule
+	let oui = "this is a oui"
+end module

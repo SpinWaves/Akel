@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 23/08/2022
+// Updated : 26/08/2022
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -21,23 +21,13 @@ class Studio : public Ak::Application
 			add_component(studio);
 
 			add_component<Ak::RendererComponent>(static_cast<Ak::WindowComponent*>(studio));
+
 			Ak::ImGuiComponent* imgui = Ak::memAlloc<Ak::ImGuiComponent>();
 			imgui->setSettingsFilePath(std::string(Ak::Core::getMainDirPath() + "settings/akel_studio_imgui.ini").c_str());
 			add_component(imgui);
 			studio->setContext();
 
-			ImGuiIO& io = ImGui::GetIO();
-			imgui->addFontFromFile(std::string(Ak::Core::getMainDirPath() + "fonts/opensans/OpenSans-Regular.ttf").c_str(), 19.0f, true);
-
-			static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
-			ImFontConfig config;
-			config.MergeMode = true;
-			config.GlyphOffset.y = 4.0f;
-
-			io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "fonts/material_icons-regular.ttf").c_str(), 19.0f, &config, icons_ranges);
-			io.Fonts->AddFontDefault();
-			
-			imgui->generateFonts();
+			studio->generateFontTextures(imgui);
 
 			add_component<SceneCamera>(-5, 3, -5, &studio->size);
 		}

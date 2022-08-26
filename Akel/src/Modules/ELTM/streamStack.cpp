@@ -1,30 +1,37 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/05/2021
-// Updated : 19/05/2021
+// Updated : 26/08/2022
 
-#include <Modules/ELTM/eltm.h>
+#include "streamStack.h"
 
 namespace Ak
 {
-	int StreamStack::getLineIndexNumber(int line)
-	{
-		return _tokens[line].size();
-	}
+	StreamStack::StreamStack(const func::function<int()>* input, std::string file) : _input(*input), _file(std::move(file)) {}
 
-	int StreamStack::getTokenNumber()
+	int StreamStack::operator()()
 	{
-		int returner = 0;
-		for(int i = 0; i < _tokens.size(); i++)
+		int ret = -1;
+
+		if(_stack.empty())
+			ret = _input();
+		else
 		{
-			returner += _tokens[i].size();
+			ret = _stack.top();
+			_stack.pop();
 		}
-		return returner;
+
+		if(ret == '\n')
+			_line++;
+
+		return ret;
 	}
 
-	int StreamStack::getLineNumber()
+	void StreamStack::push_back(int c)
 	{
-		return _tokens.size();
+		_stack.push(c);
+		if(c == '\n')
+			_line--;
 	}
 }
 

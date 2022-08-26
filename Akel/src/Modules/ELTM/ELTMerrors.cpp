@@ -1,78 +1,44 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/05/2021
-// Updated : 29/05/2021
+// Updated : 26/08/2022
 
 #include <Modules/ELTM/eltm.h>
 
 namespace Ak
 {
-	ELTMerrors::ELTMerrors(std::string message, std::string file, std::string caller, size_t line)
-	{
-		_message = std::move(message);
-		_line = line;
-		_file = file;
-		_caller = caller;
-	}
+	ELTMerrors::ELTMerrors(std::string message, std::string file, std::string caller, std::size_t line) :
+		_message(std::move(message)),
+		_line(line),
+		_file(std::move(file)),
+		_caller(std::move(caller))
+	{}
 
-	const char* ELTMerrors::what()
+	ELTMerrors syntax_error(std::string message, std::string file, std::size_t line)
 	{
-		return _message.c_str();
+		message.insert(0, "syntax error, ");
+		return ELTMerrors(std::move(message), std::move(file), "", line);
 	}
-
-	size_t ELTMerrors::line()
+	ELTMerrors unexpected_error(std::string message, std::string file, std::size_t line)
 	{
-		return _line;
+		message.insert(0, "unexpected ");
+		return ELTMerrors(std::move(message), std::move(file), "", line);
 	}
-
-	std::string ELTMerrors::file()
+	ELTMerrors file_not_found_error(std::string message, std::string file, std::size_t line)
 	{
-		return _file;
+		message.insert(0, "file not found '");
+		message.push_back('\'');
+		return ELTMerrors(std::move(message), std::move(file), "", line);
 	}
-	
-	std::string ELTMerrors::caller()
+	ELTMerrors context_error(std::string message, std::string file, std::string caller, std::size_t line)
 	{
-		return _caller;
+		message.insert(0, "context error, ");
+		return ELTMerrors(std::move(message), std::move(file), std::move(caller), line);
 	}
-
-	void ELTMerrors::activate(bool activate)
+	ELTMerrors already_declared_error(std::string message, std::string file, std::size_t line)
 	{
-		_activate = activate;
-	}
-	bool ELTMerrors::is_active()
-	{
-		return _activate;
-	}
-
-	ELTMerrors simple_error(std::string message, std::string file, size_t line)
-	{
-		std::string _message = std::string("ELTM error, file: " + file + ", line: " + std::to_string(line) + ", ");
-		_message += message;
-		return ELTMerrors(std::move(_message), file, "", line);
-	}
-	ELTMerrors syntax_error(std::string message, std::string file, size_t line)
-	{
-		std::string _message = std::string("ELTM syntax error, file: " + file + ", line: " + std::to_string(line) + ", ");
-		_message += message;
-		return ELTMerrors(std::move(_message), file, "", line);
-	}
-	ELTMerrors file_not_found_error(std::string message, std::string file, size_t line)
-	{
-		std::string _message = std::string("ELTM error, file: " + file + ", line: " + std::to_string(line) +",  \"");
-		_message += message;
-		_message += "\" file not found";
-		return ELTMerrors(std::move(_message), file, "", line);
-	}
-	ELTMerrors context_error(std::string message, std::string file, std::string caller, size_t line)
-	{
-		std::string _message = std::string("ELTM context error, file: " + file + ", line: " + std::to_string(line) + ", in function: " + caller + ", ");
-		_message += message;
-		return ELTMerrors(std::move(_message), file, caller, line);
-	}
-	ELTMerrors already_declared_error(std::string message, std::string file, size_t line)
-	{
-		std::string _message = std::string("ELTM error, file: " + file + ", line: " + std::to_string(line) + ", \"" + message + "\" is already declared in this scope");
-		return ELTMerrors(std::move(_message), file, "", line);
+		message += " is already declared in this scope";
+		return ELTMerrors(std::move(message), std::move(file), "", line);
 	}
 }
 

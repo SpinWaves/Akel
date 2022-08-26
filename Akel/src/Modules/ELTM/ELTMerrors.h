@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/05/2021
-// Updated : 13/07/2021
+// Updated : 26/08/2022
 
 #ifndef __AK_ELTM_ERRORS__
 #define __AK_ELTM_ERRORS__
@@ -13,29 +13,29 @@ namespace Ak
 	class ELTMerrors
 	{
 		public:
-			ELTMerrors(std::string message, std::string file, std::string caller, size_t line);
-			const char* what();
-			size_t line();
-			std::string file();
-			std::string caller();
+			ELTMerrors(std::string message, std::string file, std::string caller, std::size_t line);
 
-			static void activate(bool activate);
-			static bool is_active();
+			inline void expose()
+			{
+				std::cout	<< red << "[ELTM error] " << def << ": " 
+							<< _message 
+							<< " at line " << _line 
+							<< _caller != "" ? " in function " << _caller : "" 
+							<< " in file " << _file << std::endl;
+			}
 
 		private:
-			size_t _line;
 			std::string _file;
 			std::string _caller;
 			std::string _message;
-
-			inline static bool _activate = true;
+			std::size_t _line;
 	};
 
-	ELTMerrors simple_error(std::string message, std::string file, size_t line);
-	ELTMerrors syntax_error(std::string message, std::string file, size_t line);
-	ELTMerrors file_not_found_error(std::string message, std::string file, size_t line);
-	ELTMerrors context_error(std::string message, std::string file, std::string caller, size_t line);
-	ELTMerrors already_declared_error(std::string message, std::string file, size_t line);
+	ELTMerrors syntax_error(std::string message, std::string file, std::size_t line);
+	ELTMerrors unexpected_error(std::string message, std::string file, std::size_t line);
+	ELTMerrors file_not_found_error(std::string message, std::string file, std::size_t line);
+	ELTMerrors context_error(std::string message, std::string file, std::string caller, std::size_t line);
+	ELTMerrors already_declared_error(std::string message, std::string file, std::size_t line);
 }
 
 #endif // __AK_ELTM_ERRORS__

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 23/08/2022
+// Updated : 26/08/2022
 
 #include <Platform/platform.h>
 #include <Renderer/Core/render_core.h>
@@ -95,12 +95,6 @@ namespace Ak
 	{
 		SDL_GetWindowPosition(_window, &pos.X, &pos.Y);
 		SDL_GetWindowSize(_window, &size.X, &size.Y);
-	}
-
-	void WindowComponent::onEvent(Input& input)
-	{
-		if(input.getInKey(AK_KEY_ESCAPE) && input.getInKey(AK_KEY_TAB))
-			input.finish();
 	}
 
 	void WindowComponent::onQuit()

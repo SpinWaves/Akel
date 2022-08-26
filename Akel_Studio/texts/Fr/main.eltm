@@ -1,37 +1,37 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 24/08/2022
+// Updated : 26/08/2022
 
-set window_title = Akel Studio
+let window_title = Akel Studio
 
-set yes = Oui
-set no = Non
+let yes = Oui
+let no = Non
 
-set lang_name = Français
+let lang_name = Français
 
-set really = Vraiment ?
-set are_you_sure_quit = Voulez vous vraiment quitter ?
+let really = Vraiment ?
+let are_you_sure_quit = Voulez vous vraiment quitter ?
 
 begin module MainMenuBar
 
-	set file = Ficher
-		set quit = Quitter
-		set open = Ouvrir
-		set save = Sauvegarder
+	let file = Ficher
+		let quit = Quitter
+		let open = Ouvrir
+		let save = Sauvegarder
 
-	set edit = Éditer
-		set addFile = Ajouter un fichier au projet
-		set build = Construire le projet
-        set options = Parametres
+	let edit = Éditer
+		let addFile = Ajouter un fichier au projet
+		let build = Construire le projet
+        let options = Parametres
 
-	set help = Aide
-		set about = À propos
-			set version = Akel version 0.0.1\nAkel Studio version 0.0.1
-			set license = Licence MIT X11
-			set website = Site Web
-			set code = Code source
-			set about_text = (	Akel is a game engine made for fun by a young french man.
+	let help = Aide
+		let about = À propos
+			let version = Akel version 0.0.1\nAkel Studio version 0.0.1
+			let license = Licence MIT X11
+			let website = Site Web
+			let code = Code source
+			let about_text = (	Akel is a game engine made for fun by a young french man.
 								\nIt is designed to be very easy to use. Not being the most
 								\npowerful, it goes the way of simplicity of use, both on
 								\nthe editor side and on the code side. It is completly
@@ -39,40 +39,40 @@ begin module MainMenuBar
 								\nby yourself if you want to.\n \n \n
 								Akel Studio is the editor of Akel made with Akel and ImGui)
 
-	set eltm_editor = Éditeur d'ELTM
-		set e_load = Charger un fichier
-		set e_save = get(save)
-		set e_save_as = get(save) sous
+	let eltm_editor = Éditeur d'ELTM
+		let e_load = Charger un fichier
+		let e_save = get(save)
+		let e_save_as = get(save) sous
 
-	set panels = Paneaux
+	let panels = Paneaux
 
 end module
 
 begin module Settings
-	set general = Général
-		set language = Langue
-		set onQuit = Fenêtre de validation à la fermeture
+	let general = Général
+		let language = Langue
+		let onQuit = Fenêtre de validation à la fermeture
 end module
 
 begin module errors
 
-	set consoleMainWin = Akel Éditeur: Impossible de créer la console
-	set consoleUnknownCommand = Commande inconnue
+	let consoleMainWin = Akel Éditeur: Impossible de créer la console
+	let consoleUnknownCommand = Commande inconnue
 
 end module
 
 begin module Console
 
-	set name = Console
-	set input = Entrée
-	set welcome = Bienvenue dans l'éditeur d'Akel !
+	let name = Console
+	let input = Entrée
+	let welcome = Bienvenue dans l'éditeur d'Akel !
 
-	set helpClear = \tla commande clear est utilisée pour effacer le contenu de la console
-	set helpHistory = \tla commande history est utilisée pour afficher l'historique de la console depuis le dernier effacment
-	set helpBuild = \tla commande build est utilisée pour contruire le projet ouvert
-	set helpSysShell = \tla commande sysShell est utilisée pour passer sous un terminal système
-	set helpQuit = \tla commande quit est utilisée pour quitter l'éditeur
-	set help = (\t help clear: get(helpClear)\n
+	let helpClear = \tla commande clear est utilisée pour effacer le contenu de la console
+	let helpHistory = \tla commande history est utilisée pour afficher l'historique de la console depuis le dernier effacment
+	let helpBuild = \tla commande build est utilisée pour contruire le projet ouvert
+	let helpSysShell = \tla commande sysShell est utilisée pour passer sous un terminal système
+	let helpQuit = \tla commande quit est utilisée pour quitter l'éditeur
+	let help = (\t help clear: get(helpClear)\n
 				\t help history: get(helpHistory)\n
 				\t help build: get(helpBuild)\n
 				\t help sysShell: get(helpSysShell)\n
@@ -81,70 +81,70 @@ begin module Console
 end module
 
 begin module ELTM_Editor
-    set name = Éditeur d'ELTM
-	set text = Texte
-	set version = ELTM version 1.1.2
-	set add = Ajouter un nouvel ID
+    let name = Éditeur d'ELTM
+	let text = Texte
+	let version = ELTM version 1.1.2
+	let add = Ajouter un nouvel ID
 end module
 
 begin module Entities
-	set name = Entitées
+	let name = Entitées
 end module
 
 begin module EntitiesManager
-	set name = Inspecteur d'entitée
-	set transform = Transfomations
-		set pos = Position
-		set rot = Rotation
-		set sca = Échelle
+	let name = Inspecteur d'entitée
+	let transform = Transfomations
+		let pos = Position
+		let rot = Rotation
+		let sca = Échelle
 end module
 
 begin module RendererManager
-	set name = Rendu de la scène
-		set render_sets = Paramètres de rendu
+	let name = Rendu de la scène
+		let render_lets = Paramètres de rendu
 
-		set culling = Face culling
-		set cull_none = Aucun
-		set cull_front = Avant
-		set cull_back = Arrière
-		set cull_front_and_back = Avant et arrière
+		let culling = Face culling
+		let cull_none = Aucun
+		let cull_front = Avant
+		let cull_back = Arrière
+		let cull_front_and_back = Avant et arrière
 
-		set bg_color = Couleur d'arrière plan
+		let bg_color = Couleur d'arrière plan
 
-		set reload = Recharger le renderer
+		let reload = Recharger le renderer
 
-	set stats = Statistiques de rendu
-		set n_devices = Nombre de périphériques graphiques : %d
-		set vendor = Fournisseur : %s
-		set model = GPU utilisé : %s
-		set model_type = Type : %s
-		set vulkan_v = Version de Vulkan : %s
+	let stats = Statistiques de rendu
+		let n_devices = Nombre de périphériques graphiques : %d
+		let vendor = Fournisseur : %s
+		let model = GPU utilisé : %s
+		let model_type = Type : %s
+		let vulkan_v = Version de Vulkan : %s
 end module
 
 begin module AudioManager
-	set name = Audio de la scène
-	set play = Jouer un son
-	set load = Charger un son
+	let name = Audio de la scène
+	let play = Jouer un son
+	let load = Charger un son
 end module
 
 begin module MaterialEditor
-	set name = Éditeur de matériaux
+	let name = Éditeur de matériaux
 end module
 
 begin module Materials
-	set name = Materiaux
+	let name = Materiaux
 end module
 
 begin module Browser
-	set name = Navigateur de contenu
-	set content = Contenu actuel
-	set folders = Dossiers
+	let name = Navigateur de contenu
+	let content = Contenu actuel
+	let folders = Dossiers
 end module
 
 begin module Scene
-	set name = Scène
-	set aspect = Ratio
-		set free_aspect = Libre
-	set view = Vue
-		set grid = Grille
+	let name = Scène
+	let aspect = Ratio
+		let free_aspect = Libre
+	let view = Vue
+		let grid = Grille
 end module
