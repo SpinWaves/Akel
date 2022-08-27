@@ -1,409 +1,194 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/05/2021
-// Updated : 12/03/2022
+// Updated : 28/08/2022
 
-#include <Modules/ELTM/eltm.h>
+#include "eltm.h"
 
 namespace Ak
 {
-	ELTM::ELTM(bool is_global) : _stream()
+	bool ELTM::parse_token_value(tk_iterator& it, const eltm_token& value)
 	{
-		_comments[0] = false;
-		_comments[1] = false;
-		_is_global = is_global;
+		if(it->has_value(value))
+		{
+			++it;
+			return true;
+		}
+		expected_syntax_error(std::to_string(value).c_str(), _path, it->get_line()).expose();
+		return false;
 	}
 
-	bool ELTM::load(std::string file)
+	bool ELTM::compile_id_declaration(tk_iterator& it, std::string module_name)
 	{
-		_file = file.c_str();
-		_stream.tokenize(file);
-		static std::string __ELTM_MAIN_FILE;
-		std::string import_file;
+		if(!parse_token_value(it, eltm_token::kw_let))
+			return false;
+
+		if(!it->is_identifier())
+		{
+			unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+			return false;
+		}
+
+		std::string id_name = it->get_identifier().name;
+
+		if((!module_name.empty() && _modules[module_name].count(id_name)) || (module_name.empty() && _texts.count(id_name)))
+		{
+			already_declared_error(std::move(id_name), _path, it->get_line()).expose();
+			return false;
+		}
+
+		it++;
+
+		if(!parse_token_value(it, eltm_token::assign))
+			return false;
+
+		if(!it->is_string() && !it->has_value(eltm_token::kw_get))
+		{
+			unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+			return false;
+		}
+
 		std::string text;
 
-		std::string path;
-		std::size_t found = 0;
-		found = file.rfind("/");
-		path.append(file.begin(), file.begin() + found + 1);
-
-		if(__ELTM_MAIN_FILE.empty())
-			__ELTM_MAIN_FILE = file;
-
-		for(_line = 0; _line < _stream.getLineNumber(); _line++)
+		for(; it(); it++)
 		{
-			if(!_comments[0] && !_comments[1])
+			if(!it->is_string() && !it->has_value(eltm_token::kw_get))
+				break;
+			if(it->is_string())
+				text.append(it->get_string());
+			else
 			{
-				if(_stream.getToken(_line, 0).isKeyword())
+				if(!parse_token_value(it, eltm_token::kw_get))
+					return false;
+				if(!parse_token_value(it, eltm_token::par_open))
+					return false;
+				if(!it->is_identifier())
 				{
-					switch(_stream.getToken(_line, 0).getReservedToken())
-					{
-						case eltm_token::kw_set:
-						{
-							if(_stream.getToken(_line, 1).isString())
-							{
-								if(_texts.count(_stream.getToken(_line, 1).getString()))
-								{
-									ELTMerrors error = already_declared_error(_stream.getToken(_line, 1).getString(), file, _line + 1);
-									std::cout << red << error.what() << def << std::endl;
-									_isError = true;
-									return false;
-								}
-								if(!setID(true))
-									return false;
-							}
-							else
-							{
-								ELTMerrors error = syntax_error("ID name cannot be a keyword", file, _line + 1);
-								std::cout << red << error.what() << def << std::endl;
-								_isError = true;
-								return false;
-							}
-							break;
-						}
-						case eltm_token::kw_import:
-						{
-							if(_stream.getToken(_line, 1).isString())
-							{
-								bool isKnown = false;
-								if(_stream.getToken(_line, 1).getString() == __ELTM_MAIN_FILE)
-									isKnown = true;
-								else
-								{
-									for(auto elem : _imports)
-									{
-										if(elem.getFile() == _stream.getToken(_line, 1).getString().c_str())
-										{
-											isKnown = true;
-											break;
-										}
-									}
-								}
-								if(!isKnown)
-								{
-									ELTM newFile;
-									_imports.push_back(newFile);
-									if(!_imports.back().load(std::string(path + _stream.getToken(_line, 1).getString()).c_str()))
-									{
-										_isError = true;
-										return false;
-									}
-								}
-							}
-							else
-							{
-								ELTMerrors error = syntax_error("file name cannot be a keyword", file, _line + 1);
-								std::cout << red << error.what() << def << std::endl;
-								_isError = true;
-								return false;
-							}
-							break;
-						}
-						case eltm_token::basic_comment: _comments[0] = true; break;
-						case eltm_token::begin_long_comment: _comments[1] = true; _last_line_long_comment = _line; break;
-
-						case eltm_token::kw_begin:
-						{
-							if(_stream.getToken(_line, 1).isKeyword())
-							{
-								if(_stream.getToken(_line, 1).getReservedToken() == eltm_token::kw_module)
-								{
-									if(!_lastModuleName.empty())
-									{
-										ELTMerrors error = simple_error("module cannot be instancied inside another module", _file, _line+1);
-										std::cout << red << error.what() << def << std::endl;
-										_isError = true;
-										return false;
-									}
-									if(_stream.getToken(_line, 2).isString())
-									{
-										_lastModuleName = _stream.getToken(_line, 2).getString();
-									}
-									else
-									{
-										ELTMerrors error = syntax_error("module name cannot be a keyword", _file, _line+1);
-										std::cout << red << error.what() << def << std::endl;
-										_isError = true;
-										return false;
-									}
-								}
-							}
-							else
-							{
-								ELTMerrors error = syntax_error("keyword as \"module\" needed after \"begin\"", _file, _line+1);
-								std::cout << red << error.what() << def << std::endl;
-								_isError = true;
-								return false;
-							}
-							break;
-						}
-						case eltm_token::kw_end:
-						{
-							if(_stream.getToken(_line, 1).isKeyword())
-							{
-								if(_stream.getToken(_line, 1).getReservedToken() == eltm_token::kw_module)
-									_lastModuleName.clear();
-							}
-						}
-
-						default: break;
-					}
+					unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+					return false;
 				}
+				if(_texts.count(it->get_identifier().name))
+					text.append(_texts[it->get_identifier().name]);
+				else if(!module_name.empty() && _modules[module_name].count(it->get_identifier().name))
+					text.append(_modules[module_name][it->get_identifier().name]);
 				else
 				{
-					Token::activateKw(false);
-					if(_stream.getToken(_line, 0).getString() == "___ELTM_TOKEN_COMMENT_BASIC_CODE___")
-					{
-						_comments[0] = true;
-						Token::activateKw();
-					}
-					else if(!_texts.count(_stream.getToken(_line, 0).getString()))
-					{
-						Token::activateKw();
-						ELTMerrors error = simple_error(std::string("undefined ID or keyword \"" + _stream.getToken(_line, 0).getString() + "\""), file, _line + 1);
-						std::cout << red << error.what() << def << std::endl;
-						_isError = true;
-						return false;
-					}
-					else if(!_current_texts.count(_stream.getToken(_line, 0).getString()))
-					{
-						Token::activateKw();
-						ELTMerrors error = simple_error(std::string("undefined ID or keyword \"" + _stream.getToken(_line, 0).getString() + "\""), file, _line + 1);
-						std::cout << red << error.what() << def << std::endl;
-						_isError = true;
-						return false;
-					}
-					if(!setID(false))
-						return false;
+					unknown_id_error(it->get_identifier().name, _path, it->get_line()).expose();
+					return false;
 				}
-			}
-			if(_comments[0])
-				_comments[0] = false;
-			if(_comments[1])
-			{
-				if(_stream.getToken(_line, 0).isKeyword())
+				it++;
+				if(!it->has_value(eltm_token::par_close))
 				{
-					if(_stream.getToken(_line, 0).getReservedToken() == eltm_token::end_long_comment)
-						_comments[1] = false;
+					unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+					return false;
 				}
 			}
+		}
 
-		}
-		if(_comments[1])
-		{
-			ELTMwarning warning = no_end("long comment (/*)", file, _last_line_long_comment);
-			std::cout << magenta << warning.what() << def << std::endl;
-		}
-		_isError = false;
+		if(module_name.empty())
+			_texts[id_name] = std::move(text);
+		else
+			_modules[module_name][id_name] = std::move(text);
+
 		return true;
 	}
 
-	bool ELTM::setID(bool isNewID)
+	bool ELTM::compile_module_declaration(tk_iterator& it)
 	{
-		std::string text;
-		std::string moduleName;
-		std::string moduleID;
-		int found;
-		bool long_text = false;
-		bool getText = false;
+		if(!parse_token_value(it, eltm_token::kw_begin))
+			return false;
+		if(!parse_token_value(it, eltm_token::kw_module))
+			return false;
 
-		int assignPos = isNewID ? 2 : 1;
-		int j = assignPos + 1;
-
-		if(_stream.getToken(_line, assignPos).getReservedToken() == eltm_token::assign)
+		if(!it->is_identifier())
 		{
-			int currentLine = _line;
-			Token::activateKw(false);
+			unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+			return false;
+		}
 
-			while(_line < _stream.getLineNumber())
+		std::string module_name = it->get_identifier().name;
+		it++;
+
+		while(it())
+		{
+			if(it->has_value(eltm_token::kw_let))
 			{
-				for(; j < _stream.getLineIndexNumber(_line); j++)
-				{
-					// Comment check
-					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::basic_comment])
-						_comments[0] = true;
-					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::begin_long_comment])
-					{
-						_comments[1] = true;
-						_last_line_long_comment = _line;
-					}
-
-					if(!_comments[0] && !_comments[1])
-					{
-						if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::kw_get] && _stream.getToken(_line, j + 1).getString() == Token::mixable_keywords_token[eltm_token::begin_long_text])
-							getText = true;
-
-						// Long text begin check
-						if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::begin_long_text] && !getText)
-						{
-							if(j != assignPos + 1)
-							{
-								ELTMerrors error = syntax_error("long text key \"(\" needs to be at the begenning of a text", _file, _line + 1);
-								std::cout << red << error.what() << def << std::endl;
-								_isError = true;
-								return false;
-							}
-							else
-								long_text = true;
-						}
-						else if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::end_long_text]) // Check for long text end
-						{
-							if(getText)
-								getText = false;
-							else if(long_text)
-								long_text = false;
-						}
-						else
-						{
-							if(getText)
-							{
-								if(_stream.getToken(_line, j + 3).getString() == Token::mixable_keywords_token[eltm_token::end_long_text])
-								{
-									if(!_lastModuleName.empty())
-									{
-										if(_is_global)
-										{
-											if(_modules[_lastModuleName].count(_stream.getToken(_line, j + 2).getString()))
-											{
-												text += _modules[_lastModuleName][_stream.getToken(_line, j + 2).getString()];
-												j += 2;
-											}
-											else
-											{
-												ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
-												std::cout << red << error.what() << def << std::endl;
-												_isError = true;
-												return false;
-											}
-										}
-										else
-										{
-											if(_current_modules[_lastModuleName].count(_stream.getToken(_line, j + 2).getString()))
-											{
-												text += _current_modules[_lastModuleName][_stream.getToken(_line, j + 2).getString()];
-												j += 2;
-											}
-											else
-											{
-												ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
-												std::cout << red << error.what() << def << std::endl;
-												_isError = true;
-												return false;
-											}
-										}
-									}
-									else if(_texts.count(_stream.getToken(_line, j + 2).getString()) || _current_texts.count(_stream.getToken(_line, j + 2).getString()))
-									{
-										if(_is_global)
-											text += _texts[_stream.getToken(_line, j + 2).getString()];
-										else
-											text += _current_texts[_stream.getToken(_line, j + 2).getString()];
-										j += 2;
-									}
-									else if((found = _stream.getToken(_line, j + 2).getString().find(".")) != std::string::npos)
-									{
-										moduleName.append(_stream.getToken(_line, j + 2).getString(), 0, found);
-										if(_is_global)
-										{
-											if(_modules.count(moduleName))
-											{
-												moduleID.append(_stream.getToken(_line, j + 2).getString(), found + 1, _stream.getToken(_line, j + 2).getString().length());
-												if(_modules[moduleName].count(moduleID))
-												{
-													text += _modules[moduleName][moduleID];
-													j += 2;
-												}
-											}
-											else
-											{
-												ELTMerrors error = simple_error("\"get()\" : undefined module name", _file, _line + 1);
-												std::cout << red << error.what() << def << std::endl;
-												_isError = true;
-												return false;
-											}
-										}
-										else
-										{
-											if(_current_modules.count(moduleName))
-											{
-												moduleID.append(_stream.getToken(_line, j + 2).getString(), found + 1, _stream.getToken(_line, j + 2).getString().length());
-												if(_current_modules[moduleName].count(moduleID))
-												{
-													text += _current_modules[moduleName][moduleID];
-													j += 2;
-												}
-											}
-											else
-											{
-												ELTMerrors error = simple_error("\"get()\" : undefined module name", _file, _line + 1);
-												std::cout << red << error.what() << def << std::endl;
-												_isError = true;
-												return false;
-											}
-										}
-									}
-									else
-									{
-										ELTMerrors error = simple_error("\"get()\" : undefined ID", _file, _line + 1);
-										std::cout << red << error.what() << def << std::endl;
-										_isError = true;
-										return false;
-									}
-								}
-								else
-								{
-									ELTMerrors error = simple_error("get ID begun without end", _file, _line + 1);
-									std::cout << red << error.what() << def << std::endl;
-									_isError = true;
-									return false;
-								}
-							}
-							else
-							{
-								// Get text needed
-								text += _stream.getToken(_line, j).getString();
-								text += " ";
-							}
-						}
-					}
-
-					if(_stream.getToken(_line, j).getString() == Token::mixable_keywords_token[eltm_token::end_long_comment] && _comments[1])
-						_comments[1] = false;
-				}
-
-				if(!long_text)
-					break;
-				_line++;
-				j = 0;
-			}
-			text.pop_back();
-			if(_lastModuleName.empty())
-			{
-				_current_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;
-				if(_is_global)
-					_texts[_stream.getToken(currentLine, assignPos - 1).getString()] = text;
+				if(!compile_id_declaration(it, module_name))
+					return false;
 			}
 			else
 			{
-				_current_modules[_lastModuleName][_stream.getToken(currentLine, assignPos - 1).getString()] = text;
-				if(_is_global)
-					_modules[_lastModuleName][_stream.getToken(currentLine, assignPos - 1).getString()] = text;
+				unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+				return false;
+			}
+			if(it->has_value(eltm_token::kw_end))
+				break;
+
+			if(!it->is_keyword())
+				it++;
+		}
+
+		if(!parse_token_value(it, eltm_token::kw_end))
+			return false;
+		if(!parse_token_value(it, eltm_token::kw_module))
+			return false;
+
+		return true;
+	}
+
+	bool ELTM::load(std::string path)
+	{
+		File file(path.c_str());
+		_path = path;
+		func::function<int()> get = [&]() { return file(); };
+		StreamStack stream(&get, path);
+		tk_iterator it(stream);
+		if(std::find(_files.begin(), _files.end(), path) != _files.end())
+			return true;
+		_files.push_back(path);
+
+		while(it())
+		{
+			if(!it->is_keyword() || it->has_value(eltm_token::kw_get))
+			{
+				unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+				_is_error = true;
+				return false;
+			}
+			if(it->has_value(eltm_token::kw_let))
+			{
+				if(!compile_id_declaration(it))
+				{
+					_is_error = true;
+					return false;
+				}
+			}
+			if(it->has_value(eltm_token::kw_begin))
+			{
+				if(!compile_module_declaration(it))
+				{
+					_is_error = true;
+					return false;
+				}
+			}
+			if(it->has_value(eltm_token::kw_import))
+			{
+				it++;
+				if(!it->is_string())
+				{
+					unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+					_is_error = true;
+					return false;
+				}
+				if(!load(it->get_string()))
+					return false;
+				_path = path;
 			}
 
-			Token::activateKw();
-			if(long_text)
-			{
-				ELTMwarning warning = no_end("long text (\"(\")", _file, currentLine + 1);
-				std::cout << magenta << warning.what() << def << std::endl;
-			}
+			if(!it->is_keyword())
+				it++;
 		}
-		else
-		{
-			ELTMerrors error = syntax_error("missing \"=\" after ID declaration", _file, _line + 1);
-			std::cout << red << error.what() << def << std::endl;
-			_isError = true;
-			return false;
-		}
+
 		return true;
 	}
 }

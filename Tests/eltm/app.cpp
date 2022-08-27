@@ -12,6 +12,8 @@ class ELTM_tester_comp : public Ak::Component
 
 			eltm.load(Ak::Core::getMainDirPath() + "test.eltm");
 			std::cout << eltm.getText("test") << std::endl;
+			std::cout << eltm.getText("test2") << std::endl;
+			std::cout << eltm.getText("myModule.oui") << std::endl;
 		}
 
         void onEvent(Ak::Input& input) override

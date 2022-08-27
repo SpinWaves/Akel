@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/05/2021
-// Updated : 26/08/2022
+// Updated : 28/08/2022
 
 #ifndef __AK_ELTM_ERRORS__
 #define __AK_ELTM_ERRORS__
 
 #include <Akpch.h>
+#include <Utils/utils.h>
 
 namespace Ak
 {
@@ -17,11 +18,12 @@ namespace Ak
 
 			inline void expose()
 			{
-				std::cout	<< red << "[ELTM error] " << def << ": " 
+				std::cout	<< "\x1b[38;2;255;25;25m" << "[ELTM error] " << def
 							<< _message 
-							<< " at line " << _line 
-							<< _caller != "" ? " in function " << _caller : "" 
-							<< " in file " << _file << std::endl;
+							<< " at line " << _line + 1;
+				if(!_caller.empty())
+					std::cout << " in function " << _caller;
+				std::cout << " in file " << _file << std::endl;
 			}
 
 		private:
@@ -33,9 +35,11 @@ namespace Ak
 
 	ELTMerrors syntax_error(std::string message, std::string file, std::size_t line);
 	ELTMerrors unexpected_error(std::string message, std::string file, std::size_t line);
+	ELTMerrors expected_syntax_error(std::string message, std::string file, std::size_t line);
 	ELTMerrors file_not_found_error(std::string message, std::string file, std::size_t line);
 	ELTMerrors context_error(std::string message, std::string file, std::string caller, std::size_t line);
 	ELTMerrors already_declared_error(std::string message, std::string file, std::size_t line);
+	ELTMerrors unknown_id_error(std::string message, std::string file, std::size_t line);
 }
 
 #endif // __AK_ELTM_ERRORS__

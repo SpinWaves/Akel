@@ -1,150 +1,150 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 26/08/2022
+// Updated : 28/08/2022
 
-let window_title = Akel Studio
+let window_title = "Akel Studio"
 
-let yes = Oui
-let no = Non
+let yes = "Oui"
+let no = "Non"
 
-let lang_name = Français
+let lang_name = "Français"
 
-let really = Vraiment ?
-let are_you_sure_quit = Voulez vous vraiment quitter ?
+let really = "Vraiment ?"
+let are_you_sure_quit = "Voulez vous vraiment quitter ?"
 
 begin module MainMenuBar
 
-	let file = Ficher
-		let quit = Quitter
-		let open = Ouvrir
-		let save = Sauvegarder
+	let file = "Ficher"
+		let quit = "Quitter"
+		let open = "Ouvrir"
+		let save = "Sauvegarder"
 
-	let edit = Éditer
-		let addFile = Ajouter un fichier au projet
-		let build = Construire le projet
-        let options = Parametres
+	let edit = "Éditer"
+		let addFile = "Ajouter un fichier au projet"
+		let build = "Construire le projet"
+        let options = "Parametres"
 
-	let help = Aide
-		let about = À propos
-			let version = Akel version 0.0.1\nAkel Studio version 0.0.1
-			let license = Licence MIT X11
-			let website = Site Web
-			let code = Code source
-			let about_text = (	Akel is a game engine made for fun by a young french man.
+	let help = "Aide"
+		let about = "À propos"
+			let version = "Akel version 0.0.1\nAkel Studio version 0.0.1"
+			let license = "Licence MIT X11"
+			let website = "Site Web"
+			let code = "Code source"
+			let about_text = 	"Akel is a game engine made for fun by a young french man.
 								\nIt is designed to be very easy to use. Not being the most
 								\npowerful, it goes the way of simplicity of use, both on
 								\nthe editor side and on the code side. It is completly
 								\nfree and open-source and you can contribute to its code
 								\nby yourself if you want to.\n \n \n
-								Akel Studio is the editor of Akel made with Akel and ImGui)
+								Akel Studio is the editor of Akel made with Akel and ImGui"
 
-	let eltm_editor = Éditeur d'ELTM
-		let e_load = Charger un fichier
+	let eltm_editor = "Éditeur d'ELTM"
+		let e_load = "Charger un fichier"
 		let e_save = get(save)
-		let e_save_as = get(save) sous
+		let e_save_as = get(save)" sous"
 
-	let panels = Paneaux
+	let panels = "Paneaux"
 
 end module
 
 begin module Settings
-	let general = Général
-		let language = Langue
-		let onQuit = Fenêtre de validation à la fermeture
+	let general = "Général"
+		let language = "Langue"
+		let onQuit = "Fenêtre de validation à la fermeture"
 end module
 
 begin module errors
 
-	let consoleMainWin = Akel Éditeur: Impossible de créer la console
-	let consoleUnknownCommand = Commande inconnue
+	let consoleMainWin = "Akel Éditeur: Impossible de créer la console"
+	let consoleUnknownCommand = "Commande inconnue"
 
 end module
 
 begin module Console
 
-	let name = Console
-	let input = Entrée
-	let welcome = Bienvenue dans l'éditeur d'Akel !
+	let name = "Console"
+	let input = "Entrée"
+	let welcome = "Bienvenue dans l'éditeur d'Akel !"
 
-	let helpClear = \tla commande clear est utilisée pour effacer le contenu de la console
-	let helpHistory = \tla commande history est utilisée pour afficher l'historique de la console depuis le dernier effacment
-	let helpBuild = \tla commande build est utilisée pour contruire le projet ouvert
-	let helpSysShell = \tla commande sysShell est utilisée pour passer sous un terminal système
-	let helpQuit = \tla commande quit est utilisée pour quitter l'éditeur
-	let help = (\t help clear: get(helpClear)\n
-				\t help history: get(helpHistory)\n
-				\t help build: get(helpBuild)\n
-				\t help sysShell: get(helpSysShell)\n
-				\t help quit: get(helpQuit))
+	let helpClear = "\tla commande clear est utilisée pour effacer le contenu de la console"
+	let helpHistory = "\tla commande history est utilisée pour afficher l'historique de la console depuis le dernier effacment"
+	let helpBuild = "\tla commande build est utilisée pour contruire le projet ouvert"
+	let helpSysShell = "\tla commande sysShell est utilisée pour passer sous un terminal système"
+	let helpQuit = "\tla commande quit est utilisée pour quitter l'éditeur"
+	let help =	"\thelp clear: "get(helpClear)
+				"\n\t help history: "get(helpHistory)
+				"\n\t help build: "get(helpBuild)
+				"\n\t help sysShell: "get(helpSysShell)
+				"\n\t help quit: "get(helpQuit)
 
 end module
 
 begin module ELTM_Editor
-    let name = Éditeur d'ELTM
-	let text = Texte
-	let version = ELTM version 1.1.2
-	let add = Ajouter un nouvel ID
+    let name = "Éditeur d'ELTM"
+	let text = "Texte"
+	let version = "ELTM version 2.0.0"
+	let add = "Ajouter un nouvel ID"
 end module
 
 begin module Entities
-	let name = Entitées
+	let name = "Entitées"
 end module
 
 begin module EntitiesManager
-	let name = Inspecteur d'entitée
-	let transform = Transfomations
-		let pos = Position
-		let rot = Rotation
-		let sca = Échelle
+	let name = "Inspecteur d'entitée"
+	let transform = "Transfomations"
+		let pos = "Position"
+		let rot = "Rotation"
+		let sca = "Échelle"
 end module
 
 begin module RendererManager
-	let name = Rendu de la scène
-		let render_lets = Paramètres de rendu
+	let name = "Rendu de la scène"
+		let render_sets = "Paramètres de rendu"
 
-		let culling = Face culling
-		let cull_none = Aucun
-		let cull_front = Avant
-		let cull_back = Arrière
-		let cull_front_and_back = Avant et arrière
+		let culling = "Face culling"
+		let cull_none = "Aucun"
+		let cull_front = "Avant"
+		let cull_back = "Arrière"
+		let cull_front_and_back = "Avant et arrière"
 
-		let bg_color = Couleur d'arrière plan
+		let bg_color = "Couleur d'arrière plan"
 
-		let reload = Recharger le renderer
+		let reload = "Recharger le renderer"
 
-	let stats = Statistiques de rendu
-		let n_devices = Nombre de périphériques graphiques : %d
-		let vendor = Fournisseur : %s
-		let model = GPU utilisé : %s
-		let model_type = Type : %s
-		let vulkan_v = Version de Vulkan : %s
+	let stats = "Statistiques de rendu"
+		let n_devices = "Nombre de périphériques graphiques : %d"
+		let vendor = "Fournisseur : %s"
+		let model = "GPU utilisé : %s"
+		let model_type = "Type : %s"
+		let vulkan_v = "Version de Vulkan : %s"
 end module
 
 begin module AudioManager
-	let name = Audio de la scène
-	let play = Jouer un son
-	let load = Charger un son
+	let name = "Audio de la scène"
+	let play = "Jouer un son"
+	let load = "Charger un son"
 end module
 
 begin module MaterialEditor
-	let name = Éditeur de matériaux
+	let name = "Éditeur de matériaux"
 end module
 
 begin module Materials
-	let name = Materiaux
+	let name = "Materiaux"
 end module
 
 begin module Browser
-	let name = Navigateur de contenu
-	let content = Contenu actuel
-	let folders = Dossiers
+	let name = "Navigateur de contenu"
+	let content = "Contenu actuel"
+	let folders = "Dossiers"
 end module
 
 begin module Scene
-	let name = Scène
-	let aspect = Ratio
-		let free_aspect = Libre
-	let view = Vue
-		let grid = Grille
+	let name = "Scène"
+	let aspect = "Ratio"
+		let free_aspect = "Libre"
+	let view = "Vue"
+		let grid = "Grille"
 end module

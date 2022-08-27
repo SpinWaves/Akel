@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 16/08/2022
+// Updated : 27/08/2022
 
 #include <Panels/eltm_editor.h>
 #include <Fonts/material_font.h>
@@ -10,7 +10,7 @@ ELTM_editor::ELTM_editor(std::shared_ptr<Ak::ELTM> eltm, std::string* input_buff
 {
     _eltm = std::move(eltm);
     _save = save;
-	_loader = Ak::create_Unique_ptr<Ak::ELTM>(false);
+	_loader = Ak::create_Unique_ptr<Ak::ELTM>();
     _input_buffer = input_buffer;
 }
 
@@ -49,17 +49,17 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
 		{
 			_file = *_input_buffer;
 			_texts.clear();
-			for(auto it = _loader->getCurrentTexts().begin(); it != _loader->getCurrentTexts().end(); ++it)
+			for(auto it = _loader->getTexts().begin(); it != _loader->getTexts().end(); ++it)
 				_texts.emplace_back(it->first, it->second);
 			_modules.clear();
-			for(auto it = _loader->getCurrentModules().begin(); it != _loader->getCurrentModules().end(); ++it)
+			for(auto it = _loader->getModules().begin(); it != _loader->getModules().end(); ++it)
 				for(auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
 					_modules.emplace_back(it->first, ELTM_editor::text_type{ std::make_pair(it2->first, it2->second) });
 		}
     }
     if(!_is_open)
         return;
-	if(ImGui::Begin(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getLocalText("ELTM_Editor.name")).c_str(), &_is_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
+	if(ImGui::Begin(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getText("ELTM_Editor.name")).c_str(), &_is_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
     {
         ImGui::Text("File : %s", _file.c_str());
 
@@ -70,7 +70,7 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
         static std::string id;
         static std::string text;
 
-        if(ImGui::Button(std::string(AKS_ICON_MD_TEXT_INCREASE" " + _eltm->getLocalText("ELTM_Editor.add")).c_str()))
+        if(ImGui::Button(std::string(AKS_ICON_MD_TEXT_INCREASE" " + _eltm->getText("ELTM_Editor.add")).c_str()))
         {
             size_t found = 0;
             if((found = id.find('.')) != std::string::npos)
@@ -96,9 +96,9 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
 
         ImGui::SameLine(0);
         
-        ImGui::InputTextWithHint("##TEXT", _eltm->getLocalText("ELTM_Editor.text").c_str(), text.data(), text.capacity(), ImGuiInputTextFlags_CallbackResize, InputCallback, (void*)&text);
+        ImGui::InputTextWithHint("##TEXT", _eltm->getText("ELTM_Editor.text").c_str(), text.data(), text.capacity(), ImGuiInputTextFlags_CallbackResize, InputCallback, (void*)&text);
 
-        ImGui::TextUnformatted(_eltm->getLocalText("ELTM_Editor.version").c_str());
+        ImGui::TextUnformatted(_eltm->getText("ELTM_Editor.version").c_str());
 
 		ImGui::End();
     }
@@ -146,7 +146,7 @@ void ELTM_editor::editor()
         if(ImGui::BeginTable("3ways", 2, flags))
         {
             ImGui::TableSetupColumn("ID", ImGuiTableColumnFlags_NoHide);
-            ImGui::TableSetupColumn(_eltm->getLocalText("ELTM_Editor.text").c_str(), ImGuiTableColumnFlags_NoHide);
+            ImGui::TableSetupColumn(_eltm->getText("ELTM_Editor.text").c_str(), ImGuiTableColumnFlags_NoHide);
             ImGui::TableHeadersRow();
 
             for(auto it = _texts.end(); it != _texts.begin(); --it)

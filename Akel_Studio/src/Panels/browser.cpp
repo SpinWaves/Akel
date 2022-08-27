@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 17/08/2022
+// Updated : 27/08/2022
 
 #include <Panels/browser.h>
 #include <Fonts/material_font.h>
@@ -16,7 +16,7 @@ void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
 	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
 	_height = size.Y / 4;
     
-	if(ImGui::Begin(std::string(AKS_ICON_MD_FOLDER_OPEN" " + _eltm->getLocalText("Browser.name")).c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
+	if(ImGui::Begin(std::string(AKS_ICON_MD_FOLDER_OPEN" " + _eltm->getText("Browser.name")).c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
     {
         browser();
         ImGui::SameLine(0);
@@ -30,7 +30,7 @@ void Browser::browser()
 {
     if(ImGui::BeginChild("Browser", ImVec2((15.1 * _width)/100, _height - 41), true, ImGuiWindowFlags_HorizontalScrollbar))
     {
-		ImGui::Text(std::string(AKS_ICON_MD_FOLDER_COPY" " + _eltm->getLocalText("Browser.folders")).c_str());
+		ImGui::Text(std::string(AKS_ICON_MD_FOLDER_COPY" " + _eltm->getText("Browser.folders")).c_str());
         ImGui::SameLine((15.1 * _width)/100 - 60);
         if(ImGui::Button("   ../   "))
         {
@@ -104,7 +104,7 @@ void Browser::content()
     std::string filename;
     if(ImGui::BeginChild("Content", ImVec2((83 * _width)/100, _height - 41), true, ImGuiWindowFlags_HorizontalScrollbar))
     {
-        ImGui::Text(std::string(AKS_ICON_MD_FILE_COPY" " + _eltm->getLocalText("Browser.content")).c_str());
+        ImGui::Text(std::string(AKS_ICON_MD_FILE_COPY" " + _eltm->getText("Browser.content")).c_str());
         ImGui::SameLine((83 * _width)/100 - 40);
 		if(ImGui::Button(AKS_ICON_MD_SETTINGS))
 		{

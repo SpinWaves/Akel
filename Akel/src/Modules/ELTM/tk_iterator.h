@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/08/2022
-// Updated : 26/08/2022
+// Updated : 27/08/2022
 
 #include <Akpch.h>
 #include "token.h"
@@ -11,7 +11,6 @@ namespace Ak
 	class tk_iterator
 	{
 		public:
-			tk_iterator(std::deque<Token>& tokens);
 			tk_iterator(class StreamStack& tokens);
 
 			inline const Token& operator*() const noexcept { return _current; }

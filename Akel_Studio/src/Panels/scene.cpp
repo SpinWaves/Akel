@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 26/08/2022
+// Updated : 27/08/2022
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -13,15 +13,15 @@ Scene::Scene(std::shared_ptr<Ak::ELTM> eltm) : Panel("__scene")
 
 void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 {
-    if(ImGui::Begin(std::string(AKS_ICON_MD_SPORTS_ESPORTS" " + _eltm->getLocalText("Scene.name")).c_str(), nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground))
+    if(ImGui::Begin(std::string(AKS_ICON_MD_SPORTS_ESPORTS" " + _eltm->getText("Scene.name")).c_str(), nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground))
     {
         ImDrawList* draw_list = ImGui::GetBackgroundDrawList();
 
         if(ImGui::BeginMenuBar())
         {
-            if(ImGui::BeginMenu(std::string(AKS_ICON_MD_ASPECT_RATIO" " + _eltm->getLocalText("Scene.aspect")).c_str()))
+            if(ImGui::BeginMenu(std::string(AKS_ICON_MD_ASPECT_RATIO" " + _eltm->getText("Scene.aspect")).c_str()))
             {
-                if(ImGui::MenuItem(_eltm->getLocalText("Scene.free_aspect").c_str(), NULL, _aspect_checked == 0))
+                if(ImGui::MenuItem(_eltm->getText("Scene.free_aspect").c_str(), NULL, _aspect_checked == 0))
                     _aspect_checked = 0;
                 if(ImGui::MenuItem("16:10", NULL, _aspect_checked == 1))
                     _aspect_checked = 1;
@@ -36,9 +36,9 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 
                 ImGui::EndMenu();
             }
-            if(ImGui::BeginMenu(std::string(AKS_ICON_MD_PANORAMA" " + _eltm->getLocalText("Scene.view")).c_str()))
+            if(ImGui::BeginMenu(std::string(AKS_ICON_MD_PANORAMA" " + _eltm->getText("Scene.view")).c_str()))
             {
-				ImGui::Checkbox(std::string(AKS_ICON_MD_GRID_4X4" " + _eltm->getLocalText("Scene.grid")).c_str(), &_grid);
+				ImGui::Checkbox(std::string(AKS_ICON_MD_GRID_4X4" " + _eltm->getText("Scene.grid")).c_str(), &_grid);
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();

@@ -1,12 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/08/2022
-// Updated : 26/08/2022
+// Updated : 27/08/2022
 
 #include <Akpch.h>
 #include "token.h"
 #include "streamStack.h"
-#include "ETLMerrors.h"
+#include "ELTMerrors.h"
 
 namespace Ak
 {
@@ -73,7 +73,7 @@ namespace Ak
 
 		stream.push_back(c);
 
-		if(std::optional<elmt_token> t = get_keyword(word))
+		if(std::optional<eltm_token> t = get_keyword(word))
 			return Token(*t, line);
 		return Token(identifier{std::move(word)}, line);
 	}
@@ -82,7 +82,7 @@ namespace Ak
 	{
 		std::size_t line = stream.getline();
 
-		if(std::optional<Tk> t = get_operator(stream))
+		if(std::optional<eltm_token> t = get_operator(stream))
 			return Token(*t, line);
 
 		std::string unexpected;

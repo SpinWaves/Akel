@@ -1,5 +1,10 @@
-let test = "this is a test file"
+import "test2.eltm"
+
+let test =	"this is a test file"
+			" et ca marche "
+			get(test2)
+			" tres bien"
 
 begin module myModule
-	let oui = "this is a oui"
+	let oui = get(test)
 end module

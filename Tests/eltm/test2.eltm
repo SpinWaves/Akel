@@ -1,0 +1,3 @@
+import "test2.eltm"
+
+let test2 = "this is a test2"

@@ -1,13 +1,16 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/05/2021
-// Updated : 26/08/2022
+// Updated : 27/08/2022
 
 #include "streamStack.h"
 
 namespace Ak
 {
-	StreamStack::StreamStack(const func::function<int()>* input, std::string file) : _input(*input), _file(std::move(file)) {}
+	StreamStack::StreamStack(const func::function<int()>* input, std::string file) :
+		_input(*input),
+		_file(std::move(file))
+	{}
 
 	int StreamStack::operator()()
 	{
