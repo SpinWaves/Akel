@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/05/2021
-// Updated : 27/08/2022
+// Updated : 28/08/2022
 
 #ifndef __AK_ELTM_CONTEXT__
 #define __AK_ELTM_CONTEXT__
@@ -16,10 +16,7 @@ namespace Ak
 	class ELTM
 	{
 		public:
-			inline ELTM()
-			{
-				_texts["__ELTM_internal_error_ID_message"] = "error";
-			}
+			ELTM() = default;
 
 			bool load(std::string path);
 			
@@ -27,13 +24,14 @@ namespace Ak
 			{
 				_texts.clear();
 				_modules.clear();
+				_files.clear();
 				return load(std::move(path));
 			}
 
 			inline const std::string& getText(const std::string& ID, std::size_t line, const std::string& file, const std::string& function)
 			{
 				if(_is_error)
-					return _texts["__ELTM_internal_error_ID_message"];
+					return _error;
 				if(_texts.count(ID))
 					return _texts[ID];
 
@@ -48,13 +46,13 @@ namespace Ak
 					}
 					else
 					{
-						context_error(std::move(std::string("undefined module name : " + ID.substr(0, found))), file, function, line).expose();
-						return _texts["__ELTM_internal_error_ID_message"];
+						context_error(std::move(std::string("undefined module name : '" + ID.substr(0, found) + "'")), file, function, line).expose();
+						return _error;
 					}
 				}
 
-				context_error(std::move(std::string("undefined ID : " + ID)), file, function, line).expose();
-				return _texts["__ELTM_internal_error_ID_message"];
+				context_error(std::move(std::string("undefined ID : '" + ID + "'")), file, function, line).expose();
+				return _error;
 			}
 
 			inline std::unordered_map<std::string, std::string>& getTexts() { return _texts; }
@@ -72,13 +70,14 @@ namespace Ak
 
 			std::vector<std::string> _files;
 
-			std::string _path = "";
+			std::filesystem::path _path;
+			const std::string _error = "ELTM error";
 
 			bool _is_error = false;
 	};
 
 	#undef getText
-	#define getText(ID) getText(ID, __LINE__, __FILE__, AK_FUNC_SIG)
+	#define getText(ID) getText(ID, __LINE__ - 1, __FILE__, AK_FUNC_SIG)
 }
 
 #endif // __AK_ELTM_CONTEXT__

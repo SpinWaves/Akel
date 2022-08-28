@@ -10,27 +10,25 @@ Its use is not dissociable from C++ because it requires an instantiated context 
 
 Your ELTM code :
 
-```kotlin
+```rust
 // comment
 /*
 	Long
 	Comment
 */
 
-import someFile.tm
+import "someFile.eltm"
 
-let YourID = your text
-let ID2 = (that s
+let YourID = "your text"
+let ID2 = "that s
 		a very
 		very long
-		text)
+		text"
 let something = get(ID2)	// get() is used to get text from another ID
 
 begin module moduleName
-
-	let yay = bla bla bla
-	let ouh = get(something)
-
+	let yay = "bla bla bla"
+	let ouh = "this is the text from 'something' : "get(something)
 end module
 ```
 
@@ -43,6 +41,5 @@ if(context.load("file.eltm"))	// Ak::ELTM::load return true or false in case of 
 {
 	std::string text = context.getText("YourID");
 	std::cout << context.getText("moduleName.yay") << std::endl;
-	std::cout << Ak::ELTM::getText("YourID") << std::endl; // you can get texts directly from ELTM class if context was initialized as global
 }
 ```

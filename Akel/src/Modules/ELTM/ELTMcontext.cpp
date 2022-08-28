@@ -180,7 +180,7 @@ namespace Ak
 					_is_error = true;
 					return false;
 				}
-				if(!load(it->get_string()))
+				if(!load(_path.parent_path().string() + "/" + it->get_string()))
 					return false;
 				_path = path;
 			}

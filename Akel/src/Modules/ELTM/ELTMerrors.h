@@ -22,7 +22,7 @@ namespace Ak
 							<< _message 
 							<< " at line " << _line + 1;
 				if(!_caller.empty())
-					std::cout << " in function " << _caller;
+					std::cout << " in function \"" << _caller << '"';
 				std::cout << " in file " << _file << std::endl;
 			}
 
