@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 20/08/2022
+// Updated : 30/08/2022
 
 #include <Audio/audio.h>
 #include <Renderer/Core/render_core.h>
@@ -12,6 +12,7 @@ namespace Ak
 	namespace Core
 	{
 		std::string getMainDirPath();
+		void initCpuInfo();
 	}
 	
     bool initAkel(AkelInstance* project)
@@ -58,6 +59,8 @@ namespace Ak
 
 		MemoryManager::useMemoryManager(project->use_memory_manager);
 		MemoryManager::init();
+
+		Core::initCpuInfo();
 
 		return true;
     }

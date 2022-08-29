@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/04/2021
-// Updated : 21/08/2022
+// Updated : 30/08/2022
 
 #include <Core/core.h>
 
@@ -33,4 +33,16 @@ namespace Ak::Core
                   << "Vulkan version : " << info.getVulkanVersion() << '\n'
                   << "Number devices : " << info.getNumberOfDevices() << std::endl;
     }
+
+	static CPU* __cpu = nullptr;
+
+	void initCpuInfo()
+	{
+		__cpu = memAlloc<CPU>();
+	}
+
+	const CPU& getCpuInfo()
+	{
+		return *__cpu;
+	}
 }

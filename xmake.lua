@@ -6,7 +6,7 @@
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "spirv-reflect", "vulkan-loader", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk")
+add_requires("libsdl_image", "libsdl", "libsdl_ttf", "libsndfile", "openal-soft", "spirv-reflect", "vulkan-loader", "vulkan-validationlayers", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
@@ -41,6 +41,7 @@ target("Akel")
 	add_packages("openal-soft",   { public = true })
 	add_packages("vulkan-loader", { public = true })
 	add_packages("imgui_sdl_vk",  { public = true })
+	add_packages("vulkan-validationlayers",  { public = true })
 target_end() -- optional but I think the code is cleaner with this
 
 -- Akel Studio Build

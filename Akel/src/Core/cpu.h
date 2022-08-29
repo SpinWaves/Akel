@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/04/2021
-// Updated : 03/06/2021
+// Updated : 30/08/2022
 
 #ifndef __AK_CPU__
 #define __AK_CPU__
@@ -29,32 +29,32 @@ namespace Ak::Core
         public:
             CPU();
 
-            std::string vendor();
-            std::string model();
-            int cores();
-            float cpuSpeedInMHz();
-            bool isSSE();
-            bool isSSE2();
-            bool isSSE3();
-            bool isSSE41();
-            bool isSSE42();
-            bool isAVX();
-            bool isAVX2();
-            bool isHyperThreaded();
-            int logicalCpus();
+            inline std::string vendor() const { return _VendorId; }
+            inline std::string model() const { return _ModelName; }
+            inline int cores() const noexcept { return _NumCores; }
+            inline float cpuSpeedInMHz() const noexcept { return _CPUMHz; }
+            inline bool isSSE() const noexcept { return _IsSSE; }
+			inline bool isSSE2() const noexcept { return _IsSSE2; }
+			inline bool isSSE3() const noexcept { return _IsSSE3; }
+			inline bool isSSE41() const noexcept { return _IsSSE41; }
+			inline bool isSSE42() const noexcept { return _IsSSE42; }
+			inline bool isAVX() const noexcept { return _IsAVX; }
+			inline bool isAVX2() const noexcept { return _IsAVX2; }
+			inline bool isHyperThreaded() const noexcept { return _IsHTT; }
+            inline int logicalCpus() const noexcept { return _NumLogCpus; }
 
         private:
             // Bit positions for data extractions
-            static const uint32_t SSE_POS   = 0x02000000;
-            static const uint32_t SSE2_POS  = 0x04000000;
-            static const uint32_t SSE3_POS  = 0x00000001;
-            static const uint32_t SSE41_POS = 0x00080000;
-            static const uint32_t SSE42_POS = 0x00100000;
-            static const uint32_t AVX_POS   = 0x10000000;
-            static const uint32_t AVX2_POS  = 0x00000020;
-            static const uint32_t LVL_NUM   = 0x000000FF;
-            static const uint32_t LVL_TYPE  = 0x0000FF00;
-            static const uint32_t LVL_CORES = 0x0000FFFF;
+            constexpr static const uint32_t SSE_POS   = 0x02000000;
+            constexpr static const uint32_t SSE2_POS  = 0x04000000;
+        	constexpr static const uint32_t SSE3_POS  = 0x00000001;
+			constexpr static const uint32_t SSE41_POS = 0x00080000;
+			constexpr static const uint32_t SSE42_POS = 0x00100000;
+			constexpr static const uint32_t AVX_POS   = 0x10000000;
+			constexpr static const uint32_t AVX2_POS  = 0x00000020;
+			constexpr static const uint32_t LVL_NUM   = 0x000000FF;
+			constexpr static const uint32_t LVL_TYPE  = 0x0000FF00;
+			constexpr static const uint32_t LVL_CORES = 0x0000FFFF;
 
             std::string _VendorId;
             std::string _ModelName;

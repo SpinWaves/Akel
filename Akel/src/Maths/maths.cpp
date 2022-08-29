@@ -1,10 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 24/07/2022
+// Updated : 30/08/2022
 
 #include <Maths/maths.h>
 #include <Core/profile.h>
+#include <Core/cpu.h>
+#include <Core/hardwareInfo.h>
 
 namespace Ak::Maths
 {
@@ -33,12 +35,17 @@ namespace Ak::Maths
 
     forceinline float fsqrt(float number)
     {
-        #if (defined(__clang__) || defined(__GNUC__) || defined(__MINGW32__) || defined(__MINGW34__)) && defined(__SSE2__) && defined(AK_x86)
-            asm("sqrtss %xmm0, %xmm0");
-        #elif defined(_M_IX86_FP) && _M_IX86_FP == 2
-            __asm { sqrtss xmm0, number; }
-        #else
-            return sqrt(number);
-        #endif
+		if(Ak::Core::getCpuInfo().isSSE2())
+		{
+			#if (defined(__clang__) || defined(__GNUC__) || defined(__MINGW32__) || defined(__MINGW34__)) && defined(AK_x86)
+				asm("sqrtss %xmm0, %xmm0");
+			#elif defined(_M_IX86_FP) && _M_IX86_FP == 2
+				__asm { sqrtss xmm0, number;}
+			#else
+				return sqrt(number);
+			#endif
+		}
+		else
+			return sqrt(number);
     }
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/04/2021
-// Updated : 13/06/2022
+// Updated : 30/08/2022
 
 #include <Core/core.h>
 #include <Platform/platform.h>
@@ -150,58 +150,5 @@ namespace Ak::Core
             _ModelName += std::string((const char*)&cpuID.EDX(), 4);
         }
     
-    }
-
-    std::string CPU::vendor() 
-    { 
-        return _VendorId;
-    }
-    std::string CPU::model()
-    { 
-        return _ModelName;
-    }
-    int CPU::cores()
-    { 
-        return _NumCores;   
-    }
-    float CPU::cpuSpeedInMHz()      
-    { 
-        return _CPUMHz;     
-    }
-    bool CPU::isSSE()              
-    { 
-        return _IsSSE;      
-    }
-    bool CPU::isSSE2()             
-    { 
-        return _IsSSE2;     
-    }
-    bool CPU::isSSE3()             
-    { 
-        return _IsSSE3;     
-    }
-    bool CPU::isSSE41()            
-    { 
-        return _IsSSE41;   
-    }
-    bool CPU::isSSE42()            
-    { 
-        return _IsSSE42;    
-    }
-    bool CPU::isAVX()              
-    { 
-        return _IsAVX;     
-    }
-    bool CPU::isAVX2()             
-    { 
-        return _IsAVX2;     
-    }
-    bool CPU::isHyperThreaded()    
-    { 
-        return _IsHTT;      
-    }
-    int CPU::logicalCpus()        
-    { 
-        return _NumLogCpus; 
     }
 }
