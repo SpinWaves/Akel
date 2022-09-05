@@ -39,24 +39,6 @@ namespace Ak::Core
         #endif
     }
 
-    uint32_t& CPUID::EAX() 
-    {
-        return regs[0];
-    }
-    uint32_t& CPUID::EBX() 
-    {
-        return regs[1];
-    }
-    uint32_t& CPUID::ECX() 
-    {
-        return regs[2];
-    }
-    uint32_t& CPUID::EDX() 
-    {
-        return regs[3];
-    }
-
-
     CPU::CPU()
     {
         CPUID cpuID0(0, 0);

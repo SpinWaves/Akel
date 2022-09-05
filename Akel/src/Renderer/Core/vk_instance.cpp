@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 20/08/2022
+// Updated : 04/09/2022
 
 #include <Core/core.h>
 #include "vk_instance.h"
@@ -36,7 +36,7 @@ namespace Ak
 
         VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
 
-        if(enableValidationLayers && !Core::ProjectFile::getBoolValue("vk_force_disable_validation_layers"))
+		if(enableValidationLayers && !Core::ProjectFile::getBoolValue("vk_force_disable_validation_layers") && Render_Core::get().getLayers().checkValidationLayerSupport())
         {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             createInfo.ppEnabledLayerNames = validationLayers.data();

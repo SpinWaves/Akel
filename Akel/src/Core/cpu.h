@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/04/2021
-// Updated : 30/08/2022
+// Updated : 04/09/2022
 
 #ifndef __AK_CPU__
 #define __AK_CPU__
@@ -15,10 +15,10 @@ namespace Ak::Core
         public:
             CPUID(unsigned funcId, unsigned subFuncId);
 
-            uint32_t &EAX();
-            uint32_t &EBX();
-            uint32_t &ECX();
-            uint32_t &EDX();
+			inline uint32_t& EAX() { return regs[0]; }
+			inline uint32_t& EBX() { return regs[1]; }
+			inline uint32_t& ECX() { return regs[2]; }
+			inline uint32_t& EDX()  { return regs[3]; }
 
         private:
             uint32_t regs[4];

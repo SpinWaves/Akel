@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/05/2021
-// Updated : 28/08/2022
+// Updated : 05/09/2022
 
 #include "eltm.h"
 
@@ -52,11 +52,9 @@ namespace Ak
 
 		for(; it(); it++)
 		{
-			if(!it->is_string() && !it->has_value(eltm_token::kw_get))
-				break;
 			if(it->is_string())
 				text.append(it->get_string());
-			else
+			else if(it->has_value(eltm_token::kw_get))
 			{
 				if(!parse_token_value(it, eltm_token::kw_get))
 					return false;
@@ -83,6 +81,8 @@ namespace Ak
 					return false;
 				}
 			}
+			else
+				break;
 		}
 
 		if(module_name.empty())
@@ -139,13 +139,13 @@ namespace Ak
 	bool ELTM::load(std::string path)
 	{
 		File file(path.c_str());
+		if(std::find(_files.begin(), _files.end(), path) != _files.end())
+			return true;
+		_files.push_back(path);
 		_path = path;
 		func::function<int()> get = [&]() { return file(); };
 		StreamStack stream(&get, path);
 		tk_iterator it(stream);
-		if(std::find(_files.begin(), _files.end(), path) != _files.end())
-			return true;
-		_files.push_back(path);
 
 		while(it())
 		{
