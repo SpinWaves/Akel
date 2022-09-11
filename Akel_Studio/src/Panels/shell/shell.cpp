@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/07/2021
-// Updated : 27/08/2022
+// Updated : 11/09/2022
 
 #include <Panels/shell/shell.h>
 
@@ -10,11 +10,31 @@ Shell::Shell(std::shared_ptr<Ak::ELTM> eltm) : Parser()
 	_eltm = eltm;
 }
 
+std::string exec(std::string command)
+{
+	char buffer[128];
+	std::string result = "";
+
+	std::FILE* pipe = std::popen(command.c_str(), "r");
+	if(!pipe)
+		return "unable to execute command";
+
+	while(!std::feof(pipe))
+	{
+		if(std::fgets(buffer, 128, pipe) != NULL)
+			result += buffer;
+	}
+
+	std::pclose(pipe);
+	return result;
+}
+
+
 void Shell::command(std::string command)
 {
 	ee = false;
 	print("> " + command);
-	const uint16_t type = Parser::parse(command);
+	const uint16_t type = Parser::parse(std::move(command));
 	if(type & static_cast<uint16_t>(Commands::help))
 	{
 		if(type & static_cast<uint16_t>(Commands::clear))
@@ -40,7 +60,10 @@ void Shell::command(std::string command)
 	else if(type & static_cast<uint16_t>(Commands::history))
 		_out.insert(_out.end(), _history.begin(), _history.end());
 	else if(type & static_cast<uint16_t>(Commands::build)) {}
-	else if(type & static_cast<uint16_t>(Commands::sysShell)) {}
+	else if(type & static_cast<uint16_t>(Commands::sysShell))
+	{
+		print()
+	}
 	else if(type & static_cast<uint16_t>(Commands::quit))
 		_quit = true;
 	else if(type & static_cast<uint16_t>(Commands::easterEgg))
@@ -52,17 +75,3 @@ void Shell::command(std::string command)
 		print(_eltm->getText("errors.consoleUnknownCommand"), 1);
 }
 
-void Shell::print(std::string print, uint8_t type)
-{
-	_out.push_back(std::tuple<uint8_t, std::string, __time>(type, print, Ak::Time::getCurrentTime()));
-}
-
-std::vector<std::tuple<uint8_t, std::string, __time>> Shell::getOutPut()
-{
-	return _out;
-}
-
-bool Shell::quit()
-{
-	return _quit;
-}

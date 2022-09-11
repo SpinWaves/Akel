@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/07/2021
-// Updated : 03/11/2021
+// Updated : 11/09/2022
 
 #ifndef __AK_SHELL__
 #define __AK_SHELL__
@@ -11,11 +11,17 @@
 class Shell : private Parser
 {
 	public:
-		explicit Shell(std::shared_ptr<Ak::ELTM> eltm);
+		Shell(std::shared_ptr<Ak::ELTM> eltm);
 		void command(std::string command);
-		void print(std::string print, uint8_t type = 0);
-		bool quit();
-		std::vector<std::tuple<uint8_t, std::string, __time>> getOutPut();
+		
+		inline void print(std::string print, uint8_t type = 0)
+		{
+			_out.push_back(std::tuple<uint8_t, std::string, __time>(type, std:::move(print), Ak::Time::getCurrentTime()));
+		}
+
+		inline std::vector<std::tuple<uint8_t, std::string, __time>> getOutPut() { return _out; }
+
+		inline bool quit() const noexcept { return _quit; }
 
 		bool ee = false;
 

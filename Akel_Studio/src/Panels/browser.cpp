@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 27/08/2022
+// Updated : 10/09/2022
 
 #include <Panels/browser.h>
 #include <Fonts/material_font.h>
@@ -107,9 +107,8 @@ void Browser::content()
         ImGui::Text(std::string(AKS_ICON_MD_FILE_COPY" " + _eltm->getText("Browser.content")).c_str());
         ImGui::SameLine((83 * _width)/100 - 40);
 		if(ImGui::Button(AKS_ICON_MD_SETTINGS))
-		{
+			settings();
 
-		}
         ImGui::Separator();
         for(const std::filesystem::directory_entry& file : _files)
         {
@@ -202,4 +201,9 @@ bool Browser::is_there_subdir(std::string dir)
             return true;
     }
     return false;
+}
+
+void Browser::settings()
+{
+
 }

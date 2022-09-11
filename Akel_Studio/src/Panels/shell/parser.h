@@ -1,37 +1,36 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/07/2021
-// Updated : 02/08/2021
+// Updated : 11/09/2022
 
 #ifndef __AK_SHELL_PARSER__
 #define __AK_SHELL_PARSER__
 
 #include <AkSpch.h>
 
-enum class Commands
+enum class Command
 {
-	clear = 0x00001,
-	help = 0x00002,
-	history = 0x00004,
-	build = 0x00008,
-	sysShell = 0x00010,
-	quit = 0x00020,
-	error = 0x00040,
-	easterEgg = 0x00080,
-	release = 0x00100,
-	debug = 0x00200,
+	clear,
+	help,
+	history,
+	build,
+	sysShell,
+	quit,
+	error,
+	easterEgg,
 };
 
 class Parser
 {
 	public:
 		Parser() = default;
-		uint16_t parse(std::string command);
-		std::string getOption();
+		Command parse(std::string command);
+		inline const std::string& getOption(int index) { return _option[index]; }
+		inline const std::variant<std::string, Command>& getArg(int index) { return _arguments[index]; }
 		~Parser() = default;
 
 	private:
-		static inline Ak::duets_array<Commands, std::string> _keywords
+		static inline Ak::duets_array<Command, std::string> _keywords
 		{
 			{Commands::clear, "clear"},
 			{Commands::help, "help"},
@@ -39,11 +38,11 @@ class Parser
 			{Commands::build, "build"},
 			{Commands::sysShell, "sysShell"},
 			{Commands::quit, "quit"},
-			{Commands::easterEgg, "Rick"}
+			{Commands::easterEgg, "rick"}
 		};
 
-		std::stringstream _stream;
-		std::string _option = "";
+		std::vector<std::string> _options;
+		std::vector<std::variant<std::string, Command>> _arguments;
 };
 
 #endif // __AK_SHELL_PARSER__
