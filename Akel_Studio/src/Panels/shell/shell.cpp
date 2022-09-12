@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/07/2021
-// Updated : 11/09/2022
+// Updated : 12/09/2022
 
 #include <Panels/shell/shell.h>
 
@@ -10,68 +10,119 @@ Shell::Shell(std::shared_ptr<Ak::ELTM> eltm) : Parser()
 	_eltm = eltm;
 }
 
-std::string exec(std::string command)
+std::string Shell::exec(std::string command)
 {
-	char buffer[128];
-	std::string result = "";
+	std::array<char, 128> buffer;
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
 
-	std::FILE* pipe = std::popen(command.c_str(), "r");
-	if(!pipe)
-		return "unable to execute command";
-
-	while(!std::feof(pipe))
+    if(!pipe)
 	{
-		if(std::fgets(buffer, 128, pipe) != NULL)
-			result += buffer;
+        print("unkown command", 1);
+		return "";
 	}
 
-	std::pclose(pipe);
-	return result;
-}
+    while(fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+        result += buffer.data();
 
+    return result;
+}
 
 void Shell::command(std::string command)
 {
 	ee = false;
 	print("> " + command);
-	const uint16_t type = Parser::parse(std::move(command));
-	if(type & static_cast<uint16_t>(Commands::help))
+	Command com = Parser::parse(std::move(command));
+
+	switch(com)
 	{
-		if(type & static_cast<uint16_t>(Commands::clear))
-			print(_eltm->getText("Console.helpClear"), 2);
-		else if(type & static_cast<uint16_t>(Commands::history))
-			print(_eltm->getText("Console.helpHistory"), 2);
-		else if(type & static_cast<uint16_t>(Commands::build))
-			print(_eltm->getText("Console.helpBuild"), 2);
-		else if(type & static_cast<uint16_t>(Commands::sysShell))
-			print(_eltm->getText("Console.helpSysShell"), 2);
-		else if(type & static_cast<uint16_t>(Commands::quit))
-			print(_eltm->getText("Console.helpQuit"), 2);
-		else if(type & static_cast<uint16_t>(Commands::error))
-			print("help: " + _eltm->getText("errors.consoleUnknownCommand"), 1);
-		else
-			print(" " + _eltm->getText("Console.help"), 2);
+		case Command::clear:
+			if(!Parser::getOptions().empty())
+			{
+				print(_eltm->getText("errors.consoleNoOpt"), 1);
+				break;
+			}
+			if(!Parser::getArg().empty())
+			{
+				print(_eltm->getText("errors.consoleTooMuchArgs"), 1);
+				break;
+			}
+			_history = _out;
+			_out.clear();
+		break;
+
+		case Command::history:
+			if(!Parser::getOptions().empty())
+			{
+				print(_eltm->getText("errors.consoleNoOpt"), 1);
+				break;
+			}
+			if(!Parser::getArg().empty())
+			{
+				print(_eltm->getText("errors.consoleTooMuchArgs"), 1);
+				break;
+			}
+			_out.insert(_out.end(), _history.begin(), _history.end());
+		break;
+
+		case Command::build:
+			if(!Parser::getOptions().empty())
+			{
+				print(_eltm->getText("errors.consoleNoOpt"), 1);
+				break;
+			}
+			if(!Parser::getArg().empty())
+			{
+				print(_eltm->getText("errors.consoleTooMuchArgs"), 1);
+				break;
+			}
+		break;
+
+		case Command::quit:
+			if(!Parser::getOptions().empty())
+			{
+				print(_eltm->getText("errors.consoleNoOpt"), 1);
+				break;
+			}
+			if(!Parser::getArg().empty())
+			{
+				print(_eltm->getText("errors.consoleTooMuchArgs"), 1);
+				break;
+			}
+			_quit = true;
+		break;
+
+		case Command::easterEgg:
+			if(!Parser::getOptions().empty())
+			{
+				print(_eltm->getText("errors.consoleNoOpt"), 1);
+				break;
+			}
+			if(!Parser::getArg().empty())
+			{
+				print(_eltm->getText("errors.consoleTooMuchArgs"), 1);
+				break;
+			}
+			print("RICK ROLL TIME !!!" , 2);
+			ee = true;
+		break;
+
+		case Command::sysShell:
+		{
+			std::string sys_command;
+			for(auto it = Parser::getArg().begin(); it != Parser::getArg().end(); it++)
+			{
+				if(std::holds_alternative<Command>(*it))
+					sys_command += Parser::_keywords[std::get<Command>(*it)];
+				else
+					sys_command += std::get<std::string>(*it);
+			}
+			print(std::move(exec(sys_command)), 2);
+			break;
+		}
+
+		case Command::error:
+		default: print(_eltm->getText("errors.consoleUnknownCommand"), 1); break;
 	}
-	else if(type & static_cast<uint16_t>(Commands::clear))
-	{
-		_history = _out;
-		_out.clear();
-	}
-	else if(type & static_cast<uint16_t>(Commands::history))
-		_out.insert(_out.end(), _history.begin(), _history.end());
-	else if(type & static_cast<uint16_t>(Commands::build)) {}
-	else if(type & static_cast<uint16_t>(Commands::sysShell))
-	{
-		print()
-	}
-	else if(type & static_cast<uint16_t>(Commands::quit))
-		_quit = true;
-	else if(type & static_cast<uint16_t>(Commands::easterEgg))
-	{
-		print("RICK ROLL TIME !!!" , 2);
-		ee = true;
-	}
-	else
-		print(_eltm->getText("errors.consoleUnknownCommand"), 1);
 }
 

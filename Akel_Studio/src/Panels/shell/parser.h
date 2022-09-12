@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/07/2021
-// Updated : 11/09/2022
+// Updated : 12/09/2022
 
 #ifndef __AK_SHELL_PARSER__
 #define __AK_SHELL_PARSER__
@@ -25,22 +25,23 @@ class Parser
 	public:
 		Parser() = default;
 		Command parse(std::string command);
-		inline const std::string& getOption(int index) { return _option[index]; }
-		inline const std::variant<std::string, Command>& getArg(int index) { return _arguments[index]; }
+		inline const std::vector<std::string>& getOptions() { return _options; }
+		inline const std::vector<std::variant<std::string, Command>>& getArg() { return _arguments; }
 		~Parser() = default;
 
-	private:
+	protected:
 		static inline Ak::duets_array<Command, std::string> _keywords
 		{
-			{Commands::clear, "clear"},
-			{Commands::help, "help"},
-			{Commands::history, "history"},
-			{Commands::build, "build"},
-			{Commands::sysShell, "sysShell"},
-			{Commands::quit, "quit"},
-			{Commands::easterEgg, "rick"}
+			{Command::clear, "clear"},
+			{Command::help, "help"},
+			{Command::history, "history"},
+			{Command::build, "build"},
+			{Command::sysShell, "sysShell"},
+			{Command::quit, "quit"},
+			{Command::easterEgg, "rick"}
 		};
 
+	private:
 		std::vector<std::string> _options;
 		std::vector<std::variant<std::string, Command>> _arguments;
 };

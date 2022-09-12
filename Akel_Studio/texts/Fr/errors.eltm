@@ -1,9 +1,11 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/08/2022
-// Updated : 28/08/2022
+// Updated : 12/09/2022
 
 begin module errors
 	let consoleMainWin = "Akel Éditeur: Impossible de créer la console"
 	let consoleUnknownCommand = "Commande inconnue"
+	let consoleNoOpt = "Cette commande n'a pas d'options"
+	let consoleTooMuchArgs = "Trop d'arguments"
 end module

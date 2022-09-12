@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 20/08/2022
+// Updated : 13/09/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -16,7 +16,6 @@
 #include <AL/alc.h>
 
 // SndFile
-#include <sndfile.h>
 
 // Vulkan
 #include <vulkan/vulkan.h>
