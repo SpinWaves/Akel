@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/08/2021
-// Updated : 08/08/2021
+// Updated : 13/09/2022
 
 #include <Audio/openAL.h>
 #include <Core/core.h>
@@ -50,7 +50,7 @@ namespace Ak
         SNDFILE* file = sf_open(filename.c_str(), SFM_READ, &fileInfos);
         if(!file)
         {
-            Core::log::report(ERROR, "SndFile: unable to open sound file " + filename);
+            Core::log::report(ERROR, "SndFile: unable to open sound file %s, %s", filename.c_str(), sf_strerror(file));
             return 0;
         }
 

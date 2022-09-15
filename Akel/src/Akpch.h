@@ -16,6 +16,7 @@
 #include <AL/alc.h>
 
 // SndFile
+#include <sndfile.h>
 
 // Vulkan
 #include <vulkan/vulkan.h>

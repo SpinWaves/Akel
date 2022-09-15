@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 30/05/2022
+// Updated : 15/09/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -34,7 +34,15 @@ namespace Ak
 					inline int32_t getSet() const noexcept { return _set; }
 					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
 
-					inline bool operator==(const Uniform &rhs) const { return _binding == rhs._binding && _offset == rhs._offset && _size == rhs._size && _set == rhs._set && _stageFlags == rhs._stageFlags; }
+					inline bool operator==(const Uniform &rhs) const
+					{
+						return  _binding == rhs._binding &&
+								_offset == rhs._offset &&
+								_size == rhs._size &&
+								_set == rhs._set && 
+								_stageFlags == rhs._stageFlags;
+					}
+
 					inline bool operator!=(const Uniform &rhs) const { return !operator==(rhs); }
 
 				private:
@@ -45,45 +53,21 @@ namespace Ak
 					int32_t _size;
 			};
 
-			class Vertex_input
+			class VertexInput
 			{
 				public:
-					Vertex_input(std::vector<VkVertexInputBindingDescription> bindings = {}, std::vector<VkVertexInputAttributeDescription> attributes = {}) : _bindings(std::move(bindings)), _attributes(std::move(attributes)) {}
+					VertexInput(VkVertexInputBindingDescription binding, VkVertexInputAttributeDescription attribute) : _binding(std::move(binding)), _attribute(std::move(attribute)) {}
 
-					const std::vector<VkVertexInputBindingDescription>& getBindingDescriptions() const { return _bindings; }
-					const std::vector<VkVertexInputAttributeDescription>& getAttributeDescriptions() const { return _attributes; }
+					const VkVertexInputBindingDescription& getBindingDescription() const { return _binding; }
+					const VkVertexInputAttributeDescription& getAttributeDescription() const { return _attribute; }
 
-					inline bool operator<(const Vertex_input& rhs) const { return _bindings.front().binding < rhs._bindings.front().binding; }
-
-				private:
-					std::vector<VkVertexInputBindingDescription> _bindings;
-					std::vector<VkVertexInputAttributeDescription> _attributes;
-			};
-
-			class Attribute
-			{
-				public:
-					Attribute(int32_t binding, int32_t location, int32_t offset, int32_t format) : _binding(binding), _location(location), _offset(offset), _format(format) {}
-
-					inline int32_t getBinding() const noexcept { return _binding; }
-					inline int32_t getLocation() const noexcept { return _location; }
-					inline int32_t getOffest() const noexcept { return _offset; }
-					inline int32_t getFormat() const noexcept { return _format; }
-
-					inline bool operator==(const Attribute &rhs) const noexcept { return _binding == rhs._binding && _location == rhs._location && _offset == rhs._offset && _format == rhs._format; }
-					inline bool operator!=(const Attribute &rhs) const noexcept { return !operator==(rhs); }
-
-					inline VkVertexInputAttributeDescription convert_to_vk_vertex_input_attribute() const noexcept { return VkVertexInputAttributeDescription{_binding, _location, static_cast<VkFormat>(_format), _offset}; }
-
-					Attribute() = default;
+					inline bool operator<(const VertexInput& rhs) const { return _binding.binding < rhs._binding.binding; }
 
 				private:
-					int32_t _binding = 0;
-					int32_t _location = 0;
-					int32_t _offset = 0;
-					int32_t _format = 0;
+					VkVertexInputBindingDescription _binding;
+					VkVertexInputAttributeDescription _attribute;
 			};
- 
+
 			enum class type { vertex, fragment, geometry, tesselation_evaluation, tesselation_control, compute };
 
 			Shader(const std::vector<uint32_t> byte_code, type t);
@@ -91,22 +75,24 @@ namespace Ak
 			void generate();
 			void destroy() noexcept;
  
-			inline const VkShaderModule& getShaderModule() noexcept { return _shader; }
-			inline const type getType() noexcept { return _type; }
+			inline const VkShaderModule& getShaderModule() const noexcept { return _shader; }
+			inline const type getType() const noexcept { return _type; }
 
-			inline const duets_array<fString, Uniform>& getUniforms() { return _uniforms; }
-			inline const duets_array<fString, Attribute>& getAttributes() { return _attributes; }
+			inline const duets_array<fString, Uniform>& getUniforms() const { return _uniforms; }
+			inline const duets_array<fString, VkVertexInputAttributeDescription>& getAttributes() const { return _attributes; }
 
-			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _desc_sets; }
+			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() const { return _desc_sets; }
 
 			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.has(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
-			inline std::optional<Attribute> getAttribute(fString name) { return _attributes.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
+			inline std::optional<VkVertexInputAttributeDescription> getAttribute(fString name) { return _attributes.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
+
+			inline const fString& get_entry_point_name() const noexcept { return _entry_point_name; }
 
 			~Shader() = default;
 
 		private:
 			duets_array<fString, Uniform> _uniforms;
-			duets_array<fString, Attribute> _attributes;
+			duets_array<fString, VkVertexInputAttributeDescription> _attributes;
 
 			std::vector<DescriptorSetLayout> _desc_sets;
 
@@ -114,6 +100,7 @@ namespace Ak
 			VkShaderModule _shader = VK_NULL_HANDLE;
 
 			const std::vector<uint32_t> _byte_code;
+			fString _entry_point_name;
 			type _type;
 	};
 

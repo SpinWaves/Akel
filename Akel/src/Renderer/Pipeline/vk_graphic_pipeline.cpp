@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 20/08/2022
+// Updated : 13/09/2022
 
 #include "vk_graphic_pipeline.h"
 #include "vk_shader.h"
@@ -12,8 +12,6 @@ namespace Ak
 {
 	void GraphicPipeline::init()
     {
-        //_shader = memAlloc<Shader>();
-
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
