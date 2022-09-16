@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 21/08/2022
+// Updated : 16/09/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -24,7 +24,6 @@
 #include <Renderer/SwapChain/vk_render_pass.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Descriptors/vk_descriptor_pool.h>
-//#include <Renderer/Pipeline/vk_compute_pipeline.h>
 
 namespace Ak
 {

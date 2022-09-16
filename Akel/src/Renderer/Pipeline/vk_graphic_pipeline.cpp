@@ -1,56 +1,78 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 13/09/2022
+// Updated : 16/09/2022
 
 #include "vk_graphic_pipeline.h"
-#include "vk_shader.h"
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
 
 namespace Ak
 {
-	void GraphicPipeline::init()
+	void GraphicPipeline::init(std::vector<std::vector<uint32_t>> shaders, std::vector<Shader::VertexInput> inputs,
+				VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL, 
+				VkCullModeFlags cullMode = VK_CULL_MODE_BACK_BIT, VkFrontFace frontFace = VK_FRONT_FACE_CLOCKWISE);
     {
-        VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
-        vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-        vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-        vertShaderStageInfo.module = VK_NULL_HANDLE;
-        vertShaderStageInfo.pName = "main";
+		std::vector<VkPipelineShaderStageCreateInfo> stages;
+		std::vector<VkDescriptorSetLayout> descriptor_layouts;
 
-        VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
-        fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-        fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-        fragShaderStageInfo.module = VK_NULL_HANDLE;
-        fragShaderStageInfo.pName = "main";
+		for(int i = 0; i < shaders.size(); i++)
+		{
+			_shaders.push_back(memAlloc<Shader>(shaders[i]));
+			_shaders.back().generate();
 
-        VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
+			VkPipelineShaderStageCreateInfo shaderStageInfo{};
+			shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+			shaderStageInfo.stage = _shaders.back().getType();
+			shaderStageInfo.module = _shaders.back().getShaderModule();
+			shaderStageInfo.pName = _shaders.back().get_entry_point_name().c_str();
 
-        VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
-        vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        vertexInputInfo.vertexBindingDescriptionCount = 0;
-        vertexInputInfo.vertexAttributeDescriptionCount = 0;
+			stages.push_back(shaderStageInfo);
+			for(auto& desc : _shaders.back().getDescriptorSetLayouts())
+				descriptor_layouts.push_back(desc.get());
+		}
 
-        vertexInputInfo.vertexBindingDescriptionCount = 1;
-        vertexInputInfo.vertexAttributeDescriptionCount = -1;//static_cast<uint32_t>(attributeDescriptions.size());
-        vertexInputInfo.pVertexBindingDescriptions = VK_NULL_HANDLE;//&bindingDescription;
-        vertexInputInfo.pVertexAttributeDescriptions = nullptr;//attributeDescriptions.data();
+		std::vector<VkVertexInputBindingDescription> bindingDescriptions;
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
+		uint32_t lastAttribute = 0;
+
+		for(const auto& input : inputs)
+		{
+			for(const auto& binding : input.getBindingDescriptions())
+				bindingDescriptions.emplace_back(binding);
+
+			for(const auto& attribute : input.getAttributeDescriptions())
+			{
+				auto &newAttribute = attributeDescriptions.emplace_back(attribute);
+				newAttribute.location += lastAttribute;
+			}
+
+			if(!input.getAttributeDescriptions().empty())
+				lastAttribute = attributeDescriptions.back().location + 1;
+		}
+
+		VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
+		vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+		vertexInputStateCreateInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
+		vertexInputStateCreateInfo.pVertexBindingDescriptions = bindingDescriptions.data();
+		vertexInputStateCreateInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+		vertexInputStateCreateInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        inputAssembly.topology = topology;
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = (float) Render_Core::get().getSwapChain()._swapChainExtent.width;
-        viewport.height = (float) Render_Core::get().getSwapChain()._swapChainExtent.height;
+        viewport.width = (float)Render_Core::get().getSwapChain()._swapChainExtent.width;
+        viewport.height = (float)Render_Core::get().getSwapChain()._swapChainExtent.height;
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor{};
-        scissor.offset = {0, 0};
+        scissor.offset = { 0, 0 };
         scissor.extent = Render_Core::get().getSwapChain()._swapChainExtent;
 
         VkPipelineViewportStateCreateInfo viewportState{};
@@ -64,10 +86,10 @@ namespace Ak
         rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         rasterizer.depthClampEnable = VK_FALSE;
         rasterizer.rasterizerDiscardEnable = VK_FALSE;
-        rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+        rasterizer.polygonMode = polygonMode;
         rasterizer.lineWidth = 1.0f;
-        rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-        rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+        rasterizer.cullMode = cullMode;
+        rasterizer.frontFace = frontFace;
         rasterizer.depthBiasEnable = VK_FALSE;
 
         VkPipelineMultisampleStateCreateInfo multisampling{};
@@ -92,16 +114,16 @@ namespace Ak
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        pipelineLayoutInfo.setLayoutCount = 0;
-        pipelineLayoutInfo.pushConstantRangeCount = 0;
+        pipelineLayoutInfo.setLayoutCount = descriptor_layouts.size();
+        pipelineLayoutInfo.pushConstantRangeCount = descriptor_layouts.data();
 
         if(vkCreatePipelineLayout(Render_Core::get().getDevice().get(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create pipeline layout");
 
         VkGraphicsPipelineCreateInfo pipelineInfo{};
         pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-        pipelineInfo.stageCount = 2;
-        pipelineInfo.pStages = shaderStages;
+        pipelineInfo.stageCount = stages.size();
+        pipelineInfo.pStages = stages.data();
         pipelineInfo.pVertexInputState = &vertexInputInfo;
         pipelineInfo.pInputAssemblyState = &inputAssembly;
         pipelineInfo.pViewportState = &viewportState;
@@ -121,7 +143,17 @@ namespace Ak
     {
         Ak_assert(_graphicsPipeline != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
         vkDestroyPipeline(Render_Core::get().getDevice().get(), _graphicsPipeline, nullptr);
-        if(_shader == nullptr)
-            memFree(_shader);
+        
+		if(!_shaders.empty())
+		{
+			for(Shader* shader : _shaders)
+			{
+				shader->destroy();
+            	memFree(shader);
+			}
+		}
+
+        Ak_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
+		vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
     }
 }

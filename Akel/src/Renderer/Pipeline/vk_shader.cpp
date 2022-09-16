@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 15/09/2022
+// Updated : 16/09/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -145,7 +145,7 @@ namespace Ak
 		}
 	}
 
-	Shader load_spirv_from_file(fString path, Shader::type t)
+	std::vector<uint32_t> load_spirv_from_file(fString path)
 	{
 		std::ifstream stream(path.c_str(), std::ios::binary);
 
@@ -154,14 +154,15 @@ namespace Ak
 		std::vector<uint32_t> data;
 
 		stream.seekg(0);
+
 		std::for_each(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>(), [&data](const char c){ data.push_back(static_cast<uint32_t>(c)); });
 		
 		stream.close();
 
-		return Shader(std::move(data), t);
+		return data;
 	}
 
-	Shader::Shader(const std::vector<uint32_t> byte_code, Shader::type t) : _byte_code(std::move(byte_code)), _type(t) {}
+	Shader::Shader(const std::vector<uint32_t> byte_code) : _byte_code(std::move(byte_code)) {}
 
 	void Shader::generate()
 	{
@@ -178,16 +179,7 @@ namespace Ak
 
 		_entry_point_name = module.entry_point_name;
 
-		VkShaderStageFlags stage;
-
-		switch(_type)
-		{
-			case Shader::type::vertex: stage = VK_SHADER_STAGE_VERTEX_BIT; break;
-			case Shader::type::fragment: stage = VK_SHADER_STAGE_FRAGMENT_BIT; break;
-			// TODO : add more shader types
-
-			default: break;
-		}
+		_type = module.shader_stage;
 
 		for(int i = 0; i < sets.size(); i++)
 		{
@@ -200,6 +192,7 @@ namespace Ak
 				if(_uniforms.has(sets[i]->bindings[j]->name))
 					return;
 				if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+				{
 					_uniforms.set_duet(sets[i]->bindings[j]->name,
 						Shader::Uniform{
 							sets[i]->bindings[j]->binding,
@@ -208,6 +201,8 @@ namespace Ak
 							sets[i]->bindings[j]->block.size,
 							stage
 						});
+					_layouts.emplace_back(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, sets[i]->bindings[j]->binding, _type);
+				}
 			}
 		}
 
@@ -251,8 +246,5 @@ namespace Ak
 
 		for(auto& desc : _desc_sets)
 			desc.destroy();
-
-		Ak_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline layout");
-		vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
 	}
 }

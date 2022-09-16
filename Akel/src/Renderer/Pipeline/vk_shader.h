@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 15/09/2022
+// Updated : 16/09/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -56,35 +56,33 @@ namespace Ak
 			class VertexInput
 			{
 				public:
-					VertexInput(VkVertexInputBindingDescription binding, VkVertexInputAttributeDescription attribute) : _binding(std::move(binding)), _attribute(std::move(attribute)) {}
+					VertexInput(std::vector<VkVertexInputBindingDescription> bindings, std::vector<VkVertexInputAttributeDescription> attributes) : _bindings(std::move(bindings)), _attributes(std::move(attributes)) {}
 
-					const VkVertexInputBindingDescription& getBindingDescription() const { return _binding; }
-					const VkVertexInputAttributeDescription& getAttributeDescription() const { return _attribute; }
+					const std::vector<VkVertexInputBindingDescription>& getBindingDescriptions() const { return _bindings; }
+					const std::vector<VkVertexInputAttributeDescription>& getAttributeDescriptions() const { return _attributes; }
 
-					inline bool operator<(const VertexInput& rhs) const { return _binding.binding < rhs._binding.binding; }
+					inline bool operator<(const VertexInput& other) const { return _bindings.front().binding < other._bindings.front().binding; }
 
 				private:
-					VkVertexInputBindingDescription _binding;
-					VkVertexInputAttributeDescription _attribute;
+					std::vector<VkVertexInputBindingDescription> _bindings;
+					std::vector<VkVertexInputAttributeDescription> _attributes;
 			};
 
-			enum class type { vertex, fragment, geometry, tesselation_evaluation, tesselation_control, compute };
-
-			Shader(const std::vector<uint32_t> byte_code, type t);
+			Shader(const std::vector<uint32_t> byte_code);
 
 			void generate();
 			void destroy() noexcept;
  
-			inline const VkShaderModule& getShaderModule() const noexcept { return _shader; }
-			inline const type getType() const noexcept { return _type; }
+			inline VkShaderModule getShaderModule() const noexcept { return _shader; }
+			inline VkShaderStageFlagBits getType() const noexcept { return _type; }
 
 			inline const duets_array<fString, Uniform>& getUniforms() const { return _uniforms; }
 			inline const duets_array<fString, VkVertexInputAttributeDescription>& getAttributes() const { return _attributes; }
 
-			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() const { return _desc_sets; }
+			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() const { return _layouts; }
 
 			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.has(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
-			inline std::optional<VkVertexInputAttributeDescription> getAttribute(fString name) { return _attributes.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
+			inline std::optional<VkVertexInputAttributeDescription> getAttribute(fString name) { return _inputs.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
 
 			inline const fString& get_entry_point_name() const noexcept { return _entry_point_name; }
 
@@ -93,18 +91,19 @@ namespace Ak
 		private:
 			duets_array<fString, Uniform> _uniforms;
 			duets_array<fString, VkVertexInputAttributeDescription> _attributes;
-
-			std::vector<DescriptorSetLayout> _desc_sets;
-
-			VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
-			VkShaderModule _shader = VK_NULL_HANDLE;
+			
+			std::vector<VkDescriptorPoolSize> descriptorPools;
+			std::vector<DescriptorSetLayout> _layouts;
 
 			const std::vector<uint32_t> _byte_code;
+
 			fString _entry_point_name;
-			type _type;
+
+			VkShaderModule _shader = VK_NULL_HANDLE;
+			VkShaderStageFlagBits _type;
 	};
 
-	Shader load_spirv_from_file(fString path, Shader::type t);
+	std::vector<uint32_t> load_spirv_from_file(fString path);
 }
 
 #endif // __AK_VK_SHADER__
