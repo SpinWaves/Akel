@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 16/09/2022
+// Updated : 18/09/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -179,7 +179,7 @@ namespace Ak
 
 		_entry_point_name = module.entry_point_name;
 
-		_type = module.shader_stage;
+		_type = static_cast<VkShaderStageFlagBits>(module.shader_stage);
 
 		for(int i = 0; i < sets.size(); i++)
 		{
@@ -199,9 +199,12 @@ namespace Ak
 							sets[i]->bindings[j]->set,
 							sets[i]->bindings[j]->block.offset,
 							sets[i]->bindings[j]->block.size,
-							stage
+							_type
 						});
-					_layouts.emplace_back(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, sets[i]->bindings[j]->binding, _type);
+
+					DescriptorSetLayout layout;
+					layout.init(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, sets[i]->bindings[j]->binding, _type);
+					_layouts.push_back(std::move(layout));
 				}
 			}
 		}
@@ -215,17 +218,17 @@ namespace Ak
 		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to get input variables informations");
 
 		uint32_t currentOffset = 4;
-		VkVertexInputAttributeDescription attr_desc;
-		attr_desc.binding = 0;
 
 		for(std::size_t i = 0; i < input_vars.size(); i++)
 		{
+			VkVertexInputAttributeDescription attr_desc;
+			attr_desc.binding = 0;
 			attr_desc.location = input_vars[i]->location;
-			attr_desc.format = input_vars[i]->format;
+			attr_desc.format = static_cast<VkFormat>(input_vars[i]->format);
 			attr_desc.offset = currentOffset;
 			currentOffset += formatSize(attr_desc.format);
 			
-			_attributes.set_duet(input_vars[i]->name, attr_desc);
+			_attributes.set_duet(input_vars[i]->name, std::move(attr_desc));
 		}
 
 		spvReflectDestroyShaderModule(&module);
@@ -243,8 +246,5 @@ namespace Ak
 	{
 		Ak_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
 		vkDestroyShaderModule(Render_Core::get().getDevice().get(), _shader, nullptr);
-
-		for(auto& desc : _desc_sets)
-			desc.destroy();
 	}
 }

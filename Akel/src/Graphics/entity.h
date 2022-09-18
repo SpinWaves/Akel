@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2021
-// Updated : 07/03/2022
+// Updated : 18/09/2022
 
 #ifndef __AK_ENTITY__
 #define __AK_ENTITY__
@@ -10,6 +10,9 @@
 
 #include <Maths/maths.h>
 #include <Graphics/vertex.h>
+
+#include <Renderer/Buffers/vk_ibo.h>
+#include <Renderer/Buffers/vk_vbo.h>
 
 enum class Models
 {
@@ -34,7 +37,6 @@ enum class Colors : uint32_t
 
 namespace Ak
 {
-
 	class Entity3D
 	{
 		public:
@@ -61,6 +63,8 @@ namespace Ak
 
 	class Entity2D
 	{
+		friend class RendererComponent;
+
 		public:
 			Entity2D(Models _model, Maths::Vec2<float> _position, Maths::Vec2<float> _scale, Maths::Vec4<float> _color);
 			Entity2D(Models _model, Maths::Vec2<float> _position, Maths::Vec2<float> _scale, Colors color);
@@ -70,17 +74,11 @@ namespace Ak
 			Maths::Vec2<float> scale;
 			Maths::Vec4<float> color;
 
-			struct EntityInternalData
-			{
-				std::vector<Vertex2D> vertexData;
-				VkBuffer vertexBuffer;
-				VkDeviceMemory vertexBufferMemory;
-				std::vector<uint16_t> indexData;
-				VkBuffer indexBuffer;
-				VkDeviceMemory indexBufferMemory;
-			};
+		private:
+			void initBuffers();
 
-			EntityInternalData __data;
+			C_VBO _vbo;
+			C_IBO _ibo;
 	};
 }
 

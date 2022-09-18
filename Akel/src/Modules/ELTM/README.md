@@ -26,7 +26,7 @@ let ID2 = "that s
 		text"
 let something = get(ID2)	// get() is used to get text from another ID
 
-begin module moduleName
+begin module myModule
 	let yay = "bla bla bla"
 	let ouh = "this is the text from 'something' : "get(something)
 end module
@@ -40,6 +40,6 @@ Ak::ELTM context;
 if(context.load("file.eltm"))	// Ak::ELTM::load return true or false in case of good execution or error in your ELTM file
 {
 	std::string text = context.getText("YourID");
-	std::cout << context.getText("moduleName.yay") << std::endl;
+	std::cout << context.getText("myModule.yay") << std::endl;
 }
 ```

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 16/09/2022
+// Updated : 18/09/2022
 
 #ifndef __AK_VK_GRAPHIC_PIPELINE__
 #define __AK_VK_GRAPHIC_PIPELINE__
@@ -19,7 +19,7 @@ namespace Ak
 						VkCullModeFlags cullMode = VK_CULL_MODE_BACK_BIT, VkFrontFace frontFace = VK_FRONT_FACE_CLOCKWISE);
 			void destroy() noexcept;
 
-			inline const std::vector<Shader*>& getShader() const override { return _shaders; }
+			inline const std::vector<Shader*>& getShaders() const override { return _shaders; }
 			inline const VkPipeline& getPipeline() const override { return _graphicsPipeline; }
 			inline const VkPipelineLayout& getPipelineLayout() const override { return _pipelineLayout; }
 			inline const VkPipelineBindPoint& getPipelineBindPoint() const override { return _pipelineBindPoint; }

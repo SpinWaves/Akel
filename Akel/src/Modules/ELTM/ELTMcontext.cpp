@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/05/2021
-// Updated : 05/09/2022
+// Updated : 18/09/2022
 
 #include "eltm.h"
 
@@ -86,9 +86,9 @@ namespace Ak
 		}
 
 		if(module_name.empty())
-			_texts[id_name] = std::move(text);
+			_texts[std::move(id_name)] = std::move(text);
 		else
-			_modules[module_name][id_name] = std::move(text);
+			_modules[std::move(module_name)][std::move(id_name)] = std::move(text);
 
 		return true;
 	}

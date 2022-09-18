@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 04/07/2022
+// Updated : 18/09/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -13,15 +13,33 @@ namespace Ak
     {
         Render_Core::get().setWindow(_window);
         Render_Core::get().init();
+
+        for(Entity2D& ent : _2D_entities)
+			ent.initBuffers();
+
+		_pipeline.init(_shaders, std::vector<Ak::Shader::VertexInput>{ {
+				{ Vertex2D::getBindingDescription() },
+				{ Vertex2D::getAttributeDescriptions()[0], Vertex2D::getAttributeDescriptions()[1] }
+		} });
     }
 
     void RendererComponent::onRender()
     {
-        
+		_pipeline.bindPipeline(Render_Core::get().getActiveCmdBuffer());
+
+        for(Entity2D& ent : _2D_entities)
+		{
+			ent._vbo.bind();
+			ent._ibo.bind();
+
+			vkCmdDrawIndexed(Render_Core::get().getActiveCmdBuffer().get(), static_cast<uint32_t>(ent._ibo.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
+		}
     }
 
     void RendererComponent::onQuit()
     {
+		_pipeline.destroy();
+
         Render_Core::get().getSwapChain().destroyFB();
         Render_Core::get().getSwapChain().destroy();
     }

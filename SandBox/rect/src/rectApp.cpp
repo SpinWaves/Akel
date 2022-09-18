@@ -10,7 +10,7 @@ class FPSprinterComponent : public Ak::Component
 class Rect : public Ak::Application
 {
     public:
-        explicit Rect() : Ak::Application("Rect")
+        Rect() : Ak::Application()
         {
             Ak::WindowComponent* window = Ak::memAlloc<Ak::WindowComponent>();
             add_component(window); // function inherited from Ak::Application
@@ -27,11 +27,13 @@ class Rect : public Ak::Application
             Ak::Render_Core::get().getClearValue().color.float32[0] = 128 / 255;
             Ak::Render_Core::get().getClearValue().color.float32[1] = 175 / 255;
             Ak::Render_Core::get().getClearValue().color.float32[2] = 255 / 255;
-        //    renderer->setBackgroundColor(0.49f, 0.66f, 0.85f, 1.0f);
-/*
-            Ak::Entity2D rectangle(Models::quad, {50.0f, 50.0f}, {250.0f, 200.0f}, Colors::red);
+
+			renderer->loadCustomShader("../../Ressources/shaders/basic_2D.vert.spv");
+			renderer->loadCustomShader("../../Ressources/shaders/basic_2D.frag.spv");
+
+            Ak::Entity2D rectangle(Models::quad, { 50.0f, 50.0f }, { 250.0f, 200.0f }, Colors::red);
             renderer->add_entity(rectangle);
-  */          
+
             add_component(renderer);
         }
         ~Rect() = default;
@@ -40,10 +42,9 @@ class Rect : public Ak::Application
 Ak::AkelInstance Akel_init()
 {
     Ak::AkelInstance instance;
-        instance.project_file_path = Ak::Core::getMainDirPath() + "SandBox/rect";
+        instance.project_file_path = Ak::Core::getMainDirPath() + "../../SandBox/rect";
         instance.project_file_name = "rect";
         instance.memory_manager_enable_fixed_allocator = false;
-		instance.vk_force_disable_validation_layers = true; // TODO : remove that
     return instance;    
 }
 

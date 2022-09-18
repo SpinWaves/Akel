@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 16/09/2022
+// Updated : 18/09/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -79,10 +79,10 @@ namespace Ak
 			inline const duets_array<fString, Uniform>& getUniforms() const { return _uniforms; }
 			inline const duets_array<fString, VkVertexInputAttributeDescription>& getAttributes() const { return _attributes; }
 
-			inline const std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() const { return _layouts; }
+			inline std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _layouts; }
 
 			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.has(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
-			inline std::optional<VkVertexInputAttributeDescription> getAttribute(fString name) { return _inputs.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
+			inline std::optional<VkVertexInputAttributeDescription> getAttribute(fString name) { return _attributes.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
 
 			inline const fString& get_entry_point_name() const noexcept { return _entry_point_name; }
 

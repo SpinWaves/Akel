@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 20/08/2022
+// Updated : 18/09/2022
 
 #include "vk_descriptor_set.h"
 #include "vk_descriptor_set_layout.h"
@@ -19,7 +19,7 @@ namespace Ak
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = Render_Core::get().getDescPool().get();
-        allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+        allocInfo.descriptorSetCount = 1;
         allocInfo.pSetLayouts = &layout.get();
 
         if(vkAllocateDescriptorSets(device, &allocInfo, &_desc_set) != VK_SUCCESS)
@@ -28,7 +28,7 @@ namespace Ak
         VkDescriptorBufferInfo bufferInfo{};
         bufferInfo.buffer = ubo->get();
         bufferInfo.offset = ubo->getOffset();
-        bufferInfo.range = sizeof(UBO);
+        bufferInfo.range = ubo->getSize();
 
         VkWriteDescriptorSet descriptorWrite{};
         descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;

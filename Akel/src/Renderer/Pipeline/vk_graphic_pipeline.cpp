@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 16/09/2022
+// Updated : 18/09/2022
 
 #include "vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
@@ -10,8 +10,8 @@
 namespace Ak
 {
 	void GraphicPipeline::init(std::vector<std::vector<uint32_t>> shaders, std::vector<Shader::VertexInput> inputs,
-				VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL, 
-				VkCullModeFlags cullMode = VK_CULL_MODE_BACK_BIT, VkFrontFace frontFace = VK_FRONT_FACE_CLOCKWISE);
+				VkPrimitiveTopology topology, VkPolygonMode polygonMode, 
+				VkCullModeFlags cullMode, VkFrontFace frontFace)
     {
 		std::vector<VkPipelineShaderStageCreateInfo> stages;
 		std::vector<VkDescriptorSetLayout> descriptor_layouts;
@@ -19,16 +19,16 @@ namespace Ak
 		for(int i = 0; i < shaders.size(); i++)
 		{
 			_shaders.push_back(memAlloc<Shader>(shaders[i]));
-			_shaders.back().generate();
+			_shaders.back()->generate();
 
 			VkPipelineShaderStageCreateInfo shaderStageInfo{};
 			shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-			shaderStageInfo.stage = _shaders.back().getType();
-			shaderStageInfo.module = _shaders.back().getShaderModule();
-			shaderStageInfo.pName = _shaders.back().get_entry_point_name().c_str();
+			shaderStageInfo.stage = _shaders.back()->getType();
+			shaderStageInfo.module = _shaders.back()->getShaderModule();
+			shaderStageInfo.pName = _shaders.back()->get_entry_point_name().c_str();
 
 			stages.push_back(shaderStageInfo);
-			for(auto& desc : _shaders.back().getDescriptorSetLayouts())
+			for(DescriptorSetLayout& desc : _shaders.back()->getDescriptorSetLayouts())
 				descriptor_layouts.push_back(desc.get());
 		}
 
@@ -112,10 +112,10 @@ namespace Ak
         colorBlending.blendConstants[2] = 0.0f;
         colorBlending.blendConstants[3] = 0.0f;
 
-        VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
         pipelineLayoutInfo.setLayoutCount = descriptor_layouts.size();
-        pipelineLayoutInfo.pushConstantRangeCount = descriptor_layouts.data();
+        pipelineLayoutInfo.pSetLayouts = descriptor_layouts.data();
 
         if(vkCreatePipelineLayout(Render_Core::get().getDevice().get(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create pipeline layout");
@@ -124,7 +124,7 @@ namespace Ak
         pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
         pipelineInfo.stageCount = stages.size();
         pipelineInfo.pStages = stages.data();
-        pipelineInfo.pVertexInputState = &vertexInputInfo;
+        pipelineInfo.pVertexInputState = &vertexInputStateCreateInfo;
         pipelineInfo.pInputAssemblyState = &inputAssembly;
         pipelineInfo.pViewportState = &viewportState;
         pipelineInfo.pRasterizationState = &rasterizer;
