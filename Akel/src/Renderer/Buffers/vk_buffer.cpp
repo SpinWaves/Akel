@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 20/08/2022
+// Updated : 19/09/2022
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
@@ -64,14 +64,10 @@ namespace Ak
 		VkMemoryRequirements memRequirements;
 		vkGetBufferMemoryRequirements(device, _buffer, &memRequirements);
 
-		VkMemoryAllocateInfo allocInfo{};
-		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-		allocInfo.allocationSize = memRequirements.size;
-		allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits);
-
 		_mem_chunck = Render_Core::get().allocChunk(memRequirements, properties);
 
-		vkBindBufferMemory(device, _buffer, _mem_chunck.memory, _mem_chunck.offset);
+		if(vkBindBufferMemory(device, _buffer, _mem_chunck.memory, _mem_chunck.offset) != VK_SUCCESS)
+			Core::log::report(FATAL_ERROR, "Vulkan : unable to bind device memory to a buffer object");
 	}
 
 	void Buffer::pushToGPU() noexcept

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 07/04/2022
+// Updated : 19/09/2022
 
 #ifndef __AK_BASE_COMPONENT__
 #define __AK_BASE_COMPONENT__
@@ -24,7 +24,6 @@ namespace Ak
 			virtual void onQuit();
 
 			inline const char* getName() noexcept { return _name.c_str(); }
-			inline void setName(const char* name) noexcept { _name = name; }
 			virtual ~Component();
 
 		protected:

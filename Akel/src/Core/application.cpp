@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 26/08/2022
+// Updated : 19/09/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -79,8 +79,16 @@ namespace Ak
 
 	void Application::destroy()
 	{
+		Component* renderer_component = nullptr;
 		for(auto component : _components)
-			component->onQuit();
+		{
+			if(std::strcmp(component->getName(), "__renderer_component") == 0)
+				renderer_component = component;
+			else
+				component->onQuit();
+		}
+		if(renderer_component)
+			renderer_component->onQuit();
 		_app_check = false;
 	}
 
