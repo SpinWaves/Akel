@@ -167,7 +167,7 @@ namespace Ak
 	void Shader::generate()
 	{
 		SpvReflectShaderModule module = {};
-		SpvReflectResult result = spvReflectCreateShaderModule(_byte_code.size(), _byte_code.data(), &module);
+		SpvReflectResult result = spvReflectCreateShaderModule(_byte_code.size() * sizeof(uint32_t), _byte_code.data(), &module);
 		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to create a Spir-V reflect shader module");
 
 		uint32_t count = 0;
@@ -235,7 +235,7 @@ namespace Ak
 
 		VkShaderModuleCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-		createInfo.codeSize = _byte_code.size();
+		createInfo.codeSize = _byte_code.size() * sizeof(uint32_t);
 		createInfo.pCode = _byte_code.data();
 
 		if(vkCreateShaderModule(Render_Core::get().getDevice().get(), &createInfo, nullptr, &_shader) != VK_SUCCESS)

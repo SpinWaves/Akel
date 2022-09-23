@@ -122,8 +122,9 @@ namespace Ak
             return *this;
         }
         size_t size = std::strlen(str);
-        _string = memAllocSize<char>(size);
+        _string = memAllocSize<char>(size + 1);
         std::memcpy((void*)_string, (void*)str, size);
+		_string[size] = 0;
         return *this;
     }
     

@@ -9,11 +9,11 @@ end
 
 arr: num = {}
 
-function Vmain() -> vec4
+fn Vmain() -> vec4
     pos = vec3(vewData.model * vec4(pos, 1.0))
     return vewData.proj * vewData.view * vec4(pos, 1.0)
 end
 
-function Fmain() -> vec4
+fn Fmain() -> vec4
     return color
 end

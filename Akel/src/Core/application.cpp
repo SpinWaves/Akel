@@ -79,16 +79,8 @@ namespace Ak
 
 	void Application::destroy()
 	{
-		Component* renderer_component = nullptr;
 		for(auto component : _components)
-		{
-			if(std::strcmp(component->getName(), "__renderer_component") == 0)
-				renderer_component = component;
-			else
-				component->onQuit();
-		}
-		if(renderer_component)
-			renderer_component->onQuit();
+			component->onQuit();
 		_app_check = false;
 	}
 

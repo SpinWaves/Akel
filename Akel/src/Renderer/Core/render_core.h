@@ -51,6 +51,8 @@ namespace Ak
             Render_Core();
 
             void init();
+
+			void destroyCommandBuffers();
             void destroy();
 
             bool beginFrame();

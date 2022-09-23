@@ -14,9 +14,6 @@ namespace Ak
         Render_Core::get().setWindow(_window);
         Render_Core::get().init();
 
-        for(Entity2D& ent : _2D_entities)
-			ent.initBuffers();
-		
 		if(!_shaders.empty())
 		{
 			_pipeline.init(_shaders, std::vector<Ak::Shader::VertexInput>{ {
@@ -24,6 +21,9 @@ namespace Ak
 					{ Vertex2D::getAttributeDescriptions()[0], Vertex2D::getAttributeDescriptions()[1] }
 			} });
 		}
+
+        for(Entity2D& ent : _2D_entities)
+			ent.initBuffers();
     }
 
     void RendererComponent::onRender()
@@ -44,10 +44,10 @@ namespace Ak
 
     void RendererComponent::onQuit()
     {
+        Render_Core::get().getSwapChain().destroyFB();
+		Render_Core::get().destroyCommandBuffers();
 		if(!_shaders.empty())
 			_pipeline.destroy();
-
-        Render_Core::get().getSwapChain().destroyFB();
         Render_Core::get().getSwapChain().destroy();
     }
 }
