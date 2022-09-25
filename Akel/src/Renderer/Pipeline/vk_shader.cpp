@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 18/09/2022
+// Updated : 24/09/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 19/09/2022
+// Updated : 24/09/2022
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
@@ -23,7 +23,7 @@ namespace Ak
 		else
 		{
 			_usage = usage;
-			_flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+			_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 		}
 
 		_mem_chunck.size = size;
@@ -68,6 +68,8 @@ namespace Ak
 
 		if(vkBindBufferMemory(device, _buffer, _mem_chunck.memory, _mem_chunck.offset) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : unable to bind device memory to a buffer object");
+
+		Ak_assert(_buffer != VK_NULL_HANDLE, "Vulkan : something went wrong in the creation of a buffer");
 	}
 
 	void Buffer::pushToGPU() noexcept

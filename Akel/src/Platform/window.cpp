@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 26/08/2022
+// Updated : 25/09/2022
 
 #include <Platform/platform.h>
 #include <Renderer/Core/render_core.h>
@@ -60,12 +60,12 @@ namespace Ak
 
 		size.X = size.X == AK_WINDOW_MAX_SIZE ? DM.w : size.X;
 		size.Y = size.Y == AK_WINDOW_MAX_SIZE ? DM.h : size.Y;
-
+/*
 		if(icon == "default_Akel_icon")
 			_icon = SDL_CreateRGBSurfaceFrom(static_cast<void*>(logo_icon_data), logo_size, logo_size, 32, 4 * logo_size, rmask, gmask, bmask, amask);
 		else
 			_icon = IMG_Load(icon.c_str());
-
+*/
 		SDL_SetWindowIcon(_window, _icon);
 		SDL_SetWindowTitle(_window, title.c_str());
 		SDL_SetWindowPosition(_window, pos.X, pos.Y);

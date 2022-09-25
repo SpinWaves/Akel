@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 08/05/2022
+// Updated : 24/09/2022
 
 #ifndef __AK_VK_BUFFER__
 #define __AK_VK_BUFFER__
@@ -23,7 +23,7 @@ namespace Ak
 			inline void mapMem(void* data = nullptr, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0) noexcept
 			{
 				if(vkMapMemory(Render_Core::get().getDevice().get(), _mem_chunck.memory, _mem_chunck.offset + offset, size, 0, &data) != VK_SUCCESS)
-					Core::log::report(ERROR, "Vulkan : failed to map a buffer");
+					Core::log::report(FATAL_ERROR, "Vulkan : failed to map a buffer");
 			}
 			inline void unmapMem() noexcept { vkUnmapMemory(Render_Core::get().getDevice().get(), _mem_chunck.memory); }
 
@@ -46,8 +46,8 @@ namespace Ak
 			uint32_t findMemoryType(uint32_t typeFilter);
 			void pushToGPU() noexcept;
 
-			VkBufferUsageFlags _usage;
-			VkMemoryPropertyFlags _flags;
+			VkBufferUsageFlags _usage = 0;
+			VkMemoryPropertyFlags _flags = 0;
 	};
 }
 

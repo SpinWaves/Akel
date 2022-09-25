@@ -80,7 +80,7 @@ class Rect : public Ak::Application
 			renderer->loadCustomShader(vertex_shader);
 			renderer->loadCustomShader(fragment_shader);
 
-            Ak::Entity2D rectangle(Models::quad, { 50.0f, 50.0f }, { 250.0f, 200.0f }, Colors::red);
+			Ak::Entity2D rectangle(Models::quad, { 50.0f, 50.0f }, { 250.0f, 200.0f }, Colors::red);
             renderer->add_entity(rectangle);
 
             add_component(renderer);
