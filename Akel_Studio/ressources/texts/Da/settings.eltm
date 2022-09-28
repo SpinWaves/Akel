@@ -1,0 +1,10 @@
+// This file is a part of Akel Studio
+// Authors : @kbz_8
+// Created : 28/08/2022
+// Updated : 28/08/2022
+
+begin module Settings
+	let general = "Generelt"
+		let language = "Sprog"
+		let onQuit = "Valideringsvindue ved lukning"
+end module
