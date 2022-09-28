@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 25/09/2022
+// Updated : 26/09/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -184,7 +184,7 @@ void StudioComponent::drawMainMenuBar()
 		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_HELP" " + _eltm->getText("MainMenuBar.help")).c_str()))
 		{
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_INFO" " + _eltm->getText("MainMenuBar.about")).c_str()))
-				_showAbout = _showAbout ? false : true;
+				_showAbout = !_showAbout;
 			ImGui::EndMenu();
 		}
 		ImGui::SameLine(size.X - 100);
@@ -198,7 +198,7 @@ void StudioComponent::drawAboutWindow()
 {
 	if(ImGui::Begin(std::string(AKS_ICON_MD_INFO" " + _eltm->getText("MainMenuBar.about")).data(), &_showAbout, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
 	{
-		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - ImGui::CalcTextSize(_eltm->getText("MainMenuBar.version").data()).x - 30, ImGui::GetWindowHeight() - ImGui::GetTextLineHeightWithSpacing() * 2.5));
+		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - ImGui::CalcTextSize(_eltm->getText("MainMenuBar.version").data()).x - 30, ImGui::GetWindowHeight() - ImGui::GetTextLineHeightWithSpacing() * 3));
 		ImGui::TextUnformatted(_eltm->getText("MainMenuBar.version").data());
 
 #ifdef AK_STUDIO_DEBUG

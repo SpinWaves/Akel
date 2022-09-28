@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 27/08/2022
+// Updated : 28/09/2022
 
 #include <Panels/entities_manager.h>
 #include <Fonts/material_font.h>
@@ -71,4 +71,9 @@ void EntitiesManager::render_transform()
 
 		ImGui::Separator();
     }
+	if(ImGui::CollapsingHeader(std::string(AKS_ICON_MD_CATEGORY" " + _eltm->getText("EntitiesManager.material")).c_str(), ImGuiTreeNodeFlags_SpanFullWidth))
+	{
+		
+		ImGui::Separator();
+	}
 }

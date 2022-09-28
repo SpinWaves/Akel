@@ -3,4 +3,4 @@
 let English = "ressources/texts/En/main.eltm"
 let Danish = "ressources/texts/Da/main.eltm"
 let Portuguese = "ressources/texts/Por/main.eltm"
-let Francais = "ressources/texts/Fri/main.eltm"
+let Francais = "ressources/texts/Fr/main.eltm"
