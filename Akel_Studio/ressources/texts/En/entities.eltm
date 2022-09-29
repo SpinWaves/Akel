@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/08/2022
-// Updated : 28/09/2022
+// Updated : 29/09/2022
 
 begin module Entities
 	let name = "Entities"
@@ -13,5 +13,7 @@ begin module EntitiesManager
 		let pos = "Position"
 		let rot = "Rotation"
 		let sca = "Scale"
-	let material = "Material"
+	let mesh = "Mesh"
+		let material = "Material"
+		let model = "Model"
 end module
