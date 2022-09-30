@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/09/2021
-// Updated : 12/08/2022
+// Updated : 30/09/2022
 
 #include "allocator_GPU.h"
 #include "pages.h"

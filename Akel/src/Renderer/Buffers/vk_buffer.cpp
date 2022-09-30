@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 24/09/2022
+// Updated : 30/09/2022
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
@@ -147,20 +147,5 @@ namespace Ak
 		mappedRange.offset = offset;
 		mappedRange.size = size;
 		vkFlushMappedMemoryRanges(Render_Core::get().getDevice().get(), 1, &mappedRange);
-	}
-
-	uint32_t Buffer::findMemoryType(uint32_t typeFilter)
-    {
-		VkPhysicalDeviceMemoryProperties memProperties;
-		vkGetPhysicalDeviceMemoryProperties(Render_Core::get().getDevice().getPhysicalDevice(), &memProperties);
-
-		for(uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
-		{
-			if((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & _flags) == _flags)
-				return i;
-		}
-
-		Core::log::report(FATAL_ERROR, "Vulkan : failed to find suitable memory type");
-		return 0; // Not necessary due to the FATAL_ERROR parameter for logs but that removes a warning
 	}
 }

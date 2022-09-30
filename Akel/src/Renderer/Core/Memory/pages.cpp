@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 12/08/2022
+// Updated : 01/10/2022
 
 #include <Core/core.h>
 #include "pages.h"
@@ -109,7 +109,7 @@ namespace Ak
 	            align = unalign ? 0 : align = requirements.alignment - unalign;
 
 	            start += align;
-	            available -= align;
+	        	available -= align;
 
 	            if(available >= requirements.size)
 	            {

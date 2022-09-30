@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 21/08/2022
+// Updated : 30/09/2022
 
 #include <Utils/fStrings.h>
 #include <Core/core.h>
@@ -16,7 +16,8 @@ namespace Ak
             return;
         }
 
-        _string = memAllocSize<char>(len == npos ? std::strlen(str) - pos : len - pos);
+        _string = memAllocSize<char>(len == npos ? std::strlen(str) - pos + 1 : len - pos + 1);
+		std::memset(_string, 0, len == npos ? std::strlen(str) - pos + 1 : len - pos + 1);
 
         char c;
         while((c = str[_size + pos]))

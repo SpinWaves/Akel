@@ -15,7 +15,8 @@ void Materials::onUpdate(Ak::Maths::Vec2<int>& size)
 {
     if(ImGui::Begin(std::string(AKS_ICON_MD_CATEGORY" " + _eltm->getText("Materials.name")).c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
     {
-		if(ImGui::BeginChild("Materialsyy", ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetWindowHeight() - 90.0f), true, ImGuiWindowFlags_HorizontalScrollbar))
+		ImVec2 child_size = ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetWindowHeight() - 90.0f);
+		if(ImGui::BeginChild("Materials", child_size, true))
 		{
 			if(_names.empty())
 			{
@@ -24,6 +25,43 @@ void Materials::onUpdate(Ak::Maths::Vec2<int>& size)
 					ImGui::Indent(((ImGui::GetWindowWidth() - 15.0f) / 2.0f) - ImGui::CalcTextSize(_eltm->getText("Materials.no_materials").c_str()).x / 2.0f);
 					ImGui::TextUnformatted(_eltm->getText("Materials.no_materials").c_str());
 				ImGui::PopStyleColor();
+			}
+			else
+			{
+				int i = 0;
+				for(auto it = _names.begin(); it != _names.end(); it++)
+				{
+					if(ImGui::BeginChild(it->c_str(), ImVec2(child_size.x / 2.15f, child_size.y / 2.15f), true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+					{
+						ImGui::Dummy(ImVec2(10.0f, child_size.y / 2.15f - ImGui::GetTextLineHeight() * 2.0f));
+						ImGui::Separator();
+						
+						ImGui::TextUnformatted(it->c_str());
+						
+						ImGui::SameLine(child_size.x / 2.15f - 32.5f);
+
+						ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
+						if(ImGui::SmallButton(AKS_ICON_MD_MORE_VERT))
+							ImGui::OpenPopup("material_toggle");
+						ImGui::PopStyleVar();
+
+						if(ImGui::BeginPopup("material_toggle"))
+						{
+							if(ImGui::MenuItem(_eltm->getText("Materials.delete").c_str()))
+							{
+								_names.erase(it);
+								if(it == _names.end())
+									it--;
+							}
+							ImGui::EndPopup();
+						}
+						
+						ImGui::EndChild();
+					}
+					if(i % 2 == 0)
+						ImGui::SameLine();
+					i++;
+				}
 			}
 
 			ImGui::EndChild();
@@ -49,12 +87,16 @@ void Materials::onUpdate(Ak::Maths::Vec2<int>& size)
 			ImGui::Dummy(ImVec2(69.0f, ImGui::GetWindowHeight() - ImGui::GetFontSize() * 6.5f));
 			ImGui::Separator();
 
-			if(ImGui::Button(std::string(_eltm->getText("Materials.create") + " "AKS_ICON_MD_NOTE_ADD).c_str(), ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)) && std::strlen(name) != 0)
+			bool already_exists = std::find_if(_names.begin(), _names.end(), [&](std::string s) { return std::strcmp(s.c_str(), name) == 0; }) != _names.end();
+
+			if(ImGui::Button(std::string(_eltm->getText("Materials.create") + " "AKS_ICON_MD_NOTE_ADD).c_str(), ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)) && std::strlen(name) != 0 && !already_exists)
 			{
 				_names.emplace_back(name);
 				std::memset(name, 0, 128);
 				_new_material = false;
 			}
+			if(ImGui::IsItemHovered() && already_exists)
+				ImGui::SetTooltip(_eltm->getText("Materials.already_created").c_str());
 
 			ImGui::End();
 		}

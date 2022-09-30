@@ -13,4 +13,6 @@ begin module Materials
 	let no_materials = "There are no materials"
 	let mat_name = "Name"
 	let create = "Create material"
+	let delete = "Delete"
+	let already_created = "This material name already exists"
 end module

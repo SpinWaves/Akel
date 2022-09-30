@@ -15,11 +15,12 @@ class Materials : public Panel
         Materials(std::shared_ptr<Ak::ELTM> eltm);
 
         void onUpdate(Ak::Maths::Vec2<int>& size) override;
+		inline const std::vector<std::string>& getNames() const { return _names; }
 
         ~Materials() = default;
 
 	private:
-		std::vector<Ak::fString> _names;
+		std::vector<std::string> _names;
 		bool _new_material;
 };
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 24/09/2022
+// Updated : 30/09/2022
 
 #ifndef __AK_VK_BUFFER__
 #define __AK_VK_BUFFER__
@@ -43,7 +43,6 @@ namespace Ak
 
 		private:
 			void createBuffer(VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
-			uint32_t findMemoryType(uint32_t typeFilter);
 			void pushToGPU() noexcept;
 
 			VkBufferUsageFlags _usage = 0;

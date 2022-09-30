@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 19/09/2022
+// Updated : 30/09/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -32,6 +32,20 @@ namespace Ak
 			return;
 
 		_pipeline.bindPipeline(Render_Core::get().getActiveCmdBuffer());
+
+		VkViewport viewport{};
+		viewport.x = 0.0f;
+		viewport.y = 0.0f;
+		viewport.width = (float)Render_Core::get().getSwapChain()._swapChainExtent.width;
+		viewport.height = (float)Render_Core::get().getSwapChain()._swapChainExtent.height;
+		viewport.minDepth = 0.0f;
+		viewport.maxDepth = 1.0f;
+		vkCmdSetViewport(Render_Core::get().getActiveCmdBuffer().get(), 0, 1, &viewport);
+
+		VkRect2D scissor{};
+		scissor.offset = { 0, 0 };
+		scissor.extent = Render_Core::get().getSwapChain()._swapChainExtent;
+		vkCmdSetScissor(Render_Core::get().getActiveCmdBuffer().get(), 0, 1, &scissor);
 
         for(Entity2D& ent : _2D_entities)
 		{

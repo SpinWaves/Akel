@@ -6,12 +6,7 @@
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk")
-add_requires("libsdl", { configs = { shared = false } }, { system = false })
-add_requires("libsdl_image", { configs = { shared = false } }, { system = false })
-add_requires("libsdl_ttf", { configs = { shared = false } }, { system = false })
-add_requires("libsndfile", { configs = { shared = false } }, { system = false })
-add_requires("openal-soft", { configs = { shared = false } }, { system = false })
+add_requires("spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsdl_ttf", "libsndfile", "openal-soft")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
