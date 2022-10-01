@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 16/06/2022
+// Updated : 01/10/2022
 
 #include <Maths/maths.h>
 
@@ -32,16 +32,15 @@ namespace Ak
         }
 
         T* ptr = nullptr;
-        JamAllocator::flag finder;
-        finder.size = sizeType;
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
 
         std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
-        if(_freeSpaces != nullptr)
+        if(_freeSpaces != nullptr && _freeSpaces->has_data())
         {
-            if(_freeSpaces->has_data())
-               node = _freeSpaces->find(&finder);
+			JamAllocator::flag finder;
+			finder.size = sizeType;
+		   node = _freeSpaces->find(&finder);
         }
 
         if(node != nullptr)
@@ -99,16 +98,15 @@ namespace Ak
         }
 
         T* ptr = nullptr;
-        JamAllocator::flag finder;
-        finder.size = size;
         BinarySearchTree<JamAllocator::flag*>* node = nullptr;
 
         std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
-        if(_freeSpaces != nullptr)
+        if(_freeSpaces != nullptr && _freeSpaces->has_data())
         {
-            if(_freeSpaces->has_data())
-               node = _freeSpaces->find(&finder);
+			JamAllocator::flag finder;
+			finder.size = size;
+		   node = _freeSpaces->find(&finder);
         }
         if(node != nullptr)
         {

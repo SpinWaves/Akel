@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 12/08/2022
+-- Updated : 01/10/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -17,6 +17,7 @@ set_targetdir("build/$(os)_$(arch)")
 -- Lib Akel Build
 target("Akel")
 	set_default(true)
+	set_license("MIT")
 	set_kind("static")
 	add_files("Akel/src/**.cpp")
 	add_includedirs("Akel/src", "libs/include")
@@ -46,6 +47,7 @@ target_end() -- optional but I think the code is cleaner with this
 -- Akel Studio Build
 target("Akel_Studio")
 	set_default(true)
+	set_license("MIT")
     set_kind("binary")
 	add_includedirs("Akel/src", "Akel_Studio/src", "libs/include")
     add_deps("Akel")

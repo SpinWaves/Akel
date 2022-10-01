@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 26/08/2022
+// Updated : 01/10/2022
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -23,12 +23,6 @@ namespace Ak
             {
                 _xRel = 0;
                 _yRel = 0;
-                for(int i = 0; i < SDL_NUM_SCANCODES; i++)
-                {
-                    _keys[i] ^= static_cast<uint8_t>(action::up);
-                    if(i < _mouse.size())
-						_mouse[i] ^= static_cast<uint8_t>(action::up);
-                }
             }
 
             inline bool getInKey(const SDL_Scancode key, action type = action::down) const noexcept { return _keys[key] & static_cast<uint8_t>(type); }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 30/09/2022
+// Updated : 01/10/2022
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
@@ -33,7 +33,7 @@ namespace Ak
 		if(type == Buffer::kind::constant)
 		{
 			void* mapped = nullptr;
-			mapMem(mapped);
+			mapMem(&mapped);
 				std::memcpy(mapped, data, _mem_chunck.size);
 			unmapMem();
 

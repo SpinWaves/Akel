@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 19/09/2022
+// Updated : 01/10/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -33,12 +33,12 @@ namespace Ak
 				_in.reset();
 				while(SDL_PollEvent(_in.getNativeEvent()))
 				{
-					_in.update();
 					if(ImGuiComponent::getNumComp())
 					{
 						for(auto component : _components)
 							component->onImGuiEvent(_in);
 					}
+					_in.update();
 				}
 				for(auto component : _components)
 				{
