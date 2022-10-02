@@ -44,6 +44,8 @@ void Materials::onUpdate(Ak::Maths::Vec2<int>& size)
 						if(ImGui::SmallButton(AKS_ICON_MD_MORE_VERT))
 							ImGui::OpenPopup("material_toggle");
 						ImGui::PopStyleVar();
+						
+						static bool rename = false;
 
 						if(ImGui::BeginPopup("material_toggle"))
 						{
@@ -53,7 +55,34 @@ void Materials::onUpdate(Ak::Maths::Vec2<int>& size)
 								if(it == _names.end())
 									it--;
 							}
+							if(ImGui::MenuItem(_eltm->getText("Materials.rename").c_str()))
+								rename = true;
 							ImGui::EndPopup();
+						}
+
+						if(rename && ImGui::Begin(std::string(AKS_ICON_MD_CATEGORY" " + _eltm->getText("Materials.rename")).c_str(), &rename, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
+						{
+							ImGui::SetWindowPos(ImVec2(size.X / 2.0f - 200.0f, size.Y / 2.0f - 60.0f));
+							ImGui::SetWindowSize(ImVec2(400.0f, 120.0f));
+							ImGui::SetWindowFocus();
+							static char name[128] = { 0 };
+							ImGui::TextUnformatted(_eltm->getText("Materials.mat_name").c_str());
+							ImGui::SameLine();
+							ImGui::InputText("##material_name", name, 128);
+							ImGui::Separator();
+
+							bool already_exists = std::find_if(_names.begin(), _names.end(), [&](std::string s) { return std::strcmp(s.c_str(), name) == 0; }) != _names.end();
+
+							if(ImGui::Button(std::string(_eltm->getText("Materials.rename") + " "AKS_ICON_MD_NOTE_ADD).c_str(), ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)) && std::strlen(name) != 0 && !already_exists)
+							{
+								*it = name;
+								std::memset(name, 0, 128);
+								rename = false;
+							}
+							if(ImGui::IsItemHovered() && already_exists)
+								ImGui::SetTooltip(_eltm->getText("Materials.already_created").c_str());
+
+							ImGui::End();
 						}
 						
 						ImGui::EndChild();

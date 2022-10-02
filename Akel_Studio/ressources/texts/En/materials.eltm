@@ -15,4 +15,5 @@ begin module Materials
 	let create = "Create material"
 	let delete = "Delete"
 	let already_created = "This material name already exists"
+	let rename = "Rename"
 end module
