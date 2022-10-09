@@ -93,13 +93,19 @@ namespace Ak
 
 	void WindowComponent::update()
 	{
+		if(_window == nullptr)
+			return;
 		SDL_GetWindowPosition(_window, &pos.X, &pos.Y);
 		SDL_GetWindowSize(_window, &size.X, &size.Y);
 	}
 
 	void WindowComponent::onQuit()
 	{
-        SDL_FreeSurface(_icon);
-        SDL_DestroyWindow(_window);
+		if(_window != nullptr)
+		{
+			SDL_FreeSurface(_icon);
+			SDL_DestroyWindow(_window);
+			_window = nullptr;
+		}
 	}
 }

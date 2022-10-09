@@ -106,3 +106,13 @@ target("eltm_tester")
 	add_includedirs("Akel/src", "Tests/eltm", "libs/include")
     add_files("Tests/eltm/*.cpp")
 target_end()
+
+-- Multipe Windows Rendering tester Build
+target("mult_win_render")
+	set_default(false)
+    set_kind("binary")
+    add_deps("Akel")
+	set_targetdir("Tests/Windowing/multiple_windows_rendering/")
+	add_includedirs("Akel/src", "libs/include")
+    add_files("Tests/Windowing/multiple_windows_rendering/*.cpp")
+target_end()

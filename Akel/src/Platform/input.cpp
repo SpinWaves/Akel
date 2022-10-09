@@ -15,8 +15,24 @@ namespace Ak
 
     void Input::update()
     { 
+		_current_window = _event.window.windowID;
         if(_event.window.event == SDL_WINDOWEVENT_CLOSE) 
-            _end = true;
+		{
+			if(_windows.size() == 0)
+			{
+            	_end = true;
+				return;
+			}
+			for(auto it = _windows.begin(); it != _windows.end(); it++)
+			{
+				if((*it)->_window_id == _current_window)
+				{
+					(*it)->onQuit();
+					_windows.erase(it);
+					break;
+				}
+			}
+		}
 
         if(_event.type == SDL_MOUSEMOTION) 
         {
@@ -25,8 +41,6 @@ namespace Ak
 
             _xRel = _event.motion.xrel;
             _yRel = _event.motion.yrel;
-
-            _current_window = _event.motion.windowID;
         }
 
         if(_event.window.event == SDL_WINDOWEVENT_RESIZED || _event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
