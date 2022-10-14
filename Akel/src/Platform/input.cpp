@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 26/08/2022
+// Updated : 14/10/2022
 
 #include <Platform/platform.h>
 #include <Renderer/Core/render_core.h>
@@ -18,7 +18,7 @@ namespace Ak
 		_current_window = _event.window.windowID;
         if(_event.window.event == SDL_WINDOWEVENT_CLOSE) 
 		{
-			if(_windows.size() == 0)
+			if(_windows.size() == 1)
 			{
             	_end = true;
 				return;
