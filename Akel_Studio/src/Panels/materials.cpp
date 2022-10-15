@@ -113,7 +113,12 @@ void Materials::onUpdate(Ak::Maths::Vec2<int>& size)
 			ImGui::SameLine();
             ImGui::InputText("##material_name", name, 128);
 
-			ImGui::Dummy(ImVec2(69.0f, ImGui::GetWindowHeight() - ImGui::GetFontSize() * 6.5f));
+			static char shader[512] = { 0 };
+			ImGui::TextUnformatted(_eltm->getText("Materials.shader_bind").c_str());
+			ImGui::SameLine();
+            ImGui::InputText("##shader_bind", shader, 512);
+
+			ImGui::Dummy(ImVec2(69.0f, ImGui::GetWindowHeight() - ImGui::GetFontSize() * 8.5f));
 			ImGui::Separator();
 
 			bool already_exists = std::find_if(_names.begin(), _names.end(), [&](std::string s) { return std::strcmp(s.c_str(), name) == 0; }) != _names.end();

@@ -6,7 +6,7 @@
 #include <Panels/entities_manager.h>
 #include <Fonts/material_font.h>
 
-EntitiesManager::EntitiesManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__entities_manager")
+EntitiesManager::EntitiesManager(std::shared_ptr<Ak::ELTM> eltm, const std::vector<std::string>& materials) : Panel("__entities_manager"), _materials(materials)
 {
     _eltm = std::move(eltm);
 	Ak::Matrixes::matrix_mode(Ak::matrix::model);
@@ -80,6 +80,20 @@ void EntitiesManager::render_transform()
         }
 		if(ImGui::TreeNode(std::string(AKS_ICON_MD_CATEGORY" " + _eltm->getText("EntitiesManager.material")).c_str()))
 		{
+			static std::string selected = "None";
+			if(ImGui::BeginCombo("##combo_materials", selected.c_str()))
+			{
+				static int item_current_idx = 0;
+				for(int i = 0; i < _materials.size(); i++)
+				{
+					if(ImGui::Selectable(_materials[i].c_str(), item_current_idx == 3))
+					{
+						item_current_idx = i;
+						selected = _materials[i];
+					}
+				}
+				ImGui::EndCombo();
+			}
 			ImGui::Separator();
             ImGui::TreePop();
 		}

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 23/08/2022
-// Updated : 24/08/2022
+// Updated : 15/10/2022
 
 #include "camera.h"
 
@@ -21,7 +21,7 @@ void SceneCamera::update()
 
 void SceneCamera::onEvent(Ak::Input& input)
 {
-	if(	input.getInMouse(AK_MOUSE_BUTTON_RIGHT) &&
+	if(	input.getInMouse(AK_MOUSE_BUTTON_RIGHT) && _focus &&
 		input.getX() > (15 * _window_size->X)/100 - 1 && input.getX() < _window_size->X - (19 * _window_size->X)/100 &&
 		input.getY() > 75 && input.getY() < _window_size->Y - _window_size->Y/4)
 	{

@@ -12,7 +12,7 @@
 class EntitiesManager : public Panel
 {
     public:
-        EntitiesManager(std::shared_ptr<Ak::ELTM> eltm);
+        EntitiesManager(std::shared_ptr<Ak::ELTM> eltm, const std::vector<std::string>& materials);
 
         void onUpdate(Ak::Maths::Vec2<int>& size) override;
 
@@ -20,6 +20,7 @@ class EntitiesManager : public Panel
 
     private:
         void render_transform();
+		const std::vector<std::string>& _materials;
 };
 
 #endif // __AK_STUDIO_ENTITIES_MANAGER__

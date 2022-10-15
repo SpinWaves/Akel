@@ -1,12 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 24/09/2022
+// Updated : 15/10/2022
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
+#include <camera.h>
 
-Scene::Scene(std::shared_ptr<Ak::ELTM> eltm) : Panel("__scene")
+Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, SceneCamera* camera) : Panel("__scene"), _camera(camera)
 {
     _eltm = std::move(eltm);
 }
@@ -15,6 +16,7 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 {
     if(ImGui::Begin(std::string(AKS_ICON_MD_SPORTS_ESPORTS" " + _eltm->getText("Scene.name")).c_str(), nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground))
     {
+		_camera->setFocus(true);
         ImDrawList* draw_list = ImGui::GetBackgroundDrawList();
 
         if(ImGui::BeginMenuBar())
@@ -75,4 +77,6 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 
 		ImGui::End();
     }
+	else
+		_camera->setFocus(false);
 }

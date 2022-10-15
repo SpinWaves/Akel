@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 26/08/2022
+// Updated : 15/10/2022
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -18,6 +18,9 @@ class Studio : public Ak::Application
 			add_component<Ak::AudioManager>();
 
 			StudioComponent* studio = Ak::memAlloc<StudioComponent>();
+			SceneCamera* camera = Ak::memAlloc<SceneCamera>(-5, 3, -5, &studio->size);
+			studio->setCamera(camera);
+			add_component(camera);
 			add_component(studio);
 
 			add_component<Ak::RendererComponent>(static_cast<Ak::WindowComponent*>(studio));
@@ -28,8 +31,6 @@ class Studio : public Ak::Application
 			studio->setContext();
 
 			studio->generateFontTextures(imgui);
-
-			add_component<SceneCamera>(-5, 3, -5, &studio->size);
 		}
 		~Studio() = default;
 };

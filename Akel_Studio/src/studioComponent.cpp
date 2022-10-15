@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 30/09/2022
+// Updated : 15/10/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -38,16 +38,16 @@ void StudioComponent::onAttach()
 	_stack = Ak::create_Unique_ptr<PanelStack>();
 
 	_stack->add_panel<Docks>(_eltm);
-	_stack->add_panel<Scene>(_eltm);
+	_stack->add_panel<Scene>(_eltm, _camera);
 	_stack->add_panel<ELTM_editor>(_eltm, &_eltm_editor_input_buffer, &_eltm_editor_save);
 	_stack->add_panel<Entities>(_eltm);
-	_stack->add_panel<EntitiesManager>(_eltm);
 	_stack->add_panel<RendererManager>(_eltm);
 	_stack->add_panel<AudioManager>(_eltm);
 	
 	Materials* materials = Ak::memAlloc<Materials>(_eltm);
 	_stack->add_panel(materials);
 	_stack->add_panel<MaterialEditor>(_eltm, materials->getNames());
+	_stack->add_panel<EntitiesManager>(_eltm, materials->getNames());
 
 	_stack->add_panel<Browser>(_eltm);
 	_stack->add_panel<Console>(_eltm);

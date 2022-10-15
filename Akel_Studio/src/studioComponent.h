@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 26/08/2022
+// Updated : 15/10/2022
 
 #ifndef __AK_STUDIO_COMPONENT__
 #define __AK_STUDIO_COMPONENT__
@@ -22,6 +22,7 @@ class StudioComponent : public Ak::WindowComponent
 		void generateFontTextures(Ak::ImGuiComponent* imgui);
 
 		void setContext();
+		inline void setCamera(class SceneCamera* camera) noexcept { _camera = camera; } 
 
 		~StudioComponent() = default;
 
@@ -32,15 +33,14 @@ class StudioComponent : public Ak::WindowComponent
 		void draw_general_settings();
 
 		std::string _eltm_editor_input_buffer;
-		uint8_t _eltm_editor_save = 0;
-
 		std::shared_ptr<Ak::ELTM> _eltm;
+		uint8_t _eltm_editor_save = 0;
 		Ak::Unique_ptr<PanelStack> _stack;
-
+		class SceneCamera* _camera = nullptr;
+		std::array<bool, 1> _opts;
 		bool _running = true;
 		bool _showAbout = false;
 		bool _showOpt = false;
-		std::array<bool, 1> _opts;
 };
 
 #endif // __AK_STUDIO_COMPONENT__

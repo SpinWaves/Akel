@@ -5,6 +5,11 @@
 
 begin module MaterialEditor
 	let name = "Material Editor"
+	let metalness = "Metalness"
+	let roughness = "Roughness"
+	let albedo = "Albedo"
+	let normals = "Normals"
+	let use = "Use"
 end module
 
 begin module Materials
@@ -16,4 +21,5 @@ begin module Materials
 	let delete = "Delete"
 	let already_created = "This material name already exists"
 	let rename = "Rename"
+	let shader_bind = "Shader"
 end module
