@@ -15,7 +15,7 @@ class App : public Ak::Application
 Ak::AkelInstance Akel_init()
 {
     Ak::AkelInstance instance;
-		instance.project_file_path = std::string(Ak::Core::getMainDirPath() + "Tests/Kila");
+		instance.project_file_path = Ak::Core::getMainDirPath();
 		instance.project_file_name = "app";
 		instance.enable_warning_console_message = true;
         instance.use_memory_manager = true;

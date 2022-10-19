@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 16/05/2022
+// Updated : 19/10/2022
 
 #include "functions.h"
 #include "compiler.h"
@@ -74,10 +74,8 @@ namespace Ak::Kl
 				{
 					case Tokens::statment_then:
 					case Tokens::statment_else:
-					case Tokens::kw_repeat:
 					case Tokens::kw_do: nesting++; break;
 
-					case Tokens::kw_until:
 					case Tokens::kw_end: nesting--; break;
 
 					default : break;

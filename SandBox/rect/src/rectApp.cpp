@@ -76,13 +76,13 @@ class Rect : public Ak::Application
             Ak::Render_Core::get().getClearValue().color.float32[0] = 128 / 255;
             Ak::Render_Core::get().getClearValue().color.float32[1] = 175 / 255;
             Ak::Render_Core::get().getClearValue().color.float32[2] = 255 / 255;
-
+/*
 			renderer->loadCustomShader(vertex_shader);
 			renderer->loadCustomShader(fragment_shader);
 
 			Ak::Entity2D rectangle(Models::quad, { 50.0f, 50.0f }, { 250.0f, 200.0f }, Colors::red);
             renderer->add_entity(rectangle);
-
+*/
             add_component(renderer);
         }
         ~Rect() = default;

@@ -15,8 +15,8 @@ uniform viewData
 end
 
 function Vmain() -> vec4
-    pos = vec3(vewData.model * vec4(pos, 1.0))
-    return vewData.proj * vewData.view * vec4(pos, 1.0)
+    pos = vec3(viewData.model * vec4(pos, 1.0))
+    return viewData.proj * viewData.view * vec4(pos, 1.0)
 end
 
 function Fmain() -> vec4

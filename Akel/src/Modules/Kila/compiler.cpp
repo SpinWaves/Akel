@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 29/05/2022
+// Updated : 19/10/2022
 
 #include "file.h"
 #include "compiler.h"
@@ -22,6 +22,7 @@ namespace Ak::Kl
 
 		StreamStack stream(&get);
 		tk_iterator it(stream);
+		Context context;
 	}
 
 	std::string Compiler::loadFile(const std::string& path)
