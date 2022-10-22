@@ -1,17 +1,28 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/05/2022
-// Updated : 19/10/2022
+// Updated : 21/10/2022
 
 #include "compiler_context.h"
 #include <Core/core.h>
 
 namespace Ak::Kl
 {
-	Context::Context(std::string name, uint32_t kila_version)
+	const identifier_info* compiler_context::find(const std::string& name) const
 	{
-		meta_data_ptr = create_shared_ptr_w();
-		meta_data_ptr->name = std::move(name);
-		meta_data_ptr->kila_version = kila_version;
+		identifier_info* ret = const_cast<identifier_info*>(_locals->find(name));
+		if(_locals && ret)
+			return ret;
+		ret = const_cast<identifier_info*>(_functions.find(name));
+		if(ret)
+			return ret;
+		return _globals.find(name);
+	}
+
+	void compiler_context::leave_scope()
+	{
+		if(_params == _locals.get())
+			_params = nullptr;
+		_locals = _locals->detach_parent();
 	}
 }

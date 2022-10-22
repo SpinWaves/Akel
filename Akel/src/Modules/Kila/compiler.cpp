@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 19/10/2022
+// Updated : 22/10/2022
 
 #include "file.h"
 #include "compiler.h"
@@ -9,20 +9,13 @@
 #include "token_iterator.h"
 #include "stream_stack.h"
 #include "compiler_context.h"
+#include <functions.h>
 
 namespace Ak::Kl
 {
-	std::vector<uint32_t> Compiler::generateSpirV(const std::string& code)
+	inline Error unexpected_syntax(const tk_iterator& it)
 	{
-		func::function<int()> get = [&]()
-		{
-			static size_t pos = 0;
-			return code[pos++];
-		};
-
-		StreamStack stream(&get);
-		tk_iterator it(stream);
-		Context context;
+		return unexpected_syntax_error(std::to_string(it->get_value()).c_str(), it->get_line_number());
 	}
 
 	std::string Compiler::loadFile(const std::string& path)
@@ -34,11 +27,6 @@ namespace Ak::Kl
 		return ret;
 	}
 
-	inline Error unexpected_syntax(const tk_iterator& it)
-	{
-		return unexpected_syntax_error(std::to_string(it->get_value()).c_str(), it->get_line_number());
-	}
-
 	type_handle parse_type(compiler_context& ctx, tk_iterator& it)
 	{
 		if(!it->is_keyword())
@@ -48,34 +36,14 @@ namespace Ak::Kl
 		
 		switch(it->get_token())
 		{
-			case Tokens::t_void:
-				t = ctx.get_handle(simple_type::nothing);
-				++it;
-			break;
-			case Tokens::t_num:
-				t = ctx.get_handle(simple_type::number);
-				++it;
-			break;
-			case Tokens::t_bool:
-				t = ctx.get_handle(simple_type::boolean);
-				++it;
-			break;
+			case Tokens::t_void: t = ctx.get_handle(simple_type::nothing); break;
+			case Tokens::t_num:  t = ctx.get_handle(simple_type::number); break;
+			case Tokens::t_bool: t = ctx.get_handle(simple_type::boolean); break;
 
 			default: unexpected_syntax(it).expose();
 		}
-		
-		while(it->is_keyword())
-		{
-			switch(it->get_token())
-			{
-				case Tokens::square_b:
-					parse_token_value(++it, Tokens::square_e);
-					t = ctx.get_handle(table_type{t});
-				break;
-				
-				default: return t;
-			}
-		}
+
+		it++;
 		
 		return t;
 	}
@@ -103,5 +71,74 @@ namespace Ak::Kl
 		++it;
 
 		return ret;
+	}
+
+	std::vector<expression<lvalue>::ptr> compile_variable_declaration(compiler_context& ctx, tk_iterator& it)
+    {
+        std::string name = parse_declaration_name(ctx, it);
+
+        type_handle type_id = nullptr;
+        if(it->has_value(Tokens::type_specifier))
+        {
+            parse_token_value(ctx, it, Tokens::type_specifier);
+            type_id = parse_type(ctx, it);
+
+            if(type_id == type_registry::get_void_handle())
+                syntax_error("cannot declare void variable", it->get_line_number()).expose();
+
+			if(it->has_value(Tokens::square_b))
+			{
+				++it;
+				parse_token_value(ctx, it, Tokens::square_e);
+				type_id = ctx.get_handle(array_type{type_id});
+			}
+        }
+
+        std::vector<expression<lvalue>::ptr> ret;
+
+        if(it->has_value(Tokens::assign))
+        {
+            ++it;
+            ret.emplace_back(build_initialization_expression(ctx, it, type_id, false));
+        }
+        else
+            ret.emplace_back(build_default_initialization(type_id));
+
+        ctx.create_identifier(std::move(name), type_id);
+
+        return ret;
+    }
+
+	std::vector<uint32_t> Compiler::generateSpirV(const std::string& code)
+	{
+		func::function<int()> get = [&]()
+		{
+			static size_t pos = 0;
+			return code[pos++];
+		};
+
+		StreamStack stream(&get);
+		tk_iterator it(stream);
+
+		compiler_context context;
+
+		std::vector<function_body> function_bodys;
+		std::vector<expression<lvalue>::ptr> initializers;
+
+		while(it())
+		{
+			if(!std::holds_alternative<Tokens>(it->get_value()))
+	            unexpected_syntax(it).expose();
+
+			switch(it->get_token()) // global scope
+			{
+				case Tokens::kw_function: function_bodys.emplace_back(context, it); break;
+
+				default:
+					for(expression<lvalue>::ptr& expr : compile_variable_declaration(context, it))
+						initializers.push_back(std::move(expr));
+				break;
+			}
+		}
 	}
 }
