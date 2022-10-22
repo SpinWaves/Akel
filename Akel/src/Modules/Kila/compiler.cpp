@@ -36,8 +36,8 @@ namespace Ak::Kl
 		
 		switch(it->get_token())
 		{
+			case Tokens::t_num: t = ctx.get_handle(simple_type::number); break;
 			case Tokens::t_void: t = ctx.get_handle(simple_type::nothing); break;
-			case Tokens::t_num:  t = ctx.get_handle(simple_type::number); break;
 			case Tokens::t_bool: t = ctx.get_handle(simple_type::boolean); break;
 
 			default: unexpected_syntax(it).expose();
@@ -140,5 +140,8 @@ namespace Ak::Kl
 				break;
 			}
 		}
+
+		for(function_body& f : function_bodys)
+			f.compile();
 	}
 }

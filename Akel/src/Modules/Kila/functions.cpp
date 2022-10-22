@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 19/10/2022
+// Updated : 22/10/2022
 
 #include "functions.h"
 #include "compiler.h"
@@ -12,6 +12,8 @@
 
 namespace Ak::Kl
 {
+	void compile_function_block(compiler_context& ctx, tk_iterator& it, type_handle return_type_id);
+
 	function_declaration parse_function_declaration(compiler_context& ctx, tk_iterator& it)
 	{
 		function_declaration ret;
@@ -92,4 +94,14 @@ namespace Ak::Kl
 	}
 
 	function_body::function_body(function_body&& orig) noexcept : _tokens(std::move(orig._tokens)), _decl(std::move(orig._decl)) {}
+
+	void function_body::compile(compiler_context& ctx)
+	{
+		ctx.function();
+		const function_type* ft = std::get_if<function_type>(_decl.type_id);
+		for(int i = 0; i < int(_decl.params.size()); i++)
+			ctx.create_param(std::move(_decl.params[i]), ft->param_type_id[i].type_id);
+		tk_iterator it(_tokens);
+		compile_function_block(ctx, it, ft->return_type_id);
+	}
 }

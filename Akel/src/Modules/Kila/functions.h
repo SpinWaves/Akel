@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 15/05/2022
+// Updated : 22/10/2022
 
 #ifndef __AK_KILA_FUNCTIONS__
 #define __AK_KILA_FUNCTIONS__
@@ -28,6 +28,8 @@ namespace Ak::Kl
 			function_body(function_body&& orig) noexcept;
 
 			inline const function_declaration& get_decl() const { return _decl; }
+
+			void compile(class compiler_context& ctx);
 
 		private:
 			function_declaration _decl;
