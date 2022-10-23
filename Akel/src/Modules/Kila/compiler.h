@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 29/05/2022
+// Updated : 23/10/2022
 
 #ifndef __AK_KILA_COMPILER__
 #define __AK_KILA_COMPILER__
@@ -14,7 +14,7 @@
 namespace Ak::Kl
 {
 	type_handle parse_type(class compiler_context& ctx, class tk_iterator& it);
-	std::string parse_declaration_name(class compiler_context& ctx, class tk_iterator& it);
+	std::string parse_declaration_name(class compiler_context& ctx, class tk_iterator& it, bool is_function);
 	void parse_token_value(class tk_iterator& it, const token_value& value);
 
 	class Compiler

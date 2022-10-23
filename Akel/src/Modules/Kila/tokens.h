@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/11/2021
-// Updated : 19/10/2022
+// Updated : 23/10/2022
 
 #ifndef __AK_KILA_TOKENS__
 #define __AK_KILA_TOKENS__
@@ -17,8 +17,6 @@ namespace Ak::Kl
 		kw_do,
         kw_end,
         kw_for,
-        kw_len,
-        kw_mut,
 		kw_break,
         kw_const,
 		kw_while,
@@ -27,7 +25,6 @@ namespace Ak::Kl
         kw_import,
         kw_export,
         kw_uniform,
-		kw_continue,
         kw_location,
         kw_function,
 
@@ -111,18 +108,15 @@ namespace Ak::Kl
                 {Tokens::kw_do, "do"},
                 {Tokens::kw_end, "end"},
                 {Tokens::kw_for, "for"},
-                {Tokens::kw_len, "len"},
-                {Tokens::kw_mut, "mut"},
                 {Tokens::kw_while, "while"},
                 {Tokens::kw_break, "break"},
+                {Tokens::kw_function, "fn"},
                 {Tokens::kw_struct, "struct"},
                 {Tokens::kw_return, "return"},
                 {Tokens::kw_import, "import"},
                 {Tokens::kw_export, "export"},
                 {Tokens::kw_const, "constval"},
                 {Tokens::kw_uniform, "uniform"},
-                {Tokens::kw_function, "function"},
-                {Tokens::kw_continue, "continue"},
                 {Tokens::kw_location, "location"},
 
                 {Tokens::t_num, "num"},

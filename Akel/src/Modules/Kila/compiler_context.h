@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/05/2022
-// Updated : 21/10/2022
+// Updated : 23/10/2022
 
 #ifndef __AK_KILA_COMPILER_CONTEXT__
 #define __AK_KILA_COMPILER_CONTEXT__
@@ -146,9 +146,11 @@ namespace Ak::Kl
 			{
 				return _locals ? _locals->create_identifier(std::move(name), type_id) : _globals.create_identifier(std::move(name), type_id);
 			}
-			inline bool can_declare(const std::string& name) const
+			inline bool can_declare(const std::string& name, bool is_function) const
 			{
-				return _locals ? _locals->can_declare(name) : (_globals.can_declare(name) && _functions.can_declare(name));
+				if(is_function)
+					return _functions.can_declare(name);
+				return _locals ? _locals->can_declare(name) : _globals.can_declare(name);
 			}
 			
 			inline const identifier_info* create_param(std::string name, type_handle type_id)    { return _params->create_param(name, type_id); }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 22/10/2022
+// Updated : 23/10/2022
 
 #include "functions.h"
 #include "compiler.h"
@@ -21,7 +21,7 @@ namespace Ak::Kl
 		parse_token_value(it, Tokens::kw_function);
 
 		function_type ft;
-		ret.name = parse_declaration_name(ctx, it);
+		ret.name = parse_declaration_name(ctx, it, true);
 
 		{
 			auto _ = ctx.function();
@@ -70,19 +70,12 @@ namespace Ak::Kl
 
 		while(nesting && !it->is_eof())
 		{
-			if(it->is_keyword())
-			{
-				switch(it->get_token())
-				{
-					case Tokens::statment_then:
-					case Tokens::statment_else:
-					case Tokens::kw_do: nesting++; break;
+			if(it->has_value(Tokens::embrace_b))
+				nesting++;
 
-					case Tokens::kw_end: nesting--; break;
+			if(it->has_value(Tokens::embrace_e))
+				nesting--;
 
-					default : break;
-				}
-			}
 			_tokens.push_back(*it);
 			++it;
 		}
