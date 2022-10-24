@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 23/10/2022
+// Updated : 24/10/2022
 
 #ifndef __AK_KILA_COMPILER__
 #define __AK_KILA_COMPILER__
@@ -29,6 +29,21 @@ namespace Ak::Kl
 
 		private:
 			std::string loadFile(const std::string& path);
+
+			void compile_simple_statement();
+			void compile_block_statement();
+			void compile_for_statement();
+			void compile_while_statement();
+			void compile_if_statement();
+			void compile_var_statement();
+			void compile_break_statement();
+			void compile_return_statement();
+			void compile_statement();
+			void compile_variable_declaration();
+			
+			compiler_context _ctx;
+			std::vector<uint32_t> _code;
+			tk_iterator _it;
 	};
 }
 

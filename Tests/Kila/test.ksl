@@ -1,19 +1,4 @@
-location(0) pos: vec3
-location(1) color: vec4
-
-uniform viewData
-    view: mat4
-    model: mat4
-    proj: mat4
-end
-
-arr: num[4]
-
 function Vmain() -> vec4
-    pos = vec3(vewData.model * vec4(pos, 1.0))
-    return vewData.proj * vewData.view * vec4(pos, 1.0)
-end
-
-function Fmain() -> vec4
-    return color
-end
+{
+	i : num = 4
+}

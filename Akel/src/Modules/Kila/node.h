@@ -53,8 +53,7 @@ namespace Ak::Kl
 		//import
 	};
 
-	struct Node;
-	using node_ptr = Unique_ptr<Node>;
+	using node_ptr = Unique_ptr<struct Node>;
 	using node_value = std::variant<node_op, double, bool, identifier>;
 
 	struct Node

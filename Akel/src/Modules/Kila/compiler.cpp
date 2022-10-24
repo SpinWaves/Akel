@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 23/10/2022
+// Updated : 25/10/2022
 
 #include "file.h"
 #include "compiler.h"
@@ -9,7 +9,7 @@
 #include "token_iterator.h"
 #include "stream_stack.h"
 #include "compiler_context.h"
-#include <functions.h>
+#include "functions.h"
 
 namespace Ak::Kl
 {
@@ -17,16 +17,6 @@ namespace Ak::Kl
 	{
 		return unexpected_syntax_error(std::to_string(it->get_value()).c_str(), it->get_line_number());
 	}
-
-	struct possible_flow
-    {
-        size_t break_level;
-        bool can_continue;
-        type_handle return_type_id;
-
-        inline possible_flow add_loop() { return possible_flow{break_level+1, true, return_type_id}; }
-        inline static possible_flow in_function(type_handle return_type_id) { return possible_flow{0, false, return_type_id}; }
-    };
 
 	std::string Compiler::loadFile(const std::string& path)
 	{
@@ -39,12 +29,12 @@ namespace Ak::Kl
 
 	type_handle parse_type(compiler_context& ctx, tk_iterator& it)
 	{
-		if(!it->is_keyword())
+		if(!_it->is_keyword())
 			unexpected_syntax(it).expose();
 		
 		type_handle t = nullptr;
 		
-		switch(it->get_token())
+		switch(_it->get_token())
 		{
 			case Tokens::t_num: t = ctx.get_handle(simple_type::number); break;
 			case Tokens::t_void: t = ctx.get_handle(simple_type::nothing); break;
@@ -68,157 +58,131 @@ namespace Ak::Kl
 		expected_syntax_error(std::to_string(value).c_str(), it->get_line_number()).expose();
 	}
 
-	std::string parse_declaration_name(compiler_context& ctx, tk_iterator& it, bool is_function)
+	std::string parse_declaration_name(compiler_context& _ctx, tk_iterator& it, bool is_function)
 	{
-		if(!it->is_identifier())
-			unexpected_syntax(it).expose();
+		if(!_it->is_identifier())
+			unexpected_syntax(_it).expose();
 
-		std::string ret = it->get_identifier().name;
+		std::string ret = _it->get_identifier().name;
 
-		if(!ctx.can_declare(ret, is_function))
-			already_declared_error(ret.c_str(), it->get_line_number()).expose();
+		if(!_ctx.can_declare(ret, is_function))
+			already_declared_error(ret.c_str(), _it->get_line_number()).expose();
 
 		++it;
 
 		return ret;
 	}
 
-	std::vector<expression<lvalue>::ptr> compile_variable_declaration(compiler_context& ctx, tk_iterator& it)
+	void Compiler::compile_variable_declaration()
     {
-        std::string name = parse_declaration_name(ctx, it, false);
+        std::string name = parse_declaration_name(_ctx, _it, false);
 
         type_handle type_id = nullptr;
-        if(it->has_value(Tokens::type_specifier))
+        if(_it->has_value(Tokens::type_specifier))
         {
-            parse_token_value(ctx, it, Tokens::type_specifier);
-            type_id = parse_type(ctx, it);
+            parse_token_value(_it, Tokens::type_specifier);
+            type_id = parse_type(_ctx, _it);
 
             if(type_id == type_registry::get_void_handle())
-                syntax_error("cannot declare void variable", it->get_line_number()).expose();
+                syntax_error("cannot declare void variable", _it->get_line_number()).expose();
 
-			if(it->has_value(Tokens::square_b))
+			if(_it->has_value(Tokens::square_b))
 			{
 				++it;
-				parse_token_value(ctx, it, Tokens::square_e);
-				type_id = ctx.get_handle(array_type{type_id});
+				parse_token_value(_it, Tokens::square_e);
+				type_id = _ctx.get_handle(array_type{type_id});
 			}
         }
 
         std::vector<expression<lvalue>::ptr> ret;
 
-        if(it->has_value(Tokens::assign))
+        if(_it->has_value(Tokens::assign))
         {
-            ++it;
-            ret.emplace_back(build_initialization_expression(ctx, it, type_id, false));
+            ++_it;
+            ret.emplace_back(build_initialization_expression(_ctx, _it, type_id, false));
         }
         else
             ret.emplace_back(build_default_initialization(type_id));
 
-        ctx.create_identifier(std::move(name), type_id);
+        _ctx.create_identifier(std::move(name), type_id);
 
         return ret;
     }
 
-	void compile_simple_statement(compiler_context& ctx, tk_iterator& it);
-    void compile_block_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf);
-	void compile_for_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf);
-	void compile_while_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf);
-	void compile_if_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf);
-	void compile_var_statement(compiler_context& ctx, tk_iterator& it);
-	void compile_break_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf);
-	void compile_return_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf);
-
-	void compile_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf)
+	void Compiler::compile_statement()
     {
-        if(it->is_keyword())
+        if(_it->is_keyword())
         {
-            switch(it->get_token())
+            switch(_it->get_token())
             {
-                case Tokens::kw_for:       return compile_for_statement(ctx, it, pf.add_loop());
-                case Tokens::kw_while:     return compile_while_statement(ctx, it, pf.add_loop());
-                case Tokens::statement_if: return compile_if_statement(ctx, it, pf);
-                case Tokens::kw_break:     return compile_break_statement(ctx, it, pf);
-                case Tokens::kw_return:    return compile_return_statement(ctx, it, pf);
+                case Tokens::kw_for:       return compile_for_statement();
+                case Tokens::kw_while:     return compile_while_statement();
+                case Tokens::statement_if: return compile_if_statement();
+                case Tokens::kw_break:     return compile_break_statement();
+                case Tokens::kw_return:    return compile_return_statement();
 
                 default: break;
             }
         }
-		else if(it->is_identifier() && ctx.can_declare(it->get_identifier().name, false))
-			return compile_var_statement(ctx, it);
+		else if(_it->is_identifier() && _ctx.can_declare(_it->get_identifier().name, false))
+			return compile_var_statement();
 
-        if(it->has_value(Tokens::embrace_b))
-            return compile_block_statement(ctx, it, pf);
-        return compile_simple_statement(ctx, it);
+        if(_it->has_value(Tokens::embrace_b))
+            return compile_block_statement();
+        return compile_simple_statement();
     }
 
-	void compile_simple_statement(compiler_context& ctx, tk_iterator& it)
+	void Compiler::compile_simple_statement()
     {
-		create_simple_statement(build_void_expression(ctx, it));
-		parse_token_value(ctx, it, Tokens::endline);
+		parse_token_value(_it, Tokens::endline);
     }
 
-	void compile_while_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf)
+	void Compiler::compile_while_statement()
     {
-		parse_token_value(ctx, it, Tokens::kw_while);
+		parse_token_value(_it, Tokens::kw_while);
 
 		bool brackets = false;
 
-		if(it->has_value(Tokens::bracket_b))
+		if(_it->has_value(Tokens::bracket_b))
 		{
-			parse_token_value(ctx, it, Tokens::bracket_b);
+			parse_token_value(_it, Tokens::bracket_b);
 			brackets = true;
 		}
 
-		expression<number>::ptr expr = build_boolean_expression(ctx, it);
-
 		if(brackets)
-			parse_token_value(ctx, it, Tokens::bracket_e);
+			parse_token_value(_it, Tokens::bracket_e);
 
-		parse_token_value(ctx, it, Tokens::kw_do);
+		parse_token_value(_it, Tokens::kw_do);
 
-		compile_block_statement(ctx, it, pf);
-
-		create_while_statement(std::move(expr), std::move(block));
+		compile_block_statement();
     }
 
-	void compile_return_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf)
+	void Compiler::compile_return_statement()
     {
-        parse_token_value(ctx, it, Tokens::kw_return);
+        parse_token_value(_it, Tokens::kw_return);
 
         if(pf.return_type_id == type_registry::get_void_handle())
         {
-            parse_token_value(ctx, it, Tokens::semicolon);
+            parse_token_value(_it, Tokens::semicolon);
             return create_return_void_statement();
         }
-        expression<lvalue>::ptr expr = build_initialization_expression(ctx, it, pf.return_type_id, true);
-        parse_token_value(ctx, it, Tokens::endline);
-        create_return_statement(std::move(expr));
+        parse_token_value(_it, Tokens::endline);
     }
 
-    std::vector<statement_ptr> compile_block_contents(compiler_context& ctx, tk_iterator& it, possible_flow pf)
+    void Compiler::compile_block_statement()
     {
-        std::vector<statement_ptr> ret;
-
-        if(it->has_value(Tokens::embrace_b))
+		_ctx.scope();
+        if(_it->has_value(Tokens::embrace_b))
         {
-            parse_token_value(ctx, it, Tokens::embrace_b);
+            parse_token_value(_it, Tokens::embrace_b);
 
-            while(!it->has_value(Tokens::embrace_e))
-                ret.push_back(compile_statement(ctx, it, pf));
+            while(!_it->has_value(Tokens::embrace_e))
+                ret.push_back(compile_statement(_ctx, _it));
 
-            parse_token_value(ctx, it, Tokens::embrace_e);
+            parse_token_value(_it, Tokens::embrace_e);
         }
         else
-            ret.push_back(compile_statement(ctx, it, pf));
-
-        return ret;
-    }
-
-    statement_ptr compile_block_statement(compiler_context& ctx, tk_iterator& it, possible_flow pf)
-    {
-		ctx.scope();
-		std::vector<statement_ptr> block = compile_block_contents(ctx, it, pf);
-		return create_block_statement(std::move(block));
+            ret.push_back(compile_statement(_ctx, _it));
     }
 
 	std::vector<uint32_t> Compiler::generateSpirV(const std::string& code)
@@ -230,30 +194,27 @@ namespace Ak::Kl
 		};
 
 		StreamStack stream(&get);
-		tk_iterator it(stream);
+		tk_iterator it_tmp(stream);
 
-		compiler_context context;
+		it = std::move(it_tmp);
 
 		std::vector<function_body> function_bodys;
-		std::vector<expression<lvalue>::ptr> initializers;
 
-		while(it())
+		while(_it())
 		{
-			if(!std::holds_alternative<Tokens>(it->get_value()))
-	            unexpected_syntax(it).expose();
+			if(!std::holds_alternative<Tokens>(_it->get_value()))
+	            unexpected_syntax(_it).expose();
 
-			switch(it->get_token()) // global scope
+			switch(_it->get_token()) // global scope
 			{
-				case Tokens::kw_function: function_bodys.emplace_back(context, it); break;
-
-				default:
-					for(expression<lvalue>::ptr& expr : compile_variable_declaration(context, it))
-						initializers.push_back(std::move(expr));
-				break;
+				case Tokens::kw_function: function_bodys.emplace_back(context, _it); break;
+				default: compile_variable_declaration() break;
 			}
 		}
 
 		for(function_body& f : function_bodys)
 			f.compile();
+
+		return _code;
 	}
 }

@@ -15,13 +15,13 @@ uniform viewData
     proj: mat4
 }
 
-fn Vmain() -> vec4
+function Vmain() -> vec4
 {
      pos = vec3(viewData.model * vec4(pos, 1.0))
      return viewData.proj * viewData.view * vec4(pos, 1.0)
 } 
   
-f n Fmain() -> vec4
+function Fmain() -> vec4
 {
     return color
 }

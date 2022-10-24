@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 23/10/2022
+// Updated : 25/10/2022
 
 #include "functions.h"
 #include "compiler.h"
@@ -33,7 +33,7 @@ namespace Ak::Kl
 				if(!ret.params.empty())
 					parse_token_value(it, Tokens::comma);
 
-				std::string name = parse_declaration_name(ctx, it);
+				std::string name = parse_declaration_name(ctx, it, false);
 				ret.params.push_back(name);
 
 				parse_token_value(it, Tokens::colon);
