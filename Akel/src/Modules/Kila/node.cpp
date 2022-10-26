@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/05/2022
-// Updated : 15/05/2022
+// Updated : 26/10/2022
 
 #include "node.h"
 #include "errors.h"
@@ -87,10 +87,6 @@ namespace Ak::Kl
 						_type_id = boolean_handle;
 						_lvalue = false;
 						_children[0]->check_conversion(number_handle, false);
-					break;
-					case node_op::len:
-						_type_id = number_handle;
-						_lvalue = false;
 					break;
 					case node_op::add:
 					case node_op::sub:
@@ -185,7 +181,7 @@ namespace Ak::Kl
 						ilt.inner_type_id.reserve(_children.size());
 
 						for(const node_ptr& child : _children)
-						ilt.inner_type_id.push_back(child->get_type_id());
+							ilt.inner_type_id.push_back(child->get_type_id());
 
 						_type_id = context.get_handle(ilt);
 						_lvalue = false;

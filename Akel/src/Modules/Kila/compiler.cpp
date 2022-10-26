@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 25/10/2022
+// Updated : 26/10/2022
 
 #include "file.h"
 #include "compiler.h"
@@ -10,6 +10,7 @@
 #include "stream_stack.h"
 #include "compiler_context.h"
 #include "functions.h"
+#include "spirv_data.h"
 
 namespace Ak::Kl
 {
@@ -153,9 +154,27 @@ namespace Ak::Kl
 			parse_token_value(_it, Tokens::bracket_e);
 
 		parse_token_value(_it, Tokens::kw_do);
-
 		compile_block_statement();
     }
+
+	void Compiler::compile_for_statement()
+	{
+		parse_token_value(_it, Tokens::kw_for);
+
+		bool brackets = false;
+
+		if(_it->has_value(Tokens::bracket_b))
+		{
+			parse_token_value(_it, Tokens::bracket_b);
+			brackets = true;
+		}
+
+		if(brackets)
+			parse_token_value(_it, Tokens::bracket_e);
+
+		parse_token_value(_it, Tokens::kw_do);
+		compile_block_statement();
+	}
 
 	void Compiler::compile_return_statement()
     {
@@ -194,9 +213,7 @@ namespace Ak::Kl
 		};
 
 		StreamStack stream(&get);
-		tk_iterator it_tmp(stream);
-
-		it = std::move(it_tmp);
+		_it = tk_iterator(stream);
 
 		std::vector<function_body> function_bodys;
 
@@ -207,7 +224,13 @@ namespace Ak::Kl
 
 			switch(_it->get_token()) // global scope
 			{
-				case Tokens::kw_function: function_bodys.emplace_back(context, _it); break;
+				case Tokens::kw_function:
+				{
+					function_bodys.emplace_back(context, _it);
+					_code.push_back(Spv::OpFunction);
+					break;
+				}
+
 				default: compile_variable_declaration() break;
 			}
 		}
