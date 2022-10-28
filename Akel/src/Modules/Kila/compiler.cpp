@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 26/10/2022
+// Updated : 28/10/2022
 
 #include "file.h"
 #include "compiler.h"
@@ -11,6 +11,7 @@
 #include "compiler_context.h"
 #include "functions.h"
 #include "spirv_data.h"
+#include "spirv_part.h"
 
 namespace Ak::Kl
 {
@@ -217,6 +218,8 @@ namespace Ak::Kl
 
 		std::vector<function_body> function_bodys;
 
+		SpirvPart part;
+
 		while(_it())
 		{
 			if(!std::holds_alternative<Tokens>(_it->get_value()))
@@ -227,7 +230,9 @@ namespace Ak::Kl
 				case Tokens::kw_function:
 				{
 					function_bodys.emplace_back(context, _it);
-					_code.push_back(Spv::OpFunction);
+					part.add(Spv::OpFunction, /* return type id*/, /*fn id*/, 0, /*fn type id*/);
+					_code.insert(_code.end(), part.begin(), part.end());
+					part.clearData();
 					break;
 				}
 

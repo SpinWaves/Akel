@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/11/2021
-// Updated : 15/05/2022
+// Updated : 28/10/2022
 
 #ifndef __AK_KILA__
 #define __AK_KILA__
@@ -19,5 +19,6 @@
 #include <Modules/Kila/functions.h>
 #include <Modules/Kila/compiler.h>
 #include <Modules/Kila/node_parser.h>
+#include <Modules/Kila/spirv_part.h>
 
 #endif // __AK_KILA__
