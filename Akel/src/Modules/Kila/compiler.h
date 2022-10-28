@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/05/2022
-// Updated : 24/10/2022
+// Updated : 28/10/2022
 
 #ifndef __AK_KILA_COMPILER__
 #define __AK_KILA_COMPILER__
@@ -40,6 +40,7 @@ namespace Ak::Kl
 			void compile_return_statement();
 			void compile_statement();
 			void compile_variable_declaration();
+			void compile_function_declaration(class function_body fn);
 			
 			compiler_context _ctx;
 			std::vector<uint32_t> _code;

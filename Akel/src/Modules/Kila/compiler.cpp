@@ -205,6 +205,13 @@ namespace Ak::Kl
             ret.push_back(compile_statement(_ctx, _it));
     }
 
+	void Compiler::compile_function_declaration(function_body fn)
+	{
+		SpirvPart part;
+		part.add(Spv::OpFunction, /* return type id*/, /*fn id*/, 0, /*fn type id*/);
+		_code.insert(_code.end(), part.begin(), part.end());
+	}
+
 	std::vector<uint32_t> Compiler::generateSpirV(const std::string& code)
 	{
 		func::function<int()> get = [&]()
@@ -218,8 +225,6 @@ namespace Ak::Kl
 
 		std::vector<function_body> function_bodys;
 
-		SpirvPart part;
-
 		while(_it())
 		{
 			if(!std::holds_alternative<Tokens>(_it->get_value()))
@@ -230,9 +235,7 @@ namespace Ak::Kl
 				case Tokens::kw_function:
 				{
 					function_bodys.emplace_back(context, _it);
-					part.add(Spv::OpFunction, /* return type id*/, /*fn id*/, 0, /*fn type id*/);
-					_code.insert(_code.end(), part.begin(), part.end());
-					part.clearData();
+					compile_function_declaration(function_bodys.back());
 					break;
 				}
 

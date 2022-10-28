@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 21/08/2022
+// Updated : 28/10/2022
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
