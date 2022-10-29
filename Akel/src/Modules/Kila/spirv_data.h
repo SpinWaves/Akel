@@ -1,13 +1,24 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/05/2022
-// Updated : 27/05/2022
+// Updated : 25/10/2022
 
 #ifndef __AK_KILA_SPIR_V_DATA__
 #define __AK_KILA_SPIR_V_DATA__
 
 namespace Ak::Kl
 {
+	constexpr uint32_t makeSpirvVersion(uint32_t major, uint32_t minor)
+	{
+		return (major << 16) | (minor << 8);
+	}
+
+	constexpr uint32_t SpirvMagicNumber = 0x07230203;
+	constexpr uint32_t SpirvMajorVersion = 1;
+	constexpr uint32_t SpirvMinorVersion = 6;
+	constexpr uint32_t SpirvRevision = 1;
+	constexpr uint32_t SpirvVersion = makeSpirvVersion(SpirvMajorVersion, SpirvMinorVersion);
+
 	enum class Spv
 	{
 		OpNop = 0,
