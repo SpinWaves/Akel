@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 24/09/2022
+// Updated : 03/11/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -195,10 +195,10 @@ namespace Ak
 				{
 					_uniforms.set_duet(sets[i]->bindings[j]->name,
 						Shader::Uniform{
-							sets[i]->bindings[j]->binding,
-							sets[i]->bindings[j]->set,
-							sets[i]->bindings[j]->block.offset,
-							sets[i]->bindings[j]->block.size,
+							static_cast<int32_t>(sets[i]->bindings[j]->binding),
+							static_cast<int32_t>(sets[i]->bindings[j]->set),
+							static_cast<int32_t>(sets[i]->bindings[j]->block.offset),
+							static_cast<int32_t>(sets[i]->bindings[j]->block.size),
 							_type
 						});
 

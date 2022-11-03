@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 01/10/2022
+// Updated : 03/11/2022
 
 #include "heap.h"
 
@@ -14,22 +14,22 @@ namespace Ak
         _callbacks = callbacks;
         _device = device;
 
-        for(size_t i = 0; i < props.memoryTypeCount; i++)
+        for(uint32_t i = 0; i < props.memoryTypeCount; i++)
         {
             VkMemoryType& type = props.memoryTypes[i];
 
             if(type.heapIndex == _heapIndex)
-                _memoryTypes.emplace_back(MemoryType{ static_cast<uint32_t>(i), type.propertyFlags });
+                _memoryTypes.emplace_back(MemoryType{ i, type.propertyFlags });
         }
     }
 
 	bool const GPU_Heap::match(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags, uint32_t* typeIndex) const
     {
-        for(size_t i = 0; i < _memoryTypes.size(); i++)
+        for(uint32_t i = 0; i < _memoryTypes.size(); i++)
         {
             if((requirements.memoryTypeBits & (1 << _memoryTypes[i].typeIndex)) != 0 && (_memoryTypes[i].flags & flags) == flags)
             {
-                *typeIndex = static_cast<uint32_t>(i);
+                *typeIndex = i;
                 return true;
             }
         }

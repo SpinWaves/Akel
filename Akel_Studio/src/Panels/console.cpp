@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 09/07/2021
-// Updated : 13/09/2022
+// Updated : 03/11/2022
 
 #include <Panels/console.h>
 #include <Fonts/material_font.h>
@@ -90,10 +90,10 @@ void Console::inputBar()
 
     bool reclaimFocus = false;
 
-	char in[_inBufferSize] = "";
+	std::string in(_inBufferSize, 0);
 
     ImGui::PushItemWidth(-ImGui::GetStyle().ItemSpacing.x * 7);
-    if(ImGui::InputText(_eltm->getText("Console.input").c_str(), in, _inBufferSize, inputTextFlags, InputCallback, this))
+    if(ImGui::InputText(_eltm->getText("Console.input").c_str(), in.data(), _inBufferSize, inputTextFlags, InputCallback, this))
     {
 		_input = in;
 		_sh.command(_input);

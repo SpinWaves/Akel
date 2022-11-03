@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 16/09/2022
+// Updated : 03/11/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -77,8 +77,9 @@ namespace Ak
             inline uint32_t getActiveImageIndex()  { return _active_image_index; }
             inline uint32_t getImageIndex()        { return _image_index; }
 
-            inline GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags) { return _allocator.allocChunk(requirements, flags); }
-            inline void freeChunk(GPU_Mem_Chunk& chunk) { _allocator.freeChunk(chunk); }
+            //inline GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags) { return _allocator.allocChunk(requirements, flags); }
+            //inline void freeChunk(GPU_Mem_Chunk& chunk) { _allocator.freeChunk(chunk); }
+			inline const VmaAllocator& getAllocator() const noexcept { return _allocator; }
 
             inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
             inline bool isFrameBufferResizeRequested() const noexcept { return _framebufferResized; }
@@ -92,7 +93,8 @@ namespace Ak
             Instance _instance;
             SwapChain _swapchain;
             Semaphore _semaphore;
-            Allocator_GPU _allocator;
+            //Allocator_GPU _allocator;
+			VmaAllocator _allocator;
             ValidationLayers _layers;
             DescriptorPool _desc_pool;
             std::vector<CmdBuffer*> _cmd_buffers;

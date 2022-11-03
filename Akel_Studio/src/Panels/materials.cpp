@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 30/09/2022
+// Updated : 03/11/2022
 
 #include <Panels/materials.h>
 #include <Fonts/material_font.h>
@@ -73,7 +73,7 @@ void Materials::onUpdate(Ak::Maths::Vec2<int>& size)
 
 							bool already_exists = std::find_if(_names.begin(), _names.end(), [&](std::string s) { return std::strcmp(s.c_str(), name) == 0; }) != _names.end();
 
-							if(ImGui::Button(std::string(_eltm->getText("Materials.rename") + " "AKS_ICON_MD_NOTE_ADD).c_str(), ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)) && std::strlen(name) != 0 && !already_exists)
+							if(ImGui::Button(std::string(_eltm->getText("Materials.rename") + " " AKS_ICON_MD_NOTE_ADD).c_str(), ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)) && std::strlen(name) != 0 && !already_exists)
 							{
 								*it = name;
 								std::memset(name, 0, 128);
@@ -96,7 +96,7 @@ void Materials::onUpdate(Ak::Maths::Vec2<int>& size)
 			ImGui::EndChild();
 		}
 		ImGui::Separator();
-		if(ImGui::Button(std::string(_eltm->getText("Materials.add") + " "AKS_ICON_MD_ADD).c_str(), ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)))
+		if(ImGui::Button(std::string(_eltm->getText("Materials.add") + " " AKS_ICON_MD_ADD).c_str(), ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)))
 			_new_material = true;
         ImGui::End();
     }
@@ -123,7 +123,7 @@ void Materials::onUpdate(Ak::Maths::Vec2<int>& size)
 
 			bool already_exists = std::find_if(_names.begin(), _names.end(), [&](std::string s) { return std::strcmp(s.c_str(), name) == 0; }) != _names.end();
 
-			if(ImGui::Button(std::string(_eltm->getText("Materials.create") + " "AKS_ICON_MD_NOTE_ADD).c_str(), ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)) && std::strlen(name) != 0 && !already_exists)
+			if(ImGui::Button(std::string(_eltm->getText("Materials.create") + " " AKS_ICON_MD_NOTE_ADD).c_str(), ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)) && std::strlen(name) != 0 && !already_exists)
 			{
 				_names.emplace_back(name);
 				std::memset(name, 0, 128);

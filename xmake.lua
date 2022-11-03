@@ -6,10 +6,11 @@
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsdl_ttf", "libsndfile", "openal-soft")
+add_requires("spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-memory-allocator")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
+set_config("cxx", "clang++")
 
 set_objectdir("build/objects/$(os)_$(arch)")
 set_targetdir("build/$(os)_$(arch)")
@@ -39,6 +40,7 @@ target("Akel")
 	add_packages("libsdl",		  { public = true })
 	add_packages("libsdl_ttf",    { public = true })
 	add_packages("imgui_sdl_vk",  { public = true })
+	add_packages("vulkan-memory-allocator", { public = true })
 
 	add_packages("libsndfile",    { public = true })
 	add_packages("openal-soft",   { public = true })

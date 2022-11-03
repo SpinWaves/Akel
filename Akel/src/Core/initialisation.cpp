@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 30/08/2022
+// Updated : 03/11/2022
 
 #include <Audio/audio.h>
 #include <Renderer/Core/render_core.h>
@@ -35,10 +35,10 @@ namespace Ak
 
 		if(std::strcmp(AK_arch, "x86") != 0)
 		{
-			Core::log::report(ERROR, "Akel can only run on x86 architecture, you are trying to run it on a "AK_arch" architecture");
+			Core::log::report(ERROR, "Akel can only run on x86 architecture, you are trying to run it on a " AK_arch " architecture");
 			return false;
 		}
-		Core::log::report("arch: "AK_arch);
+		Core::log::report("arch: " AK_arch);
 
 		if(!Core::isVulkanSupported())
 			Core::log::report(FATAL_ERROR, "Vulkan is not supported");

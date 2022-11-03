@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 01/10/2022
+// Updated : 03/11/2022
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
@@ -45,8 +45,22 @@ namespace Ak
 	{
 		Ak_assert(_buffer != VK_NULL_HANDLE, "trying to destroy an uninit video buffer");
 		vkDestroyBuffer(Render_Core::get().getDevice().get(), _buffer, nullptr);
-		Render_Core::get().freeChunk(_mem_chunck);
+		vkFreeMemory(Render_Core::get().getDevice().get(), _mem_chunck.memory, nullptr);
 	}
+
+	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
+    {
+        VkPhysicalDeviceMemoryProperties memProperties;
+        vkGetPhysicalDeviceMemoryProperties(Render_Core::get().getDevice().getPhysicalDevice(), &memProperties);
+
+        for(uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
+        {
+            if((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
+                return i;
+        }
+
+        Core::log::report(FATAL_ERROR, "Vulkan : failed to find suitable memory type");
+    }
 
 	void Buffer::createBuffer(VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
 	{
@@ -63,10 +77,15 @@ namespace Ak
 
 		VkMemoryRequirements memRequirements;
 		vkGetBufferMemoryRequirements(device, _buffer, &memRequirements);
+		VkMemoryAllocateInfo allocInfo{};
+        allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocInfo.allocationSize = memRequirements.size;
+        allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 
-		_mem_chunck = Render_Core::get().allocChunk(memRequirements, properties);
+        if(vkAllocateMemory(device, &allocInfo, nullptr, &_mem_chunck.memory) != VK_SUCCESS)
+            Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate buffer memory");
 
-		if(vkBindBufferMemory(device, _buffer, _mem_chunck.memory, _mem_chunck.offset) != VK_SUCCESS)
+		if(vkBindBufferMemory(device, _buffer, _mem_chunck.memory, 0) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : unable to bind device memory to a buffer object");
 
 		Ak_assert(_buffer != VK_NULL_HANDLE, "Vulkan : something went wrong in the creation of a buffer");

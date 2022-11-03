@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2021
-// Updated : 15/05/2022
+// Updated : 03/11/2022
 
 #include <Modules/Kila/lexer.h>
 #include <Modules/Kila/errors.h>
@@ -115,7 +115,7 @@ namespace Ak::Kl
 
             switch(get_char_type(c))
             {
-                case char_type::eof:  return {eof(), line};
+                case char_type::eof:  return {eof(), static_cast<unsigned int>(line)};
                 case char_type::space: continue;
                 case char_type::alphanum: stream.push_back(c); return fetch_word(stream);
                 case char_type::punct:

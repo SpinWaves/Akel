@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 01/10/2022
+// Updated : 03/11/2022
 
 #include <Core/core.h>
 #include "pages.h"
@@ -72,7 +72,8 @@ namespace Ak
 	    info.allocationSize = size;
 	    info.memoryTypeIndex = typeIndex;
 
-	    vkAllocateMemory(device, &info, callbacks, &_memory);
+	    if(vkAllocateMemory(device, &info, callbacks, &_memory) != VK_SUCCESS)
+			Core::log::report(FATAL_ERROR, "GPU Allocator : cannot allocate GPU memory");
 
 	    pageMap.insert({ _memory, this });
 	}
