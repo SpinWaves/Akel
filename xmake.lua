@@ -1,16 +1,15 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 01/10/2022
+-- Updated : 04/11/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-memory-allocator")
+add_requires("spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
-set_config("cxx", "clang++")
 
 set_objectdir("build/objects/$(os)_$(arch)")
 set_targetdir("build/$(os)_$(arch)")
@@ -40,6 +39,7 @@ target("Akel")
 	add_packages("libsdl",		  { public = true })
 	add_packages("libsdl_ttf",    { public = true })
 	add_packages("imgui_sdl_vk",  { public = true })
+	add_packages("sol2",  		  { public = true })
 	add_packages("vulkan-memory-allocator", { public = true })
 
 	add_packages("libsndfile",    { public = true })
@@ -117,4 +117,14 @@ target("mult_win_render")
 	set_targetdir("Tests/Windowing/multiple_windows_rendering/")
 	add_includedirs("Akel/src", "libs/include")
     add_files("Tests/Windowing/multiple_windows_rendering/*.cpp")
+target_end()
+
+-- Lua tester build
+target("lua")
+	set_default(false)
+    set_kind("binary")
+    add_deps("Akel")
+	set_targetdir("Tests/Scripting/Lua/")
+	add_includedirs("Akel/src", "libs/include")
+    add_files("Tests/Scripting/Lua/*.cpp")
 target_end()

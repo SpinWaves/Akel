@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 03/11/2022
+// Updated : 04/11/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -30,6 +30,9 @@
 #include <imgui.h>
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_vulkan.h>
+
+// Lua
+#include <sol/sol.hpp>
 
 // APIs' maths
 #define GLM_FORCE_RADIANS

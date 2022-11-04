@@ -1,0 +1,9 @@
+16:7 ---- Begin Start ----
+16:7 ---- architecture: 64bits
+16:7 ---- arch: x86
+16:7 ---- End ----
+16:7 ---- Begin Runtime ----
+16:7 ---- End ----
+16:7 ---- Begin Shutdown ----
+16:7 ---- Strong Warning: Component Stack: unable to free a component "Component" address(0x5574da32d020), unable to find its allocator
+16:7 ---- End ----
