@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 20/08/2022
+// Updated : 04/11/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -70,7 +70,7 @@ namespace Ak
             }
             return __jam.alloc<T>(std::forward<Args>(args)...);
         }
-        return new T(std::forward<Args>(args)...);
+		return ::new T(std::forward<Args>(args)...);
     }
 
     template <class T>
@@ -94,7 +94,7 @@ namespace Ak
             */
             return __jam.alloc<T>(size);
         }
-        return new T(size);
+		return ::new T(size);
     }
 
     template <class T>

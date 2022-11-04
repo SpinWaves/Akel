@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 03/11/2022
+// Updated : 04/11/2022
 
 #include <Audio/audio.h>
 #include <Renderer/Core/render_core.h>
@@ -40,8 +40,17 @@ namespace Ak
 		}
 		Core::log::report("arch: " AK_arch);
 
+		if(project->app == nullptr)
+		{
+			Core::log::report(ERROR, "Application pointer is null");
+			return false;
+		}
+
 		if(!Core::isVulkanSupported())
-			Core::log::report(FATAL_ERROR, "Vulkan is not supported");
+		{
+			Core::log::report(ERROR, "Vulkan is not supported");
+			return false;
+		}
 
 		if(project->project_file_name != "")
 			Core::ProjectFile::setName(project->project_file_name);
