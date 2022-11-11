@@ -1,143 +1,28 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 01/10/2022
+// Updated : 11/11/2022
 
 #include <Maths/maths.h>
 
 namespace Ak
 {
-    void FatalError(std::string message, ...);
     void Error(std::string message, ...);
     void Warning(std::string message, ...);
 
     template <class T, typename ... Args>
     T* JamAllocator::alloc(Args&& ... args)
     {
-        if(_heap == nullptr)
-        {
-            FatalError("Jam Allocator: you need to initialize the allocator before asking him to give you memory");
-            return nullptr;
-        }
-        size_t sizeType = sizeof(T);
-        if(!canHold(sizeType))
-        {
-            //if(_autoResize)
-            //    increase_size(_heapSize * (4/3));
-            //else
-            {
-                FatalError("Jam Allocator: the requested allocation is too large for the allocator (%d > %d), free up memory or increase the size of the allocator", sizeType, _heapSize - _memUsed);
-                return nullptr;
-            }
-        }
-
-        T* ptr = nullptr;
-        BinarySearchTree<JamAllocator::flag*>* node = nullptr;
-
-        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
-
-        if(_freeSpaces != nullptr && _freeSpaces->has_data())
-        {
-			JamAllocator::flag finder;
-			finder.size = sizeType;
-		   node = _freeSpaces->find(&finder);
-        }
-
-        if(node != nullptr)
-        {
-            _freeSpaces->remove(node, false);
-            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (reinterpret_cast<uintptr_t>(node->getData()) - reinterpret_cast<uintptr_t>(_heap)));
-            if(!_usedSpaces->has_data())
-                _usedSpaces = node;
-            else
-                _usedSpaces->add(node); // Give node to Used Spaces Tree
-        }
-
-        if(ptr == nullptr) // If we haven't found free flag
-        {
-            JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
-            flag->size = sizeType;
-            _memUsed += sizeof(JamAllocator::flag);
-
-            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag*>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
-            init_node(node, flag);
-
-            if(_usedSpaces == nullptr || !_usedSpaces->has_data())
-                _usedSpaces = node;
-            else
-                _usedSpaces->add(node); // Give node to Used Spaces Tree
-            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // Allocate Pointer
-            _memUsed += sizeType;
-        }
-
-        watchdog.unlock();
-
-        if(std::is_class<T>::value)
+		T* ptr = reinterpret_cast<T*>(internal_allocation(sizeof(T)));
+        if constexpr(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
-
     	return ptr;
     }
 
     template <class T>
     T* JamAllocator::alloc(size_t size)
     {
-        if(_heap == nullptr)
-        {
-            FatalError("Jam Allocator: you need to initialize the allocator before asking him to give you memory");
-            return nullptr;
-        }
-        if(!canHold(size))
-        {
-            //if(_autoResize)
-            //    increase_size(_heapSize * (4/3));
-            //else
-            {
-                FatalError("Jam Allocator: the requested allocation is too large for the allocator (%d > %d), free up memory or increase the size of the allocator", size, _heapSize - _memUsed);
-                return nullptr;
-            }
-        }
-
-        T* ptr = nullptr;
-        BinarySearchTree<JamAllocator::flag*>* node = nullptr;
-
-        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
-
-        if(_freeSpaces != nullptr && _freeSpaces->has_data())
-        {
-			JamAllocator::flag finder;
-			finder.size = size;
-		   node = _freeSpaces->find(&finder);
-        }
-        if(node != nullptr)
-        {
-            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + (reinterpret_cast<uintptr_t>(node->getData()) - reinterpret_cast<uintptr_t>(_heap)));
-            if(!_usedSpaces->has_data())
-                _usedSpaces = node;
-            else
-                _usedSpaces->add(node); // Give node to Used Spaces Tree
-            _freeSpaces->remove(node, false);
-        }
-        if(ptr == nullptr) // If we haven't found free flag
-        {
-            JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
-            flag->size = size;
-            _memUsed += sizeof(JamAllocator::flag);
-            _memUsed += sizeof(_freeSpaces);
-
-            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag*>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
-            init_node(node, flag);
-
-            if(_usedSpaces == nullptr || !_usedSpaces->has_data())
-                _usedSpaces = node;
-            else
-                _usedSpaces->add(node); // Give node to Used Spaces Tree
-            ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // Allocate Pointer
-            _memUsed += size;
-        }
-
-        watchdog.unlock();
-
-        return ptr;
+		return reinterpret_cast<T*>(internal_allocation(size));
     }
 
     template <class T>
@@ -158,7 +43,7 @@ namespace Ak
             Warning("Jam Allocator: a pointer allocated by another allocator is trying to be freed");
             return;
         }
-        if(std::is_class<T>::value)
+        if constexpr(std::is_class<T>::value)
             ptr->~T();
 
         JamAllocator::flag* finder = nullptr;

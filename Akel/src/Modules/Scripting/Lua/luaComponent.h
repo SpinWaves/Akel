@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 04/11/2022
+// Updated : 10/11/2022
 
 #ifndef __AK_LUA_COMPONENT__
 #define __AK_LUA_COMPONENT__
@@ -14,7 +14,7 @@ namespace Ak::lua
 	class LuaComponent : public Component
 	{
 		public:
-			LuaComponent() = default;
+			LuaComponent();
 
 			void onAttach() override;
 			void update() override;

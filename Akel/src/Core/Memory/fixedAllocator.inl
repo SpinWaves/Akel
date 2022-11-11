@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/08/2021
-// Updated : 29/05/2022
+// Updated : 11/11/2022
 
 namespace Ak
 {
@@ -26,7 +26,7 @@ namespace Ak
 
         *_it = true;
 
-        if(std::is_class<T>::value)
+        if constexpr(std::is_class<T>::value)
         {
             T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * (std::distance(_it, _bits.rend()) - 1));
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
@@ -49,7 +49,7 @@ namespace Ak
 
         std::unique_lock<std::mutex> watchdog(_mutex);
 
-        if(std::is_class<T>::value)
+        if constexpr(std::is_class<T>::value)
             ptr->~T();
 
         const size_t index = (reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(_heap)) / _block_size;

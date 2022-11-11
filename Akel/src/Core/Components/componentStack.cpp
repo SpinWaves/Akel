@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 03/07/2022
+// Updated : 11/11/2022
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -24,6 +24,7 @@ namespace Ak
 			_components.erase(it);
 		}
 	}
+
 	void ComponentStack::remove_component(const char* name)
 	{
 		for(size_t i = 0; i < _components.size(); i++)

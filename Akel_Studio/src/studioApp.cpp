@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 04/11/2022
+// Updated : 05/11/2022
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -10,6 +10,16 @@
 #include <Fonts/material_font.h>
 
 Ak::AkelInstance Akel_init()
+{
+
+	Ak::AkelInstance project;
+		project.project_file_path = std::string(Ak::Core::getMainDirPath() + "settings");
+		project.project_file_name = "akel_studio";
+        project.memory_manager_enable_fixed_allocator = false;
+	return project;
+}
+
+Ak::Application* Akel_mainApp()
 {
 	Ak::Application* app = Ak::memAlloc<Ak::Application>();
 	Ak::Core::printEngineInfo();
@@ -26,14 +36,9 @@ Ak::AkelInstance Akel_init()
 	Ak::ImGuiComponent* imgui = Ak::memAlloc<Ak::ImGuiComponent>();
 	imgui->setSettingsFilePath(std::string(Ak::Core::getMainDirPath() + "settings/akel_studio_imgui.ini").c_str());
 	app->add_component(imgui);
-	studio->setContext();
 
+	studio->setContext();
 	studio->generateFontTextures(imgui);
 
-	Ak::AkelInstance project;
-		project.project_file_path = std::string(Ak::Core::getMainDirPath() + "settings");
-		project.project_file_name = "akel_studio";
-        project.memory_manager_enable_fixed_allocator = false;
-		project.app = app;
-	return project;
+	return app;
 }

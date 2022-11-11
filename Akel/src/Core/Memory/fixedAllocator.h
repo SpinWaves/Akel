@@ -1,13 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 18/07/2021
-// Updated : 29/05/2022
+// Updated : 11/11/2022
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
 
 #include <Akpch.h>
-#include <Utils/Containers/bst.h>
+#include <Utils/bits_array.h>
 
 namespace Ak
 {
@@ -33,14 +33,13 @@ namespace Ak
             ~FixedAllocator();
 
         private:
+            std::mutex _mutex;
+            BitsArray _bits;
+            void* _heap = nullptr;
             size_t _block_size = 0;
         	size_t _heap_size = 0;
-            void* _heap = nullptr;
-            std::vector<bool> _bits;
-            bool _autoResize = false;
-            std::vector<bool>::reverse_iterator _it;
-            std::mutex _mutex;
             int _allocator_number = 0;
+            bool _autoResize = false;
     };
 }
 

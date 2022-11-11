@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 29/05/2022
+// Updated : 11/11/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -11,10 +11,7 @@
 /**
  * TODO :
  *  - Resize system
- *  - Size allocation (like malloc)
  */
-
-// JamAllocator version 2.0.2
 
 namespace Ak
 {
@@ -48,29 +45,28 @@ namespace Ak
             ~JamAllocator();
         
         private:
-
             struct flag
             {
                 unsigned int size = 0;
             };
+
+            void init_node(BinarySearchTree<flag*>* node, flag* ptr);
+			void* internal_allocation(size_t size);
             
             std::vector<std::pair<void*, unsigned int>> _resises;
-
-            size_t _heapSize = 0;
-            size_t _memUsed = 0;
+            std::mutex _mutex;
 
             void* _heap = nullptr;
             void* _heapEnd = nullptr;
 
-            bool _autoResize = false;
-            int _allocator_number = 0;
-            
             BinarySearchTree<flag*>* _freeSpaces = nullptr;
             BinarySearchTree<flag*>* _usedSpaces = nullptr;
 
-            void init_node(BinarySearchTree<flag*>* node, flag* ptr);
+            size_t _heapSize = 0;
+            size_t _memUsed = 0;
 
-            std::mutex _mutex;
+            bool _autoResize = false;
+            int _allocator_number = 0;
     };
 }
 

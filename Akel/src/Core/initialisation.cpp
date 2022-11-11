@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 04/11/2022
+// Updated : 05/11/2022
 
 #include <Audio/audio.h>
 #include <Renderer/Core/render_core.h>
@@ -39,12 +39,6 @@ namespace Ak
 			return false;
 		}
 		Core::log::report("arch: " AK_arch);
-
-		if(project->app == nullptr)
-		{
-			Core::log::report(ERROR, "Application pointer is null");
-			return false;
-		}
 
 		if(!Core::isVulkanSupported())
 		{

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/07/2021
-// Updated : 09/05/2022
+// Updated : 11/11/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -25,7 +25,7 @@ namespace Ak
 
         _allocator_number = MemoryManager::accessToControlUnit()->fixedStack.size();
         std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
-        Core::ProjectFile::setIntValue(key, Size);
+        Core::ProjectFile::setIntValue(std::move(key), Size);
         MemoryManager::accessToControlUnit()->fixedStack.emplace_back(weak_from_this());
     }
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 04/11/2022
+// Updated : 05/11/2022
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -12,17 +12,18 @@
 #include <Core/instance.h>
 
 extern Ak::AkelInstance Akel_init();
+extern Ak::Application* Akel_mainApp();
 
 int main(int argc, char** argv)
 {
 	Ak::Core::Paths::init(argv[0]);
 	Ak::Core::log::Init(argv[0]);
 
-	AK_BEGIN_SESSION("Start");
+	AK_BEGIN_SESSION("Startup");
 		Ak::AkelInstance project = std::move(Akel_init());
 		if(!Ak::initAkel(&project))
 			Ak::Core::log::report(FATAL_ERROR, "Something went wrong with Akel initialisation");
-		auto app = project.app;
+		auto app = Akel_mainApp();
 	AK_END_SESSION();
 
 	AK_BEGIN_SESSION("Runtime");

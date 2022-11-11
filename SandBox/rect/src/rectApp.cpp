@@ -97,7 +97,7 @@ Ak::AkelInstance Akel_init()
     return instance;    
 }
 
-Ak::Application* Akel_mainApplication()
+Ak::Application* Akel_mainApp()
 {
 	return Ak::memAlloc<Rect>();
 }
