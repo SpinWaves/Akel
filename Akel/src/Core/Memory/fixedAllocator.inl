@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/08/2021
-// Updated : 11/11/2022
+// Updated : 12/11/2022
 
 namespace Ak
 {
@@ -13,9 +13,7 @@ namespace Ak
     {
         if(!canAlloc())
         {
-            if(_autoResize)
-                resize(_bits.size() * 2);
-            else
+            if(!_autoResize)
             {
                 Error("Fixed Allocator: unable to alloc block, no more block free");
                 return nullptr;
@@ -24,17 +22,17 @@ namespace Ak
 
         std::unique_lock<std::mutex> watchdog(_mutex);
 
-        *_it = true;
+		size_t index = _bits.getFirstTrueBit();
+
+		std::cout << "allocation" << std::endl;
 
         if constexpr(std::is_class<T>::value)
         {
-            T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * (std::distance(_it, _bits.rend()) - 1));
+            T* ptr = reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * index);
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
-
             return ptr;
         }
-
-        return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * (std::distance(_it, _bits.rend()) - 1));
+		return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(_heap) + _block_size * index);
     }
 
     template <class T>
@@ -43,16 +41,14 @@ namespace Ak
         if(!contains(ptr))
         {
             Warning("Fixed Allocator: a pointer allocated by another allocator will be freed, this may be an error");
-            delete ptr;
             return;
         }
-
-        std::unique_lock<std::mutex> watchdog(_mutex);
 
         if constexpr(std::is_class<T>::value)
             ptr->~T();
 
+        std::unique_lock<std::mutex> watchdog(_mutex);
         const size_t index = (reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(_heap)) / _block_size;
-        _bits[index] = false;
+        _bits.set(index, 1);
     }
 }

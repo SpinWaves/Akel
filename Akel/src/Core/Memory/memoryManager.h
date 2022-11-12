@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 04/11/2022
+// Updated : 12/11/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
 
 #include <Akpch.h>
+#include <Core/projectFile.h>
 
 namespace Ak
 {
@@ -58,15 +59,15 @@ namespace Ak
         {
 		    if(Core::ProjectFile::getBoolValue("memory_manager_enable_fixed_allocator"))
             {
-                if(!std::is_class<T>::value)
-                {
-                    if(sizeof(T) <= 16)
-            			return __fixed1.alloc<T>(std::forward<Args>(args)...);
-                    if(sizeof(T) <= 32)
-            			return __fixed2.alloc<T>(std::forward<Args>(args)...);
-            		if(sizeof(T) <= 96)
-            			return __fixed3.alloc<T>(std::forward<Args>(args)...);
-                }
+				if constexpr(!std::is_class<T>::value)
+				{
+					if constexpr(sizeof(T) <= 16)
+						return __fixed1.alloc<T>(std::forward<Args>(args)...);
+					else if constexpr(sizeof(T) <= 32)
+						return __fixed2.alloc<T>(std::forward<Args>(args)...);
+					else if constexpr(sizeof(T) <= 96)
+						return __fixed3.alloc<T>(std::forward<Args>(args)...);
+				}
             }
             return __jam.alloc<T>(std::forward<Args>(args)...);
         }
@@ -77,23 +78,7 @@ namespace Ak
     T* MemoryManager::allocSize(size_t size)
     {
         if(_use && __jam.is_init())
-        {
-            /*
-            if(Core::ProjectFile::getBoolValue("memory_manager_enable_fixed_allocator"))
-            {
-                if(!std::is_class<T>::value)
-                {
-                    if(size <= 16)
-                        return __fixed1.alloc<T>(std::forward<Args>(args)...);
-                    if(size <= 32)
-                        return __fixed2.alloc<T>(std::forward<Args>(args)...);
-                    if(size <= 96)
-                        return __fixed3.alloc<T>(std::forward<Args>(args)...);
-                }
-            }
-            */
             return __jam.alloc<T>(size);
-        }
 		return ::new T(size);
     }
 

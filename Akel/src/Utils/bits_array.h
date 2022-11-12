@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2022
-// Updated : 11/11/2022
+// Updated : 12/11/2022
 
 #ifndef __AK_BITS_ARRAY__
 #define __AK_BITS_ARRAY__
@@ -21,15 +21,17 @@ using uintsys_t = uint32_t;
 	class BitsArray : public non_copyable
 	{
 		public:
-			BitsArray(size_t bits_n);
+			BitsArray() = default;
 
+			void init(size_t bits_n);
 			void resetBits(bool value);
 			void set(size_t index, bool value);
 			bool get(size_t index) const;
+			size_t getFirstTrueBit();
 
 			~BitsArray() = default;
 
-			static constexpr uintsys_t nbits = CHAR_BIT / sizeof(uintsys_t);
+			static constexpr uintsys_t nbits = CHAR_BIT * sizeof(uintsys_t);
 
 		private:
 			std::unique_ptr<uintsys_t[]> _pool;

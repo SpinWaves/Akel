@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 11/11/2022
+// Updated : 12/11/2022
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -52,6 +52,7 @@ namespace Ak
 
             void init_node(BinarySearchTree<flag*>* node, flag* ptr);
 			void* internal_allocation(size_t size);
+			void internal_free(void* ptr);
             
             std::vector<std::pair<void*, unsigned int>> _resises;
             std::mutex _mutex;

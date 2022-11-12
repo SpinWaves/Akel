@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/07/2021
-// Updated : 11/11/2022
+// Updated : 12/11/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -21,7 +21,7 @@ namespace Ak
 
         _block_size = blockSize;
         _heap_size = Size;
-        _bits.resize(numBlocks, false);
+		_bits.init(numBlocks);
 
         _allocator_number = MemoryManager::accessToControlUnit()->fixedStack.size();
         std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
@@ -38,21 +38,9 @@ namespace Ak
         _heap = realloc(_heap, Size);
 
         _heap_size = Size;
-        _bits.resize(numBlocks, false);
 
         std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
         Core::ProjectFile::setIntValue(key, Size);
-    }
-
-    bool FixedAllocator::canAlloc()
-    {
-        _it = std::find(_bits.rbegin(), _bits.rend(), true);
-        return _it != _bits.rend() ? false : true;
-    }
-
-    void FixedAllocator::autoResize(bool set)
-    {
-        _autoResize = set;
     }
 
     bool FixedAllocator::contains(void* ptr) const
