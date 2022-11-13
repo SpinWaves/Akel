@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 28/08/2022
+// Updated : 12/11/2022
 
 import "audio_manager.eltm"
 import "browser.eltm"
@@ -14,6 +14,7 @@ import "materials.eltm"
 import "renderer_manager.eltm"
 import "scene.eltm"
 import "settings.eltm"
+import "components.eltm"
 
 let window_title = "Akel Studio"
 

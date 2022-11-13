@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 27/08/2022
+// Updated : 12/11/2022
 
 #include <Panels/docks.h>
 #include <Fonts/material_font.h>
@@ -11,15 +11,43 @@ bool reload_docks = true;
 Docks::Docks(std::shared_ptr<Ak::ELTM> eltm) : Panel("__docks")
 {
     _eltm = std::move(eltm);
-;
 }
 
 void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
 {
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+	_width = (15 * size.X)/100;
+    _height = size.Y - 25 - (50 * size.Y)/100;
+
+	if(ImGui::Begin("ComponentsDockSpace", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking))
+    {
+		ImGui::SetWindowPos(ImVec2(0, 25));
+		ImGui::SetWindowSize(ImVec2(_width, _height));
+
+        ImGuiID dockspace_id = ImGui::GetID("MyComponentsDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton);
+
+        static int first_times_components = 0;
+        if(reload_docks)
+            first_times_components = 0;
+        if(first_times_components < 2)
+        {
+            ImGui::DockBuilderRemoveNode(dockspace_id);
+            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoWindowMenuButton);
+
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_LIST" " + _eltm->getText("Components.name")).data(), dockspace_id);
+            ImGui::DockBuilderDockWindow(std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Entities.name")).data(), dockspace_id);
+            ImGui::DockBuilderFinish(dockspace_id);
+
+            first_times_components++;
+        }
+
+		ImGui::End();
+    }
+
 	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
 	_height = size.Y / 4;
-
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
 	if(ImGui::Begin("ConsoleDockSpace", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking))
     {

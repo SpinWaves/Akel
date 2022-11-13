@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 05/11/2022
+// Updated : 13/11/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -40,6 +40,7 @@ void StudioComponent::onAttach()
 	_stack->add_panel<Docks>(_eltm);
 	_stack->add_panel<Scene>(_eltm, _camera);
 	_stack->add_panel<ELTM_editor>(_eltm, &_eltm_editor_input_buffer, &_eltm_editor_save);
+	_stack->add_panel<Components>(_eltm);
 	_stack->add_panel<Entities>(_eltm);
 	_stack->add_panel<RendererManager>(_eltm);
 	_stack->add_panel<AudioManager>(_eltm);
