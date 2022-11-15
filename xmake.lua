@@ -1,12 +1,12 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 04/11/2022
+-- Updated : 15/11/2022
 
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2")
+add_requires("spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsdl_ttf", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
@@ -28,8 +28,6 @@ target("Akel")
 		add_defines("AK_RELEASE")
 	end
 
-	add_defines("MAIN_PATH=\"$(projectdir)/\"")
-
 	set_pcxxheader("Akel/src/Akpch.h")
 	
 	add_defines("SDL_MAIN_HANDLED")
@@ -40,6 +38,7 @@ target("Akel")
 	add_packages("libsdl_ttf",    { public = true })
 	add_packages("imgui_sdl_vk",  { public = true })
 	add_packages("sol2",  		  { public = true })
+	add_packages("nlohmann_json", { public = true })
 	add_packages("vulkan-memory-allocator", { public = true })
 
 	add_packages("libsndfile",    { public = true })

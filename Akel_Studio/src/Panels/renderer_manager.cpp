@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 27/08/2022
+// Updated : 15/11/2022
 
 #include <Panels/renderer_manager.h>
 #include <Fonts/material_font.h>
@@ -71,7 +71,7 @@ void RendererManager::render_sets()
         if(vsync_save != Ak::Render_Core::get().getWindow()->vsync)
 		{
             Ak::Render_Core::get().getWindow()->fetchSettings();
-			Ak::Core::ProjectFile::setBoolValue("vsync", !vsync_save);
+			Ak::getMainAppProjectFile().setBoolValue("vsync", !vsync_save);
 		}
         
         ImGui::TreePop();

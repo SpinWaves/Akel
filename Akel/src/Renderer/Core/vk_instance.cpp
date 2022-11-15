@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 04/09/2022
+// Updated : 15/11/2022
 
 #include <Core/core.h>
 #include "vk_instance.h"
@@ -15,7 +15,7 @@ namespace Ak
 
 	void Instance::init()
 	{
-		if(enableValidationLayers && !Core::ProjectFile::getBoolValue("vk_force_disable_validation_layers") && !Render_Core::get().getLayers().checkValidationLayerSupport())
+		if(enableValidationLayers && !getMainAppProjectFile().getBoolValue("vk_force_disable_validation_layers") && !Render_Core::get().getLayers().checkValidationLayerSupport())
 			Core::log::report(ERROR, "Vulkan : validations layers are enabled but not available");
 
         VkApplicationInfo appInfo{};
@@ -36,7 +36,7 @@ namespace Ak
 
         VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
 
-		if(enableValidationLayers && !Core::ProjectFile::getBoolValue("vk_force_disable_validation_layers") && Render_Core::get().getLayers().checkValidationLayerSupport())
+		if(enableValidationLayers && !getMainAppProjectFile().getBoolValue("vk_force_disable_validation_layers") && Render_Core::get().getLayers().checkValidationLayerSupport())
         {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             createInfo.ppEnabledLayerNames = validationLayers.data();
@@ -67,7 +67,7 @@ namespace Ak
         if(!SDL_Vulkan_GetInstanceExtensions(Render_Core::get().getWindow()->getNativeWindow(), &count, extensions.data() + additional_extension_count))
 			Core::log::report(ERROR, "Vulkan : cannot get instance extentions from window : %s", SDL_GetError());
 
-        if(enableValidationLayers && !Core::ProjectFile::getBoolValue("vk_force_disable_validation_layers"))
+        if(enableValidationLayers && !getMainAppProjectFile().getBoolValue("vk_force_disable_validation_layers"))
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 
         return extensions;

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 10/03/2022
+// Updated : 15/11/2022
 
 #include <Panels/Base/panelStack.h>
 
@@ -82,11 +82,6 @@ PanelStack::~PanelStack()
 			}
 		}
 		if(!isCustomAlloc)
-		{
-			if(!Ak::Core::ProjectFile::getBoolValue("use_memory_manager"))
-				delete elem;
-			else
-				Ak::Core::log::report(STRONG_WARNING, "Panel Stack: unable to free a panel \"%s\" address(%p), unable to find its allocator", elem->getName(), elem);
-		}
+			Ak::Core::log::report(STRONG_WARNING, "Panel Stack: unable to free a panel \"%s\" address(%p), unable to find its allocator", elem->getName(), elem);
 	}
 }

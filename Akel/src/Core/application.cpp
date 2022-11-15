@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 05/11/2022
+// Updated : 15/11/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -18,7 +18,7 @@ namespace Ak
 		
 		_fps.init();
 		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
-			Core::log::report(FATAL_ERROR, "SDL error : unable to init all subsystems : %s", SDL_GetError());
+			Core::log::report(FATAL_ERROR, "SDL error : unable to init all subsystems : %s", SDL_GetError());	
 	}
 
 	void Application::run()

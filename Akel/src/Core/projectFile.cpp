@@ -1,348 +1,131 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 07/05/2022
+// Updated : 15/11/2022
 
 #include <Core/core.h>
 
 #define __FILEPATH _dir + _name + std::string(".akel")
 
-namespace Ak::Core
+namespace Ak
 {
-	void ProjectFile::initProjFile()
-    {
-		if(_dir.back() != '/')
-			_dir.push_back('/');
-        std::filesystem::path f(__FILEPATH);
-        if(!std::filesystem::exists(f))
-        {
-    		std::ofstream proj_file(__FILEPATH);
-    		if(!proj_file.is_open())
-    			Core::log::report(FATAL_ERROR, "Application: unable to open/create project file in directory: " + _dir);
+	Core::ProjectFile* __main_app_project_file = nullptr;
 
-            std::string useMemMan = "false";
-            if(MemoryManager::isMemoryManagerUsed())
-                useMemMan = "true";
+	Core::ProjectFile& getMainAppProjectFile()
+	{
+		return *__main_app_project_file;
+	}
 
-    		proj_file << "# This file is an Akel project file. It contains configuration parameters for the engine." << '\n'
-    			      << "# DO NOT MODIFY IT, OTHERWISE YOU WILL GET BAD PERFORMANCES," << '\n'
-    				  << "# BAD MEMORY OPTIMISATION OR EVEN YOUR PROJECT WILL NOT WORK ANYMORE!" << '\n' << std::endl;
-    		proj_file.close();
-        }
+	namespace Core
+	{
+		void ProjectFile::initProjFile()
+		{
+			if(_dir.back() != '/')
+				_dir.push_back('/');
+			std::filesystem::path f(__FILEPATH);
+			if(!std::filesystem::exists(f))
+				write_file();
+			else
+			{
+				std::ifstream file(__FILEPATH, std::ios::binary);
+				if(!file.is_open())
+				{
+					Core::log::report(ERROR, "config file manager: unable to open " + __FILEPATH);
+					return;
+				}
 
-        std::ifstream file(__FILEPATH);
-        if(!file.is_open())
-        {
-            Core::log::report(ERROR, "config file manager: unable to open " + _dir + _name + std::string(".akel"));
-            return;
-        }
+				file.unsetf(std::ios::skipws);
 
-        std::string getter;
-        size_t com_found = 0;
-        size_t equal_found = 0;
-        for(int i = 0; std::getline(file, getter); i++)
-        {
-            if((com_found = getter.find("#")) != std::string::npos)
-                getter.erase(getter.begin() + com_found, getter.end());
+				file.seekg(0, std::ios::end);
+				std::size_t fileSize = file.tellg();
+				file.seekg(0, std::ios::beg);
+				
+				_data.reserve(fileSize);
+				_data.insert(_data.begin(), std::istream_iterator<uint8_t>(file), std::istream_iterator<uint8_t>());
 
-            if(getter.empty())
-                continue;
+				file.close();
 
-            if((equal_found = getter.find("=")) == std::string::npos)
-            {
-                _data[getter] = std::tuple<int, _type>(i, "");
-                continue;
-            }
+				_json = json::from_msgpack(_data);
+			}
+		}
 
-            std::string key(getter.begin(), getter.begin() + equal_found - 1);
-            std::string val(getter.begin() + equal_found + 2, getter.end());
+		void ProjectFile::setDir(const std::string& dir)
+		{
+			_dir = dir;
+		}
 
-            if(getter.find_first_not_of("0123456789.") == std::string::npos)
-            {
-                if(getter.find(".") != std::string::npos)
-                {
-                    _data[key] = std::tuple<int, _type>(i, std::stof(val));
-                    continue;
-                }
-                    _data[key] = std::tuple<int, _type>(i, std::stoi(val));
-                continue;
-            }
+		void ProjectFile::setName(const std::string& name)
+		{
+			_name = name;
+		}
 
-            if(val == "true")
-            {
-                _data[key] = std::tuple<int, _type>(i, true);
-                continue;
-            }
-            if(val == "false")
-            {
-                _data[key] = std::tuple<int, _type>(i, false);
-                continue;
-            }
+		bool ProjectFile::getBoolValue(const std::string& key)
+		{
+			if(!_json.contains(key))
+				return false;
+			return _json[key];
+		}
+		
+		int ProjectFile::getIntValue(const std::string& key)
+		{
+			if(!_json.contains(key))
+				return -1;
+			return _json[key];
+		}
+		
+		float ProjectFile::getFloatValue(const std::string& key)
+		{
+			if(!_json.contains(key))
+				return -1.0f;
+			return _json[key];
+		}
 
-            _data[key] = std::tuple<int, _type>(i, val);
-        }
+		std::string ProjectFile::getStringValue(const std::string& key)
+		{
+			if(!_json.contains(key))
+				return "";
+			return _json[key];
+		}
 
-        file.close();
-    }
+		void ProjectFile::setStringValue(const std::string& key, const std::string& value)
+		{
+			_json[key] = value;
+			write_file();
+		}
 
-    void ProjectFile::setDir(const std::string& dir)
-    {
-        _dir = dir;
-    }
-    void ProjectFile::setName(const std::string& name)
-    {
-        _name = name;
-    }
+		void ProjectFile::setIntValue(const std::string& key, const int value)
+		{
+			_json[key] = value;
+			write_file();
+		}
 
-    bool ProjectFile::getBoolValue(const std::string& key)
-    {
-        if(!_data.count(key))
-            return false;
-        if(std::holds_alternative<bool>(std::get<1>(_data[key])))
-	      return std::get<bool>(std::get<1>(_data[key]));
-        return false;
-    }
-    int ProjectFile::getIntValue(const std::string& key)
-    {
-        if(!_data.count(key))
-            return -1;
-        if(std::holds_alternative<int>(std::get<1>(_data[key])))
-	      return std::get<int>(std::get<1>(_data[key]));
-        return -1;
-    }
-    float ProjectFile::getFloatValue(const std::string& key)
-    {
-        if(!_data.count(key))
-            return 0.0f;
-        if(std::holds_alternative<float>(std::get<1>(_data[key])))
-	      return std::get<float>(std::get<1>(_data[key]));
-        return 0.0f;
-    }
-    std::string ProjectFile::getStringValue(const std::string& key)
-    {
-        if(!_data.count(key))
-            return "";
-        if(std::holds_alternative<std::string>(std::get<1>(_data[key])))
-	      return std::get<std::string>(std::get<1>(_data[key]));
-        return "";
-    }
+		void ProjectFile::setBoolValue(const std::string& key, const bool value)
+		{
+			_json[key] = value;
+			write_file();
+		}
 
-    void ProjectFile::setStringValue(const std::string& key, const std::string& value)
-    {
-        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
-        if(!file.is_open())
-            Core::log::report(ERROR, "Project file manager: unable to modify a project file, cannot open " + __FILEPATH);
+		void ProjectFile::setFloatValue(const std::string& key, const float value)
+		{
+			_json[key] = value;
+			write_file();
+		}
 
-        std::string line;
-        if(!_data.count(key))
-        {
-            file << key << " = " << value << std::endl;
-            int lines = 0;
-            while(getline(file, line))
-               lines++;
-            file.close();
-            _data[key] = std::tuple<int, _type>(lines - 1, value); // lines - 1 because we ended file with std::endl so it makes a new line
-            return;
-        }
-
-        std::ofstream newFile(_dir + std::string("temp.akel"));
-        if(!newFile.is_open())
-        {
-            Core::log::report(WARNING, "Project file manager: unable to modify project file: unable to create new file");
-            return;
-        }
-
-		file.seekg(0, file.beg);
-
-        for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
-        {
-            if(i == std::get<0>(_data[key]))
-            {
-                size_t equal = 0;
-                if((equal = line.find("=")) != std::string::npos)
-                {
-                    line.erase(line.begin() + equal + 2, line.end());
-                    line.append(value);
-                }
-                else
-                    line.append(std::string(" = ") + value);
-            }
-            newFile << line << '\n';
-			line.clear();
-        }
-
-        file.close();
-        newFile.close();
-
-		std::filesystem::remove(__FILEPATH);
-        std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
-
-        _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
-
-    }
-
-    void ProjectFile::setIntValue(const std::string& key, const int value)
-    {
-        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
-        if(!file.is_open())
-            Core::log::report(ERROR, "Project file manager: unable to modify a project file, cannot open " + __FILEPATH);
-
-        std::string line;
-        if(!_data.count(key))
-        {
-            file << key << " = " << value << std::endl;
-            int lines = 0;
-            while(std::getline(file, line))
-               lines++;
-            file.close();
-            _data[key] = std::tuple<int, _type>(lines - 1, value); // lines - 1 because we ended file with std::endl so it makes a new line
-            return;
-        }
-
-        std::ofstream newFile(_dir + std::string("temp.akel"));
-        if(!newFile.is_open())
-        {
-            Core::log::report(WARNING, "Project file manager: unable to modify project file: unable to create new file");
-            return;
-        }
-
-		file.seekg(0, file.beg);
-
-        for(int i = 0; std::getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
-        {
-            if(i == std::get<0>(_data[key]))
-            {
-                size_t equal = 0;
-                if((equal = line.find("=")) != std::string::npos)
-                {
-                    line.erase(line.begin() + equal + 2, line.end());
-                    line.append(std::to_string(value));
-                }
-                else
-                    line.append(std::string(" = ") + std::to_string(value));
-            }
-        	newFile << line << '\n';
-			line.clear();
-        }
-
-        file.close();
-        newFile.close();
-
-		std::filesystem::remove(__FILEPATH);
-        std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
-
-        _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
-    }
-
-    void ProjectFile::setBoolValue(const std::string& key, const bool value)
-    {
-        std::string pass;
-        if(value)
-            pass = "true";
-        else
-            pass = "false";
-
-        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
-        if(!file.is_open())
-            Core::log::report(ERROR, "Project file manager: unable to modify a project file, cannot open " + __FILEPATH);
-
-        std::string line;
-        if(!_data.count(key))
-        {
-            file << key << " = " << pass << std::endl;
-            int lines = 0;
-            while(getline(file, line))
-               lines++;
-            file.close();
-            _data[key] = std::tuple<int, _type>(lines - 1, value); // lines - 1 because we ended file with std::endl so it makes a new line
-            return;
-        }
-
-        std::ofstream newFile(_dir + std::string("temp.akel"));
-        if(!newFile.is_open())
-        {
-            Core::log::report(WARNING, "Project file manager: unable to modify project file: unable to create new file");
-            return;
-        }
-
-		file.seekg(0, file.beg);
-
-        for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
-        {
-            if(i == std::get<0>(_data[key]))
-            {
-                size_t equal = 0;
-                if((equal = line.find("=")) != std::string::npos)
-                {
-                    line.erase(line.begin() + equal + 2, line.end());
-                    line.append(pass);
-                }
-                else
-                    line.append(std::string(" = ") + pass);
-            }
-            newFile << line << '\n';
-			line.clear();
-        }
-
-        file.close();
-        newFile.close();
-
-		std::filesystem::remove(__FILEPATH);
-        std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
-
-        _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
-    }
-
-    void ProjectFile::setFloatValue(const std::string& key, const float value)
-    {
-        std::fstream file(__FILEPATH, std::fstream::in | std::fstream::out | std::fstream::ate);
-        if(!file.is_open())
-            Core::log::report(ERROR, "Project file manager: unable to modify a project file, cannot open " + __FILEPATH);
-
-        std::string line;
-        if(!_data.count(key))
-        {
-            file << key << " = " << value << std::endl;
-            int lines = 0;
-            while(getline(file, line))
-               lines++;
-            file.close();
-            _data[key] = std::tuple<int, _type>(lines - 1, value); // lines - 1 because we ended file with std::endl so it makes a new line
-            return;
-        }
-
-        std::ofstream newFile(_dir + std::string("temp.akel"));
-        if(!newFile.is_open())
-        {
-            Core::log::report(WARNING, "Project file manager: unable to modify project file: unable to create new file");
-            return;
-        }
-
-		file.seekg(0, file.beg);
-
-        for(int i = 0; getline(file, line); i++) // Access to key line (seekg have problems with files opened in text mode)
-        {
-            if(i == std::get<0>(_data[key]))
-            {
-                size_t equal = 0;
-                if((equal = line.find("=")) != std::string::npos)
-                {
-                    line.erase(line.begin() + equal + 2, line.end());
-                    line.append(std::to_string(value));
-                }
-                else
-                    line.append(std::string(" = ") + std::to_string(value));
-            }
-            newFile << line << '\n';
-			line.clear();
-        }
-
-        file.close();
-        newFile.close();
-
-		std::filesystem::remove(__FILEPATH);
-        std::filesystem::rename(_dir + "temp.akel", __FILEPATH);
-
-        _data[key] = std::tuple<int, _type>(std::get<0>(_data[key]), value);
-    }
+		void ProjectFile::write_file()
+		{
+			std::filesystem::remove(__FILEPATH);
+			std::ofstream newFile(__FILEPATH, std::ios::ate | std::ios::binary);
+			if(!newFile.is_open())
+			{
+				Core::log::report(FATAL_ERROR, "Project file manager: unable to modify project file: unable to create new file");
+				return;
+			}
+			_data = json::to_msgpack(_json);
+			for(uint8_t byte : _data)
+				newFile << byte;
+			newFile.close();
+		}
+	}
 }
+
+#undef __FILEPATH

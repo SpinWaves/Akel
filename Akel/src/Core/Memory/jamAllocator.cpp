@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 12/11/2022
+// Updated : 15/11/2022
 
 #include <Core/core.h>
 
@@ -24,7 +24,7 @@ namespace Ak
 
         _allocator_number = MemoryManager::accessToControlUnit()->jamStack.size();
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
-        Core::ProjectFile::setIntValue(key, Size);
+        getMainAppProjectFile().setIntValue(key, Size);
         MemoryManager::accessToControlUnit()->jamStack.push_back(weak_from_this());
     }
 
@@ -53,7 +53,7 @@ namespace Ak
 
             _heapSize = Size;
             std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
-            Core::ProjectFile::setIntValue(key, Size);
+            getMainAppProjectFile().setIntValue(key, Size);
         }
     }
 
@@ -71,7 +71,7 @@ namespace Ak
         _heap = nullptr;
         
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
-        Core::ProjectFile::setIntValue(key, _memUsed);
+        getMainAppProjectFile().setIntValue(key, _memUsed);
     }
 
 	void* JamAllocator::internal_allocation(size_t size)

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 13/11/2022
+// Updated : 15/11/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -15,20 +15,20 @@ void StudioComponent::onAttach()
 	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>();
 	_lang_eltm->load(Ak::Core::getMainDirPath() + "ressources/texts/langs.eltm");
 
-	if(!Ak::Core::ProjectFile::keyExists("language"))
-		Ak::Core::ProjectFile::setStringValue("language", Ak::Core::getMainDirPath() + _lang_eltm->getText("English"));
-	if(!Ak::Core::ProjectFile::keyExists("on_quit_window"))
-		Ak::Core::ProjectFile::setBoolValue("on_quit_window", true);
-	if(!Ak::Core::ProjectFile::keyExists("vsync"))
-		Ak::Core::ProjectFile::setBoolValue("vsync", true);
+	if(!Ak::getMainAppProjectFile().keyExists("language"))
+		Ak::getMainAppProjectFile().setStringValue("language", Ak::Core::getMainDirPath() + _lang_eltm->getText("English"));
+	if(!Ak::getMainAppProjectFile().keyExists("on_quit_window"))
+		Ak::getMainAppProjectFile().setBoolValue("on_quit_window", true);
+	if(!Ak::getMainAppProjectFile().keyExists("vsync"))
+		Ak::getMainAppProjectFile().setBoolValue("vsync", true);
 	
-	_eltm->load(std::move(Ak::Core::ProjectFile::getStringValue("language")));
+	_eltm->load(std::move(Ak::getMainAppProjectFile().getStringValue("language")));
 
 	Ak::WindowComponent::onAttach();
 	Ak::WindowComponent::title = std::move(_eltm->getText("window_title"));
 	Ak::WindowComponent::resizable = true;
 	Ak::WindowComponent::maximize = true;
-	Ak::WindowComponent::vsync = Ak::Core::ProjectFile::getBoolValue("vsync");
+	Ak::WindowComponent::vsync = Ak::getMainAppProjectFile().getBoolValue("vsync");
 	Ak::WindowComponent::fetchSettings();
 
 	Ak::Render_Core::get().getClearValue().color.float32[0] = 0.627450980;
@@ -107,7 +107,7 @@ void StudioComponent::onImGuiRender()
 void StudioComponent::onImGuiEvent(Ak::Input& input)
 {
 	_running = _running == true ? !input.isEnded() : _running;
-	if(!_running && !Ak::Core::ProjectFile::getBoolValue("on_quit_window"))
+	if(!_running && !Ak::getMainAppProjectFile().getBoolValue("on_quit_window"))
 		realquit = true;
 	if(realquit)
 		input.finish();
@@ -236,7 +236,7 @@ void StudioComponent::draw_general_settings()
 			{
 				if(!_eltm->reload(Ak::Core::getMainDirPath() + path))
 					Ak::Core::log::report(FATAL_ERROR, "unable to change language");
-				Ak::Core::ProjectFile::setStringValue("language", Ak::Core::getMainDirPath() + path);
+				Ak::getMainAppProjectFile().setStringValue("language", Ak::Core::getMainDirPath() + path);
 				selected = lang;
 				reload_docks = true;
 			}
@@ -247,10 +247,10 @@ void StudioComponent::draw_general_settings()
 
 	ImGui::Separator();
 
-	bool on_quit_window = Ak::Core::ProjectFile::getBoolValue("on_quit_window");
+	bool on_quit_window = Ak::getMainAppProjectFile().getBoolValue("on_quit_window");
 	ImGui::Checkbox(_eltm->getText("Settings.onQuit").c_str(), &on_quit_window);
-	if(on_quit_window != Ak::Core::ProjectFile::getBoolValue("on_quit_window"))
-		Ak::Core::ProjectFile::setBoolValue("on_quit_window", on_quit_window);
+	if(on_quit_window != Ak::getMainAppProjectFile().getBoolValue("on_quit_window"))
+		Ak::getMainAppProjectFile().setBoolValue("on_quit_window", on_quit_window);
 }
 
 void StudioComponent::drawOptionsWindow()

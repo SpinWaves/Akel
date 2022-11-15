@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 20/08/2022
+// Updated : 15/11/2022
 
 #include <Core/core.h>
 
@@ -77,7 +77,7 @@ namespace Ak::Core
 				case MESSAGE: std::cout << blue << "[Akel log Message] " << buffer << def << '\n'; _type = "Message: "; break;
 				case WARNING:
 				{	
-					if(Core::ProjectFile::getBoolValue("enable_warning_console_message"))
+					if(getMainAppProjectFile().getBoolValue("enable_warning_console_message"))
 						std::cout << magenta << "[Akel log Warning] " << buffer << def << '\n';
 					_type = "Warning: ";
 					break;

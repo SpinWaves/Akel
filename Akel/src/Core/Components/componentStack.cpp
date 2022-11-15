@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 11/11/2022
+// Updated : 15/11/2022
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -81,12 +81,7 @@ namespace Ak
 				}
 			}
 			if(!isCustomAlloc)
-			{
-				if(!Core::ProjectFile::getBoolValue("use_memory_manager"))
-					::delete elem;
-				else
-					Core::log::report(STRONG_WARNING, "Component Stack: unable to free a component \"%s\" address(%p), unable to find its allocator", elem->getName(), elem);
-			}
+				Core::log::report(STRONG_WARNING, "Component Stack: unable to free a component \"%s\" address(%p), unable to find its allocator", elem->getName(), elem);
 		}
 	}
 }

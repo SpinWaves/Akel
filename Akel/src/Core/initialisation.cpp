@@ -1,11 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 05/11/2022
+// Updated : 15/11/2022
 
 #include <Audio/audio.h>
 #include <Renderer/Core/render_core.h>
 #include "softwareInfo.h"
+#include "application.h"
 
 namespace Ak
 {
@@ -15,6 +16,8 @@ namespace Ak
 		void initCpuInfo();
 	}
 	
+	extern Core::ProjectFile* __main_app_project_file;
+
     bool initAkel(AkelInstance* project)
     {
 		#if defined(AK_64BITS)
@@ -46,24 +49,24 @@ namespace Ak
 			return false;
 		}
 
+		__main_app_project_file = &project->_project_file;
+
 		if(project->project_file_name != "")
-			Core::ProjectFile::setName(project->project_file_name);
+			project->_project_file.setName(project->project_file_name);
 		if(project->project_file_path != "")
-			Core::ProjectFile::setDir(project->project_file_path);
+			project->_project_file.setDir(project->project_file_path);
 		else
-			Core::ProjectFile::setDir(Core::getMainDirPath());
+			project->_project_file.setDir(Core::getMainDirPath());
 		
-		Core::ProjectFile::initProjFile();
+		project->_project_file.initProjFile();
 
-		Core::ProjectFile::setBoolValue("enable_warning_console_message", project->enable_warning_console_message);
-		Core::ProjectFile::setBoolValue("vk_enable_message_validation_layer", project->vk_enable_message_validation_layer);
-		Core::ProjectFile::setBoolValue("vk_force_disable_validation_layers", project->vk_force_disable_validation_layers);
-		Core::ProjectFile::setBoolValue("memory_manager_enable_fixed_allocator", project->memory_manager_enable_fixed_allocator);
-
-		MemoryManager::useMemoryManager(project->use_memory_manager);
-		MemoryManager::init();
+		project->_project_file.setBoolValue("enable_warning_console_message", project->enable_warning_console_message);
+		project->_project_file.setBoolValue("vk_enable_message_validation_layer", project->vk_enable_message_validation_layer);
+		project->_project_file.setBoolValue("vk_force_disable_validation_layers", project->vk_force_disable_validation_layers);
+		project->_project_file.setBoolValue("memory_manager_enable_fixed_allocator", project->memory_manager_enable_fixed_allocator);
 
 		Core::initCpuInfo();
+		MemoryManager::init();
 
 		return true;
     }

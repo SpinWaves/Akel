@@ -1,46 +1,53 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 08/07/2022
+// Updated : 15/11/2022
 
 #ifndef __AK_PROJECT_FILE__
 #define __AK_PROJECT_FILE__
 
 #include <Akpch.h>
 
-namespace Ak::Core
+namespace Ak
 {
-    class ProjectFile
-    {
-        public:
-            ProjectFile() = delete;
+	namespace Core
+	{
+		using json = nlohmann::json;
 
-    		static void initProjFile();
+		class ProjectFile
+		{
+			public:
+				ProjectFile() = default;
 
-            static void setDir(const std::string& dir);
-            static void setName(const std::string& name);
+				void initProjFile();
 
-            static bool getBoolValue(const std::string& key);
-            static int getIntValue(const std::string& key);
-            static float getFloatValue(const std::string& key);
-            static std::string getStringValue(const std::string& key);
+				void setDir(const std::string& dir);
+				void setName(const std::string& name);
 
-            static void setStringValue(const std::string& key, const std::string& value);
-            static void setIntValue(const std::string& key, const int value);
-            static void setBoolValue(const std::string& key, const bool value);
-            static void setFloatValue(const std::string& key, const float value);
+				bool getBoolValue(const std::string& key);
+				int getIntValue(const std::string& key);
+				float getFloatValue(const std::string& key);
+				std::string getStringValue(const std::string& key);
 
-            inline static bool keyExists(const std::string& key) { return _data.count(key); }
+				void setStringValue(const std::string& key, const std::string& value);
+				void setIntValue(const std::string& key, const int value);
+				void setBoolValue(const std::string& key, const bool value);
+				void setFloatValue(const std::string& key, const float value);
 
-            ~ProjectFile() = delete;
+				inline bool keyExists(const std::string& key) { return _json.contains(key); }
 
-        private:
-            using _type = std::variant<std::string, int, bool, float>;
-            // map construction:                 key         ->     <line, value>
-            inline static std::unordered_map<std::string, std::tuple<int, _type>> _data;
-            inline static std::string _name = "application";
-            inline static std::string _dir;
-    };
+				~ProjectFile() = default;
+
+			private:
+				void write_file();
+
+				json _json;
+				std::vector<uint8_t> _data;
+				std::string _name = "application";
+				std::string _dir;
+		};
+	}
+	Core::ProjectFile& getMainAppProjectFile();
 }
 
 #endif // __AK_PROJECT_FILE__

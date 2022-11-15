@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 12/11/2022
+// Updated : 15/11/2022
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -26,8 +26,6 @@ namespace Ak
             static void init();
             static void end();
 
-            static void useMemoryManager(bool set = true);
-            inline static bool isMemoryManagerUsed() noexcept { return _use; }
             inline static std::shared_ptr<ControlUnit>& accessToControlUnit() { return control_unit; }
 			inline static bool is_init() noexcept { return _is_init; }
 
@@ -43,21 +41,20 @@ namespace Ak
             ~MemoryManager() = delete;
 
         private:
-            inline static std::shared_ptr<ControlUnit> control_unit;
             inline static JamAllocator __jam;
             inline static FixedAllocator __fixed1;
             inline static FixedAllocator __fixed2;
             inline static FixedAllocator __fixed3;
-            inline static bool _use = true;
+            inline static std::shared_ptr<ControlUnit> control_unit;
             inline static bool _is_init = false;
     };
 
     template <class T, typename ... Args>
     T* MemoryManager::alloc(Args&& ... args)
     {
-        if(_use && __jam.is_init())
+        if(__jam.is_init())
         {
-		    if(Core::ProjectFile::getBoolValue("memory_manager_enable_fixed_allocator"))
+		    if(getMainAppProjectFile().getBoolValue("memory_manager_enable_fixed_allocator"))
             {
 				if constexpr(!std::is_class<T>::value)
 				{
@@ -77,7 +74,7 @@ namespace Ak
     template <class T>
     T* MemoryManager::allocSize(size_t size)
     {
-        if(_use && __jam.is_init())
+        if(__jam.is_init())
             return __jam.alloc<T>(size);
 		return ::new T(size);
     }
@@ -85,32 +82,29 @@ namespace Ak
     template <class T>
     void MemoryManager::free(T* ptr)
     {
-        if(_use)
-        {
-		    if(Core::ProjectFile::getBoolValue("memory_manager_enable_fixed_allocator"))
-            {
-                if(__fixed1.contains((void*)ptr))
-                {
-        			__fixed1.free(ptr);
-                    return;
-                }
-        		if(__fixed2.contains((void*)ptr))
-                {
-        			__fixed2.free(ptr);
-                    return;
-                }
-        		if(__fixed3.contains((void*)ptr))
-                {
-        			__fixed3.free(ptr);
-                    return;
-                }
-            }
-    		if(__jam.contains((void*)ptr))
-            {
-    			__jam.free(ptr);
-                return;
-            }
-        }
+		if(getMainAppProjectFile().getBoolValue("memory_manager_enable_fixed_allocator"))
+		{
+			if(__fixed1.contains((void*)ptr))
+			{
+				__fixed1.free(ptr);
+				return;
+			}
+			if(__fixed2.contains((void*)ptr))
+			{
+				__fixed2.free(ptr);
+				return;
+			}
+			if(__fixed3.contains((void*)ptr))
+			{
+				__fixed3.free(ptr);
+				return;
+			}
+		}
+		if(__jam.contains((void*)ptr))
+		{
+			__jam.free(ptr);
+			return;
+		}
         for(auto& elem : control_unit->jamStack)
         {
             if(!elem.expired())
