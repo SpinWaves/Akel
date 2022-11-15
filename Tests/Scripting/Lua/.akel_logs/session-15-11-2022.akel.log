@@ -1,0 +1,20 @@
+
+7:22 ---- Begin Startup ----
+7:22 ---- architecture: 64bits
+7:22 ---- arch: x86
+7:22 ---- End ----
+7:22 ---- Begin Runtime ----
+7:22 ---- End ----
+7:22 ---- Begin Shutdown ----
+7:22 ---- Strong Warning: Component Stack: unable to free a component "__lua_component" address(0x7ffa9976e348), unable to find its allocator
+7:22 ---- End ----
+
+7:38 ---- Begin Startup ----
+7:38 ---- architecture: 64bits
+7:38 ---- arch: x86
+7:38 ---- End ----
+7:38 ---- Begin Runtime ----
+7:38 ---- End ----
+7:38 ---- Begin Shutdown ----
+7:38 ---- Strong Warning: Component Stack: unable to free a component "__lua_component" address(0x7f421c96c348), unable to find its allocator
+7:38 ---- End ----
