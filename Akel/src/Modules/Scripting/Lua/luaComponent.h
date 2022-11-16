@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 15/11/2022
+// Updated : 16/11/2022
 
 #ifndef __AK_LUA_COMPONENT__
 #define __AK_LUA_COMPONENT__
@@ -22,10 +22,13 @@ namespace Ak::lua
 			void onEvent(Input& in) override;
 			void onQuit() override;
 
+			void attach_script(std::filesystem::path path);
+
 			~LuaComponent() = default;
 
 		private:
-			std::shared_ptr<sol::state> _state;
+			sol::load_result _script;
+			sol::protected_function_result _guard;
 	};
 }
 
