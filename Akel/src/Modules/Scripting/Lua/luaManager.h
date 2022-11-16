@@ -1,26 +1,30 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/11/2022
-// Updated : 15/11/2022
+// Updated : 16/11/2022
 
 #ifndef __AK_LUA_MANAGER__
 #define __AK_LUA_MANAGER__
 
 #include <Akpch.h>
 #include <Utils/selfInstance.h>
+#include <Platform/input.h>
 
-namespace Ak
+namespace Ak::lua
 {
 	class LuaManager : public SelfInstance<LuaManager>
 	{
 		public:
-			inline std::shared_ptr<sol::state> getState() { _state; }
+			LuaManager();
 
-		private:
-			LuaManager() = default;
+			inline sol::state& getState() { _state; }
+			void bindLogs();
+			void bindInputs(Input& in);
+
 			~LuaManager() = default;
 
-			std::shared_ptr<sol::state> _state;
+		private:
+			sol::state _state;
 	};
 }
 

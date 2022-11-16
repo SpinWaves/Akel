@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 01/10/2022
+// Updated : 16/11/2022
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -15,16 +15,9 @@ namespace Ak
 
     class Input
     {
+		friend class Application;
+
         public:
-            Input();
-
-            void update();
-            inline void reset() noexcept
-            {
-                _xRel = 0;
-                _yRel = 0;
-            }
-
             inline bool getInKey(const SDL_Scancode key, action type = action::down) const noexcept { return _keys[key] & static_cast<uint8_t>(type); }
 
             inline bool getInMouse(const uint8_t button, action type = action::down) const noexcept { return _mouse[button] & static_cast<uint8_t>(type); }
@@ -44,9 +37,17 @@ namespace Ak
 
             inline static void add_window(class WindowComponent* window) { _windows.push_back(window); }
 
+        private:
+            Input();
+
+            void update();
+            inline void reset() noexcept
+            {
+                _xRel = 0;
+                _yRel = 0;
+            }
             ~Input() = default;
 
-        private:
             SDL_Event _event;
             std::array<uint8_t, SDL_NUM_SCANCODES> _keys;
             std::array<uint8_t, 5> _mouse;

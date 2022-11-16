@@ -12,6 +12,8 @@ Ak::AkelInstance Akel_init()
 Ak::Application* Akel_mainApp()
 {
 	Ak::Application* app = Ak::memAlloc<Ak::Application>();
-	app->add_component<Ak::lua::LuaComponent>();
+	Ak::lua::LuaComponent* lua = Ak::memAlloc<Ak::lua::LuaComponent>();
+	lua->attach_script(Ak::Core::getMainDirPath() + "script.lua");
+	app->add_component(lua);
 	return app;
 }
