@@ -14,6 +14,16 @@ set_languages("cxx17")
 set_objectdir("build/objects/$(os)_$(arch)")
 set_targetdir("build/$(os)_$(arch)")
 
+toolchain("clang")
+	set_toolset("cxx", "clang", "clang++")
+toolchain_end()
+
+toolchain("gcc")
+	set_toolset("cxx", "gcc", "g++")
+toolchain_end()
+
+set_optimize("fastest")
+
 -- Lib Akel Build
 target("Akel")
 	set_default(true)
