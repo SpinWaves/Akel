@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 12/11/2022
+// Updated : 19/11/2022
 
 #include <Maths/maths.h>
 
@@ -14,6 +14,10 @@ namespace Ak
     T* JamAllocator::alloc(Args&& ... args)
     {
 		T* ptr = reinterpret_cast<T*>(internal_allocation(sizeof(T)));
+		void* tmp = ptr;
+		std::size_t s = std::numeric_limits<std::size_t>::max();
+		std::align(alignof(T), sizeof(T), tmp, s);
+		_memUsed += reinterpret_cast<T*>(tmp) - ptr;
         if constexpr(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
     	return ptr;
@@ -22,7 +26,12 @@ namespace Ak
     template <class T>
     T* JamAllocator::alloc(size_t size)
     {
-		return reinterpret_cast<T*>(internal_allocation(size));
+		T* ptr = reinterpret_cast<T*>(internal_allocation(size));
+		void* tmp = ptr;
+		std::size_t s = std::numeric_limits<std::size_t>::max();
+		std::align(alignof(T), size * sizeof(T), tmp, s);
+		_memUsed += reinterpret_cast<T*>(tmp) - ptr;
+		return ptr;
     }
 
     template <class T>
