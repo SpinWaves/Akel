@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 15/11/2022
+// Updated : 21/11/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -124,13 +124,13 @@ void StudioComponent::onImGuiEvent(Ak::Input& input)
 void StudioComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::string(Ak::Core::getMainDirPath() + "ressources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 19.0f, true);
+	imgui->addFontFromFile(std::string(Ak::Core::getMainDirPath() + "ressources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 18.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "ressources/fonts/material_icons-regular.ttf").c_str(), 19.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "ressources/fonts/material_icons-regular.ttf").c_str(), 18.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }
