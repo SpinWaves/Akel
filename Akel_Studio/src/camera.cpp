@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 23/08/2022
-// Updated : 15/10/2022
+// Updated : 22/11/2022
 
 #include "camera.h"
 
@@ -25,10 +25,10 @@ void SceneCamera::onEvent(Ak::Input& input)
 		input.getX() > (15 * _window_size->X)/100 - 1 && input.getX() < _window_size->X - (19 * _window_size->X)/100 &&
 		input.getY() > 75 && input.getY() < _window_size->Y - _window_size->Y/4)
 	{
+		_is_in_action = true;
 		_theta -= input.getXRel() * _sensivity;
 		_phi -= input.getYRel() * _sensivity;
 		SDL_WarpMouseInWindow(Ak::Render_Core::get().getWindow()->getNativeWindow(), _window_size->X / 2, _window_size->Y / 2);
-		SDL_ShowCursor(SDL_DISABLE);
 
 		_mov.SET(0.0, 0.0, 0.0);
 
@@ -42,6 +42,13 @@ void SceneCamera::onEvent(Ak::Input& input)
 		_speed = input.getInKey(AK_KEY_Q) ? 1.5f : 0.3f;
 		_position += _mov * _speed;
 	}
+	else
+		_is_in_action = false;
+}
+
+void SceneCamera::onRender()
+{
+	SDL_ShowCursor(_is_in_action ? SDL_DISABLE : SDL_ENABLE);
 }
 
 void SceneCamera::update_view()

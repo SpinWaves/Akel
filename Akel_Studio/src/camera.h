@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 23/08/2022
-// Updated : 15/10/2022
+// Updated : 22/11/2022
 
 #ifndef __AK_STUDIO_CAMERA__
 #define __AK_STUDIO_CAMERA__
@@ -15,6 +15,7 @@ class SceneCamera : public Ak::Component
 
 			void update() override;
 			void onEvent(Ak::Input& input) override;
+			void onRender() override;
 			inline void setFocus(bool focus) noexcept { _focus = focus; }
 
 			~SceneCamera() = default;
@@ -38,6 +39,7 @@ class SceneCamera : public Ak::Component
 			const float _sensivity = 0.9f;
 
 			bool _focus = true;
+			bool _is_in_action = false;
 };
 
 #endif // __AK_STUDIO_CAMERA__
