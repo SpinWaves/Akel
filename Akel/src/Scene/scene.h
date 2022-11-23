@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 17/11/2022
+// Updated : 23/11/2022
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -23,7 +23,7 @@ namespace Ak
 			virtual void onRender2D() {}
 			virtual void onQuit() {}
 
-			~Scene();
+			virtual ~Scene();
 
 		private:
 			std::string _name = "Empty scene";

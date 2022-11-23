@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 15/11/2022
+// Updated : 22/11/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -9,7 +9,6 @@
 // SDL2
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 
 // OpenAL
 #include <AL/al.h>
