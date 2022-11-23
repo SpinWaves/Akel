@@ -38,13 +38,5 @@ Ak::Application* Akel_mainApp()
 	studio->setContext();
 	studio->generateFontTextures(imgui);
 
-	Ak::Core::GPU gpu;
-	std::cout	<< "Vk version  : " << gpu.getVulkanVersion() << '\n'
-				<< "Nb devices  : " << gpu.getNumberOfDevices() << '\n'
-				<< "Model name  : " << gpu.getModelName() << '\n'
-				<< "Vendor name : " << gpu.getVendorName() << '\n'
-				<< "Device type : " << gpu.getDeviceType() << '\n'
-				<< "Driver ver  : " << gpu.getDriverVersion() << std::endl;
-
 	return app;
 }
