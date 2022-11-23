@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 21/08/2022
+// Updated : 23/11/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -40,7 +40,7 @@ namespace Ak::Core
 
         auto FN_vkEnumerateInstanceVersion = PFN_vkEnumerateInstanceVersion(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
         if(vkEnumerateInstanceVersion)
-            vkEnumerateInstanceVersion(&_instanceVersion );
+            vkEnumerateInstanceVersion(&_instanceVersion);
     }
 
     GPU::~GPU()

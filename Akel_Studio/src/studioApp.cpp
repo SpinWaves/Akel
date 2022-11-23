@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 15/11/2022
+// Updated : 23/11/2022
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -37,6 +37,14 @@ Ak::Application* Akel_mainApp()
 
 	studio->setContext();
 	studio->generateFontTextures(imgui);
+
+	Ak::Core::GPU gpu;
+	std::cout	<< "Vk version  : " << gpu.getVulkanVersion() << '\n'
+				<< "Nb devices  : " << gpu.getNumberOfDevices() << '\n'
+				<< "Model name  : " << gpu.getModelName() << '\n'
+				<< "Vendor name : " << gpu.getVendorName() << '\n'
+				<< "Device type : " << gpu.getDeviceType() << '\n'
+				<< "Driver ver  : " << gpu.getDriverVersion() << std::endl;
 
 	return app;
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 05/07/2021
+// Updated : 23/11/2022
 
 #ifndef __AK_GPU__
 #define __AK_GPU__
@@ -15,7 +15,7 @@ namespace Ak::Core
         public:
             GPU();
 
-            inline uint32_t getNumberOfDevices() { return _deviceCount; }
+            inline uint32_t getNumberOfDevices() noexcept { return _deviceCount; }
             inline std::string getModelName() { return std::string(_deviceProperties.deviceName); }
             inline std::string getVendorName() { return _vendors[_deviceProperties.vendorID]; }
             inline std::string getDeviceType() { return _types[static_cast<int>(_deviceProperties.deviceType)]; }
@@ -47,7 +47,7 @@ namespace Ak::Core
             std::map<uint32_t, std::string> _vendors;
             std::array<std::string, 5> _types;
             uint32_t _deviceCount = 0;
-            uint32_t _instanceVersion = VK_API_VERSION_1_0;
+            uint32_t _instanceVersion = VK_API_VERSION_1_3;
     };
 }
 

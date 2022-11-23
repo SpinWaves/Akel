@@ -8,6 +8,7 @@
 
 #include <Akpch.h>
 #include <Core/Components/baseComponent.h>
+#include <Core/log.h>
 
 namespace Ak
 {

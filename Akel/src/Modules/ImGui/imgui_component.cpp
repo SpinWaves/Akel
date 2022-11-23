@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 21/11/2022
+// Updated : 23/11/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -68,7 +68,7 @@ namespace Ak
 			init_info.DescriptorPool = descriptorPool;
 			init_info.Allocator = nullptr;
 			init_info.MinImageCount = Render_Core::get().getSwapChain().getSupport().capabilities.minImageCount;
-			init_info.ImageCount = Render_Core::get().getSwapChain().getSupport().capabilities.maxImageCount;
+			init_info.ImageCount = Render_Core::get().getSwapChain().getImagesNumber();
 			init_info.CheckVkResultFn = RCore::checkVk;
 		ImGui_ImplVulkan_Init(&init_info, Render_Core::get().getRenderPass().get());
 
