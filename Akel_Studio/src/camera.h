@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 23/08/2022
-// Updated : 22/11/2022
+// Updated : 24/11/2022
 
 #ifndef __AK_STUDIO_CAMERA__
 #define __AK_STUDIO_CAMERA__
@@ -13,6 +13,7 @@ class SceneCamera : public Ak::Component
 		public:
 			SceneCamera(double x, double y, double z, Ak::Maths::Vec2<int>* window_size);
 
+			void onAttach() override;
 			void update() override;
 			void onEvent(Ak::Input& input) override;
 			void onRender() override;
@@ -36,7 +37,7 @@ class SceneCamera : public Ak::Component
 			double _phi = -20;
 
 			float _speed = 0.3f;
-			const float _sensivity = 0.9f;
+			float _sensivity = 0.9f;
 
 			bool _focus = true;
 			bool _is_in_action = false;

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 23/08/2022
-// Updated : 22/11/2022
+// Updated : 24/11/2022
 
 #include "camera.h"
 
@@ -12,11 +12,21 @@ SceneCamera::SceneCamera(double x, double y, double z, Ak::Maths::Vec2<int>* win
 	update_view();
 }
 
+void SceneCamera::onAttach()
+{
+	if(!Ak::getMainAppProjectFile().keyExists("scene_camera_sensy"))
+		Ak::getMainAppProjectFile().setFloatValue("scene_camera_sensy", 0.7f);
+	else
+		_sensivity = Ak::getMainAppProjectFile().getFloatValue("scene_camera_sensy");
+}
+
 void SceneCamera::update()
 {
 	update_view();
 	_target = _position + _direction;
 	Ak::Matrixes::lookAt(_position.X, _position.Y, _position.Z, _target.X, _target.Y, _target.Z, 0, 1, 0);
+	if(_sensivity != Ak::getMainAppProjectFile().getFloatValue("scene_camera_sensy"))
+		_sensivity = Ak::getMainAppProjectFile().getFloatValue("scene_camera_sensy");
 }
 
 void SceneCamera::onEvent(Ak::Input& input)
@@ -29,6 +39,8 @@ void SceneCamera::onEvent(Ak::Input& input)
 		_theta -= input.getXRel() * _sensivity;
 		_phi -= input.getYRel() * _sensivity;
 		SDL_WarpMouseInWindow(Ak::Render_Core::get().getWindow()->getNativeWindow(), _window_size->X / 2, _window_size->Y / 2);
+		SDL_PumpEvents();
+		SDL_FlushEvent(SDL_MOUSEMOTION);
 
 		_mov.SET(0.0, 0.0, 0.0);
 

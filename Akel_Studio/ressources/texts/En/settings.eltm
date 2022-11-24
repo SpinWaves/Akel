@@ -1,10 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/08/2022
-// Updated : 28/08/2022
+// Updated : 24/11/2022
 
 begin module Settings
 	let general = "General"
 		let language = "Language"
 		let onQuit = "Validation window at closing"
+	
+	let scene = "Editor's scene"
+		let camera = "Camera"
+			let sensitivity = "Sensitivity"
 end module

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 21/11/2022
+// Updated : 24/11/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -253,6 +253,20 @@ void StudioComponent::draw_general_settings()
 		Ak::getMainAppProjectFile().setBoolValue("on_quit_window", on_quit_window);
 }
 
+void StudioComponent::draw_scene_settings()
+{
+	ImGui::Text(std::string(AKS_ICON_MD_VIDEOCAM" " + _eltm->getText("Settings.camera")).data());
+
+	ImGui::Separator();
+
+	ImGui::Text(_eltm->getText("Settings.sensitivity").data());
+	ImGui::SameLine(0);
+	static float sensy = Ak::getMainAppProjectFile().getFloatValue("scene_camera_sensy");
+	ImGui::SliderFloat("##slider_camera_sensy", &sensy, 0.1f, 2.0f, "%.1f");
+	if(sensy != Ak::getMainAppProjectFile().getFloatValue("scene_camera_sensy"))
+		Ak::getMainAppProjectFile().setFloatValue("scene_camera_sensy", sensy);
+}
+
 void StudioComponent::drawOptionsWindow()
 {
 	if(ImGui::Begin(std::string(AKS_ICON_MD_SETTINGS" " + _eltm->getText("MainMenuBar.options")).data(), &_showOpt, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
@@ -263,6 +277,8 @@ void StudioComponent::drawOptionsWindow()
 		{
 			if(ImGui::Selectable(std::string(AKS_ICON_MD_TUNE" " + _eltm->getText("Settings.general")).data(), selected == 0))
 				selected = 0;
+			if(ImGui::Selectable(std::string(AKS_ICON_MD_PANORAMA" " + _eltm->getText("Settings.scene")).data(), selected == 1))
+				selected = 1;
 			ImGui::EndChild();
 		}
 
@@ -273,6 +289,7 @@ void StudioComponent::drawOptionsWindow()
 			switch(selected)
 			{
 				case 0: draw_general_settings(); break;
+				case 1: draw_scene_settings(); break;
 
 				default : break;
 			}
