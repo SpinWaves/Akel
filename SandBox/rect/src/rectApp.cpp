@@ -73,14 +73,14 @@ class Rect : public Ak::Application
 
             Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(window);
 
-            Ak::Render_Core::get().getClearValue().color.float32[0] = 128 / 255;
-            Ak::Render_Core::get().getClearValue().color.float32[1] = 175 / 255;
-            Ak::Render_Core::get().getClearValue().color.float32[2] = 255 / 255;
+            Ak::Render_Core::get().getClearValue().color.float32[0] = 0.0f;
+            Ak::Render_Core::get().getClearValue().color.float32[1] = 0.0f;
+            Ak::Render_Core::get().getClearValue().color.float32[2] = 0.0f;
 
 			renderer->loadCustomShader(vertex_shader);
 			renderer->loadCustomShader(fragment_shader);
 
-			Ak::Entity2D rectangle(Models::quad, { 50.0f, 50.0f }, { 250.0f, 200.0f }, Colors::red);
+			Ak::Entity2D rectangle(Models::quad, { -0.5f, -0.5f }, { 1.0f, 1.0f }, Colors::red);
             renderer->add_entity(rectangle);
 
             add_component(renderer);

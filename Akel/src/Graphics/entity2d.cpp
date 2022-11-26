@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 18/09/2022
+// Updated : 26/11/2022
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -47,7 +47,7 @@ namespace Ak
 				std::vector<uint32_t> indexData;
                 indexData = { 0, 1, 2, 2, 3, 0 };
 
-				_vbo.create(sizeof(Vertex2D) * vertexData.size(), vertexData.data());
+				_vbo.create(sizeof(vertexData[0]) * vertexData.size(), vertexData.data());
 				_ibo.create(sizeof(uint32_t) * indexData.size(), indexData.data());
 
 				break;

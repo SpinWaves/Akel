@@ -18,7 +18,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 
   Demo | Command
   ---- | -------
-  Editor | `xmake` or `xmake build Editor`
+  Editor | `xmake` or `xmake build Akel_Studio`
   Rectangle | `xmake build RectDemo`
   Cube | Coming soon...
 

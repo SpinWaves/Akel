@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 24/09/2022
+// Updated : 26/11/2022
 
 #include "vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
@@ -63,6 +63,13 @@ namespace Ak
         inputAssembly.topology = topology;
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
+		VkDynamicState states[] = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+
+		VkPipelineDynamicStateCreateInfo dynamicStates{};
+		dynamicStates.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+		dynamicStates.dynamicStateCount = 2;
+		dynamicStates.pDynamicStates = states;
+
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
@@ -118,7 +125,7 @@ namespace Ak
         pipelineLayoutInfo.pSetLayouts = descriptor_layouts.data();
 
         if(vkCreatePipelineLayout(Render_Core::get().getDevice().get(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
-            Core::log::report(FATAL_ERROR, "Vulkan : failed to create pipeline layout");
+            Core::log::report(FATAL_ERROR, "Vulkan : failed to create a graphics pipeline layout");
 
         VkGraphicsPipelineCreateInfo pipelineInfo{};
         pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -130,13 +137,14 @@ namespace Ak
         pipelineInfo.pRasterizationState = &rasterizer;
         pipelineInfo.pMultisampleState = &multisampling;
         pipelineInfo.pColorBlendState = &colorBlending;
+		pipelineInfo.pDynamicState = &dynamicStates;
         pipelineInfo.layout = _pipelineLayout;
         pipelineInfo.renderPass = Render_Core::get().getRenderPass().get();
         pipelineInfo.subpass = 0;
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
         if(vkCreateGraphicsPipelines(Render_Core::get().getDevice().get(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS)
-            Core::log::report(FATAL_ERROR, "Vulkan : failed to create graphics pipeline");
+            Core::log::report(FATAL_ERROR, "Vulkan : failed to create a graphics pipeline");
     }
 
     void GraphicPipeline::destroy() noexcept

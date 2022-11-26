@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 03/11/2022
+// Updated : 26/11/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -155,7 +155,8 @@ namespace Ak
 
 		stream.seekg(0);
 
-		std::for_each(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>(), [&data](const char c){ data.push_back(static_cast<uint32_t>(c)); });
+		// Need to read 4 bytes each time and store them in an uint32_t, not just one
+		//std::for_each(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>(), [&data](const char c){ data.push_back(static_cast<uint32_t>(c)); });
 		
 		stream.close();
 

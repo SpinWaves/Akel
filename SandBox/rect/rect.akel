@@ -1,15 +1,1 @@
-# This file is an Akel project file. It contains configuration parameters for the engine.
-# DO NOT MODIFY IT, OTHERWISE YOU WILL GET BAD PERFORMANCES,
-# BAD MEMORY OPTIMISATION OR EVEN YOUR PROJECT WILL NOT WORK ANYMORE!
-
-use_memory_manager = true
-fixedAllocator_size_0 = 1600
-fixedAllocator_size_1 = 6400
-fixedAllocator_size_2 = 38400
-jamAllocator_size_0 = 3393
-enable_warning_console_message = true
-vk_enable_message_validation_layer = false
-memory_manager_enable_fixed_allocator = false
-imgui_vk_debug_report = true
-imgui_vk_unlimited_framerate = false
-vk_force_disable_validation_layers = false
+…¾enable_warning_console_messageÃ³jamAllocator_size_0ÍÙ%memory_manager_enable_fixed_allocatorÂÙ"vk_enable_message_validation_layerÂÙ"vk_force_disable_validation_layersÂ
