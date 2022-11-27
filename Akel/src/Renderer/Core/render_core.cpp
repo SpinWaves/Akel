@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 03/11/2022
+// Updated : 26/11/2022
 
 #include "render_core.h"
 
@@ -60,7 +60,7 @@ namespace Ak
 		_surface.create();
 		_device.init();
 		_queues.init();
-		//_allocator.init(_device.getPhysicalDevice(), _device.get(), nullptr, 4096);
+		_allocator.init(_device.getPhysicalDevice(), _device.get(), nullptr, 4096);
 		_swapchain.init();
 		_pass.init();
 		_swapchain.initFB();

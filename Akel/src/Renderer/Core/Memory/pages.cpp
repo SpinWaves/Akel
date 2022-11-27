@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 03/11/2022
+// Updated : 27/11/2022
 
 #include <Core/core.h>
 #include "pages.h"
@@ -67,7 +67,7 @@ namespace Ak
 
 	    _head = memAlloc<GPU_Page::Flag>(0, size);
 
-	    VkMemoryAllocateInfo info = {};
+	    VkMemoryAllocateInfo info{};
 	    info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	    info.allocationSize = size;
 	    info.memoryTypeIndex = typeIndex;

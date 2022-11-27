@@ -150,13 +150,15 @@ namespace Ak
 		std::ifstream stream(path.c_str(), std::ios::binary);
 
 		if(!stream.is_open())
-			Core::log::report(FATAL_ERROR, "Renderer : unable to open a spirv shader file");
+			Core::log::report(FATAL_ERROR, "Renderer : unable to open a spirv shader file, %s", path.c_str());
+		
 		std::vector<uint32_t> data;
 
 		stream.seekg(0);
 
-		// Need to read 4 bytes each time and store them in an uint32_t, not just one
-		//std::for_each(std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>(), [&data](const char c){ data.push_back(static_cast<uint32_t>(c)); });
+		uint32_t part = 0;
+		while(stream.read(reinterpret_cast<char*>(&part), sizeof(part)))
+			data.push_back(part);
 		
 		stream.close();
 
