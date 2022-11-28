@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 27/11/2022
+// Updated : 28/11/2022
 
 #include "heap.h"
 
@@ -20,14 +20,14 @@ namespace Ak
 
             if(type.heapIndex == _heapIndex)
                 _memoryTypes.emplace_back(MemoryType{ i, type.propertyFlags });
-        }
+		}
     }
 
 	bool const GPU_Heap::match(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags, uint32_t* typeIndex) const
     {
         for(uint32_t i = 0; i < _memoryTypes.size(); i++)
         {
-            if((requirements.memoryTypeBits & (1 << _memoryTypes[i].typeIndex)) != 0 && (_memoryTypes[i].flags & flags) == flags)
+            if((requirements.memoryTypeBits & (1 << _memoryTypes[i].typeIndex)) && (_memoryTypes[i].flags & flags) == flags)
             {
                 *typeIndex = i;
                 return true;

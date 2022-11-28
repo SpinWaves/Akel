@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 27/11/2022
+// Updated : 28/11/2022
 
 #include <Core/core.h>
 #include "pages.h"
@@ -104,10 +104,7 @@ namespace Ak
 	            size_t start = current->offset;
 	            size_t available = current->size;
 
-	            size_t unalign = start % requirements.alignment;
-	            size_t align;
-
-	            align = unalign ? 0 : align = requirements.alignment - unalign;
+	            size_t align = start % requirements.alignment ? 0 : requirements.alignment - start % requirements.alignment;
 
 	            start += align;
 	        	available -= align;
@@ -119,6 +116,10 @@ namespace Ak
 	                result.memory = _memory;
 	                result.offset = start;
 	                result.size = requirements.size;
+					std::cout << "size    : " << result.size << std::endl;
+					std::cout << "offset  : " << result.offset << std::endl;
+					std::bitset<32> bits(requirements.memoryTypeBits);
+					std::cout << "memory  : " << bits << std::endl;
 	                return result;
 	            }
 	        }
