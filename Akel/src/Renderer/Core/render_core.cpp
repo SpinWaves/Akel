@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 26/11/2022
+// Updated : 29/11/2022
 
 #include "render_core.h"
 
@@ -103,6 +103,8 @@ namespace Ak
 		_cmd_buffers[_active_image_index]->beginRecord();
 		_pass.begin();
 
+		_cmd_buffer_finished = false;
+
 		return true;
 	}
 
@@ -154,6 +156,7 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to present swap chain image");
 
 		_active_image_index = (_active_image_index + 1) % MAX_FRAMES_IN_FLIGHT;
+		_cmd_buffer_finished = true;
 	}
 
 	void Render_Core::destroyCommandBuffers()

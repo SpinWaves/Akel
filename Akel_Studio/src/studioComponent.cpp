@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 24/11/2022
+// Updated : 29/11/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -21,6 +21,8 @@ void StudioComponent::onAttach()
 		Ak::getMainAppProjectFile().setBoolValue("on_quit_window", true);
 	if(!Ak::getMainAppProjectFile().keyExists("vsync"))
 		Ak::getMainAppProjectFile().setBoolValue("vsync", true);
+	if(!Ak::getMainAppProjectFile().keyExists("cullmode"))
+		Ak::getMainAppProjectFile().setIntValue("cullmode", VK_CULL_MODE_BACK_BIT);
 	
 	_eltm->load(std::move(Ak::getMainAppProjectFile().getStringValue("language")));
 

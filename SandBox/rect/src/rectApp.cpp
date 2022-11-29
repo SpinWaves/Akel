@@ -27,7 +27,7 @@ class Rect : public Ak::Application
 			renderer->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/vert.spv");
 			renderer->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/frag.spv");
 
-			Ak::Entity2D rectangle(Models::quad, { -0.5f, -0.5f }, { 1.0f, 1.0f }, Colors::red);
+			Ak::Entity2D rectangle(Models::quad, { 50.0f, 50.0f }, { 50.0f, 50.0f }, Colors::red);
             renderer->add_entity(rectangle);
 
             add_component(renderer);
@@ -40,7 +40,6 @@ Ak::AkelInstance Akel_init()
     Ak::AkelInstance instance;
         instance.project_file_path = Ak::Core::getMainDirPath() + "../../SandBox/rect";
         instance.project_file_name = "rect";
-        instance.memory_manager_enable_fixed_allocator = false;
     return instance;    
 }
 

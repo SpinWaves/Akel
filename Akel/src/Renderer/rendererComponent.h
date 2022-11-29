@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 26/11/2022
+// Updated : 29/11/2022
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -30,11 +30,15 @@ namespace Ak
 
             void switchToShader(std::size_t index);
 
+			inline constexpr void reloadRenderer() noexcept { _reload = true; }
+			inline void setCullMode(VkCullModeFlags culling) noexcept { _cull_mode = culling; }
+
 			inline void add_entity(Entity2D& entity) { _2D_entities.push_back(entity); }
 			inline void add_entity(Entity3D& entity) { _3D_entities.push_back(entity); }
 
             void onAttach() override;
             void onRender() override;
+            void update() override;
             void onQuit() override;
 
         private:
@@ -43,10 +47,14 @@ namespace Ak
 
 			std::vector<Entity3D> _3D_entities;
 			std::vector<Entity2D> _2D_entities;
+
+			VkCullModeFlags _cull_mode;
             
 			render_mode _mode;
             
 			WindowComponent* _window = nullptr;
+
+			bool _reload = false;
     };
 }
 

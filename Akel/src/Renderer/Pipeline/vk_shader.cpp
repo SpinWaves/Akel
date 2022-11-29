@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 26/11/2022
+// Updated : 29/11/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -249,5 +249,6 @@ namespace Ak
 	{
 		Ak_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
 		vkDestroyShaderModule(Render_Core::get().getDevice().get(), _shader, nullptr);
+		_shader = VK_NULL_HANDLE;
 	}
 }

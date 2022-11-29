@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 30/09/2022
+// Updated : 29/11/2022
 
 #include <Renderer/rendererComponent.h>
 
@@ -25,6 +25,22 @@ namespace Ak
         for(Entity2D& ent : _2D_entities)
 			ent.initBuffers();
     }
+
+	void RendererComponent::update()
+	{
+		if(_reload)
+		{
+			if(!_shaders.empty())
+			{
+				_pipeline.destroy();
+				_pipeline.init(_shaders, std::vector<Ak::Shader::VertexInput>{ {
+						{ Vertex2D::getBindingDescription() },
+						{ Vertex2D::getAttributeDescriptions()[0], Vertex2D::getAttributeDescriptions()[1] }
+				} }, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, _cull_mode);
+			}
+			_reload = false;
+		}
+	}
 
     void RendererComponent::onRender()
     {

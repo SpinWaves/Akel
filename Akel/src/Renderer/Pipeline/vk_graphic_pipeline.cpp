@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 26/11/2022
+// Updated : 29/11/2022
 
 #include "vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
@@ -65,9 +65,10 @@ namespace Ak
 
 		VkDynamicState states[] = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
 
+		constexpr size_t statesCount = sizeof(states) / sizeof(VkDynamicState);
 		VkPipelineDynamicStateCreateInfo dynamicStates{};
 		dynamicStates.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-		dynamicStates.dynamicStateCount = 2;
+		dynamicStates.dynamicStateCount = statesCount;
 		dynamicStates.pDynamicStates = states;
 
         VkViewport viewport{};

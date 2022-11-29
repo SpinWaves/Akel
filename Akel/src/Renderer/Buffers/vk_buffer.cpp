@@ -45,7 +45,8 @@ namespace Ak
 	{
 		Ak_assert(_buffer != VK_NULL_HANDLE, "trying to destroy an uninit video buffer");
 		vkDestroyBuffer(Render_Core::get().getDevice().get(), _buffer, nullptr);
-		Render_Core::get().freeChunk(_mem_chunck);
+		//Render_Core::get().freeChunk(_mem_chunck);
+		vkFreeMemory(Render_Core::get().getDevice().get(), _mem_chunck.memory, nullptr);
 	}
 
 	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
@@ -78,7 +79,7 @@ namespace Ak
 		VkMemoryRequirements memRequirements;
 		vkGetBufferMemoryRequirements(device, _buffer, &memRequirements);
 
-		/*
+		
 		VkMemoryAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
         allocInfo.allocationSize = memRequirements.size;
@@ -86,9 +87,9 @@ namespace Ak
 
         if(vkAllocateMemory(device, &allocInfo, nullptr, &_mem_chunck.memory) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate buffer memory");
-		*/
+		
 
-		_mem_chunck = Render_Core::get().allocChunk(memRequirements, properties);
+		//_mem_chunck = Render_Core::get().allocChunk(memRequirements, properties);
 
 		if(vkBindBufferMemory(device, _buffer, _mem_chunck.memory, _mem_chunck.offset) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : unable to bind device memory to a buffer object");

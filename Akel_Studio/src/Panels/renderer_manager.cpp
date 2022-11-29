@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 15/11/2022
+// Updated : 29/11/2022
 
 #include <Panels/renderer_manager.h>
 #include <Fonts/material_font.h>
@@ -9,7 +9,16 @@
 RendererManager::RendererManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__renderer_manager"), _gpu()
 {
     _eltm = std::move(eltm);
-    selected = _eltm->getText("RendererManager.cull_none");
+    int cull_mode = Ak::getMainAppProjectFile().getIntValue("cullmode");
+	switch(cull_mode)
+	{
+		case VK_CULL_MODE_NONE: selected = _eltm->getText("RendererManager.cull_none"); break;
+		case VK_CULL_MODE_FRONT_BIT: selected = _eltm->getText("RendererManager.cull_front"); break;
+		case VK_CULL_MODE_BACK_BIT: selected = _eltm->getText("RendererManager.cull_back"); break;
+		case VK_CULL_MODE_FRONT_AND_BACK: selected = _eltm->getText("RendererManager.cull_front_and_back"); break;
+
+		default : break;
+	}
 }
 
 void RendererManager::onUpdate(Ak::Maths::Vec2<int>& size)
@@ -31,28 +40,36 @@ void RendererManager::render_sets()
         ImGui::SameLine();
         if(ImGui::BeginCombo("##combo", selected.c_str()))
         {
-            static int item_current_idx = 0;
-            if(ImGui::Selectable(_eltm->getText("RendererManager.cull_none").c_str(), item_current_idx == 0))
+            int item_current_idx = Ak::getMainAppProjectFile().getIntValue("cullmode");
+            if(ImGui::Selectable(_eltm->getText("RendererManager.cull_none").c_str(), item_current_idx == VK_CULL_MODE_NONE))
             {
-                item_current_idx = 0;
+                item_current_idx = VK_CULL_MODE_NONE;
                 selected = _eltm->getText("RendererManager.cull_none");
             }
-            if(ImGui::Selectable(_eltm->getText("RendererManager.cull_front").c_str(), item_current_idx == 1))
+            if(ImGui::Selectable(_eltm->getText("RendererManager.cull_front").c_str(), item_current_idx == VK_CULL_MODE_FRONT_BIT))
             {
-                item_current_idx = 1;
+                item_current_idx = VK_CULL_MODE_FRONT_BIT;
                 selected = _eltm->getText("RendererManager.cull_front");
             }
-            if(ImGui::Selectable(_eltm->getText("RendererManager.cull_back").c_str(), item_current_idx == 2))
+            if(ImGui::Selectable(_eltm->getText("RendererManager.cull_back").c_str(), item_current_idx == VK_CULL_MODE_BACK_BIT))
             {
-                item_current_idx = 2;
+                item_current_idx = VK_CULL_MODE_BACK_BIT;
                 selected = _eltm->getText("RendererManager.cull_back");
             }
-            if(ImGui::Selectable(_eltm->getText("RendererManager.cull_front_and_back").c_str(), item_current_idx == 3))
+            if(ImGui::Selectable(_eltm->getText("RendererManager.cull_front_and_back").c_str(), item_current_idx == VK_CULL_MODE_FRONT_AND_BACK))
             {
-                item_current_idx = 3;
+                item_current_idx = VK_CULL_MODE_FRONT_AND_BACK;
                 selected = _eltm->getText("RendererManager.cull_front_and_back");
             }
             ImGui::EndCombo();
+
+			if(item_current_idx != Ak::getMainAppProjectFile().getIntValue("cullmode"))
+			{
+				Ak::getMainAppProjectFile().setIntValue("cullmode", item_current_idx);
+				Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
+				renderer->setCullMode(item_current_idx);
+				renderer->reloadRenderer();
+			}
         }
         
         static ImVec4 color = ImVec4(Ak::Render_Core::get().getClearValue().color.float32[0], Ak::Render_Core::get().getClearValue().color.float32[1], Ak::Render_Core::get().getClearValue().color.float32[2], Ak::Render_Core::get().getClearValue().color.float32[3]);

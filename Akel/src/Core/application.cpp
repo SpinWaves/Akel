@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 23/11/2022
+// Updated : 29/11/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -10,11 +10,19 @@
 
 namespace Ak
 {
+	static Application* __main_app = nullptr;
+
+	ComponentStack* getMainAppComponentStack()
+	{
+		return static_cast<ComponentStack*>(__main_app);
+	}
+
 	Application::Application() : ComponentStack(), non_copyable(), _in(), _fps()
 	{
 		if(_app_check)
 			Core::log::report(FATAL_ERROR, "you can only declare one application");
 		_app_check = true;
+		__main_app = this;
 		
 		_fps.init();
 		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)

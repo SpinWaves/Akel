@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 30/09/2022
+// Updated : 28/11/2022
 
 #ifndef __AK_VK_MEMORY_PAGES__
 #define __AK_VK_MEMORY_PAGES__

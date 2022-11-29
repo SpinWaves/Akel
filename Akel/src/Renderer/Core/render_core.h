@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 26/11/2022
+// Updated : 29/11/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -74,8 +74,9 @@ namespace Ak
             inline VkClearValue& getClearValue()   { return _clearColor; }
             inline CmdBuffer& getCmdBuffer(int i)  { return *_cmd_buffers[i]; }
             inline CmdBuffer& getActiveCmdBuffer() { return *_cmd_buffers[_active_image_index]; }
-            inline uint32_t getActiveImageIndex()  { return _active_image_index; }
-            inline uint32_t getImageIndex()        { return _image_index; }
+            inline uint32_t getActiveImageIndex() const noexcept  { return _active_image_index; }
+            inline uint32_t getImageIndex()    const noexcept     { return _image_index; }
+			inline bool areCmdBufferFimished() const noexcept     { return _cmd_buffer_finished; }
 
             inline GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags) { return _allocator.allocChunk(requirements, flags); }
             inline void freeChunk(GPU_Mem_Chunk& chunk) { _allocator.freeChunk(chunk); }
@@ -106,6 +107,8 @@ namespace Ak
             uint32_t _active_image_index = 0;
             uint32_t _image_index = 0;
             bool _is_init = false;
+
+			bool _cmd_buffer_finished = true;
     };
 }
 

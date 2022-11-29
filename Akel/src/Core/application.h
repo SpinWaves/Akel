@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 15/11/2022
+// Updated : 29/11/2022
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -29,6 +29,8 @@ namespace Ak
 			CounterFPS _fps;
 			inline static bool _app_check = false;
 	};
+
+	ComponentStack* getMainAppComponentStack();
 }
 
 #endif // __AK_APPLICATION__
