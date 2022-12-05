@@ -1,3 +1,8 @@
+// This file is a part of Akel
+// Authors : @kbz_8
+// Created : 28/03/2021
+// Updated : 05/12/2022
+//
 // Akel is an open source game engine made for fun
 // https://github.com/SpinWaves/Akel
 // 
@@ -34,5 +39,6 @@
 #include <Modules/modules.h>
 #include <Graphics/graphics.h>
 #include <Audio/audio.h>
+#include <Scene/scenes.h>
 
 #endif // __AKEL__

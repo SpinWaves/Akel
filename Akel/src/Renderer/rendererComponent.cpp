@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 29/11/2022
+// Updated : 05/12/2022
 
 #include <Renderer/rendererComponent.h>
+#include <Renderer/Buffers/vk_ubo.h>
 
 namespace Ak
 {
@@ -70,6 +71,16 @@ namespace Ak
 
 			vkCmdDrawIndexed(Render_Core::get().getActiveCmdBuffer().get(), static_cast<uint32_t>(ent._ibo.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
 		}
+
+		/*
+		for(Shader* shader : _pipeline.getShaders())
+		{
+			for(UBO& ubo : shader->getUniformBuffers())
+			{
+				ubo.setDynamicData();
+			}
+		}
+		*/
     }
 
     void RendererComponent::onQuit()

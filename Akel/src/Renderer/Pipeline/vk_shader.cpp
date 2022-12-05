@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 29/11/2022
+// Updated : 05/12/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
+#include <Renderer/Buffers/vk_ubo.h>
 
 #include <Utils/fStrings.h>
 
@@ -208,6 +209,10 @@ namespace Ak
 					DescriptorSetLayout layout;
 					layout.init(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, sets[i]->bindings[j]->binding, _type);
 					_layouts.push_back(std::move(layout));
+
+					UBO* buffer = memAlloc<UBO>();
+					buffer->create(sets[i]->bindings[j]->block.size);
+					_uniform_buffers.push_back(buffer);
 				}
 			}
 		}
@@ -248,6 +253,16 @@ namespace Ak
 	void Shader::destroy() noexcept
 	{
 		Ak_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
+
+		for(auto buffer : _uniform_buffers)
+		{
+			buffer->destroy();
+			memFree(buffer);
+		}
+
+		for(auto layout : _layouts)
+			layout.destroy();
+
 		vkDestroyShaderModule(Render_Core::get().getDevice().get(), _shader, nullptr);
 		_shader = VK_NULL_HANDLE;
 	}

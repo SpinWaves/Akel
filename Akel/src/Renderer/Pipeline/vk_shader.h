@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 24/09/2022
+// Updated : 05/12/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -80,6 +80,10 @@ namespace Ak
 			inline const duets_array<fString, VkVertexInputAttributeDescription>& getAttributes() const { return _attributes; }
 
 			inline std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _layouts; }
+			inline DescriptorSetLayout& getDescriptorSetLayout(int index) { return _layouts[index]; }
+
+			inline std::vector<class UBO*>& getUniformBuffers() { return _uniform_buffers; }
+			inline class UBO* getUniformBuffer(int index) { return _uniform_buffers[index]; }
 
 			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.has(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
 			inline std::optional<VkVertexInputAttributeDescription> getAttribute(fString name) { return _attributes.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
@@ -94,6 +98,7 @@ namespace Ak
 			
 			std::vector<VkDescriptorPoolSize> descriptorPools;
 			std::vector<DescriptorSetLayout> _layouts;
+			std::vector<class UBO*> _uniform_buffers;
 
 			const std::vector<uint32_t> _byte_code;
 

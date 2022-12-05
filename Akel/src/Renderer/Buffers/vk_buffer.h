@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 01/10/2022
+// Updated : 05/12/2022
 
 #ifndef __AK_VK_BUFFER__
 #define __AK_VK_BUFFER__
@@ -15,7 +15,7 @@ namespace Ak
 	class Buffer
 	{
 		public:
-			enum class kind { constant, dynamic };
+			enum class kind { constant, dynamic, uniform };
 
 			void create(kind type, VkDeviceSize size, VkBufferUsageFlags usage, const void* data = nullptr);
 			void destroy() noexcept;

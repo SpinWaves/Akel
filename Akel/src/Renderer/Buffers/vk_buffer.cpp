@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 28/11/2022
+// Updated : 05/12/2022
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
@@ -18,6 +18,11 @@ namespace Ak
 				return;
 			}
 			_usage = usage | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+			_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+		}
+		else if(type == Buffer::kind::uniform)
+		{
+			_usage = usage;
 			_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 		}
 		else
