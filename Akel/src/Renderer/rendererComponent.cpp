@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 05/12/2022
+// Updated : 06/12/2022
 
 #include <Renderer/rendererComponent.h>
 #include <Renderer/Buffers/vk_ubo.h>
@@ -22,9 +22,6 @@ namespace Ak
 					{ Vertex2D::getAttributeDescriptions()[0], Vertex2D::getAttributeDescriptions()[1] }
 			} });
 		}
-
-        for(Entity2D& ent : _2D_entities)
-			ent.initBuffers();
     }
 
 	void RendererComponent::update()
@@ -63,14 +60,6 @@ namespace Ak
 		scissor.offset = { 0, 0 };
 		scissor.extent = Render_Core::get().getSwapChain()._swapChainExtent;
 		vkCmdSetScissor(Render_Core::get().getActiveCmdBuffer().get(), 0, 1, &scissor);
-
-        for(Entity2D& ent : _2D_entities)
-		{
-			ent._vbo.bind();
-			ent._ibo.bind();
-
-			vkCmdDrawIndexed(Render_Core::get().getActiveCmdBuffer().get(), static_cast<uint32_t>(ent._ibo.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
-		}
 
 		/*
 		for(Shader* shader : _pipeline.getShaders())

@@ -1,27 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/11/2022
-// Updated : 23/11/2022
+// Updated : 06/12/2022
 
 #include <Scene/scene.h>
 #include <Scene/scene_manager.h>
 
 namespace Ak
 {
-	void SceneManager::onAttach()
-	{
-		_scenes.clear();
-	}
-
-	void SceneManager::update()
-	{
-		_scenes[_current_scene_id]->update();
-	}
-
-	void SceneManager::onEvent(Input& in)
-	{
-		_scenes[_current_scene_id]->onEvent(in);
-	}
+	SceneManager::SceneManager() : Component("__scenes_manager") {}
 
 	void SceneManager::onRender()
 	{
@@ -32,6 +19,9 @@ namespace Ak
 	void SceneManager::onQuit()
 	{
 		for(Scene* scene : _scenes)
+		{
 			scene->onQuit();
+			memFree(scene);
+		}
 	}
 }

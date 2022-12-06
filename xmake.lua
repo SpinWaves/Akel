@@ -6,7 +6,7 @@
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json")
+add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json")
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
@@ -48,6 +48,7 @@ target("Akel")
 	add_packages("imgui_sdl_vk",  { public = true })
 	add_packages("sol2",  		  { public = true })
 	add_packages("nlohmann_json", { public = true })
+	add_packages("entt", 	      { public = true })
 	add_packages("vulkan-memory-allocator", { public = true })
 
 	add_packages("libsndfile",    { public = true })

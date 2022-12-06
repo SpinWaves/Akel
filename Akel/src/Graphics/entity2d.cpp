@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 28/11/2022
+// Updated : 05/12/2022
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -29,6 +29,12 @@ namespace Ak
         uint32_t col_val = static_cast<uint32_t>(_color);
         color.SET(static_cast<float>((col_val & R_MASK) >> 24) / 255, static_cast<float>((col_val & G_MASK) >> 16) / 255, static_cast<float>((col_val & B_MASK) >> 8) / 255, static_cast<float>((col_val & A_MASK)) / 255);
     }
+
+	void Entity2D::destroy() noexcept
+	{
+		_vbo.destroy();
+		_ibo.destroy();
+	}
 
 	void Entity2D::initBuffers()
 	{

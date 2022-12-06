@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2021
-// Updated : 18/09/2022
+// Updated : 06/12/2022
 
 #ifndef __AK_ENTITY__
 #define __AK_ENTITY__
@@ -63,11 +63,13 @@ namespace Ak
 
 	class Entity2D
 	{
-		friend class RendererComponent;
+		friend class Scene;
 
 		public:
 			Entity2D(Models _model, Maths::Vec2<float> _position, Maths::Vec2<float> _scale, Maths::Vec4<float> _color);
 			Entity2D(Models _model, Maths::Vec2<float> _position, Maths::Vec2<float> _scale, Colors color);
+
+			void destroy() noexcept;
 
 			Models model;
 			Maths::Vec2<float> position;
