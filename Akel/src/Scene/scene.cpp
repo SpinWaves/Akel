@@ -1,17 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 06/12/2022
+// Updated : 07/12/2022
 
 #include <Scene/scene.h>
+#include <Platform/window.h>
+#include <Graphics/matrixes.h>
 
 namespace Ak
 {
-	Scene::Scene(fString name) : _name(std::move(name)) {}
-
-	void Scene::onAttach(uint32_t id)
+	Scene::Scene(fString name, WindowComponent* window) : _name(std::move(name)), _window(window)
 	{
-		_id = id;
+		if(window == nullptr)
+			Core::log::report(FATAL_ERROR, "Scene '%s' : wrong window pointer", name.c_str());
 	}
 
 	void Scene::add_2D_entity(Entity2D entity)
@@ -22,6 +23,8 @@ namespace Ak
 
 	void Scene::onRender2D()
 	{
+		Matrixes::ortho(0, 0, _window->size.X, _window->size.Y);
+
         for(Entity2D& ent : _2D_entities)
 		{
 			ent._vbo.bind();

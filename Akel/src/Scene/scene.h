@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 06/12/2022
+// Updated : 07/12/2022
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -16,9 +16,9 @@ namespace Ak
 	class Scene
 	{
 		public:
-			Scene(fString name = "Empty scene");
+			Scene(fString name = "Empty scene", class WindowComponent* window = nullptr);
 
-			void onAttach(uint32_t id);
+			inline void onAttach(uint32_t id) noexcept { _id = id; }
 			void onRender3D();
 			void onRender2D();
 			void onQuit();
@@ -31,6 +31,7 @@ namespace Ak
 			std::vector<class Entity3D> _3D_entities;
 			std::vector<class Entity2D> _2D_entities;
 			fString _name;
+			class WindowComponent* _window = nullptr;
 			uint32_t _id = -1;
 	};
 }
