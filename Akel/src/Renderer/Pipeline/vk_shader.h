@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 05/12/2022
+// Updated : 07/12/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -20,18 +20,20 @@ namespace Ak
 			class Uniform
 			{
 				public:
-					Uniform(int32_t binding = -1, int32_t set = -1, int32_t offset = -1, int32_t size = -1, VkShaderStageFlags stageFlags = 0) :
+					Uniform(int32_t binding = -1, int32_t set = -1, int32_t offset = -1, int32_t size = -1, VkShaderStageFlags stageFlags = 0, class UBO* ubo = nullptr) :
 						_binding(binding),
 						_set(set),
 						_offset(offset),
 						_size(size),
-						_stageFlags(stageFlags)
+						_stageFlags(stageFlags),
+						_buffer(ubo)
 					{}
 
 					inline int32_t getBinding() const noexcept { return _binding; }
 					inline int32_t getOffset() const noexcept { return _offset; }
 					inline int32_t getSize() const noexcept { return _size; }
 					inline int32_t getSet() const noexcept { return _set; }
+					inline class UBO* getBuffer() const noexcept { return _buffer; }
 					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
 
 					inline bool operator==(const Uniform &rhs) const
@@ -45,7 +47,10 @@ namespace Ak
 
 					inline bool operator!=(const Uniform &rhs) const { return !operator==(rhs); }
 
+					~Uniform();
+
 				private:
+					class UBO* _buffer = nullptr;
 					VkShaderStageFlags _stageFlags;
 					int32_t _binding;
 					int32_t _set;
@@ -76,14 +81,11 @@ namespace Ak
 			inline VkShaderModule getShaderModule() const noexcept { return _shader; }
 			inline VkShaderStageFlagBits getType() const noexcept { return _type; }
 
-			inline const duets_array<fString, Uniform>& getUniforms() const { return _uniforms; }
-			inline const duets_array<fString, VkVertexInputAttributeDescription>& getAttributes() const { return _attributes; }
+			inline duets_array<fString, Uniform>& getUniforms() { return _uniforms; }
+			inline duets_array<fString, VkVertexInputAttributeDescription>& getAttributes() { return _attributes; }
 
 			inline std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _layouts; }
 			inline DescriptorSetLayout& getDescriptorSetLayout(int index) { return _layouts[index]; }
-
-			inline std::vector<class UBO*>& getUniformBuffers() { return _uniform_buffers; }
-			inline class UBO* getUniformBuffer(int index) { return _uniform_buffers[index]; }
 
 			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.has(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
 			inline std::optional<VkVertexInputAttributeDescription> getAttribute(fString name) { return _attributes.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
@@ -98,7 +100,6 @@ namespace Ak
 			
 			std::vector<VkDescriptorPoolSize> descriptorPools;
 			std::vector<DescriptorSetLayout> _layouts;
-			std::vector<class UBO*> _uniform_buffers;
 
 			const std::vector<uint32_t> _byte_code;
 

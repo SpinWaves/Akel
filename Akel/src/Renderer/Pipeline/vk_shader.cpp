@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 05/12/2022
+// Updated : 07/12/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -166,6 +166,12 @@ namespace Ak
 		return data;
 	}
 
+	Shader::Uniform::~Uniform()
+	{
+		if(_buffer != nullptr)
+			memFree(_buffer);
+	}
+
 	Shader::Shader(const std::vector<uint32_t> byte_code) : _byte_code(std::move(byte_code)) {}
 
 	void Shader::generate()
@@ -197,22 +203,22 @@ namespace Ak
 					return;
 				if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
 				{
+					UBO* buffer = memAlloc<UBO>();
+					buffer->create(sets[i]->bindings[j]->block.size);
+
 					_uniforms.set_duet(sets[i]->bindings[j]->name,
 						Shader::Uniform{
 							static_cast<int32_t>(sets[i]->bindings[j]->binding),
 							static_cast<int32_t>(sets[i]->bindings[j]->set),
 							static_cast<int32_t>(sets[i]->bindings[j]->block.offset),
 							static_cast<int32_t>(sets[i]->bindings[j]->block.size),
-							_type
+							_type,
+							buffer
 						});
 
 					DescriptorSetLayout layout;
 					layout.init(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, sets[i]->bindings[j]->binding, _type);
 					_layouts.push_back(std::move(layout));
-
-					UBO* buffer = memAlloc<UBO>();
-					buffer->create(sets[i]->bindings[j]->block.size);
-					_uniform_buffers.push_back(buffer);
 				}
 			}
 		}
@@ -253,12 +259,6 @@ namespace Ak
 	void Shader::destroy() noexcept
 	{
 		Ak_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
-
-		for(auto buffer : _uniform_buffers)
-		{
-			buffer->destroy();
-			memFree(buffer);
-		}
 
 		for(auto layout : _layouts)
 			layout.destroy();

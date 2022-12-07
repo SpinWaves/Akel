@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/04/2022
-// Updated : 01/10/2022
+// Updated : 07/12/2022
 
 #include "vk_ubo.h"
 
@@ -15,7 +15,7 @@ namespace Ak
 		unmapMem();
 	}
 
-	void UBO::setDynamicData(uint32_t size, uint32_t typeSize, const void* data)
+	void UBO::setDynamicData(uint32_t size, const void* data)
 	{
 		void* temp = nullptr;
 		mapMem(&temp);

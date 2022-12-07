@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 30/03/2022
+// Updated : 07/12/2022
 
 #ifndef __AK_VEC2__
 #define __AK_VEC2__

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 29/11/2022
+// Updated : 07/12/2022
 
 #include <Panels/renderer_manager.h>
 #include <Fonts/material_font.h>
@@ -66,9 +66,9 @@ void RendererManager::render_sets()
 			if(item_current_idx != Ak::getMainAppProjectFile().getIntValue("cullmode"))
 			{
 				Ak::getMainAppProjectFile().setIntValue("cullmode", item_current_idx);
-				Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
-				renderer->setCullMode(item_current_idx);
-				renderer->reloadRenderer();
+				//Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
+				//renderer->setCullMode(item_current_idx);
+				//renderer->reloadRenderer();
 			}
         }
         

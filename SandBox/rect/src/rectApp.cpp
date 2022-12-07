@@ -21,17 +21,14 @@ class Rect : public Ak::Application
             window->fetchSettings();
 
             add_component<FPSprinterComponent>();
-
-            Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(window);
-
-			renderer->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/vert_u.spv");
-			renderer->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/frag_u.spv");
-
-            add_component(renderer);
+            add_component<Ak::RendererComponent>(window);
 
 			Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene", window);
 
-			Ak::Entity2D rectangle(Models::quad, { 50.0f, 50.0f }, { 100.0f, 100.0f }, Colors::red);
+			scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/vert_u.spv");
+			scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/frag_u.spv");
+
+			Ak::Entity2D rectangle(Models::quad, { 50.f, 50.f }, { 100.f, 100.f }, Colors::red);
 			scene->add_2D_entity(std::move(rectangle));
 
 			Ak::SceneManager* scenes_manager = Ak::memAlloc<Ak::SceneManager>();
