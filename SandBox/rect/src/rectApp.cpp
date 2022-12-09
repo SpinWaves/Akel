@@ -28,7 +28,7 @@ class Rect : public Ak::Application
 			scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/vert_u.spv");
 			scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/frag_u.spv");
 
-			Ak::Entity2D rectangle(Models::quad, { 50.f, 50.f }, { 100.f, 100.f }, Colors::red);
+			Ak::Entity2D rectangle(Models::quad, { -0.5f, -0.5f }, { 1.f, 1.f }, Colors::red);
 			scene->add_2D_entity(std::move(rectangle));
 
 			Ak::SceneManager* scenes_manager = Ak::memAlloc<Ak::SceneManager>();

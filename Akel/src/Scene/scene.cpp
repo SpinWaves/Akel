@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 07/12/2022
+// Updated : 09/12/2022
 
 #include <Scene/scene.h>
 #include <Platform/window.h>
@@ -60,6 +60,31 @@ namespace Ak
 	void Scene::onRender2D()
 	{
 		Matrixes::ortho(0, 0, _window->size.X, _window->size.Y);
+		
+		for(Shader* shader : _pipeline.getShaders())
+		{
+			if(shader->getUniforms().size() > 0)
+			{
+				if(shader->getUniforms().has("matrixes"))
+				{
+					Matrixes::matrix_mode(matrix::view);
+					Matrixes::load_identity();
+					Matrixes::matrix_mode(matrix::model);
+					Matrixes::load_identity();
+
+					MatrixesBuffer mat;
+					mat.proj = Matrixes::get_matrix(matrix::proj);
+					mat.model = Matrixes::get_matrix(matrix::model);
+					mat.view = Matrixes::get_matrix(matrix::view);
+
+					mat.proj[1][1] *= -1;
+
+					shader->getUniforms()["matrixes"].getBuffer()->setDynamicData(sizeof(mat), &mat);
+				}
+
+				vkCmdBindDescriptorSets(Render_Core::get().getActiveCmdBuffer().get(), VK_PIPELINE_BIND_POINT_GRAPHICS, _pipeline.getPipelineLayout(), 0, 1, shader->getVkDescriptorSets().data(), 0, nullptr);
+			}
+		}
 
         for(Entity2D& ent : _2D_entities)
 		{
@@ -67,19 +92,6 @@ namespace Ak
 			ent._ibo.bind();
 
 			vkCmdDrawIndexed(Render_Core::get().getActiveCmdBuffer().get(), static_cast<uint32_t>(ent._ibo.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
-		}
-
-		for(Shader* shader : _pipeline.getShaders())
-		{
-			if(shader->getUniforms().has("matrixes"))
-			{
-				MatrixesBuffer mat;
-				mat.proj = Matrixes::get_matrix(matrix::proj);
-				mat.model = Matrixes::get_matrix(matrix::model);
-				mat.view = Matrixes::get_matrix(matrix::view);
-
-				shader->getUniforms()["matrixes"].getBuffer()->setDynamicData(sizeof(mat), &mat);
-			}
 		}
 	}
 

@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 18/09/2022
+// Updated : 08/12/2022
 
 #include "vk_descriptor_set.h"
 #include "vk_descriptor_set_layout.h"
+#include "vk_descriptor_pool.h"
 #include <Renderer/Buffers/vk_ubo.h>
 #include <Renderer/Core/render_core.h>
 #include <Renderer/Pipeline/vk_shader.h>
@@ -12,13 +13,15 @@
 
 namespace Ak
 {
-    void DescriptorSet::init(UBO* ubo, DescriptorSetLayout& layout)
+    void DescriptorSet::init(UBO* ubo, DescriptorSetLayout& layout, DescriptorPool& pool)
     {
         auto device = Render_Core::get().getDevice().get();
 
+		_pool = pool.get();
+
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = Render_Core::get().getDescPool().get();
+        allocInfo.descriptorPool = _pool;
         allocInfo.descriptorSetCount = 1;
         allocInfo.pSetLayouts = &layout.get();
 
@@ -45,6 +48,6 @@ namespace Ak
     void DescriptorSet::destroy() noexcept
     {
         Ak_assert(_desc_set != VK_NULL_HANDLE, "trying to destroy an uninit descriptor set");
-        vkFreeDescriptorSets(Render_Core::get().getDevice().get(), Render_Core::get().getDescPool().get(), 1, &_desc_set);
+        vkFreeDescriptorSets(Render_Core::get().getDevice().get(), _pool, 1, &_desc_set);
     }
 }

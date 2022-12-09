@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/08/2021
-// Updated : 12/11/2022
+// Updated : 08/12/2022
 
 namespace Ak
 {
@@ -23,8 +23,6 @@ namespace Ak
         std::unique_lock<std::mutex> watchdog(_mutex);
 
 		size_t index = _bits.getFirstTrueBit();
-
-		std::cout << "allocation" << std::endl;
 
         if constexpr(std::is_class<T>::value)
         {

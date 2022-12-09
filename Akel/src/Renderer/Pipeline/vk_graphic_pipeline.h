@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 29/11/2022
+// Updated : 09/12/2022
 
 #ifndef __AK_VK_GRAPHIC_PIPELINE__
 #define __AK_VK_GRAPHIC_PIPELINE__
@@ -16,7 +16,7 @@ namespace Ak
 		public:
 			void init(	std::vector<std::vector<uint32_t>> shaders, std::vector<Shader::VertexInput> inputs,
 						VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VkPolygonMode polygonMode = VK_POLYGON_MODE_FILL, 
-						VkCullModeFlags cullMode = VK_CULL_MODE_BACK_BIT, VkFrontFace frontFace = VK_FRONT_FACE_CLOCKWISE);
+						VkCullModeFlags cullMode = VK_CULL_MODE_BACK_BIT, VkFrontFace frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE);
 			void destroy() noexcept;
 
 			inline const std::vector<Shader*>& getShaders() const override { return _shaders; }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 07/12/2022
+// Updated : 08/12/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -200,7 +200,7 @@ namespace Ak
 			for(int j = 0; j < sets[i]->binding_count; j++)
 			{
 				if(_uniforms.has(sets[i]->bindings[j]->name))
-					return;
+					continue;
 				if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
 				{
 					UBO* buffer = memAlloc<UBO>();
@@ -221,6 +221,16 @@ namespace Ak
 					_layouts.push_back(std::move(layout));
 				}
 			}
+		}
+
+		_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(_layouts.size()) });
+		_desc_pool.init(_layouts.size(), _desc_pool_sizes.data());
+		for(int i = 0; i < _layouts.size(); i++)
+		{
+			DescriptorSet set;
+			set.init(_uniforms[i].second.getBuffer(), _layouts[i], _desc_pool);
+			_vk_sets.push_back(set.get());
+			_sets.push_back(std::move(set));
 		}
 
 		count = 0;
@@ -262,6 +272,8 @@ namespace Ak
 
 		for(auto layout : _layouts)
 			layout.destroy();
+
+		_desc_pool.destroy();
 
 		vkDestroyShaderModule(Render_Core::get().getDevice().get(), _shader, nullptr);
 		_shader = VK_NULL_HANDLE;

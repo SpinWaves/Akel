@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 29/11/2022
+// Updated : 08/12/2022
 
 #include "render_core.h"
 
@@ -65,7 +65,7 @@ namespace Ak
 		_pass.init();
 		_swapchain.initFB();
 		_cmd_pool.init();
-		
+
 		_cmd_buffers.resize(MAX_FRAMES_IN_FLIGHT);
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
