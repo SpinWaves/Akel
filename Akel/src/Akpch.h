@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 05/12/2022
+// Updated : 11/12/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -111,5 +111,7 @@
 
 #undef ARRAY_SIZE
 #define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0])
+
+constexpr const int MAX_FRAMES_IN_FLIGHT = 2;
 
 #endif // __AK_PCH__

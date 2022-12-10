@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/05/2021
-// Updated : 07/12/2022
+// Updated : 10/12/2022
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__
@@ -132,6 +132,25 @@ namespace Ak
 				return false;
 			}
 
+			bool has(__first&& duet)
+			{
+				for(int i = 0; i < _array.size(); i++)
+				{
+					if(_array[i].first == duet)
+						return true;
+				}
+				return false;
+			}
+			bool has(const __second&& duet)
+			{
+				for(int i = 0; i < _array.size(); i++)
+				{
+					if(_array[i].second == duet)
+						return true;
+				}
+				return false;
+			}
+
 			iterator begin()
 			{
 				return _array.begin();
@@ -150,13 +169,6 @@ namespace Ak
 			const_iterator cend() const
 			{
 				return _array.cend();
-			}
-
-			friend std::ostream& operator<<(std::ostream& target, const duets_array& source)
-			{
-				for(int i = 0; i < source.size(); i++)
-					target << source[i].first << "	" << source[i].second << std::endl;
-				return target;
 			}
 
 		private:

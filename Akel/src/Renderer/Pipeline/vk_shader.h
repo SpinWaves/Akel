@@ -1,16 +1,16 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 08/12/2022
+// Updated : 10/12/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
 
 #include <Akpch.h>
 #include <Utils/Containers/duetsArray.h>
+#include <Renderer/Descriptors/vk_descriptor_set.h>
 #include <Renderer/Descriptors/vk_descriptor_set_layout.h>
 #include <Renderer/Descriptors/vk_descriptor_pool.h>
-#include <Renderer/Descriptors/vk_descriptor_set.h>
 
 namespace Ak
 {
@@ -83,8 +83,8 @@ namespace Ak
 			inline VkShaderModule getShaderModule() const noexcept { return _shader; }
 			inline VkShaderStageFlagBits getType() const noexcept { return _type; }
 
-			inline duets_array<fString, Uniform>& getUniforms() { return _uniforms; }
-			inline duets_array<fString, VkVertexInputAttributeDescription>& getAttributes() { return _attributes; }
+			inline std::unordered_map<std::string, Uniform>& getUniforms() { return _uniforms; }
+			inline std::unordered_map<std::string, VkVertexInputAttributeDescription>& getAttributes() { return _attributes; }
 
 			inline std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _layouts; }
 			inline DescriptorSetLayout& getDescriptorSetLayout(int index) { return _layouts[index]; }
@@ -92,16 +92,16 @@ namespace Ak
 			inline std::vector<DescriptorSet>& getDescriptorSets() { return _sets; }
 			inline std::vector<VkDescriptorSet>& getVkDescriptorSets() { return _vk_sets; }
 
-			inline std::optional<Uniform> getUniform(fString name) { return _uniforms.has(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
-			inline std::optional<VkVertexInputAttributeDescription> getAttribute(fString name) { return _attributes.has(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
+			inline std::optional<Uniform> getUniform(std::string name) { return _uniforms.count(std::move(name)) ? std::make_optional(_uniforms[name]) : std::nullopt; }
+			inline std::optional<VkVertexInputAttributeDescription> getAttribute(std::string name) { return _attributes.count(std::move(name)) ? std::make_optional(_attributes[name]) : std::nullopt; }
 
 			inline const fString& get_entry_point_name() const noexcept { return _entry_point_name; }
 
 			~Shader() = default;
 
 		private:
-			duets_array<fString, Uniform> _uniforms;
-			duets_array<fString, VkVertexInputAttributeDescription> _attributes;
+			std::unordered_map<std::string, Uniform> _uniforms;
+			std::unordered_map<std::string, VkVertexInputAttributeDescription> _attributes;
 			
 			std::vector<VkDescriptorPoolSize> _desc_pool_sizes;
 			DescriptorPool _desc_pool;

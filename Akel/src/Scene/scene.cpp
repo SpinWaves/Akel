@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 09/12/2022
+// Updated : 10/12/2022
 
 #include <Scene/scene.h>
 #include <Platform/window.h>
@@ -59,13 +59,14 @@ namespace Ak
 
 	void Scene::onRender2D()
 	{
-		Matrixes::ortho(0, 0, _window->size.X, _window->size.Y);
+		if(_pipeline.getShaders().size() != 0)
+			Matrixes::ortho(0, 0, _window->size.X, _window->size.Y);
 		
 		for(Shader* shader : _pipeline.getShaders())
 		{
 			if(shader->getUniforms().size() > 0)
 			{
-				if(shader->getUniforms().has("matrixes"))
+				if(shader->getUniforms().count("matrixes"))
 				{
 					Matrixes::matrix_mode(matrix::view);
 					Matrixes::load_identity();

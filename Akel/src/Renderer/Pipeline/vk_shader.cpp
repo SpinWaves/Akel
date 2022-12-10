@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 08/12/2022
+// Updated : 11/12/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -199,14 +199,14 @@ namespace Ak
 
 			for(int j = 0; j < sets[i]->binding_count; j++)
 			{
-				if(_uniforms.has(sets[i]->bindings[j]->name))
+				if(_uniforms.count(sets[i]->bindings[j]->name))
 					continue;
 				if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
 				{
 					UBO* buffer = memAlloc<UBO>();
 					buffer->create(sets[i]->bindings[j]->block.size);
 
-					_uniforms.set_duet(sets[i]->bindings[j]->name,
+					_uniforms[sets[i]->bindings[j]->name] =
 						Shader::Uniform{
 							static_cast<int32_t>(sets[i]->bindings[j]->binding),
 							static_cast<int32_t>(sets[i]->bindings[j]->set),
@@ -214,7 +214,7 @@ namespace Ak
 							static_cast<int32_t>(sets[i]->bindings[j]->block.size),
 							_type,
 							buffer
-						});
+						};
 
 					DescriptorSetLayout layout;
 					layout.init(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, sets[i]->bindings[j]->binding, _type);
@@ -223,14 +223,16 @@ namespace Ak
 			}
 		}
 
-		_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(_layouts.size()) });
-		_desc_pool.init(_layouts.size(), _desc_pool_sizes.data());
-		for(int i = 0; i < _layouts.size(); i++)
+		_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(_layouts.size()) * MAX_FRAMES_IN_FLIGHT });
+		_desc_pool.init(_layouts.size() * MAX_FRAMES_IN_FLIGHT, _desc_pool_sizes.data());
+		int i = 0;
+		for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
 		{
 			DescriptorSet set;
-			set.init(_uniforms[i].second.getBuffer(), _layouts[i], _desc_pool);
+			set.init(it->second.getBuffer(), _layouts[i], _desc_pool);
 			_vk_sets.push_back(set.get());
 			_sets.push_back(std::move(set));
+			i++;
 		}
 
 		count = 0;
@@ -252,7 +254,7 @@ namespace Ak
 			attr_desc.offset = currentOffset;
 			currentOffset += formatSize(attr_desc.format);
 			
-			_attributes.set_duet(input_vars[i]->name, std::move(attr_desc));
+			_attributes[input_vars[i]->name] = std::move(attr_desc);
 		}
 
 		spvReflectDestroyShaderModule(&module);

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 29/11/2022
+// Updated : 10/12/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -90,6 +90,7 @@ namespace Ak
 		for(auto component : _components)
 			component->onQuit();
 		_app_check = false;
+		SDL_Quit();
 	}
 
 	void Application::end()
@@ -101,6 +102,5 @@ namespace Ak
 	{
 		if(_app_check)
 			destroy();
-		SDL_Quit();
 	}
 }

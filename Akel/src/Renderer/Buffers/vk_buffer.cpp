@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 05/12/2022
+// Updated : 10/12/2022
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
@@ -173,6 +173,7 @@ namespace Ak
 	void Buffer::flush(VkDeviceSize size, VkDeviceSize offset)
 	{
 		VkMappedMemoryRange mappedRange{};
+		mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
 		mappedRange.memory = _mem_chunck.memory;
 		mappedRange.offset = offset;
 		mappedRange.size = size;

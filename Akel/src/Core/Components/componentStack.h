@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 05/11/2022
+// Updated : 10/12/2022
 
 #ifndef __AK_COMPONENTS_STACK__
 #define __AK_COMPONENTS_STACK__
@@ -19,10 +19,10 @@ namespace Ak
 		public:
 			ComponentStack() = default;
 
-			void add_component(Component* component);
+			Component* add_component(Component* component);
 
 			template <typename T, typename ... Args>
-			inline void add_component(Args&& ... args) { add_component(memAlloc<T>(std::forward<Args>(args)...)); }
+			inline T* add_component(Args&& ... args) { return static_cast<T*>(add_component(memAlloc<T>(std::forward<Args>(args)...))); }
 
 			void remove_component(Component* component); // Modifiers
 			void remove_component(const char* name);

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 29/11/2022
+// Updated : 10/12/2022
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -29,15 +29,20 @@ Ak::Application* Akel_mainApp()
 	app->add_component(camera);
 	app->add_component(studio);
 
-	Ak::RendererComponent* renderer = Ak::memAlloc<Ak::RendererComponent>(static_cast<Ak::WindowComponent*>(studio));
+	app->add_component<Ak::RendererComponent>(static_cast<Ak::WindowComponent*>(studio));
 
-	renderer->loadCustomShader(Ak::Core::getMainDirPath() + "ressources/shaders/2D/vert.spv");
-	renderer->loadCustomShader(Ak::Core::getMainDirPath() + "ressources/shaders/2D/frag.spv");
+	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene", static_cast<Ak::WindowComponent*>(studio));
+
+	scene->loadCustomShader(Ak::Core::getMainDirPath() + "ressources/shaders/2D/vert.spv");
+	scene->loadCustomShader(Ak::Core::getMainDirPath() + "ressources/shaders/2D/frag.spv");
 
 	Ak::Entity2D rectangle(Models::quad, { -0.5f, -0.5f }, { 1.f, 1.f }, Colors::red);
-	renderer->add_entity(rectangle);
+	scene->add_2D_entity(std::move(rectangle));
 
-	app->add_component(renderer);
+	Ak::SceneManager* scenes_manager = Ak::memAlloc<Ak::SceneManager>();
+	scenes_manager->add_scene(scene);
+
+	app->add_component(scenes_manager);
 
 	Ak::ImGuiComponent* imgui = Ak::memAlloc<Ak::ImGuiComponent>();
 	imgui->setSettingsFilePath(std::string(Ak::Core::getMainDirPath() + "settings/akel_studio_imgui.ini").c_str());

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 08/12/2022
+// Updated : 11/12/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -39,8 +39,6 @@ namespace Ak
     #endif
 
     const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
-
-    constexpr const int MAX_FRAMES_IN_FLIGHT = 2;
 
     /**
      * Render_Core is a singleton that is not meant to be created anywhere by the user
