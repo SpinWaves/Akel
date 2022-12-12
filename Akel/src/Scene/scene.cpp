@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 10/12/2022
+// Updated : 11/12/2022
 
 #include <Scene/scene.h>
 #include <Platform/window.h>
@@ -61,7 +61,7 @@ namespace Ak
 	{
 		if(_pipeline.getShaders().size() != 0)
 			Matrixes::ortho(0, 0, _window->size.X, _window->size.Y);
-		
+	
 		for(Shader* shader : _pipeline.getShaders())
 		{
 			if(shader->getUniforms().size() > 0)
@@ -80,7 +80,7 @@ namespace Ak
 
 					mat.proj[1][1] *= -1;
 
-					shader->getUniforms()["matrixes"].getBuffer()->setDynamicData(sizeof(mat), &mat);
+					shader->getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
 
 				vkCmdBindDescriptorSets(Render_Core::get().getActiveCmdBuffer().get(), VK_PIPELINE_BIND_POINT_GRAPHICS, _pipeline.getPipelineLayout(), 0, 1, shader->getVkDescriptorSets().data(), 0, nullptr);

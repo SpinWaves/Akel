@@ -31,7 +31,7 @@ Ak::Application* Akel_mainApp()
 	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/vert_u.spv");
 	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/frag_u.spv");
 
-	scene->add_2D_entity({ Models::quad, { 100.f, 100.f }, { 100.f, 100.f }, Colors::red });
+	scene->add_2D_entity({ Models::quad, { -500.f, -500.f }, { 1000.f, 1000.f }, Colors::red });
 
 	Ak::SceneManager* scenes_manager = app->add_component<Ak::SceneManager>();
 	scenes_manager->add_scene(scene);

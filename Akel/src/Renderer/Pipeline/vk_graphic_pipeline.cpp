@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 29/11/2022
+// Updated : 11/12/2022
 
 #include "vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
@@ -146,6 +146,12 @@ namespace Ak
 
         if(vkCreateGraphicsPipelines(Render_Core::get().getDevice().get(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create a graphics pipeline");
+
+		if(!_shaders.empty())
+		{
+			for(Shader* shader : _shaders)
+				shader->destroyModule();
+		}
     }
 
     void GraphicPipeline::destroy() noexcept

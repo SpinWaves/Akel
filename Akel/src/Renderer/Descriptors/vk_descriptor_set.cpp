@@ -19,11 +19,14 @@ namespace Ak
 
 		_pool = pool.get();
 
+		std::array<VkDescriptorSetLayout, MAX_FRAMES_IN_FLIGHT> layouts;
+		layouts.fill(layout.get());
+
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = _pool;
         allocInfo.descriptorSetCount = MAX_FRAMES_IN_FLIGHT;
-        allocInfo.pSetLayouts = &layout.get();
+        allocInfo.pSetLayouts = layouts.data();
 
         if(vkAllocateDescriptorSets(device, &allocInfo, _desc_set.data()) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate descriptor set");

@@ -224,7 +224,7 @@ namespace Ak
 		}
 
 		_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(_layouts.size()) * MAX_FRAMES_IN_FLIGHT });
-		_desc_pool.init(_layouts.size() * MAX_FRAMES_IN_FLIGHT, _desc_pool_sizes.data());
+		_desc_pool.init(_layouts.size(), _desc_pool_sizes.data());
 		int i = 0;
 		for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
 		{
@@ -268,16 +268,21 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create shader module");
 	}
 
-	void Shader::destroy() noexcept
+	void Shader::destroyModule() noexcept
 	{
 		Ak_assert(_shader != VK_NULL_HANDLE, "trying to destroy an uninit shader");
+		vkDestroyShaderModule(Render_Core::get().getDevice().get(), _shader, nullptr);
+		_shader = VK_NULL_HANDLE;
+	}
+
+	void Shader::destroy() noexcept
+	{
+		for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
+			it->second.getBuffer()->destroy();
 
 		for(auto layout : _layouts)
 			layout.destroy();
 
 		_desc_pool.destroy();
-
-		vkDestroyShaderModule(Render_Core::get().getDevice().get(), _shader, nullptr);
-		_shader = VK_NULL_HANDLE;
 	}
 }

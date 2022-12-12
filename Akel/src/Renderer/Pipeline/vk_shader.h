@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 10/12/2022
+// Updated : 11/12/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -79,7 +79,8 @@ namespace Ak
 
 			void generate();
 			void destroy() noexcept;
- 
+			void destroyModule() noexcept;
+
 			inline VkShaderModule getShaderModule() const noexcept { return _shader; }
 			inline VkShaderStageFlagBits getType() const noexcept { return _type; }
 
