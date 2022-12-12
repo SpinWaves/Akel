@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 10/12/2022
+// Updated : 12/12/2022
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -21,7 +21,7 @@ Ak::Application* Akel_mainApp()
 {
 	Ak::Application* app = Ak::memAlloc<Ak::Application>();
 	Ak::Core::printEngineInfo();
-	app->add_component<Ak::AudioManager>();
+	app->add_component<Ak::AudioComponent>();
 
 	StudioComponent* studio = Ak::memAlloc<StudioComponent>();
 	SceneCamera* camera = Ak::memAlloc<SceneCamera>(-5, 3, -5, &studio->size);

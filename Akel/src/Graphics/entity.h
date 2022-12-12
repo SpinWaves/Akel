@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2021
-// Updated : 06/12/2022
+// Updated : 12/12/2022
 
 #ifndef __AK_ENTITY__
 #define __AK_ENTITY__
@@ -39,26 +39,24 @@ namespace Ak
 {
 	class Entity3D
 	{
+		friend class Scene;
+
 		public:
 			Entity3D(Models _model, Maths::Vec3<float> _position, Maths::Vec3<float> _scale, Maths::Vec4<float> _color);
 			Entity3D(Models _model, Maths::Vec3<float> _position, Maths::Vec3<float> _scale, Colors _color);
+
+			void destroy() noexcept;
 
 			Models model;
 			Maths::Vec3<float> position;
 			Maths::Vec3<float> scale;
 			Maths::Vec4<float> color;
 
-			struct EntityInternalData
-			{
-				std::vector<Vertex3D> vertexData;
-				VkBuffer vertexBuffer;
-				VkDeviceMemory vertexBufferMemory;
-				std::vector<uint16_t> indexData;
-				VkBuffer indexBuffer;
-				VkDeviceMemory indexBufferMemory;
-			};
+		private:
+			void initBuffers();
 
-			EntityInternalData __data;
+			C_VBO _vbo;
+			C_IBO _ibo;
 	};
 
 	class Entity2D

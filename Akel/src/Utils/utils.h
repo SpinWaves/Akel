@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/04/2021
-// Updated : 21/08/2022
+// Updated : 12/12/2022
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -38,6 +38,7 @@ using Ak_f96 = long double;
 #include <Utils/nonCopyable.h>
 #include <Utils/scopeTimer.h>
 #include <Utils/selfInstance.h>
+#include <Utils/plainApplication.h>
 
 #include <Utils/Containers/containers.h>
 

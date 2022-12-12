@@ -17,24 +17,16 @@ Ak::AkelInstance Akel_init()
 
 Ak::Application* Akel_mainApp()
 {
-	Ak::Application* app = Ak::memAlloc<Ak::Application>();
-
-	Ak::WindowComponent* window = app->add_component<Ak::WindowComponent>();
-	window->title = "Rectangle using Akel Engine";
-	window->fetchSettings();
-
+	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Rectangle using Akel Engine");
 	app->add_component<FPSprinterComponent>();
-	app->add_component<Ak::RendererComponent>(window);
 
-	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene", window);
+	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene", app->getWindow());
 
 	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/vert_u.spv");
 	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/frag_u.spv");
 
 	scene->add_2D_entity({ Models::quad, { -500.f, -500.f }, { 1000.f, 1000.f }, Colors::red });
-
-	Ak::SceneManager* scenes_manager = app->add_component<Ak::SceneManager>();
-	scenes_manager->add_scene(scene);
+	app->add_scene(scene);
 
 	return app;
 }

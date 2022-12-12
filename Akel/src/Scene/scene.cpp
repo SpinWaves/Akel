@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 11/12/2022
+// Updated : 12/12/2022
 
 #include <Scene/scene.h>
 #include <Platform/window.h>
@@ -59,8 +59,10 @@ namespace Ak
 
 	void Scene::onRender2D()
 	{
-		if(_pipeline.getShaders().size() != 0)
-			Matrixes::ortho(0, 0, _window->size.X, _window->size.Y);
+		if(_pipeline.getShaders().size() == 0 || _2D_entities.size() == 0)
+			return;
+
+		Matrixes::ortho(0, 0, _window->size.X, _window->size.Y);
 	
 		for(Shader* shader : _pipeline.getShaders())
 		{
@@ -98,6 +100,43 @@ namespace Ak
 
 	void Scene::onRender3D()
 	{
+		if(_pipeline.getShaders().size() == 0 || _3D_entities.size() == 0)
+			return;
+
+		Matrixes::perspective(90.f, _window->size.X / _window->size.Y, 0.1f, 1000.f);
+	
+		for(Shader* shader : _pipeline.getShaders())
+		{
+			if(shader->getUniforms().size() > 0)
+			{
+				if(shader->getUniforms().count("matrixes"))
+				{
+					Matrixes::matrix_mode(matrix::view);
+					Matrixes::load_identity();
+					Matrixes::matrix_mode(matrix::model);
+					Matrixes::load_identity();
+
+					MatrixesBuffer mat;
+					mat.proj = Matrixes::get_matrix(matrix::proj);
+					mat.model = Matrixes::get_matrix(matrix::model);
+					mat.view = Matrixes::get_matrix(matrix::view);
+
+					mat.proj[1][1] *= -1;
+
+					shader->getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
+				}
+
+				vkCmdBindDescriptorSets(Render_Core::get().getActiveCmdBuffer().get(), VK_PIPELINE_BIND_POINT_GRAPHICS, _pipeline.getPipelineLayout(), 0, 1, shader->getVkDescriptorSets().data(), 0, nullptr);
+			}
+		}
+
+        for(Entity3D& ent : _3D_entities)
+		{
+			ent._vbo.bind();
+			ent._ibo.bind();
+
+			vkCmdDrawIndexed(Render_Core::get().getActiveCmdBuffer().get(), static_cast<uint32_t>(ent._ibo.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
+		}
 
 	}
 

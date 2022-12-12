@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 06/03/2022
+// Updated : 12/12/2022
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -20,6 +20,7 @@ namespace Ak
 		scale = std::move(_scale);
 		color = std::move(_color);
 	}
+
 	Entity3D::Entity3D(Models _model, Maths::Vec3<float> _position, Maths::Vec3<float> _scale, Colors _color)
     {
 	    model = _model;
@@ -27,32 +28,43 @@ namespace Ak
 		scale = std::move(_scale);
         uint32_t col_val = static_cast<uint32_t>(_color);
         color.SET(static_cast<float>((col_val & R_MASK) >> 24) / 255, static_cast<float>((col_val & G_MASK) >> 16) / 255, static_cast<float>((col_val & B_MASK) >> 8) / 255, static_cast<float>((col_val & A_MASK)) / 255);
+    }
 
+	void Entity3D::destroy() noexcept
+	{
+		_vbo.destroy();
+		_ibo.destroy();
+	}
+
+	void Entity3D::initBuffers()
+	{
         switch(model)
         {
             case Models::quad :
-                __data.vertexData = {
+			{
+				std::vector<Vertex3D> vertexData;
+                vertexData = {
                     {position, color},
-                    {{position.X + scale.X, position.Y, position.Z}, color},
-                    {{position.X + scale.X, position.Y + scale.Y, position.Z}, color},
-                    {{position.X, position.Y + scale.Y, position.Z}, color}
+                    {{position.X + scale.X, position.Y}, color},
+                    {{position.X + scale.X, position.Y + scale.Y}, color},
+                    {{position.X, position.Y + scale.Y}, color}
                 };
-                __data.indexData = {0, 1, 2, 2, 3, 0};
-            break;
+
+				std::vector<uint32_t> indexData;
+                indexData = { 0, 1, 2, 2, 3, 0 };
+
+				_vbo.create(sizeof(Vertex3D) * vertexData.size(), vertexData.data());
+				_ibo.create(sizeof(uint32_t) * indexData.size(), indexData.data());
+
+				break;
+			}
 
             case Models::triangle :
-                __data.vertexData = {
-                    {{position.X, position.Y + scale.Y, position.Z}, color},
-                    {{position.X + scale.X, position.Y + scale.Y, position.Z}, color},
-                    {{position.X - scale.X, position.Y + scale.Y, position.Z}, color}
-                };
-                __data.indexData.clear();
             break;
 
-            case Models::cube :
-			break;
+            case Models::cube : Core::log::report(FATAL_ERROR, "Entity 2D : a cube cannot be a 2D entity, you may use the \"quad\" model"); break;
 
             default : Core::log::report(ERROR, "Entity 2D : bad model"); break;
         }
-    }
+	}
 }
