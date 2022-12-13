@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 11/12/2022
+// Updated : 13/12/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
@@ -223,16 +223,19 @@ namespace Ak
 			}
 		}
 
-		_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(_layouts.size()) * MAX_FRAMES_IN_FLIGHT });
-		_desc_pool.init(_layouts.size(), _desc_pool_sizes.data());
-		int i = 0;
-		for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
+		if(_layouts.size() != 0)
 		{
-			DescriptorSet set;
-			set.init(it->second.getBuffer(), _layouts[i], _desc_pool);
-			_vk_sets.push_back(set.get());
-			_sets.push_back(std::move(set));
-			i++;
+			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(_layouts.size()) * MAX_FRAMES_IN_FLIGHT });
+			_desc_pool.init(_layouts.size(), _desc_pool_sizes.data());
+			int i = 0;
+			for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
+			{
+				DescriptorSet set;
+				set.init(it->second.getBuffer(), _layouts[i], _desc_pool);
+				_vk_sets.push_back(set.get());
+				_sets.push_back(std::move(set));
+				i++;
+			}
 		}
 
 		count = 0;
@@ -283,6 +286,7 @@ namespace Ak
 		for(auto layout : _layouts)
 			layout.destroy();
 
-		_desc_pool.destroy();
+		if(_layouts.size() != 0)
+			_desc_pool.destroy();
 	}
 }
