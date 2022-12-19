@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 12/12/2022
+// Updated : 19/12/2022
 
 #include <Scene/scene.h>
 #include <Platform/window.h>
@@ -26,10 +26,15 @@ namespace Ak
 	void Scene::onAttach(uint32_t id) noexcept
 	{
 		_id = id;
-		_pipeline.init(_shaders, std::vector<Ak::Shader::VertexInput>{ {
+		_2D_pipeline.init(_shaders, std::vector<Ak::Shader::VertexInput>{ {
 				{ Vertex2D::getBindingDescription() },
 				{ Vertex2D::getAttributeDescriptions()[0], Vertex2D::getAttributeDescriptions()[1] }
 		} });
+
+		_3D_pipeline.init(_shaders, std::vector<Ak::Shader::VertexInput>{ {
+				{ Vertex3D::getBindingDescription() },
+				{ Vertex3D::getAttributeDescriptions()[0], Vertex3D::getAttributeDescriptions()[1] }
+		} }, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
 	}
 
 	void Scene::add_2D_entity(Entity2D entity)
@@ -38,10 +43,14 @@ namespace Ak
 		_2D_entities.push_back(std::move(entity));
 	}
 
+	void Scene::add_3D_entity(Entity3D entity)
+	{
+		entity.initBuffers();
+		_3D_entities.push_back(std::move(entity));
+	}
+
 	void Scene::onPreRender()
 	{
-		_pipeline.bindPipeline(Render_Core::get().getActiveCmdBuffer());
-
 		VkViewport viewport{};
 		viewport.x = 0.0f;
 		viewport.y = 0.0f;
@@ -59,12 +68,14 @@ namespace Ak
 
 	void Scene::onRender2D()
 	{
-		if(_pipeline.getShaders().size() == 0 || _2D_entities.size() == 0)
+		if(_2D_pipeline.getShaders().size() == 0 || _2D_entities.size() == 0)
 			return;
 
-		Matrixes::ortho(0, 0, _window->size.X, _window->size.Y);
+		_2D_pipeline.bindPipeline(Render_Core::get().getActiveCmdBuffer());
+
+		Matrixes::ortho(0, _window->size.X, 0, _window->size.Y);
 	
-		for(Shader* shader : _pipeline.getShaders())
+		for(Shader* shader : _2D_pipeline.getShaders())
 		{
 			if(shader->getUniforms().size() > 0)
 			{
@@ -80,12 +91,10 @@ namespace Ak
 					mat.model = Matrixes::get_matrix(matrix::model);
 					mat.view = Matrixes::get_matrix(matrix::view);
 
-					mat.proj[1][1] *= -1;
-
 					shader->getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
 
-				vkCmdBindDescriptorSets(Render_Core::get().getActiveCmdBuffer().get(), VK_PIPELINE_BIND_POINT_GRAPHICS, _pipeline.getPipelineLayout(), 0, 1, shader->getVkDescriptorSets().data(), 0, nullptr);
+				vkCmdBindDescriptorSets(Render_Core::get().getActiveCmdBuffer().get(), VK_PIPELINE_BIND_POINT_GRAPHICS, _2D_pipeline.getPipelineLayout(), 0, 1, shader->getVkDescriptorSets().data(), 0, nullptr);
 			}
 		}
 
@@ -100,19 +109,19 @@ namespace Ak
 
 	void Scene::onRender3D()
 	{
-		if(_pipeline.getShaders().size() == 0 || _3D_entities.size() == 0)
+		if(_3D_pipeline.getShaders().size() == 0 || _3D_entities.size() == 0)
 			return;
 
-		Matrixes::perspective(90.f, _window->size.X / _window->size.Y, 0.1f, 1000.f);
+		_3D_pipeline.bindPipeline(Render_Core::get().getActiveCmdBuffer());
+
+		Matrixes::perspective(90.f, (float)_window->size.X / (float)_window->size.Y, 0.1f, 1000.f);
 	
-		for(Shader* shader : _pipeline.getShaders())
+		for(Shader* shader : _3D_pipeline.getShaders())
 		{
 			if(shader->getUniforms().size() > 0)
 			{
 				if(shader->getUniforms().count("matrixes"))
 				{
-					Matrixes::matrix_mode(matrix::view);
-					Matrixes::load_identity();
 					Matrixes::matrix_mode(matrix::model);
 					Matrixes::load_identity();
 
@@ -126,7 +135,7 @@ namespace Ak
 					shader->getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
 
-				vkCmdBindDescriptorSets(Render_Core::get().getActiveCmdBuffer().get(), VK_PIPELINE_BIND_POINT_GRAPHICS, _pipeline.getPipelineLayout(), 0, 1, shader->getVkDescriptorSets().data(), 0, nullptr);
+				vkCmdBindDescriptorSets(Render_Core::get().getActiveCmdBuffer().get(), VK_PIPELINE_BIND_POINT_GRAPHICS, _3D_pipeline.getPipelineLayout(), 0, 1, shader->getVkDescriptorSets().data(), 0, nullptr);
 			}
 		}
 
@@ -144,6 +153,9 @@ namespace Ak
 	{
 		for(auto entity : _2D_entities)
 			entity.destroy();
-		_pipeline.destroy();
+		for(auto entity : _3D_entities)
+			entity.destroy();
+		_2D_pipeline.destroy();
+		_3D_pipeline.destroy();
 	}
 }

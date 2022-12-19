@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 23/08/2022
+// Updated : 19/12/2022
 
 #ifndef __AK_CAMERA__
 #define __AK_CAMERA__ 
@@ -27,7 +27,7 @@ namespace Ak
 
 		private:
 			const float _speed = 0.3f;
-			const float _sensivity = 0.9f;
+			const float _sensivity = 0.7f;
 
 			void update_view();
 

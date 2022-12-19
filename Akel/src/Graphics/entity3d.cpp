@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 12/12/2022
+// Updated : 19/12/2022
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -40,18 +40,27 @@ namespace Ak
 	{
         switch(model)
         {
-            case Models::quad :
+			case Models::cube:
 			{
-				std::vector<Vertex3D> vertexData;
-                vertexData = {
-                    {position, color},
-                    {{position.X + scale.X, position.Y}, color},
-                    {{position.X + scale.X, position.Y + scale.Y}, color},
-                    {{position.X, position.Y + scale.Y}, color}
-                };
+				const std::vector<Vertex3D> vertexData = {
+					{{position.X          , position.Y          , position.Z + scale.Z}, {1.0f,  0.0f,  0.0f}},
+					{{position.X + scale.X, position.Y          , position.Z + scale.Z}, {0.0f,  1.0f,  0.0f}},
+					{{position.X + scale.X, position.Y + scale.Y, position.Z + scale.Z}, {0.0f,  0.0f,  1.0f}},
+					{{position.X          , position.Y + scale.Y, position.Z + scale.Z}, {1.0f,  0.0f,  1.0f}},
+					{{position.X          , position.Y          , position.Z}          , {1.0f,  1.0f,  0.0f}},
+					{{position.X + scale.X, position.Y          , position.Z}          , {0.0f,  1.0f,  1.0f}},
+					{{position.X + scale.X, position.Y + scale.Y, position.Z}          , {1.0f,  1.0f,  1.0f}},
+					{{position.X          , position.Y + scale.Y, position.Z}          , {0.5f,  0.5f,  0.0f}},
+				};
 
-				std::vector<uint32_t> indexData;
-                indexData = { 0, 1, 2, 2, 3, 0 };
+				const std::vector<uint32_t> indexData = {
+					0, 1, 2, 2, 3, 0,
+					4, 5, 6, 6, 7, 4,
+					3, 2, 6, 6, 7, 3,
+					0, 1, 5, 5, 4, 0,
+					0, 3, 7, 7, 4, 0,
+					1, 2, 6, 6, 5, 1
+				};
 
 				_vbo.create(sizeof(Vertex3D) * vertexData.size(), vertexData.data());
 				_ibo.create(sizeof(uint32_t) * indexData.size(), indexData.data());
@@ -59,12 +68,7 @@ namespace Ak
 				break;
 			}
 
-            case Models::triangle :
-            break;
-
-            case Models::cube : Core::log::report(FATAL_ERROR, "Entity 2D : a cube cannot be a 2D entity, you may use the \"quad\" model"); break;
-
-            default : Core::log::report(ERROR, "Entity 2D : bad model"); break;
+            default : Core::log::report(ERROR, "Entity 3D : bad model"); break;
         }
 	}
 }

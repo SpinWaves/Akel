@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 11/12/2022
+// Updated : 19/12/2022
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -41,6 +41,7 @@
 
 // APIs' maths
 #define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 

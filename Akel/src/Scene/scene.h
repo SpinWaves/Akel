@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 07/12/2022
+// Updated : 19/12/2022
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -30,6 +30,7 @@ namespace Ak
 			inline void setCullMode(VkCullModeFlags culling) noexcept { _cull_mode = culling; }
 
 			void add_2D_entity(Entity2D entity);
+			void add_3D_entity(Entity3D entity);
 
 			~Scene() = default;
 
@@ -37,7 +38,8 @@ namespace Ak
 			std::vector<class Entity3D> _3D_entities;
 			std::vector<class Entity2D> _2D_entities;
 
-			GraphicPipeline _pipeline;
+			GraphicPipeline _3D_pipeline;
+			GraphicPipeline _2D_pipeline;
 			std::vector<std::vector<uint32_t>> _shaders;
 			VkCullModeFlags _cull_mode;
 			

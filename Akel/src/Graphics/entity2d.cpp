@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 11/12/2022
+// Updated : 19/12/2022
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -42,16 +42,14 @@ namespace Ak
         {
             case Models::quad :
 			{
-				std::vector<Vertex2D> vertexData;
-                vertexData = {
+				std::vector<Vertex2D> vertexData = {
                     {position, color},
                     {{position.X + scale.X, position.Y}, color},
                     {{position.X + scale.X, position.Y + scale.Y}, color},
                     {{position.X, position.Y + scale.Y}, color}
                 };
 
-				std::vector<uint32_t> indexData;
-                indexData = { 0, 1, 2, 2, 3, 0 };
+				std::vector<uint32_t> indexData = { 0, 1, 2, 2, 3, 0 };
 
 				_vbo.create(sizeof(Vertex2D) * vertexData.size(), vertexData.data());
 				_ibo.create(sizeof(uint32_t) * indexData.size(), indexData.data());
@@ -61,8 +59,6 @@ namespace Ak
 
             case Models::triangle :
             break;
-
-            case Models::cube : Core::log::report(FATAL_ERROR, "Entity 2D : a cube cannot be a 2D entity, you may use the \"quad\" model"); break;
 
             default : Core::log::report(ERROR, "Entity 2D : bad model"); break;
         }

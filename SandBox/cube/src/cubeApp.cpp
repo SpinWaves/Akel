@@ -17,24 +17,17 @@ Ak::AkelInstance Akel_init()
 
 Ak::Application* Akel_mainApp()
 {
-	Ak::Application* app = Ak::memAlloc<Ak::Application>();
-
-	Ak::WindowComponent* window = app->add_component<Ak::WindowComponent>();
-	window->title = "Cube using Akel Engine";
-	window->fetchSettings();
-
+	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Cube using Akel Engine");
 	app->add_component<FPSprinterComponent>();
-	app->add_component<Ak::RendererComponent>(window);
+	app->add_component<Ak::Camera3D>(0, 2, 0);
 
-	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene", window);
+	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene", app->getWindow());
 
-	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/cube/src/vert.spv");
-	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/cube/src/frag.spv");
+	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/cube/src/vert_u.spv");
+	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/cube/src/frag_u.spv");
 
-	scene->add_3D_entity({ Models::quad, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, Colors::red });
-
-	Ak::SceneManager* scenes_manager = app->add_component<Ak::SceneManager>();
-	scenes_manager->add_scene(scene);
+	scene->add_3D_entity({ Models::cube, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, Colors::red });
+	app->add_scene(scene);
 
 	return app;
 }
