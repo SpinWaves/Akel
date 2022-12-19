@@ -18,6 +18,8 @@ Ak::AkelInstance Akel_init()
 Ak::Application* Akel_mainApp()
 {
 	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Cube using Akel Engine");
+	app->getWindow()->vsync = false;
+	app->getWindow()->fetchSettings();
 	app->add_component<FPSprinterComponent>();
 	app->add_component<Ak::Camera3D>(0, 2, 0);
 

@@ -38,7 +38,7 @@ namespace Ak
 			_theta -= input.getXRel() * _sensivity;
 			_phi -= input.getYRel() * _sensivity;
 		}
-		if(input.getInKey(SDL_SCANCODE_ESCAPE, action::up))
+		if(input.getInKey(SDL_SCANCODE_ESCAPE))
 		{
 			_isMouseGrabed = false;
 			SDL_SetRelativeMouseMode(SDL_FALSE);
