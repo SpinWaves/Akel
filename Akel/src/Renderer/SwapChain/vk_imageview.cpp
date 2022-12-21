@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 20/08/2022
+// Updated : 21/12/2022
 
 #include "vk_swapchain.h"
 #include "vk_imageview.h"
@@ -11,13 +11,13 @@
 
 namespace Ak
 {
-	void ImageView::init(SwapChain* swapchain, VkImage& image)
+	void ImageView::init(SwapChain& swapchain, VkImage& image)
 	{
 		VkImageViewCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 		createInfo.image = image;
 		createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-		createInfo.format = swapchain->_swapChainImageFormat;
+		createInfo.format = swapchain._swapChainImageFormat;
 		createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
 		createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
 		createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;

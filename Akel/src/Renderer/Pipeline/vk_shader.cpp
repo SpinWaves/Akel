@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 13/12/2022
+// Updated : 21/12/2022
 
 #include "vk_shader.h"
 #include "vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
 #include <Renderer/Buffers/vk_ubo.h>
+#include <Renderer/rendererComponent.h>
 
 #include <Utils/fStrings.h>
 
@@ -172,7 +173,7 @@ namespace Ak
 			memFree(_buffer);
 	}
 
-	Shader::Shader(const std::vector<uint32_t> byte_code) : _byte_code(std::move(byte_code)) {}
+	Shader::Shader(const std::vector<uint32_t> byte_code, RendererComponent* renderer) : _byte_code(std::move(byte_code)), _renderer(renderer) {}
 
 	void Shader::generate()
 	{
@@ -204,7 +205,7 @@ namespace Ak
 				if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
 				{
 					UBO* buffer = memAlloc<UBO>();
-					buffer->create(sets[i]->bindings[j]->block.size);
+					buffer->create(_renderer, sets[i]->bindings[j]->block.size);
 
 					_uniforms[sets[i]->bindings[j]->name] =
 						Shader::Uniform{
@@ -231,7 +232,7 @@ namespace Ak
 			for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
 			{
 				DescriptorSet set;
-				set.init(it->second.getBuffer(), _layouts[i], _desc_pool);
+				set.init(_renderer, it->second.getBuffer(), _layouts[i], _desc_pool);
 				_vk_sets.push_back(set.get());
 				_sets.push_back(std::move(set));
 				i++;

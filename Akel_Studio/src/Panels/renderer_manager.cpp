@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 07/12/2022
+// Updated : 21/12/2022
 
 #include <Panels/renderer_manager.h>
 #include <Fonts/material_font.h>
@@ -72,22 +72,23 @@ void RendererManager::render_sets()
 			}
         }
         
-        static ImVec4 color = ImVec4(Ak::Render_Core::get().getClearValue().color.float32[0], Ak::Render_Core::get().getClearValue().color.float32[1], Ak::Render_Core::get().getClearValue().color.float32[2], Ak::Render_Core::get().getClearValue().color.float32[3]);
+		Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
+        static ImVec4 color = ImVec4(renderer->getClearValue().color.float32[0], renderer->getClearValue().color.float32[1], renderer->getClearValue().color.float32[2], renderer->getClearValue().color.float32[3]);
         ImGui::ColorEdit4("##picker", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-        Ak::Render_Core::get().getClearValue().color.float32[0] = color.x;
-        Ak::Render_Core::get().getClearValue().color.float32[1] = color.y;
-        Ak::Render_Core::get().getClearValue().color.float32[2] = color.z;
+        renderer->getClearValue().color.float32[0] = color.x;
+        renderer->getClearValue().color.float32[1] = color.y;
+        renderer->getClearValue().color.float32[2] = color.z;
         ImGui::SameLine();
         ImGui::Text(_eltm->getText("RendererManager.bg_color").c_str());
 
         if(ImGui::Button(std::string(AKS_ICON_MD_REFRESH" " + _eltm->getText("RendererManager.reload")).c_str()))
-            Ak::Render_Core::get().requireFrameBufferResize();
+            renderer->requireFrameBufferResize();
 
-        bool vsync_save = Ak::Render_Core::get().getWindow()->vsync;
-        ImGui::Checkbox("Vsync", &Ak::Render_Core::get().getWindow()->vsync);
-        if(vsync_save != Ak::Render_Core::get().getWindow()->vsync)
+        bool vsync_save = renderer->getWindow()->vsync;
+        ImGui::Checkbox("Vsync", &renderer->getWindow()->vsync);
+        if(vsync_save != renderer->getWindow()->vsync)
 		{
-            Ak::Render_Core::get().getWindow()->fetchSettings();
+            renderer->getWindow()->fetchSettings();
 			Ak::getMainAppProjectFile().setBoolValue("vsync", !vsync_save);
 		}
         

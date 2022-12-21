@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 15/11/2022
+// Updated : 21/12/2022
 
 #include "render_core.h"
 #include <Core/core.h>
@@ -15,7 +15,7 @@ namespace Ak
 	{
 		pickPhysicalDevice();
 
-		Queues::QueueFamilyIndices indices = Render_Core::get().getQueue().findQueueFamilies(_physicalDevice);
+		Queues::QueueFamilyIndices indices = Render_Core::get().getQueue().getFamilies();
 
 		std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 		std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
@@ -67,33 +67,42 @@ namespace Ak
 		std::vector<VkPhysicalDevice> devices(deviceCount);
 		vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &deviceCount, devices.data());
 
+		SDL_Window* window = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_VULKAN | SDL_WINDOW_HIDDEN);
+		if(!window)
+			Core::log::report(FATAL_ERROR, "Vulkan : failed to create a window to pick physical device");
+
+		VkSurfaceKHR surface = VK_NULL_HANDLE;
+		if(SDL_Vulkan_CreateSurface(window, Render_Core::get().getInstance().get(), &surface) != SDL_TRUE)
+			Core::log::report(FATAL_ERROR, "Vulkan : failed to create a surface to pick physical device");
+
 		for(const auto& device : devices)
 		{
-			if(isDeviceSuitable(device))
+			if(isDeviceSuitable(device, surface))
 			{
 				_physicalDevice = device;
 				break;
 			}
 		}
 
+		vkDestroySurfaceKHR(Render_Core::get().getInstance().get(), surface, nullptr);
+		SDL_DestroyWindow(window);
+
 		if(_physicalDevice == VK_NULL_HANDLE)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to find a suitable GPU");
 	}
-	bool Device::isDeviceSuitable(VkPhysicalDevice device)
+
+	bool Device::isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface)
 	{
-		Queues::QueueFamilyIndices indices = Render_Core::get().getQueue().findQueueFamilies(device);
+		Queues::QueueFamilyIndices indices = Render_Core::get().getQueue().findQueueFamilies(device, surface);
 
 		bool extensionsSupported = checkDeviceExtensionSupport(device);
 
-		bool swapChainAdequate = false;
+		uint32_t formatCount = 0;
 		if(extensionsSupported)
-		{
-			SwapChain::SwapChainSupportDetails swapChainSupport = Render_Core::get().getSwapChain().querySwapChainSupport(device);
-			swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
-		}
-
-		return indices.isComplete() && extensionsSupported && swapChainAdequate;
+			vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
+		return indices.isComplete() && extensionsSupported && formatCount != 0;
 	}
+
 	bool Device::checkDeviceExtensionSupport(VkPhysicalDevice device)
 	{
 		uint32_t extensionCount;

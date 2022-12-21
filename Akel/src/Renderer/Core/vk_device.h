@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 08/05/2022
+// Updated : 21/12/2022
 
 #ifndef __AK_VK_DEVICE__
 #define __AK_VK_DEVICE__
@@ -23,7 +23,7 @@ namespace Ak
 			
 		private:
 			void pickPhysicalDevice();
-			bool isDeviceSuitable(VkPhysicalDevice device);
+			bool isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface);
 			bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 
 			VkPhysicalDevice _physicalDevice = VK_NULL_HANDLE;

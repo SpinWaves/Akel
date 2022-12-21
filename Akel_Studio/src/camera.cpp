@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 23/08/2022
-// Updated : 24/11/2022
+// Updated : 21/12/2022
 
 #include "camera.h"
 
-SceneCamera::SceneCamera(double x, double y, double z, Ak::Maths::Vec2<int>* window_size) : Ak::Component("scene_camera"), _up(0, 1, 0)
+SceneCamera::SceneCamera(double x, double y, double z, Ak::WindowComponent* window) : Ak::Component("scene_camera"), _up(0, 1, 0)
 {
-	_window_size = window_size;
+	_window = window;
 	_position.SET(x, y, z);
 	update_view();
 }
@@ -32,13 +32,13 @@ void SceneCamera::update()
 void SceneCamera::onEvent(Ak::Input& input)
 {
 	if(	input.getInMouse(AK_MOUSE_BUTTON_RIGHT) && _focus &&
-		input.getX() > (15 * _window_size->X)/100 - 1 && input.getX() < _window_size->X - (19 * _window_size->X)/100 &&
-		input.getY() > 75 && input.getY() < _window_size->Y - _window_size->Y/4)
+		input.getX() > (15 * _window->size.X)/100 - 1 && input.getX() < _window->size.X - (19 * _window->size.X)/100 &&
+		input.getY() > 75 && input.getY() < _window->size.Y - _window->size.Y/4)
 	{
 		_is_in_action = true;
 		_theta -= input.getXRel() * _sensivity;
 		_phi -= input.getYRel() * _sensivity;
-		SDL_WarpMouseInWindow(Ak::Render_Core::get().getWindow()->getNativeWindow(), _window_size->X / 2, _window_size->Y / 2);
+		SDL_WarpMouseInWindow(_window->getNativeWindow(), _window->size.X / 2, _window->size.Y / 2);
 		SDL_PumpEvents();
 		SDL_FlushEvent(SDL_MOUSEMOTION);
 

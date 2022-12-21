@@ -20,7 +20,7 @@ Ak::Application* Akel_mainApp()
 	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Rectangle using Akel Engine");
 	app->add_component<FPSprinterComponent>();
 
-	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene", app->getWindow());
+	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
 
 	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/vert_u.spv");
 	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/frag_u.spv");

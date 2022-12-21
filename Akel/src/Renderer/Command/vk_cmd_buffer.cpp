@@ -1,30 +1,27 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 20/08/2022
+// Updated : 21/12/2022
 
 #include "vk_cmd_buffer.h"
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-	void CmdBuffer::init()
+	void CmdBuffer::init(RendererComponent* renderer)
 	{
+		_renderer = renderer;
+
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		allocInfo.commandPool = Render_Core::get().getCmdPool().get();
+		allocInfo.commandPool = renderer->getCmdPool().get();
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		allocInfo.commandBufferCount = 1;
 
 		if(vkAllocateCommandBuffers(Render_Core::get().getDevice().get(), &allocInfo, &_cmd_buffer) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate command buffer");
-	}
-
-	void CmdBuffer::destroy() noexcept
-	{
-		Ak_assert(_cmd_buffer != VK_NULL_HANDLE, "trying to destroy an uninit command buffer");
-		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), Render_Core::get().getCmdPool().get(), 1, &_cmd_buffer);
 	}
 
 	void CmdBuffer::beginRecord(VkCommandBufferUsageFlags usage)
@@ -49,5 +46,11 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to end recording command buffer");
 
 		_is_recording = false;
+	}
+
+	void CmdBuffer::destroy() noexcept
+	{
+		Ak_assert(_cmd_buffer != VK_NULL_HANDLE, "trying to destroy an uninit command buffer");
+		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), _renderer->getCmdPool().get(), 1, &_cmd_buffer);
 	}
 }

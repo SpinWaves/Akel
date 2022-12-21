@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 09/05/2022
+// Updated : 21/12/2022
 
 #ifndef __AK_VK_SEMAPHORE__
 #define __AK_VK_SEMAPHORE__
@@ -13,7 +13,7 @@ namespace Ak
 	class Semaphore
 	{
 		public:
-			void init();
+			void init(class RendererComponent& renderer);
 			void destroy() noexcept;
 
 			inline VkSemaphore& getImageSemaphore(int i) noexcept { return _imageAvailableSemaphores[i]; }

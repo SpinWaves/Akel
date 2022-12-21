@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 14/10/2022
+// Updated : 21/12/2022
 
 #include <Platform/platform.h>
-#include <Renderer/Core/render_core.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
@@ -28,6 +28,7 @@ namespace Ak
 				if((*it)->_window_id == _current_window)
 				{
 					(*it)->onQuit();
+					(*it)->_renderer->onQuit();
 					_windows.erase(it);
 					break;
 				}
@@ -45,41 +46,47 @@ namespace Ak
 
         if(_event.window.event == SDL_WINDOWEVENT_RESIZED || _event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
         {
-            Render_Core::get().requireFrameBufferResize();
             for(auto win : _windows)
             {
                 if(win->_window_id == _current_window)
+				{
                     win->size.SET(_event.window.data1, _event.window.data2);
+					win->_renderer->requireFrameBufferResize();
+				}
             }
         }
 
         if(_event.window.event == SDL_WINDOWEVENT_MINIMIZED)
         {
-            Render_Core::get().requireFrameBufferResize();
             for(auto win : _windows)
             {
                 if(win->_window_id == _current_window)
+				{
                     win->minimize = true;
+					win->_renderer->requireFrameBufferResize();
+				}
             }
         }
         else if(_event.window.event == SDL_WINDOWEVENT_MAXIMIZED)
         {
-            Render_Core::get().requireFrameBufferResize();
             for(auto win : _windows)
             {
                 if(win->_window_id == _current_window)
+				{
                     win->maximize = true;
+					win->_renderer->requireFrameBufferResize();
+				}
             }
         }
         else if(_event.window.event == SDL_WINDOWEVENT_RESTORED)
         {
-            Render_Core::get().requireFrameBufferResize();
             for(auto win : _windows)
             {
                 if(win->_window_id == _current_window)
                 {
                     win->minimize = false;
                     win->maximize = false;
+					win->_renderer->requireFrameBufferResize();
                 }
             }
         }

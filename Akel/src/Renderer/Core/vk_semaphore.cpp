@@ -1,20 +1,21 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 20/08/2022
+// Updated : 21/12/2022
 
 #include "vk_semaphore.h"
 #include "render_core.h"
 #include <Utils/assert.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-	void Semaphore::init()
+	void Semaphore::init(RendererComponent& renderer)
 	{
 		_imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
 		_renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
 		_inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
-		_imagesInFlight.resize(Render_Core::get().getSwapChain().getImagesNumber(), VK_NULL_HANDLE);
+		_imagesInFlight.resize(renderer.getSwapChain().getImagesNumber(), VK_NULL_HANDLE);
 
 		VkSemaphoreCreateInfo semaphoreInfo{};
 		semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;

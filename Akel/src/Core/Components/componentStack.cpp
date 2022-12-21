@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 10/12/2022
+// Updated : 21/12/2022
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -41,11 +41,10 @@ namespace Ak
 
 	Component* ComponentStack::get_component(const char* name)
 	{
-		for(auto elem : _components)
-		{
-			if(std::strcmp(elem->getName(), name) == 0)
-				return elem;
-		}
+		auto it = std::find_if(_components.begin(), _components.end(), [=](Component* c) { return std::strcmp(c->getName(), name) == 0; });
+		if(it != _components.end())
+			return *it;
+		return nullptr;
 	}
 
 	ComponentStack::~ComponentStack()

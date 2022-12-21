@@ -1,15 +1,16 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 11/12/2022
+// Updated : 21/12/2022
 
 #include "vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-	void GraphicPipeline::init(std::vector<std::vector<uint32_t>> shaders, std::vector<Shader::VertexInput> inputs,
+	void GraphicPipeline::init(RendererComponent& renderer, std::vector<std::vector<uint32_t>> shaders, std::vector<Shader::VertexInput> inputs,
 				VkPrimitiveTopology topology, VkPolygonMode polygonMode, 
 				VkCullModeFlags cullMode, VkFrontFace frontFace)
     {
@@ -18,17 +19,17 @@ namespace Ak
 
 		for(int i = 0; i < shaders.size(); i++)
 		{
-			_shaders.push_back(memAlloc<Shader>(shaders[i]));
-			_shaders.back()->generate();
+			_shaders.emplace_back(std::move(shaders[i]), &renderer);
+			_shaders.back().generate();
 
 			VkPipelineShaderStageCreateInfo shaderStageInfo{};
 			shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-			shaderStageInfo.stage = _shaders.back()->getType();
-			shaderStageInfo.module = _shaders.back()->getShaderModule();
-			shaderStageInfo.pName = _shaders.back()->get_entry_point_name().c_str();
+			shaderStageInfo.stage = _shaders.back().getType();
+			shaderStageInfo.module = _shaders.back().getShaderModule();
+			shaderStageInfo.pName = _shaders.back().get_entry_point_name().c_str();
 
 			stages.push_back(shaderStageInfo);
-			for(DescriptorSetLayout& desc : _shaders.back()->getDescriptorSetLayouts())
+			for(DescriptorSetLayout& desc : _shaders.back().getDescriptorSetLayouts())
 				descriptor_layouts.push_back(desc.get());
 		}
 
@@ -74,14 +75,14 @@ namespace Ak
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
-        viewport.width = (float)Render_Core::get().getSwapChain()._swapChainExtent.width;
-        viewport.height = (float)Render_Core::get().getSwapChain()._swapChainExtent.height;
+        viewport.width = (float)renderer.getSwapChain()._swapChainExtent.width;
+        viewport.height = (float)renderer.getSwapChain()._swapChainExtent.height;
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
         VkRect2D scissor{};
         scissor.offset = { 0, 0 };
-        scissor.extent = Render_Core::get().getSwapChain()._swapChainExtent;
+        scissor.extent = renderer.getSwapChain()._swapChainExtent;
 
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -140,7 +141,7 @@ namespace Ak
         pipelineInfo.pColorBlendState = &colorBlending;
 		pipelineInfo.pDynamicState = &dynamicStates;
         pipelineInfo.layout = _pipelineLayout;
-        pipelineInfo.renderPass = Render_Core::get().getRenderPass().get();
+        pipelineInfo.renderPass = renderer.getRenderPass().get();
         pipelineInfo.subpass = 0;
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
@@ -149,8 +150,8 @@ namespace Ak
 
 		if(!_shaders.empty())
 		{
-			for(Shader* shader : _shaders)
-				shader->destroyModule();
+			for(Shader& shader : _shaders)
+				shader.destroyModule();
 		}
     }
 
@@ -161,11 +162,8 @@ namespace Ak
         
 		if(!_shaders.empty())
 		{
-			for(Shader* shader : _shaders)
-			{
-				shader->destroy();
-            	memFree(shader);
-			}
+			for(Shader& shader : _shaders)
+				shader.destroy();
 		}
 
         Ak_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");

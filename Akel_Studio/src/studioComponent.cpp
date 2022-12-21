@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 29/11/2022
+// Updated : 21/12/2022
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -33,10 +33,6 @@ void StudioComponent::onAttach()
 	Ak::WindowComponent::vsync = Ak::getMainAppProjectFile().getBoolValue("vsync");
 	Ak::WindowComponent::fetchSettings();
 
-	Ak::Render_Core::get().getClearValue().color.float32[0] = 0.627450980;
-	Ak::Render_Core::get().getClearValue().color.float32[1] = 0.878431373;
-	Ak::Render_Core::get().getClearValue().color.float32[2] = 0.909803922;
-
 	_stack = Ak::create_Unique_ptr<PanelStack>();
 
 	_stack->add_panel<Docks>(_eltm);
@@ -59,6 +55,12 @@ void StudioComponent::onAttach()
 void StudioComponent::setContext()
 {
     ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
+
+	Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
+	renderer->getClearValue().color.float32[0] = 0.627450980;
+	renderer->getClearValue().color.float32[1] = 0.878431373;
+	renderer->getClearValue().color.float32[2] = 0.909803922;
+
 }
 
 static bool realquit = false;

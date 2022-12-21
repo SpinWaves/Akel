@@ -1,12 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 19/12/2022
+// Updated : 21/12/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
 #include <Modules/ImGui/imgui_component.h>
-#include <Renderer/Core/render_core.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
@@ -31,6 +31,16 @@ namespace Ak
 
 	void Application::run()
 	{
+		std::vector<RendererComponent*> renderers;
+		std::vector<ImGuiComponent*> imguis;
+		for(auto comp : _components)
+		{
+			if(std::strcmp(comp->getName(), "__renderer_component") == 0)
+				renderers.push_back(static_cast<RendererComponent*>(comp));
+			if(std::strcmp(comp->getName(), "__imgui_component") == 0)
+				imguis.push_back(static_cast<ImGuiComponent*>(comp));
+		}
+
 		while(!_in.isEnded()) // Main loop
 		{
 			_fps.update();
@@ -55,33 +65,32 @@ namespace Ak
 				}
 			}
 			
-			if(Render_Core::get().beginFrame())
+			// rendering
+			for(auto renderer : renderers)
+				renderer->beginFrame();
+			if(ImGuiComponent::getNumComp())
 			{
-				// rendering
-				if(ImGuiComponent::getNumComp())
-				{
-					ImGui_ImplVulkan_NewFrame();
-					ImGui_ImplSDL2_NewFrame();
-					ImGui::NewFrame();
+				ImGui_ImplVulkan_NewFrame();
+				ImGui_ImplSDL2_NewFrame();
+				ImGui::NewFrame();
 
-					for(auto component : _components)
-					{
-						component->onRender();
-						component->onImGuiRender();
-					}
-
-					ImGui::Render();
-					ImDrawData* draw_data = ImGui::GetDrawData();
-					if(draw_data->DisplaySize.x >= 0.0f && draw_data->DisplaySize.y >= 0.0f)
-						ImGui_ImplVulkan_RenderDrawData(draw_data, Render_Core::get().getActiveCmdBuffer().get());
-				}
-				else
+				for(auto component : _components)
 				{
-					for(auto component : _components)
-						component->onRender();
+					component->onRender();
+					component->onImGuiRender();
 				}
-				Render_Core::get().endFrame();
+
+				ImGui::Render();
+				for(auto imgui : imguis)
+					imgui->renderFrame();
 			}
+			else
+			{
+				for(auto component : _components)
+					component->onRender();
+			}
+			for(auto renderer : renderers)
+				renderer->endFrame();
 		}
 	}
 

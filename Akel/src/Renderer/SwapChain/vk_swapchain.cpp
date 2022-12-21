@@ -1,18 +1,21 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 23/11/2022
+// Updated : 21/12/2022
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-    void SwapChain::init()
+    void SwapChain::init(RendererComponent* renderer)
     {
+		_renderer = renderer;
+
         _swapChainSupport = querySwapChainSupport(Render_Core::get().getDevice().getPhysicalDevice());
 
-        VkSurfaceFormatKHR surfaceFormat = Render_Core::get().getSurface().chooseSwapSurfaceFormat(_swapChainSupport.formats);
+        VkSurfaceFormatKHR surfaceFormat = renderer->getSurface().chooseSwapSurfaceFormat(_swapChainSupport.formats);
         VkPresentModeKHR presentMode = chooseSwapPresentMode(_swapChainSupport.presentModes);
         VkExtent2D extent = chooseSwapExtent(_swapChainSupport.capabilities);
 
@@ -22,7 +25,7 @@ namespace Ak
 
         VkSwapchainCreateInfoKHR createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-        createInfo.surface = Render_Core::get().getSurface().get();
+        createInfo.surface = renderer->getSurface().get();
 
         createInfo.minImageCount = imageCount;
         createInfo.imageFormat = surfaceFormat.format;
@@ -31,7 +34,7 @@ namespace Ak
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-        Queues::QueueFamilyIndices indices = Render_Core::get().getQueue().findQueueFamilies(Render_Core::get().getDevice().getPhysicalDevice());
+        Queues::QueueFamilyIndices indices = Render_Core::get().getQueue().findQueueFamilies(Render_Core::get().getDevice().getPhysicalDevice(), renderer->getSurface().get());
         uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
         if(indices.graphicsFamily != indices.presentFamily)
@@ -65,10 +68,7 @@ namespace Ak
         _imageViews.resize(_swapChainImages.size());
 
         for(size_t i = 0; i < _swapChainImages.size(); i++)
-        {
-            _imageViews[i] = memAlloc<ImageView>();
-            _imageViews[i]->init(this, _swapChainImages[i]);
-        }
+            _imageViews[i].init(*this, _swapChainImages[i]);
     }
 
     void SwapChain::initFB()
@@ -76,16 +76,13 @@ namespace Ak
         _framebuffers.resize(_imageViews.size());
 
         for(size_t i = 0; i < _imageViews.size(); i++)
-        {
-            _framebuffers[i] = memAlloc<FrameBuffer>();
-            _framebuffers[i]->init(this, *_imageViews[i]);
-        }
+            _framebuffers[i].init(*_renderer, _imageViews[i]);
     }
 
     SwapChain::SwapChainSupportDetails SwapChain::querySwapChainSupport(VkPhysicalDevice device)
     {
         SwapChain::SwapChainSupportDetails details;
-        VkSurfaceKHR surface = Render_Core::get().getSurface().get();
+        VkSurfaceKHR surface = _renderer->getSurface().get();
 
         if(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : unable to retrieve surface capabilities");
@@ -113,7 +110,7 @@ namespace Ak
 
     VkPresentModeKHR SwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
     {
-		if(!Render_Core::get().getWindow()->vsync)
+		if(!_renderer->getWindow()->vsync)
 		    return VK_PRESENT_MODE_IMMEDIATE_KHR;
 
         for(const auto& availablePresentMode : availablePresentModes)
@@ -130,7 +127,7 @@ namespace Ak
             return capabilities.currentExtent;
 
         int width, height;
-        SDL_Vulkan_GetDrawableSize(Render_Core::get().getWindow()->getNativeWindow(), &width, &height);
+        SDL_Vulkan_GetDrawableSize(_renderer->getWindow()->getNativeWindow(), &width, &height);
 
         VkExtent2D actualExtent = { static_cast<uint32_t>(width), static_cast<uint32_t>(height) };
 
@@ -144,41 +141,30 @@ namespace Ak
     {
         destroyFB();
         destroy();
-        Render_Core::get().getRenderPass().destroy();
+        _renderer->getRenderPass().destroy();
 
-        init();
-        Render_Core::get().getRenderPass().init();
+        init(_renderer);
+        _renderer->getRenderPass().init(_renderer);
         initFB();
     }
 
     void SwapChain::destroyFB() noexcept
     {
-        if(_framebuffers[0] == nullptr)
-            return;
-
         vkDeviceWaitIdle(Render_Core::get().getDevice().get());
             
         for(size_t i = 0; i < _framebuffers.size(); i++)
-        {
-            _framebuffers[i]->destroy();
-            memFree(_framebuffers[i]);
-            _framebuffers[i] = nullptr;
-        }
+            _framebuffers[i].destroy();
     }
 
     void SwapChain::destroy() noexcept
     {
-        if(_swapChain == VK_NULL_HANDLE && _imageViews[0] == nullptr)
+        if(_swapChain == VK_NULL_HANDLE)
             return;
         
         vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 
         for(size_t i = 0; i < _imageViews.size(); i++)
-        {
-            _imageViews[i]->destroy();
-            memFree(_imageViews[i]);
-            _imageViews[i] = nullptr;
-        }
+            _imageViews[i].destroy();
 
         if(_swapChain != VK_NULL_HANDLE)
             vkDestroySwapchainKHR(Render_Core::get().getDevice().get(), _swapChain, nullptr);

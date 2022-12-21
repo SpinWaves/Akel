@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 08/05/2022
+// Updated : 21/12/2022
 
 #ifndef __AK_VK_SURFACE__
 #define __AK_VK_SURFACE__
@@ -13,7 +13,7 @@ namespace Ak
 	class Surface
 	{
 		public:
-			void create();
+			void create(class RendererComponent& renderer);
 			void destroy() noexcept;
 			
 			VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);

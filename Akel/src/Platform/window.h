@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 26/08/2022
+// Updated : 21/12/2022
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -20,6 +20,7 @@ namespace Ak
     class WindowComponent : public Component
     {
         friend class Input;
+		friend class RendererComponent;
         
         public:
             WindowComponent();
@@ -57,8 +58,9 @@ namespace Ak
             SDL_Window* _window = nullptr;
 
         private:
-            uint32_t _flags = 0;
             SDL_Surface* _icon = nullptr;
+			class RendererComponent* _renderer = nullptr;
+            uint32_t _flags = 0;
             uint32_t _window_id = 0;
     };
 }

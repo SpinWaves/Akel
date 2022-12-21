@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2022
-// Updated : 06/12/2022
+// Updated : 21/12/2022
 
 #ifndef __AK_SCENE_MANAGER__
 #define __AK_SCENE_MANAGER__
@@ -16,9 +16,10 @@ namespace Ak
 	class SceneManager : public Component
 	{
 		public:
-			SceneManager();
+			SceneManager(class RendererComponent* renderer);
 
 			void onRender() override;
+			void update() override;
 			void onQuit() override;
 
 			inline void add_scene(class Scene* scene)
@@ -27,7 +28,7 @@ namespace Ak
 					_scenes.push_back(scene);
 				if(_current_scene_id == -1)
 					_current_scene_id = 0;
-				scene->onAttach(_scenes.size() - 1);
+				scene->onAttach(_renderer, _scenes.size() - 1);
 			}
 
 			inline void remove_scene(class Scene* scene)
@@ -59,7 +60,9 @@ namespace Ak
 
 		private:
 			std::vector<class Scene*> _scenes;
+			class RendererComponent* _renderer = nullptr;
 			int32_t _current_scene_id = -1;
+			bool _has_been_destroyed = false;
 	};
 }
 

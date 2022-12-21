@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 11/12/2022
+// Updated : 21/12/2022
 
 #include "vk_descriptor_set.h"
 #include "vk_descriptor_set_layout.h"
@@ -9,12 +9,15 @@
 #include <Renderer/Buffers/vk_ubo.h>
 #include <Renderer/Core/render_core.h>
 #include <Renderer/Pipeline/vk_shader.h>
+#include <Renderer/rendererComponent.h>
 #include <Utils/assert.h>
 
 namespace Ak
 {
-    void DescriptorSet::init(UBO* ubo, DescriptorSetLayout& layout, DescriptorPool& pool)
+    void DescriptorSet::init(RendererComponent* renderer, UBO* ubo, DescriptorSetLayout& layout, DescriptorPool& pool)
     {
+		_renderer = renderer;
+
         auto device = Render_Core::get().getDevice().get();
 
 		_pool = pool.get();
@@ -53,11 +56,11 @@ namespace Ak
 
 	VkDescriptorSet& DescriptorSet::operator()() noexcept
 	{
-		return _desc_set[Render_Core::get().getActiveImageIndex()];
+		return _desc_set[_renderer->getActiveImageIndex()];
 	}
 	VkDescriptorSet& DescriptorSet::get() noexcept
 	{
-		return _desc_set[Render_Core::get().getActiveImageIndex()];
+		return _desc_set[_renderer->getActiveImageIndex()];
 	}
 
     void DescriptorSet::destroy() noexcept

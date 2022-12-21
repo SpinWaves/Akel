@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/03/2022
-// Updated : 12/12/2022
+// Updated : 21/12/2022
 
 #include <Utils/plainApplication.h>
 #include <Renderer/rendererComponent.h>
@@ -17,7 +17,7 @@ namespace Ak
 		_window->fetchSettings();
 
 		_renderer = add_component<RendererComponent>(_window);
-		_scene_manager = add_component<Ak::SceneManager>();
+		_scene_manager = add_component<Ak::SceneManager>(_renderer);
 	}
 
 	void PlainApplication::add_scene(class Scene* scene) noexcept

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 11/12/2022
+// Updated : 21/12/2022
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -75,7 +75,7 @@ namespace Ak
 					std::vector<VkVertexInputAttributeDescription> _attributes;
 			};
 
-			Shader(const std::vector<uint32_t> byte_code);
+			Shader(const std::vector<uint32_t> byte_code, class RendererComponent* renderer);
 
 			void generate();
 			void destroy() noexcept;
@@ -113,6 +113,7 @@ namespace Ak
 			const std::vector<uint32_t> _byte_code;
 
 			fString _entry_point_name;
+			class RendererComponent* _renderer = nullptr;
 
 			VkShaderModule _shader = VK_NULL_HANDLE;
 			VkShaderStageFlagBits _type;

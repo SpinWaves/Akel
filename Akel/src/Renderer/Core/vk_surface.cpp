@@ -1,17 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 20/08/2022
+// Updated : 21/12/2022
 
 #include "render_core.h"
 #include <Platform/window.h>
 #include <Utils/assert.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-	void Surface::create()
+	void Surface::create(RendererComponent& renderer)
 	{
-		if(SDL_Vulkan_CreateSurface(Render_Core::get().getWindow()->getNativeWindow(), Render_Core::get().getInstance().get(), &_surface) != SDL_TRUE)
+		if(SDL_Vulkan_CreateSurface(renderer.getWindow()->getNativeWindow(), Render_Core::get().getInstance().get(), &_surface) != SDL_TRUE)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create a surface : %s", SDL_GetError());
 	}
 

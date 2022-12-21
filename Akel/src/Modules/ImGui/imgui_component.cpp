@@ -1,19 +1,19 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 23/11/2022
+// Updated : 21/12/2022
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
 #include <Platform/messageBox.h>
 #include <Renderer/Core/render_core.h>
-#include <Platform/window.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
 	static VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
 
-	ImGuiComponent::ImGuiComponent() : Component("__imguiComponent") {}
+	ImGuiComponent::ImGuiComponent(RendererComponent* renderer) : Component("__imgui_component"), _renderer(renderer) {}
 
 	void ImGuiComponent::onAttach()
 	{
@@ -58,7 +58,7 @@ namespace Ak
 		}
 
 		// Setup Platform/Renderer bindings
-		ImGui_ImplSDL2_InitForVulkan(Render_Core::get().getWindow()->getNativeWindow());
+		ImGui_ImplSDL2_InitForVulkan(_renderer->getWindow()->getNativeWindow());
 		ImGui_ImplVulkan_InitInfo init_info{};
 			init_info.Instance = Render_Core::get().getInstance().get();
 			init_info.PhysicalDevice = Render_Core::get().getDevice().getPhysicalDevice();
@@ -67,26 +67,26 @@ namespace Ak
 			init_info.Queue = Render_Core::get().getQueue().getGraphic();
 			init_info.DescriptorPool = descriptorPool;
 			init_info.Allocator = nullptr;
-			init_info.MinImageCount = Render_Core::get().getSwapChain().getSupport().capabilities.minImageCount;
-			init_info.ImageCount = Render_Core::get().getSwapChain().getImagesNumber();
+			init_info.MinImageCount = _renderer->getSwapChain().getSupport().capabilities.minImageCount;
+			init_info.ImageCount = _renderer->getSwapChain().getImagesNumber();
 			init_info.CheckVkResultFn = RCore::checkVk;
-		ImGui_ImplVulkan_Init(&init_info, Render_Core::get().getRenderPass().get());
+		ImGui_ImplVulkan_Init(&init_info, _renderer->getRenderPass().get());
 
 		_componentsInit = true;
 	}
 
 	void ImGuiComponent::generateFonts()
 	{
-		Render_Core::get().getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+		_renderer->getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
-			ImGui_ImplVulkan_CreateFontsTexture(Render_Core::get().getActiveCmdBuffer().get());
+			ImGui_ImplVulkan_CreateFontsTexture(_renderer->getActiveCmdBuffer().get());
 
 			VkSubmitInfo end_info{};
 			end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 			end_info.commandBufferCount = 1;
-			end_info.pCommandBuffers = &Render_Core::get().getActiveCmdBuffer().get();
+			end_info.pCommandBuffers = &_renderer->getActiveCmdBuffer().get();
 
-		Render_Core::get().getActiveCmdBuffer().endRecord();
+		_renderer->getActiveCmdBuffer().endRecord();
 
 		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &end_info, VK_NULL_HANDLE) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Imgui Vulkan error : failed to submit font command buffer");
@@ -107,13 +107,13 @@ namespace Ak
 		if(def)
 			io.FontDefault = io.Fonts->AddFontFromFileTTF(file, size);
 
-		Render_Core::get().getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-			ImGui_ImplVulkan_CreateFontsTexture(Render_Core::get().getActiveCmdBuffer().get());
+		_renderer->getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+			ImGui_ImplVulkan_CreateFontsTexture(_renderer->getActiveCmdBuffer().get());
 			VkSubmitInfo end_info{};
 			end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 			end_info.commandBufferCount = 1;
-			end_info.pCommandBuffers = &Render_Core::get().getActiveCmdBuffer().get();
-		Render_Core::get().getActiveCmdBuffer().endRecord();
+			end_info.pCommandBuffers = &_renderer->getActiveCmdBuffer().get();
+		_renderer->getActiveCmdBuffer().endRecord();
 		
 		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &end_info, VK_NULL_HANDLE) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Imgui Vulkan error : failed to submit font command buffer");
@@ -129,19 +129,26 @@ namespace Ak
 		if(def)
 			io.FontDefault = io.Fonts->AddFontFromMemoryCompressedTTF(data, data_size, size, &conf, range);
 
-		Render_Core::get().getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-			ImGui_ImplVulkan_CreateFontsTexture(Render_Core::get().getActiveCmdBuffer().get());
+		_renderer->getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+			ImGui_ImplVulkan_CreateFontsTexture(_renderer->getActiveCmdBuffer().get());
 			VkSubmitInfo end_info{};
 			end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 			end_info.commandBufferCount = 1;
-			end_info.pCommandBuffers = &Render_Core::get().getActiveCmdBuffer().get();
-		Render_Core::get().getActiveCmdBuffer().endRecord();
+			end_info.pCommandBuffers = &_renderer->getActiveCmdBuffer().get();
+		_renderer->getActiveCmdBuffer().endRecord();
 
 		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &end_info, VK_NULL_HANDLE) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Imgui Vulkan error : failed to submit font command buffer");
 
 		vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		ImGui_ImplVulkan_DestroyFontUploadObjects();
+	}
+
+	void ImGuiComponent::renderFrame()
+	{
+		ImDrawData* draw_data = ImGui::GetDrawData();
+		if(draw_data->DisplaySize.x >= 0.0f && draw_data->DisplaySize.y >= 0.0f)
+			ImGui_ImplVulkan_RenderDrawData(draw_data, _renderer->getActiveCmdBuffer().get());
 	}
 
 	void ImGuiComponent::onQuit()

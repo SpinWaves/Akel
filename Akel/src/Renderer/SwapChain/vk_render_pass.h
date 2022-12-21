@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vk_render_pass.h                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/21 17:04:31 by maldavid          #+#    #+#             */
+/*   Updated: 2022/12/21 17:04:32 by maldavid         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // this file is a part of akel
 // authors : @kbz_8
 // created : 10/04/2022
@@ -13,7 +25,7 @@ namespace Ak
 	class RenderPass
 	{
 		public:
-			void init();
+			void init(class RendererComponent* renderer);
 			void destroy() noexcept;
 
 			void begin();
@@ -24,6 +36,7 @@ namespace Ak
 
 		private:
 			VkRenderPass _renderPass = VK_NULL_HANDLE;
+			class RendererComponent* _renderer = nullptr;
 			bool _is_running = false;
 	};
 }

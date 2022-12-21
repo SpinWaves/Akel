@@ -23,7 +23,7 @@ Ak::Application* Akel_mainApp()
 	app->add_component<FPSprinterComponent>();
 	app->add_component<Ak::Camera3D>(0, 2, 0);
 
-	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene", app->getWindow());
+	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
 
 	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/cube/src/vert_u.spv");
 	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/cube/src/frag_u.spv");

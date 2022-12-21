@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 11/12/2022
+// Updated : 21/12/2022
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -13,17 +13,8 @@
 
 #include "vk_queues.h"
 #include "vk_device.h"
-#include "vk_surface.h"
 #include "vk_instance.h"
-#include "vk_semaphore.h"
 #include "vk_validation_layers.h"
-
-#include <Renderer/Command/vk_cmd_pool.h>
-#include <Renderer/Command/vk_cmd_buffer.h>
-#include <Renderer/SwapChain/vk_swapchain.h>
-#include <Renderer/SwapChain/vk_render_pass.h>
-#include <Renderer/Pipeline/vk_graphic_pipeline.h>
-#include <Renderer/Descriptors/vk_descriptor_pool.h>
 
 namespace Ak
 {
@@ -46,65 +37,31 @@ namespace Ak
     class Render_Core : public SelfInstance<Render_Core>
     {
         public:
-            Render_Core();
+            Render_Core() = default;
 
             void init();
-
-			void destroyCommandBuffers();
             void destroy();
 
-            bool beginFrame();
-            void endFrame();
-
-            inline class WindowComponent* getWindow() noexcept { return _window; }
-            inline void setWindow(class WindowComponent* window) noexcept { _window = window; }
-
-            inline Instance&  getInstance()		   { return _instance; }
-            inline Device&    getDevice()		   { return _device; }
-            inline Surface&   getSurface()		   { return _surface; }
-            inline Queues&    getQueue()		   { return _queues; }
-            inline CmdPool&   getCmdPool()		   { return _cmd_pool; }
-            inline SwapChain& getSwapChain()	   { return _swapchain; }
-            inline Semaphore& getSemaphore()	   { return _semaphore; }
-            inline RenderPass& getRenderPass()	   { return _pass; }
-            inline ValidationLayers& getLayers()   { return _layers; }
-            inline VkClearValue& getClearValue()   { return _clearColor; }
-            inline CmdBuffer& getCmdBuffer(int i)  { return *_cmd_buffers[i]; }
-            inline CmdBuffer& getActiveCmdBuffer() { return *_cmd_buffers[_active_image_index]; }
-            inline uint32_t getActiveImageIndex() const noexcept  { return _active_image_index; }
-            inline uint32_t getImageIndex()    const noexcept     { return _image_index; }
-			inline bool areCmdBufferFimished() const noexcept     { return _cmd_buffer_finished; }
+            inline Instance&  getInstance() noexcept { return _instance; }
+            inline Device&    getDevice() noexcept { return _device; }
+            inline Queues&    getQueue() noexcept { return _queues; }
+            inline ValidationLayers& getLayers() noexcept { return _layers; }
 
             inline GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags) { return _allocator.allocChunk(requirements, flags); }
             inline void freeChunk(GPU_Mem_Chunk& chunk) { _allocator.freeChunk(chunk); }
 			//inline const VmaAllocator& getAllocator() const noexcept { return _allocator; }
-
-            inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
-            inline bool isFrameBufferResizeRequested() const noexcept { return _framebufferResized; }
+			
+			~Render_Core() = default;
 
         private:
             Device _device;
             Queues _queues;
-            Surface _surface;
-            RenderPass _pass;
-            CmdPool _cmd_pool;
             Instance _instance;
-            SwapChain _swapchain;
-            Semaphore _semaphore;
             Allocator_GPU _allocator;
 			//VmaAllocator _allocator;
             ValidationLayers _layers;
-            std::vector<CmdBuffer*> _cmd_buffers;
-            VkClearValue _clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
 
-            class WindowComponent* _window = nullptr;
-            bool _framebufferResized = false;
-
-            uint32_t _active_image_index = 0;
-            uint32_t _image_index = 0;
             bool _is_init = false;
-
-			bool _cmd_buffer_finished = true;
     };
 }
 

@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 11/12/2022
+// Updated : 21/12/2022
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
+#include <Renderer/Command/vk_cmd_pool.h>
 
 namespace Ak
 {
@@ -92,7 +93,6 @@ namespace Ak
 
         if(vkAllocateMemory(device, &allocInfo, nullptr, &_mem_chunck.memory) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate buffer memory");
-		
 
 		//_mem_chunck = Render_Core::get().allocChunk(memRequirements, properties);
 
@@ -110,13 +110,14 @@ namespace Ak
 		newBuffer._flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 		newBuffer.createBuffer(newBuffer._usage, newBuffer._flags);
 
-		auto cmdpool = Render_Core::get().getCmdPool().get();
+		CmdPool cmdpool;
+		cmdpool.init();
 		auto device = Render_Core::get().getDevice().get();
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocInfo.commandPool = cmdpool;
+		allocInfo.commandPool = cmdpool.get();
 		allocInfo.commandBufferCount = 1;
 
 		VkCommandBuffer commandBuffer;
@@ -144,7 +145,7 @@ namespace Ak
 		vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
 		vkQueueWaitIdle(graphicsQueue);
 
-		vkFreeCommandBuffers(device, cmdpool, 1, &commandBuffer);
+		cmdpool.destroy();
 
 		this->swap(newBuffer);
 

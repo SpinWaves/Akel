@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 23/08/2022
-// Updated : 24/11/2022
+// Updated : 21/12/2022
 
 #ifndef __AK_STUDIO_CAMERA__
 #define __AK_STUDIO_CAMERA__
@@ -11,7 +11,7 @@
 class SceneCamera : public Ak::Component
 {
 		public:
-			SceneCamera(double x, double y, double z, Ak::Maths::Vec2<int>* window_size);
+			SceneCamera(double x, double y, double z, Ak::WindowComponent* window);
 
 			void onAttach() override;
 			void update() override;
@@ -31,7 +31,7 @@ class SceneCamera : public Ak::Component
 			Ak::Maths::Vec3<double> _target;
 			Ak::Maths::Vec3<double> _direction;
 			Ak::Maths::Vec3<double> _mov;
-			Ak::Maths::Vec2<int>* _window_size = nullptr;
+			Ak::WindowComponent* _window = nullptr;
 
 			double _theta = -45;
 			double _phi = -20;

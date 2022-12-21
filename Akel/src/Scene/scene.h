@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 19/12/2022
+// Updated : 21/12/2022
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -16,9 +16,9 @@ namespace Ak
 	class Scene
 	{
 		public:
-			Scene(fString name = "Empty scene", class WindowComponent* window = nullptr);
+			Scene(fString name = "Empty scene");
 
-			void onAttach(uint32_t id) noexcept;
+			void onAttach(class RendererComponent* renderer, uint32_t id) noexcept;
 			void onPreRender();
 			void onRender3D();
 			void onRender2D();
@@ -44,7 +44,7 @@ namespace Ak
 			VkCullModeFlags _cull_mode;
 			
 			fString _name;
-			class WindowComponent* _window = nullptr;
+			class RendererComponent* _renderer = nullptr;
 			uint32_t _id = -1;
 	};
 }

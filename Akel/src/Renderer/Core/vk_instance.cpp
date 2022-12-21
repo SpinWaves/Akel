@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 15/11/2022
+// Updated : 21/12/2022
 
 #include <Core/core.h>
 #include "vk_instance.h"
@@ -20,7 +20,7 @@ namespace Ak
 
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = Render_Core::get().getWindow()->title.c_str();
+        appInfo.pApplicationName = "Akel application";
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "Akel";
         appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);
@@ -56,20 +56,24 @@ namespace Ak
 
 	std::vector<const char*> Instance::getRequiredExtensions()
     {
+		SDL_Window* window = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_VULKAN | SDL_WINDOW_HIDDEN);
+		if(!window)
+			Core::log::report(FATAL_ERROR, "Vulkan : cannot get instance extentions from window : %s",  SDL_GetError());
         unsigned int count = 0;
-        if(!SDL_Vulkan_GetInstanceExtensions(Render_Core::get().getWindow()->getNativeWindow(), &count, nullptr))
+        if(!SDL_Vulkan_GetInstanceExtensions(window, &count, nullptr))
 			Core::log::report(ERROR, "Vulkan : cannot get instance extentions from window : %s",  SDL_GetError());
 
         std::vector<const char*> extensions = { VK_EXT_DEBUG_REPORT_EXTENSION_NAME };
         size_t additional_extension_count = extensions.size();
         extensions.resize(additional_extension_count + count);
 
-        if(!SDL_Vulkan_GetInstanceExtensions(Render_Core::get().getWindow()->getNativeWindow(), &count, extensions.data() + additional_extension_count))
+        if(!SDL_Vulkan_GetInstanceExtensions(window, &count, extensions.data() + additional_extension_count))
 			Core::log::report(ERROR, "Vulkan : cannot get instance extentions from window : %s", SDL_GetError());
 
         if(enableValidationLayers && !getMainAppProjectFile().getBoolValue("vk_force_disable_validation_layers"))
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 
+		SDL_DestroyWindow(window);
         return extensions;
     }
 
