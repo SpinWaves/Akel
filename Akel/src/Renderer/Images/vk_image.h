@@ -20,7 +20,7 @@ namespace Ak
 			void destroy() noexcept;
 
 			inline VkImage& get() noexcept { return _image; }
-			inline VkImage& operator() noexcept { return _image; }
+			inline VkImage& operator()() noexcept { return _image; }
 			inline VkDeviceMemory getDeviceMemory() noexcept { return _memory; }
 
 			virtual ~Image() = default;

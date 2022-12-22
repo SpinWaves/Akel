@@ -1,24 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/04/2021
-// Updated : 13/06/2022
+// Updated : 22/12/2022
 
-#include <Core/core.h>
-#include <Utils/utils.h>
+#include <Core/softwareInfo.h>
 
 namespace Ak::Core
 {
     bool isVulkanSupported()
     {
-        VkInstance instance;
-	    VkInstanceCreateInfo createInfo{};
-	    createInfo.enabledLayerCount = 0;
-	    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        if(vkCreateInstance(&createInfo, nullptr, &instance) == VK_SUCCESS)
-		{
-        	vkDestroyInstance(instance, nullptr);
-            return true;
-		}
+		uint32_t ver;
+		volkInitialize();
+        if(vkEnumerateInstanceVersion(&ver) == VK_SUCCESS)
+			return true;
         return false;
     }
 

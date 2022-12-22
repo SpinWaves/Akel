@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 23/11/2022
+// Updated : 22/12/2022
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -27,6 +27,10 @@ namespace Ak::Core
         createInfo.enabledLayerCount = 0;
 
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+
+		volkInitializeCustom((PFN_vkGetInstanceProcAddr)vkGetInstanceProcAddr(nullptr, "vkCreateInstance"));
+		volkInitializeCustom((PFN_vkGetInstanceProcAddr)vkGetInstanceProcAddr(nullptr, "vkEnumeratePhysicalDevices"));
+		volkInitializeCustom((PFN_vkGetInstanceProcAddr)vkGetInstanceProcAddr(nullptr, "vkGetPhysicalDeviceProperties"));
 
         if(vkCreateInstance(&createInfo, nullptr, &_instance) != VK_SUCCESS)
             Core::log::report(ERROR, "Unable to get GPU info, unable to create vulkan instance");
