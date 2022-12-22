@@ -3,20 +3,6 @@
 // Created : 25/03/2022
 // Updated : 22/12/2022
 
-#include <Core/profile.h>
-
-#define VOLK_IMPLEMENTATION
-
-#ifdef AK_PLATFORM_WINDOWS
-	#define VK_USE_PLATFORM_WIN32_KHR
-#elif defined(AK_PLATFORM_OSX)
-	#define VK_USE_PLATFORM_MACOS_MVK
-#elif defined(AK_PLATFORM_LINUX)
-	#define VK_USE_PLATFORM_XLIB_KHR
-#else
-	#error "Akel's renderer don't know how to run on this system"
-#endif
-
 #include "render_core.h"
 
 namespace Ak
@@ -66,11 +52,11 @@ namespace Ak
 	{
 		if(_is_init)
 			return;
-
-		volkInitialize();
 		_instance.init();
+		volkLoadInstance(_instance.get());
 		_layers.init();
 		_device.init();
+		volkLoadDevice(_device.get());
 		_queues.init();
 		_is_init = true;
 	}

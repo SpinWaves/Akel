@@ -1,13 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 15/11/2022
+// Updated : 22/12/2022
 
 #include <Core/core.h>
 
 namespace Ak::Core
 {
-	void log::Init(std::string path) // Removes ten days old files
+	void log::init(std::string path) // Removes ten days old files
 	{
 		std::lock_guard<std::mutex> watchdog(mutex);
 

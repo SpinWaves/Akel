@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 11/08/2022
+// Updated : 22/12/2022
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -27,7 +27,7 @@ namespace Ak
 			friend class Paths;
             public:
                 log() = delete;
-                static void Init(std::string path);
+                static void init(std::string path);
                 static void report(enum LogType type, std::string message, ...);
                 static void report(std::string message, ...);
                 ~log() = delete;

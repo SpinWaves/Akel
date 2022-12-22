@@ -1,9 +1,24 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 15/11/2022
+// Updated : 22/12/2022
 
-#include <Audio/audio.h>
+#include <Core/profile.h>
+
+#define VOLK_IMPLEMENTATION
+
+#ifdef AK_PLATFORM_WINDOWS
+	#define VK_USE_PLATFORM_WIN32_KHR
+#elif defined(AK_PLATFORM_OSX)
+	#define VK_USE_PLATFORM_MACOS_MVK
+#elif defined(AK_PLATFORM_LINUX)
+	#define VK_USE_PLATFORM_XLIB_KHR
+#else
+	#error "Akel's renderer don't know how to run on this system"
+#endif
+
+#include <volk.h>
+
 #include <Renderer/Core/render_core.h>
 #include "softwareInfo.h"
 #include "application.h"
@@ -43,6 +58,11 @@ namespace Ak
 		}
 		Core::log::report("arch: " AK_arch);
 
+		if(volkInitialize() != VK_SUCCESS)
+		{
+			Core::log::report(ERROR, "Vulkan is not supported");
+			return false;
+		}
 		if(!Core::isVulkanSupported())
 		{
 			Core::log::report(ERROR, "Vulkan is not supported");

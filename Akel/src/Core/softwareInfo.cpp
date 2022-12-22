@@ -10,7 +10,6 @@ namespace Ak::Core
     bool isVulkanSupported()
     {
 		uint32_t ver;
-		volkInitialize();
         if(vkEnumerateInstanceVersion(&ver) == VK_SUCCESS)
 			return true;
         return false;

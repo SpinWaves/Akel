@@ -25,13 +25,7 @@ namespace Ak::Core
 
         VkInstanceCreateInfo createInfo{};
         createInfo.enabledLayerCount = 0;
-
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-
-		volkInitializeCustom((PFN_vkGetInstanceProcAddr)vkGetInstanceProcAddr(nullptr, "vkCreateInstance"));
-		volkInitializeCustom((PFN_vkGetInstanceProcAddr)vkGetInstanceProcAddr(nullptr, "vkEnumeratePhysicalDevices"));
-		volkInitializeCustom((PFN_vkGetInstanceProcAddr)vkGetInstanceProcAddr(nullptr, "vkGetPhysicalDeviceProperties"));
-
         if(vkCreateInstance(&createInfo, nullptr, &_instance) != VK_SUCCESS)
             Core::log::report(ERROR, "Unable to get GPU info, unable to create vulkan instance");
         else

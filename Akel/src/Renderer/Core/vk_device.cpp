@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 21/12/2022
+// Updated : 22/12/2022
 
 #include "render_core.h"
 #include <Core/core.h>
@@ -62,7 +62,7 @@ namespace Ak
 		vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &deviceCount, nullptr);
 
 		if(deviceCount == 0)
-			Core::log::report(FATAL_ERROR, "Vulkan : failed to find GPUs with Vulkan support");
+			Core::log::report(FATAL_ERROR, "Vulkan : failed to find GPU with Vulkan support");
 
 		std::vector<VkPhysicalDevice> devices(deviceCount);
 		vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &deviceCount, devices.data());
