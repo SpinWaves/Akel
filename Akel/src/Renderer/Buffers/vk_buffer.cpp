@@ -43,7 +43,7 @@ namespace Ak
 				std::memcpy(mapped, data, _mem_chunck.size);
 			unmapMem();
 
-			//pushToGPU();
+			pushToGPU();
 		}
 	}
 
@@ -84,7 +84,6 @@ namespace Ak
 
 		VkMemoryRequirements memRequirements;
 		vkGetBufferMemoryRequirements(device, _buffer, &memRequirements);
-
 		
 		VkMemoryAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -106,7 +105,7 @@ namespace Ak
 	{
 		Buffer newBuffer;
 		newBuffer._mem_chunck.size = this->_mem_chunck.size;
-		newBuffer._usage = (this->_usage & VK_BUFFER_USAGE_TRANSFER_SRC_BIT) | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+		newBuffer._usage = (this->_usage & 0xFFFFFFFC) | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
 		newBuffer._flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 		newBuffer.createBuffer(newBuffer._usage, newBuffer._flags);
 
