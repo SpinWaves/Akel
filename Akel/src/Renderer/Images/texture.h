@@ -16,6 +16,9 @@ namespace Ak
 		public:
 			Texture() = default;
 
+			void create(std::vector<uint32_t> pixels, uint32_t width, uint32_t height);
+			void createFromFile(std::filesystem::path path);
+
 			~Texture() = default;
 
 		private:

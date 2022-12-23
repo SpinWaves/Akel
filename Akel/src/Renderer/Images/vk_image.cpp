@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 22/12/2022
+// Updated : 23/12/2022
 
 #include <Renderer/Images/vk_image.h>
+#include <Utils/assert.h>
 #include <Core/core.h>
 
 namespace Ak
@@ -17,6 +18,8 @@ namespace Ak
 
 	void Image::destroy() noexcept
 	{
-		
+		Ak_assert(_image != VK_NULL_HANDLE, "trying to destroy an uninit vulkan image");
+		vkDestroyImage(Render_Core::get().getDevice().get(), _image, nullptr);
+	    vkFreeMemory(Render_Core::get().getDevice().get(), _memory, nullptr);
 	}
 }

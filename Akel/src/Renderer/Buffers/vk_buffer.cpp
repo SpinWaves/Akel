@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 21/12/2022
+// Updated : 22/12/2022
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
@@ -36,14 +36,15 @@ namespace Ak
 
 		createBuffer(_usage, _flags);
 
-		if(type == Buffer::kind::constant)
+		if(type == Buffer::kind::constant || data != nullptr)
 		{
 			void* mapped = nullptr;
 			mapMem(&mapped);
 				std::memcpy(mapped, data, _mem_chunck.size);
 			unmapMem();
 
-			pushToGPU();
+			if(type == Buffer::kind::constant)
+				pushToGPU();
 		}
 	}
 
