@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 21/12/2022
+// Updated : 01/01/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -58,6 +58,10 @@ namespace Ak
 		}
 
 		// Setup Platform/Renderer bindings
+		ImGui_ImplVulkan_LoadFunctions([](const char *function_name, void *vulkan_instance) {
+			return vkGetInstanceProcAddr(*(reinterpret_cast<VkInstance *>(vulkan_instance)), function_name);
+		}, &Render_Core::get().getInstance().get());
+
 		ImGui_ImplSDL2_InitForVulkan(_renderer->getWindow()->getNativeWindow());
 		ImGui_ImplVulkan_InitInfo init_info{};
 			init_info.Instance = Render_Core::get().getInstance().get();

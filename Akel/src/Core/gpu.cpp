@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 22/12/2022
+// Updated : 01/01/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -30,6 +30,7 @@ namespace Ak::Core
             Core::log::report(ERROR, "Unable to get GPU info, unable to create vulkan instance");
         else
         {
+			volkLoadInstance(_instance);
             vkEnumeratePhysicalDevices(_instance, &_deviceCount, nullptr);
             _devices.resize(_deviceCount);
             vkEnumeratePhysicalDevices(_instance, &_deviceCount, _devices.data());
@@ -39,10 +40,6 @@ namespace Ak::Core
         auto FN_vkEnumerateInstanceVersion = PFN_vkEnumerateInstanceVersion(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
         if(vkEnumerateInstanceVersion)
             vkEnumerateInstanceVersion(&_instanceVersion);
-    }
-
-    GPU::~GPU()
-    {
         if(_instance)
             vkDestroyInstance(_instance, nullptr);
     }

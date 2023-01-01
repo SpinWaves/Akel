@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 24/11/2022
+// Updated : 01/01/2023
 
 #ifndef __AK_GPU__
 #define __AK_GPU__
@@ -38,7 +38,7 @@ namespace Ak::Core
                 return res;
             }
 
-            ~GPU();
+            ~GPU() = default;
 
         private:
             std::vector<VkPhysicalDevice> _devices;
