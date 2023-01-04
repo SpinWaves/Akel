@@ -14,31 +14,28 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Start by clonning the repo `git clone https://github.com/SpinWaves/Akel`
 * [Install xmake](https://xmake.io/#/guide/installation)
 * <details> <summary>Run xmake in the "xmake.lua" directory</summary>
-  By default xmake will build the Akel editor. If you want to build one of the demos you can run xmake as follows :
+  By default xmake will build Akel Studio. If you want to build one of the demos you can run xmake as follows :
 
   Demo | Command
   ---- | -------
   Editor | `xmake` or `xmake build Akel_Studio`
   Rectangle | `xmake build RectDemo`
-  Cube | Coming soon...
-
+  Cube | `xmake build CubeDemo`
   </details>
 
 # Akel useful features
+* Rendering system using Vulkan
 * Text management language [ELTM](https://github.com/SpinWaves/Akel/tree/main/Akel/src/Modules/ELTM)
-* Simple but efficient error management system
-* Rendering system with Vulkan
-* [2 memory allocation systems](https://github.com/SpinWaves/Akel/tree/main/Akel/src/Core/Memory):
-    * FixedAllocator is a fast allocator consisting of blocks of the same size that can be allocated. It is more performance oriented than memory optimised because if an allocated block is not used in full, the unused memory is wasted.
-    * JamAllocator is a slightly less efficient (but still effective) allocator that is memory optimisation oriented. It allocates the memory size you want, no memory is wasted.
+* Efficient error management system
+* Memory manager using custom allocators
 * Memory protection system in case of crash
 * Native ImGui implementation using Akel's renderer
 
 # Coming soon...
-* Cube demo
 * Custom strings to replace std::string
 * Custom shading language
 * Models manager
+* Resources manager
 
 # Contribute
 You can contribute by :
@@ -51,18 +48,6 @@ You can contribute by :
 [Website](https://akel-engine.com)
 
 [Documentation](https://doc.akel-engine.com)
-
-## Credits
-* Malte Skarupke for better implementation of std::function : https://github.com/skarupke/std_function
-* Sam Hocevar for PFD : https://github.com/samhocevar/portable-file-dialogs
-* Omar Cornut for ImGui lib : https://github.com/ocornut/imgui
-* Ruki for xmake : https://xmake.io/#/
-* Benjamin SAHRAOUI aka @ColorMan for the logo
-* For libSNDfile : [http://www.mega-nerd.com/libsndfile/](https://www.youtube.com/watch?v=iik25wqIuFo)
-    * Erik de Castro Lopo aka @erikd
-    * David Seifert aka @SoapGentoo
-    * Arthur Taylor aka @arthurt
-    * @evpobr
 
 ### Contact
 [Profile](https://solo.to/kbz_8)
