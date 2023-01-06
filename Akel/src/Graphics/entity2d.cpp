@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 19/12/2022
+// Updated : 06/01/2023
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -42,16 +42,16 @@ namespace Ak
         {
             case Models::quad :
 			{
-				std::vector<Vertex2D> vertexData = {
-                    {position, color},
-                    {{position.X + scale.X, position.Y}, color},
-                    {{position.X + scale.X, position.Y + scale.Y}, color},
-                    {{position.X, position.Y + scale.Y}, color}
+				std::vector<Vertex> vertexData = {
+                    {{position.X, position.Y, 0}, color},
+                    {{position.X + scale.X, position.Y, 0}, color},
+                    {{position.X + scale.X, position.Y + scale.Y, 0}, color},
+                    {{position.X, position.Y + scale.Y, 0}, color}
                 };
 
 				std::vector<uint32_t> indexData = { 0, 1, 2, 2, 3, 0 };
 
-				_vbo.create(sizeof(Vertex2D) * vertexData.size(), vertexData.data());
+				_vbo.create(sizeof(Vertex) * vertexData.size(), vertexData.data());
 				_ibo.create(sizeof(uint32_t) * indexData.size(), indexData.data());
 
 				break;

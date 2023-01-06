@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 21/12/2022
+// Updated : 06/01/2023
 
 #ifndef __AK_VK_GRAPHIC_PIPELINE__
 #define __AK_VK_GRAPHIC_PIPELINE__
@@ -27,7 +27,7 @@ namespace Ak
 			VkPipeline _graphicsPipeline = VK_NULL_HANDLE;
 			VkPipelineCache _cache = VK_NULL_HANDLE;
 			VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
-			VkPipelineBindPoint _pipelineBindPoint;
+			VkPipelineBindPoint _pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 			std::vector<Shader> _shaders;
 	};
 }

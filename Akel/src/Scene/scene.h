@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 21/12/2022
+// Updated : 06/01/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -38,8 +38,7 @@ namespace Ak
 			std::vector<class Entity3D> _3D_entities;
 			std::vector<class Entity2D> _2D_entities;
 
-			GraphicPipeline _3D_pipeline;
-			GraphicPipeline _2D_pipeline;
+			GraphicPipeline _pipeline;
 			std::vector<std::vector<uint32_t>> _shaders;
 			VkCullModeFlags _cull_mode;
 			

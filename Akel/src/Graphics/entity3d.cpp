@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 19/12/2022
+// Updated : 06/01/2023
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -42,7 +42,7 @@ namespace Ak
         {
 			case Models::cube:
 			{
-				const std::vector<Vertex3D> vertexData = {
+				const std::vector<Vertex> vertexData = {
 					{{position.X          , position.Y          , position.Z + scale.Z}, {1.0f,  0.0f,  0.0f}},
 					{{position.X + scale.X, position.Y          , position.Z + scale.Z}, {0.0f,  1.0f,  0.0f}},
 					{{position.X + scale.X, position.Y + scale.Y, position.Z + scale.Z}, {0.0f,  0.0f,  1.0f}},
@@ -62,7 +62,7 @@ namespace Ak
 					1, 2, 6, 6, 5, 1
 				};
 
-				_vbo.create(sizeof(Vertex3D) * vertexData.size(), vertexData.data());
+				_vbo.create(sizeof(Vertex) * vertexData.size(), vertexData.data());
 				_ibo.create(sizeof(uint32_t) * indexData.size(), indexData.data());
 
 				break;

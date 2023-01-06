@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 21/12/2022
+// Updated : 06/01/2023
 
 #include <Scene/scene.h>
 #include <Renderer/rendererComponent.h>
@@ -23,14 +23,9 @@ namespace Ak
 	{
 		_id = id;
 		_renderer = renderer;
-		_2D_pipeline.init(*_renderer, _shaders, std::vector<Ak::Shader::VertexInput>{ {
-				{ Vertex2D::getBindingDescription() },
-				{ Vertex2D::getAttributeDescriptions()[0], Vertex2D::getAttributeDescriptions()[1] }
-		} });
-
-		_3D_pipeline.init(*_renderer, _shaders, std::vector<Ak::Shader::VertexInput>{ {
-				{ Vertex3D::getBindingDescription() },
-				{ Vertex3D::getAttributeDescriptions()[0], Vertex3D::getAttributeDescriptions()[1] }
+		_pipeline.init(*_renderer, _shaders, std::vector<Ak::Shader::VertexInput>{ {
+				{ Vertex::getBindingDescription() },
+				{ Vertex::getAttributeDescriptions()[0], Vertex::getAttributeDescriptions()[1] }
 		} }, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
 	}
 
@@ -61,18 +56,18 @@ namespace Ak
 		scissor.offset = { 0, 0 };
 		scissor.extent = _renderer->getSwapChain()._swapChainExtent;
 		vkCmdSetScissor(_renderer->getActiveCmdBuffer().get(), 0, 1, &scissor);
+
+		_pipeline.bindPipeline(_renderer->getActiveCmdBuffer());
 	}
 
 	void Scene::onRender2D()
 	{
-		if(_2D_pipeline.getShaders().size() == 0 || _2D_entities.size() == 0)
+		if(_pipeline.getShaders().size() == 0 || _2D_entities.size() == 0)
 			return;
-
-		_2D_pipeline.bindPipeline(_renderer->getActiveCmdBuffer());
 
 		Matrixes::ortho(0, _renderer->getWindow()->size.X, 0, _renderer->getWindow()->size.Y);
 	
-		for(Shader& shader : _2D_pipeline.getShaders())
+		for(Shader& shader : _pipeline.getShaders())
 		{
 			if(shader.getUniforms().size() > 0)
 			{
@@ -91,7 +86,7 @@ namespace Ak
 					shader.getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
 
-				vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), VK_PIPELINE_BIND_POINT_GRAPHICS, _2D_pipeline.getPipelineLayout(), 0, 1, shader.getVkDescriptorSets().data(), 0, nullptr);
+				vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, 1, shader.getVkDescriptorSets().data(), 0, nullptr);
 			}
 		}
 
@@ -106,14 +101,12 @@ namespace Ak
 
 	void Scene::onRender3D()
 	{
-		if(_3D_pipeline.getShaders().size() == 0 || _3D_entities.size() == 0)
+		if(_pipeline.getShaders().size() == 0 || _3D_entities.size() == 0)
 			return;
-
-		_3D_pipeline.bindPipeline(_renderer->getActiveCmdBuffer());
 
 		Matrixes::perspective(90.f, (float)_renderer->getWindow()->size.X / (float)_renderer->getWindow()->size.Y, 0.1f, 1000.f);
 	
-		for(Shader& shader : _3D_pipeline.getShaders())
+		for(Shader& shader : _pipeline.getShaders())
 		{
 			if(shader.getUniforms().size() > 0)
 			{
@@ -132,7 +125,7 @@ namespace Ak
 					shader.getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
 
-				vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), VK_PIPELINE_BIND_POINT_GRAPHICS, _3D_pipeline.getPipelineLayout(), 0, 1, shader.getVkDescriptorSets().data(), 0, nullptr);
+				vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, 1, shader.getVkDescriptorSets().data(), 0, nullptr);
 			}
 		}
 
@@ -143,7 +136,6 @@ namespace Ak
 
 			vkCmdDrawIndexed(_renderer->getActiveCmdBuffer().get(), static_cast<uint32_t>(ent._ibo.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
 		}
-
 	}
 
 	void Scene::onQuit()
@@ -152,7 +144,6 @@ namespace Ak
 			entity.destroy();
 		for(auto entity : _3D_entities)
 			entity.destroy();
-		_2D_pipeline.destroy();
-		_3D_pipeline.destroy();
+		_pipeline.destroy();
 	}
 }
