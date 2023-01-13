@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 22/12/2022
+// Updated : 13/01/2023
 
 #include "vk_buffer.h"
 #include <Utils/assert.h>
@@ -56,20 +56,6 @@ namespace Ak
 		vkFreeMemory(Render_Core::get().getDevice().get(), _mem_chunck.memory, nullptr);
 	}
 
-	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
-    {
-        VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(Render_Core::get().getDevice().getPhysicalDevice(), &memProperties);
-
-        for(uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
-        {
-            if((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
-                return i;
-        }
-
-        Core::log::report(FATAL_ERROR, "Vulkan : failed to find suitable memory type");
-    }
-
 	void Buffer::createBuffer(VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
 	{
 		VkBufferCreateInfo bufferInfo{};
@@ -89,7 +75,7 @@ namespace Ak
 		VkMemoryAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
         allocInfo.allocationSize = memRequirements.size;
-        allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
+        allocInfo.memoryTypeIndex = RCore::findMemoryType(memRequirements.memoryTypeBits, properties);
 
         if(vkAllocateMemory(device, &allocInfo, nullptr, &_mem_chunck.memory) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate buffer memory");

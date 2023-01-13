@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 01/01/2023
+// Updated : 13/01/2023
 
 #include "render_core.h"
 
@@ -45,6 +45,20 @@ namespace Ak
 		{
 			if(result != 0)
 				Core::log::report(result < 0 ? FATAL_ERROR : ERROR, "Vulkan error : %s", verbaliseResultVk(result));
+		}
+
+		uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
+		{
+			VkPhysicalDeviceMemoryProperties memProperties;
+			vkGetPhysicalDeviceMemoryProperties(Render_Core::get().getDevice().getPhysicalDevice(), &memProperties);
+
+			for(uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
+			{
+				if((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
+					return i;
+			}
+
+			Core::log::report(FATAL_ERROR, "Vulkan : failed to find suitable memory type");
 		}
 	}
 
