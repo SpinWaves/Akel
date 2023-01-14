@@ -59,7 +59,7 @@ target_end() -- optional but I think the code is cleaner with this
 
 -- Akel Studio Build
 target("Akel_Studio")
-	set_default(true)
+	set_default(false)
 	set_license("MIT")
     set_kind("binary")
 	add_includedirs("Akel/src", "Akel_Studio/src", "libs/include")

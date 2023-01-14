@@ -14,11 +14,11 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Start by clonning the repo `git clone https://github.com/SpinWaves/Akel`
 * [Install xmake](https://xmake.io/#/guide/installation)
 * <details> <summary>Run xmake in the "xmake.lua" directory</summary>
-  By default xmake will build Akel Studio. If you want to build one of the demos you can run xmake as follows :
+  By default xmake will only build Akel. If you want to build Akel Studio or one of the demos you can run xmake as follows :
 
   Demo | Command
   ---- | -------
-  Editor | `xmake` or `xmake build Akel_Studio`
+  Ake Studio | `xmake build Akel_Studio`
   Rectangle | `xmake build RectDemo`
   Cube | `xmake build CubeDemo`
   </details>
