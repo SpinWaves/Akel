@@ -1,18 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 16/11/2022
+// Updated : 14/01/2023
 
 #include <Modules/Scripting/Lua/luaManager.h>
 #include <Core/core.h>
 
-#define SOL_ALL_SAFETIES_ON 1
-
 namespace Ak::lua
 {
-	LuaManager::LuaManager() : _state()
+	void LuaManager::init()
 	{
 		_state.open_libraries(sol::lib::base, sol::lib::io, sol::lib::package, sol::lib::math, sol::lib::table);
+		std::cout << "pouic" << std::endl;
 	//	LuaManager::get().bindLogs();
 	}
 

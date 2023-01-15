@@ -1,12 +1,12 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 22/12/2022
+-- Updated : 14/01/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json")
+add_requires("entt", "lief", "spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json")
 add_requires("volk", { configs = { header_only = true}})
 
 add_rules("mode.debug", "mode.release")
@@ -72,6 +72,7 @@ target("Akel_Studio")
 
 	add_packages("imguizmo_sdl_vk")
 	add_packages("spirv-reflect")
+	add_packages("lief", { public = true })
 
 	set_pcxxheader("Akel_Studio/src/AkSpch.h")
 

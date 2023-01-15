@@ -13,7 +13,7 @@ Ak::Application* Akel_mainApp()
 {
 	Ak::Application* app = Ak::memAlloc<Ak::Application>();
 	Ak::lua::LuaComponent* lua = Ak::memAlloc<Ak::lua::LuaComponent>();
-	lua->attach_script(Ak::Core::getMainDirPath() + "script.lua");
 	app->add_component(lua);
+	lua->attach_script("script.lua");
 	return app;
 }
