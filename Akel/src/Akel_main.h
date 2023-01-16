@@ -20,6 +20,7 @@ int main(int argc, char** argv)
 	Ak::Core::log::init(argv[0]);
 
 	AK_BEGIN_SESSION("Startup");
+		Ak::Res::get(); // init resource manager
 		Ak::AkelInstance project = std::move(Akel_init());
 		if(!Ak::initAkel(&project))
 			Ak::Core::log::report(FATAL_ERROR, "Something went wrong with Akel initialisation");

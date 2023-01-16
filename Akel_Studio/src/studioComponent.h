@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 24/11/2022
+// Updated : 16/01/2023
 
 #ifndef __AK_STUDIO_COMPONENT__
 #define __AK_STUDIO_COMPONENT__
@@ -34,10 +34,11 @@ class StudioComponent : public Ak::WindowComponent
 		void draw_scene_settings();
 
 		std::string _eltm_editor_input_buffer;
+		std::filesystem::path _project;
+		class SceneCamera* _camera = nullptr;
 		std::shared_ptr<Ak::ELTM> _eltm;
 		uint8_t _eltm_editor_save = 0;
 		Ak::Unique_ptr<PanelStack> _stack;
-		class SceneCamera* _camera = nullptr;
 		std::array<bool, 1> _opts;
 		bool _running = true;
 		bool _showAbout = false;

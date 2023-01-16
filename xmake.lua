@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 02/10/2021
--- Updated : 14/01/2023
+-- Updated : 16/01/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -89,6 +89,7 @@ target("RectDemo")
     add_deps("Akel")
 	add_includedirs("Akel/src", "SandBox/rect/src", "libs/include")
     add_files("SandBox/rect/src/*.cpp")
+	set_targetdir("SandBox/rect")
 target_end()
 
 -- Cube Demo Build
@@ -98,6 +99,7 @@ target("CubeDemo")
     add_deps("Akel")
 	add_includedirs("Akel/src", "SandBox/cube/src", "libs/include")
     add_files("SandBox/cube/src/*.cpp")
+	set_targetdir("SandBox/cube")
 target_end()
 
 -- Kila tester Build

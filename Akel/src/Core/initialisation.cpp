@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 22/12/2022
+// Updated : 16/01/2023
 
 #include <Core/profile.h>
 
@@ -22,6 +22,7 @@
 #include <Renderer/Core/render_core.h>
 #include "softwareInfo.h"
 #include "application.h"
+#include <Platform/resourceManager.h>
 
 namespace Ak
 {
@@ -84,9 +85,13 @@ namespace Ak
 		project->_project_file.setBoolValue("vk_enable_message_validation_layer", project->vk_enable_message_validation_layer);
 		project->_project_file.setBoolValue("vk_force_disable_validation_layers", project->vk_force_disable_validation_layers);
 		project->_project_file.setBoolValue("memory_manager_enable_fixed_allocator", project->memory_manager_enable_fixed_allocator);
+		project->_project_file.setBoolValue("use_default_resource_system", project->use_default_resource_system);
 
 		Core::initCpuInfo();
 		MemoryManager::init();
+
+		if(project->use_default_resource_system)
+			Res::get().createFileSystem();
 
 		return true;
     }

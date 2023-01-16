@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 21/12/2022
+// Updated : 16/01/2023
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -14,6 +14,7 @@ Ak::AkelInstance Akel_init()
 	Ak::AkelInstance project;
 		project.project_file_path = std::string(Ak::Core::getMainDirPath() + "settings");
 		project.project_file_name = "akel_studio";
+		project.use_default_resource_system = false;
 	return project;
 }
 

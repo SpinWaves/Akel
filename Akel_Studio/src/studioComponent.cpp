@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 21/12/2022
+// Updated : 16/01/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -155,7 +155,12 @@ void StudioComponent::drawMainMenuBar()
 		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_FOLDER" " + _eltm->getText("MainMenuBar.file")).c_str()))
 		{
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_FILE_OPEN" " + _eltm->getText("MainMenuBar.open")).c_str(), "Ctrl+O"))
-				auto file = pfd::open_file(_eltm->getText("MainMenuBar.open"), Ak::Core::getMainDirPath(), { "Akel projects (.akel)", "*.akel" });	
+			{
+				auto file = pfd::open_file(_eltm->getText("MainMenuBar.open"), Ak::Core::getMainDirPath(), { "Akel projects (.akel)", "*.akel" }).result();
+				if(!file.empty())
+					_project = file[0];
+				std::cout << _project << std::endl;
+			}
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE" " + _eltm->getText("MainMenuBar.save")).c_str(), "Ctrl+S")) { /* Do stuff */ }
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_CLOSE" " + _eltm->getText("MainMenuBar.quit")).c_str()))
 				_running = false;
