@@ -6,7 +6,7 @@
 -- Globals settings
 add_repositories("local-repo libs")
 
-add_requires("entt", "lief", "spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json")
+add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "libsdl_image", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json")
 add_requires("volk", { configs = { header_only = true}})
 
 add_rules("mode.debug", "mode.release")
@@ -72,7 +72,6 @@ target("Akel_Studio")
 
 	add_packages("imguizmo_sdl_vk")
 	add_packages("spirv-reflect")
-	add_packages("lief", { public = true })
 
 	set_pcxxheader("Akel_Studio/src/AkSpch.h")
 
