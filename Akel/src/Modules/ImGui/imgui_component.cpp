@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 01/01/2023
+// Updated : 19/01/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -237,5 +237,8 @@ namespace Ak
 		style->TabRounding = 5.0f;
 		style->WindowRounding = 0.0f;
 		style->WindowBorderSize = 1.0f;
+		style->AntiAliasedLines = true;
+		style->AntiAliasedFill = true;
+		style->TabBorderSize = 2.0f;
 	}
 }
