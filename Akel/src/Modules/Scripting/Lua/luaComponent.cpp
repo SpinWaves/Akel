@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 18/01/2023
+// Updated : 21/01/2023
 
 #include <Modules/Scripting/Lua/luaComponent.h>
 #include <Platform/input.h>
@@ -18,6 +18,7 @@ namespace Ak::lua
 
 	void LuaComponent::onAttach()
 	{
+		getMainAppProjectFile().setBoolValue("__lua_component", true);
 	}
 
 	void LuaComponent::update()
@@ -52,7 +53,7 @@ namespace Ak::lua
 
 	void LuaComponent::bindLogs()
 	{
-		auto log = _state["Ak"].get_or_create<sol::table>();
+		auto log = _state["Ak"].get_or_create<sol::table>()["log"].get_or_create<sol::table>();
 
 		log.set_function("message", [](std::string message)
 				{ Core::log::report(MESSAGE, std::string("Lua : " + std::move(message))); });

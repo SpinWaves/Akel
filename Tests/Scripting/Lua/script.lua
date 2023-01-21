@@ -1,2 +1,15 @@
-print("Akel")
-Ak:message("this is a message")
+function onInit()
+	
+end
+
+function onUpdate(delta)
+	
+end
+
+function onEvent(event)
+
+end
+
+function onDestroy()
+	
+end

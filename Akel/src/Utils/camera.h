@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 19/12/2022
+// Updated : 21/01/2023
 
 #ifndef __AK_CAMERA__
 #define __AK_CAMERA__ 
@@ -19,6 +19,7 @@ namespace Ak
 			Camera3D(Maths::Vec3<double> position);
 			Camera3D(double x, double y, double z);
 
+			void onAttach() override;
 			void update() override;
 			void onEvent(Input& input) override;
 

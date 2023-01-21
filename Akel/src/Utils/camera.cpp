@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 19/12/2022
+// Updated : 21/01/2023
 
 #include <Utils/camera.h>
 #include <Graphics/matrixes.h>
@@ -22,6 +22,11 @@ namespace Ak
 	{
 		_position.SET(x, y, z);
 		update_view();
+	}
+
+	void Camera3D::onAttach()
+	{
+		getMainAppProjectFile().setBoolValue("__camera3D_component", true);
 	}
 
 	void Camera3D::update()

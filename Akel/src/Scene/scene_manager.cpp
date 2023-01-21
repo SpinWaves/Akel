@@ -1,14 +1,20 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/11/2022
-// Updated : 06/01/2023
+// Updated : 21/01/2023
 
 #include <Scene/scene.h>
 #include <Scene/scene_manager.h>
+#include <Core/core.h>
 
 namespace Ak
 {
 	SceneManager::SceneManager(class RendererComponent* renderer) : Component("__scenes_manager"), _renderer(renderer) {}
+
+	void SceneManager::onAttach()
+	{
+		getMainAppProjectFile().setBoolValue("__scene_manager", true);
+	}
 
 	void SceneManager::onRender()
 	{

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2022
-// Updated : 21/12/2022
+// Updated : 21/01/2023
 
 #ifndef __AK_SCENE_MANAGER__
 #define __AK_SCENE_MANAGER__
@@ -18,6 +18,7 @@ namespace Ak
 		public:
 			SceneManager(class RendererComponent* renderer);
 
+			void onAttach() override;
 			void onRender() override;
 			void update() override;
 			void onQuit() override;
