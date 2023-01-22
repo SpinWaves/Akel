@@ -1,13 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 16/01/2023
+// Updated : 22/01/2023
 
 #ifndef __AK_STUDIO_COMPONENT__
 #define __AK_STUDIO_COMPONENT__
 
 #include <AkSpch.h>
 #include <Panels/panels.h>
+#include <projectManager.h>
 
 class StudioComponent : public Ak::WindowComponent
 {
@@ -33,13 +34,13 @@ class StudioComponent : public Ak::WindowComponent
 		void draw_general_settings();
 		void draw_scene_settings();
 
+		ProjectManager _project;
 		std::string _eltm_editor_input_buffer;
-		std::filesystem::path _project;
-		class SceneCamera* _camera = nullptr;
 		std::shared_ptr<Ak::ELTM> _eltm;
-		uint8_t _eltm_editor_save = 0;
+		class SceneCamera* _camera = nullptr;
 		Ak::Unique_ptr<PanelStack> _stack;
 		std::array<bool, 1> _opts;
+		uint8_t _eltm_editor_save = 0;
 		bool _running = true;
 		bool _showAbout = false;
 		bool _showOpt = false;

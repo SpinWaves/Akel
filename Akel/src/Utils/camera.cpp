@@ -1,11 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 21/01/2023
+// Updated : 22/01/2023
 
 #include <Utils/camera.h>
 #include <Graphics/matrixes.h>
 #include <Platform/input.h>
+#include <Core/core.h>
 
 namespace Ak
 {

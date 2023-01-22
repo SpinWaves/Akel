@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/01/2023
-// Updated : 21/01/2023
+// Updated : 22/01/2023
 
 #ifndef __AK_STUDIO_PROJECT_MANAGER_
 #define __AK_STUDIO_PROJECT_MANAGER_
@@ -17,10 +17,10 @@ class ProjectManager
 
 		bool openProjectFile(const std::filesystem::path& path);
 
-		bool getBoolValue(const std::string& key);
-		int getIntValue(const std::string& key);
-		float getFloatValue(const std::string& key);
-		std::string getStringValue(const std::string& key);
+		std::optional<bool> getBoolValue(const std::string& key);
+		std::optional<int> getIntValue(const std::string& key);
+		std::optional<float> getFloatValue(const std::string& key);
+		std::optional<std::string> getStringValue(const std::string& key);
 
 		void setStringValue(const std::string& key, const std::string& value);
 		void setIntValue(const std::string& key, const int value);
