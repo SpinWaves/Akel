@@ -10,7 +10,7 @@ class FPSprinterComponent : public Ak::Component
 Ak::AkelInstance Akel_init()
 {
     Ak::AkelInstance instance;
-        instance.project_file_path = Ak::Core::getMainDirPath() + "../../SandBox/rect";
+        instance.project_file_path = Ak::Core::getMainDirPath();
         instance.project_file_name = "rect";
     return instance;
 }
@@ -22,8 +22,8 @@ Ak::Application* Akel_mainApp()
 
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
 
-	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/vert_u.spv");
-	scene->loadCustomShader(Ak::Core::getMainDirPath() + "../../SandBox/rect/src/frag_u.spv");
+	scene->loadCustomShader(Ak::Core::getMainDirPath() + "src/vert_u.spv");
+	scene->loadCustomShader(Ak::Core::getMainDirPath() + "src/frag_u.spv");
 
 	scene->add_2D_entity({ Models::quad, { 100.f, 100.f }, { 200.f, 200.f }, Colors::red });
 	app->add_scene(scene);

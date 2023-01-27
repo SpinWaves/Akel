@@ -10,7 +10,7 @@ class FPSprinterComponent : public Ak::Component
 Ak::AkelInstance Akel_init()
 {
     Ak::AkelInstance instance;
-        instance.project_file_path = Ak::Core::getMainDirPath() + "../../SandBox/cube";
+        instance.project_file_path = Ak::Core::getMainDirPath();
         instance.project_file_name = "cube";
     return instance;
 }
