@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 21/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
 
 #include <Core/core.h>
+#include <Core/profile.h>
 #include <Platform/window.h>
 #include <Utils/fStrings.h>
 #include "Pipeline/vk_shader.h"
@@ -22,7 +23,7 @@
 
 namespace Ak
 {
-	class RendererComponent : public Component
+	class AK_API RendererComponent : public Component
 	{
 		public:
 			RendererComponent(WindowComponent* window);

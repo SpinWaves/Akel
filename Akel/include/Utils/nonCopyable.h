@@ -1,14 +1,16 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/03/2022
-// Updated : 26/03/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_NON_COPYABLE__
 #define __AK_NON_COPYABLE__
 
+#include <Core/profile.h>
+
 namespace Ak
 {
-	class non_copyable
+	class AK_API non_copyable
 	{
 		protected:
 			non_copyable() = default;

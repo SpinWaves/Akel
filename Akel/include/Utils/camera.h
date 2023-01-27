@@ -1,18 +1,19 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 21/01/2023
+// Updated : 27/01/2023
 
 #ifndef __AK_CAMERA__
 #define __AK_CAMERA__ 
 
 #include <Akpch.h>
 #include <Maths/maths.h>
+#include <Core/profile.h>
 #include <Core/Components/components.h>
 
 namespace Ak
 {
-	class Camera3D : public Component
+	class AK_API Camera3D : public Component
 	{
 		public:
 			Camera3D();

@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/04/2021
-// Updated : 04/09/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_CPU__
 #define __AK_CPU__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak::Core
 {
@@ -24,7 +25,7 @@ namespace Ak::Core
             uint32_t regs[4];
     };
 
-    class CPU
+    class AK_API CPU
     {
         public:
             CPU();

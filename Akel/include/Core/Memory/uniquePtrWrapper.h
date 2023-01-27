@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/09/2021
-// Updated : 29/05/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_Unique_ptrRAPPER__
 #define __AK_Unique_ptrRAPPER__
 
 #include <Core/projectFile.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
@@ -17,7 +18,7 @@ namespace Ak
     T* memAlloc(Args&& ... args);
 
     template <typename T>
-    class Unique_ptr
+    class AK_API Unique_ptr
     {
         public:
             constexpr Unique_ptr() noexcept {}

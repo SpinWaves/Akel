@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 21/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_COMPONENTS_STACK__
 #define __AK_COMPONENTS_STACK__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
@@ -14,7 +15,7 @@ namespace Ak
 	template <class T = void, typename ... Args>
 	T* memAlloc(Args&& ... args);
 
-	class ComponentStack
+	class AK_API ComponentStack
 	{
 		public:
 			ComponentStack() = default;

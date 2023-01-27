@@ -1,16 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 01/01/2023
+// Updated : 27/01/2023
 
 #ifndef __AK_GPU__
 #define __AK_GPU__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak::Core
 {
-    class GPU
+    class AK_API GPU
     {
         public:
             GPU();

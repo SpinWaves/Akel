@@ -1,17 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 01/04/2022
-// Updated : 07/05/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_SCOPE_TIMER__
 #define __AK_SCOPE_TIMER__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 #include "nonCopyable.h"
 
 namespace Ak
 {
-	class ScopeTimer : public non_copyable
+	class AK_API ScopeTimer : public non_copyable
 	{
 		public:
 			ScopeTimer(const char* scope_name);

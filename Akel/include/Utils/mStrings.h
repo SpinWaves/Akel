@@ -1,16 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/10/2021
-// Updated : 09/05/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_MUTABLE_STRINGS__
 #define __AK_MUTABLE_STRINGS__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
-    class mString
+    class AK_API mString
     {
         public:
             struct iterator

@@ -1,17 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 15/11/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
 
 #include <Akpch.h>
 #include <Core/projectFile.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
-    class MemoryManager
+    class AK_API MemoryManager
     {
         private:
             struct ControlUnit

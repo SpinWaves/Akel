@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/07/2021
-// Updated : 07/08/2021
+// Updated : 27/01/2023
 
 #ifndef __AK_TIME__
 #define __AK_TIME__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 struct __time
 {
@@ -20,7 +21,7 @@ struct __time
 
 namespace Ak
 {
-	class Time
+	class AK_API Time
 	{
 		public:
 			static __time& getCurrentTime();

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 21/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -10,6 +10,7 @@
 #include <Platform/messageBox.h>
 #include <Maths/maths.h>
 #include <Utils/utils.h>
+#include <Core/profile.h>
 
 #define AK_WINDOW_MAX_SIZE 0xFFFF
 #define AK_WINDOW_MIN_SIZE 0
@@ -17,7 +18,7 @@
 
 namespace Ak
 {
-    class WindowComponent : public Component
+    class AK_API WindowComponent : public Component
     {
         friend class Input;
 		friend class RendererComponent;

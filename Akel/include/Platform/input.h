@@ -1,19 +1,20 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 22/11/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 #include <Platform/inputScanCode.h>
 
 namespace Ak
 {
     enum class action : uint8_t { up = (1 << 1), down = (1 << 2) };
 
-    class Input
+    class AK_API Input
     {
 		friend class Application;
 

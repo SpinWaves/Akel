@@ -1,16 +1,17 @@
 // This file is a part of the Akel
 // Authors : @kbz_8
 // Created : 16/10/2021
-// Updated : 16/01/2023
+// Updated : 27/01/2023
 
 #ifndef __AK_INSTANCE__
 #define __AK_INSTANCE__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
-    class AkelInstance
+    class AK_API AkelInstance
     {
 		public:
 			AkelInstance() = default;

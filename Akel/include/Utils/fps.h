@@ -1,16 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/04/2021
-// Updated : 26/08/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_FPS__
 #define __AK_FPS__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
-	class CounterFPS
+	class AK_API CounterFPS
     {
         public:
             CounterFPS() = default;

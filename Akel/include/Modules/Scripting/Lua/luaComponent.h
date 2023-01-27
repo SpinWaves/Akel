@@ -1,17 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 18/01/2023
+// Updated : 27/01/2023
 
 #ifndef __AK_LUA_COMPONENT__
 #define __AK_LUA_COMPONENT__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 #include <Core/Components/components.h>
 
 namespace Ak::lua
 {
-	class LuaComponent : public Component
+	class AK_API LuaComponent : public Component
 	{
 		public:
 			LuaComponent();

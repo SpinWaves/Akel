@@ -1,10 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/04/2021
-// Updated : 30/08/2022
+// Updated : 27/01/2023
 
 #include <Core/core.h>
-#include <Platform/platform.h>
 
 #define MAX_INTEL_TOP_LVL 4
 
@@ -103,7 +102,7 @@ namespace Ak::Core
         } 
         else if(upVId.find("AMD") != std::string::npos) 
         {
-            if(HFS>=1)
+            if(HFS >= 1)
             {
                 _NumLogCpus = (cpuID1.EBX() >> 16) & 0xFF;
                 if (CPUID(0x80000000, 0).EAX() >=8)
@@ -121,7 +120,7 @@ namespace Ak::Core
                 _NumCores = _NumLogCpus = 1;
         } 
         else
-            messageBox(ERROR, "Unable to get CPU info", "Unexpected vendor id");
+            log::report(ERROR, "Unable to get CPU info", "Unexpected vendor id");
 
         for(int i = 0x80000002; i < 0x80000005; i++)
         {
@@ -131,6 +130,5 @@ namespace Ak::Core
             _ModelName += std::string((const char*)&cpuID.ECX(), 4);
             _ModelName += std::string((const char*)&cpuID.EDX(), 4);
         }
-    
     }
 }

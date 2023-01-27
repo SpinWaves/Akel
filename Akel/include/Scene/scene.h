@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 06/01/2023
+// Updated : 27/01/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -10,10 +10,11 @@
 #include <Platform/input.h>
 #include <Utils/fStrings.h>
 #include <Graphics/entity.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
-	class Scene
+	class AK_API Scene
 	{
 		public:
 			Scene(fString name = "Empty scene");

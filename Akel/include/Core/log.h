@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 22/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
 
 #include <Akpch.h>
 #include <Utils/utils.h>
+#include <Core/profile.h>
 
 enum LogType
 {
@@ -22,7 +23,7 @@ namespace Ak
 {
     namespace Core
     {
-        class log
+        class AK_API log
         {
 			friend class Paths;
             public:

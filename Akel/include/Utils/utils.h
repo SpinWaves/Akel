@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/04/2021
-// Updated : 27/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -43,6 +43,8 @@ using Ak_f96 = long double;
 
 #include <Utils/Containers/containers.h>
 
+#include <Core/profile.h>
+
 namespace Ak
 {
 	/**
@@ -54,13 +56,13 @@ namespace Ak
 	 * 		Myclass my_obj = Ak::default_t<Myclass>::get()
 	 */
 	template <class T>
-	struct default_t
+	struct AK_API default_t
 	{
 		static T get() { return T(); }
 	};
 
 	template<class... Ts>
-	struct overloaded : Ts...
+	struct AK_API overloaded : Ts...
 	{
 		using Ts::operator()...;
 	};

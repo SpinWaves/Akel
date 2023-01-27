@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2021
-// Updated : 29/01/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_BINARY_SEARCH_TREE__
 #define __AK_BINARY_SEARCH_TREE__
 
 #include <Core/core.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
@@ -14,7 +15,7 @@ namespace Ak
     void Warning(std::string message, ...);
 
     template <typename T>
-    class BinarySearchTree
+    class AK_API BinarySearchTree
     {
         public:
             struct iterator

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 21/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -9,10 +9,11 @@
 #include <Akpch.h>
 #include <Platform/input.h>
 #include <Core/core.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
-	class ImGuiComponent : public Component
+	class AK_API ImGuiComponent : public Component
 	{
 		friend class Application;
 

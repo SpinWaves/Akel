@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 12/11/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 /**
  * TODO :
@@ -18,7 +19,7 @@ namespace Ak
     template <typename T>
     class BinarySearchTree;
 
-    class JamAllocator : public std::enable_shared_from_this<JamAllocator>
+    class AK_API JamAllocator : public std::enable_shared_from_this<JamAllocator>
     {
         public:
             JamAllocator() = default;

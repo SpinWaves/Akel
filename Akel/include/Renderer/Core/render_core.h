@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 13/01/2023
+// Updated : 27/01/2023
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
 
 #include <Akpch.h>
 #include <Core/core.h>
+#include <Core/profile.h>
 #include <Utils/selfInstance.h>
 #include "Memory/allocator_GPU.h"
 
@@ -35,7 +36,7 @@ namespace Ak
     /**
      * Render_Core is a singleton that is not meant to be created anywhere by the user
      */
-    class Render_Core : public SelfInstance<Render_Core>
+    class AK_API Render_Core : public SelfInstance<Render_Core>
     {
         public:
             Render_Core() = default;
@@ -43,6 +44,7 @@ namespace Ak
             void init();
             void destroy();
 
+			inline bool is_init() noexcept { return _is_init; }
             inline Instance&  getInstance() noexcept { return _instance; }
             inline Device&    getDevice() noexcept { return _device; }
             inline Queues&    getQueue() noexcept { return _queues; }

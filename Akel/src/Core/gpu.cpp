@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 01/01/2023
+// Updated : 27/01/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
+#include <Renderer/Core/render_core.h>
 
 namespace Ak::Core
 {
@@ -23,24 +24,34 @@ namespace Ak::Core
         _types[3] = "Virtual";
         _types[4] = "CPU";
 
-        VkInstanceCreateInfo createInfo{};
-        createInfo.enabledLayerCount = 0;
-        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        if(vkCreateInstance(&createInfo, nullptr, &_instance) != VK_SUCCESS)
-            Core::log::report(ERROR, "Unable to get GPU info, unable to create vulkan instance");
-        else
-        {
-			volkLoadInstance(_instance);
-            vkEnumeratePhysicalDevices(_instance, &_deviceCount, nullptr);
-            _devices.resize(_deviceCount);
-            vkEnumeratePhysicalDevices(_instance, &_deviceCount, _devices.data());
-            vkGetPhysicalDeviceProperties(_devices[0], &_deviceProperties);
-        }
+		if(Render_Core::get().is_init())
+		{
+			vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &_deviceCount, nullptr);
+			_devices.resize(_deviceCount);
+			vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &_deviceCount, _devices.data());
+			vkGetPhysicalDeviceProperties(_devices[0], &_deviceProperties);
+		}
+		else
+		{
+			VkInstanceCreateInfo createInfo{};
+			createInfo.enabledLayerCount = 0;
+			createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+			if(vkCreateInstance(&createInfo, nullptr, &_instance) != VK_SUCCESS)
+				Core::log::report(ERROR, "Unable to get GPU info, unable to create vulkan instance");
+			else
+			{
+				volkLoadInstance(_instance);
+				vkEnumeratePhysicalDevices(_instance, &_deviceCount, nullptr);
+				_devices.resize(_deviceCount);
+				vkEnumeratePhysicalDevices(_instance, &_deviceCount, _devices.data());
+				vkGetPhysicalDeviceProperties(_devices[0], &_deviceProperties);
+			}
+		}
 
         auto FN_vkEnumerateInstanceVersion = PFN_vkEnumerateInstanceVersion(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
         if(vkEnumerateInstanceVersion)
             vkEnumerateInstanceVersion(&_instanceVersion);
-        if(_instance)
+		if(!Render_Core::get().is_init() && _instance)
             vkDestroyInstance(_instance, nullptr);
     }
 }

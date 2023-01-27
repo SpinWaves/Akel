@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/06/2021
-// Updated : 20/08/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -116,6 +116,14 @@
 	#error Akel can only run on 32bit or 64bit architectures
 #endif
 
+#ifdef AK_PLATFORM_WINDOWS
+	#define AK_EXPORT __declspec(dllexport)
+	#define AK_IMPORT __declspec(dllexport)
+#else
+	#define AK_EXPORT
+	#define AK_IMPORT
+#endif
+
 #ifdef __linux__
 	#define AK_PLATFORM_LINUX
 	#define forceinline __attribute__((always_inline))
@@ -125,6 +133,16 @@
 #elif not defined(forceinline)
 	#define AK_PLATFORM_UNDEFINED
 	#define forceinline inline
+#endif
+
+#if defined(AK_STATIC)
+	#define AK_API
+#else
+	#ifdef AK_BUILD
+		#define AK_API AK_EXPORT
+	#else
+		#define AK_API AK_IMPORT
+	#endif
 #endif
 
 #endif // __AK_PROFILE_CORE__

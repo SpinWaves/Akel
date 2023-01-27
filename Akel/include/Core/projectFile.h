@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 15/11/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_PROJECT_FILE__
 #define __AK_PROJECT_FILE__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
@@ -14,7 +15,7 @@ namespace Ak
 	{
 		using json = nlohmann::json;
 
-		class ProjectFile
+		class AK_API ProjectFile
 		{
 			public:
 				ProjectFile() = default;

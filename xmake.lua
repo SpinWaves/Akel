@@ -1,5 +1,5 @@
 -- This file is a part of Akel
--- Author : @kbz_8
+-- Authors : @kbz_8
 -- Created : 02/10/2021
 -- Updated : 27/01/2023
 
@@ -41,6 +41,8 @@ target("Akel")
 
 	set_pcxxheader("Akel/include/Akpch.h")
 
+	add_defines("AK_BUILD")
+	add_defines("AK_STATIC")
 	add_defines("SDL_MAIN_HANDLED")
 
 	add_packages("spirv-reflect", { public = true })
@@ -51,7 +53,7 @@ target("Akel")
 	add_packages("nlohmann_json", { public = true })
 	add_packages("entt", 	      { public = true })
 	add_packages("vulkan-memory-allocator", { public = true })
-	add_packages("volk", { public = true })
+	add_packages("volk",          { public = true })
 
 	add_packages("libsndfile",    { public = true })
 	add_packages("openal-soft",   { public = true })

@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 30/03/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_VEC4__
 #define __AK_VEC4__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak::Maths
 {
@@ -16,7 +17,7 @@ namespace Ak::Maths
     std::ostream& operator<<(std::ostream&, const Vec4<T>&);
 
     template <class T>
-    struct Vec4
+    struct AK_API Vec4
     {
         T X;
         T Y;

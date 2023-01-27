@@ -1,16 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 12/08/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_PATHS__
 #define __AK_PATHS__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak::Core
 {
-    class Paths
+    class AK_API Paths
     {
 		public:
 			Paths() = delete;

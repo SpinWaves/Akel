@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2022
-// Updated : 21/01/2023
+// Updated : 27/01/2023
 
 #ifndef __AK_SCENE_MANAGER__
 #define __AK_SCENE_MANAGER__
@@ -9,11 +9,12 @@
 #include <Akpch.h>
 #include <Core/Components/baseComponent.h>
 #include <Core/log.h>
+#include <Core/profile.h>
 #include "scene.h"
 
 namespace Ak
 {
-	class SceneManager : public Component
+	class AK_API SceneManager : public Component
 	{
 		public:
 			SceneManager(class RendererComponent* renderer);

@@ -1,17 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 18/07/2021
-// Updated : 12/11/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
 
 #include <Akpch.h>
 #include <Utils/bits_array.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
-    class FixedAllocator : public std::enable_shared_from_this<FixedAllocator>
+    class AK_API FixedAllocator : public std::enable_shared_from_this<FixedAllocator>
     {
 		public:
 			FixedAllocator() = default;

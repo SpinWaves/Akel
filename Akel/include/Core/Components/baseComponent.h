@@ -1,16 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 19/09/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_BASE_COMPONENT__
 #define __AK_BASE_COMPONENT__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
-	class Component
+	class AK_API Component
 	{
 		public:
 			Component(const char* name = "Component");

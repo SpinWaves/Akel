@@ -1,18 +1,19 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/05/2021
-// Updated : 11/01/2023
+// Updated : 27/01/2023
 
 #ifndef __AK_VECTOR__
 #define __AK_VECTOR__
 
 #include <Akpch.h>
 #include <Core/core.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
     template <typename T>
-    class Vector
+    class AK_API Vector
     {
         public:
             struct iterator

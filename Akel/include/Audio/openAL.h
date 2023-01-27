@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/08/2021
-// Updated : 05/08/2021
+// Updated : 27/01/2023
 
 #ifndef __AK_OPENAL__
 #define __AK_OPENAL__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak
 {

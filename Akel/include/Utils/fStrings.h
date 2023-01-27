@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 28/10/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
 
 #include "mStrings.h"
+#include <Core/profile.h>
 
 namespace Ak
 {
@@ -15,7 +16,7 @@ namespace Ak
      * They are a wrapper around const char* string that provides methods like std::strings to get
      * informations about our string, and are compatible with mStrings.
      */
-    class fString
+    class AK_API fString
     {
         public:
             struct iterator

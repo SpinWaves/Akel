@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/08/2021
-// Updated : 12/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_AUDIO_MANAGER__
 #define __AK_AUDIO_MANAGER__
@@ -10,13 +10,14 @@
 #include <Audio/openAL.h>
 #include <Core/Memory/uniquePtrWrapper.h>
 #include <Core/Components/baseComponent.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
     using audioFile = ALuint;
     constexpr audioFile null_audio = 0;
 
-    class AudioComponent : public Component
+    class AK_API AudioComponent : public Component
     {
         public:
             AudioComponent();

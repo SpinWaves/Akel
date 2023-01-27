@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/05/2021
-// Updated : 10/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_DUETS_ARRAY__
 #define __AK_DUETS_ARRAY__
 
 #include <Akpch.h>
 #include <Utils/utils.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
@@ -15,7 +16,7 @@ namespace Ak
 	struct default_t;
 
 	template <typename __first, typename __second>
-	class duets_array
+	class AK_API duets_array
 	{
 		using __type = std::pair<__first, __second>;
 

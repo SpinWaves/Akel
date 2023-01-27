@@ -1,18 +1,19 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/03/2022
-// Updated : 19/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_MATRIXES__
 #define __AK_MATRIXES__
 
 #include <Akpch.h>
+#include <Core/profile.h>
 
 namespace Ak
 {
     enum class matrix { proj, model, view };
 
-    class Matrixes
+    class AK_API Matrixes
     {
         public:
             Matrixes() = delete;

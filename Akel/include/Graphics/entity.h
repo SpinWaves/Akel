@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2021
-// Updated : 12/12/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_ENTITY__
 #define __AK_ENTITY__
@@ -9,6 +9,7 @@
 #include <Akpch.h>
 
 #include <Maths/maths.h>
+#include <Core/profile.h>
 #include <Graphics/vertex.h>
 
 #include <Renderer/Buffers/vk_ibo.h>
@@ -37,7 +38,7 @@ enum class Colors : uint32_t
 
 namespace Ak
 {
-	class Entity3D
+	class AK_API Entity3D
 	{
 		friend class Scene;
 
@@ -59,7 +60,7 @@ namespace Ak
 			C_IBO _ibo;
 	};
 
-	class Entity2D
+	class AK_API Entity2D
 	{
 		friend class Scene;
 

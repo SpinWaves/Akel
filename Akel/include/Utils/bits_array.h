@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/11/2022
-// Updated : 12/11/2022
+// Updated : 27/01/2023
 
 #ifndef __AK_BITS_ARRAY__
 #define __AK_BITS_ARRAY__
@@ -13,12 +13,12 @@
 namespace Ak
 {
 #ifdef AK_64BITS
-using uintsys_t = uint64_t;
+	using uintsys_t = uint64_t;
 #else
-using uintsys_t = uint32_t;
+	using uintsys_t = uint32_t;
 #endif
 
-	class BitsArray : public non_copyable
+	class AK_API BitsArray : public non_copyable
 	{
 		public:
 			BitsArray() = default;
