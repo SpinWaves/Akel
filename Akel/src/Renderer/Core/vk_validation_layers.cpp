@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 15/11/2022
+// Updated : 27/01/2023
 
-#include "vk_validation_layers.h"
-#include "render_core.h"
+#include <Renderer/Core/vk_validation_layers.h>
+#include <Renderer/Core/render_core.h>
 #include <Core/core.h>
 
 namespace Ak

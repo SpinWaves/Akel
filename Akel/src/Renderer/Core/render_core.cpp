@@ -1,9 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 13/01/2023
+// Updated : 27/01/2023
 
-#include "render_core.h"
+#include <Renderer/Core/render_core.h>
 
 namespace Ak
 {

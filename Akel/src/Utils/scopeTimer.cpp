@@ -1,9 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 01/04/2022
-// Updated : 17/04/2022
+// Updated : 27/01/2023
 
-#include "scopeTimer.h"
+#include <Utils/scopeTimer.h>
 
 namespace Ak
 {

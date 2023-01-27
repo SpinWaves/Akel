@@ -1,11 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 21/12/2022
+// Updated : 27/01/2023
 
-#include "vk_descriptor_set.h"
-#include "vk_descriptor_set_layout.h"
-#include "vk_descriptor_pool.h"
+#include <Renderer/Descriptors/vk_descriptor_set.h>
+#include <Renderer/Descriptors/vk_descriptor_set_layout.h>
+#include <Renderer/Descriptors/vk_descriptor_pool.h>
 #include <Renderer/Buffers/vk_ubo.h>
 #include <Renderer/Core/render_core.h>
 #include <Renderer/Pipeline/vk_shader.h>

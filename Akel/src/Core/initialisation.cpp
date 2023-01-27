@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 21/01/2023
+// Updated : 27/01/2023
 
 #include <Core/profile.h>
 
@@ -20,8 +20,8 @@
 #include <volk.h>
 
 #include <Renderer/Core/render_core.h>
-#include "softwareInfo.h"
-#include "application.h"
+#include <Core/softwareInfo.h>
+#include <Core/application.h>
 #include <Platform/resourceManager.h>
 
 namespace Ak

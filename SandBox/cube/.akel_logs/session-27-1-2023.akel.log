@@ -1,0 +1,14 @@
+
+11:40 ---- Begin Startup ----
+11:40 ---- architecture: 64bits
+11:40 ---- arch: x86
+11:40 ---- End ----
+11:40 ---- Begin Runtime ----
+11:41 ---- End ----
+11:41 ---- Begin Shutdown ----
+11:41 ---- Strong Warning: Component Stack: unable to free a component "__window_component" address(0x7fc6b367c360), unable to find its allocator
+11:41 ---- Strong Warning: Component Stack: unable to free a component "__renderer_component" address(0x7fc6b367c45c), unable to find its allocator
+11:41 ---- Strong Warning: Component Stack: unable to free a component "__scenes_manager" address(0x7fc6b367c678), unable to find its allocator
+11:41 ---- Strong Warning: Component Stack: unable to free a component "Component" address(0x7fc6b367c70c), unable to find its allocator
+11:41 ---- Strong Warning: Component Stack: unable to free a component "__camera3D" address(0x7fc6b367c778), unable to find its allocator
+11:41 ---- End ----

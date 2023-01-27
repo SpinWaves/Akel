@@ -1,9 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/04/2022
-// Updated : 21/12/2022
+// Updated : 27/01/2023
 
-#include "vk_vbo.h"
+#include <Renderer/Buffers/vk_vbo.h>
 
 namespace Ak
 {

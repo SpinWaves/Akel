@@ -1,11 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/03/2022
-// Updated : 28/11/2022
+// Updated : 27/01/2023
 
 #include <Core/core.h>
-#include "pages.h"
-#include "chunk.h"
+#include <Renderer/Core/Memory/pages.h>
+#include <Renderer/Core/Memory/chunk.h>
 
 namespace Ak
 {

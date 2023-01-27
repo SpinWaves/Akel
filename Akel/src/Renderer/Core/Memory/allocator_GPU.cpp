@@ -1,11 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/09/2021
-// Updated : 03/11/2022
+// Updated : 27/01/2023
 
-#include "allocator_GPU.h"
-#include "pages.h"
-#include "chunk.h"
+#include <Renderer/Core/Memory/allocator_GPU.h>
+#include <Renderer/Core/Memory/pages.h>
+#include <Renderer/Core/Memory/chunk.h>
 #include <Core/core.h>
 
 namespace Ak

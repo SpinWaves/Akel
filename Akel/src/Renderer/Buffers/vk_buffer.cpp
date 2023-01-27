@@ -1,9 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 13/01/2023
+// Updated : 27/01/2023
 
-#include "vk_buffer.h"
+#include <Renderer/Buffers/vk_buffer.h>
 #include <Utils/assert.h>
 #include <Renderer/Command/vk_cmd_pool.h>
 
