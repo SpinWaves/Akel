@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 27/01/2023
+// Updated : 28/01/2023
 
 #include <Core/profile.h>
 
@@ -94,7 +94,6 @@ namespace Ak
 		project->_project_file.setBoolValue("__audio_component", false);
 		project->_project_file.setBoolValue("__camera3D_component", false);
 
-		Core::initCpuInfo();
 		MemoryManager::init();
 
 		if(project->use_default_resource_system)

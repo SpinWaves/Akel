@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 24/07/2022
+// Updated : 28/01/2023
 
 #ifndef __AK_MATH__
 #define __AK_MATH__
@@ -20,7 +20,6 @@ namespace Ak::Maths
     bool rand_probability(double proba);
     float rsqrt(float number);
 
-    // Better implementation of abs functions
     inline int abs(int a) noexcept
     {
         int mask = (a >> (sizeof(int) * CHAR_BIT - 1));
@@ -33,8 +32,6 @@ namespace Ak::Maths
         i &= ~(1u << 31); // set sign to 0 makes it positive
         return *(float*)&i; // another tricky convertion
     }
-
-    float fsqrt(float n);
 }
 
 #endif // __AK_MATH__
