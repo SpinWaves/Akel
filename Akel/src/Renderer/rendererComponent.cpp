@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 21/01/2023
+// Updated : 29/01/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -20,11 +20,7 @@ namespace Ak
 		_swapchain.init(this);
 		_pass.init(this);
 		_swapchain.initFB();
-		_cmd_pool.init();
-
-		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-			_cmd_buffers[i].init(this);
-
+		_cmd.init();
 		_semaphore.init(*this);
 
 		_is_init = true;
@@ -34,7 +30,7 @@ namespace Ak
 	bool RendererComponent::beginFrame()
 	{
 		if(!_is_init)
-			return true;
+			return false;
 
 		auto device = Render_Core::get().getDevice().get();
 
@@ -53,9 +49,7 @@ namespace Ak
 
 		vkResetFences(device, 1, &_semaphore.getInFlightFence(_active_image_index));
 
-		vkResetCommandBuffer(_cmd_buffers[_active_image_index].get(), 0);
-
-		_cmd_buffers[_active_image_index].beginRecord();
+		_cmd.beginRecord(_active_image_index);
 		_pass.begin();
 
 		return true;
@@ -67,7 +61,7 @@ namespace Ak
 			return;
 
 		_pass.end();
-		_cmd_buffers[_active_image_index].endRecord();
+		_cmd.endRecord(_active_image_index);
 
 		VkSubmitInfo submitInfo{};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -79,7 +73,7 @@ namespace Ak
 		submitInfo.pWaitDstStageMask = waitStages;
 
 		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &_cmd_buffers[_active_image_index].get();
+		submitInfo.pCommandBuffers = &_cmd.getCmdBuffer(_active_image_index).get();
 
 		VkSemaphore signalSemaphores[] = { _semaphore.getRenderImageSemaphore(_active_image_index) };
 		submitInfo.signalSemaphoreCount = 1;
@@ -122,14 +116,12 @@ namespace Ak
 
         vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 
-		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-			_cmd_buffers[i].destroy();
+		_cmd.destroy();
 
 		_swapchain.destroyFB();
 		_pass.destroy();
 		_swapchain.destroy();
 		_semaphore.destroy();
-		_cmd_pool.destroy();
 		_surface.destroy();
 		_is_init = false;
     }

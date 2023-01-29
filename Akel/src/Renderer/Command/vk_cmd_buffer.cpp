@@ -1,22 +1,22 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 27/01/2023
+// Updated : 29/01/2023
 
 #include <Renderer/Command/vk_cmd_buffer.h>
+#include <Renderer/Command/cmd_manager.h>
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
-#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-	void CmdBuffer::init(RendererComponent* renderer)
+	void CmdBuffer::init(CmdManager* manager)
 	{
-		_renderer = renderer;
+		_manager = manager;
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		allocInfo.commandPool = renderer->getCmdPool().get();
+		allocInfo.commandPool = manager->getCmdPool().get();
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		allocInfo.commandBufferCount = 1;
 
@@ -51,6 +51,6 @@ namespace Ak
 	void CmdBuffer::destroy() noexcept
 	{
 		Ak_assert(_cmd_buffer != VK_NULL_HANDLE, "trying to destroy an uninit command buffer");
-		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), _renderer->getCmdPool().get(), 1, &_cmd_buffer);
+		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), _manager->getCmdPool().get(), 1, &_cmd_buffer);
 	}
 }
