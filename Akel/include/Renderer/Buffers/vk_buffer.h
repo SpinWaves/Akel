@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 13/01/2023
+// Updated : 30/01/2023
 
 #ifndef __AK_VK_BUFFER__
 #define __AK_VK_BUFFER__
@@ -17,7 +17,7 @@ namespace Ak
 		public:
 			enum class kind { constant, dynamic, uniform };
 
-			virtual void create(kind type, VkDeviceSize size, VkBufferUsageFlags usage, const void* data = nullptr);
+			void create(kind type, VkDeviceSize size, VkBufferUsageFlags usage, const void* data = nullptr);
 			void destroy() noexcept;
 
 			inline void mapMem(void** data = nullptr, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0) noexcept

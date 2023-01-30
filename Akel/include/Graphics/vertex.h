@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 27/01/2023
+// Updated : 31/01/2023
 
 #ifndef __AK_VERTEX__
 #define __AK_VERTEX__
@@ -16,11 +16,11 @@ namespace Ak
     {
         Maths::Vec3<float> pos;
         Maths::Vec4<float> color;
-        //Vec3<float> normals;
-        //Vec2<float> texture_coords;
+		Maths::Vec2<float> texture_coords;
+        //Maths::Vec3<float> normals;
         
         static VkVertexInputBindingDescription getBindingDescription();
-        static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions();
+        static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions();
     };
 }
 

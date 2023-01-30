@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 27/01/2023
+// Updated : 30/01/2023
 
 #include <Renderer/Descriptors/vk_descriptor_set.h>
 #include <Renderer/Descriptors/vk_descriptor_set_layout.h>
@@ -46,7 +46,7 @@ namespace Ak
 			descriptorWrite.dstSet = _desc_set[i];
 			descriptorWrite.dstBinding = 0;
 			descriptorWrite.dstArrayElement = 0;
-			descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+			descriptorWrite.descriptorType = layout.getType();
 			descriptorWrite.descriptorCount = 1;
 			descriptorWrite.pBufferInfo = &bufferInfo;
 

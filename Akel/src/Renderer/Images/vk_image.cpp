@@ -1,12 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 13/01/2023
+// Updated : 30/01/2023
 
 #include <Renderer/Images/vk_image.h>
+#include <Renderer/Buffers/vk_buffer.h>
 #include <Utils/assert.h>
 #include <Core/core.h>
 #include <Renderer/Core/render_core.h>
+#include <Renderer/Command/vk_cmd_pool.h>
 
 namespace Ak
 {
@@ -75,15 +77,88 @@ namespace Ak
 
 		if(vkCreateImageView(Render_Core::get().getDevice().get(), &viewInfo, nullptr, &_image_view) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create image view");
+
+		VkSamplerCreateInfo info = {};
+		info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+		info.magFilter = VK_FILTER_LINEAR;
+		info.minFilter = VK_FILTER_LINEAR;
+		info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+		info.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+		info.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+		info.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+		info.minLod = -1000;
+		info.maxLod = 1000;
+		info.anisotropyEnable = VK_FALSE;
+		info.maxAnisotropy = 1.0f;
+
+		if(vkCreateSampler(Render_Core::get().getDevice().get(), &info, nullptr, &_sampler))
+			Core::log::report(FATAL_ERROR, "Vulkan Texture : unable to create image sampler");
+	}
+
+	void Image::copyBuffer(Buffer& buffer)
+	{
+		CmdPool cmdpool;
+		cmdpool.init();
+		auto device = Render_Core::get().getDevice().get();
+
+		VkCommandBufferAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		allocInfo.commandPool = cmdpool.get();
+		allocInfo.commandBufferCount = 1;
+
+		VkCommandBuffer cmdBuffer;
+		vkAllocateCommandBuffers(device, &allocInfo, &cmdBuffer);
+
+		VkCommandBufferBeginInfo beginInfo{};
+		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+		vkBeginCommandBuffer(cmdBuffer, &beginInfo);
+
+		VkBufferImageCopy region = {};
+		region.bufferOffset = 0;
+		region.bufferRowLength = 0;
+		region.bufferImageHeight = 0;
+		region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		region.imageSubresource.mipLevel = 0;
+		region.imageSubresource.baseArrayLayer = 0;
+		region.imageSubresource.layerCount = 1;
+		region.imageOffset = {0, 0, 0};
+		region.imageExtent = {
+			_width,
+			_height,
+			1
+		};
+		vkCmdCopyBufferToImage(cmdBuffer, buffer.get(), _image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+		vkEndCommandBuffer(cmdBuffer);
+
+		VkSubmitInfo submitInfo{};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &cmdBuffer;
+
+		auto graphicsQueue = Render_Core::get().getQueue().getGraphic();
+
+		vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+		vkQueueWaitIdle(graphicsQueue);
+
+		cmdpool.destroy();
 	}
 
 	void Image::destroy() noexcept
 	{
-		Ak_assert(_image != VK_NULL_HANDLE, "trying to destroy an uninit vulkan image");
-		vkDestroyImage(Render_Core::get().getDevice().get(), _image, nullptr);
-		Ak_assert(_memory != VK_NULL_HANDLE, "trying to destroy an uninit memory for an image");
-	    vkFreeMemory(Render_Core::get().getDevice().get(), _memory, nullptr);
+		Ak_assert(_sampler != VK_NULL_HANDLE, "trying to destroy an uninit vulkan image sampler");
+		vkDestroySampler(Render_Core::get().getDevice().get(), _sampler, nullptr);
+		
 		Ak_assert(_image_view != VK_NULL_HANDLE, "trying to destroy an uninit vulkan image view");
 		vkDestroyImageView(Render_Core::get().getDevice().get(), _image_view, nullptr);
+		
+		Ak_assert(_memory != VK_NULL_HANDLE, "trying to destroy an uninit memory for an image");
+	    vkFreeMemory(Render_Core::get().getDevice().get(), _memory, nullptr);
+
+		Ak_assert(_image != VK_NULL_HANDLE, "trying to destroy an uninit vulkan image");
+		vkDestroyImage(Render_Core::get().getDevice().get(), _image, nullptr);
 	}
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/03/2022
-// Updated : 06/01/2023
+// Updated : 31/01/2023
 
 #include <Graphics/vertex.h>
 
@@ -16,9 +16,9 @@ namespace Ak
         return bindingDescription;
     }
 
-    std::array<VkVertexInputAttributeDescription, 2> Vertex::getAttributeDescriptions()
+    std::array<VkVertexInputAttributeDescription, 3> Vertex::getAttributeDescriptions()
     {
-        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions;
+        std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions;
 
         attributeDescriptions[0].binding = 0;
         attributeDescriptions[0].location = 0;
@@ -29,6 +29,11 @@ namespace Ak
         attributeDescriptions[1].location = 1;
         attributeDescriptions[1].format = VK_FORMAT_R32G32B32A32_SFLOAT;
         attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].location = 2;
+        attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
+        attributeDescriptions[1].offset = offsetof(Vertex, texture_coords);
 
         return attributeDescriptions;
     }

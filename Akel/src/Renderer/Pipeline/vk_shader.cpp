@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 27/01/2023
+// Updated : 30/01/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -221,12 +221,19 @@ namespace Ak
 					layout.init(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, sets[i]->bindings[j]->binding, _type);
 					_layouts.push_back(std::move(layout));
 				}
+				else if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
+				{
+					DescriptorSetLayout layout;
+					layout.init(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, sets[i]->bindings[j]->binding, _type);
+					_layouts.push_back(std::move(layout));
+				}
 			}
 		}
 
 		if(_layouts.size() != 0)
 		{
-			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, static_cast<uint32_t>(_layouts.size()) * MAX_FRAMES_IN_FLIGHT });
+			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2048 });
+			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4096 });
 			_desc_pool.init(_layouts.size(), _desc_pool_sizes.data());
 			int i = 0;
 			for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)

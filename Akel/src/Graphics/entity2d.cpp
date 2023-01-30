@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 06/01/2023
+// Updated : 31/01/2023
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -43,10 +43,10 @@ namespace Ak
             case Models::quad :
 			{
 				std::vector<Vertex> vertexData = {
-                    {{position.X, position.Y, 0}, color},
-                    {{position.X + scale.X, position.Y, 0}, color},
-                    {{position.X + scale.X, position.Y + scale.Y, 0}, color},
-                    {{position.X, position.Y + scale.Y, 0}, color}
+                    {{position.X, position.Y, 0}, color, {1.0f, 0.0f}},
+                    {{position.X + scale.X, position.Y, 0}, color, {0.0f, 0.0f}},
+                    {{position.X + scale.X, position.Y + scale.Y, 0}, color, {0.0f, 1.0f}},
+                    {{position.X, position.Y + scale.Y, 0}, color, {1.0f, 1.0f}}
                 };
 
 				std::vector<uint32_t> indexData = { 0, 1, 2, 2, 3, 0 };

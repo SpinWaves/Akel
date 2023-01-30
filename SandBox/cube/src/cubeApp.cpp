@@ -25,8 +25,8 @@ Ak::Application* Akel_mainApp()
 
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
 
-	scene->loadCustomShader(Ak::Core::getMainDirPath() + "src/vert_u.spv");
-	scene->loadCustomShader(Ak::Core::getMainDirPath() + "src/frag_u.spv");
+	scene->loadCustomShader(Ak::Core::getMainDirPath() + "src/vert.spv");
+	scene->loadCustomShader(Ak::Core::getMainDirPath() + "src/frag.spv");
 
 	scene->add_3D_entity({ Models::cube, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, Colors::red });
 	app->add_scene(scene);

@@ -1,14 +1,16 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 28/01/2023
+// Updated : 30/01/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
 
 // SDL2
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+
+// stb
+#include <stb_image.h>
 
 // OpenAL
 #include <AL/al.h>
