@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 21/12/2022
+// Updated : 01/02/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
@@ -9,15 +9,18 @@
 
 namespace Ak
 {
-	void FrameBuffer::init(RendererComponent& renderer, ImageView& image)
+	void FrameBuffer::init(RendererComponent& renderer, SwapChainImageView& image, VkImageView& depth)
 	{
-		VkImageView attachments[] = { image() };
+		std::array<VkImageView, 2> attachments = {
+			image(),
+			depth
+		};
 
 		VkFramebufferCreateInfo framebufferInfo{};
 		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
 		framebufferInfo.renderPass = renderer.getRenderPass().get();
-		framebufferInfo.attachmentCount = 1;
-		framebufferInfo.pAttachments = attachments;
+		framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+		framebufferInfo.pAttachments = attachments.data();
 		framebufferInfo.width = renderer.getSwapChain()._swapChainExtent.width;
 		framebufferInfo.height = renderer.getSwapChain()._swapChainExtent.height;
 		framebufferInfo.layers = 1;

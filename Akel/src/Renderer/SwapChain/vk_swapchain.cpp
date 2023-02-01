@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 25/01/2023
+// Updated : 01/02/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -69,6 +69,8 @@ namespace Ak
 
         for(size_t i = 0; i < _swapChainImages.size(); i++)
             _imageViews[i].init(*this, _swapChainImages[i]);
+
+		_depth.create(*renderer);
     }
 
     void SwapChain::initFB()
@@ -76,7 +78,7 @@ namespace Ak
         _framebuffers.resize(_imageViews.size());
 
         for(size_t i = 0; i < _imageViews.size(); i++)
-            _framebuffers[i].init(*_renderer, _imageViews[i]);
+            _framebuffers[i].init(*_renderer, _imageViews[i], _depth.getImageView());
     }
 
     SwapChain::SwapChainSupportDetails SwapChain::querySwapChainSupport(VkPhysicalDevice device)
@@ -165,6 +167,7 @@ namespace Ak
 
         for(size_t i = 0; i < _imageViews.size(); i++)
             _imageViews[i].destroy();
+		_depth.destroy();
 
         if(_swapChain != VK_NULL_HANDLE)
             vkDestroySwapchainKHR(Render_Core::get().getDevice().get(), _swapChain, nullptr);

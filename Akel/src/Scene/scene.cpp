@@ -29,6 +29,9 @@ namespace Ak
 		for(Entity2D& ent : _2D_entities)
 			if(!ent._texture_path.empty())
 				textures.push_back(&ent.getTexture());
+		for(Entity3D& ent : _3D_entities)
+			if(!ent._texture_path.empty())
+				textures.push_back(&ent.getTexture());
 
 		_pipeline.init(*_renderer, _shaders, std::vector<Ak::Shader::VertexInput>{ {
 				{ Vertex::getBindingDescription() },
@@ -114,13 +117,12 @@ namespace Ak
 			return;
 
 		Matrixes::perspective(90.f, (float)_renderer->getWindow()->size.X / (float)_renderer->getWindow()->size.Y, 0.1f, 1000.f);
+		std::vector<VkDescriptorSet> sets;
 	
 		for(Shader& shader : _pipeline.getShaders())
 		{
-			std::vector<VkDescriptorSet> sets;
 			for(DescriptorSet& set : shader.getDescriptorSets())
 				sets.push_back(set.get());
-
 			if(shader.getUniforms().size() > 0)
 			{
 				if(shader.getUniforms().count("matrixes"))
@@ -137,9 +139,9 @@ namespace Ak
 
 					shader.getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
-				vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, 1, sets.data(), 0, nullptr);
 			}
 		}
+		vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
 
         for(Entity3D& ent : _3D_entities)
 		{

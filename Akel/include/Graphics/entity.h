@@ -45,9 +45,10 @@ namespace Ak
 		friend class Scene;
 
 		public:
-			Entity3D(Models _model, Maths::Vec3<float> _position, Maths::Vec3<float> _scale, Maths::Vec4<float> _color);
-			Entity3D(Models _model, Maths::Vec3<float> _position, Maths::Vec3<float> _scale, Colors _color);
+			Entity3D(Models _model, Maths::Vec3<float> _position, Maths::Vec3<float> _scale, Maths::Vec4<float> _color, std::filesystem::path texture = "");
+			Entity3D(Models _model, Maths::Vec3<float> _position, Maths::Vec3<float> _scale, Colors color, std::filesystem::path texture = "");
 
+			inline Texture& getTexture() noexcept { return _texture; }
 			void destroy() noexcept;
 
 			Models model;
@@ -58,8 +59,10 @@ namespace Ak
 		private:
 			void initBuffers();
 
+			Texture _texture;
 			C_VBO _vbo;
 			C_IBO _ibo;
+			std::filesystem::path _texture_path;
 	};
 
 	class AK_API Entity2D

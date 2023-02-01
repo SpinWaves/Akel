@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 13/01/2023
+// Updated : 01/02/2023
 
 #ifndef __AK_VK_SWAPCHAIN__
 #define __AK_VK_SWAPCHAIN__
@@ -9,13 +9,14 @@
 #include <Akpch.h>
 #include "vk_imageview.h"
 #include "vk_framebuffer.h"
+#include <Renderer/Images/depth.h>
 
 namespace Ak
 {
     class SwapChain
     {
         friend class FrameBuffer;
-        friend class ImageView;
+        friend class SwapChainImageView;
         friend class GraphicPipeline;
         friend class DepthImage;
         friend class RenderPass;
@@ -50,10 +51,11 @@ namespace Ak
             SwapChainSupportDetails _swapChainSupport;
             VkSwapchainKHR _swapChain;
             std::vector<VkImage> _swapChainImages;
+			DepthImage _depth;
             VkFormat _swapChainImageFormat;
             VkExtent2D _swapChainExtent;
             std::vector<FrameBuffer> _framebuffers;
-            std::vector<ImageView> _imageViews;
+            std::vector<SwapChainImageView> _imageViews;
 			class RendererComponent* _renderer = nullptr;
     };
 }
