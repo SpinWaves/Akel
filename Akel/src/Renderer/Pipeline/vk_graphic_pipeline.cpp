@@ -1,17 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 27/01/2023
+// Updated : 01/02/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
 #include <Renderer/rendererComponent.h>
+#include <Renderer/Images/texture.h>
 
 namespace Ak
 {
 	void GraphicPipeline::init(RendererComponent& renderer, std::vector<std::vector<uint32_t>> shaders, std::vector<Shader::VertexInput> inputs,
-				VkPrimitiveTopology topology, VkPolygonMode polygonMode, 
+				std::vector<Texture*> textures, VkPrimitiveTopology topology, VkPolygonMode polygonMode, 
 				VkCullModeFlags cullMode, VkFrontFace frontFace)
     {
 		std::vector<VkPipelineShaderStageCreateInfo> stages;
@@ -21,6 +22,28 @@ namespace Ak
 		{
 			_shaders.emplace_back(std::move(shaders[i]), &renderer);
 			_shaders.back().generate();
+
+			if(textures.empty())
+			{
+				if(_shaders.back().getImageSamplers().count("texSampler"))
+				{
+					_dummy = create_Unique_ptr<Image>();
+					_dummy->create(1, 1, VK_FORMAT_R8G8B8A8_UNORM,
+									VK_IMAGE_TILING_OPTIMAL,
+									VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+									VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+									VK_IMAGE_ASPECT_COLOR_BIT);
+					_shaders.back().getImageSamplers()["texSampler"].setSampler(_dummy->getSampler());
+					_shaders.back().getImageSamplers()["texSampler"].setImageView(_dummy->getImageView());
+				}
+			}
+			else
+			{
+				for(Texture* tex : textures)
+					tex->setShaderInterface(_shaders.back());
+			}
+
+			_shaders.back().createSets();
 
 			VkPipelineShaderStageCreateInfo shaderStageInfo{};
 			shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -164,6 +187,12 @@ namespace Ak
 		{
 			for(Shader& shader : _shaders)
 				shader.destroy();
+		}
+
+		if(_dummy)
+		{
+			_dummy->destroy();
+			_dummy.reset(nullptr);
 		}
 
         Ak_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 30/01/2023
+// Updated : 01/02/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -177,6 +177,8 @@ namespace Ak
 
 	void Shader::generate()
 	{
+		_uniforms.clear();
+		_image_samplers.clear();
 		SpvReflectShaderModule module = {};
 		SpvReflectResult result = spvReflectCreateShaderModule(_byte_code.size() * sizeof(uint32_t), _byte_code.data(), &module);
 		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to create a Spir-V reflect shader module");
@@ -223,26 +225,19 @@ namespace Ak
 				}
 				else if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
 				{
+					_image_samplers[sets[i]->bindings[j]->name] =
+						Shader::ImageSampler{
+							static_cast<int32_t>(sets[i]->bindings[j]->binding),
+							static_cast<int32_t>(sets[i]->bindings[j]->set),
+							static_cast<int32_t>(sets[i]->bindings[j]->block.offset),
+							static_cast<int32_t>(sets[i]->bindings[j]->block.size),
+							_type
+						};
+
 					DescriptorSetLayout layout;
 					layout.init(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, sets[i]->bindings[j]->binding, _type);
 					_layouts.push_back(std::move(layout));
 				}
-			}
-		}
-
-		if(_layouts.size() != 0)
-		{
-			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2048 });
-			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4096 });
-			_desc_pool.init(_layouts.size(), _desc_pool_sizes.data());
-			int i = 0;
-			for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
-			{
-				DescriptorSet set;
-				set.init(_renderer, it->second.getBuffer(), _layouts[i], _desc_pool);
-				_vk_sets.push_back(set.get());
-				_sets.push_back(std::move(set));
-				i++;
 			}
 		}
 
@@ -277,6 +272,42 @@ namespace Ak
 
 		if(vkCreateShaderModule(Render_Core::get().getDevice().get(), &createInfo, nullptr, &_shader) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create shader module");
+	}
+
+	void Shader::createSets()
+	{
+		std::vector<DescriptorSetLayout*> uniform_layouts;
+		std::vector<DescriptorSetLayout*> image_sampler_layouts;
+		for(DescriptorSetLayout& layout : _layouts)
+		{
+			if(layout.getType() == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+				uniform_layouts.push_back(&layout);
+			if(layout.getType() == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
+				image_sampler_layouts.push_back(&layout);
+		}
+
+		if(_layouts.size() != 0)
+		{
+			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2048 });
+			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4096 });
+			_desc_pool.init(2, _desc_pool_sizes.data());
+			int i = 0;
+			for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
+			{
+				DescriptorSet set;
+				set.init(_renderer, it->second.getBuffer(), *uniform_layouts[i], _desc_pool);
+				_sets.push_back(std::move(set));
+				i++;
+			}
+			i = 0;
+			for(auto it = _image_samplers.begin(); it != _image_samplers.end(); ++it)
+			{
+				DescriptorSet set;
+				set.init(_renderer, it->second.getImageView(), it->second.getSampler(), *image_sampler_layouts[i], _desc_pool);
+				_sets.push_back(std::move(set));
+				i++;
+			}
+		}
 	}
 
 	void Shader::destroyModule() noexcept

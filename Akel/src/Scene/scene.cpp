@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 06/01/2023
+// Updated : 01/02/2023
 
+#include <Renderer/Images/texture.h>
 #include <Scene/scene.h>
 #include <Renderer/rendererComponent.h>
 #include <Graphics/matrixes.h>
@@ -23,10 +24,16 @@ namespace Ak
 	{
 		_id = id;
 		_renderer = renderer;
+
+		std::vector<Texture*> textures;
+		for(Entity2D& ent : _2D_entities)
+			if(!ent._texture_path.empty())
+				textures.push_back(&ent.getTexture());
+
 		_pipeline.init(*_renderer, _shaders, std::vector<Ak::Shader::VertexInput>{ {
 				{ Vertex::getBindingDescription() },
-				{ Vertex::getAttributeDescriptions()[0], Vertex::getAttributeDescriptions()[1] }
-		} }, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
+				{ Vertex::getAttributeDescriptions()[0], Vertex::getAttributeDescriptions()[1], Vertex::getAttributeDescriptions()[2] },
+		} }, std::move(textures), VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
 	}
 
 	void Scene::add_2D_entity(Entity2D entity)
@@ -66,9 +73,12 @@ namespace Ak
 			return;
 
 		Matrixes::ortho(0, _renderer->getWindow()->size.X, 0, _renderer->getWindow()->size.Y);
+		std::vector<VkDescriptorSet> sets;
 	
 		for(Shader& shader : _pipeline.getShaders())
 		{
+			for(DescriptorSet& set : shader.getDescriptorSets())
+				sets.push_back(set.get());
 			if(shader.getUniforms().size() > 0)
 			{
 				if(shader.getUniforms().count("matrixes"))
@@ -85,10 +95,9 @@ namespace Ak
 
 					shader.getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
-
-				vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, 1, shader.getVkDescriptorSets().data(), 0, nullptr);
 			}
 		}
+		vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
 
         for(Entity2D& ent : _2D_entities)
 		{
@@ -108,6 +117,10 @@ namespace Ak
 	
 		for(Shader& shader : _pipeline.getShaders())
 		{
+			std::vector<VkDescriptorSet> sets;
+			for(DescriptorSet& set : shader.getDescriptorSets())
+				sets.push_back(set.get());
+
 			if(shader.getUniforms().size() > 0)
 			{
 				if(shader.getUniforms().count("matrixes"))
@@ -124,8 +137,7 @@ namespace Ak
 
 					shader.getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
-
-				vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, 1, shader.getVkDescriptorSets().data(), 0, nullptr);
+				vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, 1, sets.data(), 0, nullptr);
 			}
 		}
 

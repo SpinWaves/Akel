@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 30/01/2023
+// Updated : 31/01/2023
 
 #include <Renderer/Descriptors/vk_descriptor_set_layout.h>
 #include <Renderer/Core/render_core.h>
@@ -19,6 +19,7 @@ namespace Ak
         bindings.stageFlags = stage;
 
 		_type = t;
+		_binding = binding;
 
         VkDescriptorSetLayoutCreateInfo layoutInfo{};
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;

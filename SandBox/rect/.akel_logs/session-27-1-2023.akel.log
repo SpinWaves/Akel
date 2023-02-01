@@ -1,0 +1,25 @@
+23:56 ---- Begin Startup ----
+23:56 ---- architecture: 64bits
+23:56 ---- arch: x86
+23:56 ---- End ----
+23:56 ---- Begin Runtime ----
+23:56 ---- End ----
+23:56 ---- Begin Shutdown ----
+23:56 ---- Strong Warning: Component Stack: unable to free a component "__window_component" address(0x7f79e9821360), unable to find its allocator
+23:56 ---- Strong Warning: Component Stack: unable to free a component "__renderer_component" address(0x7f79e982145c), unable to find its allocator
+23:56 ---- Strong Warning: Component Stack: unable to free a component "__scenes_manager" address(0x7f79e9821678), unable to find its allocator
+23:56 ---- Strong Warning: Component Stack: unable to free a component "Component" address(0x7f79e982170c), unable to find its allocator
+23:56 ---- End ----
+
+23:57 ---- Begin Startup ----
+23:57 ---- architecture: 64bits
+23:57 ---- arch: x86
+23:57 ---- End ----
+23:57 ---- Begin Runtime ----
+23:58 ---- End ----
+23:58 ---- Begin Shutdown ----
+23:58 ---- Strong Warning: Component Stack: unable to free a component "__window_component" address(0x7fc726c78360), unable to find its allocator
+23:58 ---- Strong Warning: Component Stack: unable to free a component "__renderer_component" address(0x7fc726c7845c), unable to find its allocator
+23:58 ---- Strong Warning: Component Stack: unable to free a component "__scenes_manager" address(0x7fc726c78678), unable to find its allocator
+23:58 ---- Strong Warning: Component Stack: unable to free a component "Component" address(0x7fc726c7870c), unable to find its allocator
+23:58 ---- End ----

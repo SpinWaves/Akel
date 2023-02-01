@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 30/01/2023
+// Updated : 01/02/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -116,6 +116,19 @@ namespace Ak
 
 		vkBeginCommandBuffer(cmdBuffer, &beginInfo);
 
+		VkImageMemoryBarrier copy_barrier = {};
+		copy_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+		copy_barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		copy_barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		copy_barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		copy_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		copy_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		copy_barrier.image = _image;
+		copy_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		copy_barrier.subresourceRange.levelCount = 1;
+		copy_barrier.subresourceRange.layerCount = 1;
+		vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1, &copy_barrier);
+
 		VkBufferImageCopy region = {};
 		region.bufferOffset = 0;
 		region.bufferRowLength = 0;
@@ -131,6 +144,20 @@ namespace Ak
 			1
 		};
 		vkCmdCopyBufferToImage(cmdBuffer, buffer.get(), _image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+		VkImageMemoryBarrier use_barrier = {};
+		use_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+		use_barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+		use_barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+		use_barrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+		use_barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		use_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		use_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+		use_barrier.image = _image;
+		use_barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+		use_barrier.subresourceRange.levelCount = 1;
+		use_barrier.subresourceRange.layerCount = 1;
+		vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &use_barrier);
 
 		vkEndCommandBuffer(cmdBuffer);
 

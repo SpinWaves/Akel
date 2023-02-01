@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/03/2022
-// Updated : 31/01/2023
+// Updated : 01/02/2023
 
 #include <Graphics/entity.h>
 #include <Core/core.h>
@@ -13,7 +13,8 @@
 
 namespace Ak
 {
-	Entity2D::Entity2D(Models _model, Maths::Vec2<float> _position, Maths::Vec2<float> _scale, Maths::Vec4<float> _color)
+	Entity2D::Entity2D(Models _model, Maths::Vec2<float> _position, Maths::Vec2<float> _scale, Maths::Vec4<float> _color, std::filesystem::path texture)
+	: _texture_path(std::move(texture))
 	{
 	    model = _model;
 		position = std::move(_position);
@@ -21,7 +22,8 @@ namespace Ak
 		color = std::move(_color);
 	}
 
-	Entity2D::Entity2D(Models _model, Maths::Vec2<float> _position, Maths::Vec2<float> _scale, Colors _color)
+	Entity2D::Entity2D(Models _model, Maths::Vec2<float> _position, Maths::Vec2<float> _scale, Colors _color, std::filesystem::path texture)
+	: _texture_path(std::move(texture))
     {
 	    model = _model;
 		position = std::move(_position);
@@ -34,6 +36,7 @@ namespace Ak
 	{
 		_vbo.destroy();
 		_ibo.destroy();
+		_texture.destroy();
 	}
 
 	void Entity2D::initBuffers()
@@ -43,16 +46,19 @@ namespace Ak
             case Models::quad :
 			{
 				std::vector<Vertex> vertexData = {
-                    {{position.X, position.Y, 0}, color, {1.0f, 0.0f}},
-                    {{position.X + scale.X, position.Y, 0}, color, {0.0f, 0.0f}},
-                    {{position.X + scale.X, position.Y + scale.Y, 0}, color, {0.0f, 1.0f}},
-                    {{position.X, position.Y + scale.Y, 0}, color, {1.0f, 1.0f}}
+                    {{position.X, position.Y, 0}, color, {0.0f, 0.0f}},
+                    {{position.X + scale.X, position.Y, 0}, color, {1.0f, 0.0f}},
+                    {{position.X + scale.X, position.Y + scale.Y, 0}, color, {1.0f, 1.0f}},
+                    {{position.X, position.Y + scale.Y, 0}, color, {0.0f, 1.0f}}
                 };
 
 				std::vector<uint32_t> indexData = { 0, 1, 2, 2, 3, 0 };
 
 				_vbo.create(sizeof(Vertex) * vertexData.size(), vertexData.data());
 				_ibo.create(sizeof(uint32_t) * indexData.size(), indexData.data());
+
+				if(!_texture_path.empty())
+					_texture = std::move(loadTextureFromFile(_texture_path));
 
 				break;
 			}
