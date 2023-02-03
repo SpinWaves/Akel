@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 01/02/2023
+// Updated : 02/02/2023
 
 #include <Renderer/Images/texture.h>
 #include <Scene/scene.h>
@@ -32,6 +32,9 @@ namespace Ak
 		for(Entity3D& ent : _3D_entities)
 			if(!ent._texture_path.empty())
 				textures.push_back(&ent.getTexture());
+
+		if(textures.empty())
+			_use_textures = false;
 
 		_pipeline.init(*_renderer, _shaders, std::vector<Ak::Shader::VertexInput>{ {
 				{ Vertex::getBindingDescription() },
@@ -98,6 +101,8 @@ namespace Ak
 
 					shader.getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
+				if(shader.getUniforms().count("use_texture"))
+					shader.getUniforms()["use_texture"].getBuffer()->setData(sizeof(bool), &_use_textures);
 			}
 		}
 		vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
@@ -139,6 +144,8 @@ namespace Ak
 
 					shader.getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
 				}
+				if(shader.getUniforms().count("use_texture"))
+					shader.getUniforms()["use_texture"].getBuffer()->setData(sizeof(bool), &_use_textures);
 			}
 		}
 		vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);

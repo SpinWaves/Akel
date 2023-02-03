@@ -91,7 +91,7 @@ namespace Ak
 		info.anisotropyEnable = VK_FALSE;
 		info.maxAnisotropy = 1.0f;
 
-		if(vkCreateSampler(Render_Core::get().getDevice().get(), &info, nullptr, &_sampler))
+		if(vkCreateSampler(Render_Core::get().getDevice().get(), &info, nullptr, &_sampler) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan Texture : unable to create image sampler");
 	}
 

@@ -36,7 +36,8 @@ namespace Ak
 	{
 		_vbo.destroy();
 		_ibo.destroy();
-		_texture.destroy();
+		if(!_texture_path.empty())
+			_texture.destroy();
 	}
 
 	void Entity3D::initBuffers()
