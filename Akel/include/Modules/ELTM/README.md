@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/SpinWaves/Akel/blob/main/Ressources/assets/eltm_logo.png" alt="drawing" width="500"/>
+    <img src="https://github.com/SpinWaves/Akel/blob/main/Resources/assets/eltm_logo.png" alt="drawing" width="500"/>
 </p>
 
 # ELTM

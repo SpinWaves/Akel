@@ -1,5 +1,9 @@
 # Kila
 
+<p align="center">
+    <img src="https://github.com/SpinWaves/Akel/blob/main/Resources/assets/kila_logo.png" alt="drawing" width="500"/>
+</p>
+
 Kila is a shading language made for Akel engine. It is based on Lua and Rust and is rather simple to learn.
 
 Example of Kila program

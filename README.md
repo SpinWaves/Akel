@@ -1,6 +1,6 @@
 # Akel
 <p align="center">
-    <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Ressources/assets/logo.png" alt="drawing" width="500"/>
+    <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/assets/logo.png" alt="drawing" width="500"/>
 </p>
 
 Akel is a game engine made for fun by a young french man.
