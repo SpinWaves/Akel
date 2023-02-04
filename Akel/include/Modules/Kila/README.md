@@ -8,25 +8,21 @@ Kila is a shading language made for Akel engine. It is based on Lua and Rust and
 
 Example of Kila program
 
-```lua
-location(0) pos: vec3
-location(1) color: vec4
+```
+![spatial_shader]
 
-uniform viewData
+external
 {
-    view: mat4
-    model: mat4
-    proj: mat4
+    tex : sampler2D
 }
 
 function Vmain() -> vec4
 {
-     pos = vec3(viewData.model * vec4(pos, 1.0))
-     return viewData.proj * viewData.view * vec4(pos, 1.0)
-} 
-  
+     return vec4(vertex.pos, 1.0)
+}
+
 function Fmain() -> vec4
 {
-    return color
+    return vec4(fragment.color * texture(tex, fragment.tex_coord), 1.0)
 }
 ```

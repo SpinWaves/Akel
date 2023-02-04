@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 22/01/2023
+// Updated : 04/02/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -13,7 +13,7 @@ StudioComponent::StudioComponent() : Ak::WindowComponent(), _eltm(Ak::create_sha
 void StudioComponent::onAttach()
 {
 	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>();
-	_lang_eltm->load(Ak::Core::getMainDirPath() + "ressources/texts/langs.eltm");
+	_lang_eltm->load(Ak::Core::getMainDirPath() + "resources/texts/langs.eltm");
 
 	if(!Ak::getMainAppProjectFile().keyExists("language"))
 		Ak::getMainAppProjectFile().setStringValue("language", Ak::Core::getMainDirPath() + _lang_eltm->getText("English"));
@@ -128,13 +128,13 @@ void StudioComponent::onImGuiEvent(Ak::Input& input)
 void StudioComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::string(Ak::Core::getMainDirPath() + "ressources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 18.0f, true);
+	imgui->addFontFromFile(std::string(Ak::Core::getMainDirPath() + "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 18.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "ressources/fonts/material_icons-regular.ttf").c_str(), 18.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "resources/fonts/material_icons-regular.ttf").c_str(), 18.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }

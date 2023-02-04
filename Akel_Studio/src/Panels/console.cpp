@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 09/07/2021
-// Updated : 12/12/2022
+// Updated : 04/02/2023
 
 #include <Panels/console.h>
 #include <Fonts/material_font.h>
@@ -13,7 +13,7 @@ Console::Console(std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize) : Panel
 
     _eltm = std::move(eltm);
 
-	ee = static_cast<Ak::AudioComponent*>(Ak::getMainAppComponentStack()->get_component("__audio_component"))->loadSound(Ak::Core::getMainDirPath() + "ressources/sounds/42.ogg");
+	ee = static_cast<Ak::AudioComponent*>(Ak::getMainAppComponentStack()->get_component("__audio_component"))->loadSound(Ak::Core::getMainDirPath() + "resources/sounds/42.ogg");
 
 	_sh.print("============================");
 	_sh.print(_eltm->getText("Console.welcome"));
