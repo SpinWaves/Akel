@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/08/2022
-// Updated : 17/08/2022
+// Updated : 05/02/2023
 
 #include <Akpch.h>
 #include <Core/profile.h>
@@ -11,7 +11,7 @@ namespace AkImGui
 	void openWebPage(const char* url)
 	{
 		#ifdef AK_PLATFORM_WINDOWS
-			::ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWDEFAULT);
+			ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWDEFAULT);
 		#else
 			#ifdef AK_PLATFROM_OSX
 				const char* open_executable = "open";

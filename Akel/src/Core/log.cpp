@@ -1,13 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 22/12/2022
+// Updated : 05/02/2023
 
 #include <Core/core.h>
 
 namespace Ak::Core
 {
-	void log::init(std::string path) // Removes ten days old files
+	void log::init(std::filesystem::path path) // Removes ten days old files
 	{
 		std::lock_guard<std::mutex> watchdog(mutex);
 
@@ -15,14 +15,9 @@ namespace Ak::Core
 		int date = 0;
 		size_t finder;
 
-		if((finder = path.rfind('/')) == std::string::npos)
-		{
-			std::cout << red << "[Akel log Fatal Error] invalid path for logs directory" << reset << std::endl;
-			std::exit(EXIT_FAILURE);
-		}
-		path.erase(finder + 1);
-		path.append(".akel_logs/");
-		_log_dir = std::move(path);
+		path.remove_filename();
+		path /= ".akel_logs/";
+		_log_dir = path;
 		if(!std::filesystem::exists(_log_dir))
 		{
 			std::filesystem::create_directory(_log_dir);
@@ -63,10 +58,10 @@ namespace Ak::Core
     {
 		std::lock_guard<std::mutex> watchdog(mutex);
 
-		char buffer[message.length() + 1024];
+		std::string buffer(message.length() + 1024, 0);
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, std::move(message).c_str(), args);
+		vsprintf(buffer.data(), std::move(message).c_str(), args);
 		va_end(args);
 
 		_out.open(getTime().c_str(), std::ios::app);
@@ -142,10 +137,10 @@ namespace Ak::Core
     {
 		std::lock_guard<std::mutex> watchdog(mutex);
 
-		char buffer[message.length() + 1024];
+		std::string buffer(message.length() + 1024, 0);
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, message.c_str(), args);
+		vsprintf(buffer.data(), std::move(message).c_str(), args);
 		va_end(args);
 
 		_out.open(getTime().c_str(), std::ios::app);
@@ -176,50 +171,50 @@ namespace Ak
 {
     void FatalError(std::string message, ...)
 	{
-		char buffer[message.length() + 1024];
+		std::string buffer(message.length() + 1024, 0);
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, std::move(message).c_str(), args);
+		vsprintf(buffer.data(), std::move(message).c_str(), args);
 		va_end(args);
 
 		Core::log::report(FATAL_ERROR, buffer);
 	}
     void Error(std::string message, ...)
 	{
-		char buffer[message.length() + 1024];
+		std::string buffer(message.length() + 1024, 0);
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, std::move(message).c_str(), args);
+		vsprintf(buffer.data(), std::move(message).c_str(), args);
 		va_end(args);
 
 		Core::log::report(ERROR, buffer);
 	}
     void Warning(std::string message, ...)
 	{
-		char buffer[message.length() + 1024];
+		std::string buffer(message.length() + 1024, 0);
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, std::move(message).c_str(), args);
+		vsprintf(buffer.data(), std::move(message).c_str(), args);
 		va_end(args);
 
 		Core::log::report(WARNING, buffer);
 	}
     void Strong_Warning(std::string message, ...)
 	{
-		char buffer[message.length() + 1024];
+		std::string buffer(message.length() + 1024, 0);
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, std::move(message).c_str(), args);
+		vsprintf(buffer.data(), std::move(message).c_str(), args);
 		va_end(args);
 
 		Core::log::report(STRONG_WARNING, buffer);
 	}
     void Message(std::string message, ...)
 	{
-		char buffer[message.length() + 1024];
+		std::string buffer(message.length() + 1024, 0);
 		va_list args;
 		va_start(args, message);
-		vsprintf(buffer, std::move(message).c_str(), args);
+		vsprintf(buffer.data(), std::move(message).c_str(), args);
 		va_end(args);
 
 		Core::log::report(MESSAGE, buffer);

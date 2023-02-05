@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/06/2021
-// Updated : 27/01/2023
+// Updated : 05/02/2023
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -130,7 +130,7 @@
 #elif defined(__APPLE__) || defined(__MACH__)
 	#define AK_PLATFORM_OSX
 	#define forceinline __attribute__((always_inline))
-#elif not defined(forceinline)
+#elif !defined(forceinline)
 	#define AK_PLATFORM_UNDEFINED
 	#define forceinline inline
 #endif

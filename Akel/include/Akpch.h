@@ -1,10 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 31/01/2023
+// Updated : 05/02/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
+
+#include <Core/profile.h>
 
 // SDL2
 #include <SDL2/SDL.h>
@@ -52,6 +54,9 @@
 #ifdef AK_PLATFORM_WINDOWS
     #include <windows.h>
 	#include <shellapi.h>
+	#undef max
+	#undef min
+	#undef ERROR
 #endif
 
 // MultiThreading
@@ -104,6 +109,7 @@
 #include <iterator>
 #include <iomanip>
 #include <numeric>
+#include <limits>
 
 #ifndef M_PI
     #define M_PI 3.141592653589793

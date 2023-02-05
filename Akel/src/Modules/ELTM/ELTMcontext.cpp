@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/05/2021
-// Updated : 27/01/2023
+// Updated : 05/02/2023
 
 #include <Modules/ELTM/eltm.h>
 
@@ -14,7 +14,7 @@ namespace Ak
 			++it;
 			return true;
 		}
-		expected_syntax_error(std::to_string(value).c_str(), _path, it->get_line()).expose();
+		expected_syntax_error(std::to_string(value).c_str(), _path.string(), it->get_line()).expose();
 		return false;
 	}
 
@@ -25,7 +25,7 @@ namespace Ak
 
 		if(!it->is_identifier())
 		{
-			unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+			unexpected_error(std::move(std::to_string(it->get_value())), _path.string(), it->get_line()).expose();
 			return false;
 		}
 
@@ -33,7 +33,7 @@ namespace Ak
 
 		if((!module_name.empty() && _modules[module_name].count(id_name)) || (module_name.empty() && _texts.count(id_name)))
 		{
-			already_declared_error(std::move(id_name), _path, it->get_line()).expose();
+			already_declared_error(std::move(id_name), _path.string(), it->get_line()).expose();
 			return false;
 		}
 
@@ -44,7 +44,7 @@ namespace Ak
 
 		if(!it->is_string() && !it->has_value(eltm_token::kw_get))
 		{
-			unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+			unexpected_error(std::move(std::to_string(it->get_value())), _path.string(), it->get_line()).expose();
 			return false;
 		}
 
@@ -62,7 +62,7 @@ namespace Ak
 					return false;
 				if(!it->is_identifier())
 				{
-					unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+					unexpected_error(std::move(std::to_string(it->get_value())), _path.string(), it->get_line()).expose();
 					return false;
 				}
 				if(_texts.count(it->get_identifier().name))
@@ -71,13 +71,13 @@ namespace Ak
 					text.append(_modules[module_name][it->get_identifier().name]);
 				else
 				{
-					unknown_id_error(it->get_identifier().name, _path, it->get_line()).expose();
+					unknown_id_error(it->get_identifier().name, _path.string(), it->get_line()).expose();
 					return false;
 				}
 				it++;
 				if(!it->has_value(eltm_token::par_close))
 				{
-					unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+					unexpected_error(std::move(std::to_string(it->get_value())), _path.string(), it->get_line()).expose();
 					return false;
 				}
 			}
@@ -102,7 +102,7 @@ namespace Ak
 
 		if(!it->is_identifier())
 		{
-			unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+			unexpected_error(std::move(std::to_string(it->get_value())), _path.string(), it->get_line()).expose();
 			return false;
 		}
 
@@ -118,7 +118,7 @@ namespace Ak
 			}
 			else
 			{
-				unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+				unexpected_error(std::move(std::to_string(it->get_value())), _path.string(), it->get_line()).expose();
 				return false;
 			}
 			if(it->has_value(eltm_token::kw_end))
@@ -151,7 +151,7 @@ namespace Ak
 		{
 			if(!it->is_keyword() || it->has_value(eltm_token::kw_get))
 			{
-				unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+				unexpected_error(std::move(std::to_string(it->get_value())), _path.string(), it->get_line()).expose();
 				_is_error = true;
 				return false;
 			}
@@ -176,7 +176,7 @@ namespace Ak
 				it++;
 				if(!it->is_string())
 				{
-					unexpected_error(std::move(std::to_string(it->get_value())), _path, it->get_line()).expose();
+					unexpected_error(std::move(std::to_string(it->get_value())), _path.string(), it->get_line()).expose();
 					_is_error = true;
 					return false;
 				}

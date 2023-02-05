@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/07/2021
-// Updated : 12/09/2022
+// Updated : 05/02/2023
 
 #include <Panels/shell/shell.h>
 
@@ -12,6 +12,7 @@ Shell::Shell(std::shared_ptr<Ak::ELTM> eltm) : Parser()
 
 std::string Shell::exec(std::string command)
 {
+#ifndef AK_PLATFORM_LINUX
 	std::array<char, 128> buffer;
     std::string result;
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
@@ -26,6 +27,10 @@ std::string Shell::exec(std::string command)
         result += buffer.data();
 
     return result;
+#else
+	print("unkown command", 1);
+	return "";
+#endif
 }
 
 void Shell::command(std::string command)

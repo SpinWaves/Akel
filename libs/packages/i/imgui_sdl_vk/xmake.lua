@@ -39,7 +39,7 @@ package("imgui_sdl_vk")
 
     on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos", function(package, target)
         local xmake_lua
-        local pkgs = "\"libsdl\", \"vulkan-loader\", \"vulkan-tools\""
+        local pkgs = "\"libsdl\", \"vulkan-loader\""
         xmake_lua = format([[
             add_rules("mode.debug", "mode.release")
             add_rules("utils.install.cmake_importfiles")

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/04/2021
-// Updated : 27/01/2023
+// Updated : 05/02/2023
 
 #include <Core/core.h>
 
@@ -23,7 +23,7 @@ namespace Ak::Core
                 :   "a" (funcId), 
                     "c" (subFuncId)
             );
-        #else   // MSVC or BORLANDC
+        #elif !defined(AK_64BITS)   // MSVC or BORLANDC
             __asm
             {
                 mov eax, funcId;
