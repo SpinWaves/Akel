@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 31/01/2023
+// Updated : 06/02/2023
 
 #include <Renderer/Images/texture.h>
 #include <Renderer/Pipeline/vk_shader.h>
@@ -46,14 +46,14 @@ namespace Ak
 		VkFormat format;
 		uint8_t* data = nullptr;
 
-		if(stbi_is_hdr(path.c_str()))
+		if(stbi_is_hdr(reinterpret_cast<const char*>(path.c_str())))
 		{
-			data = (uint8_t*)stbi_loadf(path.c_str(), &width, &height, &channels, 4);
+			data = (uint8_t*)stbi_loadf(reinterpret_cast<const char*>(path.c_str()), &width, &height, &channels, 4);
 			format = VK_FORMAT_R32G32B32A32_SFLOAT;
 		}
 		else
 		{
-			data = stbi_load(path.c_str(), &width, &height, &channels, 4);
+			data = stbi_load(reinterpret_cast<const char*>(path.c_str()), &width, &height, &channels, 4);
 			format = VK_FORMAT_R8G8B8A8_UNORM;
 		}
 
