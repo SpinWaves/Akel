@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 05/02/2023
+// Updated : 06/02/2023
 
 #include <Core/core.h>
 
@@ -27,7 +27,7 @@ namespace Ak::Core
 		for(auto& p: std::filesystem::directory_iterator(_log_dir))
 		{
 			name.clear();
-			name.append(p.path().string(), _log_dir.length(), p.path().string().length());
+			name.append(p.path().string(), _log_dir.string().length(), p.path().string().length());
 
 			if(name[0] == 's')
 			{

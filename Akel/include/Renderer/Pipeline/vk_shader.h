@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 01/02/2023
+// Updated : 06/02/2023
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -22,7 +22,7 @@ namespace Ak
 			class Uniform
 			{
 				public:
-					Uniform(int32_t binding = -1, int32_t set = -1, int32_t offset = -1, int32_t size = -1, VkShaderStageFlags stageFlags = 0, class UBO* ubo = nullptr) :
+					Uniform(int32_t binding = -1, int32_t set = -1, int32_t offset = -1, int32_t size = -1, VkShaderStageFlagBits stageFlags = VK_SHADER_STAGE_VERTEX_BIT, class UBO* ubo = nullptr) :
 						_binding(binding),
 						_set(set),
 						_offset(offset),
@@ -36,7 +36,7 @@ namespace Ak
 					inline int32_t getSize() const noexcept { return _size; }
 					inline int32_t getSet() const noexcept { return _set; }
 					inline class UBO* getBuffer() const noexcept { return _buffer; }
-					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
+					inline VkShaderStageFlagBits getStageFlags() const noexcept { return _stageFlags; }
 
 					inline bool operator==(const Uniform& rhs) const
 					{
@@ -53,7 +53,7 @@ namespace Ak
 
 				private:
 					class UBO* _buffer = nullptr;
-					VkShaderStageFlags _stageFlags;
+					VkShaderStageFlagBits _stageFlags;
 					int32_t _binding;
 					int32_t _set;
 					int32_t _offset;
@@ -63,7 +63,7 @@ namespace Ak
 			class ImageSampler
 			{
 				public:
-					ImageSampler(int32_t binding = -1, int32_t set = -1, int32_t offset = -1, int32_t size = -1, VkShaderStageFlags stageFlags = 0) :
+					ImageSampler(int32_t binding = -1, int32_t set = -1, int32_t offset = -1, int32_t size = -1, VkShaderStageFlagBits stageFlags = VK_SHADER_STAGE_VERTEX_BIT) :
 						_binding(binding),
 						_set(set),
 						_offset(offset),
@@ -75,7 +75,7 @@ namespace Ak
 					inline int32_t getOffset() const noexcept { return _offset; }
 					inline int32_t getSize() const noexcept { return _size; }
 					inline int32_t getSet() const noexcept { return _set; }
-					inline VkShaderStageFlags getStageFlags() const noexcept { return _stageFlags; }
+					inline VkShaderStageFlagBits getStageFlags() const noexcept { return _stageFlags; }
 
 					inline bool operator==(const ImageSampler& rhs) const
 					{
@@ -98,7 +98,7 @@ namespace Ak
 				private:
 					VkImageView _image_view = VK_NULL_HANDLE;
 					VkSampler _sampler = VK_NULL_HANDLE;
-					VkShaderStageFlags _stageFlags;
+					VkShaderStageFlagBits _stageFlags;
 					int32_t _binding;
 					int32_t _set;
 					int32_t _offset;

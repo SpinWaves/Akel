@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 05/02/2023
+// Updated : 06/02/2023
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -34,7 +34,7 @@ namespace Ak
                 ~log() = delete;
 
             private:
-				inline static const std::string& getLogPath() { return _log_dir; };
+				inline static const std::string& getLogPath() { return _log_dir.string(); };
                 static std::string getTime();
 
                 inline static std::mutex mutex;
