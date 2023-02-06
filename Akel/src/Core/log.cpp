@@ -154,7 +154,7 @@ namespace Ak::Core
     std::string log::getTime()
     {
 		__time time = Time::getCurrentTime();
-		std::string copy = _log_dir;
+		std::string copy = _log_dir.string();
 		copy.append("session-");
         copy.append(std::to_string(time.day));
 		copy.append("-");
