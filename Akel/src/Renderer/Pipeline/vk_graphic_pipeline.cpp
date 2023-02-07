@@ -27,61 +27,10 @@ namespace Ak
 			{
 				if(_shaders.back().getImageSamplers().count("texSampler"))
 				{
-					_dummy = create_Unique_ptr<Image>();
-					_dummy->create(1, 1, VK_FORMAT_R8G8B8A8_UNORM,
-									VK_IMAGE_TILING_OPTIMAL,
-									VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-									VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-									VK_IMAGE_ASPECT_COLOR_BIT);
-
-					CmdPool cmdpool;
-					cmdpool.init();
-					auto device = Render_Core::get().getDevice().get();
-
-					VkCommandBufferAllocateInfo allocInfo{};
-					allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-					allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-					allocInfo.commandPool = cmdpool.get();
-					allocInfo.commandBufferCount = 1;
-
-					VkCommandBuffer cmdBuffer;
-					vkAllocateCommandBuffers(device, &allocInfo, &cmdBuffer);
-
-					VkCommandBufferBeginInfo beginInfo{};
-					beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-					beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-					vkBeginCommandBuffer(cmdBuffer, &beginInfo);
-
-					VkImageMemoryBarrier barrier = {};
-					barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-					barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-					barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-					barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-					barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-					barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-					barrier.image = _dummy->get();
-					barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-					barrier.subresourceRange.levelCount = 1;
-					barrier.subresourceRange.layerCount = 1;
-					vkCmdPipelineBarrier(cmdBuffer, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
-
-					vkEndCommandBuffer(cmdBuffer);
-
-					VkSubmitInfo submitInfo{};
-					submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-					submitInfo.commandBufferCount = 1;
-					submitInfo.pCommandBuffers = &cmdBuffer;
-
-					auto graphicsQueue = Render_Core::get().getQueue().getGraphic();
-
-					vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
-					vkQueueWaitIdle(graphicsQueue);
-
-					cmdpool.destroy();
-
-					_shaders.back().getImageSamplers()["texSampler"].setSampler(_dummy->getSampler());
-					_shaders.back().getImageSamplers()["texSampler"].setImageView(_dummy->getImageView());
+					_dummy = create_Unique_ptr<Texture>();
+					std::array<uint8_t, 4> pixel = { 255, 255, 255, 255 };
+					_dummy->create(pixel.data(), 1, 1, VK_FORMAT_R8G8B8A8_UNORM);
+					_dummy->setShaderInterface(_shaders.back());
 				}
 			}
 			else
