@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/08/2021
-// Updated : 27/01/2023
+// Updated : 07/02/2023
 
 #ifndef __AK_AUDIO_MANAGER__
 #define __AK_AUDIO_MANAGER__
@@ -38,7 +38,6 @@ namespace Ak
 
         private:
             Unique_ptr<OpenAL> _al;
-            bool _is_init = false;
     };
 }
 

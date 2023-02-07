@@ -48,6 +48,13 @@ namespace Ak
 				{ Vertex::getBindingDescription() },
 				{ Vertex::getAttributeDescriptions()[0], Vertex::getAttributeDescriptions()[1], Vertex::getAttributeDescriptions()[2] },
 		} }, std::move(textures), VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
+
+		Matrixes::matrix_mode(matrix::view);
+		Matrixes::load_identity();
+		Matrixes::matrix_mode(matrix::model);
+		Matrixes::load_identity();
+		Matrixes::matrix_mode(matrix::proj);
+		Matrixes::load_identity();
 	}
 
 	void Scene::add_2D_entity(Entity2D entity)
@@ -138,9 +145,6 @@ namespace Ak
 			{
 				if(shader.getUniforms().count("matrices"))
 				{
-					Matrixes::matrix_mode(matrix::model);
-					Matrixes::load_identity();
-
 					MatrixesBuffer mat;
 					mat.proj = Matrixes::get_matrix(matrix::proj);
 					mat.model = Matrixes::get_matrix(matrix::model);
