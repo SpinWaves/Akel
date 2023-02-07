@@ -9,7 +9,7 @@ An editor (like Unity or UnrealEngine) is in development, facilitating the creat
 Akel is designed to be easy to use. Not being the most powerful, it goes the way of simplicity of use, both on the editor side and on the code side.
 
 # Getting started
-Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, (no information about MacOS, I have to test it). It is used with [xmake](https://xmake.io/#/). A compiler that supports C++17 is required. Dependencies are provided (SDL2, ImGui, ...) by xmake (you may install Vulkan yourself).
+Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows, (no information about MacOS, I have to test it). It is used with [xmake](https://xmake.io/#/). A compiler that supports C++17 is required. Dependencies are provided (SDL2, ImGui, ...) by xmake (you may install Vulkan SDK yourself for debuging).
 
 * Start by clonning the repo `git clone https://github.com/SpinWaves/Akel`
 * [Install xmake](https://xmake.io/#/guide/installation)
