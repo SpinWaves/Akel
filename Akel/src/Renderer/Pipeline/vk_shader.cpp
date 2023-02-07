@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 01/02/2023
+// Updated : 07/02/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -147,9 +147,9 @@ namespace Ak
 		}
 	}
 
-	std::vector<uint32_t> load_spirv_from_file(fString path)
+	std::vector<uint32_t> load_spirv_from_file(std::filesystem::path path)
 	{
-		std::ifstream stream(path.c_str(), std::ios::binary);
+		std::ifstream stream(path, std::ios::binary);
 
 		if(!stream.is_open())
 			Core::log::report(FATAL_ERROR, "Renderer : unable to open a spirv shader file, %s", path.c_str());

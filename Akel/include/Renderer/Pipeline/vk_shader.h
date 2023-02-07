@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 06/02/2023
+// Updated : 07/02/2023
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -165,7 +165,7 @@ namespace Ak
 			VkShaderStageFlagBits _type;
 	};
 
-	std::vector<uint32_t> load_spirv_from_file(fString path);
+	std::vector<uint32_t> load_spirv_from_file(std::filesystem::path path);
 }
 
 #endif // __AK_VK_SHADER__

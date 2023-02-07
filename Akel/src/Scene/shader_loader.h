@@ -41,7 +41,6 @@ namespace Ak
 			~NzslLoader() = default;
 
 		private:
-			nzsl::Ast::ModulePtr _nzsl_module = nullptr;
 			std::shared_ptr<nzsl::FilesystemModuleResolver> _resolver;
 			nzsl::SpirvWriter _writer;
 	};
