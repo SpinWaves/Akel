@@ -1,0 +1,105 @@
+
+22:5 ---- Begin Startup ----
+22:5 ---- architecture: 64bits
+22:5 ---- arch: x86
+22:5 ---- End ----
+22:5 ---- Begin Runtime ----
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-vkWaitForFences-pFences-parent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x2a32be35 | Object 0xdcc8fd0000000012 of type VkFence was not created, allocated or retrieved from the correct device. The Vulkan spec states: Each element of pFences must have been created, allocated, or retrieved from device (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkWaitForFences-pFences-parent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xdcc8fd0000000012, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xdcc8fd0000000012. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xdcc8fd0000000012, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xdcc8fd0000000012. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-vkAcquireNextImageKHR-semaphore-parent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x61beb60 | Object 0xd5b26f0000000010 of type VkSemaphore was not created, allocated or retrieved from the correct device. The Vulkan spec states: If semaphore is a valid handle, it must have been created, allocated, or retrieved from device (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkAcquireNextImageKHR-semaphore-parent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xf56c9b0000000004, type = VK_OBJECT_TYPE_SWAPCHAIN_KHR; | MessageID = 0x5d6b67e2 | Couldn't find VkSwapchainKHR Object 0xf56c9b0000000004. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xd5b26f0000000010, type = VK_OBJECT_TYPE_SEMAPHORE; | MessageID = 0x5d6b67e2 | Couldn't find VkSemaphore Object 0xd5b26f0000000010. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xf56c9b0000000004, type = VK_OBJECT_TYPE_SWAPCHAIN_KHR; | MessageID = 0x5d6b67e2 | Couldn't find VkSwapchainKHR Object 0xf56c9b0000000004. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xd5b26f0000000010, type = VK_OBJECT_TYPE_SEMAPHORE; | MessageID = 0x5d6b67e2 | Couldn't find VkSemaphore Object 0xd5b26f0000000010. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-vkResetFences-pFences-parent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x3ab4a906 | Object 0xdcc8fd0000000012 of type VkFence was not created, allocated or retrieved from the correct device. The Vulkan spec states: Each element of pFences must have been created, allocated, or retrieved from device (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkResetFences-pFences-parent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xdcc8fd0000000012, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xdcc8fd0000000012. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xdcc8fd0000000012, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xdcc8fd0000000012. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-vkWaitForFences-pFences-parent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x2a32be35 | Object 0xb097c90000000027 of type VkFence was not created, allocated or retrieved from the correct device. The Vulkan spec states: Each element of pFences must have been created, allocated, or retrieved from device (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkWaitForFences-pFences-parent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xb097c90000000027, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xb097c90000000027. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xb097c90000000027, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xb097c90000000027. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-vkAcquireNextImageKHR-semaphore-parent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x61beb60 | Object 0x3a6cbb0000000025 of type VkSemaphore was not created, allocated or retrieved from the correct device. The Vulkan spec states: If semaphore is a valid handle, it must have been created, allocated, or retrieved from device (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkAcquireNextImageKHR-semaphore-parent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0x27d60e0000000019, type = VK_OBJECT_TYPE_SWAPCHAIN_KHR; | MessageID = 0x5d6b67e2 | Couldn't find VkSwapchainKHR Object 0x27d60e0000000019. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0x3a6cbb0000000025, type = VK_OBJECT_TYPE_SEMAPHORE; | MessageID = 0x5d6b67e2 | Couldn't find VkSemaphore Object 0x3a6cbb0000000025. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0x27d60e0000000019, type = VK_OBJECT_TYPE_SWAPCHAIN_KHR; | MessageID = 0x5d6b67e2 | Couldn't find VkSwapchainKHR Object 0x27d60e0000000019. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0x3a6cbb0000000025, type = VK_OBJECT_TYPE_SEMAPHORE; | MessageID = 0x5d6b67e2 | Couldn't find VkSemaphore Object 0x3a6cbb0000000025. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-vkResetFences-pFences-parent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x3ab4a906 | Object 0xb097c90000000027 of type VkFence was not created, allocated or retrieved from the correct device. The Vulkan spec states: Each element of pFences must have been created, allocated, or retrieved from device (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkResetFences-pFences-parent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xb097c90000000027, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xb097c90000000027. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xb097c90000000027, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xb097c90000000027. This should not happen and may indicate a bug in the application.
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-VkSubmitInfo-commonparent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x46f4b991 | Object 0xd5b26f0000000010 of type VkSemaphore was not created, allocated or retrieved from the correct device. The Vulkan spec states: Each of the elements of pCommandBuffers, the elements of pSignalSemaphores, and the elements of pWaitSemaphores that are valid handles of non-ignored parameters must have been created, allocated, or retrieved from the same VkDevice (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-VkSubmitInfo-commonparent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-VkSubmitInfo-commonparent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x46f4b991 | Object 0x55791f901110 of type VkCommandBuffer was not created, allocated or retrieved from the correct device. The Vulkan spec states: Each of the elements of pCommandBuffers, the elements of pSignalSemaphores, and the elements of pWaitSemaphores that are valid handles of non-ignored parameters must have been created, allocated, or retrieved from the same VkDevice (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-VkSubmitInfo-commonparent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-VkSubmitInfo-commonparent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x46f4b991 | Object 0x980f360000000011 of type VkSemaphore was not created, allocated or retrieved from the correct device. The Vulkan spec states: Each of the elements of pCommandBuffers, the elements of pSignalSemaphores, and the elements of pWaitSemaphores that are valid handles of non-ignored parameters must have been created, allocated, or retrieved from the same VkDevice (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-VkSubmitInfo-commonparent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ VUID-vkQueueSubmit-commonparent ] Object 0: handle = 0x5579201bed90, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0xb4bf5d88 | Object 0xdcc8fd0000000012 of type VkFence was not created, allocated or retrieved from the correct device. The Vulkan spec states: Both of fence, and queue that are valid handles of non-ignored parameters must have been created, allocated, or retrieved from the same VkDevice (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkQueueSubmit-commonparent)
+22:5 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xdcc8fd0000000012, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xdcc8fd0000000012. This should not happen and may indicate a bug in the application.
+
+22:8 ---- Begin Startup ----
+22:8 ---- architecture: 64bits
+22:8 ---- arch: x86
+22:8 ---- End ----
+22:8 ---- Begin Runtime ----
+22:9 ---- Fatal Error: Vulkan : unable to retrieve surface capabilities
+22:9 ---- Fatal Error: Trying to free all instanciated allocators...
+22:9 ---- Fatal Error: All allocators have been correctly freed
+22:9 ---- Fatal Error: Program failed successfully !
+
+22:13 ---- Begin Startup ----
+22:13 ---- architecture: 64bits
+22:13 ---- arch: x86
+22:13 ---- Fatal Error: Renderer : unable to open a spirv shader file, /home/kbz_8/Documents/Programmation/C++/Akel/Tests/Windowing/multiple_windows_rendering/../../SandBox/cube/src/vert_u.spv
+22:13 ---- Fatal Error: Trying to free all instanciated allocators...
+22:13 ---- Fatal Error: All allocators have been correctly freed
+22:13 ---- Fatal Error: Program failed successfully !
+
+22:14 ---- Begin Startup ----
+22:14 ---- architecture: 64bits
+22:14 ---- arch: x86
+22:14 ---- End ----
+22:14 ---- Begin Runtime ----
+22:14 ---- Fatal Error: Vulkan : unable to retrieve surface capabilities
+22:14 ---- Fatal Error: Trying to free all instanciated allocators...
+22:14 ---- Fatal Error: All allocators have been correctly freed
+22:14 ---- Fatal Error: Program failed successfully !
+
+22:15 ---- Begin Startup ----
+22:15 ---- architecture: 64bits
+22:15 ---- arch: x86
+22:15 ---- End ----
+22:15 ---- Begin Runtime ----
+22:15 ---- Fatal Error: Vulkan : unable to retrieve surface capabilities
+22:15 ---- Fatal Error: Trying to free all instanciated allocators...
+22:15 ---- Fatal Error: All allocators have been correctly freed
+22:15 ---- Fatal Error: Program failed successfully !
+
+22:20 ---- Begin Startup ----
+22:20 ---- architecture: 64bits
+22:20 ---- arch: x86
+22:20 ---- End ----
+22:20 ---- Begin Runtime ----
+22:20 ---- Error: Vulkan layer error: Validation Error: [ VUID-vkWaitForFences-pFences-parameter ] Object 0: handle = 0x5562bf5ec640, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x4667da7c | Invalid VkFence Object 0xb3ee8b0000000070. The Vulkan spec states: pFences must be a valid pointer to an array of fenceCount valid VkFence handles (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkWaitForFences-pFences-parameter)
+22:20 ---- Error: Vulkan layer error: Validation Error: [ UNASSIGNED-Threading-Info ] Object 0: handle = 0xb3ee8b0000000070, type = VK_OBJECT_TYPE_FENCE; | MessageID = 0x5d6b67e2 | Couldn't find VkFence Object 0xb3ee8b0000000070. This should not happen and may indicate a bug in the application.
+
+22:21 ---- Begin Startup ----
+22:21 ---- architecture: 64bits
+22:21 ---- arch: x86
+22:21 ---- End ----
+22:21 ---- Begin Runtime ----
+22:21 ---- Error: Vulkan layer error: Validation Error: [ VUID-vkCmdSetViewport-commandBuffer-parameter ] Object 0: handle = 0x55d6dff07320, type = VK_OBJECT_TYPE_INSTANCE; | MessageID = 0x4b4d9343 | Invalid VkCommandBuffer Object 0x55d6e0f197b0. The Vulkan spec states: commandBuffer must be a valid VkCommandBuffer handle (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkCmdSetViewport-commandBuffer-parameter)
+
+22:40 ---- Begin Startup ----
+22:40 ---- architecture: 64bits
+22:40 ---- arch: x86
+22:40 ---- End ----
+22:40 ---- Begin Runtime ----
+22:40 ---- End ----
+22:40 ---- Begin Shutdown ----
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__window_component" address(0x7f9fb9494348), unable to find its allocator
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__window_component" address(0x7f9fb9494444), unable to find its allocator
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__window_component" address(0x7f9fb9494540), unable to find its allocator
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__renderer_component" address(0x7f9fb949463c), unable to find its allocator
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__scenes_manager" address(0x7f9fb9494858), unable to find its allocator
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__camera3D" address(0x7f9fb94948ec), unable to find its allocator
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__renderer_component" address(0x7f9fb94951f9), unable to find its allocator
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__scenes_manager" address(0x7f9fb9495415), unable to find its allocator
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__renderer_component" address(0x7f9fb9495c82), unable to find its allocator
+22:40 ---- Strong Warning: Component Stack: unable to free a component "__scenes_manager" address(0x7f9fb9495e9e), unable to find its allocator
+22:40 ---- End ----

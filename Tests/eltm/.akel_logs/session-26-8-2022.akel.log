@@ -1,0 +1,45 @@
+22:10 ---- Begin Start ----
+22:10 ---- architecture: 64bits
+22:10 ---- arch: x86
+22:10 ---- End ----
+22:10 ---- Begin Runtime ----
+
+22:14 ---- Begin Start ----
+22:14 ---- architecture: 64bits
+22:14 ---- arch: x86
+22:14 ---- End ----
+22:14 ---- Begin Runtime ----
+22:14 ---- End ----
+22:14 ---- Begin Shutdown ----
+22:14 ---- Strong Warning: Component Stack: unable to free a component "eltm tester" address(0x7fb5cc8f0338), unable to find its allocator
+22:14 ---- End ----
+
+22:17 ---- Begin Start ----
+22:17 ---- architecture: 64bits
+22:17 ---- arch: x86
+22:17 ---- End ----
+22:17 ---- Begin Runtime ----
+22:17 ---- End ----
+22:17 ---- Begin Shutdown ----
+22:17 ---- Strong Warning: Component Stack: unable to free a component "eltm tester" address(0x7f67110e0338), unable to find its allocator
+22:17 ---- End ----
+
+22:17 ---- Begin Start ----
+22:17 ---- architecture: 64bits
+22:17 ---- arch: x86
+22:17 ---- End ----
+22:17 ---- Begin Runtime ----
+22:17 ---- End ----
+22:17 ---- Begin Shutdown ----
+22:17 ---- Strong Warning: Component Stack: unable to free a component "eltm tester" address(0x7f490b386338), unable to find its allocator
+22:17 ---- End ----
+
+22:17 ---- Begin Start ----
+22:17 ---- architecture: 64bits
+22:17 ---- arch: x86
+22:17 ---- End ----
+22:17 ---- Begin Runtime ----
+22:17 ---- End ----
+22:17 ---- Begin Shutdown ----
+22:17 ---- Strong Warning: Component Stack: unable to free a component "eltm tester" address(0x7f4fdd0f7338), unable to find its allocator
+22:17 ---- End ----

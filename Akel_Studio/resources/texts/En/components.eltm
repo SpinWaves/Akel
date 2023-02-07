@@ -1,0 +1,9 @@
+// This file is a part of Akel
+// Authors : @kbz_8
+// Created : 12/11/2022
+// Updated : 12/11/2022
+
+begin module Components
+	let name = "Components"
+	let add = "Add"
+end module

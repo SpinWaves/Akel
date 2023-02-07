@@ -1,0 +1,84 @@
+
+8:13 ---- Begin Startup ----
+8:13 ---- architecture: 64bits
+8:13 ---- arch: x86
+8:13 ---- End ----
+8:13 ---- Begin Runtime ----
+8:13 ---- Message: Lua : 
+8:13 ---- End ----
+8:13 ---- Begin Shutdown ----
+8:13 ---- Strong Warning: Component Stack: unable to free a component "__lua_component" address(0x7f39b314d348), unable to find its allocator
+8:13 ---- End ----
+
+8:18 ---- Begin Startup ----
+8:18 ---- architecture: 64bits
+8:18 ---- arch: x86
+8:18 ---- End ----
+8:18 ---- Begin Runtime ----
+8:18 ---- Fatal Error: Lua : the script encountered issue at execution
+8:18 ---- Fatal Error: Trying to free all instanciated allocators...
+8:18 ---- Fatal Error: All allocators have been correctly freed
+8:18 ---- Fatal Error: Program failed successfully !
+
+8:23 ---- Begin Startup ----
+8:23 ---- architecture: 64bits
+8:23 ---- arch: x86
+8:23 ---- End ----
+8:23 ---- Begin Runtime ----
+8:23 ---- Fatal Error: Lua : the script encountered issue at execution
+8:23 ---- Fatal Error: Trying to free all instanciated allocators...
+8:23 ---- Fatal Error: All allocators have been correctly freed
+8:23 ---- Fatal Error: Program failed successfully !
+
+8:26 ---- Begin Startup ----
+8:26 ---- architecture: 64bits
+8:26 ---- arch: x86
+8:26 ---- End ----
+8:26 ---- Begin Runtime ----
+8:26 ---- Message: Lua : this is a message
+8:26 ---- End ----
+8:26 ---- Begin Shutdown ----
+8:26 ---- Strong Warning: Component Stack: unable to free a component "__lua_component" address(0x7f2134d23348), unable to find its allocator
+8:26 ---- End ----
+
+8:26 ---- Begin Startup ----
+8:26 ---- architecture: 64bits
+8:26 ---- arch: x86
+8:26 ---- End ----
+8:26 ---- Begin Runtime ----
+8:26 ---- Message: Lua : this is a message
+8:26 ---- End ----
+8:26 ---- Begin Shutdown ----
+8:26 ---- Strong Warning: Component Stack: unable to free a component "__lua_component" address(0x7f17ae85d348), unable to find its allocator
+8:26 ---- End ----
+
+8:30 ---- Begin Startup ----
+8:30 ---- architecture: 64bits
+8:30 ---- arch: x86
+8:30 ---- End ----
+8:30 ---- Begin Runtime ----
+8:30 ---- Message: Lua : this is a message
+8:30 ---- End ----
+8:30 ---- Begin Shutdown ----
+8:30 ---- Strong Warning: Component Stack: unable to free a component "__lua_component" address(0x7f48ceb1c348), unable to find its allocator
+8:30 ---- End ----
+
+8:32 ---- Begin Startup ----
+8:32 ---- architecture: 64bits
+8:32 ---- arch: x86
+8:32 ---- End ----
+8:32 ---- Begin Runtime ----
+8:32 ---- End ----
+8:32 ---- Begin Shutdown ----
+8:32 ---- Strong Warning: Component Stack: unable to free a component "__lua_component" address(0x7f0e1678b348), unable to find its allocator
+8:32 ---- End ----
+
+8:53 ---- Begin Startup ----
+8:53 ---- architecture: 64bits
+8:53 ---- arch: x86
+8:53 ---- End ----
+8:53 ---- Begin Runtime ----
+8:53 ---- End ----
+8:53 ---- Begin Shutdown ----
+8:53 ---- Strong Warning: Component Stack: unable to free a component "__lua_component" address(0x7f21db297348), unable to find its allocator
+8:53 ---- End ----

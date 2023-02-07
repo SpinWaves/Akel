@@ -1,0 +1,11 @@
+// This file is a part of Akel Studio
+// Authors : @kbz_8
+// Created : 28/08/2022
+// Updated : 28/08/2022
+
+begin module ELTM_Editor
+    let name = "ELTM Editor"
+	let text = "Text"
+	let version = "ELTM version 2.0.0"
+	let add = "Add new ID"
+end module

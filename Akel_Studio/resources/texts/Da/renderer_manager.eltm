@@ -1,0 +1,26 @@
+// This file is a part of Akel Studio
+// Authors : @kbz_8
+// Created : 28/08/2022
+// Updated : 28/08/2022
+
+begin module RendererManager
+	let name = "Scene Renderer"
+	let render_sets = "Renderindstillinger"
+
+		let culling = "Udskæring af ansigter"
+		let cull_none = "Ingen"
+		let cull_front = "Forside"
+		let cull_back = "Tilbage"
+		let cull_front_and_back = "Forside og bagside"
+
+		let bg_color = "Baggrundsfarve"
+
+		let reload = "Genindlæsning af renderer"
+
+	let stats = "Renderstatistik"
+		let n_devices = "Antal grafiske enheder : %d"
+		let vendor = "Sælger : %s"
+		let model = "GPU i brug : %s"
+		let model_type = "Type : %s"
+		let vulkan_v = "Vulkan version : %s"
+end module

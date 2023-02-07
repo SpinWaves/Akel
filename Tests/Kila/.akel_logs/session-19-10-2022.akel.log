@@ -1,0 +1,27 @@
+15:32 ---- Begin Start ----
+15:32 ---- architecture: 64bits
+15:32 ---- arch: x86
+15:32 ---- Fatal Error: Application: unable to open/create project file in directory: /sgoinfre/goinfre/Perso/maldavid/Akel/Tests/Kila/Tests/Kila/
+15:32 ---- Fatal Error: Trying to free all instanciated allocators...
+15:32 ---- Fatal Error: All allocators have been correctly freed
+15:32 ---- Fatal Error: Program failed successfully !
+
+15:33 ---- Begin Start ----
+15:33 ---- architecture: 64bits
+15:33 ---- arch: x86
+15:33 ---- End ----
+15:33 ---- Begin Runtime ----
+15:33 ---- End ----
+15:33 ---- Begin Shutdown ----
+15:33 ---- Strong Warning: Component Stack: unable to free a component "Kila tester component" address(0x7f228686c3cc), unable to find its allocator
+15:33 ---- End ----
+
+15:37 ---- Begin Start ----
+15:37 ---- architecture: 64bits
+15:37 ---- arch: x86
+15:37 ---- End ----
+15:37 ---- Begin Runtime ----
+15:37 ---- End ----
+15:37 ---- Begin Shutdown ----
+15:37 ---- Strong Warning: Component Stack: unable to free a component "Kila tester component" address(0x7fd05ba203cc), unable to find its allocator
+15:37 ---- End ----
