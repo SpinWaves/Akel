@@ -12,17 +12,14 @@ Example of Kila program
 ![spatial_shader]
 
 external
-{
     tex : sampler2D
-}
+end
 
 function Vmain() -> vec4
-{
-     return vec4(vertex.pos, 1.0)
-}
+     return ![vertex].projection * ![vertex].view * ![vertex].model * vec4(![vertex].pos, 1.0)
+end
 
 function Fmain() -> vec4
-{
-    return vec4(fragment.color * texture(tex, fragment.tex_coord), 1.0)
-}
+    return vec4(![fragment].color * texture(tex, ![fragment].tex_coord), 1.0)
+end
 ```

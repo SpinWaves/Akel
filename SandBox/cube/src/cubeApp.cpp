@@ -25,8 +25,8 @@ Ak::Application* Akel_mainApp()
 
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
 
-	scene->loadCustomShader(Ak::Core::getMainDirPath() + "src/vert.spv");
-	scene->loadCustomShader(Ak::Core::getMainDirPath() + "src/frag.spv");
+	scene->loadCustomShader<Ak::shaderlang::nzsl>(Ak::Res::get().getScriptsPath() / "vert.nzsl");
+	scene->loadCustomShader<Ak::shaderlang::nzsl>(Ak::Res::get().getScriptsPath() / "frag.nzsl");
 
 	scene->add_3D_entity({ Models::cube, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, Colors::none, Ak::Res::get().getTexturesPath() / "rodriguez.jpg" });
 	app->add_scene(scene);

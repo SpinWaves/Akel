@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 02/02/2023
+// Updated : 07/02/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>

@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 02/02/2023
+// Updated : 07/02/2023
 
 #include <Renderer/Images/texture.h>
 #include <Scene/scene.h>
 #include <Renderer/rendererComponent.h>
 #include <Graphics/matrixes.h>
 #include <Renderer/Buffers/vk_ubo.h>
+#include "shader_loader.h"
 
 namespace Ak
 {
@@ -18,7 +19,10 @@ namespace Ak
 		alignas(16) glm::mat4 proj;
 	};
 
-	Scene::Scene(fString name) : _name(std::move(name)) {}
+	Scene::Scene(fString name) : _name(std::move(name)), _loader(create_Unique_ptr<ShaderLoader>())
+	{
+		_loader->init();
+	}
 
 	void Scene::onAttach(RendererComponent* renderer, uint32_t id) noexcept
 	{
@@ -32,9 +36,6 @@ namespace Ak
 		for(Entity3D& ent : _3D_entities)
 			if(!ent._texture_path.empty())
 				textures.push_back(&ent.getTexture());
-
-		if(textures.empty())
-			_use_textures = false;
 
 		_pipeline.init(*_renderer, _shaders, std::vector<Ak::Shader::VertexInput>{ {
 				{ Vertex::getBindingDescription() },
@@ -87,7 +88,7 @@ namespace Ak
 				sets.push_back(set.get());
 			if(shader.getUniforms().size() > 0)
 			{
-				if(shader.getUniforms().count("matrixes"))
+				if(shader.getUniforms().count("matrices"))
 				{
 					Matrixes::matrix_mode(matrix::view);
 					Matrixes::load_identity();
@@ -99,10 +100,8 @@ namespace Ak
 					mat.model = Matrixes::get_matrix(matrix::model);
 					mat.view = Matrixes::get_matrix(matrix::view);
 
-					shader.getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
+					shader.getUniforms()["matrices"].getBuffer()->setData(sizeof(mat), &mat);
 				}
-				if(shader.getUniforms().count("use_texture"))
-					shader.getUniforms()["use_texture"].getBuffer()->setData(sizeof(bool), &_use_textures);
 			}
 		}
 		vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
@@ -130,7 +129,7 @@ namespace Ak
 				sets.push_back(set.get());
 			if(shader.getUniforms().size() > 0)
 			{
-				if(shader.getUniforms().count("matrixes"))
+				if(shader.getUniforms().count("matrices"))
 				{
 					Matrixes::matrix_mode(matrix::model);
 					Matrixes::load_identity();
@@ -142,10 +141,8 @@ namespace Ak
 
 					mat.proj[1][1] *= -1;
 
-					shader.getUniforms()["matrixes"].getBuffer()->setData(sizeof(mat), &mat);
+					shader.getUniforms()["matrices"].getBuffer()->setData(sizeof(mat), &mat);
 				}
-				if(shader.getUniforms().count("use_texture"))
-					shader.getUniforms()["use_texture"].getBuffer()->setData(sizeof(bool), &_use_textures);
 			}
 		}
 		vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
@@ -159,12 +156,20 @@ namespace Ak
 		}
 	}
 
+	void Scene::_loadCustomShader(shaderlang lang, std::filesystem::path path)
+	{
+		_shaders.push_back(std::move(_loader->loadShader(lang, std::move(path))));
+	}
+
 	void Scene::onQuit()
 	{
+		_loader->destroy();
 		for(auto entity : _2D_entities)
 			entity.destroy();
 		for(auto entity : _3D_entities)
 			entity.destroy();
 		_pipeline.destroy();
 	}
+
+	Scene::~Scene() {}
 }

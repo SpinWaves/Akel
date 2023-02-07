@@ -6,6 +6,9 @@
 -- Globals settings
 add_repositories("local-repo libs")
 
+add_repositories("nazara-repo https://github.com/NazaraEngine/xmake-repo")
+add_requires("nzsl")
+
 add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "stb", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json")
 add_requires("volk", { configs = { header_only = true}})
 
@@ -14,14 +17,6 @@ set_languages("cxx17")
 
 set_objectdir("build/objects/$(os)_$(arch)")
 set_targetdir("build/$(os)_$(arch)")
-
-toolchain("clang")
-	set_toolset("cxx", "clang", "clang++")
-toolchain_end()
-
-toolchain("gcc")
-	set_toolset("cxx", "gcc", "g++")
-toolchain_end()
 
 set_optimize("fastest")
 
@@ -54,7 +49,7 @@ target("Akel")
 	add_packages("entt", 	      { public = true })
 	add_packages("vulkan-memory-allocator", { public = true })
 	add_packages("volk",          { public = true })
-
+	add_packages("nzsl",          { public = true })
 	add_packages("libsndfile",    { public = true })
 	add_packages("openal-soft",   { public = true })
 target_end() -- optional but I think the code is cleaner with this

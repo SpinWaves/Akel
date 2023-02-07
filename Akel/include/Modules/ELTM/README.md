@@ -10,7 +10,7 @@ Its use is not dissociable from C++ because it requires an instantiated context 
 
 Your ELTM code :
 
-```rust
+```
 // comment
 /*
 	Long

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 05/02/2023
+// Updated : 06/02/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -36,6 +36,11 @@
 #include <imgui.h>
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_vulkan.h>
+
+// NZSL
+#include <NZSL/Parser.hpp>
+#include <NZSL/SpirvWriter.hpp>
+#include <NZSL/FilesystemModuleResolver.hpp>
 
 // Lua
 #include <sol/sol.hpp>
