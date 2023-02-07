@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 07/02/2023
-// Updated : 07/02/2023
+// Updated : 08/02/2023
 
 #ifndef __AK_BUILTIN_SHADERS__
 #define __AK_BUILTIN_SHADERS__
@@ -43,7 +43,7 @@ namespace Ak
 
 		external
 		{
-			[set(1), binding(1)] texSampler: sampler2D[f32]
+			[set(1), binding(0)] texSampler: sampler2D[f32]
 		}
 
 		[entry(frag)]
