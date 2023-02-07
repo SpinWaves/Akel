@@ -1,5 +1,0 @@
-// Test file to test the import system of Kila
-
-var test: float = 1.0;
-
-@get import2.ksl
