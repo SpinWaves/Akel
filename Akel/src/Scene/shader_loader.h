@@ -22,6 +22,7 @@ namespace Ak
 
 			void init();
 			std::vector<uint32_t> loadShader(shaderlang lang, std::filesystem::path path);
+			std::vector<uint32_t> loadShader(shaderlang lang, std::string_view shader);
 			void destroy();
 
 			~ShaderLoader() = default;
@@ -37,6 +38,7 @@ namespace Ak
 			NzslLoader();
 			
 			std::vector<uint32_t> loadShader(std::filesystem::path path);
+			std::vector<uint32_t> loadShader(std::string_view shader);
 			
 			~NzslLoader() = default;
 

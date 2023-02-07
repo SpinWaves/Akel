@@ -9,6 +9,7 @@
 #include <Graphics/matrixes.h>
 #include <Renderer/Buffers/vk_ubo.h>
 #include "shader_loader.h"
+#include <Graphics/builtin_shaders.h>
 
 namespace Ak
 {
@@ -36,6 +37,12 @@ namespace Ak
 		for(Entity3D& ent : _3D_entities)
 			if(!ent._texture_path.empty())
 				textures.push_back(&ent.getTexture());
+
+		if(_shaders.empty())
+		{
+			_shaders.push_back(std::move(_loader->loadShader(shaderlang::nzsl, std::string_view{default_vertex_shader})));
+			_shaders.push_back(std::move(_loader->loadShader(shaderlang::nzsl, std::string_view{default_fragment_shader})));
+		}
 
 		_pipeline.init(*_renderer, _shaders, std::vector<Ak::Shader::VertexInput>{ {
 				{ Vertex::getBindingDescription() },
