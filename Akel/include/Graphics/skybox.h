@@ -7,12 +7,25 @@
 #define __AK_SKYBOX__
 
 #include <Akpch.h>
+#include <Renderer/Pipeline/vk_graphic_pipeline.h>
 
 namespace Ak
 {
 	class Skybox
 	{
+		public:
+			Skybox(std::shared_ptr<class ImageCube> image, class RendererComponent* renderer);
 
+			void init(class Scene& scene) noexcept;
+			void render() noexcept;
+			void destroy() noexcept;
+
+			~Skybox() = default;
+
+		private:
+			GraphicPipeline _pipeline;
+			std::shared_ptr<class ImageCube> _image;
+			class RendererComponent* _renderer = nullptr;
 	};
 }
 
