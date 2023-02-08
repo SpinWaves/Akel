@@ -6,12 +6,12 @@
 #include <Graphics/skybox.h>
 #include <Renderer/rendererComponent.h>
 #include <Scene/scene.h>
-#include <Scene/shaderLoader.h>
+#include <Scene/shader_loader.h>
 #include <Graphics/builtin_shaders.h>
 
 namespace Ak
 {
-	Skybox::Skybox(std::shared_ptr<ImageCube> image, RendererComponent* renderer) : _image(std::move(image)), _renderer(renderer) {}
+	Skybox::Skybox(std::shared_ptr<CubeMap> map, RendererComponent* renderer) : _map(std::move(map)), _renderer(renderer) {}
 
 	void Skybox::init(Scene& scene) noexcept
 	{
@@ -19,6 +19,6 @@ namespace Ak
 
 		shaders.push_back(std::move(scene._loader->loadShader(shaderlang::nzsl, std::string_view{skybox_vertex_shader})));
 		shaders.push_back(std::move(scene._loader->loadShader(shaderlang::nzsl, std::string_view{skybox_fragment_shader})));
-		_pipeline.init(*_renderer, std::move(shaders));
+	//	_pipeline.init(*_renderer, std::move(shaders));
 	}
 }

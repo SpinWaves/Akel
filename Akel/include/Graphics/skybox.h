@@ -14,7 +14,7 @@ namespace Ak
 	class Skybox
 	{
 		public:
-			Skybox(std::shared_ptr<class ImageCube> image, class RendererComponent* renderer);
+			Skybox(std::shared_ptr<class CubeMap> map, class RendererComponent* renderer);
 
 			void init(class Scene& scene) noexcept;
 			void render() noexcept;
@@ -24,7 +24,7 @@ namespace Ak
 
 		private:
 			GraphicPipeline _pipeline;
-			std::shared_ptr<class ImageCube> _image;
+			std::shared_ptr<class CubeMap> _map;
 			class RendererComponent* _renderer = nullptr;
 	};
 }
