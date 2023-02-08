@@ -6,9 +6,9 @@ class Transformations : public Ak::Component
 	public:
 		void update() override
 		{
-			float x = 0.5 * (sin(2 * _time + 2) + sin(_time * M_PI - 2));
+			float x = 0.5 * (sin(2 * _time + 2) + sin(_time * M_PI - 2.00));
 			float y = 0.6 * (sin(2 * _time + 4) + sin(_time * M_PI - 1.76));
-			float z = 0.3 * (sin(2 * _time - 2) + sin(_time * M_PI - 1.2));
+			float z = 0.3 * (sin(2 * _time - 2) + sin(_time * M_PI - 1.20));
 			Ak::Matrixes::rotate3D(_angle, x, y, z);
 			_time += 0.01f;
 		}
