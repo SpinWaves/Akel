@@ -1,8 +1,10 @@
 .xmake/
+.vs/
 build/
 *.akel
 *.swp
 *.ini
+*.exe
 Akel_Studio/settings/
 Akel_Studio/build/
 Akel_Studio/Akel_Studio
