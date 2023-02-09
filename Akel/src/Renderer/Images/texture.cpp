@@ -45,18 +45,18 @@ namespace Ak
 		int channels;
 		VkFormat format;
 		uint8_t* data = nullptr;
+		const char* filename = path.string().c_str();
 
-		if(stbi_is_hdr(reinterpret_cast<const char*>(path.c_str())))
+		if(stbi_is_hdr(filename))
 		{
-			data = (uint8_t*)stbi_loadf(reinterpret_cast<const char*>(path.c_str()), &width, &height, &channels, 4);
+			data = (uint8_t*)stbi_loadf(filename, &width, &height, &channels, 4);
 			format = VK_FORMAT_R32G32B32A32_SFLOAT;
 		}
 		else
 		{
-			data = stbi_load(reinterpret_cast<const char*>(path.c_str()), &width, &height, &channels, 4);
+			data = stbi_load(filename, &width, &height, &channels, 4);
 			format = VK_FORMAT_R8G8B8A8_UNORM;
 		}
-
 		texture.create(data, width, height, format);
 		stbi_image_free(data);
 		return texture;
