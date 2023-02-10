@@ -24,7 +24,7 @@ namespace Ak
 		Image::createSampler();
 
 		Buffer staging_buffer;
-		size_t size = width * height * (format == VK_FORMAT_R32G32B32A32_SFLOAT ? 16 : 4);
+		std::size_t size = width * height * (format == VK_FORMAT_R32G32B32A32_SFLOAT ? 16 : 4);
 		staging_buffer.create(Buffer::kind::dynamic, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, pixels);
 		Image::copyBuffer(staging_buffer);
 		staging_buffer.destroy();
