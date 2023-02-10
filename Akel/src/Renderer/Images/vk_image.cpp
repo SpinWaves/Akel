@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 01/02/2023
+// Updated : 10/02/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -27,7 +27,7 @@ namespace Ak
 		Core::log::report(FATAL_ERROR, "Vulkan : failed to find image format");
 	}
 
-	void Image::create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImageAspectFlags aspectFlags)
+	void Image::create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties)
 	{
 		_width = width;
 		_height = height;
@@ -63,12 +63,15 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate memory for an image");
 
 		vkBindImageMemory(Render_Core::get().getDevice().get(), _image, _memory, 0);
+	}
 
+	void Image::createImageView(VkImageViewType type, VkImageAspectFlags aspectFlags) noexcept
+	{
 		VkImageViewCreateInfo viewInfo{};
 		viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 		viewInfo.image = _image;
-		viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-		viewInfo.format = format;
+		viewInfo.viewType = type;
+		viewInfo.format = _format;
 		viewInfo.subresourceRange.aspectMask = aspectFlags;
 		viewInfo.subresourceRange.baseMipLevel = 0;
 		viewInfo.subresourceRange.levelCount = 1;
@@ -77,7 +80,10 @@ namespace Ak
 
 		if(vkCreateImageView(Render_Core::get().getDevice().get(), &viewInfo, nullptr, &_image_view) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create image view");
+	}
 
+	void Image::createSampler() noexcept
+	{
 		VkSamplerCreateInfo info = {};
 		info.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
 		info.magFilter = VK_FILTER_LINEAR;

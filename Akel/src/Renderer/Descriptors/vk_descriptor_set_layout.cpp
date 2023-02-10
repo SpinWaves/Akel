@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 31/01/2023
+// Updated : 07/02/2023
 
 #include <Renderer/Descriptors/vk_descriptor_set_layout.h>
 #include <Renderer/Core/render_core.h>
@@ -9,22 +9,24 @@
 
 namespace Ak
 {
-    void DescriptorSetLayout::init(VkDescriptorType t, std::size_t n, int binding, VkShaderStageFlagBits stage)
+    void DescriptorSetLayout::init(std::vector<std::pair<int, VkDescriptorType>> binds, VkShaderStageFlagBits stage)
     {
-        VkDescriptorSetLayoutBinding bindings{};
-        bindings.binding = binding;
-        bindings.descriptorCount = 1;
-        bindings.descriptorType = t;
-        bindings.pImmutableSamplers = nullptr;
-        bindings.stageFlags = stage;
+		std::vector<VkDescriptorSetLayoutBinding> bindings(binds.size());
+		for(int i = 0; i < binds.size(); i++)
+		{
+			bindings[i].binding = binds[i].first;
+			bindings[i].descriptorCount = 1;
+			bindings[i].descriptorType = binds[i].second;
+			bindings[i].pImmutableSamplers = nullptr;
+			bindings[i].stageFlags = stage;
+		}
 
-		_type = t;
-		_binding = binding;
+		_bindings = std::move(binds);
 
         VkDescriptorSetLayoutCreateInfo layoutInfo{};
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        layoutInfo.bindingCount = n;
-        layoutInfo.pBindings = &bindings;
+        layoutInfo.bindingCount = _bindings.size();
+        layoutInfo.pBindings = bindings.data();
 
         if(vkCreateDescriptorSetLayout(Render_Core::get().getDevice().get(), &layoutInfo, nullptr, &_layout) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create descriptor set layout");

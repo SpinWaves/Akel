@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 05/12/2022
+// Updated : 07/02/2023
 //
 // Akel is an open source game engine made for fun
 // https://github.com/SpinWaves/Akel
 // 
 // MIT License
 // 
-// Copyright (c) 2021-2022 SpinWaves Studios
+// Copyright (c) 2021-2023 SpinWaves Studios
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal

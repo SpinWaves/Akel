@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 07/02/2023
+// Updated : 08/02/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -23,6 +23,8 @@ namespace Ak
 
 	class AK_API Scene
 	{
+		friend class Skybox;
+
 		public:
 			Scene(fString name = "Empty scene");
 

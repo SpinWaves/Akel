@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 07/02/2023
+// Updated : 08/02/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -200,12 +200,17 @@ namespace Ak
 			Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to get descriptor set");
 			Ak_assert(sets[i] == set2, "Renderer Shader : somehting messed up while getting descripor set from a shader");
 
+			std::vector<std::pair<int, VkDescriptorType>> bindings;
+			_layouts.emplace_back();
+
 			for(int j = 0; j < sets[i]->binding_count; j++)
 			{
 				if(_uniforms.count(sets[i]->bindings[j]->name))
 					continue;
 				if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
 				{
+					bindings.emplace_back(sets[i]->bindings[j]->binding, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER);
+
 					UBO* buffer = memAlloc<UBO>();
 					buffer->create(_renderer, sets[i]->bindings[j]->block.size);
 
@@ -218,13 +223,11 @@ namespace Ak
 							_type,
 							buffer
 						};
-
-					DescriptorSetLayout layout;
-					layout.init(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1, sets[i]->bindings[j]->binding, _type);
-					_layouts.push_back(std::move(layout));
 				}
 				else if(sets[i]->bindings[j]->descriptor_type == SPV_REFLECT_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
 				{
+					bindings.emplace_back(sets[i]->bindings[j]->binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER);
+
 					_image_samplers[sets[i]->bindings[j]->name] =
 						Shader::ImageSampler{
 							static_cast<int32_t>(sets[i]->bindings[j]->binding),
@@ -233,12 +236,10 @@ namespace Ak
 							static_cast<int32_t>(sets[i]->bindings[j]->block.size),
 							_type
 						};
-
-					DescriptorSetLayout layout;
-					layout.init(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, sets[i]->bindings[j]->binding, _type);
-					_layouts.push_back(std::move(layout));
 				}
 			}
+
+			_layouts.back().init(std::move(bindings), _type);
 		}
 
 		count = 0;
@@ -276,36 +277,34 @@ namespace Ak
 
 	void Shader::createSets()
 	{
-		std::vector<DescriptorSetLayout*> uniform_layouts;
-		std::vector<DescriptorSetLayout*> image_sampler_layouts;
-		for(DescriptorSetLayout& layout : _layouts)
-		{
-			if(layout.getType() == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
-				uniform_layouts.push_back(&layout);
-			if(layout.getType() == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
-				image_sampler_layouts.push_back(&layout);
-		}
-
 		if(_layouts.size() != 0)
 		{
 			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2048 });
 			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4096 });
 			_desc_pool.init(2, _desc_pool_sizes.data());
-			int i = 0;
-			for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
+			for(int i = 0; i < _layouts.size(); i++)
 			{
-				DescriptorSet set;
-				set.init(_renderer, it->second.getBuffer(), *uniform_layouts[i], _desc_pool);
-				_sets.push_back(std::move(set));
-				i++;
-			}
-			i = 0;
-			for(auto it = _image_samplers.begin(); it != _image_samplers.end(); ++it)
-			{
-				DescriptorSet set;
-				set.init(_renderer, it->second.getImageView(), it->second.getSampler(), *image_sampler_layouts[i], _desc_pool);
-				_sets.push_back(std::move(set));
-				i++;
+				_sets.emplace_back();
+				_sets.back().init(_renderer, _layouts[i], _desc_pool);
+				for(auto binding : _layouts[i].getBindings())
+				{
+					if(binding.second == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+					{
+						for(auto& [name, uniform] : _uniforms)
+						{
+							if(uniform.getBinding() == binding.first)
+								_sets.back().writeDescriptor(binding.first, uniform.getBuffer());
+						}
+					}
+					else if(binding.second == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
+					{
+						for(auto& [name, sampler] : _image_samplers)
+						{
+							if(sampler.getBinding() == binding.first)
+								_sets.back().writeDescriptor(binding.first, sampler.getImageView(), sampler.getSampler());
+						}
+					}
+				}
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/03/2022
-// Updated : 27/01/2023
+// Updated : 07/02/2023
 
 #ifndef __AK_PLAIN_APPLICATION__
 #define __AK_PLAIN_APPLICATION__
@@ -22,6 +22,7 @@ namespace Ak
 			void switch_to_scene(uint32_t id) noexcept;
 
 			inline class WindowComponent* getWindow() noexcept { return _window; }
+			inline class RendererComponent* getRenderer() noexcept { return _renderer; }
 
 			~PlainApplication() = default;
 

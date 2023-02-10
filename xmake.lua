@@ -99,6 +99,16 @@ target("CubeDemo")
 	set_targetdir("SandBox/cube")
 target_end()
 
+-- Skybox Demo Build
+target("SkyDemo")
+	set_default(false)
+    set_kind("binary")
+    add_deps("Akel")
+	add_includedirs("Akel/include", "SandBox/skybox/src", "libs/include")
+    add_files("SandBox/skybox/src/*.cpp")
+	set_targetdir("SandBox/skybox")
+target_end()
+
 -- Kila tester Build
 target("Kila_tester")
 	set_default(false)

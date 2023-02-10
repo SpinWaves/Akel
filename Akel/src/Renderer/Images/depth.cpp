@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/01/2023
-// Updated : 01/02/2023
+// Updated : 10/02/2023
 
 #include <Renderer/Images/depth.h>
 #include <Renderer/rendererComponent.h>
@@ -15,8 +15,8 @@ namespace Ak
             VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
         );
 		Image::create(renderer.getSwapChain()._swapChainExtent.width, renderer.getSwapChain()._swapChainExtent.height, 
-				format, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-				VK_IMAGE_ASPECT_DEPTH_BIT);
+				format, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+		Image::createImageView(VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_DEPTH_BIT);
 
 		CmdPool cmdpool;
 		cmdpool.init();

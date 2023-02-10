@@ -1,15 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 27/01/2023
+// Updated : 07/02/2023
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
 
 #include <Akpch.h>
-#include <Platform/input.h>
-#include <Core/core.h>
-#include <Core/profile.h>
+#include <Core/Components/baseComponent.h>
 
 namespace Ak
 {
@@ -21,7 +19,7 @@ namespace Ak
 			ImGuiComponent(class RendererComponent* renderer);
 
 			void onAttach() override;
-			void onImGuiEvent(Input& input) override;
+			void onImGuiEvent(class Input& input) override;
 			void onQuit() override;
 
 			void addFontFromFile(const char* file, float size, bool def = false);

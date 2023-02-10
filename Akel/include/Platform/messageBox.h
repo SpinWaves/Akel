@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 07/05/2022
+// Updated : 10/02/2023
 
 #ifndef __AK_MESSAGEBOX__
 #define __AK_MESSAGEBOX__
@@ -11,7 +11,7 @@
 
 namespace Ak
 {
-    void messageBox(LogType type, std::string message, std::string logReport);
+    void messageBox(LogType type, std::string message, std::string logReport, bool report = true);
 }
 
 #endif // __AK_MESSAGEBOX__
