@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 07/02/2023
+// Updated : 10/02/2023
 
 #include <Renderer/Images/texture.h>
 #include <Renderer/Pipeline/vk_shader.h>
@@ -18,8 +18,10 @@ namespace Ak
 		Image::create(width, height, format,
 					VK_IMAGE_TILING_OPTIMAL,
 					VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-					VK_IMAGE_ASPECT_COLOR_BIT);
+					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+		Image::createImageView(VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_COLOR_BIT);
+		Image::createSampler();
 
 		Buffer staging_buffer;
 		size_t size = width * height * (format == VK_FORMAT_R32G32B32A32_SFLOAT ? 16 : 4);
@@ -45,16 +47,18 @@ namespace Ak
 		int channels;
 		VkFormat format;
 		uint8_t* data = nullptr;
-		const char* filename = path.string().c_str();
+		std::string filename = path.string();
 
-		if(stbi_is_hdr(filename))
+		if(!std::filesystem::exists(std::move(path)))
+			Core::log::report(FATAL_ERROR, "Trying to create a texture from unfound file '%s'", filename.c_str());
+		if(stbi_is_hdr(filename.c_str()))
 		{
-			data = (uint8_t*)stbi_loadf(filename, &width, &height, &channels, 4);
+			data = (uint8_t*)stbi_loadf(filename.c_str(), &width, &height, &channels, 4);
 			format = VK_FORMAT_R32G32B32A32_SFLOAT;
 		}
 		else
 		{
-			data = stbi_load(filename, &width, &height, &channels, 4);
+			data = stbi_load(filename.c_str(), &width, &height, &channels, 4);
 			format = VK_FORMAT_R8G8B8A8_UNORM;
 		}
 		texture.create(data, width, height, format);

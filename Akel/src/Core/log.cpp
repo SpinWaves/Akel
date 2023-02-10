@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 06/02/2023
+// Updated : 10/02/2023
 
 #include <Core/core.h>
+#include <Platform/messageBox.h>
 
 namespace Ak::Core
 {
@@ -63,6 +64,11 @@ namespace Ak::Core
 		va_start(args, message);
 		vsprintf(buffer.data(), std::move(message).c_str(), args);
 		va_end(args);
+
+		#ifdef AK_RELEASE
+			if(type != STRONG_WARNING && type != WARNING)
+				messageBox(type, "Akel logs recieved a report", buffer, false);
+		#endif
 
 		_out.open(getTime().c_str(), std::ios::app);
         if(_out.is_open())

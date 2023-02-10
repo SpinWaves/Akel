@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 07/02/2023
+// Updated : 09/02/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -26,11 +26,17 @@
 // JSON/BSON
 #include <nlohmann/json.hpp>
 
+// Stb
+#include <stb_image.h>
+
 // Spir-V
 #include <spirv_reflect.h>
 
 // Entt
 #include <entt/entt.hpp>
+
+// PFD
+#include <pfd/portable-file-dialogs.h>
 
 // ImGui
 #include <imgui.h>

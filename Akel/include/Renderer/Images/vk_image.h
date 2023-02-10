@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/12/2022
-// Updated : 01/02/2023
+// Updated : 10/02/2023
 
 #ifndef __AK_VK_IMAGE__
 #define __AK_VK_IMAGE__
@@ -20,7 +20,7 @@ namespace Ak
 		public:
 			Image() = default;
 
-			void create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImageAspectFlags aspectFlags);
+			void create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties);
 			void copyBuffer(class Buffer& buffer);
 			void destroy() noexcept;
 
@@ -32,6 +32,10 @@ namespace Ak
 			inline VkSampler& getSampler() noexcept { return _sampler; }
 
 			virtual ~Image() = default;
+
+		protected:
+			void createImageView(VkImageViewType type, VkImageAspectFlags aspectFlags) noexcept;
+			void createSampler() noexcept;
 
 		private:
 			DescriptorSet _desc;
