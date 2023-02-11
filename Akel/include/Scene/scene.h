@@ -1,16 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 08/02/2023
+// Updated : 11/02/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
 
 #include <Akpch.h>
-#include <Platform/input.h>
 #include <Utils/fStrings.h>
-#include <Graphics/entity.h>
-#include <Core/profile.h>
+#include <Scene/entity.h>
 #include <Core/Memory/uniquePtrWrapper.h>
 
 namespace Ak
@@ -23,50 +21,41 @@ namespace Ak
 
 	class AK_API Scene
 	{
-		friend class Skybox;
-
 		public:
 			Scene(fString name = "Empty scene");
 
 			void onAttach(class RendererComponent* renderer, uint32_t id) noexcept;
-			void onPreRender();
-			void onRender3D();
-			void onRender2D();
+			void onRender();
 			void onQuit();
 
+			template <shaderlang lang>
+			void loadCustomShader(std::filesystem::path path);
 			inline void loadCustomShader(std::vector<uint32_t> byte_code) { _shaders.push_back(std::move(byte_code)); }
 
-			template <shaderlang lang>
-			inline void loadCustomShader(std::filesystem::path path)
-			{
-				if(lang == shaderlang::spirv)
-					_shaders.push_back(load_spirv_from_file(path.c_str()));
-				else
-					_loadCustomShader(lang, std::move(path));
-			}
+			Entity createEntity();
+			Entity createEntity(const std::string& name);
+
+			inline entt::registry& getRegistry() noexcept { return _entity_manager.getRegistry(); }
 
 			inline void setCullMode(VkCullModeFlags culling) noexcept { _cull_mode = culling; }
-
-			void add_2D_entity(Entity2D entity);
-			void add_3D_entity(Entity3D entity);
 
 			~Scene();
 
 		private:
 			void _loadCustomShader(shaderlang lang, std::filesystem::path path);
 
-			std::vector<class Entity3D> _3D_entities;
-			std::vector<class Entity2D> _2D_entities;
-
 			GraphicPipeline _pipeline;
 			std::vector<std::vector<uint32_t>> _shaders;
+			class RendererComponent* _renderer = nullptr;
 			VkCullModeFlags _cull_mode;
 			
 			Unique_ptr<class ShaderLoader> _loader;
+			Unique_ptr<class EntityManager> _entity_manager;
 			fString _name;
-			class RendererComponent* _renderer = nullptr;
 			uint32_t _id = -1;
 	};
 }
+
+#include <Scene/scene.inl>
 
 #endif
