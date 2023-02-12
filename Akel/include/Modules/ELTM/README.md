@@ -1,8 +1,9 @@
+# ELTM
+
 <p align="center">
     <img src="https://github.com/SpinWaves/Akel/blob/main/Resources/assets/eltm_logo.png" alt="drawing" width="500"/>
 </p>
 
-# ELTM
 ELTM (Extension Language for Text Management) is a C++ extension language that allows you to manage the texts of your projects more easily with Akel.
 Its use is not dissociable from C++ because it requires an instantiated context to use it. It is extremely simple and requires little time to learn.
 

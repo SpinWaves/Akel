@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/04/2021
-// Updated : 27/01/2023
+// Updated : 11/02/2023
 
 #ifndef __AK_FPS__
 #define __AK_FPS__
@@ -30,10 +30,10 @@ namespace Ak
 			int ticks = 0;
 			inline static int outputTicks = 0;
 			double ns = 1000000000.0 / 60.0;
-			uint32_t elapsed_time = 0;
-			uint32_t timer = 0;
-			uint64_t before = 0;			
+			uint64_t timer = 0;
+			uint64_t before = 0;
 			uint64_t now = 0;
+			uint32_t elapsed_time = 0;
 			bool make_up = false;
     };		
 }

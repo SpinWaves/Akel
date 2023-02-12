@@ -21,19 +21,19 @@ namespace Ak
 			inline entt::entity getSubEntity() const noexcept { return _entity; }
 
 			template <typename T, typename ... Args>
-			inline T& add_extension(Args&& ... args) { return _scene->getRegistry().emplace<T>(_entity, std::forward<Args>(args)...); }
+			inline T& addAttribute(Args&& ... args) { return _scene->getRegistry().emplace<T>(_entity, std::forward<Args>(args)...); }
 			template <typename T, typename ... Args>
-			inline T& get_or_add_extension(Args&& ... args) { return _scene.getRegistry().get_or_emplace<T>(_entity, std::forward<Args>(args)...); }
+			inline T& getOrAddAttribute(Args&& ... args) { return _scene.getRegistry().get_or_emplace<T>(_entity, std::forward<Args>(args)...); }
 			template <typename T>
-			inline T& get_extension() { return _scene.getRegistry().emplace_or_replace<T>(_entity, std::forward<Args>(args)...); }
+			inline T& getAttribute() { return _scene.getRegistry().emplace_or_replace<T>(_entity, std::forward<Args>(args)...); }
 			template <typename T>
-			inline T* try_get_extension() { return _scene->GetRegistry().try_get<T>(_entity); }
+			inline T* tryGetAttribute() { return _scene->GetRegistry().try_get<T>(_entity); }
 			template <typename T>
-			inline bool has_extension() { return _scene->GetRegistry().has<T>(_entity); }
+			inline bool hasAttribute() { return _scene->GetRegistry().has<T>(_entity); }
 			template <typename T>
-			inline void remove_extension() { _scene->GetRegistry().remove<T>(_entity); }
+			inline void removeAttribute() { _scene->GetRegistry().remove<T>(_entity); }
 			template <typename T>
-			inline void try_remove_extension() { if(has_extension<T>()) remove_extension<T>(); }
+			inline void tryRemoveAttribute() { if(hasAttribute<T>()) removeAttribute<T>(); }
 
 			~Entity() = default;
 

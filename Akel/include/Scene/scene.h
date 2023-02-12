@@ -26,6 +26,7 @@ namespace Ak
 
 			void onAttach(class RendererComponent* renderer, uint32_t id) noexcept;
 			void onRender();
+			void onUpdate(float timestep)
 			void onQuit();
 
 			template <shaderlang lang>

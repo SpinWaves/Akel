@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2022
-// Updated : 27/01/2023
+// Updated : 11/02/2023
 
 #ifndef __AK_SCENE_MANAGER__
 #define __AK_SCENE_MANAGER__
@@ -64,6 +64,7 @@ namespace Ak
 			std::vector<class Scene*> _scenes;
 			class RendererComponent* _renderer = nullptr;
 			int32_t _current_scene_id = -1;
+			float _timestep = 0.0f;
 			bool _has_been_destroyed = false;
 	};
 }

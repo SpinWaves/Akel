@@ -14,7 +14,11 @@ Ak::Application* Akel_mainApp()
 	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Cube using Akel Engine");
 	app->add_component<Ak::Camera3D>(0, 2, 0);
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
-	scene->add_3D_entity({ Models::cube, { -0.5f, -0.5f, -0.5f }, { 1.f, 1.f, 1.f }, Colors::none, Ak::Res::get().getTexturesPath() / "rodriguez.jpg" });
 	app->add_scene(scene);
+
+	Ak::Entity cube = scene->createEntity();
+	cube.addAttribute<Ak::TextureAttribute>(Ak::Res::get().getTexturesPath() / "rodriguez.png");
+	cube.addAttribute<Ak::TransformAttribute>({ 1.0f, 1.0f, 1.0f });
+	
 	return app;
 }

@@ -34,10 +34,10 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Native [NZSL](https://github.com/NazaraEngine/ShaderLang) support with helper modules
 
 # Coming soon...
-* Custom strings to replace std::string
 * Custom shading language
 * Models manager
-* Resources manager
+* Entity Component System
+* Scripting using Lua
 
 # Contribute
 You can contribute by :

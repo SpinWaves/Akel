@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 07/02/2023
+// Updated : 11/02/2023
 
 #include <Renderer/Images/texture.h>
 #include <Scene/scene.h>
@@ -57,19 +57,7 @@ namespace Ak
 		Matrixes::load_identity();
 	}
 
-	void Scene::add_2D_entity(Entity2D entity)
-	{
-		entity.initBuffers();
-		_2D_entities.push_back(std::move(entity));
-	}
-
-	void Scene::add_3D_entity(Entity3D entity)
-	{
-		entity.initBuffers();
-		_3D_entities.push_back(std::move(entity));
-	}
-
-	void Scene::onPreRender()
+	void Scene::onRender()
 	{
 		VkViewport viewport{};
 		viewport.x = 0.0f;
@@ -86,12 +74,6 @@ namespace Ak
 		vkCmdSetScissor(_renderer->getActiveCmdBuffer().get(), 0, 1, &scissor);
 
 		_pipeline.bindPipeline(_renderer->getActiveCmdBuffer());
-	}
-
-	void Scene::onRender2D()
-	{
-		if(_pipeline.getShaders().size() == 0 || _2D_entities.size() == 0)
-			return;
 
 		Matrixes::ortho(0, _renderer->getWindow()->size.X, 0, _renderer->getWindow()->size.Y);
 		std::vector<VkDescriptorSet> sets;
@@ -104,11 +86,6 @@ namespace Ak
 			{
 				if(shader.getUniforms().count("matrices"))
 				{
-					Matrixes::matrix_mode(matrix::view);
-					Matrixes::load_identity();
-					Matrixes::matrix_mode(matrix::model);
-					Matrixes::load_identity();
-
 					MatrixesBuffer mat;
 					mat.proj = Matrixes::get_matrix(matrix::proj);
 					mat.model = Matrixes::get_matrix(matrix::model);
@@ -119,52 +96,11 @@ namespace Ak
 			}
 		}
 		vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
-
-        for(Entity2D& ent : _2D_entities)
-		{
-			ent._vbo.bind(*_renderer);
-			ent._ibo.bind(*_renderer);
-
-			vkCmdDrawIndexed(_renderer->getActiveCmdBuffer().get(), static_cast<uint32_t>(ent._ibo.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
-		}
 	}
 
-	void Scene::onRender3D()
+	void Scene::onUpdate(float timestep)
 	{
-		if(_pipeline.getShaders().size() == 0 || _3D_entities.size() == 0)
-			return;
 
-		Matrixes::perspective(90.f, (float)_renderer->getWindow()->size.X / (float)_renderer->getWindow()->size.Y, 0.1f, 1000.f);
-		std::vector<VkDescriptorSet> sets;
-	
-		for(Shader& shader : _pipeline.getShaders())
-		{
-			for(DescriptorSet& set : shader.getDescriptorSets())
-				sets.push_back(set.get());
-			if(shader.getUniforms().size() > 0)
-			{
-				if(shader.getUniforms().count("matrices"))
-				{
-					MatrixesBuffer mat;
-					mat.proj = Matrixes::get_matrix(matrix::proj);
-					mat.model = Matrixes::get_matrix(matrix::model);
-					mat.view = Matrixes::get_matrix(matrix::view);
-
-					mat.proj[1][1] *= -1;
-
-					shader.getUniforms()["matrices"].getBuffer()->setData(sizeof(mat), &mat);
-				}
-			}
-		}
-		vkCmdBindDescriptorSets(_renderer->getActiveCmdBuffer().get(), _pipeline.getPipelineBindPoint(), _pipeline.getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
-
-        for(Entity3D& ent : _3D_entities)
-		{
-			ent._vbo.bind(*_renderer);
-			ent._ibo.bind(*_renderer);
-
-			vkCmdDrawIndexed(_renderer->getActiveCmdBuffer().get(), static_cast<uint32_t>(ent._ibo.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
-		}
 	}
 
 	void Scene::_loadCustomShader(shaderlang lang, std::filesystem::path path)
@@ -175,10 +111,6 @@ namespace Ak
 	void Scene::onQuit()
 	{
 		_loader->destroy();
-		for(auto entity : _2D_entities)
-			entity.destroy();
-		for(auto entity : _3D_entities)
-			entity.destroy();
 		_pipeline.destroy();
 	}
 
