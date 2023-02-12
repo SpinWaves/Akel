@@ -12,7 +12,7 @@
 
 namespace Ak
 {
-	class TextureAttribute
+	class AK_API TextureAttribute
 	{
 		friend class Scene;
 

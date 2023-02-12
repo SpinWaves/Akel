@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2023
-// Updated : 11/02/2023
+// Updated : 12/02/2023
 
 #ifndef __AK_TRANSFORM_ATTRIBUTE__
 #define __AK_TRANSFORM_ATTRIBUTE__
@@ -11,7 +11,7 @@
 
 namespace Ak
 {
-	class TransformAttribute
+	class AK_API TransformAttribute
 	{
 		Vec3f translation = { 0.0f, 0.0f, 0.0f };
 		Vec3f rotation = { 0.0f, 0.0f, 0.0f };
