@@ -1,33 +1,27 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 22/01/2023
+// Updated : 13/02/2023
 
-#include <Utils/camera.h>
-#include <Graphics/matrixes.h>
+#include <Scene/Cameras/camera3D.h>
 #include <Platform/input.h>
 #include <Core/core.h>
 
 namespace Ak
 {
-	Camera3D::Camera3D() : Component("__camera3D"), _up(0, 1, 0)
+	Camera3D::Camera3D() : _up(0, 1, 0)
 	{
 		_position.SET(0, 0, 0);
 		update_view();
 	}
-	Camera3D::Camera3D(Maths::Vec3<double> position) :  Component("__camera3D"), _position(std::move(position)), _up(0, 1, 0)
+	Camera3D::Camera3D(Maths::Vec3<double> position) : _position(std::move(position)), _up(0, 1, 0)
 	{
 		update_view();
 	}
-	Camera3D::Camera3D(double x, double y, double z) : Component("__camera3D"), _up(0, 1, 0)
+	Camera3D::Camera3D(double x, double y, double z) :  _up(0, 1, 0)
 	{
 		_position.SET(x, y, z);
 		update_view();
-	}
-
-	void Camera3D::onAttach()
-	{
-		getMainAppProjectFile().setBoolValue("__camera3D_component", true);
 	}
 
 	void Camera3D::update()

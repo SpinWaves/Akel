@@ -1,14 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 11/02/2023
+// Updated : 13/02/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
 
 #include <Akpch.h>
 #include <Utils/fStrings.h>
-#include <Scene/entity.h>
 #include <Core/Memory/uniquePtrWrapper.h>
 
 namespace Ak
@@ -18,6 +17,8 @@ namespace Ak
 		spirv,
 		nzsl
 	};
+
+	class Enity;
 
 	class AK_API Scene
 	{

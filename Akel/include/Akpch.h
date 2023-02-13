@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 09/02/2023
+// Updated : 13/02/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -22,6 +22,9 @@
 #include <volk.h>
 #include <SDL2/SDL_vulkan.h>
 #include <vk_mem_alloc.h>
+
+// Model loaders
+#include <tiny_obj_loader.h>
 
 // JSON/BSON
 #include <nlohmann/json.hpp>

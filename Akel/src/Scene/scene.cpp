@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 11/02/2023
+// Updated : 13/02/2023
 
 #include <Renderer/Images/texture.h>
 #include <Scene/scene.h>
@@ -75,7 +75,6 @@ namespace Ak
 
 		_pipeline.bindPipeline(_renderer->getActiveCmdBuffer());
 
-		Matrixes::ortho(0, _renderer->getWindow()->size.X, 0, _renderer->getWindow()->size.Y);
 		std::vector<VkDescriptorSet> sets;
 	
 		for(Shader& shader : _pipeline.getShaders())

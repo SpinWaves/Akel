@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 30/01/2023
+-- Updated : 13/02/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -9,7 +9,7 @@ add_repositories("local-repo libs")
 add_repositories("nazara-repo https://github.com/NazaraEngine/xmake-repo")
 add_requires("nzsl")
 
-add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "stb", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json")
+add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "stb", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json", "tinyobjloader")
 add_requires("volk", { configs = { header_only = true}})
 
 add_rules("mode.debug", "mode.release")
@@ -52,6 +52,7 @@ target("Akel")
 	add_packages("nzsl",          { public = true })
 	add_packages("libsndfile",    { public = true })
 	add_packages("openal-soft",   { public = true })
+	add_packages("tinyobjloader", { public = true })
 target_end() -- optional but I think the code is cleaner with this
 
 -- Akel Studio Build
@@ -107,6 +108,16 @@ target("SkyDemo")
 	add_includedirs("Akel/include", "SandBox/skybox/src", "libs/include")
     add_files("SandBox/skybox/src/*.cpp")
 	set_targetdir("SandBox/skybox")
+target_end()
+
+-- Model Demo Build
+target("ModelDemo")
+	set_default(false)
+    set_kind("binary")
+    add_deps("Akel")
+	add_includedirs("Akel/include", "SandBox/model/src", "libs/include")
+    add_files("SandBox/model/src/*.cpp")
+	set_targetdir("SandBox/model")
 target_end()
 
 -- Kila tester Build
