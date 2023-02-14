@@ -1,19 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 07/02/2023
+// Updated : 14/02/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
 #include <Renderer/rendererComponent.h>
 #include <Renderer/Images/texture.h>
+#include <Graphics/vertex.h>
 
 namespace Ak
 {
-	void GraphicPipeline::init(RendererComponent& renderer, std::vector<std::vector<uint32_t>> shaders, std::vector<Shader::VertexInput> inputs,
-				std::vector<Texture*> textures, VkPrimitiveTopology topology, VkPolygonMode polygonMode, 
-				VkCullModeFlags cullMode, VkFrontFace frontFace)
+	void GraphicPipeline::init(class RendererComponent& renderer, std::vector<std::vector<uint32_t>> shaders, const PipelineDesc& desc)
     {
 		std::vector<VkPipelineShaderStageCreateInfo> stages;
 		std::vector<VkDescriptorSetLayout> descriptor_layouts;
@@ -34,10 +33,7 @@ namespace Ak
 				}
 			}
 			else
-			{
-				for(Texture* tex : textures)
-					tex->setShaderInterface(_shaders.back());
-			}
+				desc.main_texture->setShaderInterface(_shaders.back());
 
 			_shaders.back().createSets();
 
@@ -52,35 +48,16 @@ namespace Ak
 				descriptor_layouts.push_back(desc.get());
 		}
 
-		std::vector<VkVertexInputBindingDescription> bindingDescriptions;
-		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
-		uint32_t lastAttribute = 0;
-
-		for(const auto& input : inputs)
-		{
-			for(const auto& binding : input.getBindingDescriptions())
-				bindingDescriptions.emplace_back(binding);
-
-			for(const auto& attribute : input.getAttributeDescriptions())
-			{
-				auto &newAttribute = attributeDescriptions.emplace_back(attribute);
-				newAttribute.location += lastAttribute;
-			}
-
-			if(!input.getAttributeDescriptions().empty())
-				lastAttribute = attributeDescriptions.back().location + 1;
-		}
-
 		VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
 		vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		vertexInputStateCreateInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
-		vertexInputStateCreateInfo.pVertexBindingDescriptions = bindingDescriptions.data();
-		vertexInputStateCreateInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-		vertexInputStateCreateInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+		vertexInputStateCreateInfo.vertexBindingDescriptionCount = 1;
+		vertexInputStateCreateInfo.pVertexBindingDescriptions = &Vertex::getBindingDescriptions();
+		vertexInputStateCreateInfo.vertexAttributeDescriptionCount = 3;
+		vertexInputStateCreateInfo.pVertexAttributeDescriptions = Vertex::getAttributeDescriptions().data();
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        inputAssembly.topology = topology;
+        inputAssembly.topology = desc.topology;
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
 		VkDynamicState states[] = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
@@ -114,10 +91,10 @@ namespace Ak
         rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         rasterizer.depthClampEnable = VK_FALSE;
         rasterizer.rasterizerDiscardEnable = VK_FALSE;
-        rasterizer.polygonMode = polygonMode;
-        rasterizer.lineWidth = 1.0f;
-        rasterizer.cullMode = cullMode;
-        rasterizer.frontFace = frontFace;
+        rasterizer.polygonMode = desc.mode;
+        rasterizer.lineWidth = desc.line_width;
+        rasterizer.cullMode = desc.culling;
+        rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
         rasterizer.depthBiasEnable = VK_FALSE;
 
         VkPipelineMultisampleStateCreateInfo multisampling{};
