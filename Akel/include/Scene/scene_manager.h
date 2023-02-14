@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2022
-// Updated : 11/02/2023
+// Updated : 14/02/2023
 
 #ifndef __AK_SCENE_MANAGER__
 #define __AK_SCENE_MANAGER__
@@ -22,6 +22,7 @@ namespace Ak
 			void onAttach() override;
 			void onRender() override;
 			void update() override;
+			void onEvent(Input& input) override;
 			void onQuit() override;
 
 			inline void add_scene(class Scene* scene)

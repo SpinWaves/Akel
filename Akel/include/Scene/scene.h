@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 13/02/2023
+// Updated : 14/02/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -9,6 +9,7 @@
 #include <Akpch.h>
 #include <Utils/fStrings.h>
 #include <Core/Memory/uniquePtrWrapper.h>
+#include <Platform/input.h>
 
 namespace Ak
 {
@@ -27,7 +28,8 @@ namespace Ak
 
 			void onAttach(class RendererComponent* renderer, uint32_t id) noexcept;
 			void onRender();
-			void onUpdate(float timestep)
+			void onUpdate(float timestep);
+			void onEvent(Input& input);
 			void onQuit();
 
 			template <shaderlang lang>
@@ -38,6 +40,9 @@ namespace Ak
 			Entity createEntity(const std::string& name);
 
 			inline entt::registry& getRegistry() noexcept { return _entity_manager.getRegistry(); }
+
+			template <typename T, typename ... Args>
+			void addCamera(Args&& ... args);
 
 			inline void setCullMode(VkCullModeFlags culling) noexcept { _cull_mode = culling; }
 
@@ -51,6 +56,7 @@ namespace Ak
 			class RendererComponent* _renderer = nullptr;
 			VkCullModeFlags _cull_mode;
 			
+			Unique_ptr<class Cam::BaseCamera> _camera;
 			Unique_ptr<class ShaderLoader> _loader;
 			Unique_ptr<class EntityManager> _entity_manager;
 			fString _name;

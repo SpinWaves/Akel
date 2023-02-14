@@ -1,28 +1,39 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 13/02/2023
+// Updated : 14/02/2023
 
 #include <Renderer/Images/texture.h>
 #include <Scene/scene.h>
 #include <Renderer/rendererComponent.h>
-#include <Graphics/matrixes.h>
 #include <Renderer/Buffers/vk_ubo.h>
 #include "shader_loader.h"
 #include <Graphics/builtin_shaders.h>
 
 namespace Ak
 {
-	struct MatrixesBuffer
+	struct MatricesBuffer
 	{
 		alignas(16) glm::mat4 model;
 		alignas(16) glm::mat4 view;
 		alignas(16) glm::mat4 proj;
 	};
 
-	Scene::Scene(fString name) : _name(std::move(name)), _loader(create_Unique_ptr<ShaderLoader>())
+	Scene::Scene(fString name) :
+		_name(std::move(name)), _entity_manager(create_Unique_ptr<EntityManager>()),
+		_loader(create_Unique_ptr<ShaderLoader>()), _camera(nullptr)
 	{
 		_loader->init();
+	}
+
+	Entity createEntity()
+	{
+		return _entity_manager->create();
+	}
+
+	Entity createEntity(const std::string& name)
+	{
+		return _entity_manager->create(name);
 	}
 
 	void Scene::onAttach(RendererComponent* renderer, uint32_t id) noexcept
@@ -48,13 +59,6 @@ namespace Ak
 				{ Vertex::getBindingDescription() },
 				{ Vertex::getAttributeDescriptions()[0], Vertex::getAttributeDescriptions()[1], Vertex::getAttributeDescriptions()[2] },
 		} }, std::move(textures), VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
-
-		Matrixes::matrix_mode(matrix::view);
-		Matrixes::load_identity();
-		Matrixes::matrix_mode(matrix::model);
-		Matrixes::load_identity();
-		Matrixes::matrix_mode(matrix::proj);
-		Matrixes::load_identity();
 	}
 
 	void Scene::onRender()
@@ -85,9 +89,9 @@ namespace Ak
 			{
 				if(shader.getUniforms().count("matrices"))
 				{
-					MatrixesBuffer mat;
-					mat.proj = Matrixes::get_matrix(matrix::proj);
-					mat.model = Matrixes::get_matrix(matrix::model);
+					MatricesBuffer mat;
+					mat.proj = _camera->getProj();
+					mat.model = _camera->getView();
 					mat.view = Matrixes::get_matrix(matrix::view);
 
 					shader.getUniforms()["matrices"].getBuffer()->setData(sizeof(mat), &mat);
@@ -99,7 +103,13 @@ namespace Ak
 
 	void Scene::onUpdate(float timestep)
 	{
+		Maths::Vec2i win_size = _renderer->getWindow()->size;
+		_camera->update(win_size.X / win_size.Y);
+	}
 
+	void Scene::onEvent(Input& input)
+	{
+		_camera->onEvent(input);
 	}
 
 	void Scene::_loadCustomShader(shaderlang lang, std::filesystem::path path)

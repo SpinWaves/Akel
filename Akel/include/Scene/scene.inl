@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2023
-// Updated : 11/02/2023
+// Updated : 14/02/2023
 
 namespace Ak
 {
@@ -12,5 +12,13 @@ namespace Ak
 			_shaders.push_back(load_spirv_from_file(path.c_str()));
 		else
 			_loadCustomShader(lang, std::move(path));
+	}
+
+	template <typename T, typename ... Args>
+	void Scene::addCamera(Args&& ... args)
+	{
+		static_assert(std::is_base_of<Cam::BaseCamera, T>::value, "Scene camera must inherit from Ak::Cam::BaseCamera");
+		T* cam = memAlloc<T>(std::forward(args)...);
+		_camera = make_Unique_ptr<Cam::BaseCamera>(cam);
 	}
 }

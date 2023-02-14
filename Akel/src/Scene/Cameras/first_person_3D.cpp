@@ -1,37 +1,38 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 13/02/2023
+// Updated : 14/02/2023
 
 #include <Scene/Cameras/camera3D.h>
 #include <Platform/input.h>
 #include <Core/core.h>
 
-namespace Ak
+namespace Ak::Cam
 {
-	Camera3D::Camera3D() : _up(0, 1, 0)
+	FirstPerson3D::FirstPerson3D() : BaseCamera(), _up(0, 1, 0), _position(0.0, 0.0, 0.0)
 	{
-		_position.SET(0, 0, 0);
-		update_view();
-	}
-	Camera3D::Camera3D(Maths::Vec3<double> position) : _position(std::move(position)), _up(0, 1, 0)
-	{
-		update_view();
-	}
-	Camera3D::Camera3D(double x, double y, double z) :  _up(0, 1, 0)
-	{
-		_position.SET(x, y, z);
 		update_view();
 	}
 
-	void Camera3D::update()
+	FirstPerson3D::FirstPerson3D(Maths::Vec3<double> position, float fov) : BaseCamera(), _position(std::move(position)), _up(0, 1, 0), _fov(fov)
+	{
+		update_view();
+	}
+
+	FirstPerson3D::FirstPerson3D(double x, double y, double z, float fov) : BaseCamera(), _up(0, 1, 0), _fov(fov), _position(x, y, z)
+	{
+		update_view();
+	}
+
+	void FirstPerson3D::onUpdate(float aspect)
 	{
 		update_view();
 		_target = _position + _direction;
-    	Matrixes::lookAt(_position.X, _position.Y, _position.Z, _target.X, _target.Y, _target.Z, 0, 1, 0);
+		_view = glm::lookAt(glm::vec3(_position.X, _position.Y, _position.Z), glm::vec3(_target.X, _target.Y, _target.Z), glm::vec3(0, 1, 0))
+		_proj = glm::perspective<float>(glm::radians(_fov), aspect, 0.1f, 1000.0f);
 	}
 
-	void Camera3D::onEvent(Input& input)
+	void FirstPerson3D::onEvent(Input& input)
 	{
 		if(_isMouseGrabed)
 		{
@@ -61,7 +62,7 @@ namespace Ak
 		_position += _mov * _speed;
 	}
 
-	void Camera3D::update_view()
+	void FirstPerson3D::update_view()
 	{
 		_phi = _phi > 89 ? 89 : _phi;
 		_phi = _phi < -89 ? -89 : _phi;

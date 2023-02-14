@@ -12,8 +12,8 @@ Ak::AkelInstance Akel_init()
 Ak::Application* Akel_mainApp()
 {
 	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Model Loading using Akel Engine");
-	app->add_component<Ak::Camera3D>(0, 2, 0);
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
+	scene->addCamera<Ak::Cam::FirstPerson3D>(1.0f, 1.0f, 1.0f);
 	app->add_scene(scene);
 
 	Ak::Entity lem = scene->createEntity();
