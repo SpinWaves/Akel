@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 29/01/2023
+// Updated : 15/02/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -111,8 +111,7 @@ namespace Ak
 		if(!_is_init)
 			return;
 
-		std::mutex mutex;
-        std::unique_lock<std::mutex> watchdog(mutex, std::try_to_lock);
+        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
         vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 

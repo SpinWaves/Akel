@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/11/2022
-// Updated : 14/02/2023
+// Updated : 15/02/2023
 
 #include <Scene/scene.h>
 #include <Scene/scene_manager.h>
@@ -9,7 +9,9 @@
 
 namespace Ak
 {
-	SceneManager::SceneManager(class RendererComponent* renderer) : Component("__scenes_manager"), _renderer(renderer) {}
+	SceneManager::SceneManager(class RendererComponent* renderer)
+	: Component("__scenes_manager"), _renderer(renderer), _scene_renderer(create_Unique_ptr<SceneRenderer>())
+	{}
 
 	void SceneManager::onAttach()
 	{
@@ -21,7 +23,7 @@ namespace Ak
 	{
 		if(!_renderer->isInit())
 			return;
-		_scenes[_current_scene_id]->onRender();
+		_scene_renderer->render(_scenes[_current_scene_id]);
 	}
 
 	void SceneManager::update()

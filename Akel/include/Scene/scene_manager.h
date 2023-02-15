@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2022
-// Updated : 14/02/2023
+// Updated : 15/02/2023
 
 #ifndef __AK_SCENE_MANAGER__
 #define __AK_SCENE_MANAGER__
@@ -11,6 +11,7 @@
 #include <Core/log.h>
 #include <Core/profile.h>
 #include "scene.h"
+#include <Renderer/scene_renderer.h>
 
 namespace Ak
 {
@@ -63,6 +64,7 @@ namespace Ak
 
 		private:
 			std::vector<class Scene*> _scenes;
+			Unique_ptr<SceneRenderer> _scene_renderer = nullptr;
 			class RendererComponent* _renderer = nullptr;
 			int32_t _current_scene_id = -1;
 			float _timestep = 0.0f;

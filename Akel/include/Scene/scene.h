@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 14/02/2023
+// Updated : 15/02/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -23,11 +23,12 @@ namespace Ak
 
 	class AK_API Scene
 	{
+		friend class SceneRenderer;
+
 		public:
 			Scene(fString name = "Empty scene");
 
 			void onAttach(class RendererComponent* renderer, uint32_t id) noexcept;
-			void onRender();
 			void onUpdate(float timestep);
 			void onEvent(Input& input);
 			void onQuit();
