@@ -43,11 +43,6 @@
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_vulkan.h>
 
-// NZSL
-#include <NZSL/Parser.hpp>
-#include <NZSL/SpirvWriter.hpp>
-#include <NZSL/FilesystemModuleResolver.hpp>
-
 // Lua
 #include <sol/sol.hpp>
 
@@ -69,6 +64,11 @@
 	#undef min
 	#undef ERROR
 #endif
+
+// NZSL
+#include <NZSL/Parser.hpp>
+#include <NZSL/SpirvWriter.hpp>
+#include <NZSL/FilesystemModuleResolver.hpp>
 
 // MultiThreading
 #include <thread>
