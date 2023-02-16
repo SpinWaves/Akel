@@ -1,12 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/02/2023
-// Updated : 14/02/2023
+// Updated : 16/02/2023
 
 #ifndef __AK_BASE_CAMERA__
 #define __AK_BASE_CAMERA__
 
-#include <Core/profile.h>
+#include <Akpch.h>
 
 namespace Ak::Cam
 {
@@ -23,9 +23,9 @@ namespace Ak::Cam
 
 			virtual ~BaseCamera() = default;
 
-		private:
-			glm::mat4 _view(1.0f);
-			glm::mat4 _proj(1.0f);
+		protected:
+			glm::mat4 _view = glm::mat4(1.0f);
+			glm::mat4 _proj = glm::mat4(1.0f);
 	};
 }
 

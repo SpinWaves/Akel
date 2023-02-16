@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/02/2023
-// Updated : 14/02/2023
+// Updated : 16/02/2023
 
 #include <Scene/scene.h>
 #include <Scene/entity_manager.h>
@@ -17,7 +17,7 @@ namespace Ak
 		return Entity(e, _scene);
 	}
 
-	Entity EntityManager::create(const std::string& name) noexcept
+	Entity EntityManager::create(const std::string& name)
 	{
 		auto e = _registry.create();
 		_registry.emplace<NameAttribute>(e, name);

@@ -1,9 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 12/02/2023
+// Updated : 16/02/2023
 
-#include <Scene/Attributes/texture_attributes.h>
+#include <Scene/Attributes/texture_attribute.h>
 
 namespace Ak
 {

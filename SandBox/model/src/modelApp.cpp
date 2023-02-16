@@ -17,7 +17,7 @@ Ak::Application* Akel_mainApp()
 	app->add_scene(scene);
 
 	Ak::Entity lem = scene->createEntity();
-	lem.addAttribute<Ak::TransformAttribute>({ 1.0f, 1.0f, 1.0f });
+	lem.addAttribute<Ak::TransformAttribute>(Ak::Maths::Vec3f{ 1.0f, 1.0f, 1.0f });
 	lem.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "apollo_lunar_module.obj");
 	
 	return app;

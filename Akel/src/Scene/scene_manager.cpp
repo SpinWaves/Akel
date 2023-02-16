@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/11/2022
-// Updated : 15/02/2023
+// Updated : 16/02/2023
 
 #include <Scene/scene.h>
 #include <Scene/scene_manager.h>
@@ -17,6 +17,9 @@ namespace Ak
 	{
 		getMainAppProjectFile().setBoolValue("__scene_manager", true);
 		_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
+
+		SceneRendererSettings settings;
+		_scene_renderer->init(settings);
 	}
 
 	void SceneManager::onRender()
@@ -50,6 +53,8 @@ namespace Ak
 			scene->onQuit();
 			memFree(scene);
 		}
+		if(_scene_renderer)
+			_scene_renderer->destroy();
 		_has_been_destroyed = true;
 	}
 }

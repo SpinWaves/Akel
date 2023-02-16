@@ -1,30 +1,25 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 15/02/2023
+// Updated : 16/02/2023
 
 #include <Renderer/rendererComponent.h>
-#include <Renderer/Pipeline/pipeline_manager.h>
-#include <Core/memory/sharedPtrWrapper.h>
+#include <Renderer/Pipeline/pipelines_manager.h>
+#include <Core/Memory/sharedPtrWrapper.h>
 
 namespace Ak
 {
-	void PipelinesManager::init(RendererComponent* renderer)
+	std::shared_ptr<GraphicPipeline> PipelinesManager::getPipeline(RendererComponent& renderer, PipelineDesc& desc)
 	{
-		_renderer = renderer;
-	}
-
-	std:::shared_ptr<GraphicPipeline> PipelinesManager::getPipeline(const PipelineDesc& desc)
-	{
-		auto it = std::find_if(_cache.begin(), _cache.end(), [&](const GraphicPipeline& pipeline)
+		auto it = std::find_if(_cache.begin(), _cache.end(), [&](std::shared_ptr<GraphicPipeline> pipeline) -> bool
 		{
-			return pipeline.getDescription() == desc;
+			return pipeline->getDescription() == desc;
 		});
 
 		if(it != _cache.end())
 			return *it;
-		std::shared_ptr<GraphicPipeline> new_pipeline = create_shared_ptr<GraphicPipeline>();
-		new_pipeline->init(_renderer);
+		std::shared_ptr<GraphicPipeline> new_pipeline = create_shared_ptr_w<GraphicPipeline>();
+		new_pipeline->init(renderer, desc);
 		_cache.push_back(new_pipeline);
 		return new_pipeline;
 	}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/02/2023
-// Updated : 15/02/2023
+// Updated : 16/02/2023
 
 #ifndef __AK_SCENE_RENDERER__
 #define __AK_SCENE_RENDERER__
@@ -14,20 +14,32 @@
 
 namespace Ak
 {
-	class AK_API SceneRenderer
+	struct SceneRendererSettings
+	{
+		bool shadows = true;
+		bool geometries = true;
+		bool skybox = true;
+		bool post_process = false;
+	};
+
+	class SceneRenderer
 	{
 		public:
-			SceneRenderer();
+			SceneRenderer() = default;
 
-			void init(class RendererComponent* renderer);
+			void init(SceneRendererSettings settings);
 			void render(Scene* scene);
+			void destroy();
 
 			~SceneRenderer() = default;
 
-			private:
+		private:
+			void forwardPass(Scene* scene);
+
 			PipelinesManager _pipelines_manager;
 			ForwardData _forward_data;
-			std::shared_ptr<Shader> _main_vertex_shader = nullptr;
+			Scene* _scene_cache = nullptr;
+			SceneRendererSettings _settings;
 	};
 }
 

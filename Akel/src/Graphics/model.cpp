@@ -1,21 +1,21 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 13/02/2023
+// Updated : 16/02/2023
 
 #include <Graphics/model.h>
 #include <Core/log.h>
 
 namespace Ak
 {
-	Model(std::filesystem::path file) : _file(std::move(file)) {}
+	Model::Model(std::filesystem::path file) : _file(std::move(file)) {}
 
-	Model(const Mesh& mesh)
+	Model::Model(const Mesh& mesh)
 	{
 		_meshes.push_back(mesh);
 	}
 
-	Model(Mesh&& mesh)
+	Model::Model(Mesh&& mesh)
 	{
 		_meshes.push_back(std::move(mesh));
 	}
@@ -32,7 +32,7 @@ namespace Ak
 		else if(_file.extension() == ".gltf")
 			loadGLTF();
 		else
-			Core::log::report(FATAL_ERROR, "Model : unsupported model file type '%s'", _file.s_ctr());
+			Core::log::report(FATAL_ERROR, "Model : unsupported model file type '%s'", _file.c_str());
 
 		Core::log::report(MESSAGE, "Model : loaded file '%s'", _file.c_str());
 	}
@@ -80,5 +80,10 @@ namespace Ak
 		}
 
 		_meshes.emplace_back(vertices, indices);
+	}
+
+	void Model::loadGLTF()
+	{
+
 	}
 }

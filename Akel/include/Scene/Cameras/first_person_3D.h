@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 14/02/2023
+// Updated : 16/02/2023
 
 #ifndef __AK_FIRST_PERSON_CAMERA_3D__
 #define __AK_FIRST_PERSON_CAMERA_3D__ 
@@ -23,7 +23,7 @@ namespace Ak::Cam
 			void onUpdate(float aspect) override;
 			void onEvent(Input& input) override;
 
-			FirstPerson3D() = default;
+			~FirstPerson3D() = default;
 
 		private:
 			void update_view();

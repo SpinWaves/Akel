@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/02/2023
-// Updated : 13/02/2023
+// Updated : 16/02/2023
 
 #ifndef __AK_MODEL_ATTRIBUTE__
 #define __AK_MODEL_ATTRIBUTE__
 
 #include <Akpch.h>
+#include <Graphics/model.h>
 
 namespace Ak
 {

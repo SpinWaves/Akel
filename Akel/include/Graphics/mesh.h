@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 13/02/2023
+// Updated : 16/02/2023
 
 #ifndef __AK_MESH__
 #define __AK_MESH__
@@ -18,6 +18,9 @@ namespace Ak
 		public:
 			Mesh() = default;
 			Mesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+
+			inline VBO& getVertexBuffer() noexcept { return _vertex_buffer; }
+			inline IBO& getIndexBuffer() noexcept { return _index_buffer; }
 
 			virtual ~Mesh() = default;
 

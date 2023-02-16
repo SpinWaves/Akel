@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 14/02/2023
+// Updated : 16/02/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -12,46 +12,44 @@
 
 namespace Ak
 {
-	void GraphicPipeline::init(class RendererComponent& renderer, std::vector<std::vector<uint32_t>> shaders, const PipelineDesc& desc)
+	void GraphicPipeline::init(class RendererComponent& renderer, PipelineDesc& desc)
     {
 		std::vector<VkPipelineShaderStageCreateInfo> stages;
 		std::vector<VkDescriptorSetLayout> descriptor_layouts;
 
-		for(int i = 0; i < shaders.size(); i++)
+		for(int i = 0; i < desc.shaders.size(); i++)
 		{
-			_shaders.emplace_back(std::move(shaders[i]), &renderer);
-			_shaders.back().generate();
-
-			if(textures.empty())
+			if(desc.main_texture == nullptr)
 			{
-				if(_shaders.back().getImageSamplers().count("texSampler"))
+				if(desc.shaders[i].get().getImageSamplers().count("texSampler"))
 				{
 					_dummy = create_Unique_ptr<Texture>();
 					std::array<uint8_t, 4> pixel = { 255, 255, 255, 255 };
 					_dummy->create(pixel.data(), 1, 1, VK_FORMAT_R8G8B8A8_UNORM);
-					_dummy->setShaderInterface(_shaders.back());
+					_dummy->setShaderInterface(desc.shaders[i].get());
 				}
 			}
 			else
-				desc.main_texture->setShaderInterface(_shaders.back());
+				desc.main_texture->setShaderInterface(desc.shaders[i].get());
 
-			_shaders.back().createSets();
+			desc.shaders[i].get().createSets();
 
 			VkPipelineShaderStageCreateInfo shaderStageInfo{};
 			shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-			shaderStageInfo.stage = _shaders.back().getType();
-			shaderStageInfo.module = _shaders.back().getShaderModule();
-			shaderStageInfo.pName = _shaders.back().get_entry_point_name().c_str();
+			shaderStageInfo.stage = desc.shaders[i].get().getType();
+			shaderStageInfo.module = desc.shaders[i].get().getShaderModule();
+			shaderStageInfo.pName = desc.shaders[i].get().get_entry_point_name().c_str();
 
 			stages.push_back(shaderStageInfo);
-			for(DescriptorSetLayout& desc : _shaders.back().getDescriptorSetLayouts())
-				descriptor_layouts.push_back(desc.get());
+			for(DescriptorSetLayout& descriptor : desc.shaders[i].get().getDescriptorSetLayouts())
+				descriptor_layouts.push_back(descriptor.get());
 		}
 
+		auto binding_description = Vertex::getBindingDescription();
 		VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
 		vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 		vertexInputStateCreateInfo.vertexBindingDescriptionCount = 1;
-		vertexInputStateCreateInfo.pVertexBindingDescriptions = &Vertex::getBindingDescriptions();
+		vertexInputStateCreateInfo.pVertexBindingDescriptions = &binding_description;
 		vertexInputStateCreateInfo.vertexAttributeDescriptionCount = 3;
 		vertexInputStateCreateInfo.pVertexAttributeDescriptions = Vertex::getAttributeDescriptions().data();
 
@@ -153,9 +151,9 @@ namespace Ak
         if(vkCreateGraphicsPipelines(Render_Core::get().getDevice().get(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &_graphicsPipeline) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create a graphics pipeline");
 
-		if(!_shaders.empty())
+		if(!desc.shaders.empty())
 		{
-			for(Shader& shader : _shaders)
+			for(Shader& shader : desc.shaders)
 				shader.destroyModule();
 		}
     }
@@ -165,9 +163,9 @@ namespace Ak
         Ak_assert(_graphicsPipeline != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
         vkDestroyPipeline(Render_Core::get().getDevice().get(), _graphicsPipeline, nullptr);
         
-		if(!_shaders.empty())
+		if(!_desc.shaders.empty())
 		{
-			for(Shader& shader : _shaders)
+			for(Shader& shader : _desc.shaders)
 				shader.destroy();
 		}
 

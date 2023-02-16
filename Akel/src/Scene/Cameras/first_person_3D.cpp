@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 14/02/2023
+// Updated : 16/02/2023
 
-#include <Scene/Cameras/camera3D.h>
 #include <Platform/input.h>
+#include <Scene/Cameras/first_person_3D.h>
 #include <Core/core.h>
 
 namespace Ak::Cam
@@ -28,7 +28,7 @@ namespace Ak::Cam
 	{
 		update_view();
 		_target = _position + _direction;
-		_view = glm::lookAt(glm::vec3(_position.X, _position.Y, _position.Z), glm::vec3(_target.X, _target.Y, _target.Z), glm::vec3(0, 1, 0))
+		_view = glm::lookAt(glm::vec3(_position.X, _position.Y, _position.Z), glm::vec3(_target.X, _target.Y, _target.Z), glm::vec3(0, 1, 0));
 		_proj = glm::perspective<float>(glm::radians(_fov), aspect, 0.1f, 1000.0f);
 	}
 

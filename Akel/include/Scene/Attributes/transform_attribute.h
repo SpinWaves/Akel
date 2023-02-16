@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2023
-// Updated : 13/02/2023
+// Updated : 16/02/2023
 
 #ifndef __AK_TRANSFORM_ATTRIBUTE__
 #define __AK_TRANSFORM_ATTRIBUTE__
@@ -22,8 +22,11 @@ namespace Ak
 
 		inline glm::mat4 getTransform() const
 		{
-			glm::mat4 rot = glm::toMat4(glm::quat(rotation));
-			return glm::translate(glm::mat4(1.0f), translation) * rot * glm::scale(glm::mat4(1.0f), scale);
+			glm::vec3 glm_rot(rotation.X, rotation.Y, rotation.Z);
+			glm::vec3 glm_trans(translation.X, translation.Y, translation.Z);
+			glm::vec3 glm_scale(scale.X, scale.Y, scale.Z);
+			glm::mat4 rot = glm::toMat4(glm::quat(glm_rot));
+			return glm::translate(glm::mat4(1.0f), glm_trans) * rot * glm::scale(glm::mat4(1.0f), glm_scale);
 		}
 	};
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 15/02/2023
+// Updated : 16/02/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -49,9 +49,6 @@ namespace Ak
 
 		vkResetFences(device, 1, &_semaphore.getInFlightFence(_active_image_index));
 
-		_cmd.beginRecord(_active_image_index);
-		_pass.begin();
-
 		return true;
 	}
 
@@ -59,9 +56,6 @@ namespace Ak
 	{
 		if(!_is_init)
 			return;
-
-		_pass.end();
-		_cmd.endRecord(_active_image_index);
 
 		VkSubmitInfo submitInfo{};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
