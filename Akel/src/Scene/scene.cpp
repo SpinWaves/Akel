@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 16/02/2023
+// Updated : 17/02/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -43,10 +43,10 @@ namespace Ak
 		_renderer = renderer;
 		if(_forward_shaders.empty())
 		{
-			_forward_shaders.emplace_back(std::move(_loader->loadShader(shaderlang::nzsl, std::string_view{default_vertex_shader})), renderer);
-			_forward_shaders.back().generate();
-			_forward_shaders.emplace_back(std::move(_loader->loadShader(shaderlang::nzsl, std::string_view{default_fragment_shader})), renderer);
-			_forward_shaders.back().generate();
+			std::shared_ptr<Shader> vshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{default_vertex_shader}), _renderer);
+			_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(vshader)));
+			std::shared_ptr<Shader> fshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{default_fragment_shader}), _renderer);
+			_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(fshader)));
 		}
 	}
 
@@ -63,8 +63,8 @@ namespace Ak
 
 	void Scene::_loadCustomShader(shaderlang lang, std::filesystem::path path)
 	{
-		_forward_shaders.emplace_back(std::move(_loader->loadShader(lang, std::move(path))), _renderer);
-		_forward_shaders.back().generate();
+		std::shared_ptr<Shader> shader = create_shared_ptr_w<Shader>(_loader->loadShader(lang, std::move(path)), _renderer);
+		_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(shader)));
 	}
 
 	void Scene::onQuit()

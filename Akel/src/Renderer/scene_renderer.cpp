@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 16/02/2023
+// Updated : 17/02/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -28,34 +28,19 @@ namespace Ak
 	{
 		auto renderer = scene->_renderer;
 
-		VkViewport viewport{};
-		viewport.x = 0.0f;
-		viewport.y = 0.0f;
-		viewport.width = (float)renderer->getSwapChain()._swapChainExtent.width;
-		viewport.height = (float)renderer->getSwapChain()._swapChainExtent.height;
-		viewport.minDepth = 0.0f;
-		viewport.maxDepth = 1.0f;
-		vkCmdSetViewport(renderer->getActiveCmdBuffer().get(), 0, 1, &viewport);
-
-		VkRect2D scissor{};
-		scissor.offset = { 0, 0 };
-		scissor.extent = renderer->getSwapChain()._swapChainExtent;
-		vkCmdSetScissor(renderer->getActiveCmdBuffer().get(), 0, 1, &scissor);
-
 		if(_settings.geometries)
 		{
 			if(_scene_cache != scene)
 			{
 				_forward_data.shaders.clear();
-				for(Shader& shader : scene->_forward_shaders)
-					_forward_data.shaders.push_back(shader);
+				_forward_data.shaders = scene->_forward_shaders;
 			}
 			
 			auto world = scene->getRegistry().view<ModelAttribute>();
 			for(auto e : world)
 			{
-				Entity entity = { e, scene };
-				for(const Mesh& mesh : entity.getAttribute<ModelAttribute>().model.getMeshes())
+				ModelAttribute model = world.get<ModelAttribute>(e);
+				for(const Mesh& mesh : model.model.getMeshes())
 				{
 					RenderCommandData command;
 					command.mesh = &const_cast<Mesh&>(mesh);
@@ -87,18 +72,22 @@ namespace Ak
 
 		std::vector<VkDescriptorSet> sets;
 	
-		for(Shader& shader : _forward_data.shaders)
+		for(ShaderID id : _forward_data.shaders)
 		{
-			for(DescriptorSet& set : shader.getDescriptorSets())
+			auto shader = ShadersLibrary::get().getShader(id);
+			for(DescriptorSet& set : shader->getDescriptorSets())
 				sets.push_back(set.get());
-			if(shader.getUniforms().size() > 0)
+			if(shader->getUniforms().size() > 0)
 			{
-				MatricesBuffer mat;
-				mat.proj = scene->_camera->getProj();
-				mat.view = scene->_camera->getView();
-				mat.model = glm::mat4(1.0f);
-				mat.proj[1][1] *= -1;
-				shader.getUniforms()["matrices"].getBuffer()->setData(sizeof(mat), &mat);
+				if(shader->getUniforms().count("matrices"))
+				{
+					MatricesBuffer mat;
+					mat.proj = scene->_camera->getProj();
+					mat.view = scene->_camera->getView();
+					mat.model = glm::mat4(1.0f);
+					mat.proj[1][1] *= -1;
+					shader->getUniforms()["matrices"].getBuffer()->setData(sizeof(mat), &mat);
+				}
 			}
 		}
 		vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
@@ -107,8 +96,11 @@ namespace Ak
 		{
 			if(command.mesh != nullptr)
 			{
+				std::cout << "pouicsdf" << std::endl;
 				command.mesh->getVertexBuffer().bind(*renderer);
+				std::cout << "pouic" << std::endl;
 				command.mesh->getIndexBuffer().bind(*renderer);
+				std::cout << "pouicgfdd" << std::endl;
 				vkCmdDrawIndexed(renderer->getActiveCmdBuffer().get(), static_cast<uint32_t>(command.mesh->getIndexBuffer().getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
 			}
 		}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 08/02/2023
+// Updated : 17/02/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -173,7 +173,7 @@ namespace Ak
 			memFree(_buffer);
 	}
 
-	Shader::Shader(const std::vector<uint32_t> byte_code, RendererComponent* renderer) : _byte_code(std::move(byte_code)), _renderer(renderer) {}
+	Shader::Shader(const std::vector<uint32_t> byte_code, RendererComponent* renderer) : _byte_code(std::move(byte_code)), _renderer(renderer), _entry_point_name(nullptr) {}
 
 	void Shader::generate()
 	{

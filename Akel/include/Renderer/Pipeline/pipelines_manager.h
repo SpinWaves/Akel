@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/02/2023
-// Updated : 16/02/2023
+// Updated : 17/02/2023
 
 #ifndef __AK_PIPELINES_MANAGER__
 #define __AK_PIPELINES_MANAGER__
@@ -11,7 +11,7 @@
 
 namespace Ak
 {
-	class AK_API PipelinesManager
+	class PipelinesManager
 	{
 		public:
 			PipelinesManager() = default;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 27/01/2023
+// Updated : 17/02/2023
 
 #ifndef __AK_FIXED_STRINGS__
 #define __AK_FIXED_STRINGS__
@@ -69,7 +69,7 @@ namespace Ak
 
             inline size_t size() noexcept { return _size; }
             inline size_t length() noexcept { return _size; }
-            inline bool empty() noexcept { return _string == nullptr || _string[0] == '\0'; }
+            inline bool empty() noexcept { return _string == nullptr || _string[0] == '\0' || _size == 0; }
 
             // Getters
             inline char operator[](unsigned int index) const noexcept { return _string[index]; }

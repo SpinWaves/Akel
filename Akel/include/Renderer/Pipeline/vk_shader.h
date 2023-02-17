@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 15/02/2023
+// Updated : 17/02/2023
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -122,8 +122,6 @@ namespace Ak
 
 			Shader(const std::vector<uint32_t> byte_code, class RendererComponent* renderer);
 
-			void generate();
-			void createSets();
 			void destroy() noexcept;
 			void destroyModule() noexcept;
 
@@ -148,6 +146,10 @@ namespace Ak
 
 		private:
 			friend class PipelineDesc;
+			friend class GraphicPipeline;
+
+			void generate();
+			void createSets();
 
 			std::unordered_map<std::string, Uniform> _uniforms;
 			std::unordered_map<std::string, ImageSampler> _image_samplers;

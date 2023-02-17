@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 16/02/2023
+// Updated : 17/02/2023
 
 #include <Graphics/model.h>
 #include <Core/log.h>
@@ -34,7 +34,9 @@ namespace Ak
 		else
 			Core::log::report(FATAL_ERROR, "Model : unsupported model file type '%s'", _file.c_str());
 
-		Core::log::report(MESSAGE, "Model : loaded file '%s'", _file.c_str());
+		#ifdef AK_DEBUG
+			Core::log::report(MESSAGE, "Model : loaded file '%s'", _file.c_str());
+		#endif
 	}
 
 	void Model::loadOBJ()
@@ -85,5 +87,11 @@ namespace Ak
 	void Model::loadGLTF()
 	{
 
+	}
+
+	Model::~Model()
+	{
+		for(auto mesh : _meshes)
+			mesh.destroy();
 	}
 }

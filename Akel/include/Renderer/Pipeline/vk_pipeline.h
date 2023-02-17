@@ -15,7 +15,7 @@ namespace Ak
 	class Pipeline
 	{
 		public:
-			inline void bindPipeline(CmdBuffer& commandBuffer) noexcept { vkCmdBindPipeline(commandBuffer.get(), getPipelineBindPoint(), getPipeline()); }
+			inline virtual void bindPipeline(CmdBuffer& commandBuffer) noexcept { vkCmdBindPipeline(commandBuffer.get(), getPipelineBindPoint(), getPipeline()); }
 
 			virtual const VkPipeline& getPipeline() const = 0;
 			virtual const VkPipelineLayout& getPipelineLayout() const = 0;

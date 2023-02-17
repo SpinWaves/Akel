@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2023
-// Updated : 16/02/2023
+// Updated : 17/02/2023
 
 namespace Ak
 {
@@ -10,8 +10,8 @@ namespace Ak
 	{
 		if(lang == shaderlang::spirv)
 		{
-			_forward_shaders.emplace_back(load_spirv_from_file(path.c_str()), _renderer);
-			_forward_shaders.back().generate();
+			std::shared_ptr<Shader> shader = create_shared_ptr_w<Shader>(load_spirv_from_file(path.c_str()), _renderer);
+			_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(shader)));
 		}
 		else
 			_loadCustomShader(lang, std::move(path));
