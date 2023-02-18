@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 17/02/2023
+// Updated : 18/02/2023
 
 #include <Graphics/model.h>
 #include <Core/log.h>
+#include <Core/Memory/sharedPtrWrapper.h>
 
 namespace Ak
 {
@@ -12,12 +13,12 @@ namespace Ak
 
 	Model::Model(const Mesh& mesh)
 	{
-		_meshes.push_back(mesh);
+		_meshes.push_back(create_shared_ptr_w<Mesh>(mesh));
 	}
 
 	Model::Model(Mesh&& mesh)
 	{
-		_meshes.push_back(std::move(mesh));
+		_meshes.push_back(create_shared_ptr_w<Mesh>(std::move(mesh)));
 	}
 
 	void Model::load()
@@ -81,7 +82,7 @@ namespace Ak
 			}
 		}
 
-		_meshes.emplace_back(vertices, indices);
+		_meshes.push_back(create_shared_ptr_w<Mesh>(std::move(vertices), std::move(indices)));
 	}
 
 	void Model::loadGLTF()
@@ -92,6 +93,6 @@ namespace Ak
 	Model::~Model()
 	{
 		for(auto mesh : _meshes)
-			mesh.destroy();
+			mesh->destroy();
 	}
 }

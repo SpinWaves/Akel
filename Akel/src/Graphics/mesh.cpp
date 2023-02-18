@@ -1,16 +1,24 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 17/02/2023
+// Updated : 18/02/2023
 
 #include <Graphics/mesh.h>
+#include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-	Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) : _vertices(vertices), _indices(indices)
+	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
 	{
-		_vertex_buffer.create(_vertices.size() * sizeof(Vertex), _vertices.data());
-		_index_buffer.create(_indices.size() * sizeof(uint32_t), _indices.data());
+		_vertex_buffer.create(vertices.size() * sizeof(Vertex), vertices.data());
+		_index_buffer.create(indices.size() * sizeof(uint32_t), indices.data());
+	}
+
+	void Mesh::draw(RendererComponent& renderer)
+	{
+		_index_buffer.bind(renderer);
+		_vertex_buffer.bind(renderer);
+		vkCmdDrawIndexed(renderer.getActiveCmdBuffer().get(), static_cast<uint32_t>(_index_buffer.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
 	}
 
 	void Mesh::destroy()

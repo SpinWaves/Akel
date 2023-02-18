@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 17/02/2023
+// Updated : 18/02/2023
 
 #ifndef __AK_FORWARD_DATA__
 #define __AK_FORWARD_DATA__
@@ -15,8 +15,8 @@ namespace Ak
 {
 	struct ForwardData
 	{
-		std::vector<ShaderID> shaders;
 		CommandDataQueue command_queue;
+		std::vector<ShaderID> shaders;
 		Texture* texture = nullptr;
 	};
 }

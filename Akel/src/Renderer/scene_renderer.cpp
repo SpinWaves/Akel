@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 17/02/2023
+// Updated : 18/02/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -36,15 +36,15 @@ namespace Ak
 				_forward_data.shaders = scene->_forward_shaders;
 			}
 			
+			_forward_data.command_queue.clear();
 			auto world = scene->getRegistry().view<ModelAttribute>();
 			for(auto e : world)
 			{
 				ModelAttribute model = world.get<ModelAttribute>(e);
-				for(const Mesh& mesh : model.model.getMeshes())
+				for(std::shared_ptr<Mesh> mesh : model.model.getMeshes())
 				{
 					RenderCommandData command;
-					command.mesh = &const_cast<Mesh&>(mesh);
-
+					command.mesh = mesh.get();
 					_forward_data.command_queue.push_back(command);
 				}
 			}
@@ -93,17 +93,7 @@ namespace Ak
 		vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
 
 		for(RenderCommandData& command : _forward_data.command_queue)
-		{
-			if(command.mesh != nullptr)
-			{
-				std::cout << "pouicsdf" << std::endl;
-				command.mesh->getVertexBuffer().bind(*renderer);
-				std::cout << "pouic" << std::endl;
-				command.mesh->getIndexBuffer().bind(*renderer);
-				std::cout << "pouicgfdd" << std::endl;
-				vkCmdDrawIndexed(renderer->getActiveCmdBuffer().get(), static_cast<uint32_t>(command.mesh->getIndexBuffer().getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
-			}
-		}
+			command.mesh->draw(*renderer);
 
 		renderer->getRenderPass().end();
 		renderer->getActiveCmdBuffer().endRecord();
