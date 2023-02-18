@@ -37,7 +37,7 @@ namespace Ak
 			}
 			
 			_forward_data.command_queue.clear();
-			auto world = scene->getRegistry().view<ModelAttribute>();
+			auto world = scene->getRegistry().view<ModelAttribute, TextureAttribute>();
 			for(auto e : world)
 			{
 				ModelAttribute model = world.get<ModelAttribute>(e);
@@ -47,6 +47,9 @@ namespace Ak
 					command.mesh = mesh.get();
 					_forward_data.command_queue.push_back(command);
 				}
+
+				TextureAttribute texture = world.get<TextureAttribute>(e);
+				_forward_data.texture = texture.getTexture();
 			}
 			forwardPass(scene);
 		}

@@ -20,13 +20,12 @@ namespace Ak
 			Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices);
 
 			void draw(class RendererComponent& renderer);
-			void destroy();
 
-			virtual ~Mesh() = default;
+			~Mesh();
 
 		private:
-			VBO _vertex_buffer;
-			IBO _index_buffer;
+			C_VBO _vertex_buffer;
+			C_IBO _index_buffer;
 	};
 }
 

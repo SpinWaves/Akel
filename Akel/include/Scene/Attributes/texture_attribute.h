@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2023
-// Updated : 16/02/2023
+// Updated : 18/02/2023
 
 #ifndef __AK_TEXTURE_ATTRIBUTE__
 #define __AK_TEXTURE_ATTRIBUTE__
@@ -14,20 +14,23 @@ namespace Ak
 {
 	class AK_API TextureAttribute
 	{
-		friend class Scene;
-
 		public:
 			Maths::Vec4f color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 			TextureAttribute() = default;
-			TextureAttribute(std::filesystem::path texture) : _texture_path(std::move(texture)) {}
+			TextureAttribute(std::filesystem::path texture) : _texture_path(std::move(texture))
+			{
+				VulkanInitTexture();
+			}
+
+			inline std::shared_ptr<Texture> getTexture() { return _texture; }
 
 		private:
 			void VulkanInitTexture() noexcept;
 			void VulkanDestroyTexture() noexcept;
 
 			std::filesystem::path _texture_path;
-			Texture _texture;
+			std::shared_ptr<Texture> _texture;
 	};
 }
 

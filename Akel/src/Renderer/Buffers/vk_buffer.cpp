@@ -33,6 +33,7 @@ namespace Ak
 		}
 
 		_mem_chunck.size = size;
+		_mem_chunck.offset = 0;
 
 		createBuffer(_usage, _flags);
 

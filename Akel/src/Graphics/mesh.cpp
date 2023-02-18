@@ -16,12 +16,12 @@ namespace Ak
 
 	void Mesh::draw(RendererComponent& renderer)
 	{
-		_index_buffer.bind(renderer);
 		_vertex_buffer.bind(renderer);
+		_index_buffer.bind(renderer);
 		vkCmdDrawIndexed(renderer.getActiveCmdBuffer().get(), static_cast<uint32_t>(_index_buffer.getSize() / sizeof(uint32_t)), 1, 0, 0, 0);
 	}
 
-	void Mesh::destroy()
+	Mesh::~Mesh()
 	{
 		_vertex_buffer.destroy();
 		_index_buffer.destroy();

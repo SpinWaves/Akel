@@ -3,6 +3,7 @@
 // Created : 12/02/2023
 // Updated : 18/02/2023
 
+#define TINYOBJLOADER_IMPLEMENTATION
 #include <Graphics/model.h>
 #include <Core/log.h>
 #include <Core/Memory/sharedPtrWrapper.h>
@@ -55,11 +56,12 @@ namespace Ak
 				Core::log::report(FATAL_ERROR, "Model : error while loading obj file : %s", err.c_str());
 		}
 
-		std::vector<Vertex> vertices;
-		std::vector<uint32_t> indices;
+		//std::unordered_map<Vertex, uint32_t> unique_vertices;
 
 		for(const auto& shape : shapes)
 		{
+			std::vector<Vertex> vertices;
+			std::vector<uint32_t> indices;
 			for(const auto& index : shape.mesh.indices)
 			{
 				Vertex vertex{};
@@ -76,23 +78,23 @@ namespace Ak
 				};
 
 				vertex.color = {1.0f, 1.0f, 1.0f};
-
+/*
+				if(unique_vertices.count(vertex) == 0)
+				{
+					unique_vertices[vertex] = static_cast<uint32_t>(vertices.size());
+					vertices.push_back(vertex);
+				}
+				indices.push_back(unique_vertices[vertex]);
+*/
+				indices.push_back(vertices.size());
 				vertices.push_back(vertex);
-				indices.push_back(indices.size());
 			}
+			_meshes.push_back(create_shared_ptr_w<Mesh>(std::move(vertices), std::move(indices)));
 		}
-
-		_meshes.push_back(create_shared_ptr_w<Mesh>(std::move(vertices), std::move(indices)));
 	}
 
 	void Model::loadGLTF()
 	{
 
-	}
-
-	Model::~Model()
-	{
-		for(auto mesh : _meshes)
-			mesh->destroy();
 	}
 }

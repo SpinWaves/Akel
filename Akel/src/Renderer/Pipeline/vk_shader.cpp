@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 17/02/2023
+// Updated : 18/02/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -177,6 +177,9 @@ namespace Ak
 
 	void Shader::generate()
 	{
+		if(_is_init)
+			return;
+
 		_uniforms.clear();
 		_image_samplers.clear();
 		SpvReflectShaderModule module = {};
@@ -277,6 +280,8 @@ namespace Ak
 
 	void Shader::createSets()
 	{
+		if(_is_init)
+			return;
 		if(_layouts.size() != 0)
 		{
 			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2048 });
@@ -307,6 +312,7 @@ namespace Ak
 				}
 			}
 		}
+		_is_init = true;
 	}
 
 	void Shader::destroyModule() noexcept

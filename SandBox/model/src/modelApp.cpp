@@ -19,6 +19,7 @@ Ak::Application* Akel_mainApp()
 	Ak::Entity lem = scene->createEntity();
 	lem.addAttribute<Ak::TransformAttribute>(Ak::Maths::Vec3f{ 1.0f, 1.0f, 1.0f });
 	lem.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "apollo_lunar_module.obj");
+	lem.addAttribute<Ak::TextureAttribute>(Ak::Res::get().getTexturesPath() / "apollo_map.jpg");
 	
 	return app;
 }

@@ -17,7 +17,7 @@ namespace Ak
 	{
 		CommandDataQueue command_queue;
 		std::vector<ShaderID> shaders;
-		Texture* texture = nullptr;
+		std::shared_ptr<Texture> texture = nullptr;
 	};
 }
 

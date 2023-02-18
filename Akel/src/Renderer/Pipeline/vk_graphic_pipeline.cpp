@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 17/02/2023
+// Updated : 18/02/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -99,7 +99,7 @@ namespace Ak
         rasterizer.polygonMode = desc.mode;
         rasterizer.lineWidth = desc.line_width;
         rasterizer.cullMode = desc.culling;
-        rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+        rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
         rasterizer.depthBiasEnable = VK_FALSE;
 
         VkPipelineMultisampleStateCreateInfo multisampling{};

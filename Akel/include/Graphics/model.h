@@ -23,7 +23,7 @@ namespace Ak
 
 			inline const std::vector<std::shared_ptr<Mesh>>& getMeshes() { return _meshes; }
 
-			~Model();
+			~Model() = default;
 
 		private:
 			void load();
