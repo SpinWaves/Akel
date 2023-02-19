@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 18/02/2023
+// Updated : 19/02/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -24,20 +24,6 @@ namespace Ak
 		{
 			auto shader = ShadersLibrary::get().getShader(desc.shaders[i]);
 			shader->generate();
-			if(desc.main_texture == nullptr)
-			{
-				if(shader->getImageSamplers().count("texSampler"))
-				{
-					_dummy = create_Unique_ptr<Texture>();
-					std::array<uint8_t, 4> pixel = { 255, 255, 255, 255 };
-					_dummy->create(pixel.data(), 1, 1, VK_FORMAT_R8G8B8A8_UNORM);
-					_dummy->setShaderInterface(*shader);
-				}
-			}
-			else
-				desc.main_texture->setShaderInterface(*shader);
-
-			shader->createSets();
 
 			VkPipelineShaderStageCreateInfo shaderStageInfo{};
 			shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;

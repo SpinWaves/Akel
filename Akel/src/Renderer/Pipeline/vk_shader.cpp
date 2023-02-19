@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 18/02/2023
+// Updated : 19/02/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -276,12 +276,7 @@ namespace Ak
 
 		if(vkCreateShaderModule(Render_Core::get().getDevice().get(), &createInfo, nullptr, &_shader) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create shader module");
-	}
 
-	void Shader::createSets()
-	{
-		if(_is_init)
-			return;
 		if(_layouts.size() != 0)
 		{
 			_desc_pool_sizes.push_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 2048 });
@@ -291,25 +286,6 @@ namespace Ak
 			{
 				_sets.emplace_back();
 				_sets.back().init(_renderer, _layouts[i], _desc_pool);
-				for(auto binding : _layouts[i].getBindings())
-				{
-					if(binding.second == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
-					{
-						for(auto& [name, uniform] : _uniforms)
-						{
-							if(uniform.getBinding() == binding.first)
-								_sets.back().writeDescriptor(binding.first, uniform.getBuffer());
-						}
-					}
-					else if(binding.second == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER)
-					{
-						for(auto& [name, sampler] : _image_samplers)
-						{
-							if(sampler.getBinding() == binding.first)
-								_sets.back().writeDescriptor(binding.first, sampler.getImageView(), sampler.getSampler());
-						}
-					}
-				}
 			}
 		}
 		_is_init = true;
