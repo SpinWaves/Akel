@@ -33,6 +33,12 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Native ImGui implementation using Akel's renderer
 * Native [NZSL](https://github.com/NazaraEngine/ShaderLang) support with helper modules
 
+# Screenshots
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/assets/apollo_lem.png" alt="drawing" width="500"/>
+</p>
+
 # Coming soon...
 * Custom shading language
 * Models manager
