@@ -22,6 +22,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
   Rectangle | `xmake build RectDemo`
   Cube | `xmake build CubeDemo`
   Skybox | `xmake build SkyDemo`
+  Model | `xmake build ModelDemo`
   </details>
 
 # Akel useful features
