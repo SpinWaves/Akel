@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2021
-// Updated : 16/02/2023
+// Updated : 20/02/2023
 
 #ifndef __AK_ENTITY__
 #define __AK_ENTITY__
@@ -32,7 +32,7 @@ namespace Ak
 			template <typename T>
 			inline void removeAttribute() { _scene->getRegistry().remove<T>(_entity); }
 			template <typename T>
-			inline void tryRemoveAttribute() { if(hasAttribute<T>()) removeAttribute<T>(); }
+			inline void tryRemoveAttribute() { removeAttribute<T>(); }
 
 			~Entity() = default;
 

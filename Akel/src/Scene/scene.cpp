@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 17/02/2023
+// Updated : 20/02/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -53,7 +53,7 @@ namespace Ak
 	void Scene::onUpdate(float timestep)
 	{
 		Maths::Vec2i win_size = _renderer->getWindow()->size;
-		_camera->onUpdate(win_size.X / win_size.Y);
+		_camera->onUpdate(static_cast<float>(win_size.X) / static_cast<float>(win_size.Y));
 	}
 
 	void Scene::onEvent(Input& input)

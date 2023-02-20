@@ -17,14 +17,8 @@ namespace Ak
 	{
 		public:
 			Texture() = default;
-
 			void create(uint8_t* pixels, uint32_t width, uint32_t height, VkFormat format);
-
 			~Texture() = default;
-
-		private:
-			Buffer _buffer;
-
 	};
 
 	Texture loadTextureFromFile(std::filesystem::path path);

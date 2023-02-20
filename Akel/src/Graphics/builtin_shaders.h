@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 07/02/2023
-// Updated : 18/02/2023
+// Updated : 20/02/2023
 
 #ifndef __AK_BUILTIN_SHADERS__
 #define __AK_BUILTIN_SHADERS__
@@ -27,7 +27,7 @@ namespace Ak
 		fn main(input: VertIn) -> VertOut
 		{
 			let output: VertOut;
-			output.pos = matrices.projection * matrices.view * matrices.model * vec4[f32](input.pos, 1.0);
+			output.pos = matrices.projection * matrices.view * vec4[f32](input.pos, 1.0);
 			output.color = input.color;
 			output.uv = input.uv;
 			return output;

@@ -14,7 +14,6 @@ namespace Ak
 {
 	struct MatricesBuffer
 	{
-		alignas(16) glm::mat4 model;
 		alignas(16) glm::mat4 view;
 		alignas(16) glm::mat4 proj;
 	};
@@ -65,12 +64,16 @@ namespace Ak
 		pipeline_desc.shaders = _forward_data.shaders;
 		pipeline_desc.main_texture = _forward_data.texture;
 
+		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
+		if(pipeline == nullptr)
+			return;
+
 		// caches
 		static std::vector<VkDescriptorSet> sets;
 		static Shader::Uniform matrices_uniform_buffer;
 		static DescriptorSet image_sampler_set;
 		static Shader::ImageSampler image_sampler;
-		
+
 		if(scene != _scene_cache)
 		{
 			sets.clear();
@@ -98,15 +101,10 @@ namespace Ak
 		MatricesBuffer mat;
 		mat.proj = scene->_camera->getProj();
 		mat.view = scene->_camera->getView();
-		mat.model = glm::mat4(1.0f);
 		mat.proj[1][1] *= -1;
 		matrices_uniform_buffer.getBuffer()->setData(sizeof(mat), &mat);
 
 		image_sampler_set.writeDescriptor(image_sampler.getBinding(), _forward_data.texture->getImageView(), _forward_data.texture->getSampler());
-
-		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
-		if(pipeline == nullptr)
-			return;
 
 		renderer->getActiveCmdBuffer().beginRecord();
 		renderer->getRenderPass().begin();

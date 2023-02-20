@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 18/02/2023
+// Updated : 20/02/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -182,12 +182,11 @@ namespace Ak
 
 	void Image::destroy() noexcept
 	{
-		std::cout << _sampler << std::endl;
-		Ak_assert(_sampler != VK_NULL_HANDLE, "trying to destroy an uninit vulkan image sampler");
-		vkDestroySampler(Render_Core::get().getDevice().get(), _sampler, nullptr);
+		if(_sampler != VK_NULL_HANDLE)
+			vkDestroySampler(Render_Core::get().getDevice().get(), _sampler, nullptr);
 		
-		Ak_assert(_image_view != VK_NULL_HANDLE, "trying to destroy an uninit vulkan image view");
-		vkDestroyImageView(Render_Core::get().getDevice().get(), _image_view, nullptr);
+		if(_image_view != VK_NULL_HANDLE)
+			vkDestroyImageView(Render_Core::get().getDevice().get(), _image_view, nullptr);
 		
 		Ak_assert(_memory != VK_NULL_HANDLE, "trying to destroy an uninit memory for an image");
 	    vkFreeMemory(Render_Core::get().getDevice().get(), _memory, nullptr);

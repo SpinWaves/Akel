@@ -6,7 +6,7 @@
 /*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 17:04:31 by maldavid          #+#    #+#             */
-/*   Updated: 2022/12/21 17:04:32 by maldavid         ###   ########.fr       */
+/*   Updated: 2023/02/20 14:55:48 by maldavid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ namespace Ak
 			void begin();
 			void end();
 			
-            inline VkRenderPass& operator()() noexcept { return _renderPass; }
-            inline VkRenderPass& get() noexcept { return _renderPass; }
+            inline VkRenderPass operator()() noexcept { return _renderPass; }
+            inline VkRenderPass get() noexcept { return _renderPass; }
 
 		private:
 			VkRenderPass _renderPass = VK_NULL_HANDLE;

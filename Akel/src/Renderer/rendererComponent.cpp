@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 16/02/2023
+// Updated : 20/02/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -82,8 +82,9 @@ namespace Ak
 		presentInfo.waitSemaphoreCount = 1;
 		presentInfo.pWaitSemaphores = signalSemaphores;
 
+		VkSwapchainKHR swapchain = _swapchain();
 		presentInfo.swapchainCount = 1;
-		presentInfo.pSwapchains = &_swapchain();
+		presentInfo.pSwapchains = &swapchain;
 
 		presentInfo.pImageIndices = &_image_index;
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/12/2022
-// Updated : 10/02/2023
+// Updated : 20/02/2023
 
 #ifndef __AK_VK_IMAGE__
 #define __AK_VK_IMAGE__
@@ -15,8 +15,6 @@ namespace Ak
 
 	class Image
 	{
-		friend class GraphicsPipeline;
-
 		public:
 			Image() = default;
 
@@ -24,12 +22,12 @@ namespace Ak
 			void copyBuffer(class Buffer& buffer);
 			void destroy() noexcept;
 
-			inline VkImage& get() noexcept { return _image; }
-			inline VkImage& operator()() noexcept { return _image; }
+			inline VkImage get() noexcept { return _image; }
+			inline VkImage operator()() noexcept { return _image; }
 			inline VkDeviceMemory getDeviceMemory() noexcept { return _memory; }
-			inline VkImageView& getImageView() noexcept { return _image_view; }
-			inline VkFormat& getFormat() noexcept { return _format; }
-			inline VkSampler& getSampler() noexcept { return _sampler; }
+			inline VkImageView getImageView() noexcept { return _image_view; }
+			inline VkFormat getFormat() noexcept { return _format; }
+			inline VkSampler getSampler() noexcept { return _sampler; }
 
 			virtual ~Image() = default;
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 18/02/2023
+// Updated : 20/02/2023
 
 #ifndef __AK_VK_GRAPHIC_PIPELINE__
 #define __AK_VK_GRAPHIC_PIPELINE__
@@ -23,7 +23,7 @@ namespace Ak
 		VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 		float line_width = 1.0f;
 
-		inline constexpr bool operator==(const PipelineDesc& other) noexcept
+		inline bool operator==(const PipelineDesc& other) noexcept
 		{
 			bool same_shaders = true;
 			for(int i = 0; i < shaders.size(); i++)
@@ -64,7 +64,6 @@ namespace Ak
 			VkPipelineLayout _pipelineLayout = VK_NULL_HANDLE;
 			VkPipelineBindPoint _pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 			class RendererComponent* _renderer = nullptr;
-			Unique_ptr<Texture> _dummy = nullptr;
 	};
 }
 

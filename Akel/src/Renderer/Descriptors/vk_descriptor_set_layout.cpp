@@ -11,7 +11,7 @@ namespace Ak
 {
     void DescriptorSetLayout::init(std::vector<std::pair<int, VkDescriptorType>> binds, VkShaderStageFlagBits stage)
     {
-		/*
+
 		std::vector<VkDescriptorBindingFlags> binding_flags(binds.size());
 		for(int i = 0; i < binding_flags.size(); i++)
 		{
@@ -23,7 +23,7 @@ namespace Ak
 		flags_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
 		flags_info.bindingCount = binds.size();
 		flags_info.pBindingFlags = binding_flags.data();
-*/
+
 		std::vector<VkDescriptorSetLayoutBinding> bindings(binds.size());
 		for(int i = 0; i < binds.size(); i++)
 		{
@@ -40,7 +40,7 @@ namespace Ak
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         layoutInfo.bindingCount = _bindings.size();
         layoutInfo.pBindings = bindings.data();
-//		layoutInfo.pNext = &flags_info;
+		layoutInfo.pNext = &flags_info;
 
         if(vkCreateDescriptorSetLayout(Render_Core::get().getDevice().get(), &layoutInfo, nullptr, &_layout) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create descriptor set layout");

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 07/02/2023
-// Updated : 07/02/2023
+// Updated : 20/02/2023
 
 #ifndef __AK_NZSL_BUILTIN_MODULES__
 #define __AK_NZSL_BUILTIN_MODULES__
@@ -43,7 +43,6 @@ namespace Ak_nzsl
 		[export, layout(std140)]
 		struct Matrices
 		{
-			model: mat4[f32],
 			view: mat4[f32],
 			projection: mat4[f32]
 		}

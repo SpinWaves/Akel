@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 19/02/2023
+// Updated : 20/02/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -168,12 +168,6 @@ namespace Ak
     {
         Ak_assert(_graphicsPipeline != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
         vkDestroyPipeline(Render_Core::get().getDevice().get(), _graphicsPipeline, nullptr);
-
-		if(_dummy)
-		{
-			_dummy->destroy();
-			_dummy.reset(nullptr);
-		}
 
         Ak_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
 		vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
