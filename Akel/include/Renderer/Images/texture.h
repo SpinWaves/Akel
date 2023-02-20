@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 18/02/2023
+// Updated : 20/02/2023
 
 #ifndef __AK_TEXTURE__
 #define __AK_TEXTURE__
@@ -19,7 +19,6 @@ namespace Ak
 			Texture() = default;
 
 			void create(uint8_t* pixels, uint32_t width, uint32_t height, VkFormat format);
-			void setShaderInterface(class Shader& shader);
 
 			~Texture() = default;
 

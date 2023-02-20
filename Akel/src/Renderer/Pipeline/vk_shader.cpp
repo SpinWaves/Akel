@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 19/02/2023
+// Updated : 20/02/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -220,7 +220,7 @@ namespace Ak
 					_uniforms[sets[i]->bindings[j]->name] =
 						Shader::Uniform{
 							static_cast<int32_t>(sets[i]->bindings[j]->binding),
-							static_cast<int32_t>(sets[i]->bindings[j]->set),
+							static_cast<int32_t>(i),
 							static_cast<int32_t>(sets[i]->bindings[j]->block.offset),
 							static_cast<int32_t>(sets[i]->bindings[j]->block.size),
 							_type,
@@ -234,7 +234,7 @@ namespace Ak
 					_image_samplers[sets[i]->bindings[j]->name] =
 						Shader::ImageSampler{
 							static_cast<int32_t>(sets[i]->bindings[j]->binding),
-							static_cast<int32_t>(sets[i]->bindings[j]->set),
+							static_cast<int32_t>(i),
 							static_cast<int32_t>(sets[i]->bindings[j]->block.offset),
 							static_cast<int32_t>(sets[i]->bindings[j]->block.size),
 							_type
@@ -286,6 +286,17 @@ namespace Ak
 			{
 				_sets.emplace_back();
 				_sets.back().init(_renderer, _layouts[i], _desc_pool);
+				for(auto binding : _layouts[i].getBindings())
+				{
+					if(binding.second == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+					{
+						for(auto& [name, uniform] : _uniforms)
+						{
+							if(uniform.getBinding() == binding.first)
+								_sets.back().writeDescriptor(binding.first, uniform.getBuffer());
+						}
+					}
+				}
 			}
 		}
 		_is_init = true;

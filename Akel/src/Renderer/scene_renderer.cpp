@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 19/02/2023
+// Updated : 20/02/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -65,6 +65,45 @@ namespace Ak
 		pipeline_desc.shaders = _forward_data.shaders;
 		pipeline_desc.main_texture = _forward_data.texture;
 
+		// caches
+		static std::vector<VkDescriptorSet> sets;
+		static Shader::Uniform matrices_uniform_buffer;
+		static DescriptorSet image_sampler_set;
+		static Shader::ImageSampler image_sampler;
+		
+		if(scene != _scene_cache)
+		{
+			sets.clear();
+			for(ShaderID id : _forward_data.shaders)
+			{
+				auto shader = ShadersLibrary::get().getShader(id);
+				for(DescriptorSet& set : shader->getDescriptorSets())
+					sets.push_back(set.get());
+				if(shader->getUniforms().size() > 0)
+				{
+					if(shader->getUniforms().count("matrices"))
+						matrices_uniform_buffer = shader->getUniforms()["matrices"];
+				}
+				if(shader->getImageSamplers().size() > 0)
+				{
+					if(shader->getImageSamplers().count("texSampler"))
+					{
+						image_sampler = shader->getImageSamplers()["texSampler"];
+						image_sampler_set = shader->getDescriptorSets()[image_sampler.getSet()];
+					}
+				}
+			}
+		}
+
+		MatricesBuffer mat;
+		mat.proj = scene->_camera->getProj();
+		mat.view = scene->_camera->getView();
+		mat.model = glm::mat4(1.0f);
+		mat.proj[1][1] *= -1;
+		matrices_uniform_buffer.getBuffer()->setData(sizeof(mat), &mat);
+
+		image_sampler_set.writeDescriptor(image_sampler.getBinding(), _forward_data.texture->getImageView(), _forward_data.texture->getSampler());
+
 		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
 		if(pipeline == nullptr)
 			return;
@@ -73,26 +112,6 @@ namespace Ak
 		renderer->getRenderPass().begin();
 		pipeline->bindPipeline(renderer->getActiveCmdBuffer());
 
-		std::vector<VkDescriptorSet> sets;
-	
-		for(ShaderID id : _forward_data.shaders)
-		{
-			auto shader = ShadersLibrary::get().getShader(id);
-			for(DescriptorSet& set : shader->getDescriptorSets())
-				sets.push_back(set.get());
-			if(shader->getUniforms().size() > 0)
-			{
-				if(shader->getUniforms().count("matrices"))
-				{
-					MatricesBuffer mat;
-					mat.proj = scene->_camera->getProj();
-					mat.view = scene->_camera->getView();
-					mat.model = glm::mat4(1.0f);
-					mat.proj[1][1] *= -1;
-					shader->getUniforms()["matrices"].getBuffer()->setData(sizeof(mat), &mat);
-				}
-			}
-		}
 		vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
 
 		for(RenderCommandData& command : _forward_data.command_queue)

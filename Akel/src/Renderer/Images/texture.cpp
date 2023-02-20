@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 18/02/2023
+// Updated : 20/02/2023
 
 #include <Renderer/Images/texture.h>
 #include <Renderer/Pipeline/vk_shader.h>
@@ -28,15 +28,6 @@ namespace Ak
 		staging_buffer.create(Buffer::kind::dynamic, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, pixels);
 		Image::copyBuffer(staging_buffer);
 		staging_buffer.destroy();
-	}
-
-	void Texture::setShaderInterface(Shader& shader)
-	{
-		if(shader.getImageSamplers().count("texSampler"))
-		{
-			shader.getImageSamplers()["texSampler"].setSampler(Image::getSampler());
-			shader.getImageSamplers()["texSampler"].setImageView(Image::getImageView());
-		}
 	}
 
 	Texture loadTextureFromFile(std::filesystem::path path)

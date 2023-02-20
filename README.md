@@ -42,8 +42,6 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 
 # Coming soon...
 * Custom shading language
-* Models manager
-* Entity Component System
 * Scripting using Lua
 
 # Contribute

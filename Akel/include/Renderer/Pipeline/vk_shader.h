@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 19/02/2023
+// Updated : 20/02/2023
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -86,18 +86,11 @@ namespace Ak
 								_stageFlags == rhs._stageFlags;
 					}
 
-					inline void setSampler(VkSampler sampler) noexcept { _sampler = sampler; }
-					inline void setImageView(VkImageView image_view) noexcept { _image_view = image_view; }
-					inline VkSampler getSampler() noexcept { return _sampler; }
-					inline VkImageView getImageView() noexcept { return _image_view; }
-
 					inline bool operator!=(const ImageSampler& rhs) const { return !operator==(rhs); }
 
 					~ImageSampler() = default;
 
 				private:
-					VkImageView _image_view = VK_NULL_HANDLE;
-					VkSampler _sampler = VK_NULL_HANDLE;
 					VkShaderStageFlagBits _stageFlags;
 					int32_t _binding;
 					int32_t _set;
