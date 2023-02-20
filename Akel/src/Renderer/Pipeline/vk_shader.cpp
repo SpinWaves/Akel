@@ -246,7 +246,7 @@ namespace Ak
 		}
 
 		count = 0;
-		result = spvReflectEnumerateInputVariables(&module, &count, NULL);
+		result = spvReflectEnumerateInputVariables(&module, &count, nullptr);
 		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to enumerate input variables");
 
 		std::vector<SpvReflectInterfaceVariable*> input_vars(count);
@@ -266,6 +266,14 @@ namespace Ak
 			
 			_attributes[input_vars[i]->name] = std::move(attr_desc);
 		}
+
+		count = 0;
+		result = spvReflectEnumeratePushConstantBlocks(&module, &count, nullptr);
+		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to enumerate push constants");
+
+		std::vector<SpvReflectBlockVariable*> push_const(count);
+		result = spvReflectEnumeratePushConstantBlocks(&module, &count, push_const.data());
+		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to get push constant informations");
 
 		spvReflectDestroyShaderModule(&module);
 

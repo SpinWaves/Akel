@@ -113,6 +113,27 @@ namespace Ak
 					std::vector<VkVertexInputAttributeDescription> _attributes;
 			};
 
+			class PushConstant
+			{
+				public:
+					PushConstant(int32_t binding = -1, int32_t size = -1, VkShaderStageFlagBits stage = VK_SHADER_STAGE_VERTEX_BIT) :
+						_binding(binding),
+						_size(size),
+						_stage(stage)
+					{}
+
+					inline int32_t getBinding() const noexcept { return _binding; }
+					inline int32_t getSize() const noexcept { return _size; }
+					inline VkShaderStageFlagBits getStageFlags() const noexcept { return _stage; }
+
+					~PushConstant() = default;
+
+				private:
+					VkShaderStageFlagBits _stage;
+					int32_t _binding;
+					int32_t _size;
+			};
+
 			Shader(const std::vector<uint32_t> byte_code, class RendererComponent* renderer);
 
 			void destroy() noexcept;
@@ -123,6 +144,7 @@ namespace Ak
 
 			inline std::unordered_map<std::string, Uniform>& getUniforms() { return _uniforms; }
 			inline std::unordered_map<std::string, ImageSampler>& getImageSamplers() { return _image_samplers; }
+			inline std::unordered_map<std::string, PushConstant>& getPushConstants() { return _push_constants; }
 			inline std::unordered_map<std::string, VkVertexInputAttributeDescription>& getAttributes() { return _attributes; }
 
 			inline std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _layouts; }
@@ -145,6 +167,7 @@ namespace Ak
 
 			std::unordered_map<std::string, Uniform> _uniforms;
 			std::unordered_map<std::string, ImageSampler> _image_samplers;
+			std::unordered_map<std::string, PushConstant> _push_constants;
 			std::unordered_map<std::string, VkVertexInputAttributeDescription> _attributes;
 			
 			std::vector<VkDescriptorPoolSize> _desc_pool_sizes;
