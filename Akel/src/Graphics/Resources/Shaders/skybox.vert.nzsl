@@ -1,0 +1,43 @@
+// This file is a part of Akel
+// Authors : @kbz_8
+// Created : 21/02/2023
+// Updated : 21/02/2023
+
+R"nzsl(
+
+[nzsl_version("1.0")]
+module SkyboxVertexShader;
+
+import * from Akel.Matrices;
+
+external
+{
+	[set(0), binding(0)] matrices: uniform[Matrices],
+}
+
+struct VertIn
+{
+	[location(0)] position: vec3[f32]
+}
+
+[export]
+struct VertOut
+{
+	[location(0)] uvw: vec3[f32],
+	[builtin(position)] position: vec4[f32]
+}
+
+[entry(vert)]
+fn main(input: VertIn) -> VertOut
+{
+	let rotationMat = matrices.view;
+	rotationMat[3].xyz = vec3[f32](0.0, 0.0, 0.0);
+
+	let output: VertOut;
+	output.position = matrices.projection * rotationMat * vec4[f32](input.position, 1.0);
+	output.uvw = input.position.xyz;
+
+	return output;
+}
+
+)nzsl"

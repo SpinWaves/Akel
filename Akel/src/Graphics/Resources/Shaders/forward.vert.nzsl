@@ -1,0 +1,30 @@
+// This file is a part of Akel
+// Authors : @kbz_8
+// Created : 21/02/2023
+// Updated : 21/02/2023
+
+R"nzsl(
+
+[nzsl_version("1.0")]
+module;
+
+import * from Akel.VertexInput;
+import * from Akel.VertexOutput;
+import * from Akel.Matrices;
+
+external
+{
+	[set(0), binding(0)] matrices: uniform[Matrices],
+}
+
+[entry(vert)]
+fn main(input: VertIn) -> VertOut
+{
+	let output: VertOut;
+	output.pos = matrices.projection * matrices.view * vec4[f32](input.pos, 1.0);
+	output.color = input.color;
+	output.uv = input.uv;
+	return output;
+}
+
+)nzsl"

@@ -1,0 +1,27 @@
+// This file is a part of Akel
+// Authors : @kbz_8
+// Created : 21/02/2023
+// Updated : 21/02/2023
+
+R"nzsl(
+
+[nzsl_version("1.0")]
+module;
+
+import * from Akel.VertexOutput;
+import * from Akel.FragmentOutput;
+
+external
+{
+	[set(1), binding(0)] albedo: sampler2D[f32]
+}
+
+[entry(frag)]
+fn main(input: VertOut) -> FragOut
+{
+	let output: FragOut;
+	output.color = input.color * albedo.Sample(input.uv);
+	return output;
+}
+
+)nzsl"

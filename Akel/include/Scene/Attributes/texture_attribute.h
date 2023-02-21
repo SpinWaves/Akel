@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2023
-// Updated : 18/02/2023
+// Updated : 21/02/2023
 
 #ifndef __AK_TEXTURE_ATTRIBUTE__
 #define __AK_TEXTURE_ATTRIBUTE__
 
 #include <Akpch.h>
 #include <Maths/vec4.h>
-#include <Renderer/Images/texture.h>
+#include <Renderer/Images/texture_library.h>
 
 namespace Ak
 {
@@ -23,14 +23,13 @@ namespace Ak
 				VulkanInitTexture();
 			}
 
-			inline std::shared_ptr<Texture> getTexture() { return _texture; }
+			inline TextureID getTextureID() { return _texture_id; }
 
 		private:
 			void VulkanInitTexture() noexcept;
-			void VulkanDestroyTexture() noexcept;
 
 			std::filesystem::path _texture_path;
-			std::shared_ptr<Texture> _texture;
+			TextureID _texture_id;
 	};
 }
 

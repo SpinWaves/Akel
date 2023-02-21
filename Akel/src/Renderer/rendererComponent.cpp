@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 20/02/2023
+// Updated : 21/02/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -48,6 +48,8 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to acquire swapchain image");
 
 		vkResetFences(device, 1, &_semaphore.getInFlightFence(_active_image_index));
+
+		vkResetCommandBuffer(_cmd.getCmdBuffer(_active_image_index).get(), 0);
 
 		return true;
 	}

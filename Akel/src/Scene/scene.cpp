@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 20/02/2023
+// Updated : 21/02/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -43,9 +43,9 @@ namespace Ak
 		_renderer = renderer;
 		if(_forward_shaders.empty())
 		{
-			std::shared_ptr<Shader> vshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{default_vertex_shader}), _renderer);
+			std::shared_ptr<Shader> vshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{forward_vertex_shader}), _renderer);
 			_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(vshader)));
-			std::shared_ptr<Shader> fshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{default_fragment_shader}), _renderer);
+			std::shared_ptr<Shader> fshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{forward_fragment_shader}), _renderer);
 			_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(fshader)));
 		}
 	}

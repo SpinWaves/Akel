@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 20/02/2023
+// Updated : 21/02/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -48,7 +48,7 @@ namespace Ak
 				}
 
 				TextureAttribute texture = world.get<TextureAttribute>(e);
-				_forward_data.texture = texture.getTexture();
+				_forward_data.texture = TextureLibrary::get().getTexture(texture.getTextureID());
 			}
 			forwardPass(scene);
 		}
@@ -71,8 +71,6 @@ namespace Ak
 		// caches
 		static std::vector<VkDescriptorSet> sets;
 		static Shader::Uniform matrices_uniform_buffer;
-		static DescriptorSet image_sampler_set;
-		static Shader::ImageSampler image_sampler;
 
 		if(scene != _scene_cache)
 		{
@@ -89,10 +87,10 @@ namespace Ak
 				}
 				if(shader->getImageSamplers().size() > 0)
 				{
-					if(shader->getImageSamplers().count("texSampler"))
+					if(shader->getImageSamplers().count("albedo"))
 					{
-						image_sampler = shader->getImageSamplers()["texSampler"];
-						image_sampler_set = shader->getDescriptorSets()[image_sampler.getSet()];
+						auto image_sampler = shader->getImageSamplers()["albedo"];
+						shader->getDescriptorSets()[image_sampler.getSet()].writeDescriptor(image_sampler.getBinding(), _forward_data.texture->getImageView(), _forward_data.texture->getSampler());
 					}
 				}
 			}
@@ -103,8 +101,6 @@ namespace Ak
 		mat.view = scene->_camera->getView();
 		mat.proj[1][1] *= -1;
 		matrices_uniform_buffer.getBuffer()->setData(sizeof(mat), &mat);
-
-		image_sampler_set.writeDescriptor(image_sampler.getBinding(), _forward_data.texture->getImageView(), _forward_data.texture->getSampler());
 
 		renderer->getActiveCmdBuffer().beginRecord();
 		renderer->getRenderPass().begin();
@@ -122,5 +118,6 @@ namespace Ak
 	void SceneRenderer::destroy()
 	{
 		_pipelines_manager.clearCache();
+		TextureLibrary::get().clearLibrary();
 	}
 }

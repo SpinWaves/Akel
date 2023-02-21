@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/02/2023
-// Updated : 17/02/2023
+// Updated : 21/02/2023
 
 #include <Core/log.h>
 #include <Renderer/Pipeline/shaders_library.h>
@@ -25,7 +25,11 @@ namespace Ak
 	void ShadersLibrary::removeShaderFromLibrary(ShaderID id)
 	{
 		if(_cache.count(id))
+		{
+			_cache[id]->destroyModule();
+			_cache[id]->destroy();
 			_cache.erase(id);
+		}
 	}
 
 	void ShadersLibrary::clearLibrary()
