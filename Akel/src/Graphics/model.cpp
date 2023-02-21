@@ -26,18 +26,19 @@ namespace Ak
 	{
 		if(_file.empty())
 			return;
+		std::string file_path = _file.string();
 		if(!std::filesystem::exists(_file))
-			Core::log::report(FATAL_ERROR, "Model : failed to load file '%s'", _file.c_str());
+			Core::log::report(FATAL_ERROR, "Model : failed to load file '%s'", file_path.c_str());
 
 		if(_file.extension() == ".obj")
 			loadOBJ();
 		else if(_file.extension() == ".gltf")
 			loadGLTF();
 		else
-			Core::log::report(FATAL_ERROR, "Model : unsupported model file type '%s'", _file.c_str());
+			Core::log::report(FATAL_ERROR, "Model : unsupported model file type '%s'", file_path.c_str());
 
 		#ifdef AK_DEBUG
-			Core::log::report(MESSAGE, "Model : loaded file '%s'", _file.c_str());
+			Core::log::report(MESSAGE, "Model : loaded file '%s'", file_path.c_str());
 		#endif
 	}
 
@@ -47,8 +48,9 @@ namespace Ak
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
 		std::string warn, err;
+		std::string stream_file(_file.string());
 
-		if(!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, _file.c_str()))
+		if(!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, stream_file.c_str()))
 		{
 			if(!warn.empty())
 				Core::log::report(WARNING, "Model : warning while loading obj file : %s", warn.c_str());
