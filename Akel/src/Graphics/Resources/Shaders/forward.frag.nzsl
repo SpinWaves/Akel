@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/02/2023
-// Updated : 21/02/2023
+// Updated : 22/02/2023
 
 R"nzsl(
 
@@ -13,7 +13,10 @@ import * from Akel.FragmentOutput;
 
 external
 {
-	[set(1), binding(0)] albedo: sampler2D[f32]
+	[set(1), binding(0)] u_albedo_map: sampler2D[f32],
+	//[set(1), binding(1)] u_metallic_map: sampler2D[f32],
+	//[set(1), binding(2)] u_roughness_map: sampler2D[f32],
+	//[set(1), binding(3)] u_normal_map: sampler2D[f32],
 }
 
 [entry(frag)]

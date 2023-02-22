@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 27/01/2023
+// Updated : 22/02/2023
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -16,6 +16,14 @@
 
 namespace Ak
 {
+	struct AK_API CommandLineArgs
+	{
+		char** args = nullptr;
+		int count = 0;
+
+		const char* operator[](int index) const noexcept;
+	};
+
 	class AK_API Application : public ComponentStack, public non_copyable
 	{
 		public:

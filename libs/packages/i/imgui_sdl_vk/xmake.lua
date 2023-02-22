@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Author : @kbz_8
 -- Created : 08/08/2022
--- Updated : 08/08/2022
+-- Updated : 22/02/2023
 
 package("imgui_sdl_vk")
 
@@ -11,6 +11,7 @@ package("imgui_sdl_vk")
     add_urls("https://github.com/ocornut/imgui/archive/$(version).tar.gz",
              "https://github.com/ocornut/imgui.git")
     
+	add_versions("v1.89-docking", "94e850fd6ff9eceb98fda3147e3ffd4781ad2dc7")
     add_versions("v1.87-docking", "1ee252772ae9c0a971d06257bb5c89f628fa696a")
     add_versions("v1.87", "b54ceb35bda38766e36b87c25edf7a1cd8fd2cb8c485b245aedca6fb85645a20")
     add_versions("v1.84.2", "35cb5ca0fb42cb77604d4f908553f6ef3346ceec4fcd0189675bdfb764f62b9b")

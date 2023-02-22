@@ -8,7 +8,7 @@ package("imguizmo_sdl_vk")
     add_urls("https://github.com/CedricGuillemet/ImGuizmo.git")
     add_versions("1.83", "14a91c16e40b585fd96314826fa6d506311dbe5c")
 
-    add_deps("imgui_sdl_vk v1.87-docking")
+    add_deps("imgui_sdl_vk v1.89-docking")
 
     on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos", function(package)
             local xmake_lua = ([[

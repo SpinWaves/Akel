@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 16/01/2023
+// Updated : 22/02/2023
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -12,7 +12,7 @@
 #include <Core/instance.h>
 
 extern Ak::AkelInstance Akel_init();
-extern Ak::Application* Akel_mainApp();
+extern Ak::Application* Akel_mainApp(Ak::CommandLineArgs args);
 
 int main(int argc, char** argv)
 {
@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 		Ak::AkelInstance project = std::move(Akel_init());
 		if(!Ak::initAkel(&project))
 			Ak::Core::log::report(FATAL_ERROR, "Something went wrong with Akel initialisation");
-		auto app = Akel_mainApp();
+		auto app = Akel_mainApp({ argv, argc });
 	AK_END_SESSION();
 
 	AK_BEGIN_SESSION("Runtime");

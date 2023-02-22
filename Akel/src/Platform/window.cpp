@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 21/01/2023
+// Updated : 22/02/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -69,8 +69,8 @@ namespace Ak
 */
 		SDL_SetWindowIcon(_window, _icon);
 		SDL_SetWindowTitle(_window, title.c_str());
-		SDL_SetWindowPosition(_window, pos.X, pos.Y);
 		SDL_SetWindowSize(_window, size.X, size.Y);
+		SDL_SetWindowPosition(_window, pos.X, pos.Y);
 		SDL_SetWindowMinimumSize(_window, minSize.X, minSize.Y);
 		SDL_SetWindowMaximumSize(_window, maxSize.X, maxSize.Y);
 		SDL_SetWindowBrightness(_window, brightness);

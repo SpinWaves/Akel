@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 09/01/2023
+// Updated : 22/02/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -15,6 +15,13 @@ namespace Ak
 	ComponentStack* getMainAppComponentStack()
 	{
 		return static_cast<ComponentStack*>(__main_app);
+	}
+
+	const char* CommandLineArgs::operator[](int index) const noexcept
+	{
+		if(index >= count)
+			Core::log::report(FATAL_ERROR, "Command Line Args : index out of bounds");
+		return args[index];
 	}
 
 	Application::Application() : ComponentStack(), non_copyable(), _in(), _fps()
@@ -68,26 +75,29 @@ namespace Ak
 			// rendering
 			for(auto renderer : renderers)
 				renderer->beginFrame();
+			for(auto component : _components)
+				component->onRender();
 			if(ImGuiComponent::getNumComp())
 			{
+				for(auto imgui : imguis)
+				{
+					imgui->_renderer->getActiveCmdBuffer().beginRecord();
+					imgui->_renderer->getRenderPass().begin();
+				}
 				ImGui_ImplVulkan_NewFrame();
 				ImGui_ImplSDL2_NewFrame();
 				ImGui::NewFrame();
 
 				for(auto component : _components)
-				{
-					component->onRender();
 					component->onImGuiRender();
-				}
 
 				ImGui::Render();
 				for(auto imgui : imguis)
+				{
 					imgui->renderFrame();
-			}
-			else
-			{
-				for(auto component : _components)
-					component->onRender();
+					imgui->_renderer->getRenderPass().end();
+					imgui->_renderer->getActiveCmdBuffer().endRecord();
+				}
 			}
 			for(auto renderer : renderers)
 				renderer->endFrame();

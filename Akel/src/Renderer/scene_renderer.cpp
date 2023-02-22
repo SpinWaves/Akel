@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 21/02/2023
+// Updated : 22/02/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -87,9 +87,9 @@ namespace Ak
 				}
 				if(shader->getImageSamplers().size() > 0)
 				{
-					if(shader->getImageSamplers().count("albedo"))
+					if(shader->getImageSamplers().count("u_albedo_map"))
 					{
-						auto image_sampler = shader->getImageSamplers()["albedo"];
+						auto image_sampler = shader->getImageSamplers()["u_albedo_map"];
 						shader->getDescriptorSets()[image_sampler.getSet()].writeDescriptor(image_sampler.getBinding(), _forward_data.texture->getImageView(), _forward_data.texture->getSampler());
 					}
 				}

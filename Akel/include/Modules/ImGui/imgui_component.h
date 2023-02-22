@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 07/02/2023
+// Updated : 22/02/2023
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -16,7 +16,7 @@ namespace Ak
 		friend class Application;
 
 		public:
-			ImGuiComponent(class RendererComponent* renderer);
+			ImGuiComponent(class RendererComponent* renderer, std::string file_path = "default", bool generate_font = true);
 
 			void onAttach() override;
 			void onImGuiEvent(class Input& input) override;
@@ -26,9 +26,6 @@ namespace Ak
 			void addFontFromRawTTF(uint32_t* data, size_t data_size, ImFontConfig conf, ImWchar* ranges, float size, bool def = false);
 			void generateFonts();
 
-			// Needs to be called before onAttach() to work
-			// Calling it without parameter will reset to the default path
-			inline void setSettingsFilePath(const char* path = "imgui.ini") noexcept { _settingsFilePath = path; }
 			static inline bool getNumComp() noexcept { return _componentsInit; }
 
 			virtual ~ImGuiComponent() = default;
@@ -36,9 +33,10 @@ namespace Ak
 		private:
 			void SetDarkThemeColors();
 			void renderFrame();
-			std::string _settingsFilePath = "imgui.ini";
+			std::string _settingsFilePath;
 			class RendererComponent* _renderer = nullptr;
 			static inline bool _componentsInit = false;
+			bool _generate_font_on_attach = true;
 	};
 }
 

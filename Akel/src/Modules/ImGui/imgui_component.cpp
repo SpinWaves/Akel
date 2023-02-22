@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 21/01/2023
+// Updated : 22/02/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -13,7 +13,7 @@ namespace Ak
 {
 	static VkDescriptorPool descriptorPool = VK_NULL_HANDLE;
 
-	ImGuiComponent::ImGuiComponent(RendererComponent* renderer) : Component("__imgui_component"), _renderer(renderer) {}
+	ImGuiComponent::ImGuiComponent(RendererComponent* renderer, std::string file_path, bool generate_font) : Component("__imgui_component"), _renderer(renderer), _settingsFilePath(std::move(file_path)), _generate_font_on_attach(generate_font) {}
 
 	void ImGuiComponent::onAttach()
 	{
@@ -23,7 +23,7 @@ namespace Ak
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
 
-		if(_settingsFilePath != "imgui.ini")
+		if(_settingsFilePath != "default")
 		{
 			io.IniFilename = _settingsFilePath.c_str();
 			ImGui::LoadIniSettingsFromDisk(_settingsFilePath.c_str());
@@ -75,6 +75,9 @@ namespace Ak
 			init_info.ImageCount = _renderer->getSwapChain().getImagesNumber();
 			init_info.CheckVkResultFn = RCore::checkVk;
 		ImGui_ImplVulkan_Init(&init_info, _renderer->getRenderPass().get());
+		
+		if(_generate_font_on_attach)
+			generateFonts();
 
 		_componentsInit = true;
 		getMainAppProjectFile().setBoolValue("__imgui_component", true);

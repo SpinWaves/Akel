@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 13/02/2023
+-- Updated : 22/02/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -9,7 +9,7 @@ add_repositories("local-repo libs")
 add_repositories("nazara-repo https://github.com/NazaraEngine/xmake-repo")
 add_requires("nzsl")
 
-add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.87-docking", "imguizmo_sdl_vk", "libsdl", "stb", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json", "tinyobjloader")
+add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.89-docking", "imguizmo_sdl_vk", "libsdl", "stb", "libsndfile", "openal-soft", "vulkan-memory-allocator", "sol2", "nlohmann_json", "tinyobjloader")
 add_requires("volk", { configs = { header_only = true}})
 
 add_rules("mode.debug", "mode.release")
@@ -55,23 +55,43 @@ target("Akel")
 	add_packages("tinyobjloader", { public = true })
 target_end() -- optional but I think the code is cleaner with this
 
--- Akel Studio Build
+-- Akel Studio Launcher Build
 target("Akel_Studio")
 	set_default(false)
 	set_license("MIT")
     set_kind("binary")
-	add_includedirs("Akel/include", "Akel_Studio/src", "libs/include")
+	add_includedirs("Akel/include", "Akel_Studio/src/Launcher", "Akel_Studio/src", "libs/include")
+    add_deps("Akel")
+    add_deps("akelstudio_application")
+	
+    add_files("Akel_Studio/src/Launcher/**.cpp")
+
+	set_objectdir("Akel_Studio/build/objects/$(os)_$(arch)")
+	set_targetdir("Akel_Studio/")
+
+	if is_mode("debug") then
+		add_defines("AK_STUDIO_DEBUG")
+	elseif is_mode("release") then
+		add_defines("AK_STUDIO_RELEASE")
+	end
+target_end()
+
+-- Akel Studio Build
+target("akelstudio_application")
+	set_default(false)
+	set_license("MIT")
+    set_kind("binary")
+	add_includedirs("Akel/include", "Akel_Studio/src/Akel_Studio", "Akel_Studio/src", "libs/include")
     add_deps("Akel")
 	
-    add_files("Akel_Studio/src/**.cpp")
+    add_files("Akel_Studio/src/Akel_Studio/**.cpp")
 
 	set_objectdir("Akel_Studio/build/objects/$(os)_$(arch)")
 	set_targetdir("Akel_Studio/")
 
 	add_packages("imguizmo_sdl_vk")
-	add_packages("spirv-reflect")
 
-	set_pcxxheader("Akel_Studio/src/AkSpch.h")
+	set_pcxxheader("Akel_Studio/src/Akel_Studio/AkSpch.h")
 
 	if is_mode("debug") then
 		add_defines("AK_STUDIO_DEBUG")
