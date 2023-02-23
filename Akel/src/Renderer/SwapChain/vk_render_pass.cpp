@@ -32,6 +32,7 @@ namespace Ak
             VK_IMAGE_TILING_OPTIMAL,
             VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
         );
+
 		VkAttachmentDescription depthAttachment{};
 		depthAttachment.format = depth_format;
 		depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -74,7 +75,7 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create render pass");
 	}
 
-	void RenderPass::begin()
+	void RenderPass::begin(CmdSet set)
 	{
 		if(_is_running)
 			return;
@@ -92,17 +93,17 @@ namespace Ak
 		renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
 		renderPassInfo.pClearValues = clearValues.data();
 
-		vkCmdBeginRenderPass(_renderer->getActiveCmdBuffer().get(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+		vkCmdBeginRenderPass(_renderer->getActiveCmdBuffer(set).get(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 		_is_running = true;
 	}
 
-	void RenderPass::end()
+	void RenderPass::end(CmdSet set)
 	{
 		if(!_is_running)
 			return;
 
-		vkCmdEndRenderPass(_renderer->getActiveCmdBuffer().get());
+		vkCmdEndRenderPass(_renderer->getActiveCmdBuffer(set).get());
 		_is_running = false;
 	}
 

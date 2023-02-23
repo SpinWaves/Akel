@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 15/02/2023
+// Updated : 23/02/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -30,6 +30,7 @@ namespace Ak
 			void onAttach() override;
 
 			bool beginFrame();
+			void submitCmdBuffer(CmdBuffer& buffer);
 			void endFrame();
 
 			inline WindowComponent* getWindow() noexcept { return _window; }
@@ -41,8 +42,8 @@ namespace Ak
 			inline Semaphore& getSemaphore() noexcept { return _semaphore; }
 			inline RenderPass& getRenderPass() noexcept { return _pass; }
 			inline VkClearValue& getClearValue() noexcept { return _clearColor; }
-			inline CmdBuffer& getCmdBuffer(int i) noexcept { return _cmd.getCmdBuffer(i); }
-			inline CmdBuffer& getActiveCmdBuffer() noexcept { return _cmd.getCmdBuffer(_active_image_index); }
+			inline CmdBuffer& getCmdBuffer(int i, CmdSet set = CmdSet::forward) noexcept { return _cmd.getCmdBuffer(i, set); }
+			inline CmdBuffer& getActiveCmdBuffer(CmdSet set = CmdSet::forward) noexcept { return _cmd.getCmdBuffer(_active_image_index, set); }
 			inline uint32_t getActiveImageIndex() const noexcept { return _active_image_index; }
 			inline uint32_t getImageIndex() const noexcept { return _image_index; }
 			inline bool isInit() const noexcept { return _is_init; }

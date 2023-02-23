@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 22/02/2023
+// Updated : 23/02/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -59,7 +59,7 @@ namespace Ak
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplVulkan_LoadFunctions([](const char *function_name, void *vulkan_instance) {
-			return vkGetInstanceProcAddr(*(reinterpret_cast<VkInstance *>(vulkan_instance)), function_name);
+			return vkGetInstanceProcAddr(*(reinterpret_cast<VkInstance*>(vulkan_instance)), function_name);
 		}, &Render_Core::get().getInstance().get());
 
 		ImGui_ImplSDL2_InitForVulkan(_renderer->getWindow()->getNativeWindow());
@@ -75,7 +75,7 @@ namespace Ak
 			init_info.ImageCount = _renderer->getSwapChain().getImagesNumber();
 			init_info.CheckVkResultFn = RCore::checkVk;
 		ImGui_ImplVulkan_Init(&init_info, _renderer->getRenderPass().get());
-		
+
 		if(_generate_font_on_attach)
 			generateFonts();
 
@@ -85,16 +85,16 @@ namespace Ak
 
 	void ImGuiComponent::generateFonts()
 	{
-		_renderer->getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+		_renderer->getActiveCmdBuffer(CmdSet::imgui).beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
-			ImGui_ImplVulkan_CreateFontsTexture(_renderer->getActiveCmdBuffer().get());
+			ImGui_ImplVulkan_CreateFontsTexture(_renderer->getActiveCmdBuffer(CmdSet::imgui).get());
 
 			VkSubmitInfo end_info{};
 			end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 			end_info.commandBufferCount = 1;
-			end_info.pCommandBuffers = &_renderer->getActiveCmdBuffer().get();
+			end_info.pCommandBuffers = &_renderer->getActiveCmdBuffer(CmdSet::imgui).get();
 
-		_renderer->getActiveCmdBuffer().endRecord();
+		_renderer->getActiveCmdBuffer(CmdSet::imgui).endRecord();
 
 		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &end_info, VK_NULL_HANDLE) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Imgui Vulkan error : failed to submit font command buffer");
@@ -115,13 +115,13 @@ namespace Ak
 		if(def)
 			io.FontDefault = io.Fonts->AddFontFromFileTTF(file, size);
 
-		_renderer->getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-			ImGui_ImplVulkan_CreateFontsTexture(_renderer->getActiveCmdBuffer().get());
+		_renderer->getActiveCmdBuffer(CmdSet::imgui).beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+			ImGui_ImplVulkan_CreateFontsTexture(_renderer->getActiveCmdBuffer(CmdSet::imgui).get());
 			VkSubmitInfo end_info{};
 			end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 			end_info.commandBufferCount = 1;
-			end_info.pCommandBuffers = &_renderer->getActiveCmdBuffer().get();
-		_renderer->getActiveCmdBuffer().endRecord();
+			end_info.pCommandBuffers = &_renderer->getActiveCmdBuffer(CmdSet::imgui).get();
+		_renderer->getActiveCmdBuffer(CmdSet::imgui).endRecord();
 		
 		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &end_info, VK_NULL_HANDLE) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Imgui Vulkan error : failed to submit font command buffer");
@@ -137,13 +137,13 @@ namespace Ak
 		if(def)
 			io.FontDefault = io.Fonts->AddFontFromMemoryCompressedTTF(data, data_size, size, &conf, range);
 
-		_renderer->getActiveCmdBuffer().beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-			ImGui_ImplVulkan_CreateFontsTexture(_renderer->getActiveCmdBuffer().get());
+		_renderer->getActiveCmdBuffer(CmdSet::imgui).beginRecord(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+			ImGui_ImplVulkan_CreateFontsTexture(_renderer->getActiveCmdBuffer(CmdSet::imgui).get());
 			VkSubmitInfo end_info{};
 			end_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 			end_info.commandBufferCount = 1;
-			end_info.pCommandBuffers = &_renderer->getActiveCmdBuffer().get();
-		_renderer->getActiveCmdBuffer().endRecord();
+			end_info.pCommandBuffers = &_renderer->getActiveCmdBuffer(CmdSet::imgui).get();
+		_renderer->getActiveCmdBuffer(CmdSet::imgui).endRecord();
 
 		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &end_info, VK_NULL_HANDLE) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Imgui Vulkan error : failed to submit font command buffer");
@@ -152,11 +152,19 @@ namespace Ak
 		ImGui_ImplVulkan_DestroyFontUploadObjects();
 	}
 
+	void ImGuiComponent::begin()
+	{
+		_renderer->getActiveCmdBuffer(CmdSet::imgui).beginRecord();
+		_renderer->getRenderPass().begin(CmdSet::imgui);
+	}
+
 	void ImGuiComponent::renderFrame()
 	{
 		ImDrawData* draw_data = ImGui::GetDrawData();
 		if(draw_data->DisplaySize.x >= 0.0f && draw_data->DisplaySize.y >= 0.0f)
-			ImGui_ImplVulkan_RenderDrawData(draw_data, _renderer->getActiveCmdBuffer().get());
+			ImGui_ImplVulkan_RenderDrawData(draw_data, _renderer->getActiveCmdBuffer(CmdSet::imgui).get());
+		_renderer->getRenderPass().end(CmdSet::imgui);
+		_renderer->getActiveCmdBuffer(CmdSet::imgui).endRecord();
 	}
 
 	void ImGuiComponent::onQuit()

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 21/02/2023
+// Updated : 23/02/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -36,7 +36,6 @@ namespace Ak
 
 		vkWaitForFences(device, 1, &_semaphore.getInFlightFence(_active_image_index), VK_TRUE, UINT64_MAX);
 
-		_image_index = 0;
 		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphore.getImageSemaphore(_active_image_index), VK_NULL_HANDLE, &_image_index);
 
 		if(result == VK_ERROR_OUT_OF_DATE_KHR)
@@ -49,7 +48,8 @@ namespace Ak
 
 		vkResetFences(device, 1, &_semaphore.getInFlightFence(_active_image_index));
 
-		vkResetCommandBuffer(_cmd.getCmdBuffer(_active_image_index).get(), 0);
+		for(int i = 0; i < COMMAND_BUFFERS_SETS; i++)
+			_cmd.getCmdBuffer(_active_image_index, i).reset();
 
 		return true;
 	}
@@ -59,35 +59,35 @@ namespace Ak
 		if(!_is_init)
 			return;
 
-		VkSubmitInfo submitInfo{};
-		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
+		VkSemaphore signalSemaphores[] = { _semaphore.getRenderImageSemaphore(_active_image_index) };
 		VkSemaphore waitSemaphores[] = { _semaphore.getImageSemaphore(_active_image_index) };
 		VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+
+		VkCommandBuffer command_buffers[COMMAND_BUFFERS_SETS];
+		for(int i = 0; i < COMMAND_BUFFERS_SETS - (ImGuiComponent::getNumComp() ? 0 : 1); i++)
+			command_buffers[i] = _cmd.getCmdBuffer(_active_image_index, i).get();
+
+		VkSubmitInfo submitInfo{};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 		submitInfo.waitSemaphoreCount = 1;
 		submitInfo.pWaitSemaphores = waitSemaphores;
 		submitInfo.pWaitDstStageMask = waitStages;
-
-		submitInfo.commandBufferCount = 1;
-		submitInfo.pCommandBuffers = &_cmd.getCmdBuffer(_active_image_index).get();
-
-		VkSemaphore signalSemaphores[] = { _semaphore.getRenderImageSemaphore(_active_image_index) };
+		submitInfo.commandBufferCount = COMMAND_BUFFERS_SETS - (ImGuiComponent::getNumComp() ? 0 : 1);
+		submitInfo.pCommandBuffers = command_buffers;
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores = signalSemaphores;
 
 		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &submitInfo, _semaphore.getInFlightFence(_active_image_index)) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to submit draw command buffer");
 
+		VkSwapchainKHR swapchain = _swapchain();
+
 		VkPresentInfoKHR presentInfo{};
 		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-
 		presentInfo.waitSemaphoreCount = 1;
 		presentInfo.pWaitSemaphores = signalSemaphores;
-
-		VkSwapchainKHR swapchain = _swapchain();
 		presentInfo.swapchainCount = 1;
 		presentInfo.pSwapchains = &swapchain;
-
 		presentInfo.pImageIndices = &_image_index;
 
 		VkResult result = vkQueuePresentKHR(Render_Core::get().getQueue().getPresent(), &presentInfo);

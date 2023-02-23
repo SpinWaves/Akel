@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 22/02/2023
+// Updated : 23/02/2023
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -32,7 +32,9 @@ namespace Ak
 
 		private:
 			void SetDarkThemeColors();
+			void begin();
 			void renderFrame();
+
 			std::string _settingsFilePath;
 			class RendererComponent* _renderer = nullptr;
 			static inline bool _componentsInit = false;

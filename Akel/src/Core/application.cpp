@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 22/02/2023
+// Updated : 23/02/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -80,10 +80,7 @@ namespace Ak
 			if(ImGuiComponent::getNumComp())
 			{
 				for(auto imgui : imguis)
-				{
-					imgui->_renderer->getActiveCmdBuffer().beginRecord();
-					imgui->_renderer->getRenderPass().begin();
-				}
+					imgui->begin();
 				ImGui_ImplVulkan_NewFrame();
 				ImGui_ImplSDL2_NewFrame();
 				ImGui::NewFrame();
@@ -93,11 +90,7 @@ namespace Ak
 
 				ImGui::Render();
 				for(auto imgui : imguis)
-				{
 					imgui->renderFrame();
-					imgui->_renderer->getRenderPass().end();
-					imgui->_renderer->getActiveCmdBuffer().endRecord();
-				}
 			}
 			for(auto renderer : renderers)
 				renderer->endFrame();

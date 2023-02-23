@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vk_render_pass.h                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/21 17:04:31 by maldavid          #+#    #+#             */
-/*   Updated: 2023/02/20 14:55:48 by maldavid         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 // this file is a part of akel
 // authors : @kbz_8
 // created : 10/04/2022
@@ -19,6 +7,7 @@
 #define __AK_VK_RENDER_PASS__
 
 #include <Akpch.h>
+#include <Renderer/Command/cmd_manager.h>
 
 namespace Ak
 {
@@ -28,8 +17,8 @@ namespace Ak
 			void init(class RendererComponent* renderer);
 			void destroy() noexcept;
 
-			void begin();
-			void end();
+			void begin(CmdSet set = CmdSet::forward);
+			void end(CmdSet set = CmdSet::forward);
 			
             inline VkRenderPass operator()() noexcept { return _renderPass; }
             inline VkRenderPass get() noexcept { return _renderPass; }
