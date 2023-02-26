@@ -12,7 +12,7 @@ Ak::AkelInstance Akel_init()
 Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 {
 	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Model Loading using Akel Engine");
-	app->add_component<Ak::ImGuiRenderStats>(app->getRenderer());
+	//app->add_component<Ak::ImGuiRenderStats>(app->getRenderer());
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
 	scene->addCamera<Ak::Cam::FirstPerson3D>(1.0f, 1.0f, 1.0f);
 	app->add_scene(scene);

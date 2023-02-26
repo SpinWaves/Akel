@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 23/02/2023
+// Updated : 26/02/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -85,14 +85,6 @@ namespace Ak
 					if(shader->getUniforms().count("matrices"))
 						matrices_uniform_buffer = shader->getUniforms()["matrices"];
 				}
-				if(shader->getImageSamplers().size() > 0)
-				{
-					if(shader->getImageSamplers().count("u_albedo_map"))
-					{
-						auto image_sampler = shader->getImageSamplers()["u_albedo_map"];
-						shader->getDescriptorSets()[image_sampler.getSet()].writeDescriptor(image_sampler.getBinding(), _forward_data.texture->getImageView(), _forward_data.texture->getSampler());
-					}
-				}
 			}
 		}
 
@@ -102,9 +94,8 @@ namespace Ak
 		mat.proj[1][1] *= -1;
 		matrices_uniform_buffer.getBuffer()->setData(sizeof(mat), &mat);
 
-		renderer->getActiveCmdBuffer().beginRecord();
-		renderer->getRenderPass().begin();
 		pipeline->bindPipeline(renderer->getActiveCmdBuffer());
+		renderer->getRenderPass().begin();
 
 		vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
 
@@ -112,7 +103,6 @@ namespace Ak
 			command.mesh->draw(*renderer);
 
 		renderer->getRenderPass().end();
-		renderer->getActiveCmdBuffer().endRecord();
 	}
 
 	void SceneRenderer::destroy()

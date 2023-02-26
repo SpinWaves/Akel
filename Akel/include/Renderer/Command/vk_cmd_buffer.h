@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 29/01/2023
+// Updated : 24/02/2023
 
 #ifndef __AK_VK_CMD_BUFFER__
 #define __AK_VK_CMD_BUFFER__
@@ -19,6 +19,8 @@ namespace Ak
 			void beginRecord(VkCommandBufferUsageFlags usage = 0);
 			inline void reset() noexcept { vkResetCommandBuffer(_cmd_buffer, 0); }
 			void endRecord();
+
+			inline bool isRecording() const noexcept { return _is_recording; }
 
 			inline VkCommandBuffer& operator()() noexcept { return _cmd_buffer; }
 			inline VkCommandBuffer& get() noexcept { return _cmd_buffer; }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 23/02/2023
+// Updated : 26/02/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -51,6 +51,8 @@ namespace Ak
 		for(int i = 0; i < COMMAND_BUFFERS_SETS; i++)
 			_cmd.getCmdBuffer(_active_image_index, i).reset();
 
+		_cmd.getCmdBuffer(_active_image_index).beginRecord();
+
 		return true;
 	}
 
@@ -58,6 +60,8 @@ namespace Ak
 	{
 		if(!_is_init)
 			return;
+
+		_cmd.getCmdBuffer(_active_image_index).endRecord();
 
 		VkSemaphore signalSemaphores[] = { _semaphore.getRenderImageSemaphore(_active_image_index) };
 		VkSemaphore waitSemaphores[] = { _semaphore.getImageSemaphore(_active_image_index) };

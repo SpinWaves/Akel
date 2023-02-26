@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 08/02/2023
+// Updated : 24/02/2023
 
 #include <Renderer/Descriptors/vk_descriptor_set.h>
 #include <Renderer/Descriptors/vk_descriptor_set_layout.h>
@@ -63,24 +63,21 @@ namespace Ak
 	{
         auto device = Render_Core::get().getDevice().get();
 
-		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-		{
-			VkDescriptorImageInfo imageInfo{};
-			imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-			imageInfo.imageView = view;
-            imageInfo.sampler = sampler;
+		VkDescriptorImageInfo imageInfo{};
+		imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		imageInfo.imageView = view;
+		imageInfo.sampler = sampler;
 
-			VkWriteDescriptorSet descriptorWrite{};
-			descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptorWrite.dstSet = _desc_set[i];
-			descriptorWrite.dstBinding = binding;
-			descriptorWrite.dstArrayElement = 0;
-			descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-			descriptorWrite.descriptorCount = 1;
-			descriptorWrite.pImageInfo = &imageInfo;
+		VkWriteDescriptorSet descriptorWrite{};
+		descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptorWrite.dstSet = _desc_set[_renderer->getActiveImageIndex()];
+		descriptorWrite.dstBinding = binding;
+		descriptorWrite.dstArrayElement = 0;
+		descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		descriptorWrite.descriptorCount = 1;
+		descriptorWrite.pImageInfo = &imageInfo;
 
-			vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
-		}
+		vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
 	}
 
 	VkDescriptorSet& DescriptorSet::operator()() noexcept

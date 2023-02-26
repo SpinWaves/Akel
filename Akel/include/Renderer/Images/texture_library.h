@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/02/2023
-// Updated : 21/02/2023
+// Updated : 24/02/2023
 
 #ifndef __AK_TEXTURE_LIBRARY__
 #define __AK_TEXTURE_LIBRARY__
@@ -13,6 +13,7 @@
 namespace Ak
 {
 	using TextureID = uint32_t;
+	constexpr TextureID nulltexture = 0;
 
 	class TextureLibrary : public SelfInstance<TextureLibrary>
 	{
@@ -29,7 +30,7 @@ namespace Ak
 
 		private:
 			std::unordered_map<TextureID, std::shared_ptr<Texture>> _cache;
-			TextureID _current_id = 0;
+			TextureID _current_id = 1;
 	};
 }
 
