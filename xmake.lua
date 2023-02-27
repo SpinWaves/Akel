@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 22/02/2023
+-- Updated : 27/02/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -105,9 +105,9 @@ target("RectDemo")
 	set_default(false)
     set_kind("binary")
     add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/rect/src", "libs/include")
-    add_files("SandBox/rect/src/*.cpp")
-	set_targetdir("SandBox/rect")
+	add_includedirs("Akel/include", "SandBox/Native/rect/src", "libs/include")
+    add_files("SandBox/Native/rect/src/*.cpp")
+	set_targetdir("SandBox/Native/rect")
 target_end()
 
 -- Cube Demo Build
@@ -115,9 +115,9 @@ target("CubeDemo")
 	set_default(false)
     set_kind("binary")
     add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/cube/src", "libs/include")
-    add_files("SandBox/cube/src/*.cpp")
-	set_targetdir("SandBox/cube")
+	add_includedirs("Akel/include", "SandBox/Native/cube/src", "libs/include")
+    add_files("SandBox/Native/cube/src/*.cpp")
+	set_targetdir("SandBox/Native/cube")
 target_end()
 
 -- Skybox Demo Build
@@ -125,9 +125,9 @@ target("SkyDemo")
 	set_default(false)
     set_kind("binary")
     add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/skybox/src", "libs/include")
-    add_files("SandBox/skybox/src/*.cpp")
-	set_targetdir("SandBox/skybox")
+	add_includedirs("Akel/include", "SandBox/Native/skybox/src", "libs/include")
+    add_files("SandBox/Native/skybox/src/*.cpp")
+	set_targetdir("SandBox/Native/skybox")
 target_end()
 
 -- Model Demo Build
@@ -135,9 +135,9 @@ target("ModelDemo")
 	set_default(false)
     set_kind("binary")
     add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/model/src", "libs/include")
-    add_files("SandBox/model/src/*.cpp")
-	set_targetdir("SandBox/model")
+	add_includedirs("Akel/include", "SandBox/Native/model/src", "libs/include")
+    add_files("SandBox/Native/model/src/*.cpp")
+	set_targetdir("SandBox/Native/model")
 target_end()
 
 -- Kila tester Build

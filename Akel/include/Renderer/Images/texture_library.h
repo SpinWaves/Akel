@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/02/2023
-// Updated : 24/02/2023
+// Updated : 27/02/2023
 
 #ifndef __AK_TEXTURE_LIBRARY__
 #define __AK_TEXTURE_LIBRARY__
@@ -15,12 +15,13 @@ namespace Ak
 	using TextureID = uint32_t;
 	constexpr TextureID nulltexture = 0;
 
-	class TextureLibrary : public SelfInstance<TextureLibrary>
+	class AK_API TextureLibrary : public SelfInstance<TextureLibrary>
 	{
 		public:
 			TextureLibrary() = default;
 
 			std::shared_ptr<Texture> getTexture(TextureID id);
+			TextureID addTextureToLibrary(Texture&& texture);
 			TextureID addTextureToLibrary(std::shared_ptr<Texture> texture);
 			void removeTextureFromLibrary(TextureID id);
 

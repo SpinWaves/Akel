@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 18/02/2023
+// Updated : 27/02/2023
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <Graphics/model.h>
@@ -14,12 +14,12 @@ namespace Ak
 
 	Model::Model(const Mesh& mesh)
 	{
-		_meshes.push_back(create_shared_ptr_w<Mesh>(mesh));
+		_mesh = create_shared_ptr_w<Mesh>(mesh);
 	}
 
 	Model::Model(Mesh&& mesh)
 	{
-		_meshes.push_back(create_shared_ptr_w<Mesh>(std::move(mesh)));
+		_mesh = create_shared_ptr_w<Mesh>(std::move(mesh));
 	}
 
 	void Model::load()
@@ -59,11 +59,11 @@ namespace Ak
 		}
 
 		//std::unordered_map<Vertex, uint32_t> unique_vertices;
+		std::vector<Vertex> vertices;
+		std::vector<uint32_t> indices;
 
 		for(const auto& shape : shapes)
 		{
-			std::vector<Vertex> vertices;
-			std::vector<uint32_t> indices;
 			for(const auto& index : shape.mesh.indices)
 			{
 				Vertex vertex{};
@@ -91,8 +91,8 @@ namespace Ak
 				indices.push_back(vertices.size());
 				vertices.push_back(vertex);
 			}
-			_meshes.push_back(create_shared_ptr_w<Mesh>(std::move(vertices), std::move(indices)));
 		}
+		_mesh = create_shared_ptr_w<Mesh>(std::move(vertices), std::move(indices));
 	}
 
 	void Model::loadGLTF()

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/02/2023
-// Updated : 25/02/2023
+// Updated : 27/02/2023
 
 #include <Graphics/material.h>
 #include <Renderer/Pipeline/shader_library.h>
@@ -9,9 +9,12 @@
 
 namespace Ak
 {
-	Material::Material(ShaderID shader, MaterialTextures textures) : _shader(shader), _textures(textures) {}
+	Material::Material(ShaderID shader, MaterialTextures textures) : _shader(shader)
+	{
 
-	void Material::setAlbedoTexture(TextureID texture)
+	}
+
+	void Material::setAlbedoTexture(std::filesystem::path texture)
 	{
 		if(texture != _textures.albedo)
 			_textures.albedo = texture;
@@ -38,6 +41,7 @@ namespace Ak
 			_shader_cache = _shader;
 		}
 
-		material_set.writeDescriptor(albedo_sampler_cache.getBinding(), albedo->getImageView(), albedo->getSampler());
+		if(albedo != nullptr)
+			material_set.writeDescriptor(albedo_sampler_cache.getBinding(), albedo->getImageView(), albedo->getSampler());
 	}
 }

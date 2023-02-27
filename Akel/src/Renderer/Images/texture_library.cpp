@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/02/2023
-// Updated : 21/02/2023
+// Updated : 27/02/2023
 
 #include <Core/log.h>
 #include <Renderer/Images/texture_library.h>
@@ -13,6 +13,14 @@ namespace Ak
 		if(!_cache.count(id))
 			Core::log::report(FATAL_ERROR, "Texture Library : wrong texture ID '%d'", id);
 		return _cache[id];
+	}
+
+	TextureID TextureLibrary::addTextureToLibrary(Texture&& texture)
+	{
+		std::shared_ptr<Texture> tex = create_shared_ptr_w<Texture>(std::move(texture));
+		_cache[_current_id] = std::move(tex);
+		_current_id++;
+		return _current_id - 1;
 	}
 
 	TextureID TextureLibrary::addTextureToLibrary(std::shared_ptr<Texture> texture)

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 26/02/2023
+// Updated : 27/02/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -36,19 +36,17 @@ namespace Ak
 			}
 			
 			_forward_data.command_queue.clear();
-			auto world = scene->getRegistry().view<ModelAttribute, TextureAttribute>();
+			auto world = scene->getRegistry().view<ModelAttribute, MaterialAttribute>();
 			for(auto e : world)
 			{
 				ModelAttribute model = world.get<ModelAttribute>(e);
-				for(std::shared_ptr<Mesh> mesh : model.model.getMeshes())
-				{
-					RenderCommandData command;
-					command.mesh = mesh.get();
-					_forward_data.command_queue.push_back(command);
-				}
+				MaterialAttribute material = world.get<MaterialAttribute>(e);
 
-				TextureAttribute texture = world.get<TextureAttribute>(e);
-				_forward_data.texture = TextureLibrary::get().getTexture(texture.getTextureID());
+				RenderCommandData command;
+				command.mesh = model.model.getMesh().get();
+				command.material = MaterialLibrary::get().getTexture(material.getMaterialID());
+
+				_forward_data.command_queue.push_back(command);
 			}
 			forwardPass(scene);
 		}
