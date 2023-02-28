@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/02/2023
-// Updated : 26/02/2023
+// Updated : 28/02/2023
 
 #include <Core/log.h>
 #include <Graphics/material_library.h>
@@ -22,19 +22,21 @@ namespace Ak
 		return _current_id - 1;
 	}
 
+	MaterialID MaterialLibrary::addMaterialToLibrary(MaterialDesc material)
+	{
+		_cache[_current_id] = create_shared_ptr_w<Material>(material);
+		_current_id++;
+		return _current_id - 1;
+	}
+
 	void MaterialLibrary::removeMaterialFromLibrary(MaterialID id)
 	{
 		if(_cache.count(id))
-		{
-			_cache[id]->destroy();
 			_cache.erase(id);
-		}
 	}
 
 	void MaterialLibrary::clearLibrary()
 	{
-		for(auto [id, material] : _cache)
-			material->destroy();
 		_cache.clear();
 	}
 }

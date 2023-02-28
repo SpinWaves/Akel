@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 27/02/2023
+// Updated : 28/02/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -36,15 +36,14 @@ namespace Ak
 			}
 			
 			_forward_data.command_queue.clear();
-			auto world = scene->getRegistry().view<ModelAttribute, MaterialAttribute>();
+			auto world = scene->getRegistry().view<ModelAttribute>();
 			for(auto e : world)
 			{
 				ModelAttribute model = world.get<ModelAttribute>(e);
-				MaterialAttribute material = world.get<MaterialAttribute>(e);
 
 				RenderCommandData command;
 				command.mesh = model.model.getMesh().get();
-				command.material = MaterialLibrary::get().getTexture(material.getMaterialID());
+				command.material = model.model.getMaterial();
 
 				_forward_data.command_queue.push_back(command);
 			}
@@ -60,7 +59,6 @@ namespace Ak
 
 		PipelineDesc pipeline_desc;
 		pipeline_desc.shaders = _forward_data.shaders;
-		pipeline_desc.main_texture = _forward_data.texture;
 
 		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
 		if(pipeline == nullptr)
@@ -69,6 +67,7 @@ namespace Ak
 		// caches
 		static std::vector<VkDescriptorSet> sets;
 		static Shader::Uniform matrices_uniform_buffer;
+		static ShaderID fragment_shader = nullshader;
 
 		if(scene != _scene_cache)
 		{
@@ -76,6 +75,8 @@ namespace Ak
 			for(ShaderID id : _forward_data.shaders)
 			{
 				auto shader = ShadersLibrary::get().getShader(id);
+				if(shader->getType() == VK_SHADER_STAGE_FRAGMENT_BIT)
+					fragment_shader = id;
 				for(DescriptorSet& set : shader->getDescriptorSets())
 					sets.push_back(set.get());
 				if(shader->getUniforms().size() > 0)
@@ -95,10 +96,17 @@ namespace Ak
 		pipeline->bindPipeline(renderer->getActiveCmdBuffer());
 		renderer->getRenderPass().begin();
 
-		vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
-
 		for(RenderCommandData& command : _forward_data.command_queue)
+		{
+			if(fragment_shader != nullshader)
+			{
+				auto material = MaterialLibrary::get().getMaterial(command.material);
+				material->updateDescriptors(fragment_shader);
+			}
+
+			vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
 			command.mesh->draw(*renderer);
+		}
 
 		renderer->getRenderPass().end();
 	}

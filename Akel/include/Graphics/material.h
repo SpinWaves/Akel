@@ -1,18 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 27/02/2023
+// Updated : 28/02/2023
 
 #ifndef __AK_MATERIAL__
 #define __AK_MATERIAL__
 
 #include <Akpch.h>
 #include <Renderer/Images/texture_library.h>
-#include <Renderer/Pipeline/shader_library.h>
+#include <Renderer/Pipeline/shaders_library.h>
 
 namespace Ak
 {
-	struct AK_API MaterialTextures
+	struct AK_API MaterialDesc
 	{
 		std::filesystem::path albedo;
 		//std::filesystem::path normal;
@@ -25,7 +25,7 @@ namespace Ak
 		friend class SceneRenderer;
 		public:
 			Material() = default;
-			Material(ShaderID shader, MaterialTextures textures);
+			Material(MaterialDesc textures);
 
 			void setAlbedoTexture(std::filesystem::path texture);
 			//void setMetallicTexture(TextureID texture);
@@ -33,13 +33,12 @@ namespace Ak
 			//void setNormalTexture(TextureID texture);
 
 		private:
-			void updateDescriptors();
+			void updateDescriptors(ShaderID shader);
 
-			TextureID albedo = nulltexture;
-			//TextureID normal;
-			//TextureID metallic;
-			//TextureID roughness;
-			ShaderID _shader = nullshader;
+			TextureID _albedo = nulltexture;
+			//TextureID _normal;
+			//TextureID _metallic;
+			//TextureID _roughness;
 			ShaderID _shader_cache = nullshader;
 	};
 }

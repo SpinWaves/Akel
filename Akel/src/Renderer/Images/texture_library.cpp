@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/02/2023
-// Updated : 27/02/2023
+// Updated : 28/02/2023
 
 #include <Core/log.h>
 #include <Renderer/Images/texture_library.h>
@@ -15,10 +15,9 @@ namespace Ak
 		return _cache[id];
 	}
 
-	TextureID TextureLibrary::addTextureToLibrary(Texture&& texture)
+	TextureID TextureLibrary::addTextureToLibrary(std::filesystem::path texture)
 	{
-		std::shared_ptr<Texture> tex = create_shared_ptr_w<Texture>(std::move(texture));
-		_cache[_current_id] = std::move(tex);
+		_cache[_current_id] = create_shared_ptr_w<Texture>(loadTextureFromFile(std::move(texture)));
 		_current_id++;
 		return _current_id - 1;
 	}

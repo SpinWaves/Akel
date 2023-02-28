@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/02/2023
-// Updated : 26/02/2023
+// Updated : 28/02/2023
 
 #ifndef __AK_MATERIAL_LIBRARY__
 #define __AK_MATERIAL_LIBRARY__
@@ -13,7 +13,7 @@
 namespace Ak
 {
 	using MaterialID = uint32_t;
-	constexpr MaterialId nullmaterial = 0;
+	constexpr MaterialID nullmaterial = 0;
 
 	class AK_API MaterialLibrary : public SelfInstance<MaterialLibrary>
 	{
@@ -22,6 +22,7 @@ namespace Ak
 
 			std::shared_ptr<Material> getMaterial(MaterialID id);
 			MaterialID addMaterialToLibrary(std::shared_ptr<Material> material);
+			MaterialID addMaterialToLibrary(MaterialDesc material);
 			void removeMaterialFromLibrary(MaterialID id);
 
 			void clearLibrary();

@@ -1,44 +1,42 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/02/2023
-// Updated : 27/02/2023
+// Updated : 28/02/2023
 
 #include <Graphics/material.h>
-#include <Renderer/Pipeline/shader_library.h>
-#include <Renderer/Images/texture_library.h>
+#include <Renderer/Pipeline/shaders_library.h>
 
 namespace Ak
 {
-	Material::Material(ShaderID shader, MaterialTextures textures) : _shader(shader)
+	Material::Material(MaterialDesc textures)
 	{
-
+		_albedo = TextureLibrary::get().addTextureToLibrary(textures.albedo);
 	}
 
 	void Material::setAlbedoTexture(std::filesystem::path texture)
 	{
-		if(texture != _textures.albedo)
-			_textures.albedo = texture;
+		_albedo = TextureLibrary::get().addTextureToLibrary(std::move(texture));
 	}
 
-	void Material::updateDescriptors()
+	void Material::updateDescriptors(ShaderID shader_id)
 	{
-		if(_shader == nullshader)
+		if(shader_id == nullshader)
 			return;
 		
-		auto shader = ShaderLibrary::get().getShader(_shader);
-		auto albedo = TextureLibrary::get().getTexture(_textures.albedo);
+		auto shader = ShadersLibrary::get().getShader(shader_id);
+		auto albedo = TextureLibrary::get().getTexture(_albedo);
 
 		static DescriptorSet material_set;
 		static Shader::ImageSampler albedo_sampler_cache;
 
-		if(_shader != _shader_cache && shader->getImageSamplers().size() > 0)
+		if(shader_id != _shader_cache && shader->getImageSamplers().size() > 0)
 		{
 			if(shader->getImageSamplers().count("u_albedo_map"))
 			{
 				albedo_sampler_cache = shader->getImageSamplers()["u_albedo_map"];
 				material_set = shader->getDescriptorSets()[albedo_sampler_cache.getSet()];
 			}
-			_shader_cache = _shader;
+			_shader_cache = shader_id;
 		}
 
 		if(albedo != nullptr)
