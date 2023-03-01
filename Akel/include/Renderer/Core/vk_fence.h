@@ -13,12 +13,21 @@ namespace Ak
 	class Fence
 	{
 		public:
+			Fence() = default;
+			
 			void init();
-			inline VkFence& get(int i) noexcept { return _fences[i]; }
+			
+			inline VkFence& get() noexcept { return _fence; }
+			void wait() noexcept;
+			void reset() noexcept;
+			inline void waitAndReset() noexcept { wait(); reset(); }
+
 			void destroy() noexcept;
 
+			~Fence() = default;
+
 		private:
-			std::array<VkFence, MAX_FRAMES_IN_FLIGHT> _fences;
+			VkFence _fence = VK_NULL_HANDLE;
 	};
 }
 

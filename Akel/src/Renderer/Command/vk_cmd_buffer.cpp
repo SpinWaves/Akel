@@ -6,6 +6,7 @@
 #include <Renderer/Command/vk_cmd_buffer.h>
 #include <Renderer/Command/cmd_manager.h>
 #include <Renderer/Core/render_core.h>
+#include <Renderer/Core/vk_semaphore.h>
 #include <Utils/assert.h>
 
 namespace Ak
@@ -22,6 +23,8 @@ namespace Ak
 
 		if(vkAllocateCommandBuffers(Render_Core::get().getDevice().get(), &allocInfo, &_cmd_buffer) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate command buffer");
+
+		_fence.init();
 	}
 
 	void CmdBuffer::beginRecord(VkCommandBufferUsageFlags usage)
@@ -38,6 +41,26 @@ namespace Ak
 		_is_recording = true;
 	}
 
+	void CmdBuffer::submit(Semaphore& semaphores) noexcept
+	{
+		VkSemaphore signalSemaphores[] = { semaphores.getRenderImageSemaphore() };
+		VkSemaphore waitSemaphores[] = { semaphores.getImageSemaphore() };
+		VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+
+		VkSubmitInfo submitInfo{};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submitInfo.waitSemaphoreCount = 1;
+		submitInfo.pWaitSemaphores = waitSemaphores;
+		submitInfo.pWaitDstStageMask = waitStages;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &_cmd_buffer;
+		submitInfo.signalSemaphoreCount = 1;
+		submitInfo.pSignalSemaphores = signalSemaphores;
+
+		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &submitInfo, _fence.get()) != VK_SUCCESS)
+			Core::log::report(FATAL_ERROR, "Vulkan error : failed to submit draw command buffer");
+	}
+
 	void CmdBuffer::endRecord()
 	{
 		if(!_is_recording)
@@ -52,5 +75,6 @@ namespace Ak
 	{
 		Ak_assert(_cmd_buffer != VK_NULL_HANDLE, "trying to destroy an uninit command buffer");
 		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), _manager->getCmdPool().get(), 1, &_cmd_buffer);
+		_fence.destroy();
 	}
 }

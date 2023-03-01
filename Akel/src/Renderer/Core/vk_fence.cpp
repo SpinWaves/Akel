@@ -18,19 +18,23 @@ namespace Ak
 		fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 		fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-		for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-		{
-			if(vkCreateFence(Render_Core::get().getDevice().get(), &fenceInfo, nullptr, &_fences[i]) != VK_SUCCESS)
-				Core::log::report(FATAL_ERROR, "Vulkan : failed to create CPU synchronization objects for a frame");
-		}
+		if(vkCreateFence(Render_Core::get().getDevice().get(), &fenceInfo, nullptr, &_fence) != VK_SUCCESS)
+			Core::log::report(FATAL_ERROR, "Vulkan : failed to create CPU synchronization objects for a frame");
+	}
+
+	void Fence::wait() noexcept
+	{
+		vkWaitForFences(Render_Core::get().getDevice().get(), 1, &_fence, VK_TRUE, UINT64_MAX);
+	}
+
+	void Fence::reset() noexcept
+	{
+		vkResetFences(Render_Core::get().getDevice().get(), 1, &_fence);
 	}
 
 	void Fence::destroy() noexcept
 	{
-		for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-		{
-			Ak_assert(_fences[i] != VK_NULL_HANDLE, "trying to destroy an uninit fence");
-			vkDestroyFence(Render_Core::get().getDevice().get(), _fences[i], nullptr);
-		}
+		Ak_assert(_fence != VK_NULL_HANDLE, "trying to destroy an uninit fence");
+		vkDestroyFence(Render_Core::get().getDevice().get(), _fence, nullptr);
 	}
 }

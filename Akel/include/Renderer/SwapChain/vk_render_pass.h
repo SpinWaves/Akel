@@ -17,8 +17,8 @@ namespace Ak
 			void init(class RendererComponent* renderer);
 			void destroy() noexcept;
 
-			void begin(CmdSet set = CmdSet::forward);
-			void end(CmdSet set = CmdSet::forward);
+			void begin();
+			void end();
 			
             inline VkRenderPass operator()() noexcept { return _renderPass; }
             inline VkRenderPass get() noexcept { return _renderPass; }

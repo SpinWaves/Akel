@@ -16,12 +16,12 @@ namespace Ak
 			void init();
 			void destroy() noexcept;
 
-			inline VkSemaphore& getImageSemaphore(int i) noexcept { return _imageAvailableSemaphores[i]; }
-			inline VkSemaphore& getRenderImageSemaphore(int i) noexcept { return _renderFinishedSemaphores[i]; }
+			inline VkSemaphore& getImageSemaphore() noexcept { return _imageAvailableSemaphores; }
+			inline VkSemaphore& getRenderImageSemaphore() noexcept { return _renderFinishedSemaphores; }
 
 		private:
-			std::array<VkSemaphore, MAX_FRAMES_IN_FLIGHT> _imageAvailableSemaphores;
-			std::array<VkSemaphore, MAX_FRAMES_IN_FLIGHT> _renderFinishedSemaphores;
+			VkSemaphore _imageAvailableSemaphores = VK_NULL_HANDLE;
+			VkSemaphore _renderFinishedSemaphores = VK_NULL_HANDLE;
 	};
 }
 

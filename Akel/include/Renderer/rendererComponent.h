@@ -31,21 +31,19 @@ namespace Ak
 			void onAttach() override;
 
 			bool beginFrame();
-			void submitCmdBuffer(CmdBuffer& buffer);
 			void endFrame();
 
 			inline WindowComponent* getWindow() noexcept { return _window; }
 			inline void setWindow(WindowComponent* window) noexcept { _window = window; }
 
-			inline Fence& getFences() noexcept { return _fences; }
 			inline Surface& getSurface() noexcept { return _surface; }
 			inline CmdPool& getCmdPool() noexcept { return _cmd.getCmdPool(); }
 			inline SwapChain& getSwapChain() noexcept { return _swapchain; }
-			inline Semaphore& getSemaphore() noexcept { return _semaphore; }
+			inline Semaphore& getSemaphore(int i) noexcept { return _semaphores[i]; }
 			inline RenderPass& getRenderPass() noexcept { return _pass; }
 			inline VkClearValue& getClearValue() noexcept { return _clearColor; }
-			inline CmdBuffer& getCmdBuffer(int i, CmdSet set = CmdSet::forward) noexcept { return _cmd.getCmdBuffer(i, set); }
-			inline CmdBuffer& getActiveCmdBuffer(CmdSet set = CmdSet::forward) noexcept { return _cmd.getCmdBuffer(_active_image_index, set); }
+			inline CmdBuffer& getCmdBuffer(int i) noexcept { return _cmd.getCmdBuffer(i); }
+			inline CmdBuffer& getActiveCmdBuffer() noexcept { return _cmd.getCmdBuffer(_active_image_index); }
 			inline uint32_t getActiveImageIndex() const noexcept { return _active_image_index; }
 			inline uint32_t getImageIndex() const noexcept { return _image_index; }
 			inline bool isInit() const noexcept { return _is_init; }
@@ -56,12 +54,11 @@ namespace Ak
 			void onQuit() override;
 
 		private:
-			Fence _fences;
 			CmdManager _cmd;
 			Surface _surface;
 			RenderPass _pass;
 			SwapChain _swapchain;
-			Semaphore _semaphore;
+			std::array<Semaphore, MAX_FRAMES_IN_FLIGHT> _semaphores;
 			VkClearValue _clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
 			std::mutex _mutex;
 
