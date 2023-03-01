@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 27/01/2023
+// Updated : 01/03/2023
 
 #include <Renderer/Core/render_core.h>
 
@@ -43,7 +43,7 @@ namespace Ak
 
 		void checkVk(VkResult result)
 		{
-			if(result != 0)
+			if(result != VK_SUCCESS)
 				Core::log::report(result < 0 ? FATAL_ERROR : ERROR, "Vulkan error : %s", verbaliseResultVk(result));
 		}
 

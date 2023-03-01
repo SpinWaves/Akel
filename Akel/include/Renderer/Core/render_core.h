@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 27/01/2023
+// Updated : 01/03/2023
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__

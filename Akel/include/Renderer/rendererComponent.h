@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 23/02/2023
+// Updated : 01/03/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -14,6 +14,7 @@
 #include "Pipeline/vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
 
+#include <Renderer/Core/vk_fence.h>
 #include <Renderer/Core/vk_surface.h>
 #include <Renderer/Core/vk_semaphore.h>
 #include <Renderer/Command/cmd_manager.h>
@@ -36,6 +37,7 @@ namespace Ak
 			inline WindowComponent* getWindow() noexcept { return _window; }
 			inline void setWindow(WindowComponent* window) noexcept { _window = window; }
 
+			inline Fence& getFences() noexcept { return _fences; }
 			inline Surface& getSurface() noexcept { return _surface; }
 			inline CmdPool& getCmdPool() noexcept { return _cmd.getCmdPool(); }
 			inline SwapChain& getSwapChain() noexcept { return _swapchain; }
@@ -54,6 +56,7 @@ namespace Ak
 			void onQuit() override;
 
 		private:
+			Fence _fences;
 			CmdManager _cmd;
 			Surface _surface;
 			RenderPass _pass;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 26/02/2023
+// Updated : 01/03/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -21,7 +21,8 @@ namespace Ak
 		_pass.init(this);
 		_swapchain.initFB();
 		_cmd.init();
-		_semaphore.init(*this);
+		_semaphore.init();
+		_fences.init();
 
 		_is_init = true;
 		getMainAppProjectFile().setBoolValue("__renderer_component", true);
@@ -34,7 +35,10 @@ namespace Ak
 
 		auto device = Render_Core::get().getDevice().get();
 
-		vkWaitForFences(device, 1, &_semaphore.getInFlightFence(_active_image_index), VK_TRUE, UINT64_MAX);
+		std::cout << _active_image_index << std::endl;
+		VkFence fences[] = { _fences.get(_active_image_index) };
+		std::cout << std::boolalpha << (bool)(vkWaitForFences(device, 1, fences, VK_TRUE, UINT64_MAX) == VK_SUCCESS) << std::endl;
+		vkResetFences(device, 1, fences);
 
 		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphore.getImageSemaphore(_active_image_index), VK_NULL_HANDLE, &_image_index);
 
@@ -45,8 +49,6 @@ namespace Ak
 		}
 		else if(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to acquire swapchain image");
-
-		vkResetFences(device, 1, &_semaphore.getInFlightFence(_active_image_index));
 
 		for(int i = 0; i < COMMAND_BUFFERS_SETS; i++)
 			_cmd.getCmdBuffer(_active_image_index, i).reset();
@@ -81,7 +83,8 @@ namespace Ak
 		submitInfo.signalSemaphoreCount = 1;
 		submitInfo.pSignalSemaphores = signalSemaphores;
 
-		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &submitInfo, _semaphore.getInFlightFence(_active_image_index)) != VK_SUCCESS)
+		std::cout << " " << _active_image_index << std::endl;
+		if(vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &submitInfo, _fences.get(_active_image_index)) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to submit draw command buffer");
 
 		VkSwapchainKHR swapchain = _swapchain();
@@ -122,6 +125,7 @@ namespace Ak
 		_pass.destroy();
 		_swapchain.destroy();
 		_semaphore.destroy();
+		_fences.destroy();
 		_surface.destroy();
 		_is_init = false;
     }

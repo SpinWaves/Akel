@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 27/01/2023
+// Updated : 01/03/2023
 
 #include <Renderer/Core/vk_semaphore.h>
 #include <Renderer/Core/render_core.h>
@@ -10,26 +10,16 @@
 
 namespace Ak
 {
-	void Semaphore::init(RendererComponent& renderer)
+	void Semaphore::init()
 	{
-		_imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-		_renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-		_inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
-		_imagesInFlight.resize(renderer.getSwapChain().getImagesNumber(), VK_NULL_HANDLE);
-
 		VkSemaphoreCreateInfo semaphoreInfo{};
 		semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-		VkFenceCreateInfo fenceInfo{};
-		fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-		fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-
 		for(size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
-			if(vkCreateSemaphore(Render_Core::get().getDevice().get(), &semaphoreInfo, nullptr, &_imageAvailableSemaphores[i]) != VK_SUCCESS ||
-			vkCreateSemaphore(Render_Core::get().getDevice().get(), &semaphoreInfo, nullptr, &_renderFinishedSemaphores[i]) != VK_SUCCESS ||
-			vkCreateFence(Render_Core::get().getDevice().get(), &fenceInfo, nullptr, &_inFlightFences[i]) != VK_SUCCESS)
-				Core::log::report(FATAL_ERROR, "Vulkan : failed to create synchronization objects for a frame");
+			if(	vkCreateSemaphore(Render_Core::get().getDevice().get(), &semaphoreInfo, nullptr, &_imageAvailableSemaphores[i]) != VK_SUCCESS ||
+				vkCreateSemaphore(Render_Core::get().getDevice().get(), &semaphoreInfo, nullptr, &_renderFinishedSemaphores[i]) != VK_SUCCESS)
+					Core::log::report(FATAL_ERROR, "Vulkan : failed to create GPU synchronization objects for a frame");
 		}
 	}
 
@@ -42,9 +32,6 @@ namespace Ak
 
 			Ak_assert(_imageAvailableSemaphores[i] != VK_NULL_HANDLE, "trying to destroy an uninit image semaphore");
 			vkDestroySemaphore(Render_Core::get().getDevice().get(), _imageAvailableSemaphores[i], nullptr);
-			
-			Ak_assert(_inFlightFences[i] != VK_NULL_HANDLE, "trying to destroy an uninit fence");
-			vkDestroyFence(Render_Core::get().getDevice().get(), _inFlightFences[i], nullptr);
 		}
 	}
 }
