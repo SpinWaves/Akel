@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 28/02/2023
+// Updated : 03/03/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -65,20 +65,29 @@ namespace Ak
 			return;
 
 		// caches
-		static std::vector<VkDescriptorSet> sets;
 		static Shader::Uniform matrices_uniform_buffer;
 		static ShaderID fragment_shader = nullshader;
 
 		if(scene != _scene_cache)
 		{
-			sets.clear();
+			_forward_data.descriptor_sets.clear();
 			for(ShaderID id : _forward_data.shaders)
 			{
 				auto shader = ShadersLibrary::get().getShader(id);
+				int material_set = -1;
 				if(shader->getType() == VK_SHADER_STAGE_FRAGMENT_BIT)
+				{
 					fragment_shader = id;
+					if(shader->getImageSamplers().count("u_albedo_map"))
+						material_set = shader->getImageSamplers()["u_albedo_map"].getSet();
+				}
+				int i = 0;
 				for(DescriptorSet& set : shader->getDescriptorSets())
-					sets.push_back(set.get());
+				{
+					if(i != material_set)
+						_forward_data.descriptor_sets.push_back(set.get());
+					i++;
+				}
 				if(shader->getUniforms().size() > 0)
 				{
 					if(shader->getUniforms().count("matrices"))
@@ -86,6 +95,9 @@ namespace Ak
 				}
 			}
 		}
+
+		if(fragment_shader == nullshader)
+			Core::log::report(FATAL_ERROR, "Scene Renderer : no fragment shader given");
 
 		MatricesBuffer mat;
 		mat.proj = scene->_camera->getProj();
@@ -98,14 +110,12 @@ namespace Ak
 
 		for(RenderCommandData& command : _forward_data.command_queue)
 		{
-			if(fragment_shader != nullshader)
-			{
-				auto material = MaterialLibrary::get().getMaterial(command.material);
-				material->updateDescriptors(fragment_shader);
-			}
-
-			vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
+			auto material = MaterialLibrary::get().getMaterial(command.material);
+			material->updateDescriptors(fragment_shader);
+			_forward_data.descriptor_sets.push_back(material->_set.get());
+			vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, _forward_data.descriptor_sets.size(), _forward_data.descriptor_sets.data(), 0, nullptr);
 			command.mesh->draw(*renderer);
+			_forward_data.descriptor_sets.pop_back();
 		}
 
 		renderer->getRenderPass().end();

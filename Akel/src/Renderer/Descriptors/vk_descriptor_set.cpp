@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 01/03/2023
+// Updated : 03/03/2023
 
 #include <Renderer/Descriptors/vk_descriptor_set.h>
 #include <Renderer/Descriptors/vk_descriptor_set_layout.h>
@@ -14,20 +14,20 @@
 
 namespace Ak
 {
-    void DescriptorSet::init(RendererComponent* renderer, DescriptorSetLayout& layout, DescriptorPool& pool)
+    void DescriptorSet::init(RendererComponent* renderer, DescriptorSetLayout* layout, DescriptorPool* pool)
     {
 		_renderer = renderer;
+		_layout = layout;
+		_pool = pool;
 
         auto device = Render_Core::get().getDevice().get();
 
-		_pool = pool.get();
-
 		std::array<VkDescriptorSetLayout, MAX_FRAMES_IN_FLIGHT> layouts;
-		layouts.fill(layout.get());
+		layouts.fill(layout->get());
 
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = _pool;
+        allocInfo.descriptorPool = _pool->get();
         allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
         allocInfo.pSetLayouts = layouts.data();
 
@@ -80,6 +80,13 @@ namespace Ak
 		vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
 	}
 
+	DescriptorSet DescriptorSet::duplicate()
+	{
+		DescriptorSet set;
+		set.init(_renderer, _layout, _pool);
+		return set;
+	}
+
 	VkDescriptorSet& DescriptorSet::operator()() noexcept
 	{
 		return _desc_set[_renderer->getActiveImageIndex()];
@@ -93,6 +100,6 @@ namespace Ak
     {
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 			Ak_assert(_desc_set[i] != VK_NULL_HANDLE, "trying to destroy an uninit descriptor set");
-		vkFreeDescriptorSets(Render_Core::get().getDevice().get(), _pool, MAX_FRAMES_IN_FLIGHT, _desc_set.data());
+		vkFreeDescriptorSets(Render_Core::get().getDevice().get(), _pool->get(), MAX_FRAMES_IN_FLIGHT, _desc_set.data());
     }
 }

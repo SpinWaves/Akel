@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 20/02/2023
+// Updated : 03/03/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -29,7 +29,7 @@ namespace Ak
 			shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			shaderStageInfo.stage = shader->getType();
 			shaderStageInfo.module = shader->getShaderModule();
-			shaderStageInfo.pName = shader->get_entry_point_name().c_str();
+			shaderStageInfo.pName = shader->getEntryPointName().c_str();
 
 			stages.push_back(shaderStageInfo);
 			for(DescriptorSetLayout& descriptor : shader->getDescriptorSetLayouts())

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 20/02/2023
+// Updated : 03/03/2023
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -152,10 +152,10 @@ namespace Ak
 
 			inline std::vector<DescriptorSet>& getDescriptorSets() { return _sets; }
 
-			inline std::optional<Uniform> getUniform(std::string name) { return _uniforms.count(std::move(name)) ? std::make_optional(_uniforms[name]) : std::nullopt; }
-			inline std::optional<VkVertexInputAttributeDescription> getAttribute(std::string name) { return _attributes.count(std::move(name)) ? std::make_optional(_attributes[name]) : std::nullopt; }
+			inline std::optional<Uniform> getUniform(std::string name) { return _uniforms.count(name) ? std::make_optional(_uniforms[std::move(name)]) : std::nullopt; }
+			inline std::optional<VkVertexInputAttributeDescription> getAttribute(std::string name) { return _attributes.count(name) ? std::make_optional(_attributes[std::move(name)]) : std::nullopt; }
 
-			inline const fString& get_entry_point_name() const noexcept { return _entry_point_name; }
+			inline const fString& getEntryPointName() const noexcept { return _entry_point_name; }
 
 			~Shader() = default;
 

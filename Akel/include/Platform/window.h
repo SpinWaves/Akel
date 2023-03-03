@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 27/01/2023
+// Updated : 03/03/2023
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -48,7 +48,7 @@ namespace Ak
             bool border = true;
             bool resizable = true;
             bool visible = true;
-            bool vsync = true;
+            bool vsync = false;
             bool maximize = false;
             bool minimize = false;
 			

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 20/02/2023
+// Updated : 03/03/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -293,7 +293,7 @@ namespace Ak
 			for(int i = 0; i < _layouts.size(); i++)
 			{
 				_sets.emplace_back();
-				_sets.back().init(_renderer, _layouts[i], _desc_pool);
+				_sets.back().init(_renderer, &_layouts[i], &_desc_pool);
 				for(auto binding : _layouts[i].getBindings())
 				{
 					if(binding.second == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)

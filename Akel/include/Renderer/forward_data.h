@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 26/02/2023
+// Updated : 03/03/2023
 
 #ifndef __AK_FORWARD_DATA__
 #define __AK_FORWARD_DATA__
@@ -16,6 +16,7 @@ namespace Ak
 	struct ForwardData
 	{
 		CommandDataQueue command_queue;
+		std::vector<VkDescriptorSet> descriptor_sets;
 		std::vector<ShaderID> shaders;
 	};
 }
