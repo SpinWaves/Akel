@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 22/02/2023
+// Updated : 05/03/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -61,6 +61,7 @@ void StudioComponent::setContext()
 	renderer->getClearValue().color.float32[1] = 0.878431373;
 	renderer->getClearValue().color.float32[2] = 0.909803922;
 
+	_logo = AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo.png");
 }
 
 static bool realquit = false;
@@ -145,6 +146,7 @@ void StudioComponent::onQuit()
 		elem->onQuit();
 	_stack.reset(nullptr);
 	_lang_eltm.reset(nullptr);
+	_logo.destroy();
 	Ak::WindowComponent::onQuit();
 }
 
@@ -210,6 +212,9 @@ void StudioComponent::drawAboutWindow()
 {
 	if(ImGui::Begin(std::string(AKS_ICON_MD_INFO" " + _eltm->getText("MainMenuBar.about")).data(), &_showAbout, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
 	{
+		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() / 8, ImGui::GetWindowHeight() / 8));
+		ImGui::Image(_logo.getImGuiID(), ImVec2(ImGui::GetWindowWidth() / 3, ImGui::GetWindowWidth() / 3));
+
 		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - ImGui::CalcTextSize(_eltm->getText("MainMenuBar.version").data()).x - 30, ImGui::GetWindowHeight() - ImGui::GetTextLineHeightWithSpacing() * 3));
 		ImGui::TextUnformatted(_eltm->getText("MainMenuBar.version").data());
 
