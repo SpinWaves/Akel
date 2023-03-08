@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 03/03/2023
+// Updated : 08/03/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -36,14 +36,16 @@ namespace Ak
 			}
 			
 			_forward_data.command_queue.clear();
-			auto world = scene->getRegistry().view<ModelAttribute>();
+			auto world = scene->getRegistry().group<ModelAttribute>(entt::get<TransformAttribute>);
 			for(auto e : world)
 			{
 				ModelAttribute model = world.get<ModelAttribute>(e);
+				TransformAttribute trans = world.get<TransformAttribute>(e);
 
 				RenderCommandData command;
 				command.mesh = model.model.getMesh().get();
 				command.material = model.model.getMaterial();
+				command.transform = trans.processTransform();
 
 				_forward_data.command_queue.push_back(command);
 			}
@@ -71,6 +73,7 @@ namespace Ak
 		if(scene != _scene_cache)
 		{
 			_forward_data.descriptor_sets.clear();
+			_forward_data.push_constants.clear();
 			for(ShaderID id : _forward_data.shaders)
 			{
 				auto shader = ShadersLibrary::get().getShader(id);
@@ -93,6 +96,8 @@ namespace Ak
 					if(shader->getUniforms().count("matrices"))
 						matrices_uniform_buffer = shader->getUniforms()["matrices"];
 				}
+				for(auto& [name, pc] : shader->getPushConstants())
+					_forward_data.push_constants.push_back(pc);
 			}
 		}
 
@@ -114,6 +119,11 @@ namespace Ak
 			material->updateDescriptors(fragment_shader);
 			_forward_data.descriptor_sets.push_back(material->_set.get());
 			vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, _forward_data.descriptor_sets.size(), _forward_data.descriptor_sets.data(), 0, nullptr);
+
+			_forward_data.push_constants[0].setData(&command.transform);
+			for(auto& pc : _forward_data.push_constants)
+				pc.bind(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineLayout());
+		
 			command.mesh->draw(*renderer);
 			_forward_data.descriptor_sets.pop_back();
 		}

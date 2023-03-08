@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 03/03/2023
+// Updated : 08/03/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -274,6 +274,12 @@ namespace Ak
 		std::vector<SpvReflectBlockVariable*> push_const(count);
 		result = spvReflectEnumeratePushConstantBlocks(&module, &count, push_const.data());
 		Ak_assert(result == SPV_REFLECT_RESULT_SUCCESS, "Renderer Shader : unable to get push constant informations");
+
+		for(SpvReflectBlockVariable* pc : push_const)
+		{
+			Shader::PushConstant new_pc(pc->offset, pc->size, _type);
+			_push_constants[pc->name] = std::move(new_pc);
+		}
 
 		spvReflectDestroyShaderModule(&module);
 

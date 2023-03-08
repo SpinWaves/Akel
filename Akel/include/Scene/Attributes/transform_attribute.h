@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2023
-// Updated : 16/02/2023
+// Updated : 08/03/2023
 
 #ifndef __AK_TRANSFORM_ATTRIBUTE__
 #define __AK_TRANSFORM_ATTRIBUTE__
@@ -19,8 +19,9 @@ namespace Ak
 
 		TransformAttribute() = default;
 		TransformAttribute(Maths::Vec3f trans) : translation(std::move(trans)) {}
+		TransformAttribute(float x, float y, float z) : translation(x, y, z) {}
 
-		inline glm::mat4 getTransform() const
+		inline glm::mat4 processTransform() const
 		{
 			glm::vec3 glm_rot(rotation.X, rotation.Y, rotation.Z);
 			glm::vec3 glm_trans(translation.X, translation.Y, translation.Z);

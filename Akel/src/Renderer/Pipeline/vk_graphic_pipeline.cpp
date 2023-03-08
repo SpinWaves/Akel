@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 03/03/2023
+// Updated : 08/03/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -19,6 +19,7 @@ namespace Ak
 
 		std::vector<VkPipelineShaderStageCreateInfo> stages;
 		std::vector<VkDescriptorSetLayout> descriptor_layouts;
+		std::vector<VkPushConstantRange> pc_ranges;
 
 		for(int i = 0; i < desc.shaders.size(); i++)
 		{
@@ -34,6 +35,15 @@ namespace Ak
 			stages.push_back(shaderStageInfo);
 			for(DescriptorSetLayout& descriptor : shader->getDescriptorSetLayouts())
 				descriptor_layouts.push_back(descriptor.get());
+
+			for(auto& [name, pc] : shader->getPushConstants())
+			{
+				VkPushConstantRange push_constant;
+				push_constant.offset = pc.getOffset();
+				push_constant.size = pc.getSize();
+				push_constant.stageFlags = shader->getType();
+				pc_ranges.push_back(push_constant);
+			}
 		}
 
 		VkVertexInputBindingDescription binding_description = Vertex::getBindingDescription();
@@ -120,6 +130,8 @@ namespace Ak
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
         pipelineLayoutInfo.setLayoutCount = descriptor_layouts.size();
         pipelineLayoutInfo.pSetLayouts = descriptor_layouts.data();
+		pipelineLayoutInfo.pushConstantRangeCount = pc_ranges.size();
+		pipelineLayoutInfo.pPushConstantRanges = pc_ranges.data();
 
         if(vkCreatePipelineLayout(Render_Core::get().getDevice().get(), &pipelineLayoutInfo, nullptr, &_pipelineLayout) != VK_SUCCESS)
             Core::log::report(FATAL_ERROR, "Vulkan : failed to create a graphics pipeline layout");

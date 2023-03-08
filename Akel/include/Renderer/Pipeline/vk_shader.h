@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 03/03/2023
+// Updated : 08/03/2023
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -116,21 +116,25 @@ namespace Ak
 			class PushConstant
 			{
 				public:
-					PushConstant(int32_t binding = -1, int32_t size = -1, VkShaderStageFlagBits stage = VK_SHADER_STAGE_VERTEX_BIT) :
-						_binding(binding),
+					PushConstant(int32_t offset = -1, int32_t size = -1, VkShaderStageFlagBits stage = VK_SHADER_STAGE_VERTEX_BIT) :
+						_offset(offset),
 						_size(size),
 						_stage(stage)
 					{}
 
-					inline int32_t getBinding() const noexcept { return _binding; }
+					inline int32_t getOffset() const noexcept { return _offset; }
 					inline int32_t getSize() const noexcept { return _size; }
 					inline VkShaderStageFlagBits getStageFlags() const noexcept { return _stage; }
+
+					inline void setData(void* data) noexcept { _data = data; }
+					inline void bind(VkCommandBuffer buffer, VkPipelineLayout layout) noexcept { vkCmdPushConstants(buffer, layout, _stage, _offset, _size, _data); }
 
 					~PushConstant() = default;
 
 				private:
+					void* _data = nullptr;
 					VkShaderStageFlagBits _stage;
-					int32_t _binding;
+					int32_t _offset;
 					int32_t _size;
 			};
 

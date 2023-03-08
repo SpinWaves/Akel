@@ -21,14 +21,18 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	Ak::MaterialID lem_material = Ak::MaterialLibrary::get().addMaterialToLibrary(lem_material_desc);
 
 	Ak::Entity lem = scene->createEntity();
+	lem.addAttribute<Ak::TransformAttribute>(-10.0f, 0.0f, -10.0f);
 	lem.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "apollo_lunar_module.obj", lem_material);
+	lem.getAttribute<Ak::TransformAttribute>().scale = Ak::Maths::Vec3f(0.2f, 0.2f, 0.2f);
 
 	Ak::MaterialDesc knuckles_material_desc;
 	knuckles_material_desc.albedo = Ak::Res::get().getTexturesPath() / "knuckles.png";
 	Ak::MaterialID knuckles_material = Ak::MaterialLibrary::get().addMaterialToLibrary(knuckles_material_desc);
 
 	Ak::Entity knuckles = scene->createEntity();
+	knuckles.addAttribute<Ak::TransformAttribute>(10.0f, 0.0f, 10.0f);
 	knuckles.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "knuckles.obj", knuckles_material);
+	knuckles.getAttribute<Ak::TransformAttribute>().rotation = Ak::Maths::Vec3f(1.0f, 1.0f, 0.0f);
 	
 	return app;
 }
