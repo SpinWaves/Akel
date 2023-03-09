@@ -1,67 +1,27 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 23/06/2021
+// Updated : 09/03/2023
 
 #include <Maths/vec2.h>
 
 namespace Ak::Maths
 {
-    template <class T>
-    Vec2<T>::Vec2()
-    {
-        X = 0;
-        Y = 0;
-    }
-
-    template <class T>
-    Vec2<T>::Vec2(T x, T y)
-    {
-        X = x;
-        Y = y;
-    }
-
-    template <class T>
-    Vec2<T>::Vec2(const Vec2<T> & v)
-    {
-        X = v.X;
-        Y = v.Y;
-    }
-
-    template <class T>
-    Vec2<T>::Vec2(const Vec2<T> & from, const Vec2<T> & to)
-    {
-        X = to.X - from.X;
-        Y = to.Y - from.Y;
-    }
+	template <class T>
+	Vec2<T>::Vec2(T x, T y) : X(std::move(x)), Y(std::move(y)) {}
 
 	template <class T>
-	Vec2<T>::Vec2(std::initializer_list<T> args)
+	Vec2<T>::Vec2(const Vec2<T>& v) X(v.X), Y(v.Y) {}
+
+	template <class T>
+	Vec2<T>::Vec2(const Vec2<T>& from, const Vec2<T>& to)
 	{
-		if(args.size() < 3)
-		{
-			switch(args.size())
-			{
-				case 1:
-					X = *std::move(args.begin());
-					Y = 0;
-				break;
-
-				case 2:		
-					X = *std::move(args.begin());
-					Y = *std::move(args.begin() + 1);
-				break;
-
-				default: break;
-			}
-		}
-		else
-			std::cout << "Vec2 initializer contains too much arguments" << std::endl;
+		X = to.X - from.X;
+		Y = to.Y - from.Y;
 	}
 
-
     template <class T>
-    Vec2<T> & Vec2<T>::operator= (const Vec2<T> & v)
+    Vec2<T>& Vec2<T>::operator= (const Vec2<T>& v)
     {
         X = v.X;
         Y = v.Y;
@@ -69,41 +29,31 @@ namespace Ak::Maths
     }
 
     template <class T>
-    bool Vec2<T>::operator== (const Vec2<T> & v)
+    bool Vec2<T>::operator== (const Vec2<T>& v)
     {
-        if(X == v.X && Y == v.Y)
-            return true;
-        return false;
+        return X == v.X && Y == v.Y;
     }
 
     template <class T>
-    bool Vec2<T>::operator!= (const Vec2<T> & v)
+    bool Vec2<T>::operator!= (const Vec2<T>& v)
     {
-        if(X != v.X && Y != v.Y)
-            return true;
-        return false;
-    }
-
-
-
-    template <class T>
-    bool Vec2<T>::operator== (const T valeur)
-    {
-        if(X == valeur && Y == valeur)
-            return true;
-        return false;
+        return X != v.X && Y != v.Y;
     }
 
     template <class T>
-    bool Vec2<T>::operator!= (const T valeur)
+    bool Vec2<T>::operator== (const T value)
     {
-        if(X != valeur && Y != valeur)
-            return true;
-        return false;
+        return X == value && Y == value;
     }
 
     template <class T>
-    Vec2<T> & Vec2<T>::operator+= (const Vec2<T> & v)
+    bool Vec2<T>::operator!= (const T value)
+    {
+        return X != value && Y != value;
+    }
+
+    template <class T>
+    Vec2<T>&  Vec2<T>::operator+= (const Vec2<T>& v)
     {
         X += v.X;
         Y += v.Y;
@@ -111,7 +61,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::operator+ (const Vec2<T> & v) const
+    Vec2<T> Vec2<T>::operator+ (const Vec2<T>& v) const
     {
         Vec2<T> t = *this;
         t += v;
@@ -119,15 +69,15 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::operator+ (const T valeur)
+    Vec2<T> Vec2<T>::operator+ (const T value)
     {
-        X += valeur;
-        Y += valeur;
+        X += value;
+        Y += value;
         return *this;
     }
 
     template <class T>
-    Vec2<T> & Vec2<T>::operator-= (const Vec2<T> & v)
+    Vec2<T>&  Vec2<T>::operator-= (const Vec2<T>& v)
     {
         X -= v.X;
         Y -= v.Y;
@@ -135,7 +85,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::operator- (const Vec2<T> & v) const
+    Vec2<T> Vec2<T>::operator- (const Vec2<T>& v) const
     {
         Vec2<T> t = *this;
         t -= v;
@@ -143,15 +93,15 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::operator- (const T valeur)
+    Vec2<T> Vec2<T>::operator- (const T value)
     {
-        X -= valeur;
-        Y -= valeur;
+        X -= value;
+        Y -= value;
         return *this;
     }
 
     template <class T>
-    Vec2<T> & Vec2<T>::operator*= (const T a)
+    Vec2<T>&  Vec2<T>::operator*= (const T a)
     {
         X *= a;
         Y *= a;
@@ -159,7 +109,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::operator* (const T a)const
+    Vec2<T> Vec2<T>::operator* (const T a) const
     {
         Vec2<T> t = *this;
         t *= a;
@@ -167,7 +117,7 @@ namespace Ak::Maths
     }
     
     template <class T>
-    Vec2<T> & Vec2<T>::operator* (const Vec2<T> &v)
+    Vec2<T>& Vec2<T>::operator* (const Vec2<T>& v)
     {
         X *= v.X;
         Y *= v.Y;
@@ -175,7 +125,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> & Vec2<T>::operator/= (const T a)
+    Vec2<T>& Vec2<T>::operator/= (const T a)
     {
         X /= a;
         Y /= a;
@@ -183,7 +133,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::operator/ (const T a)const
+    Vec2<T> Vec2<T>::operator/ (const T a) const
     {
         Vec2<T> t = *this;
         t /= a;
@@ -191,106 +141,74 @@ namespace Ak::Maths
     }
 
     template <class T>
-    bool Vec2<T>::operator< (const Vec2<T> &v)
+    bool Vec2<T>::operator< (const Vec2<T>& v)
     {
-        if(X < v.X && Y < v.Y)
-            return true;
-        return false;
-    }
-    template <class T>
-    bool Vec2<T>::operator< (const T valeur)
-    {
-        if(X < valeur && Y < valeur)
-            return true;
-        return false;
+        return X < v.X && Y < v.Y;
     }
 
-
-
-
     template <class T>
-    bool Vec2<T>::operator> (const Vec2<T> &v)
+    bool Vec2<T>::operator< (const T value)
     {
-        if(X > v.X && Y > v.Y)
-            return true;
-        return false;
-    }
-    template <class T>
-    bool Vec2<T>::operator> (const T valeur)
-    {
-        if(X > valeur && Y > valeur)
-            return true;
-        return false;
+        return X < value && Y < value;
     }
 
-
-
-
     template <class T>
-    bool Vec2<T>::operator<= (const Vec2<T> &v)
+    bool Vec2<T>::operator> (const Vec2<T>& v)
     {
-        if(X <= v.X && Y <= v.Y)
-            return true;
-        return false;
-    }
-    template <class T>
-    bool Vec2<T>::operator<= (const T valeur)
-    {
-        if(X <= valeur && Y <= valeur)
-            return true;
-        return false;
+        return X > v.X && Y > v.Y;
     }
 
-
-
-
     template <class T>
-    bool Vec2<T>::operator>= (const Vec2<T> &v)
+    bool Vec2<T>::operator> (const T value)
     {
-        if(X >= v.X && Y >= v.Y)
-            return true;
-        return false;
-    }
-    template <class T>
-    bool Vec2<T>::operator>= (const T valeur)
-    {
-        if(X >= valeur && Y >= valeur)
-            return true;
-        return false;
+        return X > value && Y > value;
     }
 
-
+    template <class T>
+    bool Vec2<T>::operator<= (const Vec2<T>& v)
+    {
+        return X <= v.X && Y <= v.Y;
+    }
 
     template <class T>
-    Vec2<T> Vec2<T>::crossProduct(const Vec2<T> & v)const
+    bool Vec2<T>::operator<= (const T value)
+    {
+        return X <= value && Y <= value;
+    }
+
+    template <class T>
+    bool Vec2<T>::operator>= (const Vec2<T>& v)
+    {
+        return X >= v.X && Y >= v.Y;
+    }
+
+    template <class T>
+    bool Vec2<T>::operator>= (const T value)
+    {
+        return X >= value && Y >= value;
+    }
+
+    template <class T>
+    Vec2<T> Vec2<T>::crossProduct(const Vec2<T>&  v) const
     {
         return Vec2<T>(v.Y, -v.X);
     }
 
     template <class T>
-    double Vec2<T>::length()const
+    double Vec2<T>::length() const
     {
         return sqrt(X*X + Y*Y);
     }
 
     template <class T>
-    Vec2<T> & Vec2<T>::normalize()
+    Vec2<T>& Vec2<T>::normalize()
     {
         (*this) /= length();
         return (*this);
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::COPY(const Vec2<T> &v)
-    {
-        X = v.X;
-        Y = v.Y;
-
-        return *this;
-    }
-
-    template <class T>
-    Vec2<T> Vec2<T>::DirectCopy()
+    Vec2<T> Vec2<T>::copy()
     {
         Vec2<T> cop;
         cop.X = X;
@@ -299,16 +217,15 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::SET(T x, T y)
+    Vec2<T> Vec2<T>::set(T x, T y)
     {
         X = x;
         Y = y;
-
         return *this;
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::NEGATE()
+    Vec2<T> Vec2<T>::negate()
     {
         X = -X;
         Y = -Y;
@@ -316,7 +233,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::NEGATEprecisely(bool x, bool y)
+    Vec2<T> Vec2<T>::negatePrecisely(bool x, bool y)
     {
         if(x) X = -X;
         if(y) Y = -Y;
@@ -325,7 +242,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    double Vec2<T>::dot(Vec2<T> v)
+    double Vec2<T>::dot(const Vec2<T>& v)
     {
         return X * v.X + Y * v.Y;
     }

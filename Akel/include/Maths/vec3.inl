@@ -1,78 +1,28 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 23/06/2021
+// Updated : 09/03/2023
 
 #include <Maths/vec3.h>
 
 namespace Ak::Maths
 {
     template <class T>
-    Vec3<T>::Vec3()
-    {
-        X = 0;
-        Y = 0;
-        Z = 0;
-    }
+    Vec3<T>::Vec3(T x, T y, T z) : X(std::move(x)), Y(std::move(y)), Z(std::move(z)) {}
 
     template <class T>
-    Vec3<T>::Vec3(T x, T y, T z)
-    {
-        X = x;
-        Y = y;
-        Z = z;
-    }
+    Vec3<T>::Vec3(const Vec3<T>& v) : X(v.X), Y(v.Y), Z(v.Z) {}
 
     template <class T>
-    Vec3<T>::Vec3(const Vec3<T> & v)
-    {
-        X = v.X;
-        Y = v.Y;
-        Z = v.Z;
-    }
-
-    template <class T>
-    Vec3<T>::Vec3(const Vec3<T> & from, const Vec3<T> & to)
+    Vec3<T>::Vec3(const Vec3<T>& from, const Vec3<T>& to)
     {
         X = to.X - from.X;
         Y = to.Y - from.Y;
         Z = to.Z - from.Z;
     }
 
-	template <class T>
-	Vec3<T>::Vec3(std::initializer_list<T> args)
-	{
-		if(args.size() < 4)
-		{
-			switch(args.size())
-			{
-				case 1:
-					X = *std::move(args.begin());
-					Y = 0;
-					Z = 0;
-				break;
-
-				case 2:		
-					X = *std::move(args.begin());
-					Y = *std::move(args.begin() + 1);
-					Z = 0;
-				break;
-
-				case 3:
-					X = *std::move(args.begin());
-					Y = *std::move(args.begin() + 1);
-					Z = *std::move(args.begin() + 2);
-				break;
-
-				default: break;
-			}
-		}
-		else
-			std::cout << "Vec3 initializer contains too much arguments" << std::endl;
-	}
-
     template <class T>
-    Vec3<T> & Vec3<T>::operator= (const Vec3<T> & v)
+    Vec3<T>& Vec3<T>::operator= (const Vec3<T>& v)
     {
         X = v.X;
         Y = v.Y;
@@ -81,41 +31,31 @@ namespace Ak::Maths
     }
 
     template <class T>
-    bool Vec3<T>::operator== (const Vec3<T> & v)
+    bool Vec3<T>::operator== (const Vec3<T>& v)
     {
-        if(X == v.X && Y == v.Y && Z == v.Z)
-            return true;
-        return false;
+        return X == v.X && Y == v.Y && Z == v.Z;
     }
 
     template <class T>
-    bool Vec3<T>::operator!= (const Vec3<T> & v)
+    bool Vec3<T>::operator!= (const Vec3<T>& v)
     {
-        if(X != v.X && Y != v.Y && Z != v.Z)
-            return true;
-        return false;
-    }
-
-
-
-    template <class T>
-    bool Vec3<T>::operator== (const T valeur)
-    {
-        if(X == valeur && Y == valeur && Z == valeur)
-            return true;
-        return false;
+        return X != v.X && Y != v.Y && Z != v.Z;
     }
 
     template <class T>
-    bool Vec3<T>::operator!= (const T valeur)
+    bool Vec3<T>::operator== (const T value)
     {
-        if(X != valeur && Y != valeur && Z != valeur)
-            return true;
-        return false;
+        return X == value && Y == value && Z == value;
     }
 
     template <class T>
-    Vec3<T> & Vec3<T>::operator+= (const Vec3<T> & v)
+    bool Vec3<T>::operator!= (const T value)
+    {
+        return X != value && Y != value && Z != value;
+    }
+
+    template <class T>
+    Vec3<T>& Vec3<T>::operator+= (const Vec3<T>& v)
     {
         X += v.X;
         Y += v.Y;
@@ -124,7 +64,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec3<T> Vec3<T>::operator+ (const Vec3<T> & v) const
+    Vec3<T> Vec3<T>::operator+ (const Vec3<T>& v) const
     {
         Vec3<T> t = *this;
         t += v;
@@ -132,17 +72,17 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec3<T> Vec3<T>::operator+ (const T valeur)
+    Vec3<T> Vec3<T>::operator+ (const T value)
     {
-        X += valeur;
-        Y += valeur;
-        Z += valeur;
+        X += value;
+        Y += value;
+        Z += value;
 
         return *this;
     }
 
     template <class T>
-    Vec3<T> & Vec3<T>::operator-= (const Vec3<T> & v)
+    Vec3<T>& Vec3<T>::operator-= (const Vec3<T>& v)
     {
         X -= v.X;
         Y -= v.Y;
@@ -151,7 +91,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec3<T> Vec3<T>::operator- (const Vec3<T> & v) const
+    Vec3<T> Vec3<T>::operator- (const Vec3<T>& v) const
     {
         Vec3<T> t = *this;
         t -= v;
@@ -159,11 +99,11 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec3<T> Vec3<T>::operator- (const T valeur)
+    Vec3<T> Vec3<T>::operator- (const T value)
     {
-        X -= valeur;
-        Y -= valeur;
-        Z -= valeur;
+        X -= value;
+        Y -= value;
+        Z -= value;
 
         return *this;
     }
@@ -179,7 +119,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec3<T> & Vec3<T>::operator*= (const T a)
+    Vec3<T>& Vec3<T>::operator*= (const T a)
     {
         X *= a;
         Y *= a;
@@ -195,32 +135,8 @@ namespace Ak::Maths
         return t;
     }
 
-    /*
-     ######
-    ##    ##   ##     ##
-    ##         ##     ##
-    ##       ###### ######
-    ##         ##     ##
-    ##    ##   ##     ##
-     ######
-
-    ░░░░░░░░░░░░▄▄░░░░░░░░░
-    ░░░░░░░░░░░█░░█░░░░░░░░
-    ░░░░░░░░░░░█░░█░░░░░░░░
-    ░░░░░░░░░░█░░░█░░░░░░░░
-    ░░░░░░░░░█░░░░█░░░░░░░░
-    ███████▄▄█░░░░░██████▄░
-    ▓▓▓▓▓▓█░░░░░░░░░░░░░░█░
-    ▓▓▓▓▓▓█░░░░░░░░░░░░░░█░
-    ▓▓▓▓▓▓█░░░░░░░░░░░░░░█░
-    ▓▓▓▓▓▓█░░░░░░░░░░░░░░█░
-    ▓▓▓▓▓▓█░░░░░░░░░░░░░░█░
-    ▓▓▓▓▓▓█████░░░░░░░░░█░░
-    ██████▀░░░░▀▀██████▀░░░
-    */
-
     template <class T>
-    Vec3<T> & Vec3<T>::operator* (const Vec3<T> &v)
+    Vec3<T>& Vec3<T>::operator* (const Vec3<T>&v)
     {
         X *= v.X;
         Y *= v.Y;
@@ -229,7 +145,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec3<T> & Vec3<T>::operator/= (const T a)
+    Vec3<T>& Vec3<T>::operator/= (const T a)
     {
         X /= a;
         Y /= a;
@@ -246,7 +162,7 @@ namespace Ak::Maths
     }
 
     template <class T>
-    bool Vec3<T>::operator< (const Vec3<T> &v)
+    bool Vec3<T>::operator< (const Vec3<T>&v)
     {
         if(X < v.X && Y < v.Y && Z < v.Z)
             return true;
@@ -254,9 +170,9 @@ namespace Ak::Maths
     }
 
     template <class T>
-    bool Vec3<T>::operator< (const T valeur)
+    bool Vec3<T>::operator< (const T value)
     {
-        if(X < valeur && Y < valeur && Z < valeur)
+        if(X < value && Y < value && Z < value)
             return true;
         return false;
     }
@@ -265,16 +181,16 @@ namespace Ak::Maths
 
 
     template <class T>
-    bool Vec3<T>::operator> (const Vec3<T> &v)
+    bool Vec3<T>::operator> (const Vec3<T>&v)
     {
         if(X > v.X && Y > v.Y && Z > v.Z)
             return true;
         return false;
     }
     template <class T>
-    bool Vec3<T>::operator> (const T valeur)
+    bool Vec3<T>::operator> (const T value)
     {
-        if(X > valeur && Y > valeur && Z > valeur)
+        if(X > value && Y > value && Z > value)
             return true;
         return false;
     }
@@ -283,16 +199,16 @@ namespace Ak::Maths
 
 
     template <class T>
-    bool Vec3<T>::operator<= (const Vec3<T> &v)
+    bool Vec3<T>::operator<= (const Vec3<T>&v)
     {
         if(X <= v.X && Y <= v.Y && Z <= v.Z)
             return true;
         return false;
     }
     template <class T>
-    bool Vec3<T>::operator<= (const T valeur)
+    bool Vec3<T>::operator<= (const T value)
     {
-        if(X <= valeur && Y <= valeur && Z <= valeur)
+        if(X <= value && Y <= value && Z <= value)
             return true;
         return false;
     }
@@ -301,16 +217,16 @@ namespace Ak::Maths
 
 
     template <class T>
-    bool Vec3<T>::operator>= (const Vec3<T> &v)
+    bool Vec3<T>::operator>= (const Vec3<T>&v)
     {
         if(X >= v.X && Y >= v.Y && Z >= v.Z)
             return true;
         return false;
     }
     template <class T>
-    bool Vec3<T>::operator>= (const T valeur)
+    bool Vec3<T>::operator>= (const T value)
     {
-        if(X >= valeur && Y >= valeur && Z >= valeur)
+        if(X >= value && Y >= value && Z >= value)
             return true;
         return false;
     }
@@ -318,7 +234,7 @@ namespace Ak::Maths
 
 
     template <class T>
-    Vec3<T> Vec3<T>::crossProduct(const Vec3<T> & v)const
+    Vec3<T> Vec3<T>::crossProduct(const Vec3<T>& v)const
     {
         Vec3<T> t;
         t.X = Y*v.Z - Z*v.Y;
@@ -334,14 +250,14 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec3<T> & Vec3<T>::normalize()
+    Vec3<T>& Vec3<T>::normalize()
     {
         (*this) /= length();
         return (*this);
     }
 
     template <class T>
-    Vec3<T> Vec3<T>::COPY(const Vec3<T> &v)
+    Vec3<T> Vec3<T>::COPY(const Vec3<T>&v)
     {
         X = v.X;
         Y = v.Y;

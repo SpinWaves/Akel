@@ -30,7 +30,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	Ak::MaterialID knuckles_material = Ak::MaterialLibrary::get().addMaterialToLibrary(knuckles_material_desc);
 
 	Ak::Entity knuckles = scene->createEntity();
-	knuckles.addAttribute<Ak::TransformAttribute>(10.0f, 0.0f, 10.0f);
+	knuckles.addAttribute<Ak::TransformAttribute>(5.0f, 0.0f, 5.0f);
 	knuckles.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "knuckles.obj", knuckles_material);
 	knuckles.getAttribute<Ak::TransformAttribute>().rotation = Ak::Maths::Vec3f(1.0f, 1.0f, 0.0f);
 	
