@@ -1,87 +1,29 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 23/06/2021
+// Updated : 10/03/2023
 
 #include <Maths/vec4.h>
 
 namespace Ak::Maths
 {
     template <class T>
-    Vec4<T>::Vec4()
-    {
-        X = 0;
-        Y = 0;
-        Z = 0;
-        W = 0;
-    }
+    Vec4<T>::Vec4(T x, T y, T z, T w) : X(std::move(x)), Y(std::move(y)), Z(std::move(z)), W(std::move(w)) {}
+
     template <class T>
-    Vec4<T>::Vec4(T x, T y, T z, T w)
-    {
-        X = x;
-        Y = y;
-        Z = z;
-        W = w;
-    }
+    Vec4<T>::Vec4(const Vec4<T>& v) : X(v.X), Y(v.Y), Z(v.Z), W(v.W) {}
+
     template <class T>
-    Vec4<T>::Vec4(const Vec4<T> & v)
-    {
-        X = v.X;
-        Y = v.Y;
-        Z = v.Z;
-    }
-    template <class T>
-    Vec4<T>::Vec4(const Vec4 & from, const Vec4<T> & to)
+    Vec4<T>::Vec4(const Vec4 & from, const Vec4<T>& to)
     {
         X = to.X - from.X;
         Y = to.Y - from.Y;
         Z = to.Z - from.Z;
         W = to.W - from.W;
     }
-	template <class T>
-	Vec4<T>::Vec4(std::initializer_list<T> args)
-	{
-		if(args.size() < 5)
-		{
-			switch(args.size())
-			{
-				case 1:
-					X = *std::move(args.begin());
-					Y = 0;
-					Z = 0;
-					W = 0;
-				break;
-
-				case 2:		
-					X = *std::move(args.begin());
-					Y = *std::move(args.begin() + 1);
-					Z = 0;
-					W = 0;
-				break;
-
-				case 3:
-					X = *std::move(args.begin());
-					Y = *std::move(args.begin() + 1);
-					Z = *std::move(args.begin() + 2);
-					W = 0;
-				break;
-
-				case 4:
-					X = *std::move(args.begin());
-					Y = *std::move(args.begin() + 1);
-					Z = *std::move(args.begin() + 2);
-					W = *std::move(args.begin() + 3);
-				break;
-
-				default: break;
-			}
-		}
-		else
-			std::cout << "Vec4 initializer contains too much arguments" << std::endl;
-	}
 
     template <class T>
-    Vec4<T> & Vec4<T>::operator= (const Vec4<T> & v)
+    Vec4<T>& Vec4<T>::operator= (const Vec4<T>& v)
     {
         X = v.X;
         Y = v.Y;
@@ -89,38 +31,33 @@ namespace Ak::Maths
         W = v.W;
         return *this;
     }
-    template <class T>
-    bool Vec4<T>::operator== (const Vec4<T> & v)
-    {
-        if(X == v.X && Y == v.Y && Z == v.Z && W == v.W)
-            return true;
-        return false;
-    }
-    template <class T>
-    bool Vec4<T>::operator!= (const Vec4<T> & v)
-    {
-        if(X != v.X && Y != v.Y && Z != v.Z && W != v.W)
-            return true;
-        return false;
-    }
-
 
     template <class T>
-    bool Vec4<T>::operator== (const T valeur)
+    bool Vec4<T>::operator== (const Vec4<T>& v)
     {
-        if(X == valeur && Y == valeur && Z == valeur && W == valeur)
-            return true;
-        return false;
+        return X == v.X && Y == v.Y && Z == v.Z && W == v.W;
     }
-    template <class T>
-    bool Vec4<T>::operator!= (const T valeur)
+    
+	template <class T>
+    bool Vec4<T>::operator!= (const Vec4<T>& v)
     {
-        if(X != valeur && Y != valeur && Z != valeur && W != valeur)
-            return true;
-        return false;
+        return X != v.X && Y != v.Y && Z != v.Z && W != v.W;
     }
+
     template <class T>
-    Vec4<T> & Vec4<T>::operator+= (const Vec4<T> & v)
+    bool Vec4<T>::operator== (const T value)
+    {
+        return X == value && Y == value && Z == value && W == value;
+    }
+
+    template <class T>
+    bool Vec4<T>::operator!= (const T value)
+    {
+        return X != value && Y != value && Z != value && W != value;
+    }
+    
+	template <class T>
+    Vec4<T>& Vec4<T>::operator+= (const Vec4<T>& v)
     {
         X += v.X;
         Y += v.Y;
@@ -128,24 +65,27 @@ namespace Ak::Maths
         W += v.W;
         return *this;
     }
-    template <class T>
-    Vec4<T> Vec4<T>::operator+ (const Vec4<T> & v) const
+    
+	template <class T>
+    Vec4<T> Vec4<T>::operator+ (const Vec4<T>& v) const
     {
         Vec4 t = *this;
         t += v;
         return t;
     }
-    template <class T>
-    Vec4<T> Vec4<T>::operator+ (const T valeur)
+    
+	template <class T>
+    Vec4<T> Vec4<T>::operator+ (const T value)
     {
-        X += valeur;
-        Y += valeur;
-        Z += valeur;
-        W += valeur;
+        X += value;
+        Y += value;
+        Z += value;
+        W += value;
         return *this;
     }
-    template <class T>
-    Vec4<T> & Vec4<T>::operator-= (const Vec4<T> & v)
+    
+	template <class T>
+    Vec4<T>& Vec4<T>::operator-= (const Vec4<T>& v)
     {
         X -= v.X;
         Y -= v.Y;
@@ -153,24 +93,27 @@ namespace Ak::Maths
         W -= v.W;
         return *this;
     }
-    template <class T>
-    Vec4<T> Vec4<T>::operator- (const Vec4<T> & v) const
+    
+	template <class T>
+    Vec4<T> Vec4<T>::operator- (const Vec4<T>& v) const
     {
         Vec4 t = *this;
         t -= v;
         return t;
     }
-    template <class T>
-    Vec4<T> Vec4<T>::operator- (const T valeur)
+    
+	template <class T>
+    Vec4<T> Vec4<T>::operator- (const T value)
     {
-        X -= valeur;
-        Y -= valeur;
-        Z -= valeur;
-        W -= valeur;
+        X -= value;
+        Y -= value;
+        Z -= value;
+        W -= value;
         return *this;
     }
-    template <class T>
-    Vec4<T> & Vec4<T>::operator*= (const T a)
+    
+	template <class T>
+    Vec4<T>& Vec4<T>::operator*= (const T a)
     {
         X *= a;
         Y *= a;
@@ -178,15 +121,17 @@ namespace Ak::Maths
         W *= a;
         return *this;
     }
-    template <class T>
+    
+	template <class T>
     Vec4<T> Vec4<T>::operator* (const T a)const
     {
         Vec4 t = *this;
         t *= a;
         return t;
     }
-    template <class T>
-    Vec4<T> & Vec4<T>::operator* (const Vec4<T> &v)
+    
+	template <class T>
+    Vec4<T>& Vec4<T>::operator* (const Vec4<T>&v)
     {
         X *= v.X;
         Y *= v.Y;
@@ -194,8 +139,9 @@ namespace Ak::Maths
         W *= v.W;
         return *this;
     }
-    template <class T>
-    Vec4<T> & Vec4<T>::operator/= (const T a)
+    
+	template <class T>
+    Vec4<T>& Vec4<T>::operator/= (const T a)
     {
         X /= a;
         Y /= a;
@@ -203,82 +149,69 @@ namespace Ak::Maths
         W /= a;
         return *this;
     }
-    template <class T>
+    
+	template <class T>
     Vec4<T> Vec4<T>::operator/ (const T a)const
     {
         Vec4 t = *this;
         t /= a;
         return t;
     }
-    template <class T>
-    bool Vec4<T>::operator< (const Vec4<T> &v)
+    
+	template <class T>
+    bool Vec4<T>::operator< (const Vec4<T>&v)
     {
         if(X < v.X && Y < v.Y && Z < v.Z && W < v.W)
             return true;
         return false;
     }
-    template <class T>
-    bool Vec4<T>::operator< (const T valeur)
+    
+	template <class T>
+    bool Vec4<T>::operator< (const T value)
     {
-        if(X < valeur && Y < valeur && Z < valeur && W < valeur)
+        if(X < value && Y < value && Z < value && W < value)
             return true;
         return false;
     }
 
-
-
     template <class T>
-    bool Vec4<T>::operator> (const Vec4<T> &v)
+    bool Vec4<T>::operator> (const Vec4<T>&v)
     {
-        if(X > v.X && Y > v.Y && Z > v.Z && W > v.W)
-            return true;
-        return false;
-    }
-    template <class T>
-    bool Vec4<T>::operator> (const T valeur)
-    {
-        if(X > valeur && Y > valeur && Z > valeur && W > valeur)
-            return true;
-        return false;
+        return X > v.X && Y > v.Y && Z > v.Z && W > v.W;
     }
 
-
-
-    template <class T>
-    bool Vec4<T>::operator<= (const Vec4<T> &v)
+	template <class T>
+    bool Vec4<T>::operator> (const T value)
     {
-        if(X <= v.X && Y <= v.Y && Z <= v.Z && W <= v.W)
-            return true;
-        return false;
-    }
-    template <class T>
-    bool Vec4<T>::operator<= (const T valeur)
-    {
-        if(X <= valeur && Y <= valeur && Z <= valeur && W <= valeur)
-            return true;
-        return false;
+        return X > value && Y > value && Z > value && W > value;
     }
 
-
-
     template <class T>
-    bool Vec4<T>::operator>= (const Vec4<T> &v)
+    bool Vec4<T>::operator<= (const Vec4<T>&v)
     {
-        if(X >= v.X && Y >= v.Y && Z >= v.Z && W >= v.W)
-            return true;
-        return false;
-    }
-    template <class T>
-    bool Vec4<T>::operator>= (const T valeur)
-    {
-        if(X >= valeur && Y >= valeur && Z >= valeur && W >= valeur)
-            return true;
-        return false;
+        return X <= v.X && Y <= v.Y && Z <= v.Z && W <= v.W;
     }
 
+    template <class T>
+    bool Vec4<T>::operator<= (const T value)
+    {
+        return X <= value && Y <= value && Z <= value && W <= value;
+    }
 
     template <class T>
-    Vec4<T> Vec4<T>::crossProduct(const Vec4<T> & v)const
+    bool Vec4<T>::operator>= (const Vec4<T>&v)
+    {
+        return X >= v.X && Y >= v.Y && Z >= v.Z && W >= v.W;
+    }
+
+    template <class T>
+    bool Vec4<T>::operator>= (const T value)
+    {
+        return X >= value && Y >= value && Z >= value && W >= value;
+    }
+
+    template <class T>
+    Vec4<T> Vec4<T>::crossProduct(const Vec4<T>& v)const
     {
         Vec4<T> t;
         t.X = Y*v.Z - Z*v.Y;
@@ -287,28 +220,21 @@ namespace Ak::Maths
         t.W = 1;
         return t;
     }
+
     template <class T>
     double Vec4<T>::length()const
     {
         return sqrt(X*X + Y*Y + Z*Z + W*W);
     }
-    template <class T>
-    Vec4<T> & Vec4<T>::normalize()
+    
+	template <class T>
+    void Vec4<T>::normalize()
     {
         (*this) /= length();
-        return (*this);
     }
-    template <class T>
-    Vec4<T> Vec4<T>::COPY(const Vec4 &v)
-    {
-        X = v.X;
-        Y = v.Y;
-        Z = v.Z;
-        W = v.W;
-        return *this;
-    }
-    template <class T>
-    Vec4<T> Vec4<T>::DirectCopy()
+    
+	template <class T>
+    Vec4<T> Vec4<T>::copy()
     {
         Vec4<T> cop;
         cop.X = X;
@@ -317,34 +243,35 @@ namespace Ak::Maths
         cop.W = W;
         return cop;
     }
-    template <class T>
-    Vec4<T> Vec4<T>::SET(T x, T y, T z, T w)
+    
+	template <class T>
+    void Vec4<T>::set(T x, T y, T z, T w)
     {
-        X = x;
-        Y = y;
-        Z = z;
-        W = w;
-        return *this;
+        X = std::move(x);
+        Y = std::move(y);
+        Z = std::move(z);
+        W = std::move(w);
     }
-    template <class T>
-    Vec4<T> Vec4<T>::NEGATE()
+    
+	template <class T>
+	void Vec4<T>::negate()
     {
         X = -X;
         Y = -Y;
         Z = -Z;
         W = -W;
-        return *this;
     }
-    template <class T>
-    Vec4<T> Vec4<T>::NEGATEprecisely(bool x, bool y, bool z, bool w)
+    
+	template <class T>
+    void Vec4<T>::negatePrecisely(bool x, bool y, bool z, bool w)
     {
         if(x) X = -X;
         if(y) Y = -Y;
         if(z) Z = -Z;
         if(w) W = -W;
-        return *this;
     }
-    template <class T>
+    
+	template <class T>
     double Vec4<T>::dot(Vec4<T> v)
     {
         return X * v.X + Y * v.Y + Z * v.Z + W * v.W;

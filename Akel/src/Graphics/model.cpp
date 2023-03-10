@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 27/02/2023
+// Updated : 10/03/2023
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <Graphics/model.h>
@@ -79,7 +79,7 @@ namespace Ak
 					1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
 				};
 
-				vertex.color = {1.0f, 1.0f, 1.0f};
+				vertex.color.set(1.0f, 1.0f, 1.0f, 1.0f);
 /*
 				if(unique_vertices.count(vertex) == 0)
 				{
