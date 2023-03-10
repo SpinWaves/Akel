@@ -11,3 +11,4 @@ Akel_Studio/settings/
 Akel_Studio/build/
 Akel_Studio/Akel_Studio.*
 Akel_Studio/.akel_logs/
+.gdb_history

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 09/03/2023
+// Updated : 10/03/2023
 
 #include <Maths/vec2.h>
 
@@ -11,7 +11,7 @@ namespace Ak::Maths
 	Vec2<T>::Vec2(T x, T y) : X(std::move(x)), Y(std::move(y)) {}
 
 	template <class T>
-	Vec2<T>::Vec2(const Vec2<T>& v) X(v.X), Y(v.Y) {}
+	Vec2<T>::Vec2(const Vec2<T>& v) : X(v.X), Y(v.Y) {}
 
 	template <class T>
 	Vec2<T>::Vec2(const Vec2<T>& from, const Vec2<T>& to)
@@ -201,10 +201,9 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T>& Vec2<T>::normalize()
+    void Vec2<T>::normalize()
     {
         (*this) /= length();
-        return (*this);
     }
 
     template <class T>
@@ -217,28 +216,24 @@ namespace Ak::Maths
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::set(T x, T y)
+    void Vec2<T>::set(T x, T y)
     {
         X = x;
         Y = y;
-        return *this;
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::negate()
+    void Vec2<T>::negate()
     {
         X = -X;
         Y = -Y;
-        return *this;
     }
 
     template <class T>
-    Vec2<T> Vec2<T>::negatePrecisely(bool x, bool y)
+    void Vec2<T>::negatePrecisely(bool x, bool y)
     {
         if(x) X = -X;
         if(y) Y = -Y;
-
-        return *this;
     }
 
     template <class T>

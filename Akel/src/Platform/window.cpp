@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 22/02/2023
+// Updated : 10/03/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -25,10 +25,10 @@ namespace Ak
 
     WindowComponent::WindowComponent() : Component("__window_component")
 	{
-		size.SET(1280, 750);
-		pos.SET(AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER);
-		minSize.SET(0, 0);
-		maxSize.SET(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
+		size.set(1280, 750);
+		pos.set(AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER);
+		minSize.set(0, 0);
+		maxSize.set(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
 	}
 
 	void WindowComponent::onAttach()

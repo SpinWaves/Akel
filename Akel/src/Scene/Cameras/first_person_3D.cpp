@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 20/02/2023
+// Updated : 10/03/2023
 
 #include <Platform/input.h>
 #include <Scene/Cameras/first_person_3D.h>
@@ -50,7 +50,7 @@ namespace Ak::Cam
 			SDL_SetRelativeMouseMode(SDL_TRUE);
 		}
 
-		_mov.SET(0.0, 0.0, 0.0);
+		_mov.set(0.0, 0.0, 0.0);
 
 		if(input.getInKey(AK_KEY_W) || input.getInKey(AK_KEY_UP))  			_mov -= _forward;
 		if(input.getInKey(AK_KEY_S) || input.getInKey(AK_KEY_DOWN))   		_mov += _forward;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 09/03/2023
+// Updated : 10/03/2023
 
 #ifndef __AK_VEC3__
 #define __AK_VEC3__
@@ -42,7 +42,7 @@ namespace Ak::Maths
 
 		Vec3& operator*= (const T a);
 		Vec3 operator* (const T a) const;
-		Vec3 operator* (const T a, const Vec3& v) { return Vec3<T>(v.X * a,v.Y * a,v.Z * a); }
+		friend Vec3 operator* (const T a, const Vec3& v) { return Vec3<T>(v.X * a,v.Y * a,v.Z * a); }
 		Vec3& operator* (const Vec3& v);
 
 		Vec3& operator/= (const T a);
@@ -62,18 +62,14 @@ namespace Ak::Maths
 
 		Vec3 crossProduct(const Vec3& v) const;
 		double length()const;
-		Vec3&  normalize();
+		void normalize();
 
 		Vec3 copy();
-
-		Vec3& set(T x, T y, T z);
-
-		Vec3& negate();
-		Vec3& negatePrecisely(bool x, bool y, bool z);
-
+		void set(T x, T y, T z);
+		void negate();
+		void negatePrecisely(bool x, bool y, bool z);
 		double dot(Vec3 v);
-
-		Vec3& absolute();
+		void absolute();
 	};
 
 	using Vec3f = Vec3<float>;

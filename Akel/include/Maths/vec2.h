@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 09/03/2023
+// Updated : 10/03/2023
 
 #ifndef __AK_VEC2__
 #define __AK_VEC2__
@@ -40,7 +40,7 @@ namespace Ak::Maths
 
 		Vec2& operator*= (const T a);
 		Vec2 operator* (const T a) const;
-		Vec2 operator* (const T a, const Vec2& v) { return Vec2<T>(v.X * a, v.Y * a); }
+		friend Vec2 operator* (const T a, const Vec2& v) { return Vec2<T>(v.X * a, v.Y * a); }
 
 		Vec2& operator* (const Vec2& v);
 
@@ -61,16 +61,16 @@ namespace Ak::Maths
 
 		Vec2 crossProduct(const Vec2& v) const;
 		double length() const;
-		Vec2& normalize();
+		void normalize();
 
 		Vec2 copy();
 
-		Vec2 set(T x, T y);
+		void set(T x, T y);
 
-		Vec2 negate();
-		Vec2 negatePrecisely(bool x, bool y);
+		void negate();
+		void negatePrecisely(bool x, bool y);
 
-		double dot(Vec2 v);
+		double dot(const Vec2& v);
 	};
 
 	using Vec2f = Vec2<float>;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 21/12/2022
+// Updated : 10/03/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -50,7 +50,7 @@ namespace Ak
             {
                 if(win->_window_id == _current_window)
 				{
-                    win->size.SET(_event.window.data1, _event.window.data2);
+                    win->size.set(_event.window.data1, _event.window.data2);
 					win->_renderer->requireFrameBufferResize();
 				}
             }
@@ -96,7 +96,7 @@ namespace Ak
             for(auto win : _windows)
             {
                 if(win->_window_id == _current_window)
-                    win->pos.SET(_event.window.data1, _event.window.data2);
+                    win->pos.set(_event.window.data1, _event.window.data2);
             }
         }
 
