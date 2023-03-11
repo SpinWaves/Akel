@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 18/02/2023
+// Updated : 11/03/2023
 
 #ifndef __AK_MESH__
 #define __AK_MESH__
@@ -20,8 +20,9 @@ namespace Ak
 			Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices);
 
 			void draw(class RendererComponent& renderer);
+			void destroy();
 
-			~Mesh();
+			~Mesh() = default;
 
 		private:
 			C_VBO _vertex_buffer;

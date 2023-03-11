@@ -9,16 +9,20 @@ Ak::AkelInstance Akel_init()
     return instance;
 }
 
-Ak::Application* Akel_mainApp()
+Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 {
 	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Cube using Akel Engine");
-	app->add_component<Ak::Camera3D>(0, 2, 0);
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
+	scene->addCamera<Ak::Cam::FirstPerson3D>(-5.0f, 1.0f, 0.0f);
 	app->add_scene(scene);
 
+	Ak::MaterialDesc material_desc;
+	material_desc.albedo = Ak::Res::get().getTexturesPath() / "rodriguez.jpg";
+	Ak::MaterialID material = Ak::MaterialLibrary::get().addMaterialToLibrary(material_desc);
+
 	Ak::Entity cube = scene->createEntity();
-	cube.addAttribute<Ak::TextureAttribute>(Ak::Res::get().getTexturesPath() / "rodriguez.png");
-	cube.addAttribute<Ak::TransformAttribute>({ 1.0f, 1.0f, 1.0f });
+	cube.addAttribute<Ak::TransformAttribute>(1.0f, 1.0f, 1.0f);
+	cube.addAttribute<Ak::ModelAttribute>(Ak::createCube(), material);
 	
 	return app;
 }

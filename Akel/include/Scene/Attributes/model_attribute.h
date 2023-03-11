@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/02/2023
-// Updated : 28/02/2023
+// Updated : 11/03/2023
 
 #ifndef __AK_MODEL_ATTRIBUTE__
 #define __AK_MODEL_ATTRIBUTE__
@@ -21,10 +21,20 @@ namespace Ak
 			model.load();
 			model.setMaterial(material);
 		}
+		ModelAttribute(Model&& _model, MaterialID material = nullmaterial) : model(std::move(_model))
+		{
+			model.load();
+			model.setMaterial(material);
+		}
 		ModelAttribute(std::filesystem::path model_file, MaterialID material = nullmaterial) : model(std::move(model_file))
 		{
 			model.load();
 			model.setMaterial(material);
+		}
+
+		~ModelAttribute()
+		{
+			model.getMesh()->destroy();
 		}
 	};
 }
