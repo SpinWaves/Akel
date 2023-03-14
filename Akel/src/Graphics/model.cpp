@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 10/03/2023
+// Updated : 12/03/2023
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <Graphics/model.h>
@@ -11,16 +11,8 @@
 namespace Ak
 {
 	Model::Model(std::filesystem::path file) : _file(std::move(file)) {}
-
-	Model::Model(const Mesh& mesh)
-	{
-		_mesh = create_shared_ptr_w<Mesh>(mesh);
-	}
-
-	Model::Model(Mesh&& mesh)
-	{
-		_mesh = create_shared_ptr_w<Mesh>(std::move(mesh));
-	}
+	Model::Model(const Mesh& mesh) : _mesh(mesh) {}
+	Model::Model(Mesh&& mesh) : _mesh(mesh) {}
 
 	void Model::load()
 	{
@@ -92,11 +84,16 @@ namespace Ak
 				vertices.push_back(vertex);
 			}
 		}
-		_mesh = create_shared_ptr_w<Mesh>(std::move(vertices), std::move(indices));
+		_mesh.init(std::move(vertices), std::move(indices));
 	}
 
 	void Model::loadGLTF()
 	{
 
+	}
+
+	void Model::destroy() noexcept
+	{
+		_mesh.destroy();
 	}
 }

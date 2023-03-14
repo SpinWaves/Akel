@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 28/02/2023
+// Updated : 12/03/2023
 
 #ifndef __AK_MODEL__
 #define __AK_MODEL__
@@ -25,7 +25,9 @@ namespace Ak
 			inline void setMaterial(MaterialID material) noexcept { _material = material; }
 			inline MaterialID getMaterial() const noexcept { return _material; }
 
-			inline const std::shared_ptr<Mesh>& getMesh() { return _mesh; }
+			inline const Mesh& getMesh() { return _mesh; }
+
+			void destroy() noexcept;
 
 			~Model() = default;
 
@@ -34,7 +36,7 @@ namespace Ak
 			void loadOBJ();
 			void loadGLTF();
 
-			std::shared_ptr<Mesh> _mesh;
+			Mesh _mesh;
 			std::filesystem::path _file;
 			MaterialID _material = nullmaterial;
 	};

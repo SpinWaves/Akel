@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 08/03/2023
+// Updated : 12/03/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -43,7 +43,7 @@ namespace Ak
 				TransformAttribute trans = world.get<TransformAttribute>(e);
 
 				RenderCommandData command;
-				command.mesh = model.model.getMesh().get();
+				command.mesh = &const_cast<Mesh&>(model.model.getMesh());
 				command.material = model.model.getMaterial();
 				command.transform = trans.processTransform();
 
