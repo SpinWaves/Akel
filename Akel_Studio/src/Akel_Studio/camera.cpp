@@ -8,7 +8,7 @@
 SceneCamera::SceneCamera(double x, double y, double z, Ak::WindowComponent* window) : Ak::Component("scene_camera"), _up(0, 1, 0)
 {
 	_window = window;
-	_position.SET(x, y, z);
+	_position.set(x, y, z);
 	update_view();
 }
 
@@ -42,7 +42,7 @@ void SceneCamera::onEvent(Ak::Input& input)
 		SDL_PumpEvents();
 		SDL_FlushEvent(SDL_MOUSEMOTION);
 
-		_mov.SET(0.0, 0.0, 0.0);
+		_mov.set(0.0, 0.0, 0.0);
 
 		if(input.getInKey(AK_KEY_W) || input.getInKey(AK_KEY_UP))  			_mov -= _forward;
 		if(input.getInKey(AK_KEY_S) || input.getInKey(AK_KEY_DOWN))   		_mov += _forward;
