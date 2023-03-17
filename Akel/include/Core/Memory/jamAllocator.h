@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 27/01/2023
+// Updated : 17/03/2023
 
 #ifndef __AK_JAM_ALLOCATOR__
 #define __AK_JAM_ALLOCATOR__
@@ -16,9 +16,6 @@
 
 namespace Ak
 {
-    template <typename T>
-    class BinarySearchTree;
-
     class AK_API JamAllocator : public std::enable_shared_from_this<JamAllocator>
     {
         public:
@@ -46,23 +43,19 @@ namespace Ak
             ~JamAllocator();
         
         private:
-            struct flag
-            {
-                unsigned int size = 0;
-            };
+			using flag = int64_t;
 
-            void init_node(BinarySearchTree<flag*>* node, flag* ptr);
 			void* internal_allocation(size_t size);
 			void internal_free(void* ptr);
+
+			std::multimap<flag, void*> _freeSpaces;
+			std::multimap<flag, void*> _usedSpaces;
             
             std::vector<std::pair<void*, unsigned int>> _resises;
             std::mutex _mutex;
 
             void* _heap = nullptr;
             void* _heapEnd = nullptr;
-
-            BinarySearchTree<flag*>* _freeSpaces = nullptr;
-            BinarySearchTree<flag*>* _usedSpaces = nullptr;
 
             size_t _heapSize = 0;
             size_t _memUsed = 0;

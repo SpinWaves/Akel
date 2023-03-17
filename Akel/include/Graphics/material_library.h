@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/02/2023
-// Updated : 28/02/2023
+// Updated : 17/03/2023
 
 #ifndef __AK_MATERIAL_LIBRARY__
 #define __AK_MATERIAL_LIBRARY__
@@ -33,6 +33,9 @@ namespace Ak
 			std::unordered_map<MaterialID, std::shared_ptr<Material>> _cache;
 			MaterialID _current_id = 1;
 	};
+
+	inline MaterialID addMaterialToLibrary(std::shared_ptr<Material> mat) { return MaterialLibrary::get().addMaterialToLibrary(std::move(mat)); }
+	inline MaterialID addMaterialToLibrary(MaterialDesc mat) { return MaterialLibrary::get().addMaterialToLibrary(std::move(mat)); }
 }
 
 #endif

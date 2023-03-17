@@ -18,7 +18,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 
 	Ak::MaterialDesc material_desc;
 	material_desc.albedo = Ak::Res::get().getTexturesPath() / "rodriguez.jpg";
-	Ak::MaterialID material = Ak::MaterialLibrary::get().addMaterialToLibrary(material_desc);
+	Ak::MaterialID material = Ak::addMaterialToLibrary(material_desc);
 
 	Ak::Entity cube = scene->createEntity();
 	cube.addAttribute<Ak::TransformAttribute>(1.0f, 1.0f, 1.0f);

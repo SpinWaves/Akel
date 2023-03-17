@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 19/11/2022
+// Updated : 17/03/2023
 
 #include <Core/core.h>
 
@@ -26,15 +26,6 @@ namespace Ak
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         getMainAppProjectFile().setIntValue(key, Size);
         MemoryManager::accessToControlUnit()->jamStack.push_back(weak_from_this());
-    }
-
-    void JamAllocator::init_node(BinarySearchTree<JamAllocator::flag*>* node, JamAllocator::flag* flag)
-    {
-        new ((void*)node) BinarySearchTree<JamAllocator::flag*>(std::move(flag)); // Give flag to node (node is not init, just allocated so we call his constructor)
-        node->set_greater_operation([](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size  > curr_d->size; } );
-        node->set_equal_operation(  [](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size == curr_d->size; } );
-        node->set_less_operation(   [](JamAllocator::flag* new_d, JamAllocator::flag* curr_d) { return new_d->size  < curr_d->size; } );
-        _memUsed += sizeof(BinarySearchTree<JamAllocator::flag*>);
     }
 
     void JamAllocator::increase_size(size_t Size)
@@ -64,9 +55,6 @@ namespace Ak
 
         std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
-        _freeSpaces = nullptr;
-        _usedSpaces = nullptr;
-
         std::free(_heap);
         _heap = nullptr;
         
@@ -93,25 +81,18 @@ namespace Ak
         }
 
         void* ptr = nullptr;
-        BinarySearchTree<JamAllocator::flag*>* node = nullptr;
 
         std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
-        if(_freeSpaces != nullptr && _freeSpaces->has_data())
+        if(!_freeSpaces.empty())
         {
-			JamAllocator::flag finder;
-			finder.size = size;
-		   node = _freeSpaces->find(&finder);
+			auto it = _freeSpaces.lower_bound(-size);
+			JamAllocator::flag flag = it->first;
+			ptr = it->second;
+            _freeSpaces.erase(it);
+			_usedSpaces.emplace(std::make_pair(flag, ptr));
         }
-        if(node != nullptr)
-        {
-            ptr = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(_heap) + (reinterpret_cast<uintptr_t>(node->getData()) - reinterpret_cast<uintptr_t>(_heap)));
-            if(!_usedSpaces->has_data())
-                _usedSpaces = node;
-            else
-                _usedSpaces->add(node); // Give node to Used Spaces Tree
-            _freeSpaces->remove(node, false);
-        }
+
         if(ptr == nullptr) // If we haven't found free flag
         {
             JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
