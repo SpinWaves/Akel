@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 27/01/2023
+// Updated : 17/03/2023
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -53,7 +53,7 @@ namespace Ak
     template <class T, typename ... Args>
     T* MemoryManager::alloc(Args&& ... args)
     {
-        if(__jam.is_init())
+        if(__jam.isInit())
         {
 		    if(getMainAppProjectFile().getBoolValue("memory_manager_enable_fixed_allocator"))
             {
@@ -69,15 +69,15 @@ namespace Ak
             }
             return __jam.alloc<T>(std::forward<Args>(args)...);
         }
-		return ::new T(std::forward<Args>(args)...);
+		return nullptr;
     }
 
     template <class T>
     T* MemoryManager::allocSize(size_t size)
     {
-        if(__jam.is_init())
+        if(__jam.isInit())
             return __jam.alloc<T>(size);
-		return ::new T(size);
+		return nullptr;
     }
 
     template <class T>

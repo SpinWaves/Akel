@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 21/02/2023
+// Updated : 18/03/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -12,6 +12,7 @@
 #include <Scene/entity.h>
 #include <Scene/Cameras/base_camera.h>
 #include <Graphics/builtin_shaders.h>
+#include <Scene/Attributes/model_attribute.h>
 
 namespace Ak
 {
@@ -69,6 +70,12 @@ namespace Ak
 
 	void Scene::onQuit()
 	{
+		auto view = getRegistry().view<ModelAttribute>();
+		for(auto e: view)
+		{
+			ModelAttribute model = view.get<ModelAttribute>(e);
+			model.model.destroy();
+		}
 		_loader->destroy();
 	}
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 15/11/2022
+// Updated : 17/03/2023
 
 #include <Utils/utils.h>
 #include <Core/core.h>
@@ -24,7 +24,7 @@ namespace Ak
 			__fixed3.autoResize(true);
 		}
 		__jam.init(4096 * 4096);
-		__jam.auto_increase_size(true);
+		__jam.autoIncreaseSize(true);
 		_is_init = true;
     }
     void MemoryManager::end()

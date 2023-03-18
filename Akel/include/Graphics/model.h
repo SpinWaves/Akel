@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 12/03/2023
+// Updated : 18/03/2023
 
 #ifndef __AK_MODEL__
 #define __AK_MODEL__
@@ -25,7 +25,7 @@ namespace Ak
 			inline void setMaterial(MaterialID material) noexcept { _material = material; }
 			inline MaterialID getMaterial() const noexcept { return _material; }
 
-			inline const Mesh& getMesh() { return _mesh; }
+			inline const Mesh& getMesh() const { return _mesh; }
 
 			void destroy() noexcept;
 

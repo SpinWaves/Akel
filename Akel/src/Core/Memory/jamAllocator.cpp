@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 17/03/2023
+// Updated : 18/03/2023
 
 #include <Core/core.h>
 
@@ -12,7 +12,7 @@ namespace Ak
         if(_heap != nullptr)
             return;
 
-        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
+        std::unique_lock<std::mutex> watchdog(_general_mutex, std::try_to_lock);
 
         _heap = std::malloc(Size);
 
@@ -36,7 +36,7 @@ namespace Ak
             return;
         }
 
-        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
+        std::unique_lock<std::mutex> watchdog(_general_mutex, std::try_to_lock);
 
         if(Size > _heapSize)
         {
@@ -53,7 +53,7 @@ namespace Ak
         if(_heap == nullptr)
             return;
 
-        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
+        std::unique_lock<std::mutex> watchdog(_general_mutex, std::try_to_lock);
 
         std::free(_heap);
         _heap = nullptr;
@@ -82,65 +82,53 @@ namespace Ak
 
         void* ptr = nullptr;
 
-        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
+        std::unique_lock<std::mutex> watchdog(_alloc_mutex, std::try_to_lock);
 
         if(!_freeSpaces.empty())
         {
-			auto it = _freeSpaces.lower_bound(-size);
-			JamAllocator::flag flag = it->first;
-			ptr = it->second;
-            _freeSpaces.erase(it);
-			_usedSpaces.emplace(std::make_pair(flag, ptr));
+			auto it = _freeSpaces.lower_bound(size);
+			if(it != _freeSpaces.end())
+			{
+				JamAllocator::flag flag = it->first;
+				ptr = it->second;
+				_freeSpaces.erase(it);
+				if(ptr != nullptr)
+					_usedSpaces.emplace(std::make_pair(flag, ptr));
+			}
         }
 
-        if(ptr == nullptr) // If we haven't found free flag
+        if(ptr == nullptr)
         {
-            JamAllocator::flag* flag = reinterpret_cast<JamAllocator::flag*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New flag
-            flag->size = size;
-            _memUsed += sizeof(JamAllocator::flag);
-            _memUsed += sizeof(_freeSpaces);
-
-            node = reinterpret_cast<BinarySearchTree<JamAllocator::flag*>*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // New Node
-            init_node(node, flag);
-
-            if(_usedSpaces == nullptr || !_usedSpaces->has_data())
-                _usedSpaces = node;
-            else
-                _usedSpaces->add(node); // Give node to Used Spaces Tree
-            ptr = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed); // Allocate Pointer
+            JamAllocator::flag flag = size;
+            ptr = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(_heap) + _memUsed);
+			_usedSpaces.emplace(std::make_pair(flag, ptr));
             _memUsed += size;
         }
 
         watchdog.unlock();
+
+		if(ptr == nullptr)
+			Error("JamAllocator : unable to allocate %d bytes", size);
 
         return ptr;
 	}
 
 	void JamAllocator::internal_free(void* ptr)
 	{
-        JamAllocator::flag* finder = nullptr;
-        BinarySearchTree<JamAllocator::flag*>* node = nullptr;
-        unsigned int better_flag = -1;
+        std::unique_lock<std::mutex> watchdog(_free_mutex, std::try_to_lock);
+        uint32_t cache;
+        uint32_t better_flag = -1;
+		JamAllocator::flag flag;
+		auto iterator = _usedSpaces.end();
 
-        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
-
-        auto it = _usedSpaces->root_it();
-        if(!it.has_data())
+        for(auto it = _usedSpaces.begin(); it != _usedSpaces.end(); ++it)
         {
-            watchdog.unlock();
-            return;
-        }
-
-        unsigned int cache = 0;
-
-        for(; it.has_data(); it.next()) // flag finder
-        {
-            if((cache = reinterpret_cast<uintptr_t>(ptr) - (reinterpret_cast<uintptr_t>(it->getData()) + sizeof(JamAllocator::flag))) >= 0)
+            if((cache = reinterpret_cast<uintptr_t>(ptr) - reinterpret_cast<uintptr_t>(it->second)) >= 0)
             {
                 if(cache < better_flag)
                 {
-                    finder = it->getData();
-                    node = it.get_node();
+                    flag = it->first;
+					iterator = it;
                     better_flag = cache;
                 }
                 if(better_flag == 0) // we found the exact flag
@@ -148,19 +136,15 @@ namespace Ak
             }
         }
 
-        if(finder == nullptr)
+        if(iterator == _usedSpaces.end())
         {
             Error("JamAllocator : unable to find the flag of %p", ptr);
             watchdog.unlock();
             return;
         }
         
-        _usedSpaces->remove(node, false);
-        
-        if(_freeSpaces == nullptr || !_freeSpaces->has_data())
-            _freeSpaces = node;
-        else
-            _freeSpaces->add(node);
+        _usedSpaces.erase(iterator);
+		_freeSpaces.emplace(std::make_pair(flag, ptr));
 
         watchdog.unlock();
 	}

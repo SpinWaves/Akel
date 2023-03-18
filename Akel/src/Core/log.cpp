@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 10/02/2023
+// Updated : 17/03/2023
 
 #include <Core/core.h>
 #include <Platform/messageBox.h>
@@ -102,7 +102,7 @@ namespace Ak::Core
 					if(!elem.expired())
 					{
 						elem.lock()->destroy();
-						if(elem.lock()->is_init())
+						if(elem.lock()->isInit())
 							allocators_leaks++;
 					}
 				}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 12/03/2023
+// Updated : 18/03/2023
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <Graphics/model.h>
@@ -12,7 +12,7 @@ namespace Ak
 {
 	Model::Model(std::filesystem::path file) : _file(std::move(file)) {}
 	Model::Model(const Mesh& mesh) : _mesh(mesh) {}
-	Model::Model(Mesh&& mesh) : _mesh(mesh) {}
+	Model::Model(Mesh&& mesh) : _mesh(std::move(mesh)) {}
 
 	void Model::load()
 	{
@@ -81,7 +81,7 @@ namespace Ak
 				indices.push_back(unique_vertices[vertex]);
 */
 				indices.push_back(vertices.size());
-				vertices.push_back(vertex);
+				vertices.push_back(std::move(vertex));
 			}
 		}
 		_mesh.init(std::move(vertices), std::move(indices));

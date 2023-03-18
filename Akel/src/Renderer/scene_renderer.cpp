@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 12/03/2023
+// Updated : 18/03/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -27,7 +27,7 @@ namespace Ak
 	{
 		auto renderer = scene->_renderer;
 
-		if(_settings.geometries)
+		if(_settings.geometries) // TODO : do not update command queues if scenes entities haven't been modified
 		{
 			if(_scene_cache != scene)
 			{
@@ -39,15 +39,15 @@ namespace Ak
 			auto world = scene->getRegistry().group<ModelAttribute>(entt::get<TransformAttribute>);
 			for(auto e : world)
 			{
-				ModelAttribute model = world.get<ModelAttribute>(e);
-				TransformAttribute trans = world.get<TransformAttribute>(e);
+				const ModelAttribute& model = world.get<ModelAttribute>(e);
+				const TransformAttribute& trans = world.get<TransformAttribute>(e);
 
 				RenderCommandData command;
 				command.mesh = &const_cast<Mesh&>(model.model.getMesh());
 				command.material = model.model.getMaterial();
 				command.transform = trans.processTransform();
 
-				_forward_data.command_queue.push_back(command);
+				_forward_data.command_queue.push_back(std::move(command));
 			}
 			forwardPass(scene);
 		}
@@ -123,7 +123,7 @@ namespace Ak
 			_forward_data.push_constants[0].setData(&command.transform);
 			for(auto& pc : _forward_data.push_constants)
 				pc.bind(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineLayout());
-		
+	
 			command.mesh->draw(*renderer);
 			_forward_data.descriptor_sets.pop_back();
 		}
