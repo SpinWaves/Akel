@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 18/03/2023
+// Updated : 21/03/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -12,7 +12,7 @@
 #include <Scene/entity.h>
 #include <Scene/Cameras/base_camera.h>
 #include <Graphics/builtin_shaders.h>
-#include <Scene/Attributes/model_attribute.h>
+#include <Scene/Attributes/attributes.h>
 
 namespace Ak
 {
@@ -55,6 +55,13 @@ namespace Ak
 	{
 		Maths::Vec2i win_size = _renderer->getWindow()->size;
 		_camera->onUpdate(static_cast<float>(win_size.X) / static_cast<float>(win_size.Y));
+
+		auto view = getRegistry().view<ScriptAttribute>();
+		for(auto e: view)
+		{
+			ScriptAttribute& script = view.get<ScriptAttribute>(e);
+			script.onUpdate(timestep);
+		}
 	}
 
 	void Scene::onEvent(Input& input)
@@ -70,10 +77,17 @@ namespace Ak
 
 	void Scene::onQuit()
 	{
-		auto view = getRegistry().view<ModelAttribute>();
-		for(auto e: view)
+		auto script_view = getRegistry().view<ScriptAttribute>();
+		for(auto e: script_view)
 		{
-			ModelAttribute model = view.get<ModelAttribute>(e);
+			ScriptAttribute& script = script_view.get<ScriptAttribute>(e);
+			script.onQuit();
+		}
+
+		auto model_view = getRegistry().view<ModelAttribute>();
+		for(auto e: model_view)
+		{
+			ModelAttribute& model = model_view.get<ModelAttribute>(e);
 			model.model.destroy();
 		}
 		_loader->destroy();

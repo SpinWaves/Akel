@@ -26,7 +26,8 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	lem.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "apollo_lunar_module.obj", lem_material);
 	lem.getAttribute<Ak::TransformAttribute>().scale = Ak::Maths::Vec3f(0.02f, 0.02f, 0.02f);
 
-	Ak::LuaLoader lua;
+	Ak::LuaLoader lua(app->getInput());
+	lem.addAttribute<Ak::ScriptAttribute>(lua.loadScript(Ak::Res::get().getScriptsPath() / "lem_script.lua"));
 	
 	return app;
 }

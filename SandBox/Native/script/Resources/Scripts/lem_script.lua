@@ -1,12 +1,10 @@
-
-function onInit()
+function AkelOnInit()
 	Ak.log.message("Script init")
 end
 
-function onUpdate(delta)
-	print("youpi pouic " + delta)
+function AkelOnUpdate(delta)
 end
 
-function onQuit()
+function AkelOnQuit()
 	Ak.log.message("Script exit")
 end
