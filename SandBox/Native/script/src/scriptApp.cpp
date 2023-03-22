@@ -29,5 +29,13 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	Ak::LuaLoader lua(app->getInput());
 	lem.addAttribute<Ak::ScriptAttribute>(lua.loadScript(Ak::Res::get().getScriptsPath() / "lem_script.lua"));
 	
+/*
+	Ak::NativeLoader loader;
+	auto init = []() { std::cout << "youpi pouic init" << std::endl; };
+	auto update = [](float delta) { std::cout << "youpi pouic " << delta << std::endl; };
+	auto quit = []() { std::cout << "youpi pouic exit" << std::endl; };
+	lem.addAttribute<Ak::ScriptAttribute>(loader.loadScript(init, update, quit));
+*/
+
 	return app;
 }

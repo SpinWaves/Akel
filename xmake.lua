@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 20/03/2023
+-- Updated : 22/03/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -158,34 +158,4 @@ target("Kila_tester")
 	set_targetdir("Tests/Kila/")
 	add_includedirs("Akel/include", "Tests/Kila", "libs/include")
     add_files("Tests/Kila/*.cpp")
-target_end()
-
--- ELTM tester Build
-target("eltm_tester")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	set_targetdir("Tests/eltm/")
-	add_includedirs("Akel/include", "Tests/eltm", "libs/include")
-    add_files("Tests/eltm/*.cpp")
-target_end()
-
--- Multipe Windows Rendering tester Build
-target("mult_win_render")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	set_targetdir("Tests/Windowing/multiple_windows_rendering/")
-	add_includedirs("Akel/include", "libs/include")
-    add_files("Tests/Windowing/multiple_windows_rendering/*.cpp")
-target_end()
-
--- Lua tester build
-target("lua")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	set_targetdir("Tests/Scripting/Lua/")
-	add_includedirs("Akel/include", "libs/include")
-    add_files("Tests/Scripting/Lua/*.cpp")
 target_end()

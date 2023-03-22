@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 21/03/2023
+// Updated : 22/03/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -82,6 +82,7 @@ namespace Ak
 		{
 			ScriptAttribute& script = script_view.get<ScriptAttribute>(e);
 			script.onQuit();
+			memFree(script._script);
 		}
 
 		auto model_view = getRegistry().view<ModelAttribute>();
