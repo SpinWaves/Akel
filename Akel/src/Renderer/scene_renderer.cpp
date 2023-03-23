@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 18/03/2023
+// Updated : 23/03/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -133,6 +133,7 @@ namespace Ak
 
 	void SceneRenderer::destroy()
 	{
+        vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		_pipelines_manager.clearCache();
 		TextureLibrary::get().clearLibrary();
 	}

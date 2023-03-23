@@ -13,6 +13,7 @@ function AkelOnUpdate(delta)
 	elseif transform.position.X < -10 then
 		i = 1
 	end
+	print(transform.position.X)
 end
 
 function AkelOnQuit()

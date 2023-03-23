@@ -8,6 +8,7 @@
 #include <Platform/input.h>
 #include <Core/core.h>
 #include <Maths/maths.h>
+#include <Scene/Attributes/attributes.h>
 
 namespace Ak
 {
@@ -243,9 +244,18 @@ namespace Ak
 	{
 		auto lua = (*state)["Ak"].get_or_create<sol::table>();
 
-		lua.set_function("getAttribute", [](std::string_view attribute)
-				{
+		lua.new_usertype<TransformAttribute>(
+			"TransformAttribute",
+			sol::constructors<sol::types<>, sol::types<Maths::Vec3f>, sol::types<float, float, float>>(),
+			"position", &TransformAttribute::position,
+			"rotation", &TransformAttribute::rotation,
+			"scale", &TransformAttribute::scale
+		);
 
-				});
+		lua.set_function("getAttribute", [](std::string_view attribute)
+			{
+				if(attribute == "transform")
+					return TransformAttribute();
+			});
 	}
 }
