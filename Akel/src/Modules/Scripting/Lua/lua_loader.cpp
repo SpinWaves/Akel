@@ -1,12 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 22/03/2023
+// Updated : 23/03/2023
 
 #include <Modules/Scripting/Lua/lua_loader.h>
 #include <Modules/Scripting/Lua/lua_script.h>
 #include <Platform/input.h>
 #include <Core/core.h>
+#include <Maths/maths.h>
 
 namespace Ak
 {
@@ -20,6 +21,7 @@ namespace Ak
 		state->open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table, sol::lib::os, sol::lib::string);
 		bindLogs();
 		bindInputs(input);
+		bindMaths();
 		bindECS();
 	}
 
@@ -151,6 +153,90 @@ namespace Ak
 			{ "x2", AK_MOUSE_BUTTON_X2 },
         };
         input.new_enum<uint8_t, false>("mouse", mouseItems);
+	}
+
+	void LuaLoader::bindMaths()
+	{
+		auto lua = (*state)["Ak"].get_or_create<sol::table>();
+
+		using namespace Maths;
+
+		lua.new_usertype<Vec2f>(
+			"Vec2",
+			sol::constructors<sol::types<>, sol::types<float, float>>(),
+			"X", &Vec2f::X,
+			"Y", &Vec2f::Y,
+			"length", &Vec2f::length,
+			"normalize", &Vec2f::normalize,
+			sol::meta_function::addition, [](const Vec2f& a, const Vec2f& b)
+			{ return a + b; },
+			sol::meta_function::subtraction, [](const Vec2f& a, const Vec2f& b)
+			{ return a - b; },
+			sol::meta_function::multiplication, [](Vec2f& a, Vec2f& b)
+            { return a * b; },
+//			sol::meta_function::unary_minus, [](Vec2f& v) -> Vec2f
+//			{ return -v; },
+			sol::meta_function::equal_to, [](Vec2f& a, Vec2f& b)
+			{ return a == b; }
+		);
+
+		auto vec3_mult_overloads = sol::overload(
+			//[](const Vec3f& v1, const Vec3f& v2) -> Vec3f
+			//{ return v1 * v2; },
+			[](const Vec3f& v1, float f) -> Vec3f
+			{ return v1 * f; },
+			[](float f, const Vec3f& v1) -> Vec3f
+			{ return f * v1; }
+		);
+
+		lua.new_usertype<Vec3f>(
+			"Vec3",
+			sol::constructors<sol::types<>, sol::types<float, float, float>>(),
+			"X", &Vec3f::X,
+			"Y", &Vec3f::Y,
+			"Z", &Vec3f::Z,
+			"length", &Vec3f::length,
+			"normalize", &Vec3f::normalize,
+			"absolute", &Vec3f::absolute,
+			sol::meta_function::addition, [](const Vec3f& a, const Vec3f& b)
+			{ return a + b; },
+			sol::meta_function::multiplication, vec3_mult_overloads,
+			sol::meta_function::subtraction, [](const Vec3f& a, const Vec3f& b)
+			{ return a - b; },
+			sol::meta_function::unary_minus, [](Vec3f& v) -> Vec3f
+			{ return -v; },
+			sol::meta_function::equal_to, [](Vec3f& a, Vec3f& b)
+			{ return a == b; }
+		);
+
+		auto vec4_mult_overloads = sol::overload(
+			//[](const Vec3f& v1, const Vec3f& v2) -> Vec3f
+			//{ return v1 * v2; },
+			[](const Vec4f& v1, float f) -> Vec4f
+			{ return v1 * f; },
+			[](float f, const Vec4f& v1) -> Vec4f
+			{ return f * v1; }
+		);
+
+		lua.new_usertype<Vec4f>(
+			"Vec4",
+			sol::constructors<sol::types<>, sol::types<float, float, float, float>>(),
+			"X", &Vec4f::X,
+			"Y", &Vec4f::Y,
+			"Z", &Vec4f::Z,
+			"W", &Vec4f::W,
+			"length", &Vec4f::length,
+			"normalize", &Vec4f::normalize,
+			sol::meta_function::addition, [](const Vec4f& a, const Vec4f& b)
+			{ return a + b; },
+			sol::meta_function::multiplication, vec4_mult_overloads,
+			sol::meta_function::subtraction, [](const Vec4f& a, const Vec4f& b)
+			{ return a - b; },
+			//sol::meta_function::unary_minus, [](Vec4f& v) -> Vec4f
+			//{ return -v; },
+			sol::meta_function::equal_to, [](Vec4f& a, Vec4f& b)
+			{ return a == b; }
+		);
 	}
 
 	void LuaLoader::bindECS()

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 10/03/2023
+// Updated : 23/03/2023
 
 #ifndef __AK_VEC3__
 #define __AK_VEC3__
@@ -61,7 +61,7 @@ namespace Ak::Maths
 		bool operator>= (const T value);
 
 		Vec3 crossProduct(const Vec3& v) const;
-		double length()const;
+		double length() const;
 		void normalize();
 
 		Vec3 copy();
