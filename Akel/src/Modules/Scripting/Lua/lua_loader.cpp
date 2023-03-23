@@ -47,8 +47,6 @@ namespace Ak
 
 		script = memAlloc<LuaScript>();
 
-		sol::protected_function::set_default_handler((*state)["Ak"]["log"]["error"]);
-
 		script->_on_init = (*state)["AkelOnInit"];
 		script->_on_update = (*state)["AkelOnUpdate"];
 		script->_on_quit = (*state)["AkelOnQuit"];
@@ -62,15 +60,15 @@ namespace Ak
 	{
 		auto log = (*state)["Ak"].get_or_create<sol::table>()["log"].get_or_create<sol::table>();
 
-		log.set_function("message", [](std::string message)
+		log.set_function("Message", [](std::string message)
 				{ Core::log::report(MESSAGE, "Lua : %s", message.c_str()); });
-		log.set_function("warning", [](std::string message)
+		log.set_function("Warning", [](std::string message)
 				{ Core::log::report(WARNING, "Lua : %s", message.c_str()); });
-		log.set_function("strong_warning", [](std::string message)
+		log.set_function("StrongWarning", [](std::string message)
 				{ Core::log::report(STRONG_WARNING, "Lua : %s", message.c_str()); });
-		log.set_function("error", [](std::string message)
+		log.set_function("Error", [](std::string message)
 				{ Core::log::report(ERROR, "Lua : %s", message.c_str()); });
-		log.set_function("fatal_error", [](std::string message)
+		log.set_function("FatalError", [](std::string message)
 				{ Core::log::report(FATAL_ERROR, "Lua : %s", message.c_str()); });
 	}
 
@@ -255,7 +253,7 @@ namespace Ak
 		lua.set_function("getAttribute", [](std::string_view attribute)
 			{
 				if(attribute == "transform")
-					return TransformAttribute();
+					return TransformAttribute(1.0f, 1.0f, 1.0f);
 			});
 	}
 }
