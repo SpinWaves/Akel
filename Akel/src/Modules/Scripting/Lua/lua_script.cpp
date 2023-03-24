@@ -1,13 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/03/2023
-// Updated : 21/03/2023
+// Updated : 24/03/2023
 
 #include <Modules/Scripting/Lua/lua_script.h>
 #include <Core/log.h>
 
 namespace Ak
 {
+	static int32_t id_counter = 0;
+
+	LuaScript::LuaScript() : Script(), _id(id_counter++) {}
+
 	void LuaScript::runOnInit()
 	{
 		if(!_on_init.valid())

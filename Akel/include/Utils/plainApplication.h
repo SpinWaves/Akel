@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/03/2022
-// Updated : 07/02/2023
+// Updated : 24/03/2023
 
 #ifndef __AK_PLAIN_APPLICATION__
 #define __AK_PLAIN_APPLICATION__
@@ -23,6 +23,7 @@ namespace Ak
 
 			inline class WindowComponent* getWindow() noexcept { return _window; }
 			inline class RendererComponent* getRenderer() noexcept { return _renderer; }
+			inline class SceneManager* getSceneManager() noexcept { return _scene_manager; }
 
 			~PlainApplication() = default;
 

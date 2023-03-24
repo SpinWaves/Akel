@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 23/03/2023
+// Updated : 24/03/2023
 
 #include <Modules/Scripting/Lua/lua_loader.h>
 #include <Modules/Scripting/Lua/lua_script.h>
@@ -9,19 +9,20 @@
 #include <Core/core.h>
 #include <Maths/maths.h>
 #include <Scene/Attributes/attributes.h>
+#include <Scene/scene_manager.h>
 
 namespace Ak
 {
 	static std::optional<sol::state> state;
 
-	LuaLoader::LuaLoader(const Input& input) : ScriptLoader()
+	LuaLoader::LuaLoader(Application* app, SceneManager* scene_manager) : ScriptLoader(), _scene_manager(scene_manager)
 	{
 		if(state)
 			return;
 		state = sol::state();
 		state->open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table, sol::lib::os, sol::lib::string);
 		bindLogs();
-		bindInputs(input);
+		bindInputs(app->getInput());
 		bindMaths();
 		bindECS();
 	}
@@ -250,10 +251,14 @@ namespace Ak
 			"scale", &TransformAttribute::scale
 		);
 
-		lua.set_function("getAttribute", [](std::string_view attribute)
+		static TransformAttribute trans;
+
+		lua.set_function("getAttribute", [](std::string_view attribute) -> sol::object
 			{
+				
 				if(attribute == "transform")
-					return TransformAttribute(1.0f, 1.0f, 1.0f);
+					return sol::make_object<std::reference_wrapper<TransformAttribute>>(*state, std::ref(trans));
+				return sol::lua_nil;
 			});
 	}
 }
