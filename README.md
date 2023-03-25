@@ -5,7 +5,7 @@
 
 Akel is a game engine made for fun by a young french man.
 Currently at an early stage, it is still in development and needs more work to turn it into something.
-An editor (like Unity or UnrealEngine) is in development, facilitating the creation of games. However, it will be necessary to wait for some time until this one is sufficiently developed (as well as the engine itself) to make games easily.
+An editor is in development, facilitating the creation of games. However, it will be necessary to wait for some time until this one is sufficiently developed (as well as the engine itself) to make games easily.
 Akel is designed to be easy to use. Not being the most powerful, it goes the way of simplicity of use, both on the editor side and on the code side.
 
 # Getting started
@@ -18,11 +18,12 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 
   Demo | Command
   ---- | -------
-  Ake Studio | `xmake build Akel_Studio`
+  Akel Studio | `xmake build Akel_Studio`
   Rectangle | `xmake build RectDemo`
   Cube | `xmake build CubeDemo`
   Skybox | `xmake build SkyDemo`
   Model | `xmake build ModelDemo`
+  Scripting | `xmake build ScriptDemo`
   </details>
 
 # Akel useful features
@@ -30,9 +31,11 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 * Text management language [ELTM](https://github.com/SpinWaves/Akel/tree/main/Akel/include/Modules/ELTM)
 * Efficient error management system
 * Memory manager using custom allocators
-* Memory protection system in case of crash
+* Memory protection system in case of fatal error
 * Native ImGui implementation using Akel's renderer
 * Native [NZSL](https://github.com/NazaraEngine/ShaderLang) support with helper modules
+* Native scripting using Lua
+* Easy integration of other scripting languages
 
 # Screenshots
 
@@ -42,7 +45,6 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 
 # Coming soon...
 * Custom shading language
-* Scripting using Lua
 
 # Contribute
 You can contribute by :
