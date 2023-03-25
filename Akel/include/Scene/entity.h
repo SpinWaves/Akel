@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2021
-// Updated : 20/02/2023
+// Updated : 25/03/2023
 
 #ifndef __AK_ENTITY__
 #define __AK_ENTITY__
@@ -14,7 +14,7 @@
 
 namespace Ak
 {
-	class AK_API Entity : public non_copyable
+	class AK_API Entity
 	{
 		public:
 			Entity(entt::entity entity, Scene* scene) : _entity(entity), _scene(scene) {}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/03/2023
-// Updated : 22/03/2023
+// Updated : 25/03/2023
 
 #ifndef __AK_NATIVE_SCRIPT__
 #define __AK_NATIVE_SCRIPT__
@@ -18,9 +18,9 @@ namespace Ak
 		public:
 			NativeScript() = default;
 
-			inline void runOnInit() override { if(_on_init) _on_init(); }
-			inline void runOnUpdate(float delta) override { if(_on_update) _on_update(delta); }
-			inline void runOnQuit() override { if(_on_quit) _on_quit(); }
+			inline void runOnInit(Entity* this_entity) override { if(_on_init) _on_init(); }
+			inline void runOnUpdate(Entity* this_entity, float delta) override { if(_on_update) _on_update(delta); }
+			inline void runOnQuit(Entity* this_entity) override { if(_on_quit) _on_quit(); }
 
 			~NativeScript() = default;
 

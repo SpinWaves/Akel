@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/03/2023
-// Updated : 24/03/2023
+// Updated : 25/03/2023
 
 #ifndef __AK_LUA_SCRIPT__
 #define __AK_LUA_SCRIPT__
 
 #include <Akpch.h>
 #include <Modules/Scripting/script.h>
+#include <Scene/entity.h>
 
 namespace Ak
 {
@@ -18,9 +19,9 @@ namespace Ak
 		public:
 			LuaScript();
 
-			void runOnInit() override;
-			void runOnUpdate(float delta) override;
-			void runOnQuit() override;
+			void runOnInit(Entity* this_entity) override;
+			void runOnUpdate(Entity* this_entity, float delta) override;
+			void runOnQuit(Entity* this_entity) override;
 
 			~LuaScript() = default;
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 23/03/2023
+// Updated : 25/03/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -60,8 +60,12 @@ namespace Ak
 		for(auto e: view)
 		{
 			ScriptAttribute& script = view.get<ScriptAttribute>(e);
-			script.onUpdate(timestep);
+			std::optional<Entity> entity = _entity_manager->getEntity(e);
+			if(_first_update)
+				script.onInit(&(*entity));
+			script.onUpdate(&(*entity), timestep);
 		}
+		_first_update = false;
 	}
 
 	void Scene::onEvent(Input& input)
@@ -81,7 +85,8 @@ namespace Ak
 		for(auto e: script_view)
 		{
 			ScriptAttribute& script = script_view.get<ScriptAttribute>(e);
-			script.onQuit();
+			std::optional<Entity> entity = _entity_manager->getEntity(e);
+			script.onQuit(&(*entity));
 			memFree(script._script);
 		}
 

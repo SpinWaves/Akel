@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 24/03/2023
+// Updated : 25/03/2023
 
 #include <Modules/Scripting/Lua/lua_loader.h>
 #include <Modules/Scripting/Lua/lua_script.h>
@@ -14,6 +14,7 @@
 namespace Ak
 {
 	static std::optional<sol::state> state;
+	Entity* __entity;
 
 	LuaLoader::LuaLoader(Application* app, SceneManager* scene_manager) : ScriptLoader(), _scene_manager(scene_manager)
 	{
@@ -142,6 +143,11 @@ namespace Ak
 			{ "7", AK_KEY_7 },
 			{ "8", AK_KEY_8 },
 			{ "9", AK_KEY_9 },
+
+			{ "up", AK_KEY_UP },
+			{ "down", AK_KEY_DOWN },
+			{ "left", AK_KEY_LEFT },
+			{ "right", AK_KEY_RIGHT },
         };
         input.new_enum<SDL_Scancode, false>("key", keyItems);
 
@@ -251,13 +257,18 @@ namespace Ak
 			"scale", &TransformAttribute::scale
 		);
 
-		static TransformAttribute trans;
-
 		lua.set_function("getAttribute", [](std::string_view attribute) -> sol::object
 			{
-				
-				if(attribute == "transform")
-					return sol::make_object<std::reference_wrapper<TransformAttribute>>(*state, std::ref(trans));
+				if(__entity == nullptr)
+					return sol::lua_nil;
+				TransformAttribute* trans = __entity->tryGetAttribute<TransformAttribute>();
+				if(attribute == "transform" && trans != nullptr)
+					return sol::make_object<std::reference_wrapper<TransformAttribute>>(*state, std::ref(*trans));
+			/*
+				ModelAttribute* model = __entity->tryGetAttribute<ModelAttribute>();
+				if(attribute == "model" && model != nullptr)
+					return sol::make_object<std::reference_wrapper<ModelAttribute>>(*state, std::ref(*model));
+			*/
 				return sol::lua_nil;
 			});
 	}
