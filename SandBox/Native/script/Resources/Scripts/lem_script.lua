@@ -10,6 +10,10 @@ function AkelOnUpdate(delta)
 	if Ak.getInKey(Ak.key.Q, Ak.action.down) then
 		transform.rotation.X = transform.rotation.X - 0.05
 	end
+
+	if Ak.getInKey(Ak.key.k2, Ak.action.down) then
+		Ak.switchToScene("second scene")
+	end
 end
 
 function AkelOnQuit()

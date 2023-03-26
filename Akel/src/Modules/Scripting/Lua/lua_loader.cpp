@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 25/03/2023
+// Updated : 26/03/2023
 
 #include <Modules/Scripting/Lua/lua_loader.h>
 #include <Modules/Scripting/Lua/lua_script.h>
@@ -16,7 +16,7 @@ namespace Ak
 	static std::optional<sol::state> state;
 	Entity* __entity;
 
-	LuaLoader::LuaLoader(Application* app, SceneManager* scene_manager) : ScriptLoader(), _scene_manager(scene_manager)
+	LuaLoader::LuaLoader(Application* app, SceneManager& scene_manager) : ScriptLoader()
 	{
 		if(state)
 			return;
@@ -26,6 +26,7 @@ namespace Ak
 		bindInputs(app->getInput());
 		bindMaths();
 		bindECS();
+		bindSceneManager(scene_manager);
 	}
 
 	Script* LuaLoader::loadScript(std::filesystem::path lua_file)
@@ -37,8 +38,9 @@ namespace Ak
 		}
 		
 		LuaScript* script;
+		sol::environment env(*state, sol::create, state->globals());
 
-		auto sol_script = state->script_file(lua_file.string(), sol::script_pass_on_error);
+		auto sol_script = state->script_file(lua_file.string(), env, sol::script_pass_on_error);
 		if(!sol_script.valid())
 		{
 			sol::error err = sol_script;
@@ -48,10 +50,11 @@ namespace Ak
 		}
 
 		script = memAlloc<LuaScript>();
+		script->_env = std::move(env);
 
-		script->_on_init = (*state)["AkelOnInit"];
-		script->_on_update = (*state)["AkelOnUpdate"];
-		script->_on_quit = (*state)["AkelOnQuit"];
+		script->_on_init = script->_env["AkelOnInit"];
+		script->_on_update = script->_env["AkelOnUpdate"];
+		script->_on_quit = script->_env["AkelOnQuit"];
 
 		state->collect_garbage();
 
@@ -133,16 +136,16 @@ namespace Ak
 			{ "Y", AK_KEY_Y },
 			{ "Z", AK_KEY_Z },
 
-			{ "0", AK_KEY_0 },
-			{ "1", AK_KEY_1 },
-			{ "2", AK_KEY_2 },
-			{ "3", AK_KEY_3 },
-			{ "4", AK_KEY_4 },
-			{ "5", AK_KEY_5 },
-			{ "6", AK_KEY_6 },
-			{ "7", AK_KEY_7 },
-			{ "8", AK_KEY_8 },
-			{ "9", AK_KEY_9 },
+			{ "k0", AK_KEY_0 },
+			{ "k1", AK_KEY_1 },
+			{ "k2", AK_KEY_2 },
+			{ "k3", AK_KEY_3 },
+			{ "k4", AK_KEY_4 },
+			{ "k5", AK_KEY_5 },
+			{ "k6", AK_KEY_6 },
+			{ "k7", AK_KEY_7 },
+			{ "k8", AK_KEY_8 },
+			{ "k9", AK_KEY_9 },
 
 			{ "up", AK_KEY_UP },
 			{ "down", AK_KEY_DOWN },
@@ -270,6 +273,16 @@ namespace Ak
 					return sol::make_object<std::reference_wrapper<ModelAttribute>>(*state, std::ref(*model));
 			*/
 				return sol::lua_nil;
+			});
+	}
+
+	void LuaLoader::bindSceneManager(SceneManager& manager)
+	{
+		auto lua = (*state)["Ak"].get_or_create<sol::table>();
+
+		lua.set_function("switchToScene", [&](std::string scene) -> void
+			{
+				manager.switch_to_scene(std::move(scene));
 			});
 	}
 }

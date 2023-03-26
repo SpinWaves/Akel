@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 24/03/2023
+// Updated : 26/03/2023
 
 #ifndef __AK_LUA_LOADER__
 #define __AK_LUA_LOADER__
@@ -14,7 +14,7 @@ namespace Ak
 	class AK_API LuaLoader : public ScriptLoader
 	{
 		public:
-			LuaLoader(class Application* app, class SceneManager* scene_manager);
+			LuaLoader(class Application* app, class SceneManager& scene_manager);
 
 			Script* loadScript(std::filesystem::path lua_file) override;
 
@@ -25,8 +25,7 @@ namespace Ak
 			void bindInputs(const class Input& in);
 			void bindECS();
 			void bindMaths();
-
-			class SceneManager* _scene_manager = nullptr;
+			void bindSceneManager(SceneManager& manager);
 	};
 }
 

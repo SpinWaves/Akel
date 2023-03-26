@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 23/03/2023
+// Updated : 26/03/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -70,7 +70,7 @@ namespace Ak
 		static Shader::Uniform matrices_uniform_buffer;
 		static ShaderID fragment_shader = nullshader;
 
-		if(scene != _scene_cache)
+		if(scene != _scene_cache && (_scene_cache == nullptr || !std::equal(scene->_forward_shaders.begin(), scene->_forward_shaders.end(), _scene_cache->_forward_shaders.begin())))
 		{
 			_forward_data.descriptor_sets.clear();
 			_forward_data.push_constants.clear();

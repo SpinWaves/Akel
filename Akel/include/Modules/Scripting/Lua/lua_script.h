@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/03/2023
-// Updated : 25/03/2023
+// Updated : 26/03/2023
 
 #ifndef __AK_LUA_SCRIPT__
 #define __AK_LUA_SCRIPT__
@@ -26,6 +26,7 @@ namespace Ak
 			~LuaScript() = default;
 
 		private:
+			sol::environment _env;
 			sol::protected_function _on_init;
 			sol::protected_function _on_update;
 			sol::protected_function _on_quit;

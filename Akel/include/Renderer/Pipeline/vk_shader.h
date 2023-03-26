@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 08/03/2023
+// Updated : 26/03/2023
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -160,6 +160,7 @@ namespace Ak
 			inline std::optional<VkVertexInputAttributeDescription> getAttribute(std::string name) { return _attributes.count(name) ? std::make_optional(_attributes[std::move(name)]) : std::nullopt; }
 
 			inline const fString& getEntryPointName() const noexcept { return _entry_point_name; }
+			inline const std::vector<uint32_t> getByteCode() const { return _byte_code; }
 
 			~Shader() = default;
 

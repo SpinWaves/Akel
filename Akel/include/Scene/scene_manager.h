@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2022
-// Updated : 24/03/2023
+// Updated : 26/03/2023
 
 #ifndef __AK_SCENE_MANAGER__
 #define __AK_SCENE_MANAGER__
@@ -58,6 +58,18 @@ namespace Ak
 					Core::log::report(ERROR, "Scenes Manager : trying to switch to unknown scene id (%d)", id);
 				else
 					_current_scene_id = id;
+			}
+
+			inline void switch_to_scene(std::string name)
+			{
+				auto it = std::find_if(_scenes.begin(), _scenes.end(), [&](Scene* scene)
+					{
+						return scene->getName() == name;
+					});
+				if(it == _scenes.end())
+					Core::log::report(ERROR, "Scene Manager : trying to switch to unknown scene '%s'", name.c_str());
+				else
+					_current_scene_id = (*it)->getID();
 			}
 
 			inline Scene* getCurrentScene() noexcept { return _scenes[_current_scene_id]; }

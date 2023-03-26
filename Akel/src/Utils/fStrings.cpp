@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 17/02/2023
+// Updated : 26/03/2023
 
 #include <Utils/fStrings.h>
 #include <Core/core.h>
@@ -29,6 +29,7 @@ namespace Ak
             else
                 _string[_size++] = c;
         }
+		_size++;
     }
 
     fString::fString(const fString& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str._size - pos : len - pos)
@@ -43,10 +44,10 @@ namespace Ak
         }
     }
 
-    fString::fString(fString&& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str._size : len)
+    fString::fString(fString&& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str._size - pos: len - pos)
     {
-        _string = memAllocSize<char>(_size - pos);
-        for(int i = 0; i < _size; i++)
+        _string = memAllocSize<char>(_size);
+        for(int i = 0; i <= _size; i++)
         {
             if(modifier != nullptr)
                 _string[i] = modifier(str[i + pos]);

@@ -26,8 +26,22 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	lem.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "apollo_lunar_module.obj", lem_material);
 	lem.getAttribute<Ak::TransformAttribute>().scale = Ak::Maths::Vec3f(0.02f, 0.02f, 0.02f);
 
-	Ak::LuaLoader lua(app, app->getSceneManager());
+	Ak::LuaLoader lua(app, *app->getSceneManager());
 	lem.addAttribute<Ak::ScriptAttribute>(lua.loadScript(Ak::Res::get().getScriptsPath() / "lem_script.lua"));
+
+	Ak::Scene* scene2 = Ak::memAlloc<Ak::Scene>("second scene");
+	scene2->addCamera<Ak::Cam::FirstPerson3D>(0.0f, 0.0f, 0.0f);
+	app->add_scene(scene2);
+
+	// Setting up Knuckles model and material
+	Ak::MaterialDesc knuckles_material_desc;
+	knuckles_material_desc.albedo = Ak::Res::get().getTexturesPath() / "knuckles.png";
+	Ak::MaterialID knuckles_material = Ak::addMaterialToLibrary(knuckles_material_desc);
+
+	Ak::Entity knuckles = scene2->createEntity();
+	knuckles.addAttribute<Ak::TransformAttribute>(0.0f, 0.0f, 0.0f);
+	knuckles.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "knuckles.obj", knuckles_material);
+	knuckles.addAttribute<Ak::ScriptAttribute>(lua.loadScript(Ak::Res::get().getScriptsPath() / "knuckles_script.lua"));
 
 	return app;
 }
