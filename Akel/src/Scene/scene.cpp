@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 25/03/2023
+// Updated : 27/03/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -88,6 +88,13 @@ namespace Ak
 			std::optional<Entity> entity = _entity_manager->getEntity(e);
 			script.onQuit(&(*entity));
 			memFree(script._script);
+		}
+
+		auto audio_view = getRegistry().view<AudioAttribute>();
+		for(auto e: audio_view)
+		{
+			AudioAttribute& audio = audio_view.get<AudioAttribute>(e);
+			audio.quit();
 		}
 
 		auto model_view = getRegistry().view<ModelAttribute>();

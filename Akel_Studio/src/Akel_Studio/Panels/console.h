@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 05/07/2022
+// Updated : 27/03/2023
 
 #ifndef __AK_STUDIO_CONSOLE__
 #define __AK_STUDIO_CONSOLE__
@@ -35,7 +35,7 @@ class Console : public Panel
 
 		Shell _sh;
 
-		Ak::audioFile ee = Ak::null_audio;
+		Ak::audioFile ee = Ak::nullaudio;
 
 		Ak::Maths::Vec2<int>* _pos = nullptr;
 		Ak::Maths::Vec2<int>* _size = nullptr;

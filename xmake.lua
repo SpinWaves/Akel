@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 22/03/2023
+-- Updated : 27/03/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -148,6 +148,16 @@ target("ScriptDemo")
 	add_includedirs("Akel/include", "SandBox/Native/script/src", "libs/include")
     add_files("SandBox/Native/script/src/*.cpp")
 	set_targetdir("SandBox/Native/script")
+target_end()
+
+-- Audio Demo Build
+target("AudioDemo")
+	set_default(false)
+    set_kind("binary")
+    add_deps("Akel")
+	add_includedirs("Akel/include", "SandBox/Native/audio/src", "libs/include")
+    add_files("SandBox/Native/audio/src/*.cpp")
+	set_targetdir("SandBox/Native/audio")
 target_end()
 
 -- Kila tester Build

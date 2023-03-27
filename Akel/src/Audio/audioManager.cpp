@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/08/2021
-// Updated : 07/02/2023
+// Updated : 27/03/2023
 
 #include <Audio/audioManager.h>
 #include <Core/log.h>
@@ -14,7 +14,6 @@ namespace Ak
     {
         _al = create_Unique_ptr<OpenAL>();
         _al->initOAL();
-		getMainAppProjectFile().setBoolValue("__audio_component", true);
     }
 
     audioFile AudioComponent::loadSound(std::string filename)

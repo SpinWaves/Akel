@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 26/03/2023
+// Updated : 27/03/2023
 
 #include <Modules/Scripting/Lua/lua_loader.h>
 #include <Modules/Scripting/Lua/lua_script.h>
@@ -254,24 +254,31 @@ namespace Ak
 
 		lua.new_usertype<TransformAttribute>(
 			"TransformAttribute",
-			sol::constructors<sol::types<>, sol::types<Maths::Vec3f>, sol::types<float, float, float>>(),
+			sol::constructors<sol::types<>>(),
 			"position", &TransformAttribute::position,
 			"rotation", &TransformAttribute::rotation,
 			"scale", &TransformAttribute::scale
+		);
+
+		lua.new_usertype<AudioAttribute>(
+			"AudioAttribute",
+			sol::constructors<sol::types<>>(),
+			"play", &AudioAttribute::play
 		);
 
 		lua.set_function("getAttribute", [](std::string_view attribute) -> sol::object
 			{
 				if(__entity == nullptr)
 					return sol::lua_nil;
-				TransformAttribute* trans = __entity->tryGetAttribute<TransformAttribute>();
+	
+					TransformAttribute* trans = __entity->tryGetAttribute<TransformAttribute>();
 				if(attribute == "transform" && trans != nullptr)
 					return sol::make_object<std::reference_wrapper<TransformAttribute>>(*state, std::ref(*trans));
-			/*
-				ModelAttribute* model = __entity->tryGetAttribute<ModelAttribute>();
-				if(attribute == "model" && model != nullptr)
-					return sol::make_object<std::reference_wrapper<ModelAttribute>>(*state, std::ref(*model));
-			*/
+
+				AudioAttribute* audio = __entity->tryGetAttribute<AudioAttribute>();
+				if(attribute == "audio" && audio != nullptr)
+					return sol::make_object<std::reference_wrapper<AudioAttribute>>(*state, std::ref(*audio));
+
 				return sol::lua_nil;
 			});
 	}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/07/2021
-// Updated : 27/01/2023
+// Updated : 27/03/2023
 
 #ifndef __AK_TIME__
 #define __AK_TIME__
@@ -11,7 +11,7 @@
 
 struct __time
 {
-	uint8_t sec = 0;   // 0-60
+	uint8_t sec = 0;   // 0-59
 	uint8_t min = 0;   // 0-59
 	uint8_t hour = 0;  // 0-23
 	uint8_t day = 1;   // 1-30/31

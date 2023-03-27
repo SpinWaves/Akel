@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 07/02/2023
+// Updated : 27/03/2023
 //
 // Akel is an open source game engine made for fun
 // https://github.com/SpinWaves/Akel
@@ -31,14 +31,15 @@
 #ifndef __AKEL__
 #define __AKEL__
 
-#include <Platform/platform.h>
-#include <Core/core.h>
-#include <Maths/maths.h>
-#include <Renderer/renderer.h>
-#include <Utils/utils.h>
-#include <Modules/modules.h>
-#include <Graphics/graphics.h>
+#include <Animation/animations.h>
 #include <Audio/audio.h>
+#include <Core/core.h>
+#include <Graphics/graphics.h>
+#include <Maths/maths.h>
+#include <Modules/modules.h>
+#include <Platform/platform.h>
+#include <Renderer/renderer.h>
 #include <Scene/scenes.h>
+#include <Utils/utils.h>
 
 #endif // __AKEL__

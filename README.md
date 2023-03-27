@@ -24,6 +24,7 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
   Skybox | `xmake build SkyDemo`
   Model | `xmake build ModelDemo`
   Scripting | `xmake build ScriptDemo`
+  Audio | `xmake build AudioDemo`
   </details>
 
 # Akel useful features
