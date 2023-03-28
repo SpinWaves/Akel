@@ -23,7 +23,6 @@
 // Vulkan
 #include <volk.h>
 #include <SDL2/SDL_vulkan.h>
-#include <vk_mem_alloc.h>
 
 // Model loaders
 #include <tiny_obj_loader.h>

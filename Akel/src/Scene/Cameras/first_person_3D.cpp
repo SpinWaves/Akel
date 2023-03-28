@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 10/03/2023
+// Updated : 28/03/2023
 
 #include <Platform/input.h>
 #include <Scene/Cameras/first_person_3D.h>
@@ -30,6 +30,15 @@ namespace Ak::Cam
 		_target = _position + _direction;
 		_view = glm::lookAt(glm::vec3(_position.X, _position.Y, _position.Z), glm::vec3(_target.X, _target.Y, _target.Z), glm::vec3(0, 1, 0));
 		_proj = glm::perspective<float>(glm::radians(_fov), aspect, 0.1f, 1000.0f);
+
+		if(alcGetCurrentContext() != nullptr)
+		{
+			alListener3f(AL_POSITION, _position.X, _position.Y, _position.Z);
+			alListener3f(AL_VELOCITY, _position.X, _position.Y, _position.Z);
+
+			ALfloat orientation[6] = { _target.X, _target.Y, _target.Z, _up.X, _up.Y, _up.Z };
+			alListenerfv(AL_ORIENTATION, orientation);
+		}
 	}
 
 	void FirstPerson3D::onEvent(Input& input)

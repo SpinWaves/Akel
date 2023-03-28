@@ -17,6 +17,11 @@ namespace Ak
 {
 	AudioBuffer::AudioBuffer(std::filesystem::path file)
 	{
+		if(alcGetCurrentContext() == nullptr)
+		{
+			Core::log::report(ERROR, "Audio Buffer : you need to add Ak::AudioCompent to your application to use audio");
+			return;
+		}
 		std::filesystem::path extension = file.extension();
 
 		if(!std::filesystem::exists(file))
@@ -31,17 +36,17 @@ namespace Ak
 		else if(extension == ".ogg")
 			loadOGG(std::move(file));
 		else
-			Core::log::report(ERROR, "Audio Buffer : unknown audio file format '%s'", path.c_str());
+			Core::log::report(ERROR, "Audio Buffer : unknown audio file format '%s'", file.c_str());
 	}
 
 	void AudioBuffer::loadMP3(std::filesystem::path file)
 	{
 		drmp3_config config;
 		drmp3_uint64 totalPCMFrameCount;
-		auto sampleData = drmp3_open_memory_and_read_pcm_frames_s16(fileLoaded->data(), fileLoaded->size(), &config, &totalPCMFrameCount, nullptr);
+		auto sampleData = drmp3_open_memory_and_read_pcm_frames_s16(file.string().c_str(), file.string().size(), &config, &totalPCMFrameCount, nullptr);
 		if(!sampleData)
 		{
-			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", filename.c_str());
+			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", file.c_str());
 			return;
 		}
 
@@ -53,7 +58,7 @@ namespace Ak
 
 	void AudioBuffer::loadFlac(std::filesystem::path file)
 	{
-
+		// TODO
 	}
 
 	void AudioBuffer::loadWAV(std::filesystem::path file)
@@ -61,7 +66,7 @@ namespace Ak
 		uint32_t channels;
 		uint32_t sampleRate;
 		drwav_uint64 totalPCMFrameCount;
-		auto sampleData = drwav_open_memory_and_read_pcm_frames_s16(fileLoaded->data(), fileLoaded->size(), &channels, &sampleRate, &totalPCMFrameCount, nullptr);
+		auto sampleData = drwav_open_memory_and_read_pcm_frames_s16(file.string().c_str(), file.string().size(), &channels, &sampleRate, &totalPCMFrameCount, nullptr);
 		if(!sampleData)
 		{
 			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", filename.c_str());
@@ -79,7 +84,7 @@ namespace Ak
 		int32_t channels;
 		int32_t samplesPerSec;
 		int16_t *data;
-		auto size = stb_vorbis_decode_memory(reinterpret_cast<uint8_t *>(fileLoaded->data()), static_cast<uint32_t>(fileLoaded->size()), &channels, &samplesPerSec, &data);
+		auto size = stb_vorbis_decode_memory(reinterpret_cast<uint8_t*>(fileLoaded->data()), static_cast<uint32_t>(fileLoaded->size()), &channels, &samplesPerSec, &data);
 
 		if(size == -1)
 		{
@@ -95,6 +100,8 @@ namespace Ak
 
 	void AudioBuffer::setBuffer(ALuint buffer)
 	{
+		if(alcGetCurrentContext() == nullptr)
+			return;
 		if(_buffer)
 			alDeleteBuffers(1, &_buffer);
 		_buffer = buffer;
@@ -102,6 +109,8 @@ namespace Ak
 
 	void AudioBuffer::deleteBuffer()
 	{
+		if(alcGetCurrentContext() == nullptr)
+			return;
 		if(_buffer)
 			alDeleteBuffers(1, &_buffer);
 	}

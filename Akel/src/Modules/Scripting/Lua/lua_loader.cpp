@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 27/03/2023
+// Updated : 28/03/2023
 
 #include <Modules/Scripting/Lua/lua_loader.h>
 #include <Modules/Scripting/Lua/lua_script.h>
@@ -25,6 +25,7 @@ namespace Ak
 		bindLogs();
 		bindInputs(app->getInput());
 		bindMaths();
+		bindAudioEngine();
 		bindECS();
 		bindSceneManager(scene_manager);
 	}
@@ -248,6 +249,28 @@ namespace Ak
 		);
 	}
 
+	void LuaLoader::bindAudioEngine()
+	{
+		auto lua = (*state)["Ak"].get_or_create<sol::table>();
+
+		lua.new_usertype<Sound>(
+			"Sound",
+			sol::constructors<sol::types<>, sol::types<std::string>, sol::types<std::string, float, float>>(),
+			"play", &Sound::play,
+			"resume", &Sound::resume,
+			"pause", &Sound::pause,
+			"stop", &Sound::stop,
+			"isPlaying", &Sound::isPlaying,
+			"getPitch", &Sound::getPitch,
+			"getGain", &Sound::getGain,
+			"setPitch", &Sound::setPitch,
+			"setGain", &Sound::setGain,
+			"setDirection", &Sound::setDirection,
+			"setPosition", &Sound::setPosition,
+			"setVelocity", &Sound::setVelocity,
+		);
+	}
+
 	void LuaLoader::bindECS()
 	{
 		auto lua = (*state)["Ak"].get_or_create<sol::table>();
@@ -263,7 +286,7 @@ namespace Ak
 		lua.new_usertype<AudioAttribute>(
 			"AudioAttribute",
 			sol::constructors<sol::types<>>(),
-			"play", &AudioAttribute::play
+			"sound", &AudioAttribute::sound
 		);
 
 		lua.set_function("getAttribute", [](std::string_view attribute) -> sol::object
