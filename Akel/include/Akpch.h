@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 21/03/2023
+// Updated : 28/03/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -15,8 +15,10 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-// SndFile
-#include <sndfile.h>
+// Audio
+#include <dr/dr_flac.h>
+#include <dr/dr_mp3.h>
+#include <dr/dr_wav.h>
 
 // Vulkan
 #include <volk.h>
@@ -30,7 +32,9 @@
 #include <nlohmann/json.hpp>
 
 // Stb
-#include <stb_image.h>
+#include <stb/stb_image.h>
+#define STB_VORBIS_HEADER_ONLY
+#include <stb/stb_vorbis.h>
 
 // Spir-V
 #include <spirv_reflect.h>

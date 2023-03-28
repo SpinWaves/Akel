@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 20/02/2023
+// Updated : 28/03/2023
 
 #include <Renderer/Images/texture.h>
 #include <Renderer/Pipeline/vk_shader.h>
@@ -9,7 +9,7 @@
 #include <Utils/assert.h>
 #define STBI_ASSERT(x) Ak_assert(x, "stb_image assertion failed")
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include <stb/stb_image.h>
 
 namespace Ak
 {
