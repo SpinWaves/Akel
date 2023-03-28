@@ -267,7 +267,7 @@ namespace Ak
 			"setGain", &Sound::setGain,
 			"setDirection", &Sound::setDirection,
 			"setPosition", &Sound::setPosition,
-			"setVelocity", &Sound::setVelocity,
+			"setVelocity", &Sound::setVelocity
 		);
 	}
 

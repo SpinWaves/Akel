@@ -41,9 +41,11 @@ namespace Ak
 
 	void AudioBuffer::loadMP3(std::filesystem::path file)
 	{
+		std::string data = readAudioFile(file);
+
 		drmp3_config config;
 		drmp3_uint64 totalPCMFrameCount;
-		auto sampleData = drmp3_open_memory_and_read_pcm_frames_s16(file.string().c_str(), file.string().size(), &config, &totalPCMFrameCount, nullptr);
+		auto sampleData = drmp3_open_memory_and_read_pcm_frames_s16(data.data(), data.size(), &config, &totalPCMFrameCount, nullptr);
 		if(!sampleData)
 		{
 			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", file.c_str());
@@ -63,13 +65,15 @@ namespace Ak
 
 	void AudioBuffer::loadWAV(std::filesystem::path file)
 	{
+		std::string data = readAudioFile(file);
+
 		uint32_t channels;
 		uint32_t sampleRate;
 		drwav_uint64 totalPCMFrameCount;
-		auto sampleData = drwav_open_memory_and_read_pcm_frames_s16(file.string().c_str(), file.string().size(), &channels, &sampleRate, &totalPCMFrameCount, nullptr);
+		auto sampleData = drwav_open_memory_and_read_pcm_frames_s16(data.data(), data.size(), &channels, &sampleRate, &totalPCMFrameCount, nullptr);
 		if(!sampleData)
 		{
-			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", filename.c_str());
+			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", file.c_str());
 			return;
 		}
 
@@ -81,14 +85,16 @@ namespace Ak
 
 	void AudioBuffer::loadOGG(std::filesystem::path file)
 	{
+		std::string fdata = readAudioFile(file);
+
 		int32_t channels;
 		int32_t samplesPerSec;
 		int16_t *data;
-		auto size = stb_vorbis_decode_memory(reinterpret_cast<uint8_t*>(fileLoaded->data()), static_cast<uint32_t>(fileLoaded->size()), &channels, &samplesPerSec, &data);
+		auto size = stb_vorbis_decode_memory(reinterpret_cast<uint8_t*>(fdata.data()), static_cast<uint32_t>(fdata.size()), &channels, &samplesPerSec, &data);
 
 		if(size == -1)
 		{
-			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot find size", filename.c_str());
+			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot find size", file.c_str());
 			return;
 		}
 
@@ -98,7 +104,15 @@ namespace Ak
 		free(data);
 	}
 
-	void AudioBuffer::setBuffer(ALuint buffer)
+	std::string AudioBuffer::readAudioFile(std::filesystem::path file)
+	{
+		std::ifstream is(std::move(file));
+		std::stringstream buffer;
+		buffer << is.rdbuf();
+		return buffer.str();
+	}
+
+	void AudioBuffer::setBuffer(ALuint buffer) noexcept
 	{
 		if(alcGetCurrentContext() == nullptr)
 			return;
@@ -107,7 +121,7 @@ namespace Ak
 		_buffer = buffer;
 	}
 
-	void AudioBuffer::deleteBuffer()
+	void AudioBuffer::deleteBuffer() noexcept
 	{
 		if(alcGetCurrentContext() == nullptr)
 			return;

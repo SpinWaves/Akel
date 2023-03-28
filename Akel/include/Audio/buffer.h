@@ -29,6 +29,8 @@ namespace Ak
 			void loadWAV(std::filesystem::path file);
 			void loadOGG(std::filesystem::path file);
 
+			std::string readAudioFile(std::filesystem::path file);
+
 			ALuint _buffer = 0;
 	};
 }

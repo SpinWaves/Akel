@@ -1,9 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 18/03/2023
+// Updated : 28/03/2023
 
 #define TINYOBJLOADER_IMPLEMENTATION
+#include <tiny_obj_loader.h>
+
 #include <Graphics/model.h>
 #include <Core/log.h>
 #include <Core/Memory/sharedPtrWrapper.h>
