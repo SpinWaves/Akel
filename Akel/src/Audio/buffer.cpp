@@ -21,10 +21,7 @@ namespace Ak
 	AudioBuffer::AudioBuffer(std::filesystem::path file)
 	{
 		if(alcGetCurrentContext() == nullptr)
-		{
-			Core::log::report(ERROR, "Audio Buffer : you need to add Ak::AudioCompent to your application to use audio");
 			return;
-		}
 		std::filesystem::path extension = file.extension();
 
 		if(!std::filesystem::exists(file))

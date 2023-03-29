@@ -1,3 +1,5 @@
-*.akel
-SkyDemo
-.akel_logs
+/*
+/*/
+!.gitignore
+!/src/
+!/Resources/

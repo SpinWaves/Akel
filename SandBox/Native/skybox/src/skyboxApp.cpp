@@ -1,23 +1,5 @@
-
 #include <Akel.h>
 #include <Akel_main.h>
-
-class Transformations : public Ak::Component
-{
-	public:
-		void update() override
-		{
-			float x = 0.5 * (sin(2 * _time + 2) + sin(_time * M_PI - 2.00));
-			float y = 0.6 * (sin(2 * _time + 4) + sin(_time * M_PI - 1.76));
-			float z = 0.3 * (sin(2 * _time - 2) + sin(_time * M_PI - 1.20));
-			Ak::Matrixes::rotate3D(_angle, x, y, z);
-			_time += 0.01f;
-		}
-
-	private:
-		float _angle = 0.075f;
-		float _time = 0.0f;
-};
 
 Ak::AkelInstance Akel_init()
 {
@@ -27,13 +9,31 @@ Ak::AkelInstance Akel_init()
     return instance;
 }
 
-Ak::Application* Akel_mainApp()
+Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 {
-	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Skybox using Akel Engine");
-	app->add_component<Ak::Camera3D>(0, 2, 0);
-	app->add_component<Transformations>();
+	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Skyboxing using Akel Engine");
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
-	scene->add_3D_entity({ Models::cube, { -0.5f, -0.5f, -0.5f }, { 1.f, 1.f, 1.f }, Colors::none, Ak::Res::get().getTexturesPath() / "rodriguez.jpg" });
+	scene->addCamera<Ak::Cam::FirstPerson3D>(-5.0f, 1.0f, 0.0f);
 	app->add_scene(scene);
+
+	// Setting up the skybox
+	Ak::SkyboxDesc sky_desc;
+	sky_desc.front = Ak::Res::get().getTexturesPath() / "sky_front.png";
+	sky_desc.back = Ak::Res::get().getTexturesPath() / "sky_back.png";
+	sky_desc.top = Ak::Res::get().getTexturesPath() / "sky_top.png";
+	sky_desc.bottom = Ak::Res::get().getTexturesPath() / "sky_bottom.png";
+	sky_desc.left = Ak::Res::get().getTexturesPath() / "sky_left.png";
+	sky_desc.right = Ak::Res::get().getTexturesPath() / "sky_right.png";
+	scene->addSkybox(std::move(sky_desc));
+
+	// Setting up Spaceship model and material
+	Ak::MaterialDesc spaceship_material_desc;
+	spaceship_material_desc.albedo = Ak::Res::get().getTexturesPath() / "spaceship_map.jpg";
+	Ak::MaterialID spaceship_material = Ak::addMaterialToLibrary(spaceship_material_desc);
+
+	Ak::Entity spaceship = scene->createEntity();
+	spaceship.addAttribute<Ak::TransformAttribute>(0.0f, 0.0f, 0.0f);
+	spaceship.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "spaceship.obj", spaceship_material);
+
 	return app;
 }
