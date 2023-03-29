@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/08/2021
-// Updated : 28/03/2023
+// Updated : 29/03/2023
 
 #include <Audio/openAL.h>
 #include <Core/core.h>
@@ -38,6 +38,7 @@ namespace Ak
 			return false;
 		}
 
+		checkAl(alGetError());
 		return true;
 	}
 
@@ -46,6 +47,7 @@ namespace Ak
 		alcMakeContextCurrent(nullptr);
 		alcDestroyContext(_impl->context);
 		alcCloseDevice(_impl->device);
+		checkAl(alGetError());
 	}
 
 	OpenAL::~OpenAL()

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2023
-// Updated : 28/03/2023
+// Updated : 29/03/2023
 
 #define DR_FLAC_IMPLEMENTATION
 #include <dr/dr_flac.h>
@@ -10,7 +10,10 @@
 #define DR_WAV_IMPLEMENTATION
 #include <dr/dr_wav.h>
 
+#include <stb/stb_vorbis.h>
+
 #include <Audio/buffer.h>
+#include <Audio/openAL.h>
 #include <Core/log.h>
 
 namespace Ak
@@ -28,15 +31,19 @@ namespace Ak
 			Core::log::report(ERROR, "Audio Buffer : file doesn't exists '%s'", file.c_str());
 
 		if(extension == ".mp3")
-			loadMP3(std::move(file));
+			loadMP3(file);
 		else if(extension == ".wav")
-			loadWAV(std::move(file));
+			loadWAV(file);
 		else if(extension == ".flac")
-			loadFlac(std::move(file));
+			loadFlac(file);
 		else if(extension == ".ogg")
-			loadOGG(std::move(file));
+			loadOGG(file);
 		else
 			Core::log::report(ERROR, "Audio Buffer : unknown audio file format '%s'", file.c_str());
+
+	#ifdef AK_DEBUG
+		Core::log::report(MESSAGE, "Audio Buffer : loaded file '%s'", file.c_str());
+	#endif
 	}
 
 	void AudioBuffer::loadMP3(std::filesystem::path file)
@@ -54,6 +61,8 @@ namespace Ak
 
 		alGenBuffers(1, &_buffer);
 		alBufferData(_buffer, (config.channels == 2) ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16, sampleData, totalPCMFrameCount, config.sampleRate);
+
+		checkAl(alGetError());
 
 		drmp3_free(sampleData, nullptr);
 	}
@@ -80,6 +89,8 @@ namespace Ak
 		alGenBuffers(1, &_buffer);
 		alBufferData(_buffer, (channels == 2) ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16, sampleData, totalPCMFrameCount, sampleRate);
 
+		checkAl(alGetError());
+
 		drwav_free(sampleData, nullptr);
 	}
 
@@ -90,23 +101,31 @@ namespace Ak
 		int32_t channels;
 		int32_t samplesPerSec;
 		int16_t *data;
-		auto size = stb_vorbis_decode_memory(reinterpret_cast<uint8_t*>(fdata.data()), static_cast<uint32_t>(fdata.size()), &channels, &samplesPerSec, &data);
-
+		auto size = stb_vorbis_decode_memory(reinterpret_cast<uint8_t*>(fdata.data()), static_cast<int>(fdata.size()), &channels, &samplesPerSec, &data);
 		if(size == -1)
 		{
 			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot find size", file.c_str());
 			return;
 		}
 
+		size *= sizeof(uint32_t);
+
 		alGenBuffers(1, &_buffer);
 		alBufferData(_buffer, (channels == 2) ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16, data, size, samplesPerSec);
+
+		checkAl(alGetError());
 
 		free(data);
 	}
 
 	std::string AudioBuffer::readAudioFile(std::filesystem::path file)
 	{
-		std::ifstream is(std::move(file));
+		std::ifstream is(file);
+		if(!is.is_open())
+		{
+			Core::log::report(ERROR, "Audio Buffer : unable to open '%s'", file.c_str());
+			return {};
+		}
 		std::stringstream buffer;
 		buffer << is.rdbuf();
 		return buffer.str();
@@ -119,6 +138,7 @@ namespace Ak
 		if(_buffer)
 			alDeleteBuffers(1, &_buffer);
 		_buffer = buffer;
+		checkAl(alGetError());
 	}
 
 	void AudioBuffer::deleteBuffer() noexcept
@@ -127,5 +147,6 @@ namespace Ak
 			return;
 		if(_buffer)
 			alDeleteBuffers(1, &_buffer);
+		checkAl(alGetError());
 	}
 }

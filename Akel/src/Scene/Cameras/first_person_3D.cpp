@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 28/03/2023
+// Updated : 29/03/2023
 
 #include <Platform/input.h>
 #include <Scene/Cameras/first_person_3D.h>
@@ -36,7 +36,7 @@ namespace Ak::Cam
 			alListener3f(AL_POSITION, _position.X, _position.Y, _position.Z);
 			alListener3f(AL_VELOCITY, _position.X, _position.Y, _position.Z);
 
-			ALfloat orientation[6] = { _target.X, _target.Y, _target.Z, _up.X, _up.Y, _up.Z };
+			ALfloat orientation[6] = { static_cast<float>(_direction.X), static_cast<float>(_direction.Y), static_cast<float>(_direction.Z), static_cast<float>(_up.X), static_cast<float>(_up.Y), static_cast<float>(_up.Z) };
 			alListenerfv(AL_ORIENTATION, orientation);
 		}
 	}

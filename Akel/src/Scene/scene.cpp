@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 28/03/2023
+// Updated : 29/03/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -56,15 +56,25 @@ namespace Ak
 		Maths::Vec2i win_size = _renderer->getWindow()->size;
 		_camera->onUpdate(static_cast<float>(win_size.X) / static_cast<float>(win_size.Y));
 
-		auto view = getRegistry().view<ScriptAttribute>();
-		for(auto e: view)
+		auto script_view = getRegistry().view<ScriptAttribute>();
+		for(auto e: script_view)
 		{
-			ScriptAttribute& script = view.get<ScriptAttribute>(e);
+			ScriptAttribute& script = script_view.get<ScriptAttribute>(e);
 			std::optional<Entity> entity = _entity_manager->getEntity(e);
 			if(_first_update)
 				script.onInit(&(*entity));
 			script.onUpdate(&(*entity), timestep);
 		}
+
+		auto audio_view = getRegistry().group<AudioAttribute>(entt::get<TransformAttribute>);
+		for(auto e : audio_view)
+		{
+			AudioAttribute& audio = audio_view.get<AudioAttribute>(e);
+			const TransformAttribute& trans = audio_view.get<TransformAttribute>(e);
+
+			audio.sound.setPosition(trans.position);
+		}
+
 		_first_update = false;
 	}
 

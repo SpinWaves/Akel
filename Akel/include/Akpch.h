@@ -32,8 +32,6 @@
 
 // Stb
 #include <stb/stb_image.h>
-#define STB_VORBIS_HEADER_ONLY
-#include <stb/stb_vorbis.h>
 
 // Spir-V
 #include <spirv_reflect.h>

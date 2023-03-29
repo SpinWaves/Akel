@@ -1,4 +1,4 @@
 *
 !.gitignore
-!src/
-!Resources/
+!src/*
+!Resources/*
