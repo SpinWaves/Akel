@@ -1,4 +1,6 @@
-*
+/*
+/*/
 !.gitignore
-!src/
-!Resources/
+!README.md
+!/src/
+!/Resources/
