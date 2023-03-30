@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 26/03/2023
+// Updated : 30/03/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -9,6 +9,7 @@
 #include <Scene/Cameras/base_camera.h>
 #include <Scene/entity.h>
 #include <Renderer/Buffers/vk_ubo.h>
+#include <Renderer/Images/texture_library.h>
 
 namespace Ak
 {
@@ -21,6 +22,13 @@ namespace Ak
 	void SceneRenderer::init(SceneRendererSettings settings)
 	{
 		_settings = std::move(settings);
+
+		std::shared_ptr<Material> nullmat = create_shared_ptr_w<Material>();
+		std::shared_ptr<Texture> nulltex = create_shared_ptr_w<Texture>();
+		std::array<uint8_t, 4> pixel = { 255, 255, 255, 255 };
+		nulltex->create(pixel.data(), 1, 1, VK_FORMAT_R8G8B8A8_UNORM);
+		nullmat->_albedo = TextureLibrary::get().addTextureToLibrary(std::move(nulltex));
+		MaterialLibrary::get().setNullMaterial(std::move(nullmat));
 	}
 
 	void SceneRenderer::render(Scene* scene)

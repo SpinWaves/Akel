@@ -156,6 +156,16 @@ target("AudioDemo")
 	set_targetdir("SandBox/Native/audio")
 target_end()
 
+-- Sponza Demo Build
+target("SponzaDemo")
+	set_default(false)
+    set_kind("binary")
+    add_deps("Akel")
+	add_includedirs("Akel/include", "SandBox/Native/sponza/src", "Akel/third_party")
+    add_files("SandBox/Native/sponza/src/*.cpp")
+	set_targetdir("SandBox/Native/sponza")
+target_end()
+
 -- Kila tester Build
 target("Kila_tester")
 	set_default(false)

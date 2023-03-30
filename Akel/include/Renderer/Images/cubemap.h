@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/02/2023
-// Updated : 10/02/2023
+// Updated : 29/03/2023
 
 #ifndef __AK_CUBEMAP__
 #define __AK_CUBEMAP__
@@ -11,7 +11,7 @@
 
 namespace Ak
 {
-	struct AK_API CubeMapParts
+	struct CubeMapParts
 	{
 		std::filesystem::path top;
 		std::filesystem::path bottom;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/02/2023
-// Updated : 28/02/2023
+// Updated : 30/03/2023
 
 #include <Core/log.h>
 #include <Graphics/material_library.h>
@@ -29,9 +29,14 @@ namespace Ak
 		return _current_id - 1;
 	}
 
+	void MaterialLibrary::setNullMaterial(std::shared_ptr<Material> mat)	
+	{
+		_cache[nullmaterial] = std::move(mat);
+	}
+
 	void MaterialLibrary::removeMaterialFromLibrary(MaterialID id)
 	{
-		if(_cache.count(id))
+		if(_cache.count(id) && id != nullmaterial)
 			_cache.erase(id);
 	}
 
