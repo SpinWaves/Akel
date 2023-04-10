@@ -8,4 +8,19 @@
 namespace Ak
 {
 	AnimatorComponent::AnimatorComponent() : Component("__animator_component") {}
+
+	void AnimatorComponent::onAttach()
+	{
+
+	}
+
+	void AnimatorComponent::update()
+	{
+
+	}
+
+	void AnimatorComponent::onQuit()
+	{
+
+	}
 }

@@ -25,7 +25,7 @@ namespace Ak
 		std::filesystem::path extension = file.extension();
 
 		if(!std::filesystem::exists(file))
-			Core::log::report(ERROR, "Audio Buffer : file doesn't exists '%s'", file.c_str());
+			Core::log::report(ERROR, "Audio Buffer : file doesn't exists '%s'", file.string().c_str());
 
 		if(extension == ".mp3")
 			loadMP3(file);
@@ -36,7 +36,7 @@ namespace Ak
 		else if(extension == ".ogg")
 			loadOGG(file);
 		else
-			Core::log::report(ERROR, "Audio Buffer : unknown audio file format '%s'", file.c_str());
+			Core::log::report(ERROR, "Audio Buffer : unknown audio file format '%s'", file.string().c_str());
 
 	#ifdef AK_DEBUG
 		Core::log::report(MESSAGE, "Audio Buffer : loaded file '%s'", file.c_str());
@@ -52,7 +52,7 @@ namespace Ak
 		auto sampleData = drmp3_open_memory_and_read_pcm_frames_s16(data.data(), data.size(), &config, &totalPCMFrameCount, nullptr);
 		if(!sampleData)
 		{
-			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", file.c_str());
+			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", file.string().c_str());
 			return;
 		}
 
@@ -79,7 +79,7 @@ namespace Ak
 		auto sampleData = drwav_open_memory_and_read_pcm_frames_s16(data.data(), data.size(), &channels, &sampleRate, &totalPCMFrameCount, nullptr);
 		if(!sampleData)
 		{
-			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", file.c_str());
+			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot load samples", file.string().c_str());
 			return;
 		}
 
@@ -93,15 +93,13 @@ namespace Ak
 
 	void AudioBuffer::loadOGG(std::filesystem::path file)
 	{
-		std::string fdata = readAudioFile(file);
-
 		int32_t channels;
 		int32_t samplesPerSec;
 		int16_t *data;
-		auto size = stb_vorbis_decode_memory(reinterpret_cast<uint8_t*>(fdata.data()), static_cast<int>(fdata.size()), &channels, &samplesPerSec, &data);
+		auto size = stb_vorbis_decode_filename(file.string().c_str(), &channels, &samplesPerSec, &data);
 		if(size == -1)
 		{
-			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot find size", file.c_str());
+			Core::log::report(ERROR, "Audio Buffer : cannot load '%s', cannot find size", file.string().c_str());
 			return;
 		}
 
@@ -120,7 +118,7 @@ namespace Ak
 		std::ifstream is(file);
 		if(!is.is_open())
 		{
-			Core::log::report(ERROR, "Audio Buffer : unable to open '%s'", file.c_str());
+			Core::log::report(ERROR, "Audio Buffer : unable to open '%s'", file.string().c_str());
 			return {};
 		}
 		std::stringstream buffer;

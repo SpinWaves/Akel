@@ -56,6 +56,6 @@ namespace Ak
 
 	Model createQuad()
 	{
-
+		return {};
 	}
 }
