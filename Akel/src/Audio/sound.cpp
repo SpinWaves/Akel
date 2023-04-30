@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2023
-// Updated : 29/03/2023
+// Updated : 30/04/2023
 
 #include <Audio/sound.h>
 #include <Audio/openAL.h>
@@ -27,6 +27,23 @@ namespace Ak
 		setPosition(_position);
 		setDirection(_direction);
 		setVelocity(_velocity);
+	}
+
+	void Sound::reload(std::filesystem::path file, float gain, float pitch)
+	{
+		if(alcGetCurrentContext() == nullptr)
+			return;
+		_buffer.deleteBuffer();
+		_buffer = AudioBuffer(std::move(file));
+		if(_source == 0)
+		{
+			alGenSources(1, &_source);
+			alSourcei(_source, AL_BUFFER, _buffer.getBuffer());
+			alSourcei(_source, AL_SOURCE_RELATIVE, AL_TRUE);
+			checkAl(alGetError());
+		}
+		setGain(gain);
+		setPitch(pitch);
 	}
 
 	void Sound::play(bool loop)
@@ -129,6 +146,7 @@ namespace Ak
 			return;
 		_buffer.deleteBuffer();
 		alDeleteSources(1, &_source);
+		_source = 0;
 		checkAl(alGetError());
 	}
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2023
-// Updated : 28/03/2023
+// Updated : 30/04/2023
 
 #ifndef __AK_SOUND__
 #define __AK_SOUND__
@@ -17,6 +17,8 @@ namespace Ak
 		public:
 			Sound() = default;
 			Sound(std::filesystem::path file, float gain = 1.0f, float pitch = 1.0f);
+
+			void reload(std::filesystem::path file, float gain = 1.0f, float pitch = 1.0f);
 
 			void play(bool loop = false);
 			void pause();

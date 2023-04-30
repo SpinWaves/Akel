@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2023
-// Updated : 29/03/2023
+// Updated : 30/04/2023
 
 #define DR_FLAC_IMPLEMENTATION
 #include <dr/dr_flac.h>
@@ -142,6 +142,7 @@ namespace Ak
 			return;
 		if(_buffer)
 			alDeleteBuffers(1, &_buffer);
+		_buffer = 0;
 		checkAl(alGetError());
 	}
 }

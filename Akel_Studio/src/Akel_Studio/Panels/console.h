@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 27/03/2023
+// Updated : 30/04/2023
 
 #ifndef __AK_STUDIO_CONSOLE__
 #define __AK_STUDIO_CONSOLE__
@@ -16,7 +16,7 @@ class Console : public Panel
 		Console(std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize = 256);
 		void onUpdate(Ak::Maths::Vec2<int>& size) override;
 		void onEvent(Ak::Input& input) override;
-		~Console() = default;
+		~Console();
 
 	protected:
 		std::string _input;
@@ -27,18 +27,19 @@ class Console : public Panel
 
 		static int InputCallback(ImGuiInputTextCallbackData *data);
 
-		bool _autoScroll;
-		bool _coloredOutput;
-		bool _scrollToBottom;
-		size_t _inBufferSize = 0;
-		float _WindowAlpha;
-
+	private:
 		Shell _sh;
 
-		Ak::audioFile ee = Ak::nullaudio;
+		Ak::Sound _ee;
 
 		Ak::Maths::Vec2<int>* _pos = nullptr;
 		Ak::Maths::Vec2<int>* _size = nullptr;
+
+		float _WindowAlpha;
+		size_t _inBufferSize = 0;
+		bool _autoScroll;
+		bool _coloredOutput;
+		bool _scrollToBottom;
 };
 
 #endif // __AK_STUDIO_CONSOLE__
