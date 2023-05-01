@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 22/02/2023
+// Updated : 01/05/2023
 
 #include "launcher_component.h"
 
@@ -53,8 +53,19 @@ void LauncherComponent::onQuit()
 
 void LauncherComponent::drawMainContent()
 {
+	constexpr ImVec2 child_size = ImVec2(585, 50);
 	if(ImGui::BeginChild("main_content", ImVec2(600, 0), true))
 	{
+		for(auto& project : _projects)
+		{
+			if(ImGui::BeginChild(project.title.c_str(), child_size, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+			{
+				ImGui::Text(project.title.c_str());
+				ImGui::EndChild();
+			}
+			ImGui::Separator();
+		}
+
 		ImGui::EndChild();
 	}
 }
@@ -69,7 +80,12 @@ void LauncherComponent::drawSideBar()
 		}
 		if(ImGui::Button("Import Project", ImVec2(ImGui::GetWindowWidth() - 18, 0)))
 		{
-
+			auto file = pfd::open_file("Import Project", "", { "Akel projects (.akel)", "*.akel" }).result();
+			if(!file.empty())
+			{
+				std::filesystem::path title = file[0];
+				_projects.emplace(AkImGui::ImImage{}, title.stem().string(), "");
+			}
 		}
 		ImGui::Separator();
 		if(ImGui::Button("Quit", ImVec2(ImGui::GetWindowWidth() - 18, 0)))
