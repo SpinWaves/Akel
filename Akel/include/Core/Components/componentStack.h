@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 27/01/2023
+// Updated : 02/05/2023
 
 #ifndef __AK_COMPONENTS_STACK__
 #define __AK_COMPONENTS_STACK__
@@ -31,6 +31,11 @@ namespace Ak
 			Component* get_component(const char* name);  // Accessors
 			inline Component* get_component(size_t index) { return index < _components.size() ? _components[index] : nullptr; }
 
+			template <typename T>
+			inline T* get_component_as(const char* name) { return static_cast<T*>(get_component(name)); }
+			template <typename T>
+			inline T* get_component_as(size_t index) { return static_cast<T*>(get_component(index)); }
+
 			inline std::vector<Component*>::iterator begin() { return _components.begin(); }
 			inline std::vector<Component*>::iterator end() { return _components.end(); }
 			inline std::vector<Component*>::reverse_iterator rbegin() { return _components.rbegin(); }
@@ -41,7 +46,7 @@ namespace Ak
 			inline std::vector<Component*>::const_reverse_iterator crbegin() { return _components.crbegin(); }
 			inline std::vector<Component*>::const_reverse_iterator crend() { return _components.crend(); }
 
-			~ComponentStack();
+			virtual ~ComponentStack();
 
 		protected:
 			std::vector<Component*> _components;

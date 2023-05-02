@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 23/02/2023
+// Updated : 02/05/2023
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -20,7 +20,6 @@ namespace Ak
 
 			void onAttach() override;
 			void onImGuiEvent(class Input& input) override;
-			void onQuit() override;
 
 			void addFontFromFile(const char* file, float size, bool def = false);
 			void addFontFromRawTTF(uint32_t* data, size_t data_size, ImFontConfig conf, ImWchar* ranges, float size, bool def = false);
@@ -28,7 +27,7 @@ namespace Ak
 
 			static inline bool getNumComp() noexcept { return _componentsInit; }
 
-			virtual ~ImGuiComponent() = default;
+			~ImGuiComponent();
 
 		private:
 			void SetDarkThemeColors();

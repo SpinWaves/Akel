@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 23/02/2023
+// Updated : 02/05/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -112,7 +112,5 @@ namespace Ak
 
 	Application::~Application()
 	{
-		if(_app_check)
-			destroy();
 	}
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 01/05/2023
+// Updated : 02/05/2023
 
 #ifndef __AK_STUDIO_LAUNCHER_COMPONENT__
 #define __AK_STUDIO_LAUNCHER_COMPONENT__
@@ -13,13 +13,13 @@ struct Project
 {
 	AkImGui::ImImage icon;
 	std::string title;
-	std::string description;
+	std::filesystem::path folder;
 
-	Project(AkImGui::ImImage i, std::string t, std::string d) :
-		icon(std::move(i)), title(std::move(t)), description(std::move(d))
+	Project(AkImGui::ImImage i, std::string t, std::filesystem::path p) :
+		icon(std::move(i)), title(std::move(t)), folder(std::move(p))
 	{}
 
-	inline bool operator==(const Project& rhs) const { return title == rhs.title; }
+	inline bool operator==(const Project& rhs) const { return title == rhs.title && folder == rhs.folder; }
 };
 
 namespace std
@@ -29,7 +29,7 @@ namespace std
 	{
 		size_t operator()(const Project& p) const noexcept
 		{
-			return std::hash<std::string>()(p.title);
+			return std::hash<std::string>()(p.title) + std::hash<std::filesystem::path>()(p.folder);
 		}
 	};
 }
@@ -48,17 +48,20 @@ class LauncherComponent : public Ak::Component
 
 		~LauncherComponent() = default;
 	
-	public:
-
 	private:
 		void drawMainContent();
 		void drawSideBar();
 
 	private:
 		std::unordered_set<Project> _projects;
+		std::optional<Project> _currently_creating;
 		AkImGui::ImImage _logo;
 		ImFont* _tiny_font = nullptr;
 		ImFont* _title_font = nullptr;
+		bool _new_project_window = false;
+		bool _error_no_name = false;
+		bool _error_no_path = false;
+		bool _warn_not_empty = false;
 };
 
 #endif

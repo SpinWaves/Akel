@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 05/03/2023
+// Updated : 02/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>

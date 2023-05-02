@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 01/03/2023
+// Updated : 02/05/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -162,7 +162,7 @@ namespace Ak
 		_renderer->getRenderPass().end();
 	}
 
-	void ImGuiComponent::onQuit()
+	ImGuiComponent::~ImGuiComponent()
 	{
 		vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		ImGui_ImplVulkan_Shutdown();

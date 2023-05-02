@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/12/2022
-// Updated : 20/02/2023
+// Updated : 02/05/2023
 
 #ifndef __AK_VK_IMAGE__
 #define __AK_VK_IMAGE__
@@ -36,7 +36,6 @@ namespace Ak
 			void createSampler() noexcept;
 
 		private:
-			DescriptorSet _desc;
 			VkImage _image = VK_NULL_HANDLE;
 			VkDeviceMemory _memory = VK_NULL_HANDLE;
 			VkImageView _image_view = VK_NULL_HANDLE;
