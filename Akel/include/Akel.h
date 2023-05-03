@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 27/03/2023
+// Updated : 03/05/2023
 //
 // Akel is an open source game engine made for fun
 // https://github.com/SpinWaves/Akel
@@ -30,6 +30,10 @@
 
 #ifndef __AKEL__
 #define __AKEL__
+
+// AK_VERSION encoded like so XXYYZZ with XX be the major version, YY the minor and ZZ the patch version
+#define AK_VERSION      000001
+#define AK_VERSION_STR  "0.0.1 pre-alpha"
 
 #include <Animation/animations.h>
 #include <Audio/audio.h>

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 02/05/2023
+// Updated : 03/05/2023
 
 #include "launcher_component.h"
 
@@ -91,7 +91,7 @@ void LauncherComponent::drawSideBar()
 {
 	if(ImGui::BeginChild("side_content", ImVec2(0, 0), true, ImGuiWindowFlags_NoScrollbar))
 	{
-		if(ImGui::Button("New Project", ImVec2(ImGui::GetWindowWidth() - 18, 0)))
+		if(ImGui::Button(AKS_ICON_MD_CREATE_NEW_FOLDER " New Project", ImVec2(ImGui::GetWindowWidth() - 18, 0)))
 		{
 			if(!_new_project_window)
 			{
@@ -100,17 +100,20 @@ void LauncherComponent::drawSideBar()
 				_error_no_name = false;
 				_error_no_name = false;
 				_warn_not_empty = false;
-				_currently_creating.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), "", "");
+				_currently_creating.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), "", "", true);
 			}
 			_new_project_window = true;
 		}
-		if(ImGui::Button("Import Project", ImVec2(ImGui::GetWindowWidth() - 18, 0)))
+		if(ImGui::Button(AKS_ICON_MD_FILE_DOWNLOAD " Import Project", ImVec2(ImGui::GetWindowWidth() - 18, 0)))
 		{
 			auto file = pfd::open_file("Import Project", "", { "Akel projects (.akel)", "*.akel" }).result();
 			if(!file.empty())
 			{
 				std::filesystem::path path = file[0];
-				_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), path.stem().string(), path);
+				if(std::filesystem::is_directory(path))
+					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), path.string(), path, false);
+				else
+					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), path.stem().string(), path, false);
 			}
 		}
 		ImGui::Separator();
@@ -121,7 +124,7 @@ void LauncherComponent::drawSideBar()
 		ImGui::Separator();
 
 		ImGui::PushFont(_tiny_font);
-			ImGui::Text("Akel Version 0.0.1");
+			ImGui::Text("Akel Version " AK_VERSION_STR);
 			ImGui::Text("Akel Studio Version 0.0.1");
 		ImGui::PopFont();
 
@@ -134,7 +137,7 @@ void LauncherComponent::drawSideBar()
 		ImGui::SetNextWindowPos(ImVec2(window->size.X / 2.0f - 200.0f, window->size.Y / 2.0f - 150.0f), ImGuiCond_Appearing);
 		ImGui::SetNextWindowSize(ImVec2(400.0f, 300.0f));
 		ImGui::SetNextWindowFocus();
-		if(ImGui::Begin("New Project", &_new_project_window, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking))
+		if(ImGui::Begin(AKS_ICON_MD_CREATE_NEW_FOLDER " New Project", &_new_project_window, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking))
 		{
 			if(ImGui::BeginChild("##new_project_child", ImVec2(0, 0), true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 			{
@@ -148,7 +151,7 @@ void LauncherComponent::drawSideBar()
 						ImGui::PopStyleColor();
 					ImGui::PopFont();
 				}
-				if(AkImGui::InputText("##project_name", &_currently_creating->title, ImGuiInputTextFlags_AutoSelectAll))
+				if(AkImGui::InputTextWithHint("##project_name", "New Project", &_currently_creating->title, ImGuiInputTextFlags_AutoSelectAll))
 					_error_no_name = false;
 
 				ImGui::TextUnformatted("Project's Folder :");
@@ -187,6 +190,12 @@ void LauncherComponent::drawSideBar()
 					_currently_creating->folder = dialog.result();
 				}
 
+				ImGui::NewLine();
+
+				ImGui::TextUnformatted("Use Akel's directories architecture");
+				ImGui::SameLine();
+				ImGui::Checkbox("##dir_arch", &_currently_creating->akel_filesystem);
+
 				ImGui::SetCursorPosY(ImGui::GetWindowHeight() - (ImGui::GetFontSize() * 2.0f) - 10);
 
 				if(ImGui::Button(AKS_ICON_MD_NOTE_ADD " Create Project And Setup Folder", ImVec2(ImGui::GetWindowWidth() - 15.0f, ImGui::GetFontSize() * 2.0f)))
@@ -197,6 +206,16 @@ void LauncherComponent::drawSideBar()
 						_error_no_path = true;
 					else
 					{
+						std::ofstream project_file(_currently_creating->folder / (_currently_creating->title + ".akel"));
+						if(_currently_creating->akel_filesystem)
+						{
+							std::filesystem::path res = _currently_creating->folder / "Resources";
+							std::filesystem::create_directory(res);
+							std::filesystem::create_directory(res / "Textures");
+							std::filesystem::create_directory(res / "Meshes");
+							std::filesystem::create_directory(res / "Scripts");
+							std::filesystem::create_directory(res / "Sounds");
+						}
 						_projects.insert(*_currently_creating);
 						_new_project_window = false;
 					}

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 02/05/2023
+// Updated : 03/05/2023
 
 #ifndef __AK_STUDIO_LAUNCHER_COMPONENT__
 #define __AK_STUDIO_LAUNCHER_COMPONENT__
@@ -14,9 +14,10 @@ struct Project
 	AkImGui::ImImage icon;
 	std::string title;
 	std::filesystem::path folder;
+	bool akel_filesystem = true;
 
-	Project(AkImGui::ImImage i, std::string t, std::filesystem::path p) :
-		icon(std::move(i)), title(std::move(t)), folder(std::move(p))
+	Project(AkImGui::ImImage i, std::string t, std::filesystem::path p, bool a) :
+		icon(std::move(i)), title(std::move(t)), folder(std::move(p)), akel_filesystem(a)
 	{}
 
 	inline bool operator==(const Project& rhs) const { return title == rhs.title && folder == rhs.folder; }
