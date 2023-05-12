@@ -1,13 +1,15 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 03/05/2023
+// Updated : 12/05/2023
 
 #ifndef __AK_STUDIO_LAUNCHER_COMPONENT__
 #define __AK_STUDIO_LAUNCHER_COMPONENT__
 
 #include <Akel.h>
 #include <Fonts/material_font.h>
+
+using json = nlohmann::json;
 
 struct Project
 {
@@ -55,6 +57,7 @@ class LauncherComponent : public Ak::Component
 
 	private:
 		std::unordered_set<Project> _projects;
+		json _json;
 		std::optional<Project> _currently_creating;
 		AkImGui::ImImage _logo;
 		ImFont* _tiny_font = nullptr;

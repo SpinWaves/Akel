@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 03/05/2023
+// Updated : 12/05/2023
 
 #include "launcher_component.h"
 
@@ -14,6 +14,25 @@ void LauncherComponent::onAttach()
 	ImGuiIO& io = ImGui::GetIO();
 	_tiny_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 15.0f);
 	_title_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 45.0f);
+
+	std::filesystem::path project_list = Ak::Core::getMainDirPath() + "settings/project_list.json";
+	if(std::filesystem::exists(project_list))
+	{
+		std::ifstream file(project_list);
+		if(!file.is_open())
+		{
+			Ak::Error("Akel Studio Launcher : unable to open project list file");
+			return;
+		}
+		_json = json::parse(file);
+		for(json::iterator it = _json.begin(); it != _json.end(); ++it)
+		{
+			if(it.value()["icon"] == "default")
+				_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), it.value()["title"], it.value()["path"], false);
+			else
+				_projects.emplace(AkImGui::LoadImage(it.value()["icon"]), it.value()["title"], it.value()["path"], false);
+		}
+	}
 }
 
 void LauncherComponent::onImGuiRender()
@@ -49,6 +68,8 @@ void LauncherComponent::onImGuiEvent(Ak::Input& input)
 void LauncherComponent::onQuit()
 {
 	_logo.destroy();
+	std::ofstream o(Ak::Core::getMainDirPath() + "settings/project_list.json");
+	o << std::setw(4) << _json << std::endl;
 	for(const Project& project : _projects)
 		const_cast<Project&>(project).icon.destroy();
 }
@@ -60,12 +81,12 @@ void LauncherComponent::drawMainContent()
 	{
 		for(const Project& project : _projects)
 		{
-			if(ImGui::BeginChild(project.title.c_str(), child_size, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+			if(ImGui::BeginChild(project.folder.string().c_str(), child_size, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 			{
 				ImGui::Image(const_cast<Project&>(project).icon.getImGuiID(), ImVec2(50, 50));
 				ImGui::SameLine();
 
-				if(ImGui::BeginChild(std::string(project.title + "_intenal").c_str(), ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoBackground))
+				if(ImGui::BeginChild(std::string(project.folder.string() + "_intenal").c_str(), ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoBackground))
 				{
 					ImGui::TextUnformatted(project.title.c_str());
 
@@ -111,9 +132,17 @@ void LauncherComponent::drawSideBar()
 			{
 				std::filesystem::path path = file[0];
 				if(std::filesystem::is_directory(path))
+				{
 					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), path.string(), path, false);
+					_json[std::to_string(_projects.size())]["title"] = path.string();
+				}
 				else
+				{
 					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), path.stem().string(), path, false);
+					_json[std::to_string(_projects.size())]["title"] = path.stem().string();
+				}
+				_json[std::to_string(_projects.size())]["path"] = path;
+				_json[std::to_string(_projects.size())]["icon"] = "default";
 			}
 		}
 		ImGui::Separator();
@@ -217,6 +246,9 @@ void LauncherComponent::drawSideBar()
 							std::filesystem::create_directory(res / "Sounds");
 						}
 						_projects.insert(*_currently_creating);
+						_json[std::to_string(_projects.size())]["title"] = _currently_creating->title;
+						_json[std::to_string(_projects.size())]["path"] = _currently_creating->folder / (_currently_creating->title + ".akel");
+						_json[std::to_string(_projects.size())]["icon"] = "default";
 						_new_project_window = false;
 					}
 				}
