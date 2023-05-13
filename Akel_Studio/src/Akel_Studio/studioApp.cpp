@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 22/02/2023
+// Updated : 13/05/2023
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -20,6 +20,8 @@ Ak::AkelInstance Akel_init()
 
 Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 {
+	if(args.count != 2)
+		Ak::FatalError("Akel Studio : wrong args number");
 	Ak::Application* app = Ak::memAlloc<Ak::Application>();
 	Ak::Core::printEngineInfo();
 	app->add_component<Ak::AudioComponent>();

@@ -1,11 +1,39 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 12/05/2023
+// Updated : 13/05/2023
 
 #include "launcher_component.h"
 
 static bool quit = false;
+
+SDL_HitTestResult hitTestCallback(SDL_Window* win, const SDL_Point* area, void* data)
+{
+	if(area->y < 63 && !*static_cast<bool*>(data))
+		return SDL_HITTEST_DRAGGABLE;
+	return SDL_HITTEST_NORMAL;
+}
+
+#if defined(AK_PLATFORM_LINUX) || defined(AK_PLATFORM_OSX)
+	extern char** environ;
+#elif defined(AK_PLATFORM_WINDOWS)
+	extern char** _environ;
+#endif
+
+void launchAkelStudio(std::filesystem::path project)
+{
+#if defined(AK_PLATFORM_LINUX) || defined(AK_PLATFORM_OSX)
+	std::string path = Ak::Core::getMainDirPath() + "akelstudio_application";
+	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.string().c_str()), nullptr };
+	execve(path.c_str(), args, environ);
+#elif defined(AK_PLATFORM_WINDOWS)
+	std::string path = Ak::Core::getMainDirPath() + "akelstudio_application.exe";
+	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.string().c_str()), nullptr };
+	_execve(path.c_str(), args, _environ);
+#else
+	#error "Akel Studio is only supported by Linux, MacOS_X and Windows"
+#endif
+}
 
 void LauncherComponent::onAttach()
 {
@@ -28,16 +56,18 @@ void LauncherComponent::onAttach()
 		for(json::iterator it = _json.begin(); it != _json.end(); ++it)
 		{
 			if(it.value()["icon"] == "default")
-				_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), it.value()["title"], it.value()["path"], false);
+				_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), it.value()["title"], it.key(), false);
 			else
-				_projects.emplace(AkImGui::LoadImage(it.value()["icon"]), it.value()["title"], it.value()["path"], false);
+				_projects.emplace(AkImGui::LoadImage(it.value()["icon"]), it.value()["title"], it.key(), false);
 		}
 	}
+	Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
+	SDL_SetWindowHitTest(window->getNativeWindow(), hitTestCallback, &_new_project_window);
 }
 
 void LauncherComponent::onImGuiRender()
 {
-	static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent>("__window_component");
+	static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 	if(ImGui::Begin("main", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking))
 	{
 		ImGui::SetWindowPos(ImVec2(0, 0));
@@ -59,7 +89,7 @@ void LauncherComponent::onImGuiRender()
 	}
 }
 
-void LauncherComponent::onImGuiEvent(Ak::Input& input)
+void LauncherComponent::onEvent(Ak::Input& input)
 {
 	if(quit)
 		input.finish();
@@ -77,33 +107,73 @@ void LauncherComponent::onQuit()
 void LauncherComponent::drawMainContent()
 {
 	constexpr ImVec2 child_size = ImVec2(585, 65);
+	static int32_t selector = -1;
+
 	if(ImGui::BeginChild("main_content", ImVec2(600, 0), true))
 	{
-		for(const Project& project : _projects)
+		int i = 0;
+		for(auto it = _projects.begin(); it != _projects.end(); i++)
 		{
-			if(ImGui::BeginChild(project.folder.string().c_str(), child_size, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+			bool has_been_pushed = false;
+			bool has_been_deleted = false;
+			if(selector == i && !_new_project_window)
 			{
-				ImGui::Image(const_cast<Project&>(project).icon.getImGuiID(), ImVec2(50, 50));
+				if(ImGui::IsMouseDown(ImGuiPopupFlags_MouseButtonLeft))
+					ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.3f, 0.3f, 0.3f, 1.f));
+				else if(ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonLeft))
+					launchAkelStudio(it->folder);
+				else
+					ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.2f, 0.2f, 0.2f, 1.f));
+				has_been_pushed = true;
+			}
+			if(ImGui::BeginChild(it->folder.string().c_str(), child_size, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+			{
+				if(ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+					selector = i;
+				else if(i == selector)
+					selector = -1;
+
+				ImGui::Image(const_cast<Project&>(*it).icon.getImGuiID(), ImVec2(50, 50));
 				ImGui::SameLine();
 
-				if(ImGui::BeginChild(std::string(project.folder.string() + "_intenal").c_str(), ImVec2(0, 0), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoBackground))
+				if(ImGui::BeginChild(std::string(it->folder.string() + "_intenal").c_str(), ImVec2(child_size.x - 120, 0), false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoBackground))
 				{
-					ImGui::TextUnformatted(project.title.c_str());
+					ImGui::TextUnformatted(it->title.c_str());
 
 					ImGui::PushFont(_tiny_font);
 						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 1.f, 1.f, 0.5f));
-							ImGui::TextUnformatted(project.folder.parent_path().string().c_str());
+							ImGui::TextUnformatted(it->folder.parent_path().string().c_str());
 						ImGui::PopStyleColor();
 					ImGui::PopFont();
 
 					ImGui::EndChild();
 				}
+				ImGui::SameLine();
+				if(ImGui::Button(AKS_ICON_MD_MORE_VERT))
+					ImGui::OpenPopup("more");
+				if(ImGui::IsItemHovered())
+					selector = -1;
 
+				if(ImGui::BeginPopup("more"))
+				{
+					selector = -1;
+					if(ImGui::MenuItem("Delete"))
+					{
+						_json.erase(it->folder);
+						it = _projects.erase(it);
+						has_been_deleted = true;
+					}
+					ImGui::EndPopup();
+				}
 				ImGui::EndChild();
 			}
-			ImGui::Separator();
+			if(has_been_pushed)
+				ImGui::PopStyleColor();
+			if(!has_been_deleted)
+				++it;
+			if(it != _projects.end())
+				ImGui::Separator();
 		}
-
 		ImGui::EndChild();
 	}
 }
@@ -134,18 +204,24 @@ void LauncherComponent::drawSideBar()
 				if(std::filesystem::is_directory(path))
 				{
 					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), path.string(), path, false);
-					_json[std::to_string(_projects.size())]["title"] = path.string();
+					_json[path]["title"] = path.string();
 				}
 				else
 				{
 					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), path.stem().string(), path, false);
-					_json[std::to_string(_projects.size())]["title"] = path.stem().string();
+					_json[path]["title"] = path.stem().string();
 				}
-				_json[std::to_string(_projects.size())]["path"] = path;
-				_json[std::to_string(_projects.size())]["icon"] = "default";
+				_json[path]["icon"] = "default";
 			}
 		}
+
 		ImGui::Separator();
+
+		if(ImGui::Button(AKS_ICON_MD_DELETE " Clear Project List", ImVec2(ImGui::GetWindowWidth() - 18, 0)))
+		{
+			_projects.clear();
+			_json.clear();
+		}
 		if(ImGui::Button("Quit", ImVec2(ImGui::GetWindowWidth() - 18, 0)))
 			quit = true;
 
@@ -162,7 +238,7 @@ void LauncherComponent::drawSideBar()
 
 	if(_new_project_window)
 	{
-		static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent>("__window_component");
+		static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 		ImGui::SetNextWindowPos(ImVec2(window->size.X / 2.0f - 200.0f, window->size.Y / 2.0f - 150.0f), ImGuiCond_Appearing);
 		ImGui::SetNextWindowSize(ImVec2(400.0f, 300.0f));
 		ImGui::SetNextWindowFocus();
@@ -246,9 +322,8 @@ void LauncherComponent::drawSideBar()
 							std::filesystem::create_directory(res / "Sounds");
 						}
 						_projects.insert(*_currently_creating);
-						_json[std::to_string(_projects.size())]["title"] = _currently_creating->title;
-						_json[std::to_string(_projects.size())]["path"] = _currently_creating->folder / (_currently_creating->title + ".akel");
-						_json[std::to_string(_projects.size())]["icon"] = "default";
+						_json[_currently_creating->folder / (_currently_creating->title + ".akel")]["title"] = _currently_creating->title;
+						_json[_currently_creating->folder / (_currently_creating->title + ".akel")]["icon"] = "default";
 						_new_project_window = false;
 					}
 				}

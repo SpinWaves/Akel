@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 12/05/2023
+// Updated : 13/05/2023
 
 #ifndef __AK_STUDIO_LAUNCHER_COMPONENT__
 #define __AK_STUDIO_LAUNCHER_COMPONENT__
@@ -44,7 +44,7 @@ class LauncherComponent : public Ak::Component
 
 		void onAttach() override;
 		void onImGuiRender() override;
-		void onImGuiEvent(Ak::Input& input) override;
+		void onEvent(Ak::Input& input) override;
 		void onQuit() override;
 
 		void generateFontTextures(Ak::ImGuiComponent* imgui);

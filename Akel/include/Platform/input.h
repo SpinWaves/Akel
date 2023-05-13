@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 27/01/2023
+// Updated : 13/05/2023
 
 #ifndef __AK_INPUT__
 #define __AK_INPUT__
@@ -27,6 +27,9 @@ namespace Ak
             inline int getX() const noexcept { return _x; }
             inline int getY() const noexcept { return _y; }
 
+            inline int getXGlobal() const noexcept { return _gx; }
+            inline int getYGlobal() const noexcept { return _gy; }
+
             inline int getXRel() const noexcept { return _xRel; }
             inline int getYRel() const noexcept { return _yRel; }
 
@@ -42,27 +45,25 @@ namespace Ak
             Input();
 
             void update();
-            inline void reset() noexcept
-            {
-                _xRel = 0;
-                _yRel = 0;
-            }
+            void reset() noexcept;
             ~Input() = default;
+
+            inline static std::vector<class WindowComponent*> _windows;
 
             SDL_Event _event;
             std::array<uint8_t, SDL_NUM_SCANCODES> _keys;
             std::array<uint8_t, 5> _mouse;
 
+			int _gx = 0;
+			int _gy = 0;
             int _x = 0;
             int _y = 0;
             int _xRel = 0;
             int _yRel = 0;
 
-            bool _end = false;
-
             uint32_t _current_window = 0;
-            
-            inline static std::vector<class WindowComponent*> _windows;
+
+            bool _end = false;        
     };
 }
 

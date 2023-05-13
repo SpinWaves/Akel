@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 10/09/2022
+// Updated : 13/05/2023
 
 #include <Panels/browser.h>
 #include <Fonts/material_font.h>
@@ -15,10 +15,10 @@ void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
 {
 	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
 	_height = size.Y / 4;
-    
+
 	if(ImGui::Begin(std::string(AKS_ICON_MD_FOLDER_OPEN" " + _eltm->getText("Browser.name")).c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
     {
-        browser();
+		browser();
         ImGui::SameLine(0);
         content();
 

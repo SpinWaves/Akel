@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 10/03/2023
+// Updated : 13/05/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -12,6 +12,16 @@ namespace Ak
     {
 		reset();
     }
+
+	void Input::reset() noexcept
+	{
+		_xRel = 0;
+		_yRel = 0;
+		for(int i = 0; i < _keys.size(); i++)
+			_keys[i] = _keys[i] & ~(static_cast<uint8_t>(action::up));
+		for(int i = 0; i < _mouse.size(); i++)
+			_mouse[i] = _mouse[i] & ~(static_cast<uint8_t>(action::up));
+	}
 
     void Input::update()
     { 
@@ -42,6 +52,8 @@ namespace Ak
 
             _xRel = _event.motion.xrel;
             _yRel = _event.motion.yrel;
+
+			SDL_GetGlobalMouseState(&_gx, &_gy);
         }
 
         if(_event.window.event == SDL_WINDOWEVENT_RESIZED || _event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
