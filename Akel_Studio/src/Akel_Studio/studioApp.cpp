@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 13/05/2023
+// Updated : 14/05/2023
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -22,20 +22,18 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 {
 	if(args.count != 2)
 		Ak::FatalError("Akel Studio : wrong args number");
+
 	Ak::Application* app = Ak::memAlloc<Ak::Application>();
-	Ak::Core::printEngineInfo();
+	Ak::Core::printEngineHeader();
+
 	app->add_component<Ak::AudioComponent>();
 
-	StudioComponent* studio = Ak::memAlloc<StudioComponent>();
-	SceneCamera* camera = app->add_component<SceneCamera>(-5, 3, -5, studio);
-	studio->setCamera(camera);
-	app->add_component(studio);
-
-	Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(static_cast<Ak::WindowComponent*>(studio));
+	Ak::WindowComponent* window = app->add_component<Ak::WindowComponent>();
+	Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
 
 	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, Ak::Core::getMainDirPath() + "settings/akel_studio_imgui.ini", false);
 
-	studio->setContext();
+	StudioComponent* studio = app->add_component<StudioComponent>();
 	studio->generateFontTextures(imgui);
 
 	return app;

@@ -1,14 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 02/05/2023
+// Updated : 14/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
 
 Ak::Unique_ptr<Ak::ELTM> _lang_eltm(nullptr);
 
-StudioComponent::StudioComponent() : Ak::WindowComponent(), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>()) {}
+StudioComponent::StudioComponent() : _eltm(Ak::create_shared_ptr_w<Ak::ELTM>()) {}
 
 void StudioComponent::onAttach()
 {
@@ -26,12 +26,12 @@ void StudioComponent::onAttach()
 	
 	_eltm->load(std::move(Ak::getMainAppProjectFile().getStringValue("language")));
 
-	Ak::WindowComponent::onAttach();
-	Ak::WindowComponent::title = std::move(_eltm->getText("window_title"));
-	Ak::WindowComponent::resizable = true;
-	Ak::WindowComponent::maximize = true;
-	Ak::WindowComponent::vsync = Ak::getMainAppProjectFile().getBoolValue("vsync");
-	Ak::WindowComponent::fetchSettings();
+	Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
+	window->title = std::move(_eltm->getText("window_title"));
+	window->resizable = true;
+	window->maximize = true;
+	window->vsync = Ak::getMainAppProjectFile().getBoolValue("vsync");
+	window->fetchSettings();
 
 	_stack = Ak::create_Unique_ptr<PanelStack>();
 
@@ -50,11 +50,6 @@ void StudioComponent::onAttach()
 
 	_stack->add_panel<Browser>(_eltm);
 	_stack->add_panel<Console>(_eltm);
-}
-
-void StudioComponent::setContext()
-{
-   // ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
 
 	Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
 	renderer->getClearValue().color.float32[0] = 0.627450980;
@@ -62,6 +57,7 @@ void StudioComponent::setContext()
 	renderer->getClearValue().color.float32[2] = 0.909803922;
 
 	_logo = AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo.png");
+   // ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
 }
 
 static bool realquit = false;
@@ -70,11 +66,13 @@ void StudioComponent::onImGuiRender()
 {
 	//ImGuizmo::BeginFrame();
 	//ImGuizmo::Enable(true);
+	
+	static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 
 	drawMainMenuBar();
 
 	for(auto elem : _stack->_panels)
-		elem->onUpdate(size);
+		elem->onUpdate(window->size);
 
 	if(_showAbout)
 		drawAboutWindow();
@@ -147,11 +145,11 @@ void StudioComponent::onQuit()
 	_stack.reset(nullptr);
 	_lang_eltm.reset(nullptr);
 	_logo.destroy();
-	Ak::WindowComponent::onQuit();
 }
 
 void StudioComponent::drawMainMenuBar()
 {
+	static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 	if(ImGui::BeginMainMenuBar())
 	{
 		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_FOLDER" " + _eltm->getText("MainMenuBar.file")).c_str()))
@@ -201,7 +199,7 @@ void StudioComponent::drawMainMenuBar()
 				_showAbout = !_showAbout;
 			ImGui::EndMenu();
 		}
-		ImGui::SameLine(size.X - 100);
+		ImGui::SameLine(window->size.X - 100);
 		ImGui::Text("%d FPS", Ak::CounterFPS::getFPS());
 
 		ImGui::EndMainMenuBar();
@@ -210,6 +208,7 @@ void StudioComponent::drawMainMenuBar()
 
 void StudioComponent::drawAboutWindow()
 {
+	static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 	if(ImGui::Begin(std::string(AKS_ICON_MD_INFO" " + _eltm->getText("MainMenuBar.about")).data(), &_showAbout, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
 	{
 		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() / 8, ImGui::GetWindowHeight() / 8));
@@ -223,7 +222,7 @@ void StudioComponent::drawAboutWindow()
 #else
 		ImGui::TextUnformatted("Release version");
 #endif
-		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() / 1.75f, size.Y - (size.Y / 1.2f)));
+		ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() / 1.75f, window->size.Y - (window->size.Y / 1.2f)));
 		ImGui::TextWrapped(_eltm->getText("MainMenuBar.about_text").data());
 
 		AkImGui::WebLink(_eltm->getText("MainMenuBar.license").data(), "https://akel-engine.com/license/", ImVec2(ImGui::GetWindowWidth()/2 - ImGui::CalcTextSize(_eltm->getText("MainMenuBar.website").data()).x * 2 - ImGui::CalcTextSize(_eltm->getText("MainMenuBar.license").data()).x, ImGui::GetWindowHeight() - ImGui::GetWindowHeight()/4));

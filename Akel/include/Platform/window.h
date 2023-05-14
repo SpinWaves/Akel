@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 03/03/2023
+// Updated : 14/05/2023
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -36,10 +36,10 @@ namespace Ak
             std::string title = "Akel Window";
             std::string icon = "default_Akel_icon";
             
-            Maths::Vec2<int> size;
-            Maths::Vec2<int> pos;
-            Maths::Vec2<int> minSize;
-            Maths::Vec2<int> maxSize;
+            Vec2i size;
+            Vec2i pos;
+            Vec2i minSize;
+            Vec2i maxSize;
             
             float brightness = 1.0f;
             float opacity = 1.0f;

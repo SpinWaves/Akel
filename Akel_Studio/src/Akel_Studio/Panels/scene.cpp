@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 22/02/2023
+// Updated : 14/05/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -16,7 +16,6 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 {
     if(ImGui::Begin(std::string(AKS_ICON_MD_SPORTS_ESPORTS" " + _eltm->getText("Scene.name")).c_str(), nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground))
     {
-		_camera->setFocus(true);
         ImDrawList* draw_list = ImGui::GetBackgroundDrawList();
 
         if(ImGui::BeginMenuBar())
@@ -78,6 +77,4 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 
 		ImGui::End();
     }
-	else
-		_camera->setFocus(false);
 }

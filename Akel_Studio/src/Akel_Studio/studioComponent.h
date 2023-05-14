@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 05/03/2023
+// Updated : 14/05/2023
 
 #ifndef __AK_STUDIO_COMPONENT__
 #define __AK_STUDIO_COMPONENT__
@@ -21,9 +21,6 @@ class StudioComponent : public Ak::WindowComponent
 		void onQuit() override;
 
 		void generateFontTextures(Ak::ImGuiComponent* imgui);
-
-		void setContext();
-		inline void setCamera(class SceneCamera* camera) noexcept { _camera = camera; } 
 
 		~StudioComponent() = default;
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 10/03/2023
+// Updated : 14/05/2023
 
 #ifndef __AK_VEC2__
 #define __AK_VEC2__
@@ -73,12 +73,21 @@ namespace Ak::Maths
 		double dot(const Vec2& v);
 	};
 
+	// Aliases using Maths namesapce
 	using Vec2f = Vec2<float>;
 	using Vec2d = Vec2<double>;
 	using Vec2i = Vec2<int32_t>;
 	using Vec2ui = Vec2<uint32_t>;
 }
 
+namespace Ak
+{
+	// Aliases without Maths namespace
+	using Vec2f = Maths::Vec2<float>;
+	using Vec2d = Maths::Vec2<double>;
+	using Vec2i = Maths::Vec2<int32_t>;
+	using Vec2ui = Maths::Vec2<uint32_t>;
+}
 
 #include <Maths/vec2.inl>
 

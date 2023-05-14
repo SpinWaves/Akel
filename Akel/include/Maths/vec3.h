@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 23/03/2023
+// Updated : 14/05/2023
 
 #ifndef __AK_VEC3__
 #define __AK_VEC3__
@@ -76,6 +76,14 @@ namespace Ak::Maths
 	using Vec3d = Vec3<double>;
 	using Vec3i = Vec3<int32_t>;
 	using Vec3ui = Vec3<uint32_t>;
+}
+
+namespace Ak
+{
+	using Vec3f = Maths::Vec3<float>;
+	using Vec3d = Maths::Vec3<double>;
+	using Vec3i = Maths::Vec3<int32_t>;
+	using Vec3ui = Maths::Vec3<uint32_t>;
 }
 
 #include <Maths/vec3.inl>
