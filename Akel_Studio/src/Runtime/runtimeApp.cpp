@@ -49,13 +49,32 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 
 	Ak::Core::ProjectFile& project = Ak::getMainAppProjectFile();
 
-	if(project.keyExists("__window_Component") && project.archive()["__window_component"])
+	if(project.keyExists("__window_component"))
 	{
 		Ak::WindowComponent* window = app->add_component<Ak::WindowComponent>();
-		if(project.keyExists("__renderer_Component") && project.archive()["__renderer_component"])
-		{
+		window->title = project.archive()["window_component"]["title"];
+		window->icon = project.archive()["window_component"]["icon"];
+		window->size.X = project.archive()["window_component"]["size"]["x"];
+		window->size.Y = project.archive()["window_component"]["size"]["y"];
+		window->pos.X = project.archive()["window_component"]["pos"]["x"];
+		window->pos.Y = project.archive()["window_component"]["pos"]["y"];
+		window->minSize.X = project.archive()["window_component"]["minSize"]["x"];
+		window->minSize.Y = project.archive()["window_component"]["minSize"]["y"];
+		window->maxSize.X = project.archive()["window_component"]["maxSize"]["x"];
+		window->maxSize.Y = project.archive()["window_component"]["maxSize"]["y"];
+		window->brightness = project.archive()["window_component"]["brightnesss"];
+		window->opacity = project.archive()["window_component"]["opacity"];
+		window->fullscreen = project.archive()["window_component"]["fullscreen"];
+		window->border = project.archive()["window_component"]["border"];
+		window->resizable = project.archive()["window_component"]["resizable"];
+		window->visible = project.archive()["window_component"]["visible"];
+		window->vsync = project.archive()["window_component"]["vsync"];
+		window->maximize = project.archive()["window_component"]["maximize"];
+		window->minimize = project.archive()["window_component"]["minimize"];
+		window->fetchSettings();
+
+		if(project.keyExists("__renderer_component"))
 			Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
-		}
 	}
 
 	return app;

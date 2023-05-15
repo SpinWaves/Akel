@@ -91,6 +91,26 @@ namespace Ak
 		visible ? SDL_ShowWindow(_window) : SDL_HideWindow(_window);
 		if(_renderer != nullptr)
 			_renderer->requireFrameBufferResize();
+
+		getMainAppProjectFile().archive()["window_component"]["title"] = title;
+		getMainAppProjectFile().archive()["window_component"]["icon"] = icon;
+		getMainAppProjectFile().archive()["window_component"]["size"]["x"] = size.X;
+		getMainAppProjectFile().archive()["window_component"]["size"]["y"] = size.Y;
+		getMainAppProjectFile().archive()["window_component"]["pos"]["x"] = pos.X;
+		getMainAppProjectFile().archive()["window_component"]["pos"]["y"] = pos.Y;
+		getMainAppProjectFile().archive()["window_component"]["minSize"]["x"] = minSize.X;
+		getMainAppProjectFile().archive()["window_component"]["minSize"]["y"] = minSize.Y;
+		getMainAppProjectFile().archive()["window_component"]["maxSize"]["x"] = maxSize.X;
+		getMainAppProjectFile().archive()["window_component"]["maxSize"]["y"] = maxSize.Y;
+		getMainAppProjectFile().archive()["window_component"]["brightnesss"] = brightness;
+		getMainAppProjectFile().archive()["window_component"]["opacity"] = opacity;
+		getMainAppProjectFile().archive()["window_component"]["fullscreen"] = fullscreen;
+		getMainAppProjectFile().archive()["window_component"]["border"] = border;
+		getMainAppProjectFile().archive()["window_component"]["resizable"] = resizable;
+		getMainAppProjectFile().archive()["window_component"]["visible"] = visible;
+		getMainAppProjectFile().archive()["window_component"]["vsync"] = vsync;
+		getMainAppProjectFile().archive()["window_component"]["maximize"] = maximize;
+		getMainAppProjectFile().archive()["window_component"]["minimize"] = minimize;
 	}
 
 	void WindowComponent::update()
@@ -109,5 +129,6 @@ namespace Ak
 			SDL_DestroyWindow(_window);
 			_window = nullptr;
 		}
+		fetchSettings();
 	}
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/08/2022
-// Updated : 02/05/2023
+// Updated : 15/05/2023
 
 #ifndef __AK_IMGUI_UTILS__
 #define __AK_IMGUI_UTILS__
@@ -15,7 +15,7 @@ namespace AkImGui
 
 	class AK_API ImImage
 	{
-		friend ImImage LoadImage(std::filesystem::path file);
+		friend AK_API ImImage LoadImage(std::filesystem::path file);
 
 		public:
 			ImImage() = default;

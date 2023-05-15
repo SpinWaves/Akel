@@ -41,6 +41,9 @@ int main(int argc, char** argv)
 
 	std::cout << Ak::bg_green << "Akel successfully finished" << Ak::bg_def << std::endl;
 
+	if(project.at_akel_exit)
+		project.at_akel_exit();
+
 	return 0;
 }
 

@@ -20,15 +20,19 @@ SDL_HitTestResult hitTestCallback(SDL_Window* win, const SDL_Point* area, void* 
 	extern char** _environ;
 #endif
 
-void launchAkelStudio(std::filesystem::path project)
+static std::filesystem::path akel_studio_project;
+
+void launchAkelStudio()
 {
+	if(akel_studio_project.empty())
+		return;
 #if defined(AK_PLATFORM_LINUX) || defined(AK_PLATFORM_OSX)
 	std::string path = Ak::Core::getMainDirPath() + "akelstudio_application";
-	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.string().c_str()), nullptr };
+	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(akel_studio_project.string().c_str()), nullptr };
 	execve(path.c_str(), args, environ);
 #elif defined(AK_PLATFORM_WINDOWS)
 	std::string path = Ak::Core::getMainDirPath() + "akelstudio_application.exe";
-	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.string().c_str()), nullptr };
+	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(akel_studio_project.string().c_str()), nullptr };
 	_execve(path.c_str(), args, _environ);
 #else
 	#error "Akel Studio is only supported by Linux, MacOS_X and Windows"
@@ -123,7 +127,10 @@ void LauncherComponent::drawMainContent()
 				if(ImGui::IsMouseDown(ImGuiPopupFlags_MouseButtonLeft))
 					ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.3f, 0.3f, 0.3f, 1.f));
 				else if(ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonLeft))
-					launchAkelStudio(it->folder);
+				{
+					akel_studio_project = it->folder;
+					quit = true;
+				}
 				else
 					ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.2f, 0.2f, 0.2f, 1.f));
 				has_been_pushed = true;
@@ -206,14 +213,14 @@ void LauncherComponent::drawSideBar()
 				if(std::filesystem::is_directory(path))
 				{
 					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), path.string(), path, false);
-					_json[path]["title"] = path.string();
+					_json[path.string()]["title"] = path.string();
 				}
 				else
 				{
 					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo_icon.png"), path.stem().string(), path, false);
-					_json[path]["title"] = path.stem().string();
+					_json[path.string()]["title"] = path.stem().string();
 				}
-				_json[path]["icon"] = "default";
+				_json[path.string()]["icon"] = "default";
 			}
 		}
 
@@ -324,8 +331,8 @@ void LauncherComponent::drawSideBar()
 							std::filesystem::create_directory(res / "Sounds");
 						}
 						_projects.insert(*_currently_creating);
-						_json[_currently_creating->folder / (_currently_creating->title + ".akel")]["title"] = _currently_creating->title;
-						_json[_currently_creating->folder / (_currently_creating->title + ".akel")]["icon"] = "default";
+						_json[(_currently_creating->folder / (_currently_creating->title + ".akel")).string()]["title"] = _currently_creating->title;
+						_json[(_currently_creating->folder / (_currently_creating->title + ".akel")).string()]["icon"] = "default";
 						_new_project_window = false;
 					}
 				}

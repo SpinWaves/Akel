@@ -37,6 +37,8 @@ namespace std
 	};
 }
 
+void launchAkelStudio();
+
 class LauncherComponent : public Ak::Component
 {
 	public:

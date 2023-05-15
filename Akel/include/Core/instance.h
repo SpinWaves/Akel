@@ -24,6 +24,7 @@ namespace Ak
 			bool enable_warning_console_message = true;
 			bool vk_force_disable_validation_layers = false;
 			bool use_default_resource_system = true;
+			func::function<void(void)> at_akel_exit;
 
 			inline void writeProjectFile() { _project_file.writeFile(); }
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 14/05/2023
+// Updated : 15/05/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
@@ -13,6 +13,7 @@ Ak::AkelInstance Akel_init()
 		project.project_file_path = Ak::Core::getMainDirPath() + "settings";
 		project.project_file_name = "akel_studio_launcher";
 		project.use_default_resource_system = false;
+		project.at_akel_exit = launchAkelStudio;
 	return project;
 }
 
