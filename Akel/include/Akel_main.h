@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 22/02/2023
+// Updated : 15/05/2023
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -35,6 +35,7 @@ int main(int argc, char** argv)
 		app->destroy();
 		Ak::memFree(app);
 		Ak::Render_Core::get().destroy();
+		project.writeProjectFile();
 		Ak::MemoryManager::end();
 	AK_END_SESSION();
 

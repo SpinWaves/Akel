@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 13/05/2023
+// Updated : 15/05/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -42,9 +42,9 @@ namespace Ak
 		std::vector<ImGuiComponent*> imguis;
 		for(auto comp : _components)
 		{
-			if(std::strcmp(comp->getName(), "__renderer_component") == 0)
+			if(comp->getName() == "__renderer_component")
 				renderers.push_back(static_cast<RendererComponent*>(comp));
-			if(std::strcmp(comp->getName(), "__imgui_component") == 0)
+			if(comp->getName() == "__imgui_component")
 				imguis.push_back(static_cast<ImGuiComponent*>(comp));
 		}
 

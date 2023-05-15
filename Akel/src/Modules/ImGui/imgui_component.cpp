@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 13/05/2023
+// Updated : 15/05/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -80,7 +80,7 @@ namespace Ak
 			generateFonts();
 
 		_componentsInit = true;
-		getMainAppProjectFile().setBoolValue("__imgui_component", true);
+		getMainAppProjectFile().archive()["__imgui_component"] = true;
 	}
 
 	void ImGuiComponent::generateFonts()

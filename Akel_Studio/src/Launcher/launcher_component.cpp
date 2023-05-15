@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 13/05/2023
+// Updated : 15/05/2023
 
 #include "launcher_component.h"
 
@@ -34,6 +34,8 @@ void launchAkelStudio(std::filesystem::path project)
 	#error "Akel Studio is only supported by Linux, MacOS_X and Windows"
 #endif
 }
+
+LauncherComponent::LauncherComponent() : Ak::Component("launcherComponent") {}
 
 void LauncherComponent::onAttach()
 {

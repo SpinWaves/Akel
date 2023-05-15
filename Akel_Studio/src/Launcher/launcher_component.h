@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 13/05/2023
+// Updated : 15/05/2023
 
 #ifndef __AK_STUDIO_LAUNCHER_COMPONENT__
 #define __AK_STUDIO_LAUNCHER_COMPONENT__
@@ -40,7 +40,7 @@ namespace std
 class LauncherComponent : public Ak::Component
 {
 	public:
-		LauncherComponent() = default;
+		LauncherComponent();
 
 		void onAttach() override;
 		void onImGuiRender() override;

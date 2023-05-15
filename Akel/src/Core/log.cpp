@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 17/03/2023
+// Updated : 15/05/2023
 
 #include <Core/core.h>
 #include <Platform/messageBox.h>
@@ -78,14 +78,14 @@ namespace Ak::Core
 				case MESSAGE: std::cout << blue << "[Akel log Message] " << buffer << def << '\n'; _type = "Message: "; break;
 				case WARNING:
 				{	
-					if(getMainAppProjectFile().getBoolValue("enable_warning_console_message"))
+					if(getMainAppProjectFile().archive()["enable_warning_console_message"])
 						std::cout << magenta << "[Akel log Warning] " << buffer << def << '\n';
 					_type = "Warning: ";
 					break;
 				}
 				case STRONG_WARNING: std::cout << yellow << "[Akel log Strong Warning] " << buffer << def << '\n'; _type = "Strong Warning: "; break;
-				case ERROR: std::cout << red << "[Akel log Error] " << buffer << def << '\n'; _type = "Error: "; break;
-				case FATAL_ERROR: std::cout << red << "[Akel log Fatal Error] " << buffer << def << '\n'; _type = "Fatal Error: "; break;
+				case ERROR: std::cerr << red << "[Akel log Error] " << buffer << def << '\n'; _type = "Error: "; break;
+				case FATAL_ERROR: std::cerr << red << "[Akel log Fatal Error] " << buffer << def << '\n'; _type = "Fatal Error: "; break;
 
 				default: break;
 			}

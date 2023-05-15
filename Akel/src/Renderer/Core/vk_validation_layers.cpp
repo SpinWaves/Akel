@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 27/01/2023
+// Updated : 15/05/2023
 
 #include <Renderer/Core/vk_validation_layers.h>
 #include <Renderer/Core/render_core.h>
@@ -13,7 +13,7 @@ namespace Ak
 	{
 		if constexpr(!enableValidationLayers)
 			return;
-		if(getMainAppProjectFile().getBoolValue("vk_force_disable_validation_layers"))
+		if(getMainAppProjectFile().archive()["vk_force_disable_validation_layers"])
 			return;
 
 		VkDebugUtilsMessengerCreateInfoEXT createInfo;
@@ -53,7 +53,7 @@ namespace Ak
 	{
 		if constexpr(!enableValidationLayers)
 			return;
-		if(getMainAppProjectFile().getBoolValue("vk_force_disable_validation_layers"))
+		if(getMainAppProjectFile().archive()["vk_force_disable_validation_layers"])
 			return;
 		destroyDebugUtilsMessengerEXT(nullptr);
 	}
@@ -85,7 +85,7 @@ namespace Ak
 			std::cout << '\n';
 			Core::log::report(WARNING, std::string("Vulkan layer warning: ") + pCallbackData->pMessage);
 		}
-		else if(getMainAppProjectFile().getBoolValue("vk_enable_message_validation_layer"))
+		else if(getMainAppProjectFile().archive()["vk_enable_message_validation_layer"])
 			std::cout << green << pCallbackData->pMessage << def << std::endl;
 
 		return VK_FALSE;

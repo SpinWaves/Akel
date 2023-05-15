@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 28/03/2023
+-- Updated : 15/05/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -59,6 +59,7 @@ target("Akel_Studio")
 	add_includedirs("Akel/include", "Akel_Studio/src/Launcher", "Akel_Studio/src", "Akel/third_party")
     add_deps("Akel")
     add_deps("akelstudio_application")
+    add_deps("AkelRuntime")
 	
     add_files("Akel_Studio/src/Launcher/**.cpp")
 
@@ -96,14 +97,14 @@ target("akelstudio_application")
 	end
 target_end()
 
--- Rectangle Demo Build
-target("RectDemo")
+-- Akel Runtime Build
+target("AkelRuntime")
 	set_default(false)
     set_kind("binary")
     add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/Native/rect/src", "Akel/third_party")
-    add_files("SandBox/Native/rect/src/*.cpp")
-	set_targetdir("SandBox/Native/rect")
+	add_includedirs("Akel/include", "Akel/third_party")
+    add_files("Akel_Studio/src/Runtime/*.cpp")
+	set_targetdir("Akel_Studio/resources/runtime/")
 target_end()
 
 -- Cube Demo Build

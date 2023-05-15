@@ -1,11 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 15/11/2022
+// Updated : 15/05/2023
 
 #include <Core/core.h>
 
-#define __FILEPATH _dir + _name + std::string(".akel")
+#define __FILEPATH _dir / (_name + std::string(".akel"))
 
 namespace Ak
 {
@@ -20,19 +20,14 @@ namespace Ak
 	{
 		void ProjectFile::initProjFile()
 		{
-			if(_dir.back() != '/')
-				_dir.push_back('/');
 			std::filesystem::path f(__FILEPATH);
 			if(!std::filesystem::exists(f))
-				write_file();
+				writeFile();
 			else
 			{
 				std::ifstream file(__FILEPATH, std::ios::binary);
 				if(!file.is_open())
-				{
-					Core::log::report(ERROR, "config file manager: unable to open " + __FILEPATH);
-					return;
-				}
+					Core::log::report(FATAL_ERROR, std::string("config file manager: unable to open " + f.string()));
 
 				file.unsetf(std::ios::skipws);
 
@@ -49,69 +44,7 @@ namespace Ak
 			}
 		}
 
-		void ProjectFile::setDir(const std::string& dir)
-		{
-			_dir = dir;
-		}
-
-		void ProjectFile::setName(const std::string& name)
-		{
-			_name = name;
-		}
-
-		bool ProjectFile::getBoolValue(const std::string& key)
-		{
-			if(!_json.contains(key))
-				return false;
-			return _json[key];
-		}
-		
-		int ProjectFile::getIntValue(const std::string& key)
-		{
-			if(!_json.contains(key))
-				return -1;
-			return _json[key];
-		}
-		
-		float ProjectFile::getFloatValue(const std::string& key)
-		{
-			if(!_json.contains(key))
-				return -1.0f;
-			return _json[key];
-		}
-
-		std::string ProjectFile::getStringValue(const std::string& key)
-		{
-			if(!_json.contains(key))
-				return "";
-			return _json[key];
-		}
-
-		void ProjectFile::setStringValue(const std::string& key, const std::string& value)
-		{
-			_json[key] = value;
-			write_file();
-		}
-
-		void ProjectFile::setIntValue(const std::string& key, const int value)
-		{
-			_json[key] = value;
-			write_file();
-		}
-
-		void ProjectFile::setBoolValue(const std::string& key, const bool value)
-		{
-			_json[key] = value;
-			write_file();
-		}
-
-		void ProjectFile::setFloatValue(const std::string& key, const float value)
-		{
-			_json[key] = value;
-			write_file();
-		}
-
-		void ProjectFile::write_file()
+		void ProjectFile::writeFile()
 		{
 			std::filesystem::remove(__FILEPATH);
 			std::ofstream newFile(__FILEPATH, std::ios::ate | std::ios::binary);

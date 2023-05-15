@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 02/05/2023
+// Updated : 15/05/2023
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -30,7 +30,7 @@ namespace Ak
 	{
 		for(size_t i = 0; i < _components.size(); i++)
 		{
-			if(std::strcmp(_components[i]->getName(), name) == 0)
+			if(_components[i]->getName() == name)
 			{
 				_components[i]->onQuit();
 				_components.erase(_components.begin() + i);
@@ -41,7 +41,7 @@ namespace Ak
 
 	Component* ComponentStack::get_component(const char* name)
 	{
-		auto it = std::find_if(_components.begin(), _components.end(), [=](Component* c) { return std::strcmp(c->getName(), name) == 0; });
+		auto it = std::find_if(_components.begin(), _components.end(), [=](Component* c) { return c->getName() == name; });
 		if(it != _components.end())
 			return *it;
 		return nullptr;
@@ -82,7 +82,7 @@ namespace Ak
 			}
 			if(!isCustomAlloc)
 			{
-				Core::log::report(STRONG_WARNING, "Component Stack: unable to free a component \"%s\" address(%p), unable to find its allocator", elem->getName(), elem);
+				Core::log::report(STRONG_WARNING, "Component Stack: unable to free a component \"%s\" address(%p), unable to find its allocator", elem->getName().c_str(), elem);
 				elem->~Component();
 			}
 		}

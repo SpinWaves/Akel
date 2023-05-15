@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 17/03/2023
+// Updated : 15/05/2023
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -55,7 +55,7 @@ namespace Ak
     {
         if(__jam.isInit())
         {
-		    if(getMainAppProjectFile().getBoolValue("memory_manager_enable_fixed_allocator"))
+		    if(getMainAppProjectFile().archive()["memory_manager_enable_fixed_allocator"])
             {
 				if constexpr(!std::is_class<T>::value)
 				{
@@ -83,7 +83,7 @@ namespace Ak
     template <class T>
     void MemoryManager::free(T* ptr)
     {
-		if(getMainAppProjectFile().getBoolValue("memory_manager_enable_fixed_allocator"))
+		if(getMainAppProjectFile().archive()["memory_manager_enable_fixed_allocator"])
 		{
 			if(__fixed1.contains((void*)ptr))
 			{

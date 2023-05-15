@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 01/03/2023
+// Updated : 15/05/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -25,7 +25,7 @@ namespace Ak
 			_semaphores[i].init();
 
 		_is_init = true;
-		getMainAppProjectFile().setBoolValue("__renderer_component", true);
+		getMainAppProjectFile().archive()["__renderer_component"] = true;
     }
 
 	bool RendererComponent::beginFrame()

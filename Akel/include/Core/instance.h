@@ -1,7 +1,7 @@
 // This file is a part of the Akel
 // Authors : @kbz_8
 // Created : 16/10/2021
-// Updated : 27/01/2023
+// Updated : 15/05/2023
 
 #ifndef __AK_INSTANCE__
 #define __AK_INSTANCE__
@@ -24,6 +24,8 @@ namespace Ak
 			bool enable_warning_console_message = true;
 			bool vk_force_disable_validation_layers = false;
 			bool use_default_resource_system = true;
+
+			inline void writeProjectFile() { _project_file.writeFile(); }
 
 			~AkelInstance() = default;
 

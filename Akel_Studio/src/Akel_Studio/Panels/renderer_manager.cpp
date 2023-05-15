@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 21/12/2022
+// Updated : 15/05/2023
 
 #include <Panels/renderer_manager.h>
 #include <Fonts/material_font.h>
@@ -9,7 +9,7 @@
 RendererManager::RendererManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__renderer_manager"), _gpu()
 {
     _eltm = std::move(eltm);
-    int cull_mode = Ak::getMainAppProjectFile().getIntValue("cullmode");
+    int cull_mode = Ak::getMainAppProjectFile().archive()["cullmode"];
 	switch(cull_mode)
 	{
 		case VK_CULL_MODE_NONE: selected = _eltm->getText("RendererManager.cull_none"); break;
@@ -40,7 +40,7 @@ void RendererManager::render_sets()
         ImGui::SameLine();
         if(ImGui::BeginCombo("##combo", selected.c_str()))
         {
-            int item_current_idx = Ak::getMainAppProjectFile().getIntValue("cullmode");
+            int item_current_idx = Ak::getMainAppProjectFile().archive()["cullmode"];
             if(ImGui::Selectable(_eltm->getText("RendererManager.cull_none").c_str(), item_current_idx == VK_CULL_MODE_NONE))
             {
                 item_current_idx = VK_CULL_MODE_NONE;
@@ -63,9 +63,9 @@ void RendererManager::render_sets()
             }
             ImGui::EndCombo();
 
-			if(item_current_idx != Ak::getMainAppProjectFile().getIntValue("cullmode"))
+			if(item_current_idx != Ak::getMainAppProjectFile().archive()["cullmode"])
 			{
-				Ak::getMainAppProjectFile().setIntValue("cullmode", item_current_idx);
+				Ak::getMainAppProjectFile().archive()["cullmode"] = item_current_idx;
 				//Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
 				//renderer->setCullMode(item_current_idx);
 				//renderer->reloadRenderer();
@@ -89,7 +89,7 @@ void RendererManager::render_sets()
         if(vsync_save != renderer->getWindow()->vsync)
 		{
             renderer->getWindow()->fetchSettings();
-			Ak::getMainAppProjectFile().setBoolValue("vsync", !vsync_save);
+			Ak::getMainAppProjectFile().archive()["vsync"] = !vsync_save;
 		}
         
         ImGui::TreePop();

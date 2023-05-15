@@ -1,14 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 14/05/2023
+// Updated : 15/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
 
 Ak::Unique_ptr<Ak::ELTM> _lang_eltm(nullptr);
 
-StudioComponent::StudioComponent() : _eltm(Ak::create_shared_ptr_w<Ak::ELTM>()) {}
+StudioComponent::StudioComponent() : Ak::Component("studio_component"), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>()) {}
 
 void StudioComponent::onAttach()
 {
@@ -16,21 +16,21 @@ void StudioComponent::onAttach()
 	_lang_eltm->load(Ak::Core::getMainDirPath() + "resources/texts/langs.eltm");
 
 	if(!Ak::getMainAppProjectFile().keyExists("language"))
-		Ak::getMainAppProjectFile().setStringValue("language", Ak::Core::getMainDirPath() + _lang_eltm->getText("English"));
+		Ak::getMainAppProjectFile().archive()["language"] = Ak::Core::getMainDirPath() + _lang_eltm->getText("English");
 	if(!Ak::getMainAppProjectFile().keyExists("on_quit_window"))
-		Ak::getMainAppProjectFile().setBoolValue("on_quit_window", true);
+		Ak::getMainAppProjectFile().archive()["on_quit_window"] = true;
 	if(!Ak::getMainAppProjectFile().keyExists("vsync"))
-		Ak::getMainAppProjectFile().setBoolValue("vsync", true);
+		Ak::getMainAppProjectFile().archive()["vsync"] = true;
 	if(!Ak::getMainAppProjectFile().keyExists("cullmode"))
-		Ak::getMainAppProjectFile().setIntValue("cullmode", VK_CULL_MODE_BACK_BIT);
+		Ak::getMainAppProjectFile().archive()["cullmode"] = VK_CULL_MODE_BACK_BIT;
 	
-	_eltm->load(std::move(Ak::getMainAppProjectFile().getStringValue("language")));
+	_eltm->load(std::move(Ak::getMainAppProjectFile().archive()["language"]));
 
 	Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 	window->title = std::move(_eltm->getText("window_title"));
 	window->resizable = true;
 	window->maximize = true;
-	window->vsync = Ak::getMainAppProjectFile().getBoolValue("vsync");
+	window->vsync = Ak::getMainAppProjectFile().archive()["vsync"];
 	window->fetchSettings();
 
 	_stack = Ak::create_Unique_ptr<PanelStack>();
@@ -110,7 +110,7 @@ void StudioComponent::onImGuiRender()
 void StudioComponent::onImGuiEvent(Ak::Input& input)
 {
 	_running = _running == true ? !input.isEnded() : _running;
-	if(!_running && !Ak::getMainAppProjectFile().getBoolValue("on_quit_window"))
+	if(!_running && !Ak::getMainAppProjectFile().archive()["on_quit_window"])
 		realquit = true;
 	if(realquit)
 		input.finish();
@@ -248,7 +248,7 @@ void StudioComponent::draw_general_settings()
 			{
 				if(!_eltm->reload(Ak::Core::getMainDirPath() + path))
 					Ak::Core::log::report(FATAL_ERROR, "unable to change language");
-				Ak::getMainAppProjectFile().setStringValue("language", Ak::Core::getMainDirPath() + path);
+				Ak::getMainAppProjectFile().archive()["language"] = Ak::Core::getMainDirPath() + path;
 				selected = lang;
 				reload_docks = true;
 			}
@@ -259,10 +259,10 @@ void StudioComponent::draw_general_settings()
 
 	ImGui::Separator();
 
-	bool on_quit_window = Ak::getMainAppProjectFile().getBoolValue("on_quit_window");
+	bool on_quit_window = Ak::getMainAppProjectFile().archive()["on_quit_window"];
 	ImGui::Checkbox(_eltm->getText("Settings.onQuit").c_str(), &on_quit_window);
-	if(on_quit_window != Ak::getMainAppProjectFile().getBoolValue("on_quit_window"))
-		Ak::getMainAppProjectFile().setBoolValue("on_quit_window", on_quit_window);
+	if(on_quit_window != Ak::getMainAppProjectFile().archive()["on_quit_window"])
+		Ak::getMainAppProjectFile().archive()["on_quit_window"] = on_quit_window;
 }
 
 void StudioComponent::draw_scene_settings()
@@ -273,10 +273,10 @@ void StudioComponent::draw_scene_settings()
 
 	ImGui::Text(_eltm->getText("Settings.sensitivity").data());
 	ImGui::SameLine(0);
-	static float sensy = Ak::getMainAppProjectFile().getFloatValue("scene_camera_sensy");
+	static float sensy = Ak::getMainAppProjectFile().archive()["scene_camera_sensy"];
 	ImGui::SliderFloat("##slider_camera_sensy", &sensy, 0.1f, 2.0f, "%.1f");
-	if(sensy != Ak::getMainAppProjectFile().getFloatValue("scene_camera_sensy"))
-		Ak::getMainAppProjectFile().setFloatValue("scene_camera_sensy", sensy);
+	if(sensy != Ak::getMainAppProjectFile().archive()["scene_camera_sensy"])
+		Ak::getMainAppProjectFile().archive()["scene_camera_sensy"] = sensy;
 }
 
 void StudioComponent::drawOptionsWindow()

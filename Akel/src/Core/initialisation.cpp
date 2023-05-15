@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 14/02/2023
+// Updated : 15/05/2023
 
 #include <Core/profile.h>
 
@@ -81,17 +81,11 @@ namespace Ak
 		
 		project->_project_file.initProjFile();
 
-		project->_project_file.setBoolValue("enable_warning_console_message", project->enable_warning_console_message);
-		project->_project_file.setBoolValue("vk_enable_message_validation_layer", project->vk_enable_message_validation_layer);
-		project->_project_file.setBoolValue("vk_force_disable_validation_layers", project->vk_force_disable_validation_layers);
-		project->_project_file.setBoolValue("memory_manager_enable_fixed_allocator", project->memory_manager_enable_fixed_allocator);
-		project->_project_file.setBoolValue("use_default_resource_system", project->use_default_resource_system);
-		project->_project_file.setBoolValue("__window_component", false);
-		project->_project_file.setBoolValue("__renderer_component", false);
-		project->_project_file.setBoolValue("__lua_component", false);
-		project->_project_file.setBoolValue("__scene_manager", false);
-		project->_project_file.setBoolValue("__imgui_component", false);
-		project->_project_file.setBoolValue("__audio_component", false);
+		project->_project_file.archive()["enable_warning_console_message"] = project->enable_warning_console_message;
+		project->_project_file.archive()["vk_enable_message_validation_layer"] = project->vk_enable_message_validation_layer;
+		project->_project_file.archive()["vk_force_disable_validation_layers"] = project->vk_force_disable_validation_layers;
+		project->_project_file.archive()["memory_manager_enable_fixed_allocator"] = project->memory_manager_enable_fixed_allocator;
+		project->_project_file.archive()["use_default_resource_system"] = project->use_default_resource_system;
 
 		MemoryManager::init();
 
