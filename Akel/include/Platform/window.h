@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 14/05/2023
+// Updated : 16/05/2023
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -56,9 +56,15 @@ namespace Ak
 
         protected:
             void create();
+		
+		protected:
             SDL_Window* _window = nullptr;
 
         private:
+			void deserialize();
+			void serialize();
+
+		private:
             SDL_Surface* _icon = nullptr;
 			class RendererComponent* _renderer = nullptr;
             uint32_t _flags = 0;

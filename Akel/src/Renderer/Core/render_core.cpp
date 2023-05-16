@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 01/03/2023
+// Updated : 16/05/2023
 
 #include <Renderer/Core/render_core.h>
 
@@ -66,6 +66,8 @@ namespace Ak
 	{
 		if(_is_init)
 			return;
+		if(!getMainAppProjectFile().keyExists("render_core"))
+			getMainAppProjectFile().archive()["render_core"] = nlohmann::json::object();
 		_instance.init();
 		volkLoadInstance(_instance.get());
 		_layers.init();

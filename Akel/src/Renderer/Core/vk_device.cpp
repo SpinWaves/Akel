@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 15/05/2023
+// Updated : 16/05/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Core/core.h>
@@ -67,6 +67,26 @@ namespace Ak
 		std::vector<VkPhysicalDevice> devices(deviceCount);
 		vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &deviceCount, devices.data());
 
+		Core::ProjectFile& project = getMainAppProjectFile();
+		int saved_index = -1;
+		if(project.archive()["render_core"].contains("physical_device"))
+		{
+			saved_index = project.archive()["render_core"]["physical_device"];
+			if(saved_index < devices.size())
+				_physicalDevice = devices[saved_index];
+		}
+
+		if(project.archive()["render_core"].contains("queue_families"))
+		{
+			if(project.archive()["render_core"]["queue_families"].contains("graphics") && project.archive()["render_core"]["queue_families"].contains("present"))
+			{
+				Render_Core::get().getQueue()._families = Queues::QueueFamilyIndices{};
+				Render_Core::get().getQueue()._families->graphicsFamily.emplace(project.archive()["render_core"]["queue_families"]["graphics"]);
+				Render_Core::get().getQueue()._families->presentFamily.emplace(project.archive()["render_core"]["queue_families"]["present"]);
+				return;
+			}
+		}
+
 		SDL_Window* window = SDL_CreateWindow("", 0, 0, 1, 1, SDL_WINDOW_VULKAN | SDL_WINDOW_HIDDEN);
 		if(!window)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create a window to pick physical device");
@@ -75,13 +95,20 @@ namespace Ak
 		if(SDL_Vulkan_CreateSurface(window, Render_Core::get().getInstance().get(), &surface) != SDL_TRUE)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create a surface to pick physical device");
 
+		int i = 0;
 		for(const auto& device : devices)
 		{
+			if(saved_index != -1 && saved_index != i)
+				continue;
 			if(isDeviceSuitable(device, surface))
 			{
 				_physicalDevice = device;
+				project.archive()["render_core"]["physical_device"] = i;
+				project.archive()["render_core"]["queue_families"]["graphics"] = Render_Core::get().getQueue().getFamilies().graphicsFamily.value();
+				project.archive()["render_core"]["queue_families"]["present"] = Render_Core::get().getQueue().getFamilies().presentFamily.value();
 				break;
 			}
+			i++;
 		}
 
 		vkDestroySurfaceKHR(Render_Core::get().getInstance().get(), surface, nullptr);

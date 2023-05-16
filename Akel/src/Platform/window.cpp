@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 15/05/2023
+// Updated : 16/05/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -35,7 +35,6 @@ namespace Ak
 	{
 		if(_window == nullptr)
 			create();
-		getMainAppProjectFile().archive()["__window_component"] = true;
 	}
 
 	void WindowComponent::create()
@@ -51,6 +50,58 @@ namespace Ak
 
 		_icon = SDL_CreateRGBSurfaceFrom(static_cast<void*>(logo_icon_data), logo_size, logo_size, 32, 4 * logo_size, rmask, gmask, bmask, amask);
         SDL_SetWindowIcon(_window, _icon);
+		deserialize();
+		fetchSettings();
+	}
+
+	void WindowComponent::deserialize()
+	{
+		Core::ProjectFile& project = getMainAppProjectFile();
+		if(!project.keyExists(std::string("window_component_" + std::to_string(_window_id))))
+			return;
+		title =      project.archive()[std::string("window_component_" + std::to_string(_window_id))]["title"];
+		icon =       project.archive()[std::string("window_component_" + std::to_string(_window_id))]["icon"];
+		size.X =     project.archive()[std::string("window_component_" + std::to_string(_window_id))]["size"]["x"];
+		size.Y =     project.archive()[std::string("window_component_" + std::to_string(_window_id))]["size"]["y"];
+		pos.X =      project.archive()[std::string("window_component_" + std::to_string(_window_id))]["pos"]["x"];
+		pos.Y =      project.archive()[std::string("window_component_" + std::to_string(_window_id))]["pos"]["y"];
+		minSize.X =  project.archive()[std::string("window_component_" + std::to_string(_window_id))]["minSize"]["x"];
+		minSize.Y =  project.archive()[std::string("window_component_" + std::to_string(_window_id))]["minSize"]["y"];
+		maxSize.X =  project.archive()[std::string("window_component_" + std::to_string(_window_id))]["maxSize"]["x"];
+		maxSize.Y =  project.archive()[std::string("window_component_" + std::to_string(_window_id))]["maxSize"]["y"];
+		brightness = project.archive()[std::string("window_component_" + std::to_string(_window_id))]["brightnesss"];
+		opacity =    project.archive()[std::string("window_component_" + std::to_string(_window_id))]["opacity"];
+		fullscreen = project.archive()[std::string("window_component_" + std::to_string(_window_id))]["fullscreen"];
+		border =     project.archive()[std::string("window_component_" + std::to_string(_window_id))]["border"];
+		resizable =  project.archive()[std::string("window_component_" + std::to_string(_window_id))]["resizable"];
+		visible =    project.archive()[std::string("window_component_" + std::to_string(_window_id))]["visible"];
+		vsync =      project.archive()[std::string("window_component_" + std::to_string(_window_id))]["vsync"];
+		maximize =   project.archive()[std::string("window_component_" + std::to_string(_window_id))]["maximize"];
+		minimize =   project.archive()[std::string("window_component_" + std::to_string(_window_id))]["minimize"];
+	}
+
+	void WindowComponent::serialize()
+	{
+		Core::ProjectFile& project = getMainAppProjectFile();
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["title"] = title;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["icon"] = icon;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["size"]["x"] = size.X;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["size"]["y"] = size.Y;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["pos"]["x"] = pos.X;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["pos"]["y"] = pos.Y;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["minSize"]["x"] = minSize.X;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["minSize"]["y"] = minSize.Y;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["maxSize"]["x"] = maxSize.X;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["maxSize"]["y"] = maxSize.Y;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["brightnesss"] = brightness;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["opacity"] = opacity;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["fullscreen"] = fullscreen;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["border"] = border;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["resizable"] = resizable;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["visible"] = visible;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["vsync"] = vsync;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["maximize"] = maximize;
+		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["minimize"] = minimize;
 	}
 
 	void WindowComponent::fetchSettings()
@@ -91,26 +142,6 @@ namespace Ak
 		visible ? SDL_ShowWindow(_window) : SDL_HideWindow(_window);
 		if(_renderer != nullptr)
 			_renderer->requireFrameBufferResize();
-
-		getMainAppProjectFile().archive()["window_component"]["title"] = title;
-		getMainAppProjectFile().archive()["window_component"]["icon"] = icon;
-		getMainAppProjectFile().archive()["window_component"]["size"]["x"] = size.X;
-		getMainAppProjectFile().archive()["window_component"]["size"]["y"] = size.Y;
-		getMainAppProjectFile().archive()["window_component"]["pos"]["x"] = pos.X;
-		getMainAppProjectFile().archive()["window_component"]["pos"]["y"] = pos.Y;
-		getMainAppProjectFile().archive()["window_component"]["minSize"]["x"] = minSize.X;
-		getMainAppProjectFile().archive()["window_component"]["minSize"]["y"] = minSize.Y;
-		getMainAppProjectFile().archive()["window_component"]["maxSize"]["x"] = maxSize.X;
-		getMainAppProjectFile().archive()["window_component"]["maxSize"]["y"] = maxSize.Y;
-		getMainAppProjectFile().archive()["window_component"]["brightnesss"] = brightness;
-		getMainAppProjectFile().archive()["window_component"]["opacity"] = opacity;
-		getMainAppProjectFile().archive()["window_component"]["fullscreen"] = fullscreen;
-		getMainAppProjectFile().archive()["window_component"]["border"] = border;
-		getMainAppProjectFile().archive()["window_component"]["resizable"] = resizable;
-		getMainAppProjectFile().archive()["window_component"]["visible"] = visible;
-		getMainAppProjectFile().archive()["window_component"]["vsync"] = vsync;
-		getMainAppProjectFile().archive()["window_component"]["maximize"] = maximize;
-		getMainAppProjectFile().archive()["window_component"]["minimize"] = minimize;
 	}
 
 	void WindowComponent::update()
@@ -123,6 +154,7 @@ namespace Ak
 
 	void WindowComponent::onQuit()
 	{
+		serialize();
 		if(_window != nullptr)
 		{
 			SDL_FreeSurface(_icon);

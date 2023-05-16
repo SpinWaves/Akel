@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 15/05/2023
-// Updated : 15/05/2023
+// Updated : 16/05/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
@@ -32,8 +32,8 @@ Ak::AkelInstance Akel_init()
 	json settings = json::from_msgpack(std::move(data));
 
     Ak::AkelInstance instance;
-        instance.project_file_path = settings["projectFilePath"];
-        instance.project_file_name = settings["projectFileName"];
+		instance.project_file_path = settings["projectFilePath"];
+		instance.project_file_name = settings["projectFileName"];
 		instance.memory_manager_enable_fixed_allocator = settings["memManagerEnableFixedAllocator"];
 		instance.vk_enable_message_validation_layer = settings["vkEnableMessageValidationLayers"];
 		instance.use_system_dialog_boxes = settings["useSystemDialogBoxes"];
@@ -49,33 +49,22 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 
 	Ak::Core::ProjectFile& project = Ak::getMainAppProjectFile();
 
-	if(project.keyExists("__window_component"))
+	if(project.keyExists("__window_component") && project.archive()["__window_component"] == true)
 	{
 		Ak::WindowComponent* window = app->add_component<Ak::WindowComponent>();
-		window->title = project.archive()["window_component"]["title"];
-		window->icon = project.archive()["window_component"]["icon"];
-		window->size.X = project.archive()["window_component"]["size"]["x"];
-		window->size.Y = project.archive()["window_component"]["size"]["y"];
-		window->pos.X = project.archive()["window_component"]["pos"]["x"];
-		window->pos.Y = project.archive()["window_component"]["pos"]["y"];
-		window->minSize.X = project.archive()["window_component"]["minSize"]["x"];
-		window->minSize.Y = project.archive()["window_component"]["minSize"]["y"];
-		window->maxSize.X = project.archive()["window_component"]["maxSize"]["x"];
-		window->maxSize.Y = project.archive()["window_component"]["maxSize"]["y"];
-		window->brightness = project.archive()["window_component"]["brightnesss"];
-		window->opacity = project.archive()["window_component"]["opacity"];
-		window->fullscreen = project.archive()["window_component"]["fullscreen"];
-		window->border = project.archive()["window_component"]["border"];
-		window->resizable = project.archive()["window_component"]["resizable"];
-		window->visible = project.archive()["window_component"]["visible"];
-		window->vsync = project.archive()["window_component"]["vsync"];
-		window->maximize = project.archive()["window_component"]["maximize"];
-		window->minimize = project.archive()["window_component"]["minimize"];
-		window->fetchSettings();
-
-		if(project.keyExists("__renderer_component"))
+		if(project.keyExists("__renderer_component") && project.archive()["__renderer_component"] == true)
+		{
 			Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
+			if(project.keyExists("__imgui_component") && project.archive()["__imgui_component"] == true)
+				app->add_component<Ak::ImGuiComponent>(renderer);
+			if(project.keyExists("__scene_manager_component") && project.archive()["__scene_manager_component"] == true)
+				app->add_component<Ak::SceneManager>(renderer);
+		}
 	}
+	if(project.keyExists("__audio_component") && project.archive()["__audio_component"] == true)
+		app->add_component<Ak::AudioComponent>();
+	if(project.keyExists("__animator_component") && project.archive()["__animator_component"] == true)
+		app->add_component<Ak::AnimatorComponent>();
 
 	return app;
 }

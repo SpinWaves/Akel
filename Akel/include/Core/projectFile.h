@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 15/05/2023
+// Updated : 16/05/2023
 
 #ifndef __AK_PROJECT_FILE__
 #define __AK_PROJECT_FILE__
@@ -20,11 +20,12 @@ namespace Ak
 			public:
 				ProjectFile() = default;
 
-				void initProjFile();
+				void initProjFile(bool force_raw_json);
 
 				inline void setDir(const std::filesystem::path& dir) { _dir = dir; }
 				inline void setName(const std::string& name) { _name = name; }
 				inline bool keyExists(const std::string& key) { return _json.contains(key); }
+				inline bool isFirstTimeRunning() const noexcept { return _first_time_running; }
 
 				inline json& operator()() { return _json; }
 				inline json& archive() { return _json; }
@@ -38,6 +39,8 @@ namespace Ak
 				std::vector<uint8_t> _data;
 				std::filesystem::path _dir;
 				std::string _name = "application";
+				bool _force_raw_json;
+				bool _first_time_running = true;
 		};
 	}
 	Core::ProjectFile& getMainAppProjectFile();

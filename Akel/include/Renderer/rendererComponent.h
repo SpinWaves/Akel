@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 01/03/2023
+// Updated : 16/05/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -29,6 +29,7 @@ namespace Ak
 			RendererComponent(WindowComponent* window);
 
 			void onAttach() override;
+			void onQuit() override;
 
 			bool beginFrame();
 			void endFrame();
@@ -50,8 +51,6 @@ namespace Ak
 
 			inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
 			inline bool isFrameBufferResizeRequested() const noexcept { return _framebufferResized; }
-
-			void onQuit() override;
 
 		private:
 			CmdManager _cmd;

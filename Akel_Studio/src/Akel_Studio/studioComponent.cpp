@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 15/05/2023
+// Updated : 16/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -19,19 +19,21 @@ void StudioComponent::onAttach()
 		Ak::getMainAppProjectFile().archive()["language"] = Ak::Core::getMainDirPath() + _lang_eltm->getText("English");
 	if(!Ak::getMainAppProjectFile().keyExists("on_quit_window"))
 		Ak::getMainAppProjectFile().archive()["on_quit_window"] = true;
-	if(!Ak::getMainAppProjectFile().keyExists("vsync"))
-		Ak::getMainAppProjectFile().archive()["vsync"] = true;
 	if(!Ak::getMainAppProjectFile().keyExists("cullmode"))
 		Ak::getMainAppProjectFile().archive()["cullmode"] = VK_CULL_MODE_BACK_BIT;
+	if(!Ak::getMainAppProjectFile().keyExists("scene_camera_sensy"))
+		Ak::getMainAppProjectFile().archive()["scene_camera_sensy"] = 0.7f;
 	
 	_eltm->load(std::move(Ak::getMainAppProjectFile().archive()["language"]));
 
 	Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
-	window->title = std::move(_eltm->getText("window_title"));
-	window->resizable = true;
-	window->maximize = true;
-	window->vsync = Ak::getMainAppProjectFile().archive()["vsync"];
-	window->fetchSettings();
+	if(Ak::getMainAppProjectFile().isFirstTimeRunning())
+	{
+		window->title = std::move(_eltm->getText("window_title"));
+		window->resizable = true;
+		window->maximize = true;
+		window->fetchSettings();
+	}
 
 	_stack = Ak::create_Unique_ptr<PanelStack>();
 
