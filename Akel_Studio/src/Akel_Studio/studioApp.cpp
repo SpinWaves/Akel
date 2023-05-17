@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 14/05/2023
+// Updated : 17/05/2023
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -33,7 +33,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 
 	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, Ak::Core::getMainDirPath() + "settings/akel_studio_imgui.ini", false);
 
-	StudioComponent* studio = app->add_component<StudioComponent>();
+	StudioComponent* studio = app->add_component<StudioComponent>(args);
 	studio->generateFontTextures(imgui);
 
 	return app;

@@ -1,12 +1,12 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 13/11/2022
+// Updated : 17/05/2023
 
 #include <Panels/entities.h>
 #include <Fonts/material_font.h>
 
-Entities::Entities(std::shared_ptr<Ak::ELTM> eltm) : Panel("__entities")
+Entities::Entities(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__entities", project)
 {
     _eltm = std::move(eltm);
 }

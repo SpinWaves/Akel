@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 14/05/2023
+// Updated : 17/05/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
 #include <camera.h>
 
-Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, SceneCamera* camera) : Panel("__scene"), _camera(camera)
+Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, SceneCamera* camera) : Panel("__scene", project), _camera(camera)
 {
     _eltm = std::move(eltm);
 }

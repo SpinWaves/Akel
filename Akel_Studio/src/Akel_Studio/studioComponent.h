@@ -1,19 +1,18 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 16/05/2023
+// Updated : 17/05/2023
 
 #ifndef __AK_STUDIO_COMPONENT__
 #define __AK_STUDIO_COMPONENT__
 
 #include <AkSpch.h>
 #include <Panels/panels.h>
-#include <projectManager.h>
 
 class StudioComponent : public Ak::Component
 {
 	public:
-		StudioComponent();
+		StudioComponent(Ak::CommandLineArgs args);
 
 		void onAttach() override;
 		void onImGuiRender() override;
@@ -32,7 +31,7 @@ class StudioComponent : public Ak::Component
 		void draw_scene_settings();
 
 	private:
-		ProjectManager _project;
+		Ak::Core::ProjectFile _project;
 		AkImGui::ImImage _logo;
 		std::string _eltm_editor_input_buffer;
 		std::shared_ptr<Ak::ELTM> _eltm;

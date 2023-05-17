@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 15/10/2022
+// Updated : 17/05/2023
 
 #ifndef __AK_STUDIO_SCENE__
 #define __AK_STUDIO_SCENE__
@@ -12,7 +12,7 @@
 class Scene : public Panel
 {
     public:
-        Scene(std::shared_ptr<Ak::ELTM> eltm, class SceneCamera* camera);
+        Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, class SceneCamera* camera);
 
         void onUpdate(Ak::Maths::Vec2<int>& size) override;
 

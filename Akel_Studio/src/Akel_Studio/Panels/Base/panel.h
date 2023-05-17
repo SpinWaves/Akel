@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 10/03/2022
+// Updated : 17/05/2023
 
 #ifndef __AK_STUDIO_BASE_PANEL__
 #define __AK_STUDIO_BASE_PANEL__
@@ -11,7 +11,7 @@
 class Panel
 {
 	public:
-		Panel(const char* name = "Panel");
+		Panel(const char* name, Ak::Core::ProjectFile& project);
 
 		virtual void onAttach();
 		virtual void onOpen();
@@ -25,9 +25,10 @@ class Panel
 		virtual ~Panel();
 
 	protected:
+		Ak::Core::ProjectFile& _project;
 		std::string _name;
-		int _width, _height = 0;
 		std::shared_ptr<Ak::ELTM> _eltm;
+		int _width, _height = 0;
 };
 
 #endif // __AK_STUDIO_BASE_PANEL__

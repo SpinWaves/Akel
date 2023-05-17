@@ -1,12 +1,12 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 30/09/2022
+// Updated : 17/05/2023
 
 #include <Panels/material_editor.h>
 #include <Fonts/material_font.h>
 
-MaterialEditor::MaterialEditor(std::shared_ptr<Ak::ELTM> eltm, const std::vector<std::string>& names) : Panel("__entities"), _names(names)
+MaterialEditor::MaterialEditor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, const std::vector<std::string>& names) : Panel("__entities", project), _names(names)
 {
     _eltm = std::move(eltm);
 }

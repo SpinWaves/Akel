@@ -1,12 +1,12 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 22/02/2023
+// Updated : 17/05/2023
 
 #include <Panels/entities_manager.h>
 #include <Fonts/material_font.h>
 
-EntitiesManager::EntitiesManager(std::shared_ptr<Ak::ELTM> eltm, const std::vector<std::string>& materials) : Panel("__entities_manager"), _materials(materials)
+EntitiesManager::EntitiesManager(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, const std::vector<std::string>& materials) : Panel("__entities_manager", project), _materials(materials)
 {
     _eltm = std::move(eltm);
 	//Ak::Matrixes::matrix_mode(Ak::matrix::model);

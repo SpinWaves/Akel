@@ -1,12 +1,12 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 06/09/2022
+// Updated : 17/05/2023
 
 #include <Panels/eltm_editor.h>
 #include <Fonts/material_font.h>
 
-ELTM_editor::ELTM_editor(std::shared_ptr<Ak::ELTM> eltm, std::string* input_buffer, uint8_t* save) : Panel("__eltm_editor")
+ELTM_editor::ELTM_editor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, std::string* input_buffer, uint8_t* save) : Panel("__eltm_editor", project)
 {
     _eltm = std::move(eltm);
     _save = save;

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 30/04/2023
+// Updated : 17/05/2023
 
 #ifndef __AK_STUDIO_AUDIO_MANAGER__
 #define __AK_STUDIO_AUDIO_MANAGER__
@@ -12,7 +12,7 @@
 class AudioManager : public Panel
 {
     public:
-        AudioManager(std::shared_ptr<Ak::ELTM> eltm);
+        AudioManager(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project);
         void onUpdate(Ak::Maths::Vec2<int>& size) override;
         ~AudioManager();
 

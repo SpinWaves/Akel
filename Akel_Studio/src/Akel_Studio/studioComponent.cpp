@@ -1,14 +1,23 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 16/05/2023
+// Updated : 17/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
 
 Ak::Unique_ptr<Ak::ELTM> _lang_eltm(nullptr);
 
-StudioComponent::StudioComponent() : Ak::Component("studio_component"), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>()) {}
+StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("studio_component"), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>())
+{
+	std::filesystem::path path = args[1];
+	if(!std::filesystem::exists(path))
+		Ak::FatalError("Akel Studio : invalid project path");
+	if(path.extension() != ".akel")
+		Ak::FatalError("Akel Studio : invalid project file, unkown extension '%s'", path.extension().string().c_str());
+	_project.setDir(path.parent_path());
+	_project.setName(path.stem().string());
+}
 
 void StudioComponent::onAttach()
 {
@@ -23,7 +32,7 @@ void StudioComponent::onAttach()
 		Ak::getMainAppProjectFile().archive()["cullmode"] = VK_CULL_MODE_BACK_BIT;
 	if(!Ak::getMainAppProjectFile().keyExists("scene_camera_sensy"))
 		Ak::getMainAppProjectFile().archive()["scene_camera_sensy"] = 0.7f;
-	
+
 	_eltm->load(std::move(Ak::getMainAppProjectFile().archive()["language"]));
 
 	Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
@@ -35,23 +44,25 @@ void StudioComponent::onAttach()
 		window->fetchSettings();
 	}
 
+	_project.initProjFile(true);
+
 	_stack = Ak::create_Unique_ptr<PanelStack>();
 
-	_stack->add_panel<Docks>(_eltm);
-	_stack->add_panel<Scene>(_eltm, _camera);
-	_stack->add_panel<ELTM_editor>(_eltm, &_eltm_editor_input_buffer, &_eltm_editor_save);
-	_stack->add_panel<Components>(_eltm);
-	_stack->add_panel<Entities>(_eltm);
-	_stack->add_panel<RendererManager>(_eltm);
-	_stack->add_panel<AudioManager>(_eltm);
+	_stack->add_panel<Docks>(_eltm, _project);
+	_stack->add_panel<Scene>(_eltm, _project, _camera);
+	_stack->add_panel<ELTM_editor>(_eltm, _project, &_eltm_editor_input_buffer, &_eltm_editor_save);
+	_stack->add_panel<Components>(_eltm, _project);
+	_stack->add_panel<Entities>(_eltm, _project);
+	_stack->add_panel<RendererManager>(_eltm, _project);
+	_stack->add_panel<AudioManager>(_eltm, _project);
 	
-	Materials* materials = Ak::memAlloc<Materials>(_eltm);
+	Materials* materials = Ak::memAlloc<Materials>(_eltm, _project);
 	_stack->add_panel(materials);
-	_stack->add_panel<MaterialEditor>(_eltm, materials->getNames());
-	_stack->add_panel<EntitiesManager>(_eltm, materials->getNames());
+	_stack->add_panel<MaterialEditor>(_eltm, _project, materials->getNames());
+	_stack->add_panel<EntitiesManager>(_eltm, _project, materials->getNames());
 
-	_stack->add_panel<Browser>(_eltm);
-	_stack->add_panel<Console>(_eltm);
+	_stack->add_panel<Browser>(_eltm, _project);
+	_stack->add_panel<Console>(_eltm, _project);
 
 	Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
 	renderer->getClearValue().color.float32[0] = 0.627450980;
@@ -156,12 +167,6 @@ void StudioComponent::drawMainMenuBar()
 	{
 		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_FOLDER" " + _eltm->getText("MainMenuBar.file")).c_str()))
 		{
-			if(ImGui::MenuItem(std::string(AKS_ICON_MD_FILE_OPEN" " + _eltm->getText("MainMenuBar.open")).c_str(), "Ctrl+O"))
-			{
-				auto file = pfd::open_file(_eltm->getText("MainMenuBar.open"), Ak::Core::getMainDirPath(), { "Akel projects (.akel)", "*.akel" }).result();
-				if(!file.empty())
-					_project.openProjectFile(file[0]);
-			}
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE" " + _eltm->getText("MainMenuBar.save")).c_str(), "Ctrl+S")) { /* Do stuff */ }
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_CLOSE" " + _eltm->getText("MainMenuBar.quit")).c_str()))
 				_running = false;

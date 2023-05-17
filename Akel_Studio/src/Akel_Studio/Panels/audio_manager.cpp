@@ -1,12 +1,12 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 30/04/2023
+// Updated : 17/05/2023
 
 #include <Panels/audio_manager.h>
 #include <Fonts/material_font.h>
 
-AudioManager::AudioManager(std::shared_ptr<Ak::ELTM> eltm) : Panel("__audio_manager")
+AudioManager::AudioManager(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__audio_manager", project)
 {
 	_eltm = std::move(eltm);
 }

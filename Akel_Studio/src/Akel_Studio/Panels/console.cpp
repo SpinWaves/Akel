@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 09/07/2021
-// Updated : 30/04/2023
+// Updated : 17/05/2023
 
 #include <Panels/console.h>
 #include <Fonts/material_font.h>
 
-Console::Console(std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize) : 
-	Panel("__console"), _sh(eltm), _ee(Ak::Core::getMainDirPath() + "resources/sounds/42.ogg")
+Console::Console(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, size_t inputBufferSize) : 
+	Panel("__console", project), _sh(eltm), _ee(Ak::Core::getMainDirPath() + "resources/sounds/42.ogg")
 {
 	_input.resize(inputBufferSize);
 	_inBufferSize = inputBufferSize;

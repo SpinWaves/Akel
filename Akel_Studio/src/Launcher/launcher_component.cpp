@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 15/05/2023
+// Updated : 17/05/2023
 
 #include "launcher_component.h"
 
@@ -26,13 +26,14 @@ void launchAkelStudio()
 {
 	if(akel_studio_project.empty())
 		return;
+	std::string project = akel_studio_project.string();
 #if defined(AK_PLATFORM_LINUX) || defined(AK_PLATFORM_OSX)
 	std::string path = Ak::Core::getMainDirPath() + "akelstudio_application";
-	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(akel_studio_project.string().c_str()), nullptr };
+	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.c_str()), nullptr };
 	execve(path.c_str(), args, environ);
 #elif defined(AK_PLATFORM_WINDOWS)
 	std::string path = Ak::Core::getMainDirPath() + "akelstudio_application.exe";
-	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(akel_studio_project.string().c_str()), nullptr };
+	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.c_str()), nullptr };
 	_execve(path.c_str(), args, _environ);
 #else
 	#error "Akel Studio is only supported by Linux, MacOS_X and Windows"

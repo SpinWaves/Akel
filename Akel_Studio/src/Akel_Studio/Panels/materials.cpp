@@ -1,12 +1,12 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 03/11/2022
+// Updated : 17/05/2023
 
 #include <Panels/materials.h>
 #include <Fonts/material_font.h>
 
-Materials::Materials(std::shared_ptr<Ak::ELTM> eltm) : Panel("__materials"), _new_material(false)
+Materials::Materials(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__materials", project), _new_material(false)
 {
     _eltm = std::move(eltm);
 }

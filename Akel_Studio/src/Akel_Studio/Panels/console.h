@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 30/04/2023
+// Updated : 17/05/2023
 
 #ifndef __AK_STUDIO_CONSOLE__
 #define __AK_STUDIO_CONSOLE__
@@ -13,7 +13,7 @@
 class Console : public Panel
 {
 	public:
-		Console(std::shared_ptr<Ak::ELTM> eltm, size_t inputBufferSize = 256);
+		Console(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, size_t inputBufferSize = 256);
 		void onUpdate(Ak::Maths::Vec2<int>& size) override;
 		void onEvent(Ak::Input& input) override;
 		~Console();

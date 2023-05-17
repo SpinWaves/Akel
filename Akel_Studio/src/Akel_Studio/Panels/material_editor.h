@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 30/09/2022
+// Updated : 17/05/2023
 
 #ifndef __AK_STUDIO_MATERIAL_EDITOR__
 #define __AK_STUDIO_MATERIAL_EDITOR__
@@ -12,7 +12,7 @@
 class MaterialEditor : public Panel
 {
     public:
-        MaterialEditor(std::shared_ptr<Ak::ELTM> eltm, const std::vector<std::string>& names);
+        MaterialEditor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, const std::vector<std::string>& names);
 
         void onUpdate(Ak::Maths::Vec2<int>& size) override;
 

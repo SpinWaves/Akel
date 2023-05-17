@@ -1,14 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 21/11/2022
+// Updated : 17/05/2023
 
 #include <Panels/docks.h>
 #include <Fonts/material_font.h>
 
 bool reload_docks = true;
 
-Docks::Docks(std::shared_ptr<Ak::ELTM> eltm) : Panel("__docks")
+Docks::Docks(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__docks", project)
 {
     _eltm = std::move(eltm);
 }
