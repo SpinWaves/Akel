@@ -29,9 +29,11 @@ class StudioComponent : public Ak::Component
 		void drawOptionsWindow();
 		void draw_general_settings();
 		void draw_scene_settings();
+		void draw_project_settings();
 
 	private:
 		Ak::Core::ProjectFile _project;
+		nlohmann::json _runtime_settings;
 		AkImGui::ImImage _logo;
 		std::string _eltm_editor_input_buffer;
 		std::shared_ptr<Ak::ELTM> _eltm;

@@ -322,6 +322,7 @@ void LauncherComponent::drawSideBar()
 					else
 					{
 						std::ofstream project_file(_currently_creating->folder / (_currently_creating->title + ".akel"));
+						project_file << "{}" << std::endl;
 						if(_currently_creating->akel_filesystem)
 						{
 							std::filesystem::path res = _currently_creating->folder / "Resources";

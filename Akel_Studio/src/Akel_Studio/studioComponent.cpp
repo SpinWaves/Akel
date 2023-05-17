@@ -11,12 +11,22 @@ Ak::Unique_ptr<Ak::ELTM> _lang_eltm(nullptr);
 StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("studio_component"), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>())
 {
 	std::filesystem::path path = args[1];
+	std::cout << path << std::endl;
 	if(!std::filesystem::exists(path))
 		Ak::FatalError("Akel Studio : invalid project path");
 	if(path.extension() != ".akel")
 		Ak::FatalError("Akel Studio : invalid project file, unkown extension '%s'", path.extension().string().c_str());
 	_project.setDir(path.parent_path());
 	_project.setName(path.stem().string());
+
+	_runtime_settings["projectFilePath"] = path.parent_path().string();
+	_runtime_settings["projectFileName"] = path.stem().string();
+	_runtime_settings["memManagerEnableFixedAllocator"] = true;
+	_runtime_settings["vkEnableMessageValidationLayers"] = false;
+	_runtime_settings["useSystemDialogBoxes"] = true;
+	_runtime_settings["enableWarningConsoleMessage"] = true;
+	_runtime_settings["vkForceDisableValidationLayers"] = false;
+	_runtime_settings["useDefaultResourceSystem"] = true;
 }
 
 void StudioComponent::onAttach()
@@ -158,6 +168,7 @@ void StudioComponent::onQuit()
 	_stack.reset(nullptr);
 	_lang_eltm.reset(nullptr);
 	_logo.destroy();
+	_project.writeFile();
 }
 
 void StudioComponent::drawMainMenuBar()
@@ -286,36 +297,59 @@ void StudioComponent::draw_scene_settings()
 		Ak::getMainAppProjectFile().archive()["scene_camera_sensy"] = sensy;
 }
 
+void StudioComponent::draw_project_settings()
+{
+	static std::array<bool, 6> opts = {
+		_runtime_settings["memManagerEnableFixedAllocator"],
+		_runtime_settings["vkEnableMessageValidationLayers"],
+		_runtime_settings["useSystemDialogBoxes"],
+		_runtime_settings["enableWarningConsoleMessage"],
+		_runtime_settings["vkForceDisableValidationLayers"],
+		_runtime_settings["useDefaultResourceSystem"]
+	};
+
+	ImGui::Checkbox(std::string(AKS_ICON_MD_STORAGE" " + _eltm->getText("Settings.mem_man_en_fixed")).c_str(), &opts[0]);
+	ImGui::Checkbox(std::string(AKS_ICON_MD_TERMINAL" " + _eltm->getText("Settings.vk_en_msg_layers")).c_str(), &opts[1]);
+	ImGui::Checkbox(std::string(AKS_ICON_MD_DOMAIN_VERIFICATION" " + _eltm->getText("Settings.use_sys_dial_boxes")).c_str(), &opts[2]);
+	ImGui::Checkbox(std::string(AKS_ICON_MD_LAYERS_CLEAR" " + _eltm->getText("Settings.vk_force_dis_layers")).c_str(), &opts[3]);
+	ImGui::Checkbox(std::string(AKS_ICON_MD_FOLDER_COPY" " + _eltm->getText("Settings.use_def_res_sys")).c_str(), &opts[4]);
+	ImGui::Checkbox(std::string(AKS_ICON_MD_DATA_OBJECT" " + _eltm->getText("Settings.proj_file_raw_json")).c_str(), &opts[5]);
+
+	_runtime_settings["memManagerEnableFixedAllocator"] = opts[0];
+	_runtime_settings["vkEnableMessageValidationLayers"] = opts[1];
+	_runtime_settings["useSystemDialogBoxes"] = opts[2];
+	_runtime_settings["enableWarningConsoleMessage"] = opts[3];
+	_runtime_settings["vkForceDisableValidationLayers"] = opts[4];
+	_runtime_settings["useDefaultResourceSystem"] = opts[5];
+}
+
 void StudioComponent::drawOptionsWindow()
 {
 	if(ImGui::Begin(std::string(AKS_ICON_MD_SETTINGS" " + _eltm->getText("MainMenuBar.options")).data(), &_showOpt, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
 	{
 		static int selected = -1;
-		
-    	if(ImGui::BeginChild("Panel", ImVec2(200, 0), true))
+		if(ImGui::BeginChild("Panel", ImVec2(200, 0), true))
 		{
 			if(ImGui::Selectable(std::string(AKS_ICON_MD_TUNE" " + _eltm->getText("Settings.general")).data(), selected == 0))
 				selected = 0;
 			if(ImGui::Selectable(std::string(AKS_ICON_MD_PANORAMA" " + _eltm->getText("Settings.scene")).data(), selected == 1))
 				selected = 1;
+			if(ImGui::Selectable(std::string(AKS_ICON_MD_SOURCE" " + _eltm->getText("Settings.project")).data(), selected == 2))
+				selected = 2;
 			ImGui::EndChild();
 		}
-
 		ImGui::SameLine(0);
-
 		if(ImGui::BeginChild("Choices", ImVec2(0, 0), true))
 		{
 			switch(selected)
 			{
 				case 0: draw_general_settings(); break;
 				case 1: draw_scene_settings(); break;
-
+				case 2: draw_project_settings(); break;
 				default : break;
 			}
-
 			ImGui::EndChild();
 		}
-
 		ImGui::End();
 	}	
 }

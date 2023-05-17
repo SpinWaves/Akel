@@ -28,25 +28,37 @@ void Components::onUpdate(Ak::Maths::Vec2<int>& size)
 
 		if(ImGui::BeginChild("components", ImVec2(0, 0), true))
 		{
-			if(ImGui::BeginChild("components_names", ImVec2(ImGui::CalcTextSize(std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Components.scenes")).c_str()).x + 5, 0)))
+			static ImGuiTableFlags flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_RowBg;
+			if(ImGui::BeginTable("components_table", 2, flags))
 			{
+				ImGui::TableSetupColumn("comp_names", ImGuiTableColumnFlags_NoHeaderLabel | ImGuiTableColumnFlags_WidthFixed,
+										ImGui::CalcTextSize(std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Components.scenes")).c_str()).x + 10);
+				ImGui::TableSetupColumn("comp_check", ImGuiTableColumnFlags_NoHeaderLabel | ImGuiTableColumnFlags_WidthFixed);
+
 				for(auto it = _components.begin(); it != _components.end(); ++it)
 				{
+                	ImGui::TableNextRow();
+                	ImGui::TableNextColumn();
 					ImGui::TextUnformatted(it->first.c_str());
-					ImGui::Separator();
-				}
-				ImGui::EndChild();
-			}
-			ImGui::SameLine();
-			if(ImGui::BeginChild("components_checkboxes"))
-			{
-				for(auto it = _components.begin(); it != _components.end(); ++it)
+                	ImGui::TableNextColumn();
 					ImGui::Checkbox(std::string("##" + it->first).c_str(), &it->second);
-				ImGui::EndChild();
+				}
+
+				ImGui::EndTable();
 			}
 			ImGui::EndChild();
 		}
 
 		ImGui::End();
 	}
+}
+
+void Components::onQuit()
+{	
+	_project.archive()["__window_component"] = _components[std::string(AKS_ICON_MD_VIDEO_LABEL" " + _eltm->getText("Components.window"))];
+	_project.archive()["__renderer_component"] = _components[std::string(AKS_ICON_MD_VIDEO_STABLE" " + _eltm->getText("Components.renderer"))];
+	_project.archive()["__imgui_component"] = _components[std::string(AKS_ICON_MD_WIDGETS" " + _eltm->getText("Components.imgui"))];
+	_project.archive()["__scene_manager_component"] = _components[std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Components.scenes"))];
+	_project.archive()["__audio_component"] = _components[std::string(AKS_ICON_MD_VOLUME_UP" " + _eltm->getText("Components.audio"))];
+	_project.archive()["__animator_component"] = _components[std::string(AKS_ICON_MD_PLAY_CIRCLE_FILLED" " + _eltm->getText("Components.animator"))];
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/08/2022
-// Updated : 24/11/2022
+// Updated : 17/05/2023
 
 begin module Settings
 	let general = "General"
@@ -11,4 +11,12 @@ begin module Settings
 	let scene = "Editor's scene"
 		let camera = "Camera"
 			let sensitivity = "Sensitivity"
+	
+	let project = "Project"
+		let mem_man_en_fixed = "Memory manager enable fixed allocators use"
+		let vk_en_msg_layers = "Vulkan enable console validation layers messages (Debug only)"
+		let use_sys_dial_boxes = "Use system dialog boxes"
+		let vk_force_dis_layers = "Vulkan force disable validation layers (Debug only)"
+		let use_def_res_sys = "Use Akel\'s resource system"
+		let proj_file_raw_json = "Project file use raw JSON (Release Only)"
 end module

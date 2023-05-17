@@ -15,6 +15,7 @@ class Components : public Panel
 		Components(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project);
 
 		void onUpdate(Ak::Maths::Vec2<int>& size) override;
+		void onQuit() override;
 
 		~Components() = default;
 
