@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/11/2022
-// Updated : 16/05/2023
+// Updated : 18/05/2023
 
 #include <Scene/scene.h>
 #include <Scene/scene_manager.h>
@@ -23,13 +23,15 @@ namespace Ak
 
 	void SceneManager::onRender()
 	{
-		if(!_renderer->isInit())
+		if(!_renderer->isInit() || _current_scene_id == -1)
 			return;
 		_scene_renderer->render(_scenes[_current_scene_id]);
 	}
 
 	void SceneManager::update()
 	{
+		if(_current_scene_id == -1)
+			return;
 		float timestep = (static_cast<float>(SDL_GetTicks64()) / 1000.0f) - _timestep;
 		_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
 		if(!_renderer->isInit())
@@ -40,6 +42,8 @@ namespace Ak
 
 	void SceneManager::onEvent(Input& input)
 	{
+		if(_current_scene_id == -1)
+			return;
 		_scenes[_current_scene_id]->onEvent(input);
 	}
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 17/05/2023
+// Updated : 18/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -19,14 +19,37 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 	_project.setDir(path.parent_path());
 	_project.setName(path.stem().string());
 
-	_runtime_settings["projectFilePath"] = path.parent_path().string();
-	_runtime_settings["projectFileName"] = path.stem().string();
-	_runtime_settings["memManagerEnableFixedAllocator"] = true;
-	_runtime_settings["vkEnableMessageValidationLayers"] = false;
-	_runtime_settings["useSystemDialogBoxes"] = true;
-	_runtime_settings["enableWarningConsoleMessage"] = true;
-	_runtime_settings["vkForceDisableValidationLayers"] = false;
-	_runtime_settings["useDefaultResourceSystem"] = true;
+	std::filesystem::path runtime_path(path.parent_path() / "settings.akrt");
+	if(std::filesystem::exists(runtime_path))
+	{
+		std::ifstream file(std::move(runtime_path), std::ios::binary);
+		if(!file.is_open())
+			Ak::FatalError("Akel Studio : unable to open the runtime settings file");
+
+		file.unsetf(std::ios::skipws);
+
+		file.seekg(0, std::ios::end);
+			std::size_t fileSize = file.tellg();
+		file.seekg(0, std::ios::beg);
+
+		std::vector<uint8_t> data;
+			data.reserve(fileSize);
+			data.insert(data.begin(), std::istream_iterator<uint8_t>(file), std::istream_iterator<uint8_t>());
+		file.close();
+
+		_runtime_settings = nlohmann::json::from_msgpack(std::move(data));
+	}
+	else
+	{
+		_runtime_settings["projectFilePath"] = path.parent_path().string();
+		_runtime_settings["projectFileName"] = path.stem().string();
+		_runtime_settings["memManagerEnableFixedAllocator"] = true;
+		_runtime_settings["vkEnableMessageValidationLayers"] = false;
+		_runtime_settings["useSystemDialogBoxes"] = true;
+		_runtime_settings["enableWarningConsoleMessage"] = true;
+		_runtime_settings["vkForceDisableValidationLayers"] = false;
+		_runtime_settings["useDefaultResourceSystem"] = true;
+	}
 }
 
 void StudioComponent::onAttach()
@@ -169,6 +192,14 @@ void StudioComponent::onQuit()
 	_lang_eltm.reset(nullptr);
 	_logo.destroy();
 	_project.writeFile();
+	std::filesystem::path runtime_path = _project.getDir() / "settings.akrt";
+	std::filesystem::remove(runtime_path);
+	std::ofstream runtime_set(std::move(runtime_path),	std::ios::ate | std::ios::binary);
+	if(!runtime_set.is_open())
+		Ak::FatalError("Akel Studio : unable to create runtime settings file");
+	std::vector<uint8_t> data = nlohmann::json::to_msgpack(_runtime_settings);
+	for(uint8_t byte : data)
+		runtime_set << byte;
 }
 
 void StudioComponent::drawMainMenuBar()

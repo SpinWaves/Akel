@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 16/05/2023
+// Updated : 18/05/2023
 
 #include <Core/core.h>
 
@@ -24,6 +24,7 @@ namespace Ak
 			std::filesystem::path f(__FILEPATH);
 			if(!std::filesystem::exists(f))
 			{
+				_json = json::parse(R"({})");
 				writeFile();
 				_first_time_running = true;
 			}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/11/2022
-// Updated : 17/05/2023
+// Updated : 18/05/2023
 
 #include "components.h"
 #include <Fonts/material_font.h>
@@ -9,12 +9,24 @@
 Components::Components(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__components", project)
 {
 	_eltm = std::move(eltm);
-	_components[std::string(AKS_ICON_MD_VIDEO_LABEL" " + _eltm->getText("Components.window"))] = false;
-	_components[std::string(AKS_ICON_MD_VIDEO_STABLE" " + _eltm->getText("Components.renderer"))] = false;
-	_components[std::string(AKS_ICON_MD_WIDGETS" " + _eltm->getText("Components.imgui"))] = false;
-	_components[std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Components.scenes"))] = false;
-	_components[std::string(AKS_ICON_MD_VOLUME_UP" " + _eltm->getText("Components.audio"))] = false;
-	_components[std::string(AKS_ICON_MD_PLAY_CIRCLE_FILLED" " + _eltm->getText("Components.animator"))] = false;
+	if(!_project.keyExists("__window_component"))
+		_project.archive()["__window_component"] = false;
+	if(!_project.keyExists("__renderer_component"))
+		_project.archive()["__renderer_component"] = false;
+	if(!_project.keyExists("__imgui_component"))
+		_project.archive()["__imgui_component"] = false;
+	if(!_project.keyExists("__scene_manager_component"))
+		_project.archive()["__scene_manager_component"] = false;
+	if(!_project.keyExists("__audio_component"))
+		_project.archive()["__audio_component"] = false;
+	if(!_project.keyExists("__animator_component"))
+		_project.archive()["__animator_component"] = false;
+	_components[std::string(AKS_ICON_MD_VIDEO_LABEL" " + _eltm->getText("Components.window"))] = _project.archive()["__window_component"];
+	_components[std::string(AKS_ICON_MD_VIDEO_STABLE" " + _eltm->getText("Components.renderer"))] = _project.archive()["__renderer_component"];
+	_components[std::string(AKS_ICON_MD_WIDGETS" " + _eltm->getText("Components.imgui"))] = _project.archive()["__imgui_component"];
+	_components[std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Components.scenes"))] = _project.archive()["__scene_manager_component"];
+	_components[std::string(AKS_ICON_MD_VOLUME_UP" " + _eltm->getText("Components.audio"))] = _project.archive()["__audio_component"];
+	_components[std::string(AKS_ICON_MD_PLAY_CIRCLE_FILLED" " + _eltm->getText("Components.animator"))] = _project.archive()["__animator_component"];
 }
 
 void Components::onUpdate(Ak::Maths::Vec2<int>& size)

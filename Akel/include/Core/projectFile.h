@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/08/2021
-// Updated : 16/05/2023
+// Updated : 18/05/2023
 
 #ifndef __AK_PROJECT_FILE__
 #define __AK_PROJECT_FILE__
@@ -24,6 +24,8 @@ namespace Ak
 
 				inline void setDir(const std::filesystem::path& dir) { _dir = dir; }
 				inline void setName(const std::string& name) { _name = name; }
+				inline const std::filesystem::path& getDir() const noexcept { return _dir; }
+				inline const std::string& getName() const noexcept { return _name; }
 				inline bool keyExists(const std::string& key) { return _json.contains(key); }
 				inline bool isFirstTimeRunning() const noexcept { return _first_time_running; }
 
