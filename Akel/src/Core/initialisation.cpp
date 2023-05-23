@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 18/05/2023
+// Updated : 19/05/2023
 
 #include <Core/profile.h>
 
@@ -80,6 +80,12 @@ namespace Ak
 			project->_project_file.setDir(Core::getMainDirPath());
 		
 		project->_project_file.initProjFile(project->project_file_force_raw_json);
+
+		project->_project_file.archive()["enable_warning_console_message"] = project->enable_warning_console_message;
+		project->_project_file.archive()["vk_enable_message_validation_layer"] = project->vk_enable_message_validation_layer;
+		project->_project_file.archive()["vk_force_disable_validation_layers"] = project->vk_force_disable_validation_layers;
+		project->_project_file.archive()["memory_manager_enable_fixed_allocator"] = project->memory_manager_enable_fixed_allocator;
+		project->_project_file.archive()["use_default_resource_system"] = project->use_default_resource_system;
 
 		MemoryManager::init();
 

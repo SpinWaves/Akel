@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 26/03/2023
+// Updated : 23/05/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -26,6 +26,8 @@ namespace Ak
 		class BaseCamera;
 	}
 	class Entity;
+
+	using json = nlohmann::json;
 
 	class AK_API Scene
 	{
@@ -63,6 +65,7 @@ namespace Ak
 		private:
 			void _loadCustomShader(shaderlang lang, std::filesystem::path path);
 
+			json _scene;
 			std::vector<ShaderID> _forward_shaders;
 			class RendererComponent* _renderer = nullptr;
 			Unique_ptr<Cam::BaseCamera> _camera;

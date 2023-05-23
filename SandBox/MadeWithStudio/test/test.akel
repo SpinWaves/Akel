@@ -1,1 +1,59 @@
-{}
+{
+    "__animator_component": false,
+    "__audio_component": false,
+    "__imgui_component": false,
+    "__renderer_component": true,
+    "__scene_manager_component": true,
+    "__scenes_manager_component": true,
+    "__window_component": true,
+    "enable_warning_console_message": false,
+    "fixedAllocator_size_0": 1600,
+    "fixedAllocator_size_1": 6400,
+    "fixedAllocator_size_2": 38400,
+    "jamAllocator_size_0": 16777216,
+    "memory_manager_enable_fixed_allocator": true,
+    "render_core": {
+        "instance_extensions": [
+            "VK_EXT_debug_report",
+            "VK_KHR_surface",
+            "VK_KHR_xlib_surface"
+        ],
+        "physical_device": 0,
+        "queue_families": {
+            "graphics": 0,
+            "present": 0
+        }
+    },
+    "use_default_resource_system": false,
+    "vk_enable_message_validation_layer": false,
+    "vk_force_disable_validation_layers": true,
+    "window_component_1": {
+        "border": true,
+        "brightnesss": 1.0,
+        "fullscreen": false,
+        "icon": "default_Akel_icon",
+        "maxSize": {
+            "x": 1920,
+            "y": 1080
+        },
+        "maximize": false,
+        "minSize": {
+            "x": 0,
+            "y": 0
+        },
+        "minimize": false,
+        "opacity": 1.0,
+        "pos": {
+            "x": 341,
+            "y": 235
+        },
+        "resizable": true,
+        "size": {
+            "x": 1280,
+            "y": 750
+        },
+        "title": "Akel Window",
+        "visible": true,
+        "vsync": false
+    }
+}
