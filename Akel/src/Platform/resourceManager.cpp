@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/01/2023
-// Updated : 16/01/2023
+// Updated : 24/05/2023
 
 #include <Platform/resourceManager.h>
 
@@ -32,6 +32,13 @@ namespace Ak
 			return {};
 		return _main_path / "Scripts/";
 	}
+
+	std::filesystem::path Res::getScenesPath() noexcept
+	{
+		if(!_is_enabled)
+			return {};
+		return _main_path / "Scenes/";
+	}
 	
 	std::filesystem::path Res::getSoundsPath()  noexcept
 	{
@@ -46,6 +53,7 @@ namespace Ak
 		std::filesystem::create_directory(getTexturesPath());
 		std::filesystem::create_directory(getMeshesPath());
 		std::filesystem::create_directory(getScriptsPath());
+		std::filesystem::create_directory(getScenesPath());
 		std::filesystem::create_directory(getSoundsPath());
 	}
 }

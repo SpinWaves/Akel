@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/05/2023
-// Updated : 23/05/2023
+// Updated : 24/05/2023
 
 #include <Core/file_loader.h>
 #include <Core/log.h>
@@ -13,17 +13,10 @@ namespace Ak
 	bool loadJson(std::filesystem::path file, json& j)
 	{
 		if(!std::filesystem::exists(file))
-		{
-			Core::log::report(ERROR, "File loader : file doesn't exists, %s", file.string().c_str());
 			return false;
-		}
 		std::ifstream f(std::move(file), std::ios::binary);
 		if(!f.is_open())
-		{
-			Core::log::report(ERROR, "File loader : unable to open %s", f.string().c_str());
 			return false;
-		}
-		json j;
 		try
 		{
 			j = json::parse(f);

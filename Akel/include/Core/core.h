@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 21/08/2022
+// Updated : 24/05/2023
 
 #ifndef __AK_CORE__
 #define __AK_CORE__
@@ -17,6 +17,7 @@
 #include <Core/projectFile.h>
 #include <Core/initialisation.h>
 #include <Core/instance.h>
+#include <Core/file_loader.h>
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>

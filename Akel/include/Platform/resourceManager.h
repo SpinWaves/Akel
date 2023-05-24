@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/01/2023
-// Updated : 27/01/2023
+// Updated : 24/05/2023
 
 #ifndef __AK_RESOURCE_MANAGER__
 #define __AK_RESOURCE_MANAGER__
@@ -22,6 +22,7 @@ namespace Ak
 			std::filesystem::path getTexturesPath() noexcept;
 			std::filesystem::path getMeshesPath() noexcept;
 			std::filesystem::path getScriptsPath() noexcept;
+			std::filesystem::path getScenesPath() noexcept;
 			std::filesystem::path getSoundsPath() noexcept;
 
 			~Res() = default;

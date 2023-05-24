@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 23/05/2023
+// Updated : 24/05/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -73,6 +73,7 @@ namespace Ak
 			Unique_ptr<class EntityManager> _entity_manager;
 			fString _name;
 			uint32_t _id = -1;
+			uint32_t _entity_count = 0;
 			bool _first_update = true;
 	};
 }
