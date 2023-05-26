@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 17/05/2023
+// Updated : 26/05/2023
 
 #ifndef __AK_STUDIO_COMPONENT__
 #define __AK_STUDIO_COMPONENT__
@@ -30,6 +30,7 @@ class StudioComponent : public Ak::Component
 		void draw_general_settings();
 		void draw_scene_settings();
 		void draw_project_settings();
+		void writeRuntimeSettings();
 
 	private:
 		Ak::Core::ProjectFile _project;

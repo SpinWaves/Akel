@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 18/05/2023
+// Updated : 26/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -11,7 +11,6 @@ Ak::Unique_ptr<Ak::ELTM> _lang_eltm(nullptr);
 StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("studio_component"), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>())
 {
 	std::filesystem::path path = args[1];
-	std::cout << path << std::endl;
 	if(!std::filesystem::exists(path))
 		Ak::FatalError("Akel Studio : invalid project path");
 	if(path.extension() != ".akel")
@@ -192,6 +191,11 @@ void StudioComponent::onQuit()
 	_lang_eltm.reset(nullptr);
 	_logo.destroy();
 	_project.writeFile();
+	writeRuntimeSettings();
+}
+
+void StudioComponent::writeRuntimeSettings()
+{
 	std::filesystem::path runtime_path = _project.getDir() / "settings.akrt";
 	std::filesystem::remove(runtime_path);
 	std::ofstream runtime_set(std::move(runtime_path),	std::ios::ate | std::ios::binary);
@@ -217,7 +221,7 @@ void StudioComponent::drawMainMenuBar()
 		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_TUNE" " + _eltm->getText("MainMenuBar.edit")).c_str()))
 		{
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_NOTE_ADD" " + _eltm->getText("MainMenuBar.addFile")).c_str())) { /* Do stuff */ }
-			if(ImGui::MenuItem(std::string(AKS_ICON_MD_BUILD_CIRCLE" " + _eltm->getText("MainMenuBar.build")).c_str()))   { /* Do stuff */ }
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_BUILD_CIRCLE" " + _eltm->getText("MainMenuBar.build")).c_str())) { /* Do stuff */ }
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SETTINGS" " + _eltm->getText("MainMenuBar.options")).c_str()))
 				_showOpt = !_showOpt;
 			ImGui::EndMenu();
