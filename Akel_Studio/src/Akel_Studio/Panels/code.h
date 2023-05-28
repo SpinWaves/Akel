@@ -18,7 +18,8 @@ class CodeEditor : public Panel
 		~CodeEditor() = default;
 
 	private:
-		//TextEditor _code;
+		TextEditor _code;
+		std::filesystem::path _file;
 };
 
 #endif

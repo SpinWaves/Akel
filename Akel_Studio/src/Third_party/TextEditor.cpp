@@ -343,7 +343,7 @@ TextEditor::Coordinates TextEditor::ScreenPosToCoordinates(const ImVec2& aPositi
 
 			if (line[columnIndex].mChar == '\t')
 			{
-				float spaceSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, " ").x;
+				float spaceSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, "  ").x;
 				float oldX = columnX;
 				float newColumnX = (1.0f + std::floor((1.0f + columnX) / (float(mTabSize) * spaceSize))) * (float(mTabSize) * spaceSize);
 				columnWidth = newColumnX - oldX;
@@ -892,7 +892,7 @@ void TextEditor::Render()
 
 	if (!mLines.empty())
 	{
-		float spaceSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, " ", nullptr, nullptr).x;
+		float spaceSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, "  ", nullptr, nullptr).x;
 
 		while (lineNo <= lineMax)
 		{
@@ -2393,7 +2393,7 @@ float TextEditor::TextDistanceToLineStart(const Coordinates& aFrom) const
 {
 	auto& line = mLines[aFrom.mLine];
 	float distance = 0.0f;
-	float spaceSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, " ", nullptr, nullptr).x;
+	float spaceSize = ImGui::GetFont()->CalcTextSizeA(ImGui::GetFontSize(), FLT_MAX, -1.0f, "  ", nullptr, nullptr).x;
 	int colIndex = GetCharacterIndex(aFrom);
 	for (size_t it = 0u; it < line.size() && it < colIndex; )
 	{

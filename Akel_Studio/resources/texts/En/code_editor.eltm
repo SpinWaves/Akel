@@ -5,4 +5,10 @@
 
 begin module Code
 	let name = "Code"
+
+	let file = "File"
+		let open = "Open"
+			let load = "Load File"
+		let save = "Save"
+		let save_as = "Save As"
 end module
