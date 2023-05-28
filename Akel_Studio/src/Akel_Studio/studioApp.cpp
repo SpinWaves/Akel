@@ -1,12 +1,11 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 17/05/2023
+// Updated : 26/05/2023
 
 #include <AkSpch.h>
 #include <Akel_main.h>
 #include <studioComponent.h>
-#include <camera.h>
 #include <Fonts/material_font.h>
 
 Ak::AkelInstance Akel_init()

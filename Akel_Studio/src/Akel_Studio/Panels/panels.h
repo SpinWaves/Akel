@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 12/11/2022
+// Updated : 28/05/2023
 
 #ifndef __AK_STUDIO_PANELS__
 #define __AK_STUDIO_PANELS__
@@ -18,6 +18,7 @@
 #include <Panels/browser.h>
 #include <Panels/scene.h>
 #include <Panels/components.h>
+#include <Panels/code.h>
 #include <Panels/docks.h>
 
 #include <Panels/Base/panel.h>

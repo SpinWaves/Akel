@@ -15,6 +15,7 @@ class StudioComponent : public Ak::Component
 		StudioComponent(Ak::CommandLineArgs args);
 
 		void onAttach() override;
+		void update() override;
 		void onImGuiRender() override;
 		void onImGuiEvent(Ak::Input& input) override;
 		void onQuit() override;
@@ -38,7 +39,6 @@ class StudioComponent : public Ak::Component
 		AkImGui::ImImage _logo;
 		std::string _eltm_editor_input_buffer;
 		std::shared_ptr<Ak::ELTM> _eltm;
-		class SceneCamera* _camera = nullptr;
 		Ak::Unique_ptr<PanelStack> _stack;
 		uint8_t _eltm_editor_save = 0;
 		bool _running = true;

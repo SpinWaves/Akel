@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/11/2022
-// Updated : 18/05/2023
+// Updated : 26/05/2023
 
 #include "components.h"
 #include <Fonts/material_font.h>
@@ -15,8 +15,8 @@ Components::Components(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& pr
 		_project.archive()["__renderer_component"] = false;
 	if(!_project.keyExists("__imgui_component"))
 		_project.archive()["__imgui_component"] = false;
-	if(!_project.keyExists("__scene_manager_component"))
-		_project.archive()["__scene_manager_component"] = false;
+	if(!_project.keyExists("__scenes_manager_component"))
+		_project.archive()["__scenes_manager_component"] = false;
 	if(!_project.keyExists("__audio_component"))
 		_project.archive()["__audio_component"] = false;
 	if(!_project.keyExists("__animator_component"))
@@ -24,7 +24,7 @@ Components::Components(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& pr
 	_components[std::string(AKS_ICON_MD_VIDEO_LABEL" " + _eltm->getText("Components.window"))] = _project.archive()["__window_component"];
 	_components[std::string(AKS_ICON_MD_VIDEO_STABLE" " + _eltm->getText("Components.renderer"))] = _project.archive()["__renderer_component"];
 	_components[std::string(AKS_ICON_MD_WIDGETS" " + _eltm->getText("Components.imgui"))] = _project.archive()["__imgui_component"];
-	_components[std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Components.scenes"))] = _project.archive()["__scene_manager_component"];
+	_components[std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Components.scenes"))] = _project.archive()["__scenes_manager_component"];
 	_components[std::string(AKS_ICON_MD_VOLUME_UP" " + _eltm->getText("Components.audio"))] = _project.archive()["__audio_component"];
 	_components[std::string(AKS_ICON_MD_PLAY_CIRCLE_FILLED" " + _eltm->getText("Components.animator"))] = _project.archive()["__animator_component"];
 }
@@ -65,12 +65,17 @@ void Components::onUpdate(Ak::Maths::Vec2<int>& size)
 	}
 }
 
-void Components::onQuit()
+void Components::writeComponents()
 {	
 	_project.archive()["__window_component"] = _components[std::string(AKS_ICON_MD_VIDEO_LABEL" " + _eltm->getText("Components.window"))];
 	_project.archive()["__renderer_component"] = _components[std::string(AKS_ICON_MD_VIDEO_STABLE" " + _eltm->getText("Components.renderer"))];
 	_project.archive()["__imgui_component"] = _components[std::string(AKS_ICON_MD_WIDGETS" " + _eltm->getText("Components.imgui"))];
-	_project.archive()["__scene_manager_component"] = _components[std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Components.scenes"))];
+	_project.archive()["__scenes_manager_component"] = _components[std::string(AKS_ICON_MD_VIEW_IN_AR" " + _eltm->getText("Components.scenes"))];
 	_project.archive()["__audio_component"] = _components[std::string(AKS_ICON_MD_VOLUME_UP" " + _eltm->getText("Components.audio"))];
 	_project.archive()["__animator_component"] = _components[std::string(AKS_ICON_MD_PLAY_CIRCLE_FILLED" " + _eltm->getText("Components.animator"))];
+}
+
+void Components::onQuit()
+{
+	writeComponents();
 }

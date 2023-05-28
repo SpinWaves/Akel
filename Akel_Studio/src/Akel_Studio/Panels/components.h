@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/11/2022
-// Updated : 17/05/2023
+// Updated : 26/05/2023
 
 #ifndef __AK_STUDIO_COMPONENTS__
 #define __AK_STUDIO_COMPONENTS__
@@ -16,6 +16,8 @@ class Components : public Panel
 
 		void onUpdate(Ak::Maths::Vec2<int>& size) override;
 		void onQuit() override;
+
+		void writeComponents();
 
 		~Components() = default;
 

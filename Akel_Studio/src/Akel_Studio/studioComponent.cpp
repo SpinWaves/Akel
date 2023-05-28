@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 26/05/2023
+// Updated : 28/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -81,7 +81,8 @@ void StudioComponent::onAttach()
 	_stack = Ak::create_Unique_ptr<PanelStack>();
 
 	_stack->add_panel<Docks>(_eltm, _project);
-	_stack->add_panel<Scene>(_eltm, _project, _camera);
+	_stack->add_panel<Scene>(_eltm, _project);
+	_stack->add_panel<CodeEditor>(_eltm, _project);
 	_stack->add_panel<ELTM_editor>(_eltm, _project, &_eltm_editor_input_buffer, &_eltm_editor_save);
 	_stack->add_panel<Components>(_eltm, _project);
 	_stack->add_panel<Entities>(_eltm, _project);
@@ -150,6 +151,23 @@ void StudioComponent::onImGuiRender()
 		
 		ImGui::EndPopup();
 	}
+}
+
+void StudioComponent::update()
+{
+	static Scene* scene = static_cast<Scene*>(_stack->get_panel("__scene"));
+	static Components* comps = static_cast<Components*>(_stack->get_panel("__components"));
+	if(scene->callRun())
+	{
+		comps->writeComponents();
+		_project.writeFile();
+		writeRuntimeSettings();
+		std::filesystem::remove(_project.getDir() / "AkelRuntime");
+		std::filesystem::copy(Ak::Core::getMainDirPath() + "resources/runtime/AkelRuntime", _project.getDir());
+		std::system(std::string(_project.getDir().string() + "/AkelRuntime").c_str());
+		std::filesystem::remove(_project.getDir() / "AkelRuntime");
+	}
+	scene->hangUpRun();
 }
 
 void StudioComponent::onImGuiEvent(Ak::Input& input)

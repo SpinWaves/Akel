@@ -1,13 +1,12 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 25/05/2023
+// Updated : 26/05/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
-#include <camera.h>
 
-Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, SceneCamera* camera) : Panel("__scene", project), _camera(camera)
+Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__scene", project)
 {
     _eltm = std::move(eltm);
 	_play = AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/play.png");
@@ -83,9 +82,7 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 		ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.f, 0.f, 0.f, 0.f));
 		ImGui::PushStyleColor(ImGuiCol_BorderShadow, ImVec4(0.f, 0.f, 0.f, 0.f));
 		if(ImGui::ImageButton("##play_button", _play.getImGuiID(), ImVec2(20, 20), ImVec2(0, 0), ImVec2(1, 1), ImVec4(0, 0, 0, 0), ImVec4(1, 1, 1, 1)))
-		{
-
-		}
+			_run = true;
 		ImGui::PopStyleColor(3);
 
 		ImGui::End();
