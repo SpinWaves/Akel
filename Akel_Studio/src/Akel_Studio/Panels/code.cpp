@@ -88,7 +88,7 @@ void CodeEditor::onUpdate(Ak::Vec2i& size)
 					if(f.good())
 					{
 						std::string str(_code.GetText());
-						f << str << std::endl;
+						f << str;
 					}
 				}
 				if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE_AS" " + _eltm->getText("Code.save_as")).c_str()))
@@ -98,7 +98,7 @@ void CodeEditor::onUpdate(Ak::Vec2i& size)
 					if(f.good())
 					{
 						std::string str(_code.GetText());
-						f << str << std::endl;
+						f << str;
 					}
 				}
 				ImGui::EndMenu();

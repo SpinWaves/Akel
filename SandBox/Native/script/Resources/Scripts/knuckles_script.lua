@@ -1,3 +1,7 @@
+function AkelOnInit()
+	print("knuckles script entered")
+end
+
 function AkelOnUpdate(delta)
 	local transform = Ak.getAttribute("transform")
 	if Ak.getInKey(Ak.key.E, Ak.action.down) then
@@ -13,4 +17,6 @@ function AkelOnUpdate(delta)
 	end
 end
 
-
+function AkelOnQuit()
+	print("knuckles script exited")
+end

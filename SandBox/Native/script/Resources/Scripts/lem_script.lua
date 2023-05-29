@@ -1,5 +1,5 @@
 function AkelOnInit()
-	print("Script init")
+	print("Lem script entered")
 end
 
 function AkelOnUpdate(delta)
@@ -17,5 +17,6 @@ function AkelOnUpdate(delta)
 end
 
 function AkelOnQuit()
-	print("Script exit")
+	print("Lem script exited")
 end
+
