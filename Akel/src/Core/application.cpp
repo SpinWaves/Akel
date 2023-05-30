@@ -39,10 +39,8 @@ namespace Ak
 	void Application::run()
 	{
 		std::thread rendering_thread(&Application::render, this);
-		while(!_in.isEnded()) // Main loop
-		{
+		while(!_in.isEnded()) // Main update loop
 			update();
-		}
 		_stop_rendering = true;
 		rendering_thread.join();
 	}
@@ -83,7 +81,8 @@ namespace Ak
 		}
 		if(renderers.empty())
 			return;
-		while(!_stop_rendering)
+
+		while(!_stop_rendering) // Main rendering loop
 		{
 			_fps.renderingUpdate();
 			for(auto renderer : renderers)

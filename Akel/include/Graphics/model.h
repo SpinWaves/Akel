@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 18/03/2023
+// Updated : 30/05/2023
 
 #ifndef __AK_MODEL__
 #define __AK_MODEL__
@@ -26,6 +26,7 @@ namespace Ak
 			inline MaterialID getMaterial() const noexcept { return _material; }
 
 			inline const Mesh& getMesh() const { return _mesh; }
+			inline const std::filesystem::path& getFile() const { return _file; }
 
 			void destroy() noexcept;
 

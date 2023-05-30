@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 29/03/2023
+// Updated : 30/05/2023
 
 #include <Platform/input.h>
 #include <Scene/Cameras/first_person_3D.h>
@@ -12,16 +12,19 @@ namespace Ak::Cam
 	FirstPerson3D::FirstPerson3D() : BaseCamera(), _up(0, 1, 0), _position(0.0, 0.0, 0.0)
 	{
 		update_view();
+		SDL_SetRelativeMouseMode(SDL_TRUE);
 	}
 
 	FirstPerson3D::FirstPerson3D(Maths::Vec3<double> position, float fov) : BaseCamera(), _position(std::move(position)), _up(0, 1, 0), _fov(fov)
 	{
 		update_view();
+		SDL_SetRelativeMouseMode(SDL_TRUE);
 	}
 
 	FirstPerson3D::FirstPerson3D(double x, double y, double z, float fov) : BaseCamera(), _up(0, 1, 0), _fov(fov), _position(x, y, z)
 	{
 		update_view();
+		SDL_SetRelativeMouseMode(SDL_TRUE);
 	}
 
 	void FirstPerson3D::onUpdate(float aspect)

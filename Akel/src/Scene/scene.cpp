@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 24/05/2023
+// Updated : 30/05/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -15,6 +15,7 @@
 #include <Scene/Attributes/attributes.h>
 #include <Core/file_loader.h>
 #include <Platform/resourceManager.h>
+#include <Scene/scene_serializer.h>
 
 namespace Ak
 {
@@ -23,27 +24,15 @@ namespace Ak
 		_loader(create_Unique_ptr<ShaderLoader>()), _camera(nullptr)
 	{
 		_loader->init();
-		if(getMainAppProjectFile().archive()["use_default_resource_system"] == true)
-		{
-			std::string filename = _name.c_str();
-			filename.append(".akscn");
-			if(!loadJson(Res::get().getScenesPath() / filename, _scene))
-			{
-				_scene = json::parse("{}");
-				writeJson(_scene, Res::get().getScenesPath() / filename);
-			}
-		}
 	}
 
 	Entity Scene::createEntity()
 	{
-		_scene[std::to_string(_entity_count++)] = json::object();;
 		return _entity_manager->create();
 	}
 
 	Entity Scene::createEntity(const std::string& name)
 	{
-		_scene[std::to_string(_entity_count++)]["nameAttribute"] = name.c_str();
 		return _entity_manager->create(name);
 	}
 
@@ -127,10 +116,16 @@ namespace Ak
 			ModelAttribute& model = model_view.get<ModelAttribute>(e);
 			model.model.destroy();
 		}
+
 		_loader->destroy();
-		std::string filename = _name.c_str();
-		filename.append(".akscn");
-		writeJson(_scene, Res::get().getScenesPath() / filename);
+
+		if(getMainAppProjectFile().archive()["use_default_resource_system"] == true)
+		{
+			std::string filename = _name.c_str();
+			filename.append(".akscn");
+			SceneSerializer serializer(this);
+			serializer.serialize(Res::get().getScenesPath() / filename);
+		}
 	}
 
 	Scene::~Scene() {}

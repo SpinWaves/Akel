@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/05/2021
-// Updated : 16/02/2023
+// Updated : 30/05/2023
 
 #ifndef __AK_FIRST_PERSON_CAMERA_3D__
 #define __AK_FIRST_PERSON_CAMERA_3D__ 
@@ -23,6 +23,8 @@ namespace Ak::Cam
 			void onUpdate(float aspect) override;
 			void onEvent(Input& input) override;
 
+			inline std::string getCameraType() override { return "firstPerson3D"; }
+
 			~FirstPerson3D() = default;
 
 		private:
@@ -43,7 +45,7 @@ namespace Ak::Cam
 			const float _sensivity = 0.7f;
 			float _fov = 90.0f;
 
-			bool _isMouseGrabed = false;
+			bool _isMouseGrabed = true;
 	};
 }
 
