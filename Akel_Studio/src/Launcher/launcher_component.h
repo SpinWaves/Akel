@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 15/05/2023
+// Updated : 29/05/2023
 
 #ifndef __AK_STUDIO_LAUNCHER_COMPONENT__
 #define __AK_STUDIO_LAUNCHER_COMPONENT__
@@ -32,7 +32,7 @@ namespace std
 	{
 		size_t operator()(const Project& p) const noexcept
 		{
-			return std::hash<std::string>()(p.title) + std::hash<std::filesystem::path>()(p.folder);
+			return std::hash<std::string>()(p.title) + std::hash<std::string>()(p.folder.string());
 		}
 	};
 }

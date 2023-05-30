@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/05/2023
-// Updated : 29/05/2023
+// Updated : 30/05/2023
 
 #include <Panels/code.h>
 #include <Fonts/material_font.h>
@@ -21,7 +21,7 @@ const TextEditor::Palette& getPalette()
 		0xffd69c56, // Preproc identifier
 		0xff4d8a5f, // Comment (single line)
 		0xff4d8a5f, // Comment (multi line)
-		0xff1e1e1e, // Background
+		0xff171717, // Background
 		0xffe0e0e0, // Cursor
 		0x80a06020, // Selection
 		0x800020ff, // ErrorMarker
@@ -38,7 +38,7 @@ CodeEditor::CodeEditor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& pr
 {
 	_eltm = std::move(eltm);
 	auto lang = TextEditor::LanguageDefinition::Lua();
-	_code.SetTabSize(4);
+	_code.SetTabSize(6);
 	_code.SetShowWhitespaces(false);
 
 	std::vector<const char*> identifiers = {
@@ -60,10 +60,32 @@ CodeEditor::CodeEditor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& pr
 	_code.SetPalette(getPalette());
 }
 
+void CodeEditor::onEvent(Ak::Input& input)
+{
+	if(!_window_focused)
+		return;
+	if((input.getInKey(AK_KEY_RCTRL) || input.getInKey(AK_KEY_LCTRL)) && input.getInKey(AK_KEY_S))
+	{
+		if(_current_file != -1 && _current_file < _files.size())
+		{
+			std::ofstream f(_files[_current_file].path);
+			if(f.good())
+			{
+				std::string str(_code.GetText());
+				str.pop_back(); // remove new line
+				f << str;
+				_saved = true;
+			}
+		}
+	}
+}
+
 void CodeEditor::onUpdate(Ak::Vec2i& size)
 {
+	static int selected = -1;
 	if(ImGui::Begin(std::string(AKS_ICON_MD_CODE" " + _eltm->getText("Code.name")).c_str(), nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
 	{
+		_window_focused = ImGui::IsWindowFocused(ImGuiFocusedFlags_ChildWindows);
 		if(ImGui::BeginMenuBar())
 		{
 			if(ImGui::BeginMenu(std::string(AKS_ICON_MD_FOLDER" " + _eltm->getText("Code.file")).c_str()))
@@ -73,44 +95,81 @@ void CodeEditor::onUpdate(Ak::Vec2i& size)
 					auto file = pfd::open_file(_eltm->getText("Code.load"), _project.getDir(), { "Script files (.lua)", "*.lua", "All files", "*"});	
 					if(!file.result().empty())
 					{
-						_file = file.result()[0];
-						std::ifstream f(_file);
+						std::filesystem::path path = file.result()[0];
+						std::ifstream f(path);
 						if(f.good())
 						{
 							std::string str((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
 							_code.SetText(str);
+							_files.emplace_back(path, path.filename().string(), std::move(str));
+							_current_file = _files.size() - 1;
+							selected = _current_file;
 						}
 					}
 				}
 				if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE" " + _eltm->getText("Code.save")).c_str(), "Ctrl+S"))
 				{
-					std::ofstream f(_file);
-					if(f.good())
+					if(_current_file != -1 && _current_file < _files.size())
 					{
-						std::string str(_code.GetText());
-						f << str;
+						std::ofstream f(_files[_current_file].path);
+						if(f.good())
+						{
+							std::string str(_code.GetText());
+							str.pop_back(); // remove new line
+							f << str;
+							_saved = true;
+						}
 					}
 				}
 				if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE_AS" " + _eltm->getText("Code.save_as")).c_str()))
 				{
-					_file = pfd::save_file("Select a file", ".", { "Lua File", ".lua", "All Files", "*" }, pfd::opt::force_overwrite).result();
-					std::ofstream f(_file);
-					if(f.good())
+					if(_current_file != -1 && _current_file < _files.size())
 					{
-						std::string str(_code.GetText());
-						f << str;
+						std::filesystem::path file = pfd::save_file("Select a file", ".", { "Lua File", ".lua", "All Files", "*" }, pfd::opt::force_overwrite).result();
+						std::ofstream f(file);
+						if(f.good())
+						{
+							_files[_current_file].path = std::move(file);
+							std::string str(_code.GetText());
+							str.pop_back(); // remove new line
+							f << str;
+							_saved = true;
+						}
 					}
 				}
 				ImGui::EndMenu();
+			}
+			if(_saved)
+			{
+				ImGui::SameLine(ImGui::GetWindowWidth() - ImGui::CalcTextSize(_eltm->getText("Code.saved").data()).x - 25);
+				ImGui::TextUnformatted(_eltm->getText("Code.saved").data());
 			}
 			ImGui::EndMenuBar();
 		}
 		if(ImGui::BeginChild("CodePanelSide", ImVec2(200, 0), true))
 		{
+			int i = 0;
+			for(FileData& data : _files)
+			{
+				if(ImGui::Selectable(std::string(AKS_ICON_MD_CODE" " + data.name).data(), selected == i))
+				{
+					selected = i;
+					if(selected != _current_file)
+					{
+						_files[_current_file].code = _code.GetText();
+						_files[_current_file].code.pop_back(); // to remove new line every time
+						_code.SetText(data.code);
+						_current_file = selected;
+					}
+				}
+				i++;
+			}
 			ImGui::EndChild();
 		}
 		ImGui::SameLine(0);
-		_code.Render("Code");
+		if(_code.IsTextChanged())
+			_saved = false;
+		_code.Render("Code", ImVec2(), true);
 		ImGui::End();
 	}
 }

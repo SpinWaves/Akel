@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/05/2023
-// Updated : 28/05/2023
+// Updated : 30/05/2023
 
 begin module Code
 	let name = "Code"
@@ -11,4 +11,6 @@ begin module Code
 			let load = "Load File"
 		let save = "Save"
 		let save_as = "Save As"
+
+	let saved = "Saved !"
 end module
