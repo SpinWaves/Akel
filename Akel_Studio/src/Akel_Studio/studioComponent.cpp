@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 28/05/2023
+// Updated : 30/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -49,6 +49,8 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 		_runtime_settings["vkForceDisableValidationLayers"] = false;
 		_runtime_settings["useDefaultResourceSystem"] = true;
 	}
+
+	Ak::CounterFPS::setTicksGoal(128);
 }
 
 void StudioComponent::onAttach()
@@ -155,6 +157,7 @@ void StudioComponent::onImGuiRender()
 
 void StudioComponent::update()
 {
+	Ak::CounterFPS::printTicks();
 	static Scene* scene = static_cast<Scene*>(_stack->get_panel("__scene"));
 	static Components* comps = static_cast<Components*>(_stack->get_panel("__components"));
 	if(scene->callRun())

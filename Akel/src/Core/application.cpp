@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 15/05/2023
+// Updated : 30/05/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -38,6 +38,40 @@ namespace Ak
 
 	void Application::run()
 	{
+		std::thread rendering_thread(&Application::render, this);
+		while(!_in.isEnded()) // Main loop
+		{
+			update();
+		}
+		_stop_rendering = true;
+		rendering_thread.join();
+	}
+
+	void Application::update()
+	{
+		_fps.update();
+		if(_fps.make_update()) // updates
+		{
+			_in.reset();
+			while(SDL_PollEvent(_in.getNativeEvent()))
+			{
+				if(ImGuiComponent::getNumComp())
+				{
+					for(auto component : _components)
+						component->onImGuiEvent(_in);
+				}
+				_in.update();
+			}
+			for(auto component : _components)
+			{
+				component->onEvent(_in);
+				component->update();
+			}
+		}
+	}
+
+	void Application::render()
+	{
 		std::vector<RendererComponent*> renderers;
 		std::vector<ImGuiComponent*> imguis;
 		for(auto comp : _components)
@@ -47,32 +81,11 @@ namespace Ak
 			if(comp->getName() == "__imgui_component")
 				imguis.push_back(static_cast<ImGuiComponent*>(comp));
 		}
-
-		while(!_in.isEnded()) // Main loop
+		if(renderers.empty())
+			return;
+		while(!_stop_rendering)
 		{
-			_fps.update();
-			// separation between updates and rendering
-
-			if(_fps.make_update()) // updates
-			{
-				_in.reset();
-				while(SDL_PollEvent(_in.getNativeEvent()))
-				{
-					if(ImGuiComponent::getNumComp())
-					{
-						for(auto component : _components)
-							component->onImGuiEvent(_in);
-					}
-					_in.update();
-				}
-				for(auto component : _components)
-				{
-					component->onEvent(_in);
-					component->update();
-				}
-			}
-			
-			// rendering
+			_fps.renderingUpdate();
 			for(auto renderer : renderers)
 				renderer->beginFrame();
 			for(auto component : _components)
