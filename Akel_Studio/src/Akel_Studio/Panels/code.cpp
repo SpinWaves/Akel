@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/05/2023
-// Updated : 30/05/2023
+// Updated : 31/05/2023
 
 #include <Panels/code.h>
 #include <Fonts/material_font.h>
@@ -34,12 +34,51 @@ const TextEditor::Palette& getPalette()
 	return p;
 }
 
+const TextEditor::LanguageDefinition& ELTMLang()
+{
+	static bool inited = false;
+	static TextEditor::LanguageDefinition langDef;
+	if(!inited)
+	{
+		static const char* const keywords[] = {
+			"begin", "module", "end", "let", "import"
+		};
+
+		for(auto& k : keywords)
+			langDef.mKeywords.insert(k);
+
+		static const char* const identifiers[] = {
+			"get"
+		};
+		for(auto& k : identifiers)
+		{
+			TextEditor::Identifier id;
+			id.mDeclaration = "Built-in function";
+			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
+		}
+
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", TextEditor::PaletteIndex::String));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", TextEditor::PaletteIndex::Identifier));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[\\(\\)\\=]", TextEditor::PaletteIndex::Punctuation));
+
+		langDef.mCommentStart = "/*";
+		langDef.mCommentEnd = "*/";
+		langDef.mSingleLineComment = "//";
+
+		langDef.mCaseSensitive = true;
+		langDef.mAutoIndentation = false;
+
+		langDef.mName = "ELTM";
+
+		inited = true;
+	}
+	return langDef;
+}
+
 CodeEditor::CodeEditor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__code_editor", project)
 {
 	_eltm = std::move(eltm);
-	auto lang = TextEditor::LanguageDefinition::Lua();
-	_code.SetTabSize(6);
-	_code.SetShowWhitespaces(false);
+	auto lua_lang = TextEditor::LanguageDefinition::Lua();
 
 	std::vector<const char*> identifiers = {
 		"Ak", "Message", "Warning", "StrongWarning", "Error", "FatalError", "AkelOnInit", "AkelOnUpdate", "AkelOnQuit",
@@ -52,12 +91,20 @@ CodeEditor::CodeEditor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& pr
 	for(const char* str : identifiers)
 	{
 		TextEditor::Identifier id;
-		id.mDeclaration = str;
-		lang.mPreprocIdentifiers.insert(std::make_pair(std::string(str), id));
+		id.mDeclaration = "Built-in Akel";
+		lua_lang.mIdentifiers.insert(std::make_pair(std::string(str), id));
 	}
-	lang.mAutoIndentation = true;
-	_code.SetLanguageDefinition(lang);
+	lua_lang.mAutoIndentation = true;
+
+	_lang_defs.push_back(lua_lang);
+	_lang_defs.push_back(ELTMLang());
+
+	_code.SetTabSize(3);
+	_code.SetShowWhitespaces(false);
 	_code.SetPalette(getPalette());
+
+	ImGuiIO& io = ImGui::GetIO();
+	_code_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "resources/fonts/sono/Sono-Medium.ttf").c_str(), 13.0f);
 }
 
 void CodeEditor::onEvent(Ak::Input& input)
@@ -92,7 +139,7 @@ void CodeEditor::onUpdate(Ak::Vec2i& size)
 			{
 				if(ImGui::MenuItem(std::string(AKS_ICON_MD_FILE_OPEN" " + _eltm->getText("Code.open")).c_str()))
 				{
-					auto file = pfd::open_file(_eltm->getText("Code.load"), _project.getDir(), { "Script files (.lua)", "*.lua", "All files", "*"});	
+					auto file = pfd::open_file(_eltm->getText("Code.load"), _project.getDir(), { "Script files (.lua, .eltm, .tm)", "*.lua *.eltm *.tm", "All files", "*"});
 					if(!file.result().empty())
 					{
 						std::filesystem::path path = file.result()[0];
@@ -102,6 +149,16 @@ void CodeEditor::onUpdate(Ak::Vec2i& size)
 							std::string str((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
 							_code.SetText(str);
 							_files.emplace_back(path, path.filename().string(), std::move(str));
+							if(path.extension() == ".lua")
+							{
+								_files.back().lang = Lang::Lua;
+								_code.SetLanguageDefinition(_lang_defs[static_cast<int>(Lang::Lua)]);
+							}
+							else if(path.extension() == ".eltm" || path.extension() == ".tm")
+							{
+								_files.back().lang = Lang::ELTM;
+								_code.SetLanguageDefinition(_lang_defs[static_cast<int>(Lang::ELTM)]);
+							}
 							_current_file = _files.size() - 1;
 							selected = _current_file;
 						}
@@ -160,6 +217,7 @@ void CodeEditor::onUpdate(Ak::Vec2i& size)
 						_files[_current_file].code.pop_back(); // to remove new line every time
 						_code.SetText(data.code);
 						_current_file = selected;
+						_code.SetLanguageDefinition(_lang_defs[static_cast<int>(_files[_current_file].lang)]);
 					}
 				}
 				i++;
@@ -169,7 +227,9 @@ void CodeEditor::onUpdate(Ak::Vec2i& size)
 		ImGui::SameLine(0);
 		if(_code.IsTextChanged())
 			_saved = false;
-		_code.Render("Code", ImVec2(), true);
+		ImGui::PushFont(_code_font);
+			_code.Render("Code", ImVec2(), true);
+		ImGui::PopFont();
 		ImGui::End();
 	}
 }

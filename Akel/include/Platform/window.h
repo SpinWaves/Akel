@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 16/05/2023
+// Updated : 31/05/2023
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -32,6 +32,7 @@ namespace Ak
             void fetchSettings();
 
             inline SDL_Window* getNativeWindow() const noexcept { return _window; }
+			inline static bool areThereWindowFocus() noexcept { return _windows_focus; }
 
             std::string title = "Akel Window";
             std::string icon = "default_Akel_icon";
@@ -69,6 +70,7 @@ namespace Ak
 			class RendererComponent* _renderer = nullptr;
             uint32_t _flags = 0;
             uint32_t _window_id = 0;
+			inline static bool _windows_focus = false;
     };
 }
 

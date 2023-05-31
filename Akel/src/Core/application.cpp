@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 30/05/2023
+// Updated : 31/05/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -85,27 +85,30 @@ namespace Ak
 		while(!_stop_rendering) // Main rendering loop
 		{
 			_fps.renderingUpdate();
-			for(auto renderer : renderers)
-				renderer->beginFrame();
-			for(auto component : _components)
-				component->onRender();
-			if(ImGuiComponent::getNumComp())
+			if(_fps.make_rendering())
 			{
-				for(auto imgui : imguis)
-					imgui->begin();
-				ImGui_ImplVulkan_NewFrame();
-				ImGui_ImplSDL2_NewFrame();
-				ImGui::NewFrame();
-
+				for(auto renderer : renderers)
+					renderer->beginFrame();
 				for(auto component : _components)
-					component->onImGuiRender();
+					component->onRender();
+				if(ImGuiComponent::getNumComp())
+				{
+					for(auto imgui : imguis)
+						imgui->begin();
+					ImGui_ImplVulkan_NewFrame();
+					ImGui_ImplSDL2_NewFrame();
+					ImGui::NewFrame();
 
-				ImGui::Render();
-				for(auto imgui : imguis)
-					imgui->renderFrame();
+					for(auto component : _components)
+						component->onImGuiRender();
+
+					ImGui::Render();
+					for(auto imgui : imguis)
+						imgui->renderFrame();
+				}
+				for(auto renderer : renderers)
+					renderer->endFrame();
 			}
-			for(auto renderer : renderers)
-				renderer->endFrame();
 		}
 	}
 

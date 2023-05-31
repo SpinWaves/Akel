@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 30/05/2023
+// Updated : 31/05/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -50,7 +50,7 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 		_runtime_settings["useDefaultResourceSystem"] = true;
 	}
 
-	Ak::CounterFPS::setTicksGoal(128);
+	Ak::CounterFPS::setTicksGoal(60);
 }
 
 void StudioComponent::onAttach()

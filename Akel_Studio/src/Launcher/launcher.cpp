@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 15/05/2023
+// Updated : 31/05/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
@@ -26,7 +26,10 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	window->pos = { AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER };
 	window->border = false;
 	window->resizable = false;
+	window->vsync = true;
 	window->fetchSettings();
+
+	Ak::CounterFPS::setTicksGoal(60);
 
 	Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
 

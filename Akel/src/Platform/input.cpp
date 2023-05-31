@@ -1,17 +1,17 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 13/05/2023
+// Updated : 31/05/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-    Input::Input()
-    {
+	Input::Input()
+	{
 		reset();
-    }
+	}
 
 	void Input::reset() noexcept
 	{
@@ -23,14 +23,14 @@ namespace Ak
 			_mouse[i] = _mouse[i] & ~(static_cast<uint8_t>(action::up));
 	}
 
-    void Input::update()
-    { 
+	void Input::update()
+	{ 
 		_current_window = _event.window.windowID;
-        if(_event.window.event == SDL_WINDOWEVENT_CLOSE) 
+		if(_event.window.event == SDL_WINDOWEVENT_CLOSE) 
 		{
 			if(_windows.size() == 1)
 			{
-            	_end = true;
+				_end = true;
 				return;
 			}
 			for(auto it = _windows.begin(); it != _windows.end(); it++)
@@ -45,81 +45,85 @@ namespace Ak
 			}
 		}
 
-        if(_event.type == SDL_MOUSEMOTION) 
-        {
-            _x = _event.motion.x;
-            _y = _event.motion.y;
+		if(_event.type == SDL_MOUSEMOTION) 
+		{
+			_x = _event.motion.x;
+			_y = _event.motion.y;
 
-            _xRel = _event.motion.xrel;
-            _yRel = _event.motion.yrel;
+			_xRel = _event.motion.xrel;
+			_yRel = _event.motion.yrel;
 
 			SDL_GetGlobalMouseState(&_gx, &_gy);
-        }
+		}
 
-        if(_event.window.event == SDL_WINDOWEVENT_RESIZED || _event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-        {
-            for(auto win : _windows)
-            {
-                if(win->_window_id == _current_window)
+		if(_event.window.event == SDL_WINDOWEVENT_RESIZED || _event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+		{
+			for(auto win : _windows)
+			{
+				if(win->_window_id == _current_window)
 				{
-                    win->size.set(_event.window.data1, _event.window.data2);
+					win->size.set(_event.window.data1, _event.window.data2);
 					win->_renderer->requireFrameBufferResize();
 				}
-            }
-        }
+			}
+		}
 
-        if(_event.window.event == SDL_WINDOWEVENT_MINIMIZED)
-        {
-            for(auto win : _windows)
-            {
-                if(win->_window_id == _current_window)
+		if(_event.window.event == SDL_WINDOWEVENT_MINIMIZED)
+		{
+			for(auto win : _windows)
+			{
+				if(win->_window_id == _current_window)
 				{
-                    win->minimize = true;
+					win->minimize = true;
 					win->_renderer->requireFrameBufferResize();
 				}
-            }
-        }
-        else if(_event.window.event == SDL_WINDOWEVENT_MAXIMIZED)
-        {
-            for(auto win : _windows)
-            {
-                if(win->_window_id == _current_window)
+			}
+		}
+		else if(_event.window.event == SDL_WINDOWEVENT_MAXIMIZED)
+		{
+			for(auto win : _windows)
+			{
+				if(win->_window_id == _current_window)
 				{
-                    win->maximize = true;
+					win->maximize = true;
 					win->_renderer->requireFrameBufferResize();
 				}
-            }
-        }
-        else if(_event.window.event == SDL_WINDOWEVENT_RESTORED)
-        {
-            for(auto win : _windows)
-            {
-                if(win->_window_id == _current_window)
-                {
-                    win->minimize = false;
-                    win->maximize = false;
+			}
+		}
+		else if(_event.window.event == SDL_WINDOWEVENT_RESTORED)
+		{
+			for(auto win : _windows)
+			{
+				if(win->_window_id == _current_window)
+				{
+					win->minimize = false;
+					win->maximize = false;
 					win->_renderer->requireFrameBufferResize();
-                }
-            }
-        }
+				}
+			}
+		}
+		else if(_event.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
+			WindowComponent::_windows_focus = false;
+		else if(_event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
+			WindowComponent::_windows_focus = true;
 
-        if(_event.window.event == SDL_WINDOWEVENT_MOVED)
-        {
-            for(auto win : _windows)
-            {
-                if(win->_window_id == _current_window)
-                    win->pos.set(_event.window.data1, _event.window.data2);
-            }
-        }
+		if(_event.window.event == SDL_WINDOWEVENT_MOVED)
+		{
+			for(auto win : _windows)
+			{
+				if(win->_window_id == _current_window)
+					win->pos.set(_event.window.data1, _event.window.data2);
+			}
+		}
 
-        switch(_event.type) 
-        {
-            case SDL_KEYDOWN:			_keys[_event.key.keysym.scancode] = static_cast<uint8_t>(action::down); break;
-            case SDL_KEYUP:				_keys[_event.key.keysym.scancode] = static_cast<uint8_t>(action::up); break;
-            case SDL_MOUSEBUTTONDOWN:	_mouse[_event.button.button] = static_cast<uint8_t>(action::down); break;
-            case SDL_MOUSEBUTTONUP:		_mouse[_event.button.button] = static_cast<uint8_t>(action::up); break;
+		switch(_event.type) 
+		{
+			case SDL_KEYDOWN:			_keys[_event.key.keysym.scancode] = static_cast<uint8_t>(action::down); break;
+			case SDL_KEYUP:				_keys[_event.key.keysym.scancode] = static_cast<uint8_t>(action::up); break;
+			case SDL_MOUSEBUTTONDOWN:	_mouse[_event.button.button] = static_cast<uint8_t>(action::down); break;
+			case SDL_MOUSEBUTTONUP:		_mouse[_event.button.button] = static_cast<uint8_t>(action::up); break;
 
-            default: break;
-        }
-    }
+			default: break;
+		}
+	}
 }
