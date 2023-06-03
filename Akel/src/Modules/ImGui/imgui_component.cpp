@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 16/05/2023
+// Updated : 03/06/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -150,11 +150,15 @@ namespace Ak
 
 	void ImGuiComponent::begin()
 	{
+		if(!_renderer->isRendering())
+			return;
 		_renderer->getRenderPass().begin();
 	}
 
 	void ImGuiComponent::renderFrame()
 	{
+		if(!_renderer->isRendering())
+			return;
 		ImDrawData* draw_data = ImGui::GetDrawData();
 		if(draw_data->DisplaySize.x >= 0.0f && draw_data->DisplaySize.y >= 0.0f)
 			ImGui_ImplVulkan_RenderDrawData(draw_data, _renderer->getActiveCmdBuffer().get());

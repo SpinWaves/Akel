@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/04/2021
-// Updated : 15/02/2023
+// Updated : 03/06/2023
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -31,7 +31,7 @@ using Ak_f96 = long double;
 
 #include <Utils/imguiRenderStatistics.h>
 #include <Utils/consoleOut.h>
-#include <Utils/fps.h>
+#include <Utils/ticks.h>
 #include <Utils/time.h>
 #include <Utils/mStrings.h>
 #include <Utils/fStrings.h>

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 31/05/2023
+// Updated : 03/06/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -103,11 +103,22 @@ namespace Ak
 			}
 		}
 		else if(_event.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
-			WindowComponent::_windows_focus = false;
+		{
+			for(auto win : _windows)
+			{
+				if(win->_window_id == _current_window)
+					win->_window_has_focus = false;
+			}
+		}
 		else if(_event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
-			WindowComponent::_windows_focus = true;
-
-		if(_event.window.event == SDL_WINDOWEVENT_MOVED)
+		{
+			for(auto win : _windows)
+			{
+				if(win->_window_id == _current_window)
+					win->_window_has_focus = true;
+			}
+		}
+		else if(_event.window.event == SDL_WINDOWEVENT_MOVED)
 		{
 			for(auto win : _windows)
 			{

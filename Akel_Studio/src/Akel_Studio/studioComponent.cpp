@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 31/05/2023
+// Updated : 03/06/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -50,7 +50,7 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 		_runtime_settings["useDefaultResourceSystem"] = true;
 	}
 
-	Ak::CounterFPS::setTicksGoal(60);
+	Ak::CounterTicks::setTicksGoal(60);
 }
 
 void StudioComponent::onAttach()
@@ -103,6 +103,7 @@ void StudioComponent::onAttach()
 	renderer->getClearValue().color.float32[0] = 0.627450980;
 	renderer->getClearValue().color.float32[1] = 0.878431373;
 	renderer->getClearValue().color.float32[2] = 0.909803922;
+	renderer->setMaxFPS(200);
 
 	_logo = AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo.png");
    // ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
@@ -157,7 +158,6 @@ void StudioComponent::onImGuiRender()
 
 void StudioComponent::update()
 {
-	Ak::CounterFPS::printTicks();
 	static Scene* scene = static_cast<Scene*>(_stack->get_panel("__scene"));
 	static Components* comps = static_cast<Components*>(_stack->get_panel("__components"));
 	if(scene->callRun())
@@ -274,7 +274,8 @@ void StudioComponent::drawMainMenuBar()
 			ImGui::EndMenu();
 		}
 		ImGui::SameLine(window->size.X - 100);
-		ImGui::Text("%d FPS", Ak::CounterFPS::getFPS());
+		Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
+		ImGui::Text("%d FPS", renderer->getFPS());
 
 		ImGui::EndMainMenuBar();
 	}

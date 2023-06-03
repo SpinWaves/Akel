@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 31/05/2023
+// Updated : 03/06/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -24,14 +24,14 @@ namespace Ak
 		return args[index];
 	}
 
-	Application::Application() : ComponentStack(), non_copyable(), _in(), _fps()
+	Application::Application() : ComponentStack(), non_copyable(), _in(), _ticks()
 	{
 		if(_app_check)
 			Core::log::report(FATAL_ERROR, "you can only declare one application");
 		_app_check = true;
 		__main_app = this;
 		
-		_fps.init();
+		_ticks.init();
 		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
 			Core::log::report(FATAL_ERROR, "SDL error : unable to init all subsystems : %s", SDL_GetError());	
 	}
@@ -47,8 +47,8 @@ namespace Ak
 
 	void Application::update()
 	{
-		_fps.update();
-		if(_fps.make_update()) // updates
+		_ticks.update();
+		if(_ticks.makeUpdate()) // updates
 		{
 			_in.reset();
 			while(SDL_PollEvent(_in.getNativeEvent()))
@@ -70,44 +70,63 @@ namespace Ak
 
 	void Application::render()
 	{
-		std::vector<RendererComponent*> renderers;
-		std::vector<ImGuiComponent*> imguis;
+		bool imgui_begin = false;
+		std::unordered_map<RendererComponent*, ImGuiComponent*> renderers;
 		for(auto comp : _components)
 		{
 			if(comp->getName() == "__renderer_component")
-				renderers.push_back(static_cast<RendererComponent*>(comp));
-			if(comp->getName() == "__imgui_component")
-				imguis.push_back(static_cast<ImGuiComponent*>(comp));
+				renderers[static_cast<RendererComponent*>(comp)] = nullptr;
+			else if(comp->getName() == "__imgui_component")
+			{
+				ImGuiComponent* imgui = static_cast<ImGuiComponent*>(comp);
+				renderers[imgui->_renderer] = imgui;
+			}
 		}
 		if(renderers.empty())
 			return;
 
 		while(!_stop_rendering) // Main rendering loop
 		{
-			_fps.renderingUpdate();
-			if(_fps.make_rendering())
+			if(ImGuiComponent::getNumComp())
 			{
-				for(auto renderer : renderers)
-					renderer->beginFrame();
-				for(auto component : _components)
-					component->onRender();
-				if(ImGuiComponent::getNumComp())
+				imgui_begin = false;
+				for(auto& renderer : renderers)
 				{
-					for(auto imgui : imguis)
-						imgui->begin();
+					if(renderer.first->beginFrame())
+					{
+						renderer.second->begin();
+						imgui_begin = true;
+					}
+				}
+				if(imgui_begin)
+				{
 					ImGui_ImplVulkan_NewFrame();
 					ImGui_ImplSDL2_NewFrame();
 					ImGui::NewFrame();
-
-					for(auto component : _components)
-						component->onImGuiRender();
-
-					ImGui::Render();
-					for(auto imgui : imguis)
-						imgui->renderFrame();
 				}
-				for(auto renderer : renderers)
-					renderer->endFrame();
+				for(auto component : _components)
+				{
+					component->onRender();
+					if(imgui_begin)
+						component->onImGuiRender();
+				}
+				if(imgui_begin)
+					ImGui::Render();
+				for(auto& renderer : renderers)
+				{
+					renderer.second->renderFrame();
+					if(imgui_begin)
+						renderer.first->endFrame();
+				}
+			}
+			else
+			{
+				for(auto& renderer : renderers)
+					renderer.first->beginFrame();
+				for(auto component : _components)
+					component->onRender();
+				for(auto& renderer : renderers)
+					renderer.first->endFrame();
 			}
 		}
 	}

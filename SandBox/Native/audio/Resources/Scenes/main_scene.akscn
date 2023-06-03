@@ -1,0 +1,25 @@
+{
+    "camera": "firstPerson3D",
+    "entity_0": {
+        "modelAttribute": {
+            "file": "/home/malo/Documents/Programmation/C++/Akel/SandBox/Native/audio/Resources/Meshes/spaceship.obj"
+        },
+        "transformAttribute": {
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        }
+    }
+}

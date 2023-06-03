@@ -14,7 +14,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Audio using Akel Engine");
 	app->add_component<Ak::AudioComponent>();
 
-	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main scene");
+	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main_scene");
 	scene->addCamera<Ak::Cam::FirstPerson3D>(-5.0f, 1.0f, 0.0f);
 	app->add_scene(scene);
 

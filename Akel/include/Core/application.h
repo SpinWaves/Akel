@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 30/05/2023
+// Updated : 03/06/2023
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -9,7 +9,7 @@
 #include <Akpch.h>
 #include <Platform/input.h>
 #include <Core/Components/components.h>
-#include <Utils/fps.h>
+#include <Utils/ticks.h>
 #include <Utils/nonCopyable.h>
 #include "projectFile.h"
 #include <Core/profile.h>
@@ -40,7 +40,7 @@ namespace Ak
 
 		private:
 			Input _in;
-			CounterFPS _fps;
+			CounterTicks _ticks;
 			std::atomic<bool> _stop_rendering = false;
 			inline static bool _app_check = false;
 	};

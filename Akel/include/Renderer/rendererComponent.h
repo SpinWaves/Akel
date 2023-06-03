@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 16/05/2023
+// Updated : 03/06/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -10,6 +10,7 @@
 #include <Core/profile.h>
 #include <Platform/window.h>
 #include <Utils/fStrings.h>
+#include <Renderer/fps.h>
 #include "Pipeline/vk_shader.h"
 #include "Pipeline/vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
@@ -52,7 +53,12 @@ namespace Ak
 			inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
 			inline bool isFrameBufferResizeRequested() const noexcept { return _framebufferResized; }
 
+			inline void setMaxFPS(std::uint32_t max) noexcept { _fps.setMaxFPS(max); _max_fps = max; }
+			inline uint32_t getFPS() const noexcept { return _fps.getFPS(); }
+			inline bool isRendering() const noexcept { return _fps.makeRendering(); }
+
 		private:
+			CounterFPS _fps;
 			CmdManager _cmd;
 			Surface _surface;
 			RenderPass _pass;
@@ -66,6 +72,8 @@ namespace Ak
 			uint32_t _active_image_index = 0;
 			uint32_t _image_index = 0;
 
+			uint32_t _max_fps = 100'000;
+			
 			bool _framebufferResized = false;
 			bool _is_init = false;
 	};

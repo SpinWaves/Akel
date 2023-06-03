@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 30/05/2023
-// Updated : 30/05/2023
+// Updated : 04/06/2023
 
 #include <Scene/scene.h>
 #include <Scene/scene_serializer.h>
@@ -15,17 +15,18 @@ namespace Ak
 
 	void SceneSerializer::serialize(const std::filesystem::path& file)
 	{
+		json j;
+		j["camera"] = _scene->_camera->getCameraType();
 		std::size_t count = 0;
-		_json["camera"] = _scene->_camera->getCameraType();
-		_scene->getRegistry().each([&](auto entityID)
+		_scene->getRegistry().each([&](entt::entity entityID)
 		{
 			Entity entity(entityID, _scene);
 
 			std::string id = std::string("entity_") + std::to_string(count);
-			_json[id] = json::object();
+			j[id] = json::object();
 
 			if(entity.hasAttribute<NameAttribute>())
-				_json[id]["nameAttribute"] = entity.getAttribute<NameAttribute>().name;
+				j[id]["nameAttribute"] = entity.getAttribute<NameAttribute>().name;
 
 			if(entity.hasAttribute<TransformAttribute>())
 			{
@@ -33,26 +34,26 @@ namespace Ak
 				std::array<float, 3> pos = { trans.position.X, trans.position.Y, trans.position.Z };
 				std::array<float, 3> rot = { trans.rotation.X, trans.rotation.Y, trans.rotation.Z };
 				std::array<float, 3> sca = { trans.scale.X, trans.scale.Y, trans.scale.Z };
-				_json[id]["transformAttribute"]["position"] = pos;
-				_json[id]["transformAttribute"]["rotation"] = rot;
-				_json[id]["transformAttribute"]["scale"] = sca;
+				j[id]["transformAttribute"]["position"] = pos;
+				j[id]["transformAttribute"]["rotation"] = rot;
+				j[id]["transformAttribute"]["scale"] = sca;
 			}
 
 			if(entity.hasAttribute<ModelAttribute>())
 			{
-				_json[id]["modelAttribute"]["file"] = entity.getAttribute<ModelAttribute>().model.getFile().string();
+				j[id]["modelAttribute"]["file"] = entity.getAttribute<ModelAttribute>().model.getFile().string();
 			}
-
 			count++;
 		});
-		writeJson(_json, file);
+		writeJson(j, file);
 	}
 
 	void SceneSerializer::deserialize(const std::filesystem::path& file)
 	{
-		if(!loadJson(file, _json))
+		json j;
+		if(!loadJson(file, j))
 			Core::log::report(ERROR, "Scene Serializer : unable to deserialize from file '%s'", file.string().c_str());
-		for(auto& [key, val] : _json.items())
+		for(auto& [key, val] : j.items())
 		{
 			if(key == "camera")
 			{

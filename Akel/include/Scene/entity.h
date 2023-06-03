@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2021
-// Updated : 30/05/2023
+// Updated : 04/06/2023
 
 #ifndef __AK_ENTITY__
 #define __AK_ENTITY__
@@ -30,11 +30,13 @@ namespace Ak
 			template <typename T>
 			inline T* tryGetAttribute() { return _scene->getRegistry().try_get<T>(_entity); }
 			template <typename T>
-			inline bool hasAttribute() { tryGetAttribute<T>() != nullptr; }
+			inline bool hasAttribute() { return tryGetAttribute<T>() != nullptr; }
 			template <typename T>
 			inline void removeAttribute() { _scene->getRegistry().remove<T>(_entity); }
 			template <typename T>
 			inline void tryRemoveAttribute() { removeAttribute<T>(); }
+
+			inline operator bool() const noexcept { return _entity != entt::null; }
 
 			~Entity() = default;
 
