@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/07/2021
-// Updated : 28/05/2023
+// Updated : 04/06/2023
 
 import "audio_manager.eltm"
 import "browser.eltm"
@@ -27,3 +27,5 @@ let lang_name = "English"
 let really = "Really ?"
 let are_you_sure_quit = "Do you really want to quit ?"
 
+let buildPopUpTitle = "Building Project"
+let buildPopUpText = "Your project is currently being built"

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/05/2023
-// Updated : 31/05/2023
+// Updated : 04/06/2023
 
 #include <Panels/code.h>
 #include <Fonts/material_font.h>
@@ -104,7 +104,7 @@ CodeEditor::CodeEditor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& pr
 	_code.SetPalette(getPalette());
 
 	ImGuiIO& io = ImGui::GetIO();
-	_code_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "resources/fonts/sono/Sono-Medium.ttf").c_str(), 13.0f);
+	_code_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() / "resources/fonts/sono/Sono-Medium.ttf").c_str(), 13.0f);
 }
 
 void CodeEditor::onEvent(Ak::Input& input)

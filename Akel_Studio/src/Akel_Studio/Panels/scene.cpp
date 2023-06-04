@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 26/05/2023
+// Updated : 04/06/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -9,7 +9,7 @@
 Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__scene", project)
 {
     _eltm = std::move(eltm);
-	_play = AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/play.png");
+	_play = AkImGui::LoadImage(Ak::Core::getMainDirPath() / "resources/assets/play.png");
 }
 
 void Scene::onUpdate(Ak::Maths::Vec2<int>& size)

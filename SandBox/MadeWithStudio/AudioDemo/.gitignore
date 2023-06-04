@@ -1,0 +1,8 @@
+/*
+/*/
+!*.akel
+!*.akrt
+!.gitignore
+!README.md
+!/src/
+!/Resources/

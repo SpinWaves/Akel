@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/08/2022
-// Updated : 25/05/2023
+// Updated : 04/06/2023
 
 #ifndef __AK_IMGUI_UTILS__
 #define __AK_IMGUI_UTILS__
@@ -31,7 +31,7 @@ namespace AkImGui
 	};
 
 	AK_API ImImage LoadImage(std::filesystem::path file);
-	AK_API bool spinner(const char* label, float radius, int thickness, const ImU32& color);
+	AK_API bool Spinner(const char* label, float radius, int thickness, const ImU32& color);
 
 	AK_API bool InputText(const char* label, std::string* str, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);
 	AK_API bool InputTextMultiline(const char* label, std::string* str, const ImVec2& size = ImVec2(0, 0), ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/11/2022
-// Updated : 18/05/2023
+// Updated : 04/06/2023
 
 #include <Scene/scene.h>
 #include <Scene/scene_manager.h>
@@ -51,12 +51,18 @@ namespace Ak
 	{
 		if(_has_been_destroyed)
 			return;
-
+		nlohmann::json array = nlohmann::json::array();
 		for(Scene* scene : _scenes)
 		{
 			scene->onQuit();
+			nlohmann::json scene_data;
+			scene_data["name"] = scene->getName().c_str();
+			scene_data["file"] = scene->getFilePath().empty() ? "" : scene->getFilePath();
+			array.push_back(scene_data);
 			memFree(scene);
 		}
+		if(!getMainAppProjectFile().keyExists("scenes"))
+			getMainAppProjectFile().archive()["scenes"] = array;
 		if(_scene_renderer)
 			_scene_renderer->destroy();
 		_has_been_destroyed = true;

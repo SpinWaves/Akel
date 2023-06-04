@@ -1,10 +1,11 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 03/06/2023
+// Updated : 05/06/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
+#include <Third_party/imspinner.h>
 
 Ak::Unique_ptr<Ak::ELTM> _lang_eltm(nullptr);
 
@@ -56,10 +57,10 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 void StudioComponent::onAttach()
 {
 	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>();
-	_lang_eltm->load(Ak::Core::getMainDirPath() + "resources/texts/langs.eltm");
+	_lang_eltm->load(Ak::Core::getMainDirPath() / "resources/texts/langs.eltm");
 
 	if(!Ak::getMainAppProjectFile().keyExists("language"))
-		Ak::getMainAppProjectFile().archive()["language"] = Ak::Core::getMainDirPath() + _lang_eltm->getText("English");
+		Ak::getMainAppProjectFile().archive()["language"] = _lang_eltm->getText("English");
 	if(!Ak::getMainAppProjectFile().keyExists("on_quit_window"))
 		Ak::getMainAppProjectFile().archive()["on_quit_window"] = true;
 	if(!Ak::getMainAppProjectFile().keyExists("cullmode"))
@@ -67,7 +68,7 @@ void StudioComponent::onAttach()
 	if(!Ak::getMainAppProjectFile().keyExists("scene_camera_sensy"))
 		Ak::getMainAppProjectFile().archive()["scene_camera_sensy"] = 0.7f;
 
-	_eltm->load(std::move(Ak::getMainAppProjectFile().archive()["language"]));
+	_eltm->load(std::move(Ak::VFS::resolve(Ak::getMainAppProjectFile().archive()["language"])));
 
 	Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 	if(Ak::getMainAppProjectFile().isFirstTimeRunning())
@@ -105,7 +106,7 @@ void StudioComponent::onAttach()
 	renderer->getClearValue().color.float32[2] = 0.909803922;
 	renderer->setMaxFPS(200);
 
-	_logo = AkImGui::LoadImage(Ak::Core::getMainDirPath() + "resources/assets/logo.png");
+	_logo = AkImGui::LoadImage(Ak::Core::getMainDirPath() / "resources/assets/logo.png");
    // ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
 }
 
@@ -133,7 +134,7 @@ void StudioComponent::onImGuiRender()
 
 	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-	if(ImGui::BeginPopupModal(_eltm->getText("really").c_str(), NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	if(ImGui::BeginPopupModal(_eltm->getText("really").c_str(), nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		ImGui::Text(_eltm->getText("are_you_sure_quit").c_str());
 		if(ImGui::Button(_eltm->getText("yes").c_str(), ImVec2(120, 0)))
@@ -154,6 +155,32 @@ void StudioComponent::onImGuiRender()
 		
 		ImGui::EndPopup();
 	}
+
+	if(_open_build)
+		ImGui::OpenPopup(_eltm->getText("buildPopUpTitle").c_str());
+
+	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	ImGui::SetNextWindowSize(ImVec2(ImGui::CalcTextSize(_eltm->getText("buildPopUpText").c_str()).x + 50, 100), ImGuiCond_Appearing);
+	static int timeout = Ak::Maths::randint(2000, 7000);
+	if(ImGui::BeginPopupModal(_eltm->getText("buildPopUpTitle").c_str(), nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	{
+		float windowWidth = ImGui::GetWindowWidth();
+		float textWidth = ImGui::CalcTextSize(_eltm->getText("buildPopUpText").c_str()).x;
+		ImGui::SetCursorPosX((windowWidth - textWidth) / 2.0f);
+		ImGui::Text(_eltm->getText("buildPopUpText").c_str());
+		
+		const ImU32 bg = ImGui::GetColorU32(ImGuiCol_WindowBg);
+		ImGui::SetCursorPosX((windowWidth - 45) / 2.0f);
+		ImSpinner::SpinnerLoadingRing("##buildSpinner", 15, 3, ImSpinner::white, bg);
+
+		if(SDL_GetTicks64() - _build_timer > timeout)
+		{
+			_open_build = false;
+			timeout = Ak::Maths::randint(2000, 7000);
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
 }
 
 void StudioComponent::update()
@@ -166,7 +193,7 @@ void StudioComponent::update()
 		_project.writeFile();
 		writeRuntimeSettings();
 		std::filesystem::remove(_project.getDir() / "AkelRuntime");
-		std::filesystem::copy(Ak::Core::getMainDirPath() + "resources/runtime/AkelRuntime", _project.getDir());
+		std::filesystem::copy(Ak::Core::getMainDirPath() / "resources/runtime/AkelRuntime", _project.getDir());
 		std::system(std::string(_project.getDir().string() + "/AkelRuntime").c_str());
 		std::filesystem::remove(_project.getDir() / "AkelRuntime");
 	}
@@ -193,13 +220,13 @@ void StudioComponent::onImGuiEvent(Ak::Input& input)
 void StudioComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::string(Ak::Core::getMainDirPath() + "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 18.0f, true);
+	imgui->addFontFromFile(std::string(Ak::Core::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 18.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() + "resources/fonts/material_icons-regular.ttf").c_str(), 18.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").c_str(), 18.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }
@@ -242,7 +269,8 @@ void StudioComponent::drawMainMenuBar()
 		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_TUNE" " + _eltm->getText("MainMenuBar.edit")).c_str()))
 		{
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_NOTE_ADD" " + _eltm->getText("MainMenuBar.addFile")).c_str())) { /* Do stuff */ }
-			if(ImGui::MenuItem(std::string(AKS_ICON_MD_BUILD_CIRCLE" " + _eltm->getText("MainMenuBar.build")).c_str())) { /* Do stuff */ }
+			if(ImGui::MenuItem(std::string(AKS_ICON_MD_BUILD_CIRCLE" " + _eltm->getText("MainMenuBar.build")).c_str()))
+				buildProject();
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SETTINGS" " + _eltm->getText("MainMenuBar.options")).c_str()))
 				_showOpt = !_showOpt;
 			ImGui::EndMenu();
@@ -279,6 +307,20 @@ void StudioComponent::drawMainMenuBar()
 
 		ImGui::EndMainMenuBar();
 	}
+}
+
+void StudioComponent::buildProject()
+{
+	Components* comps = static_cast<Components*>(_stack->get_panel("__components"));
+	comps->writeComponents();
+	_open_build = true;
+	_project.writeFile();
+	writeRuntimeSettings();
+	std::filesystem::remove(_project.getDir() / "AkelRuntime");
+	std::filesystem::remove(_project.getDir() / _runtime_settings["projectFileName"]);
+	std::filesystem::copy(Ak::Core::getMainDirPath() / "resources/runtime/AkelRuntime", _project.getDir());
+	std::filesystem::rename(_project.getDir() / "AkelRuntime", _project.getDir() / _runtime_settings["projectFileName"]);
+	_build_timer = SDL_GetTicks64();
 }
 
 void StudioComponent::drawAboutWindow()
@@ -321,9 +363,9 @@ void StudioComponent::draw_general_settings()
 		{
 			if(ImGui::Selectable(lang.c_str(), selected == lang))
 			{
-				if(!_eltm->reload(Ak::Core::getMainDirPath() + path))
+				if(!_eltm->reload(Ak::Core::getMainDirPath() / path))
 					Ak::Core::log::report(FATAL_ERROR, "unable to change language");
-				Ak::getMainAppProjectFile().archive()["language"] = Ak::Core::getMainDirPath() + path;
+				Ak::getMainAppProjectFile().archive()["language"] = Ak::Core::getMainDirPath() / path;
 				selected = lang;
 				reload_docks = true;
 			}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/01/2023
-// Updated : 24/05/2023
+// Updated : 04/06/2023
 
 #include <Platform/resourceManager.h>
 
@@ -9,7 +9,7 @@ namespace Ak
 {
 	Res::Res()
 	{
-		_main_path = Ak::Core::getMainDirPath() + "Resources/";
+		_main_path = Ak::Core::getMainDirPath() / "Resources/";
 	}
 
 	std::filesystem::path Res::getTexturesPath() noexcept

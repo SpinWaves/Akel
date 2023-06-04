@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 19/05/2023
+// Updated : 04/06/2023
 
 #include <Core/profile.h>
 
@@ -28,7 +28,7 @@ namespace Ak
 {
 	namespace Core
 	{
-		std::string getMainDirPath();
+		std::filesystem::path getMainDirPath();
 		void initCpuInfo();
 	}
 	

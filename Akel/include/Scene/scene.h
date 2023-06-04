@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 30/05/2023
+// Updated : 04/06/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -58,6 +58,7 @@ namespace Ak
 			void addCamera(Args&& ... args);
 
 			inline const fString& getName() const noexcept { return _name; }
+			inline const std::filesystem::path& getFilePath() const { return _filepath; }
 			inline uint32_t getID() const noexcept { return _id; }
 
 			~Scene();
@@ -67,6 +68,7 @@ namespace Ak
 
 		private:
 			std::vector<ShaderID> _forward_shaders;
+			std::filesystem::path _filepath;
 			class RendererComponent* _renderer = nullptr;
 			Unique_ptr<Cam::BaseCamera> _camera;
 			Unique_ptr<class ShaderLoader> _loader;

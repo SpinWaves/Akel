@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/08/2022
-// Updated : 25/05/2023
+// Updated : 05/06/2023
 
 #include <Akpch.h>
 #include <Core/log.h>
@@ -121,7 +121,7 @@ namespace AkImGui
 		return ImGui::InputTextWithHint(label, hint, (char*)str->c_str(), str->capacity() + 1, flags, InputTextCallback, &cb_user_data);
 	}
 
-	bool spinner(const char* label, float radius, int thickness, const ImU32& color)
+	bool Spinner(const char* label, float radius, int thickness, const ImU32& color)
 	{
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
 		if(window->SkipItems)
@@ -147,13 +147,13 @@ namespace AkImGui
 		const float a_min = IM_PI * 2.0f * ((float)start) / (float)num_segments;
 		const float a_max = IM_PI * 2.0f * ((float)num_segments - 3) / (float)num_segments;
 
-		const ImVec2 centre = ImVec2(pos.x+radius, pos.y+radius+style.FramePadding.y);
+		const ImVec2 centre = ImVec2(pos.x + radius, pos.y + radius + style.FramePadding.y);
 
 		for(int i = 0; i < num_segments; i++)
 		{
 			const float a = a_min + ((float)i / (float)num_segments) * (a_max - a_min);
-			window->DrawList->PathLineTo(ImVec2(centre.x + ImCos(a+g.Time*8) * radius,
-							centre.y + ImSin(a+g.Time*8) * radius));
+			window->DrawList->PathLineTo(ImVec2(centre.x + ImCos(a + g.Time * 8) * radius,
+							centre.y + ImSin(a + g.Time * 8) * radius));
 		}
 		window->DrawList->PathStroke(color, false, thickness);
 	}

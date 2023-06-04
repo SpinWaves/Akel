@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 17/05/2023
+// Updated : 04/06/2023
 
 #include <Panels/eltm_editor.h>
 #include <Fonts/material_font.h>
@@ -99,7 +99,7 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
     if(*_save == 1)
         destination = _file;
     else if(*_save == 2)
-        destination = std::move(pfd::save_file("Save", Ak::Core::getMainDirPath() + "New_File.eltm", { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All Files", "*" }, pfd::opt::force_overwrite).result());
+        destination = std::move(pfd::save_file("Save", Ak::Core::getMainDirPath() / "New_File.eltm", { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All Files", "*" }, pfd::opt::force_overwrite).result());
 
     if(*_save != 0)
     {

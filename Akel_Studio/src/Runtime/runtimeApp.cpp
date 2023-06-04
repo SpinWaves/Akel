@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 15/05/2023
-// Updated : 16/05/2023
+// Updated : 04/06/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 Ak::AkelInstance Akel_init()
 {
-	std::filesystem::path path(Ak::Core::getMainDirPath() + "settings.akrt");
+	std::filesystem::path path(Ak::Core::getMainDirPath() / "settings.akrt");
 	if(!std::filesystem::exists(path))
 		Ak::FatalError("Akel Runtime : no runtime settings found (there should be a 'settings.akrt' file in your executable directory)");
 
@@ -57,8 +57,21 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 			Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
 			if(project.keyExists("__imgui_component") && project.archive()["__imgui_component"] == true)
 				app->add_component<Ak::ImGuiComponent>(renderer);
-			if(project.keyExists("__scene_manager_component") && project.archive()["__scene_manager_component"] == true)
-				app->add_component<Ak::SceneManager>(renderer);
+			if(project.keyExists("__scenes_manager_component") && project.archive()["__scenes_manager_component"] == true)
+			{
+				Ak::SceneManager* manager = app->add_component<Ak::SceneManager>(renderer);
+				if(project.keyExists("scenes"))
+				{
+					for(const auto& object : project.archive()["scenes"])
+					{
+						std::string name = object["name"];
+						Ak::Scene* scene = Ak::memAlloc<Ak::Scene>(name);
+						manager->add_scene(scene);
+						Ak::SceneSerializer serializer(scene);
+						serializer.deserialize(Ak::VFS::resolve(object["file"]));
+					}
+				}
+			}
 		}
 	}
 	if(project.keyExists("__audio_component") && project.archive()["__audio_component"] == true)

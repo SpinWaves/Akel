@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 30/05/2023
+// Updated : 04/06/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -24,6 +24,12 @@ namespace Ak
 		_loader(create_Unique_ptr<ShaderLoader>()), _camera(nullptr)
 	{
 		_loader->init();
+		if(getMainAppProjectFile().archive()["use_default_resource_system"] == true)
+		{
+			std::string filename = _name.c_str();
+			filename.append(".akscn");
+			_filepath = Res::get().getScenesPath() / filename;
+		}
 	}
 
 	Entity Scene::createEntity()

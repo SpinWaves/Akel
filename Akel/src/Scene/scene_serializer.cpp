@@ -73,9 +73,9 @@ namespace Ak
 				std::array<float, 3> sca;
 				for(int i = 0; i < 3; i++)
 				{
-					pos[i] = val["modelAttribute"]["position"][i];
-					rot[i] = val["modelAttribute"]["rotation"][i];
-					sca[i] = val["modelAttribute"]["scale"][i];
+					pos[i] = val["transformAttribute"]["position"][i];
+					rot[i] = val["transformAttribute"]["rotation"][i];
+					sca[i] = val["transformAttribute"]["scale"][i];
 				}
 				auto& trans = entity.addAttribute<TransformAttribute>();
 				trans.position.set(pos[0], pos[1], pos[2]);
@@ -85,7 +85,7 @@ namespace Ak
 
 			if(val.contains("modelAttribute"))
 			{
-				entity.addAttribute<ModelAttribute>(val["modelAttribute"]["file"]);
+				entity.addAttribute<ModelAttribute>(VFS::resolve(val["modelAttribute"]["file"]));
 			}
 		}
 	}

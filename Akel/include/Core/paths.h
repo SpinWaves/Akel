@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 05/02/2023
+// Updated : 04/06/2023
 
 #ifndef __AK_PATHS__
 #define __AK_PATHS__
@@ -20,15 +20,15 @@ namespace Ak::Core
 				_main_path = path;
 				_main_path.remove_filename();
 			}
-			inline static std::string mainDirPath() { return _main_path.string(); }
-			inline static std::string logDirPath();
+			inline static std::filesystem::path mainDirPath() { return _main_path; }
+			static std::filesystem::path logDirPath();
 			~Paths() = delete;
 
 		private:
 			inline static std::filesystem::path _main_path;
     };
-    inline std::string getMainDirPath() { return Paths::mainDirPath(); }
-	inline std::string getLogsDirPath() { return Paths::logDirPath(); }
+    inline std::filesystem::path getMainDirPath() { return Paths::mainDirPath(); }
+	inline std::filesystem::path getLogsDirPath() { return Paths::logDirPath(); }
 }
 
 #endif // __AK_PATHS__
