@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 15/05/2023
+-- Updated : 05/06/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
@@ -9,7 +9,7 @@ add_repositories("local-repo libs")
 add_repositories("nazara-repo https://github.com/NazaraEngine/xmake-repo")
 add_requires("nzsl")
 
-add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.89-docking", "imguizmo_sdl_vk", "libsdl", "openal-soft", "sol2", "nlohmann_json")
+add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.89-docking", "imguizmo_sdl_vk", "libsdl", "openal-soft", "sol2", "nlohmann_json", "kuba-zip")
 add_requires("volk", { configs = { header_only = true}})
 
 add_rules("mode.debug", "mode.release")
@@ -49,6 +49,7 @@ target("Akel")
 	add_packages("volk",          { public = true })
 	add_packages("nzsl",          { public = true })
 	add_packages("openal-soft",   { public = true })
+	add_packages("kuba-zip",      { public = true })
 target_end() -- optional but I think the code is cleaner with this
 
 -- Akel Studio Launcher Build
