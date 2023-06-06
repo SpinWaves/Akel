@@ -1,18 +1,19 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/06/2023
-// Updated : 06/06/2023
+// Updated : 07/06/2023
 
 #include <Core/vfs.h>
-#include <Core/paths.h>
+#include <Core/log.h>
 
 namespace Ak
 {
-	std::filesystem::path VFS::resolve(std::filesystem::path file)
+	const std::filesystem::path& VFS::getLogDirPath() { return Core::log::getLogPath(); }
+
+	std::filesystem::path VFS::resolve(const std::string& file)
 	{
-		std::string resolver = file.string();
-		if(resolver.compare(0, 2, ":/") == 0)
-			return Core::getMainDirPath() / resolver.substr(2, std::string::npos);
+		if(file.compare(0, 2, ":/") == 0)
+			return _main_path / file.substr(2, std::string::npos);
 		return file;
 	}
 }

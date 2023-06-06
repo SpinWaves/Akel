@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 04/06/2023
+// Updated : 07/06/2023
 
 #include <Core/profile.h>
 
@@ -22,13 +22,12 @@
 #include <Renderer/Core/render_core.h>
 #include <Core/softwareInfo.h>
 #include <Core/application.h>
-#include <Platform/resourceManager.h>
+#include <Core/vfs.h>
 
 namespace Ak
 {
 	namespace Core
 	{
-		std::filesystem::path getMainDirPath();
 		void initCpuInfo();
 	}
 	
@@ -77,7 +76,7 @@ namespace Ak
 		if(project->project_file_path != "")
 			project->_project_file.setDir(project->project_file_path);
 		else
-			project->_project_file.setDir(Core::getMainDirPath());
+			project->_project_file.setDir(VFS::getMainDirPath());
 		
 		project->_project_file.initProjFile(project->project_file_force_raw_json);
 
@@ -90,7 +89,7 @@ namespace Ak
 		MemoryManager::init();
 
 		if(project->use_default_resource_system)
-			Res::get().createFileSystem();
+			VFS::initResSystem();
 
 		return true;
     }

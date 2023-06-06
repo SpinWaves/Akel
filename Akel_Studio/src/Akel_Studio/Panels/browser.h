@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 17/05/2023
+// Updated : 07/06/2023
 
 #ifndef __AK_STUDIO_BROWSER__
 #define __AK_STUDIO_BROWSER__
@@ -27,7 +27,7 @@ class Browser : public Panel
         void dir(std::string directory);
 
         std::string _current_file;
-        std::string _parent = Ak::Core::getMainDirPath();
+        std::string _parent = Ak::VFS::getMainDirPath();
         std::set<std::filesystem::directory_entry> _files;
 };
 

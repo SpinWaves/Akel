@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 05/06/2023
+// Updated : 07/06/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -14,7 +14,6 @@
 #include <Graphics/builtin_shaders.h>
 #include <Scene/Attributes/attributes.h>
 #include <Core/file_loader.h>
-#include <Platform/resourceManager.h>
 #include <Scene/scene_serializer.h>
 
 namespace Ak
@@ -28,7 +27,7 @@ namespace Ak
 		{
 			std::string filename = _name.c_str();
 			filename.append(".akscn");
-			_filepath = Res::get().getScenesPath() / filename;
+			_filepath = filename;
 		}
 	}
 
@@ -131,7 +130,7 @@ namespace Ak
 			std::cout << filename << std::endl;
 			filename.append(".akscn");
 			SceneSerializer serializer(this);
-			serializer.serialize(Res::get().getScenesPath() / filename);
+			serializer.serialize(filename);
 		}
 	}
 

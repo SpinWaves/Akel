@@ -7,11 +7,11 @@ begin module Settings
 	let general = "General"
 		let language = "Language"
 		let onQuit = "Validation window at closing"
-	
+
 	let scene = "Editor's scene"
 		let camera = "Camera"
 			let sensitivity = "Sensitivity"
-	
+
 	let project = "Project"
 		let mem_man_en_fixed = "Memory manager enable fixed allocators use"
 		let vk_en_msg_layers = "Vulkan enable console validation layers messages (Debug only)"

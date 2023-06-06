@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 04/06/2023
+// Updated : 07/06/2023
 
 #include "launcher_component.h"
 
@@ -28,11 +28,11 @@ void launchAkelStudio()
 		return;
 	std::string project = akel_studio_project.string();
 #if defined(AK_PLATFORM_LINUX) || defined(AK_PLATFORM_OSX)
-	std::string path = Ak::Core::getMainDirPath() / "akelstudio_application";
+	std::string path = Ak::VFS::getMainDirPath() / "akelstudio_application";
 	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.c_str()), nullptr };
 	execve(path.c_str(), args, environ);
 #elif defined(AK_PLATFORM_WINDOWS)
-	std::string path = Ak::Core::getMainDirPath() / "akelstudio_application.exe";
+	std::string path = Ak::VFS::getMainDirPath() / "akelstudio_application.exe";
 	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.c_str()), nullptr };
 	_execve(path.c_str(), args, _environ);
 #else
@@ -44,13 +44,13 @@ LauncherComponent::LauncherComponent() : Ak::Component("launcherComponent") {}
 
 void LauncherComponent::onAttach()
 {
-	_logo = AkImGui::LoadImage(Ak::Core::getMainDirPath() / "resources/assets/logo.png");
+	_logo = AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/logo.png");
 
 	ImGuiIO& io = ImGui::GetIO();
-	_tiny_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 15.0f);
-	_title_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 45.0f);
+	_tiny_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 15.0f);
+	_title_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 45.0f);
 
-	std::filesystem::path project_list = Ak::Core::getMainDirPath() / "settings/project_list.json";
+	std::filesystem::path project_list = Ak::VFS::getMainDirPath() / "settings/project_list.json";
 	if(std::filesystem::exists(project_list))
 	{
 		std::ifstream file(project_list);
@@ -63,7 +63,7 @@ void LauncherComponent::onAttach()
 		for(json::iterator it = _json.begin(); it != _json.end(); ++it)
 		{
 			if(it.value()["icon"] == "default")
-				_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() / "resources/assets/logo_icon.png"), it.value()["title"], it.key(), false);
+				_projects.emplace(AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/logo_icon.png"), it.value()["title"], it.key(), false);
 			else
 				_projects.emplace(AkImGui::LoadImage(it.value()["icon"]), it.value()["title"], it.key(), false);
 		}
@@ -105,7 +105,7 @@ void LauncherComponent::onEvent(Ak::Input& input)
 void LauncherComponent::onQuit()
 {
 	_logo.destroy();
-	std::ofstream o(Ak::Core::getMainDirPath() / "settings/project_list.json");
+	std::ofstream o(Ak::VFS::getMainDirPath() / "settings/project_list.json");
 	o << std::setw(4) << _json << std::endl;
 	for(const Project& project : _projects)
 		const_cast<Project&>(project).icon.destroy();
@@ -201,7 +201,7 @@ void LauncherComponent::drawSideBar()
 				_error_no_name = false;
 				_error_no_name = false;
 				_warn_not_empty = false;
-				_currently_creating.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() / "resources/assets/logo_icon.png"), "", "", true);
+				_currently_creating.emplace(AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/logo_icon.png"), "", "", true);
 			}
 			_new_project_window = true;
 		}
@@ -213,12 +213,12 @@ void LauncherComponent::drawSideBar()
 				std::filesystem::path path = file[0];
 				if(std::filesystem::is_directory(path))
 				{
-					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() / "resources/assets/logo_icon.png"), path.string(), path, false);
+					_projects.emplace(AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/logo_icon.png"), path.string(), path, false);
 					_json[path.string()]["title"] = path.string();
 				}
 				else
 				{
-					_projects.emplace(AkImGui::LoadImage(Ak::Core::getMainDirPath() / "resources/assets/logo_icon.png"), path.stem().string(), path, false);
+					_projects.emplace(AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/logo_icon.png"), path.stem().string(), path, false);
 					_json[path.string()]["title"] = path.stem().string();
 				}
 				_json[path.string()]["icon"] = "default";
@@ -349,13 +349,13 @@ void LauncherComponent::drawSideBar()
 void LauncherComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::string(Ak::Core::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 20.0f, true);
+	imgui->addFontFromFile(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 20.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::string(Ak::Core::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").c_str(), 20.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").c_str(), 20.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 04/06/2023
+// Updated : 07/06/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
@@ -10,7 +10,7 @@
 Ak::AkelInstance Akel_init()
 {
 	Ak::AkelInstance project;
-		project.project_file_path = Ak::Core::getMainDirPath() / "settings";
+		project.project_file_path = Ak::VFS::getMainDirPath() / "settings";
 		project.project_file_name = "akel_studio_launcher";
 		project.use_default_resource_system = false;
 		project.at_akel_exit = launchAkelStudio;
@@ -34,7 +34,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
 	renderer->setMaxFPS(120);
 
-	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, Ak::Core::getMainDirPath() / "settings/akel_studio_launcher_imgui.ini", false);
+	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, Ak::VFS::getMainDirPath() / "settings/akel_studio_launcher_imgui.ini", false);
 
 	LauncherComponent* launcher = app->add_component<LauncherComponent>();
 	launcher->generateFontTextures(imgui);
