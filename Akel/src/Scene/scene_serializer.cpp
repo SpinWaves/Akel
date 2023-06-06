@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 30/05/2023
-// Updated : 04/06/2023
+// Updated : 05/06/2023
 
 #include <Scene/scene.h>
 #include <Scene/scene_serializer.h>
@@ -13,7 +13,7 @@ namespace Ak
 {
 	SceneSerializer::SceneSerializer(Scene* scene) : _scene(scene) {}
 
-	void SceneSerializer::serialize(const std::filesystem::path& file)
+	void SceneSerializer::serialize(std::filesystem::path file)
 	{
 		json j;
 		j["camera"] = _scene->_camera->getCameraType();
@@ -48,7 +48,7 @@ namespace Ak
 		writeJson(j, file);
 	}
 
-	void SceneSerializer::deserialize(const std::filesystem::path& file)
+	void SceneSerializer::deserialize(std::filesystem::path file)
 	{
 		json j;
 		if(!loadJson(file, j))

@@ -2,7 +2,7 @@
     "camera": "firstPerson3D",
     "entity_0": {
         "modelAttribute": {
-            "file": ":/Resources/Meshes/spaceship.obj"
+            "file": "/home/kbz_8/Documents/Programmation/C++/Akel/SandBox/MadeWithStudio/AudioDemo/Resources/Meshes/spaceship.obj"
         },
         "transformAttribute": {
             "position": [

@@ -41,7 +41,7 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 	}
 	else
 	{
-		_runtime_settings["projectFilePath"] = path.parent_path().string();
+		_runtime_settings["projectFilePath"] = ":/";
 		_runtime_settings["projectFileName"] = path.stem().string();
 		_runtime_settings["memManagerEnableFixedAllocator"] = true;
 		_runtime_settings["vkEnableMessageValidationLayers"] = false;

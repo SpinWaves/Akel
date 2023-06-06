@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 15/05/2023
-// Updated : 04/06/2023
+// Updated : 06/06/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 Ak::AkelInstance Akel_init()
 {
-	std::filesystem::path path(Ak::Core::getMainDirPath() / "settings.akrt");
+	std::filesystem::path path(Ak::VFS::getMainDirPath() / "settings.akrt");
 	if(!std::filesystem::exists(path))
 		Ak::FatalError("Akel Runtime : no runtime settings found (there should be a 'settings.akrt' file in your executable directory)");
 
@@ -32,7 +32,7 @@ Ak::AkelInstance Akel_init()
 	json settings = json::from_msgpack(std::move(data));
 
     Ak::AkelInstance instance;
-		instance.project_file_path = settings["projectFilePath"];
+		instance.project_file_path = Ak::VFS::resolve(settings["projectFilePath"]);
 		instance.project_file_name = settings["projectFileName"];
 		instance.memory_manager_enable_fixed_allocator = settings["memManagerEnableFixedAllocator"];
 		instance.vk_enable_message_validation_layer = settings["vkEnableMessageValidationLayers"];

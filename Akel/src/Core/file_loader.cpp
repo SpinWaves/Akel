@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/05/2023
-// Updated : 24/05/2023
+// Updated : 05/06/2023
 
 #include <Core/file_loader.h>
 #include <Core/log.h>
@@ -44,7 +44,7 @@ namespace Ak
 		std::ofstream newFile(std::move(file), std::ios::ate | std::ios::binary);
 		if(!newFile.is_open())
 		{
-			Core::log::report(ERROR, "File loader: unable to write data file: unable to create new file");
+			Core::log::report(ERROR, "File loader: unable to write data file: unable to create new file : '%s'", file.string().c_str());
 			return;
 		}
 #ifdef AK_RELEASE

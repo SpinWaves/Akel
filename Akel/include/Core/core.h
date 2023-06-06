@@ -1,13 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 04/06/2023
+// Updated : 06/06/2023
 
 #ifndef __AK_CORE__
 #define __AK_CORE__
 
 #include <Core/log.h>
-#include <Core/paths.h>
 #include <Core/softwareInfo.h>
 #include <Core/hardwareInfo.h>
 #include <Core/cpu.h>

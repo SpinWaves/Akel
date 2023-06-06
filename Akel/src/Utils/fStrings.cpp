@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/10/2021
-// Updated : 26/03/2023
+// Updated : 05/06/2023
 
 #include <Utils/fStrings.h>
 #include <Core/core.h>
@@ -34,7 +34,7 @@ namespace Ak
 
     fString::fString(const fString& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str._size - pos : len - pos)
     {
-        _string = memAllocSize<char>(_size);
+        _string = memAllocSize<char>(_size + 1);
         for(int i = 0; i < _size; i++)
         {
             if(modifier != nullptr)
@@ -42,11 +42,12 @@ namespace Ak
             else
                 _string[i] = str[i + pos];
         }
+		_string[_size] = 0;
     }
 
     fString::fString(fString&& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str._size - pos: len - pos)
     {
-        _string = memAllocSize<char>(_size);
+        _string = memAllocSize<char>(_size + 1);
         for(int i = 0; i <= _size; i++)
         {
             if(modifier != nullptr)
@@ -54,11 +55,12 @@ namespace Ak
             else
                 _string[i] = str[i + pos];
         }
+		_string[_size] = 0;
     }
     
-    fString::fString(mString& str, size_t pos, size_t len, func::function<char(char)> modifier) : _string(memAlloc<char>(len == npos ? str.size() : len)), _size(len == npos ? str.size() : len)
+    fString::fString(mString& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str.size() - pos : len - pos)
     {
-        _string = memAllocSize<char>(_size - pos);
+        _string = memAllocSize<char>(_size + 1);
         for(int i = 0; i < _size; i++)
         {
             if(modifier != nullptr)
@@ -66,11 +68,12 @@ namespace Ak
             else
                 _string[i] = str[i + pos];
         }
+		_string[_size] = 0;
     }
     
-    fString::fString(mString&& str, size_t pos, size_t len, func::function<char(char)> modifier) : _string(memAlloc<char>(len == npos ? str.size() : len)), _size(len == npos ? str.size() : len)
+    fString::fString(mString&& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str.size() - pos : len - pos)
     {
-        _string = memAllocSize<char>(_size - pos);
+        _string = memAllocSize<char>(_size + 1);
         for(int i = 0; i < _size; i++)
         {
             if(modifier != nullptr)
@@ -78,11 +81,12 @@ namespace Ak
             else
                 _string[i] = str[i + pos];
         }
+		_string[_size] = 0;
     }
 
-    fString::fString(std::string& str, size_t pos, size_t len, func::function<char(char)> modifier) : _string(memAlloc<char>(len == npos ? str.length() : len)), _size(len == npos ? str.length() : len)
+    fString::fString(std::string& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str.size() - pos : len - pos)
     {
-        _string = memAllocSize<char>(_size - pos);
+        _string = memAllocSize<char>(_size + 1);
         for(int i = 0; i < _size; i++)
         {
             if(modifier != nullptr)
@@ -90,11 +94,12 @@ namespace Ak
             else
                 _string[i] = str[i + pos];
         }
+		_string[_size] = 0;
     }
 
-    fString::fString(std::string&& str, size_t pos, size_t len, func::function<char(char)> modifier) : _string(memAlloc<char>(len == npos ? str.length() : len)), _size(len == npos ? str.length() : len)
+    fString::fString(std::string&& str, size_t pos, size_t len, func::function<char(char)> modifier) : _size(len == npos ? str.size() - pos : len - pos)
     {
-        _string = memAllocSize<char>(_size - pos);
+        _string = memAllocSize<char>(_size + 1);
         for(int i = 0; i < _size; i++)
         {
             if(modifier != nullptr)
@@ -102,6 +107,7 @@ namespace Ak
             else
                 _string[i] = str[i + pos];
         }
+		_string[_size] = 0;
     }
 
     fString& fString::operator=(const fString& str)

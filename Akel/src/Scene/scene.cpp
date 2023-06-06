@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 04/06/2023
+// Updated : 05/06/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -128,6 +128,7 @@ namespace Ak
 		if(getMainAppProjectFile().archive()["use_default_resource_system"] == true)
 		{
 			std::string filename = _name.c_str();
+			std::cout << filename << std::endl;
 			filename.append(".akscn");
 			SceneSerializer serializer(this);
 			serializer.serialize(Res::get().getScenesPath() / filename);
