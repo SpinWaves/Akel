@@ -4,7 +4,6 @@
 Ak::AkelInstance Akel_init()
 {
     Ak::AkelInstance instance;
-        instance.project_file_path = Ak::Core::getMainDirPath();
         instance.project_file_name = "audio";
     return instance;
 }
@@ -20,16 +19,16 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 
 	// Setting up Spaceship model and material
 	Ak::MaterialDesc spaceship_material_desc;
-	spaceship_material_desc.albedo = Ak::Res::get().getTexturesPath() / "spaceship_map.jpg";
+	spaceship_material_desc.albedo = Ak::VFS::resolve("//Textures/spaceship_map.jpg");
 	Ak::MaterialID spaceship_material = Ak::addMaterialToLibrary(spaceship_material_desc);
 
 	Ak::Entity spaceship = scene->createEntity();
 	spaceship.addAttribute<Ak::TransformAttribute>(0.0f, 0.0f, 0.0f);
-	spaceship.addAttribute<Ak::AudioAttribute>(Ak::Res::get().getSoundsPath() / "engine.ogg");
-	spaceship.addAttribute<Ak::ModelAttribute>(Ak::Res::get().getMeshesPath() / "spaceship.obj", spaceship_material);
+	spaceship.addAttribute<Ak::AudioAttribute>(Ak::VFS::resolve("//Sounds/engine.ogg"));
+	spaceship.addAttribute<Ak::ModelAttribute>(Ak::VFS::resolve("//Meshes/spaceship.obj"), spaceship_material);
 
 	Ak::LuaLoader lua(app, *app->getSceneManager());
-	spaceship.addAttribute<Ak::ScriptAttribute>(lua.loadScript(Ak::Res::get().getScriptsPath() / "spaceship_script.lua"));
+	spaceship.addAttribute<Ak::ScriptAttribute>(lua.loadScript(Ak::VFS::resolve("//Scripts/spaceship_script.lua")));
 
 	return app;
 }

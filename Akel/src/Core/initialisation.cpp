@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 07/06/2023
+// Updated : 09/06/2023
 
 #include <Core/profile.h>
 
@@ -73,10 +73,7 @@ namespace Ak
 
 		if(project->project_file_name != "")
 			project->_project_file.setName(project->project_file_name);
-		if(project->project_file_path != "")
-			project->_project_file.setDir(project->project_file_path);
-		else
-			project->_project_file.setDir(VFS::getMainDirPath());
+		project->_project_file.setDir(VFS::resolve(project->project_file_path));
 		
 		project->_project_file.initProjFile(project->project_file_force_raw_json);
 

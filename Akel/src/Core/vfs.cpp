@@ -24,13 +24,14 @@ namespace Ak
 			if(it == _mounts.end() || it->second.empty())
 				return "";
 
-			const std::string remainder = file.substr(virtualDir.size() + 2, file.size() - virtualDir.size());
+			std::string remainder = file.substr(virtualDir.size() + 3, file.size() - virtualDir.size());
 			for(const std::filesystem::path& physicalPath : it->second)
 			{
-				const std::string newPath = physicalPath + remainder;
-				if(std::filesystem::exists(std::filesystem::path{ newPath }))
+				std::filesystem::path newPath = physicalPath / remainder;
+				if(std::filesystem::exists(newPath))
 					return newPath;
 			}
+			Core::log::report(ERROR, "Virtual File System : cannot resolve physical path for '%s'", file.c_str());
 		}
 		return file;
 	}
@@ -38,12 +39,29 @@ namespace Ak
 	void VFS::mountFolder(const std::string& virtual_path, const std::filesystem::path& physical_path, bool replace)
 	{
 		if(replace)
-			_mounts[virutal_path].clear();
+			_mounts[virtual_path].clear();
 		_mounts[virtual_path].push_back(physical_path);
 	}
 
 	void VFS::unmountFolder(const std::string& virtual_path)
 	{
-		_mounts[virutal_path].clear();
+		_mounts[virtual_path].clear();
+	}
+
+	void VFS::initResSystem()
+	{
+		if(!getMainAppProjectFile().archive()["use_default_resource_system"])
+			return;
+		std::filesystem::create_directory(_main_path / "Resources");
+		std::filesystem::create_directory(_main_path / "Resources/Textures");
+		std::filesystem::create_directory(_main_path / "Resources/Meshes");
+		std::filesystem::create_directory(_main_path / "Resources/Scripts");
+		std::filesystem::create_directory(_main_path / "Resources/Scenes");
+		std::filesystem::create_directory(_main_path / "Resources/Sounds");
+		mountFolderAs<VirtualFolder::Textures>(_main_path / "Resources/Textures", true);
+		mountFolderAs<VirtualFolder::Scenes>(_main_path / "Resources/Scenes", true);
+		mountFolderAs<VirtualFolder::Scripts>(_main_path / "Resources/Scripts", true);
+		mountFolderAs<VirtualFolder::Meshes>(_main_path / "Resources/Meshes", true);
+		mountFolderAs<VirtualFolder::Sounds>(_main_path / "Resources/Sounds", true);
 	}
 }

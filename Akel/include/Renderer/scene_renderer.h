@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/02/2023
-// Updated : 18/02/2023
+// Updated : 10/06/2023
 
 #ifndef __AK_SCENE_RENDERER__
 #define __AK_SCENE_RENDERER__
@@ -30,6 +30,8 @@ namespace Ak
 			void init(SceneRendererSettings settings);
 			void render(Scene* scene);
 			void destroy();
+
+			void setRenderTarget(TextureID texture);
 
 			~SceneRenderer() = default;
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 08/03/2023
+// Updated : 10/06/2023
 
 #ifndef __AK_FORWARD_DATA__
 #define __AK_FORWARD_DATA__
@@ -19,6 +19,7 @@ namespace Ak
 		std::vector<VkDescriptorSet> descriptor_sets;
 		std::vector<Shader::PushConstant> push_constants;
 		std::vector<ShaderID> shaders;
+		std::optional<TextureID> renderTexture;
 	};
 }
 

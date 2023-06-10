@@ -15,7 +15,7 @@ namespace Ak
 {
 	enum class VirtualFolder
 	{
-		Meshes
+		Meshes,
 		Scenes,
 		Scripts,
 		Sounds,
@@ -51,30 +51,12 @@ namespace Ak
 			~VFS() = delete;
 
 		private:
-			struct Directory
-
-		private:
 			inline static void init(const char* path)
 			{
 				_main_path = path;
 				_main_path.remove_filename();
 			}
-			inline static void initResSystem()
-			{
-				if(!getMainAppProjectFile().archive()["use_default_resource_system"])
-					return;
-				std::filesystem::create_directory(_main_path / "Resources");
-				std::filesystem::create_directory(_main_path / "Resources/Textures");
-				std::filesystem::create_directory(_main_path / "Resources/Meshes");
-				std::filesystem::create_directory(_main_path / "Resources/Scripts");
-				std::filesystem::create_directory(_main_path / "Resources/Scenes");
-				std::filesystem::create_directory(_main_path / "Resources/Sounds");
-				mountFolderAs<VirtualFolder::Textures>(_main_path / "Resources/Textures", true);
-				mountFolderAs<VirtualFolder::Scenes>(_main_path / "Resources/Scenes", true);
-				mountFolderAs<VirtualFolder::Scripts>(_main_path / "Resources/Scripts", true);
-				mountFolderAs<VirtualFolder::Meshes>(_main_path / "Resources/Meshes", true);
-				mountFolderAs<VirtualFolder::Sounds>(_main_path / "Resources/Sounds", true);
-			}
+			static void initResSystem();
 
 		private:
 			inline static std::map<std::string, std::vector<std::filesystem::path>, std::less<void>> _mounts;
