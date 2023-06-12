@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/02/2023
-// Updated : 17/02/2023
+// Updated : 13/06/2023
 
 #ifndef __AK_PIPELINES_MANAGER__
 #define __AK_PIPELINES_MANAGER__
@@ -15,10 +15,8 @@ namespace Ak
 	{
 		public:
 			PipelinesManager() = default;
-
 			std::shared_ptr<GraphicPipeline> getPipeline(class RendererComponent& renderer, PipelineDesc& desc);
 			void clearCache() noexcept;
-
 			~PipelinesManager() = default;
 
 		private:

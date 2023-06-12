@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 16/05/2023
+// Updated : 13/06/2023
 
 #include <Renderer/Core/render_core.h>
+#include <Renderer/RenderPass/render_pass_library.h>
 
 namespace Ak
 {
@@ -87,6 +88,7 @@ namespace Ak
 
         vkDeviceWaitIdle(_device());
 
+		RenderPassesLibrary::get().clearCache();
 		_device.destroy();
 		_layers.destroy();
 		_instance.destroy();
