@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 02/05/2023
+// Updated : 12/06/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -47,6 +47,8 @@ namespace Ak
 		imageInfo.usage = usage;
 		imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 		imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+		_layout = VK_IMAGE_LAYOUT_UNDEFINED;
 
 		if(vkCreateImage(Render_Core::get().getDevice().get(), &imageInfo, nullptr, &_image) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create an image");
@@ -125,7 +127,7 @@ namespace Ak
 		VkImageMemoryBarrier copy_barrier = {};
 		copy_barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 		copy_barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-		copy_barrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		copy_barrier.oldLayout = _layout;
 		copy_barrier.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
 		copy_barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 		copy_barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
@@ -178,6 +180,8 @@ namespace Ak
 		vkQueueWaitIdle(graphicsQueue);
 
 		cmdpool.destroy();
+
+		_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 	}
 
 	void Image::destroy() noexcept

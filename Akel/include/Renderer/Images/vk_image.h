@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/12/2022
-// Updated : 02/05/2023
+// Updated : 12/06/2023
 
 #ifndef __AK_VK_IMAGE__
 #define __AK_VK_IMAGE__
@@ -12,6 +12,15 @@
 namespace Ak
 {
 	VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
+
+	enum class ImageType
+	{
+		color = 0,
+		depth,
+		depth_array,
+		cube,
+		other
+	};
 
 	class Image
 	{
@@ -28,6 +37,7 @@ namespace Ak
 			inline VkImageView getImageView() noexcept { return _image_view; }
 			inline VkFormat getFormat() noexcept { return _format; }
 			inline VkSampler getSampler() noexcept { return _sampler; }
+			inline VkImageLayout getLayout() noexcept { return _layout; }
 
 			virtual ~Image() = default;
 
@@ -41,6 +51,7 @@ namespace Ak
 			VkImageView _image_view = VK_NULL_HANDLE;
 			VkSampler _sampler = VK_NULL_HANDLE;
 			VkFormat _format;
+			VkImageLayout _layout;
 			uint32_t _width = 0;
 			uint32_t _height = 0;
 	};

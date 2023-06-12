@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 08/03/2023
+// Updated : 11/06/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -13,6 +13,23 @@
 
 namespace Ak
 {
+	bool PipelineDesc::operator==(const PipelineDesc& other) noexcept
+	{
+		bool same_shaders = true;
+		for(int i = 0; i < shaders.size(); i++)
+		{
+			if(shaders.size() != other.shaders.size())
+			{
+				same_shaders = false;
+				break;
+			}
+			if(ShadersLibrary::get().getShader(shaders[i])->_byte_code != ShadersLibrary::get().getShader(other.shaders[i])->_byte_code)
+				same_shaders = false;
+		}
+		return	(culling == other.culling) && (mode == other.mode) && (topology == other.topology) &&
+				(line_width == other.line_width) && same_shaders;
+	}
+
 	void GraphicPipeline::init(class RendererComponent* renderer, PipelineDesc& desc)
     {
 		_renderer = renderer;

@@ -1,18 +1,77 @@
-// this file is a part of akel
-// authors : @kbz_8
-// created : 10/04/2022
-// updated : 08/06/2022
+// This file is a part of Akel
+// Authors : @kbz_8
+// Created : 10/04/2022
+// Updated : 12/06/2023
 
-#include <Renderer/SwapChain/vk_render_pass.h>
+#include <Renderer/Images/vk_image.h>
+#include <Renderer/RenderPass/vk_render_pass.h>
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
 #include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-	void RenderPass::init(RendererComponent* renderer)
+	VkAttachmentDescription GetAttachmentDescription(ImageType type, Image* image, bool clear = true)
 	{
-		_renderer = renderer;
+		VkAttachmentDescription attachment{};
+
+		if(type == ImageType::color)
+		{
+			attachment.format = image->getFormat();
+			attachment.initialLayout = image->getLayout();
+			attachment.finalLayout = attachment.initialLayout;
+		}
+		else if(type == ImageType::cube)
+		{
+			Core::log::report(ERROR, "Vulkan Render Pass Attachement Description : unsupported (yet) image type '%d'", static_cast<int>(type));
+			return attachment;
+		}
+		else if(type == ImageType::depth)
+		{
+			attachment.format = image->getFormat();
+			attachment.initialLayout = image->getLayout();
+			attachment.finalLayout = attachment.initialLayout;
+		}
+		else if(type == ImageType::depth_array)
+		{
+			Core::log::report(ERROR, "Vulkan Render Pass Attachement Description : unsupported (yet) image type '%d'", static_cast<int>(type));
+			return attachment;
+		}
+		else
+		{
+			Core::log::report(ERROR, "Vulkan Render Pass Attachement Description : unsupported image type '%d'", static_cast<int>(type));
+			return attachment;
+		}
+
+		if(clear)
+		{
+			attachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+			attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+			attachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		}
+		else
+		{
+			attachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+			attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+		}
+
+		attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+		attachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+		attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+		attachment.flags = 0;
+
+		return attachment;
+	}
+
+	void RenderPass::init(RenderPassDesc desc)
+	{
+		std::vector<VkAttachmentDescription> attachments;
+
+		std::vector<VkAttachmentReference> colourAttachmentReferences;
+		std::vector<VkAttachmentReference> depthAttachmentReferences;
+
+		_depth_only  = true;
+		_clear_depth = false;
 
 		VkAttachmentDescription colorAttachment{};
 		colorAttachment.format = renderer->getSwapChain()._swapChainImageFormat;
@@ -75,35 +134,45 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create render pass");
 	}
 
-	void RenderPass::begin()
+	void RenderPass::begin(CommandBuffer& cmd, std::array<float, 4> clears, FrameBuffer& fb, uint32_t width, uint32_t height)
 	{
 		if(_is_running)
 			return;
 
-		std::array<VkClearValue, 2> clearValues{};
-		clearValues[0].color = _renderer->getClearValue().color;
-		clearValues[1].depthStencil = {1.0f, 0};
+		if(!_depth_only)
+		{
+			for(int i = 0; i < _clears.size(); i++)
+			{
+				_clears[i].color.float32[0] = clears[0];
+				_clears[i].color.float32[1] = clears[1];
+				_clears[i].color.float32[2] = clears[2];
+				_clears[i].color.float32[3] = clears[3];
+			}
+		}
+
+		if(_clear_depth)
+			_clears.back().depthStencil = VkClearDepthStencilValue{ 1.0f, 0 };
 
 		VkRenderPassBeginInfo renderPassInfo{};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
 		renderPassInfo.renderPass = _renderPass;
-		renderPassInfo.framebuffer = _renderer->getSwapChain()._framebuffers[_renderer->getImageIndex()].get();
+		renderPassInfo.framebuffer = fdb.get();
 		renderPassInfo.renderArea.offset = { 0, 0 };
-		renderPassInfo.renderArea.extent = _renderer->getSwapChain()._swapChainExtent;
-		renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-		renderPassInfo.pClearValues = clearValues.data();
+		renderPassInfo.renderArea.extent = { width, height };
+		renderPassInfo.clearValueCount = static_cast<uint32_t>(_clears.size());
+		renderPassInfo.pClearValues = _clears.data();
 
-		vkCmdBeginRenderPass(_renderer->getActiveCmdBuffer().get(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+		vkCmdBeginRenderPass(cmd.get(), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 		_is_running = true;
 	}
 
-	void RenderPass::end()
+	void RenderPass::end(CommandBuffer& cmd)
 	{
 		if(!_is_running)
 			return;
 
-		vkCmdEndRenderPass(_renderer->getActiveCmdBuffer().get());
+		vkCmdEndRenderPass(cmd.get());
 		_is_running = false;
 	}
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 03/06/2023
+// Updated : 11/06/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -20,7 +20,7 @@
 #include <Renderer/Core/vk_semaphore.h>
 #include <Renderer/Command/cmd_manager.h>
 #include <Renderer/SwapChain/vk_swapchain.h>
-#include <Renderer/SwapChain/vk_render_pass.h>
+#include <Renderer/RenderPass/vk_render_pass.h>
 
 namespace Ak
 {

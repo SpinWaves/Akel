@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 20/02/2023
+// Updated : 11/06/2023
 
 #ifndef __AK_VK_SWAPCHAIN__
 #define __AK_VK_SWAPCHAIN__
 
 #include <Akpch.h>
 #include "vk_imageview.h"
-#include "vk_framebuffer.h"
+#include <Renderer/RenderPass/vk_framebuffer.h>
 #include <Renderer/Images/depth.h>
 
 namespace Ak

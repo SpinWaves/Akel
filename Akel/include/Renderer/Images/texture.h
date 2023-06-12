@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 20/02/2023
+// Updated : 12/06/2023
 
 #ifndef __AK_TEXTURE__
 #define __AK_TEXTURE__
