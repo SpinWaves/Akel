@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 11/06/2023
+// Updated : 14/06/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -10,6 +10,8 @@
 #include <Renderer/Images/texture.h>
 #include <Graphics/vertex.h>
 #include <Renderer/Pipeline/shaders_library.h>
+#include <Renderer/RenderPass/render_pass_library.h>
+#include <Renderer/Images/texture_library.h>
 
 namespace Ak
 {
@@ -27,7 +29,32 @@ namespace Ak
 				same_shaders = false;
 		}
 		return	(culling == other.culling) && (mode == other.mode) && (topology == other.topology) &&
-				(line_width == other.line_width) && same_shaders;
+				(line_width == other.line_width) && same_shaders && (swapchain == other.swapchain) &&
+				(clear_color == other.clear_color) && (clear_target = other.clear_target);
+	}
+
+	void GraphicsPipeline::createFrameBuffers()
+	{
+		std::vector<RenderPassAttachement> attachements;
+
+		if(_desc.swapchain)
+			attachments.emplace_back(_renderer->getSwapChain(), ImageType::color);
+		else
+		{
+			for(TextureID texture : _desc.render_targets)
+			{
+				if(texture != nulltexture)
+					attachments.emplace_back(TextureLibrary::get().getTexture(texture).get(), ImageType::color);
+			}
+		}
+
+		if(_desc.dept != nullptr)
+			attachments.emplace_back(_desc_depth, ImageType::depth);
+
+		RenderPassDesc render_pass_desc{};
+		render_pass_desc.clear = _desc.clear_target;
+		render_pass_desc.attachments = std::move(attachments);
+		_render_pass = RenderPassesLibrary::get().getRenderPass(render_pass_desc);
 	}
 
 	void GraphicPipeline::init(class RendererComponent* renderer, PipelineDesc& desc)

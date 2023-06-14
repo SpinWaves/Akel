@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/12/2022
-// Updated : 12/06/2023
+// Updated : 14/06/2023
 
 #ifndef __AK_VK_IMAGE__
 #define __AK_VK_IMAGE__
@@ -24,9 +24,12 @@ namespace Ak
 
 	class Image
 	{
+		friend class GraphicsPipeline;
+
 		public:
 			Image() = default;
 
+			inline void create(VkImage image) noexcept { _image = image; }
 			void create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties);
 			void copyBuffer(class Buffer& buffer);
 			void destroy() noexcept;
@@ -38,6 +41,8 @@ namespace Ak
 			inline VkFormat getFormat() noexcept { return _format; }
 			inline VkSampler getSampler() noexcept { return _sampler; }
 			inline VkImageLayout getLayout() noexcept { return _layout; }
+			inline uint32_t getWidth() const noexcept { return _width; }
+			inline uint32_t getHeight() const noexcept { return _height; }
 
 			virtual ~Image() = default;
 
@@ -51,7 +56,7 @@ namespace Ak
 			VkImageView _image_view = VK_NULL_HANDLE;
 			VkSampler _sampler = VK_NULL_HANDLE;
 			VkFormat _format;
-			VkImageLayout _layout;
+			VkImageLayout _layout = VK_IMAGE_LAYOUT_UNDEFINED;
 			uint32_t _width = 0;
 			uint32_t _height = 0;
 	};

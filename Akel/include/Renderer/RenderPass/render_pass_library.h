@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/06/2023
-// Updated : 13/06/2023
+// Updated : 14/06/2023
 
 #ifndef __AK_RENDER_PASS_LIBRARY__
 #define __AK_RENDER_PASS_LIBRARY__
@@ -21,7 +21,7 @@ namespace Ak
 			~RenderPassesLibrary() = default;
 
 		private:
-			std::vector<std::shared_ptr<RenderPass>> _cache;
+			std::map<std::size_t, std::shared_ptr<RenderPass>> _cache;
 	};
 }
 

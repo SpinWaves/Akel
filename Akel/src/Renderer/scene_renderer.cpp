@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 30/03/2023
+// Updated : 13/06/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -42,7 +42,7 @@ namespace Ak
 				_forward_data.shaders.clear();
 				_forward_data.shaders = scene->_forward_shaders;
 			}
-			
+
 			_forward_data.command_queue.clear();
 			auto world = scene->getRegistry().group<ModelAttribute>(entt::get<TransformAttribute>);
 			for(auto e : world)

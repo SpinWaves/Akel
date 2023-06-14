@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
-// Created : 15/02/2023
-// Updated : 15/02/2023
+// Created : 14/06/2023
+// Updated : 14/06/2023
 
-#ifndef __AK_HASH_COMBINE__
-#define __AK_HASH_COMBINE__
+#ifndef __AK_HASH_UTILS__
+#define __AK_HASH_UTILS__
 
 #include <Akpch.h>
 

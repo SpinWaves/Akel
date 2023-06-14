@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 12/06/2023
+// Updated : 14/06/2023
 
 #ifndef __AK_VK_RENDER_PASS__
 #define __AK_VK_RENDER_PASS__
@@ -13,14 +13,19 @@ namespace Ak
 {
 	struct RenderPassAttachement
 	{
-		Image* image;
-		ImageType type;
+		Image* image = nullptr;
+		ImageType type = ImageType::other;
+
+		RenderPassAttachement() = default;
+		RenderPassAttachement(Image* i, ImageType it) : image(i), type(it) {}
 	};
 
 	struct RenderPassDesc
 	{
 		std::vector<RenderPassAttachement> attachements;
 		bool clear = true;
+
+		bool operator==(const RenderPassDesc& desc) noexcept;
 	};
 
 	class AK_API RenderPass

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 12/06/2023
+// Updated : 14/06/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/RenderPass/vk_render_pass.h>
@@ -11,6 +11,11 @@
 
 namespace Ak
 {
+	bool RenderPassDesc::operator==(const RenderPassDesc& desc) noexcept
+	{
+		return clear == desc.clear && attachment == desc.attachment;
+	}
+
 	VkAttachmentDescription GetAttachmentDescription(ImageType type, Image* image, bool clear = true)
 	{
 		VkAttachmentDescription attachment{};

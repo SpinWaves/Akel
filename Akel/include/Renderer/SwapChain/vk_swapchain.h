@@ -1,63 +1,56 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 11/06/2023
+// Updated : 14/06/2023
 
 #ifndef __AK_VK_SWAPCHAIN__
 #define __AK_VK_SWAPCHAIN__
 
 #include <Akpch.h>
-#include "vk_imageview.h"
-#include <Renderer/RenderPass/vk_framebuffer.h>
-#include <Renderer/Images/depth.h>
+#include <Renderer/Images/vk_image.h>
 
 namespace Ak
 {
-    class SwapChain
-    {
-        friend class FrameBuffer;
-        friend class SwapChainImageView;
-        friend class GraphicPipeline;
-        friend class DepthImage;
-        friend class RenderPass;
+	class SwapChain
+	{
+		friend class GraphicPipeline;
 		friend class SceneRenderer;
 
-        public:
-            struct SwapChainSupportDetails
-            {
-                VkSurfaceCapabilitiesKHR capabilities;
-                std::vector<VkSurfaceFormatKHR> formats;
-                std::vector<VkPresentModeKHR> presentModes;
-            };
+		public:
+			struct SwapChainSupportDetails
+			{
+				VkSurfaceCapabilitiesKHR capabilities;
+				std::vector<VkSurfaceFormatKHR> formats;
+				std::vector<VkPresentModeKHR> presentModes;
+			};
 
-            void init(class RendererComponent* renderer);
-            void initFB();
-            void destroy() noexcept;
-            void destroyFB() noexcept;
+		public:
+			SwapChain() = default;
 
-            void recreate();
+			void init(class RendererComponent* renderer);
+			void recreate();
+			void destroy() noexcept;
 
-            SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
-            VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
-            VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+			SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+			VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+			VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR> &availablePresentModes);
 
-            inline SwapChainSupportDetails getSupport() noexcept { return _swapChainSupport; }
-            inline VkSwapchainKHR operator()() noexcept { return _swapChain; }
-            inline VkSwapchainKHR get() noexcept { return _swapChain; }
-            inline FrameBuffer& getFrameBuffer(int i) { return _framebuffers[i]; }
-            inline size_t getImagesNumber() const noexcept { return _swapChainImages.size(); }
+			inline VkSwapchainKHR get() noexcept { return _swapChain; }
+			inline VkSwapchainKHR operator()() noexcept { return _swapChain; }
+			inline size_t getImagesNumber() const noexcept { return _images.size(); }
+			inline Image& getImage(std::size_t i) const noexcept { return _images[i]; }
+			inline SwapChainSupportDetails getSupport() noexcept { return _swapChainSupport; }
 
-        private:
-            SwapChainSupportDetails _swapChainSupport;
-            VkSwapchainKHR _swapChain;
-            std::vector<VkImage> _swapChainImages;
-			DepthImage _depth;
-            VkFormat _swapChainImageFormat;
-            VkExtent2D _swapChainExtent;
-            std::vector<FrameBuffer> _framebuffers;
-            std::vector<SwapChainImageView> _imageViews;
+			~SwapChain() = default;
+
+		private:
+			SwapChainSupportDetails _swapChainSupport;
+			VkSwapchainKHR _swapChain;
+			std::vector<Image> _images;
+			VkFormat _swapChainImageFormat;
+			VkExtent2D _extent;
 			class RendererComponent* _renderer = nullptr;
-    };
+	};
 }
 
 #endif // __AK_VK_SWAPCHAIN__

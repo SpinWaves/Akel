@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/04/2021
-// Updated : 03/06/2023
+// Updated : 14/06/2023
 
 #ifndef __AK_UTILS__
 #define __AK_UTILS__
@@ -40,7 +40,7 @@ using Ak_f96 = long double;
 #include <Utils/selfInstance.h>
 #include <Utils/plainApplication.h>
 #include <Utils/assert.h>
-#include <Utils/hash_combine.h>
+#include <Utils/hash.h>
 
 #include <Utils/Containers/containers.h>
 
