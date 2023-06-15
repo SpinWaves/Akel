@@ -1,13 +1,15 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 02/05/2023
+// Updated : 15/06/2023
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
 
 #include <Akpch.h>
 #include <Core/Components/baseComponent.h>
+#include <Renderer/RenderPass/vk_render_pass.h>
+#include <Renderer/RenderPass/vk_framebuffer.h>
 
 namespace Ak
 {
@@ -34,7 +36,10 @@ namespace Ak
 			void begin();
 			void renderFrame();
 
+		private:
 			std::string _settingsFilePath;
+			std::vector<std::shared_ptr<FrameBuffer>> _frame_buffers;
+			std::shared_ptr<RenderPass> _render_pass;
 			class RendererComponent* _renderer = nullptr;
 			static inline bool _componentsInit = false;
 			bool _generate_font_on_attach = true;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 14/06/2023
+// Updated : 15/06/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -55,12 +55,15 @@ namespace Ak
 
 		std::vector<VkImage> tmp;
 		vkGetSwapchainImagesKHR(device, _swapChain, &imageCount, nullptr);
-		_swapChainImages.resize(imageCount);
+		_images.resize(imageCount);
 		tmp.resize(imageCount);
 		vkGetSwapchainImagesKHR(device, _swapChain, &imageCount, tmp.data());
 
 		for(int i = 0; i < imageCount; i++)
+		{
 			_images[i].create(tmp[i]);
+			_images[i].createImageView(VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_COLOR_BIT);
+		}
 
 		_swapChainImageFormat = surfaceFormat.format;
 		_extent = extent;

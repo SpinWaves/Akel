@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 14/06/2023
+// Updated : 15/06/2023
 
 #ifndef __AK_VK_SWAPCHAIN__
 #define __AK_VK_SWAPCHAIN__
@@ -15,6 +15,7 @@ namespace Ak
 	{
 		friend class GraphicPipeline;
 		friend class SceneRenderer;
+		friend class DepthImage;
 
 		public:
 			struct SwapChainSupportDetails
@@ -38,7 +39,7 @@ namespace Ak
 			inline VkSwapchainKHR get() noexcept { return _swapChain; }
 			inline VkSwapchainKHR operator()() noexcept { return _swapChain; }
 			inline size_t getImagesNumber() const noexcept { return _images.size(); }
-			inline Image& getImage(std::size_t i) const noexcept { return _images[i]; }
+			inline Image& getImage(std::size_t i) noexcept { return _images[i]; }
 			inline SwapChainSupportDetails getSupport() noexcept { return _swapChainSupport; }
 
 			~SwapChain() = default;

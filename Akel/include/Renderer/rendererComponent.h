@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 14/06/2023
+// Updated : 15/06/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -42,11 +42,10 @@ namespace Ak
 			inline CmdPool& getCmdPool() noexcept { return _cmd.getCmdPool(); }
 			inline SwapChain& getSwapChain() noexcept { return _swapchain; }
 			inline Semaphore& getSemaphore(int i) noexcept { return _semaphores[i]; }
-			inline VkClearValue& getClearValue() noexcept { return _clearColor; }
 			inline CmdBuffer& getCmdBuffer(int i) noexcept { return _cmd.getCmdBuffer(i); }
 			inline CmdBuffer& getActiveCmdBuffer() noexcept { return _cmd.getCmdBuffer(_active_image_index); }
 			inline uint32_t getActiveImageIndex() const noexcept { return _active_image_index; }
-			inline uint32_t getImageIndex() const noexcept { return _image_index; }
+			inline uint32_t getSwapChainImageIndex() const noexcept { return _swapchain_image_index; }
 			inline bool isInit() const noexcept { return _is_init; }
 
 			inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
@@ -62,13 +61,12 @@ namespace Ak
 			Surface _surface;
 			SwapChain _swapchain;
 			std::array<Semaphore, MAX_FRAMES_IN_FLIGHT> _semaphores;
-			VkClearValue _clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
 			std::mutex _mutex;
 
 			WindowComponent* _window = nullptr;
 
 			uint32_t _active_image_index = 0;
-			uint32_t _image_index = 0;
+			uint32_t _swapchain_image_index = 0;
 
 			uint32_t _max_fps = 100'000;
 			

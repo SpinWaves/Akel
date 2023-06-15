@@ -1,13 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 14/06/2023
+// Updated : 15/06/2023
 
 #ifndef __AK_VK_RENDER_PASS__
 #define __AK_VK_RENDER_PASS__
 
 #include <Akpch.h>
 #include <Renderer/Command/cmd_manager.h>
+#include <Renderer/Images/vk_image.h>
 
 namespace Ak
 {
@@ -18,6 +19,7 @@ namespace Ak
 
 		RenderPassAttachement() = default;
 		RenderPassAttachement(Image* i, ImageType it) : image(i), type(it) {}
+		inline bool operator==(const RenderPassAttachement& rhs) const noexcept { return image == rhs.image && type == rhs.type; }
 	};
 
 	struct RenderPassDesc
@@ -25,20 +27,24 @@ namespace Ak
 		std::vector<RenderPassAttachement> attachements;
 		bool clear = true;
 
-		bool operator==(const RenderPassDesc& desc) noexcept;
+		inline bool operator==(const RenderPassDesc& desc) const noexcept { return clear == desc.clear && attachements == desc.attachements; }
 	};
 
 	class AK_API RenderPass
 	{
 		public:
+			RenderPass() = default;
+
 			void init(RenderPassDesc desc);
 			void destroy() noexcept;
 
-			void begin(class CommandBuffer& cmd, std::array<float, 4> clears, class FrameBuffer& fb, uint32_t width, uint32_t height);
-			void end(class CommandBuffer& cmd);
+			void begin(class CmdBuffer& cmd, std::array<float, 4> clears, class FrameBuffer& fb, uint32_t width, uint32_t height);
+			void end(class CmdBuffer& cmd);
 
             inline VkRenderPass operator()() noexcept { return _renderPass; }
             inline VkRenderPass get() noexcept { return _renderPass; }
+
+			~RenderPass() = default;
 
 		private:
 			VkRenderPass _renderPass = VK_NULL_HANDLE;

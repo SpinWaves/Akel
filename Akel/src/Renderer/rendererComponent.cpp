@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 03/06/2023
+// Updated : 15/06/2023
 
 #include <Renderer/rendererComponent.h>
 
@@ -19,8 +19,6 @@ namespace Ak
 		
 		_surface.create(*this);
 		_swapchain.init(this);
-		_pass.init(this);
-		_swapchain.initFB();
 		_cmd.init();
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 			_semaphores[i].init();
@@ -41,7 +39,7 @@ namespace Ak
 		_cmd.getCmdBuffer(_active_image_index).waitForExecution();
 		_cmd.getCmdBuffer(_active_image_index).reset();
 
-		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphores[_active_image_index].getImageSemaphore(), VK_NULL_HANDLE, &_image_index);
+		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphores[_active_image_index].getImageSemaphore(), VK_NULL_HANDLE, &_swapchain_image_index);
 
 		if(result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
@@ -76,7 +74,7 @@ namespace Ak
 		presentInfo.pWaitSemaphores = signalSemaphores;
 		presentInfo.swapchainCount = 1;
 		presentInfo.pSwapchains = &swapchain;
-		presentInfo.pImageIndices = &_image_index;
+		presentInfo.pImageIndices = &_swapchain_image_index;
 
 		VkResult result = vkQueuePresentKHR(Render_Core::get().getQueue().getPresent(), &presentInfo);
 
@@ -102,8 +100,6 @@ namespace Ak
 
 		_cmd.destroy();
 
-		_swapchain.destroyFB();
-		_pass.destroy();
 		_swapchain.destroy();
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 			_semaphores[i].destroy();

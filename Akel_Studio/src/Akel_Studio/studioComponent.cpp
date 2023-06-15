@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 07/06/2023
+// Updated : 15/06/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -101,9 +101,11 @@ void StudioComponent::onAttach()
 	_stack->add_panel<Console>(_eltm, _project);
 
 	Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
+	/*
 	renderer->getClearValue().color.float32[0] = 0.627450980;
 	renderer->getClearValue().color.float32[1] = 0.878431373;
 	renderer->getClearValue().color.float32[2] = 0.909803922;
+	*/
 	renderer->setMaxFPS(200);
 
 	_logo = AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/logo.png");

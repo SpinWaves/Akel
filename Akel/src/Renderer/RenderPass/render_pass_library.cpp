@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/06/2023
-// Updated : 14/06/2023
+// Updated : 15/06/2023
 
 #include <Utils/hash.h>
 #include <Renderer/RenderPass/render_pass_library.h>
@@ -17,7 +17,7 @@ namespace Ak
 		auto it = _cache.find(hash);
 		if(it != _cache.end())
 			return it->second;
-		std::shared_ptr<RenderPass> new_render_pass = create_shared_ptr_w<RendrePass>();
+		std::shared_ptr<RenderPass> new_render_pass = create_shared_ptr_w<RenderPass>();
 		new_render_pass->init(desc);
 		_cache[hash] = new_render_pass;
 		return new_render_pass;

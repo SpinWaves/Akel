@@ -1,13 +1,16 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 03/06/2023
+// Updated : 15/06/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
 #include <Platform/messageBox.h>
 #include <Renderer/Core/render_core.h>
 #include <Renderer/rendererComponent.h>
+#include <Renderer/RenderPass/frame_buffer_library.h>
+#include <Renderer/RenderPass/render_pass_library.h>
+#include <Renderer/Command/vk_cmd_buffer.h>
 
 namespace Ak
 {
@@ -62,6 +65,22 @@ namespace Ak
 			return vkGetInstanceProcAddr(*(reinterpret_cast<VkInstance*>(vulkan_instance)), function_name);
 		}, &Render_Core::get().getInstance().get());
 
+		RenderPassDesc rpdesc{};
+		rpdesc.clear = true;
+		rpdesc.attachements.emplace_back(&_renderer->getSwapChain().getImage(0), ImageType::color);
+		_render_pass = RenderPassesLibrary::get().getRenderPass(rpdesc);
+
+		FrameBufferDesc fbdesc{};
+		fbdesc.render_pass = _render_pass;
+		fbdesc.attachements.emplace_back();
+		for(std::size_t i = 0; i < _renderer->getSwapChain().getImagesNumber(); i++)
+		{
+			fbdesc.screen_fbo = true;
+			fbdesc.attachements[0].image = &_renderer->getSwapChain().getImage(i);
+			fbdesc.attachements[0].type = ImageType::color;
+			_frame_buffers.emplace_back(FrameBufferLibrary::get().getFrameBuffer(fbdesc));
+		}
+
 		ImGui_ImplSDL2_InitForVulkan(_renderer->getWindow()->getNativeWindow());
 		ImGui_ImplVulkan_InitInfo init_info{};
 			init_info.Instance = Render_Core::get().getInstance().get();
@@ -74,7 +93,7 @@ namespace Ak
 			init_info.MinImageCount = _renderer->getSwapChain().getSupport().capabilities.minImageCount;
 			init_info.ImageCount = _renderer->getSwapChain().getImagesNumber();
 			init_info.CheckVkResultFn = RCore::checkVk;
-		ImGui_ImplVulkan_Init(&init_info, _renderer->getRenderPass().get());
+		ImGui_ImplVulkan_Init(&init_info, _render_pass->get());
 
 		if(_generate_font_on_attach)
 			generateFonts();
@@ -152,7 +171,8 @@ namespace Ak
 	{
 		if(!_renderer->isRendering())
 			return;
-		_renderer->getRenderPass().begin();
+		std::shared_ptr<FrameBuffer> fb = _frame_buffers[_renderer->getSwapChainImageIndex()];
+		_render_pass->begin(_renderer->getActiveCmdBuffer(), { 0.f, 0.f, 0.f, 1.f }, *fb, fb->getWidth(), fb->getHeight());
 	}
 
 	void ImGuiComponent::renderFrame()
@@ -162,7 +182,7 @@ namespace Ak
 		ImDrawData* draw_data = ImGui::GetDrawData();
 		if(draw_data->DisplaySize.x >= 0.0f && draw_data->DisplaySize.y >= 0.0f)
 			ImGui_ImplVulkan_RenderDrawData(draw_data, _renderer->getActiveCmdBuffer().get());
-		_renderer->getRenderPass().end();
+		_render_pass->end(_renderer->getActiveCmdBuffer());
 	}
 
 	ImGuiComponent::~ImGuiComponent()
