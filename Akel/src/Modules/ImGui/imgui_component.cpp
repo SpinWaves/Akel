@@ -10,6 +10,7 @@
 #include <Renderer/rendererComponent.h>
 #include <Renderer/RenderPass/frame_buffer_library.h>
 #include <Renderer/RenderPass/render_pass_library.h>
+#include <Renderer/Command/vk_cmd_pool.h>
 #include <Renderer/Command/vk_cmd_buffer.h>
 
 namespace Ak
@@ -65,6 +66,16 @@ namespace Ak
 			return vkGetInstanceProcAddr(*(reinterpret_cast<VkInstance*>(vulkan_instance)), function_name);
 		}, &Render_Core::get().getInstance().get());
 
+		{
+			CmdPool pool;
+			pool.init();
+			CmdBuffer single_time_cmd;
+			single_time_cmd.init(&pool);
+			for(std::size_t i = 0; i < _renderer->getSwapChain().getImagesNumber(); i++)
+				_renderer->getSwapChain().getImage(i).transitionLayout(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, single_time_cmd);
+			pool.destroy();
+		}
+
 		RenderPassDesc rpdesc{};
 		rpdesc.clear = true;
 		rpdesc.attachements.emplace_back(&_renderer->getSwapChain().getImage(0), ImageType::color);
@@ -78,6 +89,8 @@ namespace Ak
 			fbdesc.screen_fbo = true;
 			fbdesc.attachements[0].image = &_renderer->getSwapChain().getImage(i);
 			fbdesc.attachements[0].type = ImageType::color;
+			fbdesc.width = _renderer->getSwapChain().getImage(i).getWidth();
+			fbdesc.height = _renderer->getSwapChain().getImage(i).getHeight();
 			_frame_buffers.emplace_back(FrameBufferLibrary::get().getFrameBuffer(fbdesc));
 		}
 

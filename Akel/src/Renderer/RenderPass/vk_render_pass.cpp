@@ -113,6 +113,8 @@ namespace Ak
 
 		if(vkCreateRenderPass(Render_Core::get().getDevice().get(), &renderPassCreateInfo, nullptr, &_renderPass) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create render pass");
+
+		_clears.resize(desc.attachements.size());
 	}
 
 	void RenderPass::begin(CmdBuffer& cmd, std::array<float, 4> clears, FrameBuffer& fb, uint32_t width, uint32_t height)

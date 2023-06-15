@@ -61,7 +61,7 @@ namespace Ak
 
 		for(int i = 0; i < imageCount; i++)
 		{
-			_images[i].create(tmp[i]);
+			_images[i].create(tmp[i], surfaceFormat.format, extent.width, extent.height);
 			_images[i].createImageView(VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_COLOR_BIT);
 		}
 

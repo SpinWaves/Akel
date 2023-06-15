@@ -41,6 +41,9 @@ namespace Ak
 			{
 				_forward_data.shaders.clear();
 				_forward_data.shaders = scene->_forward_shaders;
+				if(_forward_data.depth() != VK_NULL_HANDLE)
+					_forward_data.depth.destroy();
+				_forward_data.depth.create(*scene->_renderer);
 			}
 
 			_forward_data.command_queue.clear();
@@ -69,6 +72,10 @@ namespace Ak
 
 		PipelineDesc pipeline_desc;
 		pipeline_desc.shaders = _forward_data.shaders;
+		pipeline_desc.clear_target = true;
+		pipeline_desc.clear_color = { 0.f, 0.f, 0.f, 1.f };
+		pipeline_desc.swapchain = true;
+		pipeline_desc.depth = &_forward_data.depth;
 
 		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
 		if(pipeline == nullptr)
@@ -139,6 +146,7 @@ namespace Ak
 	void SceneRenderer::destroy()
 	{
         vkDeviceWaitIdle(Render_Core::get().getDevice().get());
+		_forward_data.depth.destroy();
 		_pipelines_manager.clearCache();
 		TextureLibrary::get().clearLibrary();
 	}

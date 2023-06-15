@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/01/2023
-// Updated : 01/03/2023
+// Updated : 15/06/2023
 
 #include <Renderer/Command/cmd_manager.h>
 
@@ -12,7 +12,7 @@ namespace Ak
 		_cmd_pool.init();
 
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-			_cmd_buffers[i].init(this);
+			_cmd_buffers[i].init(*this);
 	}
 
 	void CmdManager::beginRecord(int active_image_index)

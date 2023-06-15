@@ -6,7 +6,7 @@
 /*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 10:47:24 by maldavid          #+#    #+#             */
-/*   Updated: 2023/06/15 11:02:50 by maldavid         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:19:49 by maldavid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ namespace Ak
 				attachements[0].image = &_renderer->getSwapChain().getImage(i);
 				fbdesc.screen_fbo = true;
 				fbdesc.attachements = attachements;
+				fbdesc.width = _renderer->getSwapChain().getImage(i).getWidth();
+				fbdesc.height = _renderer->getSwapChain().getImage(i).getHeight();
 				_frame_buffers.emplace_back(FrameBufferLibrary::get().getFrameBuffer(fbdesc));
 			}
 		}
@@ -86,8 +88,25 @@ namespace Ak
 		{
 			fbdesc.screen_fbo = false;
 			fbdesc.attachements = attachements;
+			fbdesc.width = attachements[0].image->getWidth();
+			fbdesc.height = attachements[0].image->getHeight();
 			_frame_buffers.emplace_back(FrameBufferLibrary::get().getFrameBuffer(fbdesc));
 		}
+	}
+
+	void GraphicPipeline::transitionAttachements()
+	{
+		if(!_single_time_cmd.isInit())
+			_single_time_cmd.init(&_pool);
+
+		if(_desc.swapchain)
+		{
+			for(uint32_t i = 0; i < _renderer->getSwapChain().getImagesNumber(); i++)
+				_renderer->getSwapChain().getImage(i).transitionLayout(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, _single_time_cmd);
+		}
+
+		if(_desc.depth != nullptr)
+			_desc.depth->transitionLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, _single_time_cmd);
 	}
 
 	void GraphicPipeline::init(class RendererComponent* renderer, PipelineDesc& desc)
@@ -95,9 +114,13 @@ namespace Ak
 		_renderer = renderer;
 		_desc = desc;
 
+		_pool.init();
+
 		std::vector<VkPipelineShaderStageCreateInfo> stages;
 		std::vector<VkDescriptorSetLayout> descriptor_layouts;
 		std::vector<VkPushConstantRange> pc_ranges;
+
+		transitionAttachements();
 
 		createFrameBuffers();
 
@@ -228,6 +251,7 @@ namespace Ak
 	void GraphicPipeline::bindPipeline(CmdBuffer& commandBuffer) noexcept
 	{
 		std::shared_ptr<FrameBuffer> fb;
+		transitionAttachements();
 		if(_desc.swapchain)
 			fb = _frame_buffers[_renderer->getSwapChainImageIndex()];
 		else
@@ -265,5 +289,7 @@ namespace Ak
 
         Ak_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
 		vkDestroyPipelineLayout(Render_Core::get().getDevice().get(), _pipelineLayout, nullptr);
+
+		_pool.destroy();
     }
 }

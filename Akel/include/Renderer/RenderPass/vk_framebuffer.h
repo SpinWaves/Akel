@@ -17,7 +17,7 @@ namespace Ak
 		std::weak_ptr<RenderPass> render_pass;
 		uint32_t width;
 		uint32_t height;
-		uint32_t layer = 0;
+		uint32_t layer = 1;
 		uint32_t msaa_level = 0;
 		int mip_index = 0;
 		bool screen_fbo = false;

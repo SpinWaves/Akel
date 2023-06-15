@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 01/03/2023
+// Updated : 15/06/2023
 
 #include <Renderer/Command/vk_cmd_buffer.h>
 #include <Renderer/Command/cmd_manager.h>
@@ -11,13 +11,29 @@
 
 namespace Ak
 {
-	void CmdBuffer::init(CmdManager* manager)
+	void CmdBuffer::init(CmdManager& manager)
 	{
-		_manager = manager;
+		_pool = &manager.getCmdPool();
 
 		VkCommandBufferAllocateInfo allocInfo{};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-		allocInfo.commandPool = manager->getCmdPool().get();
+		allocInfo.commandPool = manager.getCmdPool().get();
+		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		allocInfo.commandBufferCount = 1;
+
+		if(vkAllocateCommandBuffers(Render_Core::get().getDevice().get(), &allocInfo, &_cmd_buffer) != VK_SUCCESS)
+			Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate command buffer");
+
+		_fence.init();
+	}
+
+	void CmdBuffer::init(CmdPool* pool)
+	{
+		_pool = pool;
+
+		VkCommandBufferAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		allocInfo.commandPool = pool->get();
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		allocInfo.commandBufferCount = 1;
 
@@ -61,6 +77,26 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to submit draw command buffer");
 	}
 
+	void CmdBuffer::submitIdle()
+	{
+		auto device = Render_Core::get().getDevice().get();
+
+		VkSubmitInfo submitInfo = {};
+		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+		submitInfo.commandBufferCount = 1;
+		submitInfo.pCommandBuffers = &_cmd_buffer;
+
+		VkFenceCreateInfo fenceCreateInfo = {};
+		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+
+		VkFence fence;
+		vkCreateFence(device, &fenceCreateInfo, nullptr, &fence);
+		vkResetFences(device, 1, &fence);
+		vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &submitInfo, fence);
+		vkWaitForFences(device, 1, &fence, VK_TRUE, UINT64_MAX);
+		vkDestroyFence(device, fence, nullptr);
+	}
+
 	void CmdBuffer::endRecord()
 	{
 		if(!_is_recording)
@@ -74,7 +110,7 @@ namespace Ak
 	void CmdBuffer::destroy() noexcept
 	{
 		Ak_assert(_cmd_buffer != VK_NULL_HANDLE, "trying to destroy an uninit command buffer");
-		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), _manager->getCmdPool().get(), 1, &_cmd_buffer);
+		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), _pool->get(), 1, &_cmd_buffer);
 		_fence.destroy();
 	}
 }
