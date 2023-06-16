@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 15/06/2023
+// Updated : 16/06/2023
 
 #include <Renderer/Command/vk_cmd_buffer.h>
 #include <Renderer/Command/cmd_manager.h>
@@ -111,6 +111,7 @@ namespace Ak
 	{
 		Ak_assert(_cmd_buffer != VK_NULL_HANDLE, "trying to destroy an uninit command buffer");
 		vkFreeCommandBuffers(Render_Core::get().getDevice().get(), _pool->get(), 1, &_cmd_buffer);
+		_cmd_buffer = VK_NULL_HANDLE;
 		_fence.destroy();
 	}
 }

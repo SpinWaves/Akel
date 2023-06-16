@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 15/06/2023
+// Updated : 16/06/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -83,6 +83,7 @@ namespace Ak
 
 		FrameBufferDesc fbdesc{};
 		fbdesc.render_pass = _render_pass;
+		fbdesc.renderer = _renderer;
 		fbdesc.attachements.emplace_back();
 		for(std::size_t i = 0; i < _renderer->getSwapChain().getImagesNumber(); i++)
 		{

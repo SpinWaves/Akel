@@ -1,9 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 15/06/2023
+// Updated : 16/06/2023
 
 #include <Renderer/rendererComponent.h>
+#include <Renderer/RenderPass/frame_buffer_library.h>
 
 namespace Ak
 {
@@ -30,6 +31,7 @@ namespace Ak
 	{
 		if(!_is_init)
 			return false;
+		_rendering_began = false;
 		_fps.setMaxFPS(_window->_window_has_focus ? _max_fps : 15);
 		_fps.update();
 		if(!_fps.makeRendering())
@@ -41,7 +43,7 @@ namespace Ak
 
 		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphores[_active_image_index].getImageSemaphore(), VK_NULL_HANDLE, &_swapchain_image_index);
 
-		if(result == VK_ERROR_OUT_OF_DATE_KHR)
+		if(result == VK_ERROR_OUT_OF_DATE_KHR || _framebufferResize)
 		{
 			_swapchain.recreate();
 			return false;
@@ -51,6 +53,7 @@ namespace Ak
 
 		_cmd.getCmdBuffer(_active_image_index).beginRecord();
 
+		_rendering_began = true;
 		return true;
 	}
 
@@ -58,11 +61,12 @@ namespace Ak
 	{
 		if(!_is_init)
 			return;
-		if(!_fps.makeRendering())
+		if(_framebufferResize)
+			_framebufferResize = false;
+		if(!_fps.makeRendering() || !_rendering_began)
 			return;
 
 		_cmd.getCmdBuffer(_active_image_index).endRecord();
-
 		_cmd.getCmdBuffer(_active_image_index).submit(_semaphores[_active_image_index]);
 
 		VkSwapchainKHR swapchain = _swapchain();
@@ -78,11 +82,8 @@ namespace Ak
 
 		VkResult result = vkQueuePresentKHR(Render_Core::get().getQueue().getPresent(), &presentInfo);
 
-		if(result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || _framebufferResized)
-		{
-			_framebufferResized = false;
-			_swapchain.recreate();
-		}
+		if(result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+			_framebufferResize = true;
 		else if(result != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to present swap chain image");
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 15/06/2023
+// Updated : 16/06/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -48,8 +48,8 @@ namespace Ak
 			inline uint32_t getSwapChainImageIndex() const noexcept { return _swapchain_image_index; }
 			inline bool isInit() const noexcept { return _is_init; }
 
-			inline constexpr void requireFrameBufferResize() noexcept { _framebufferResized = true; }
-			inline bool isFrameBufferResizeRequested() const noexcept { return _framebufferResized; }
+			inline constexpr void requireFrameBufferResize() noexcept { _framebufferResize = true; }
+			inline bool isFrameBufferResizeRequested() const noexcept { return _framebufferResize; }
 
 			inline void setMaxFPS(std::uint32_t max) noexcept { _fps.setMaxFPS(max); _max_fps = max; }
 			inline uint32_t getFPS() const noexcept { return _fps.getFPS(); }
@@ -69,9 +69,10 @@ namespace Ak
 			uint32_t _swapchain_image_index = 0;
 
 			uint32_t _max_fps = 100'000;
-			
-			bool _framebufferResized = false;
+
+			bool _framebufferResize = false;
 			bool _is_init = false;
+			bool _rendering_began = false;
 	};
 }
 

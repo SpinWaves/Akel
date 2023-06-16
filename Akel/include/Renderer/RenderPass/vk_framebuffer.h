@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 15/06/2023
+// Updated : 16/06/2023
 
 #ifndef __AK_VK_FRAMEBUFFER__
 #define __AK_VK_FRAMEBUFFER__
@@ -15,9 +15,10 @@ namespace Ak
 	{
 		std::vector<RenderPassAttachement> attachements;
 		std::weak_ptr<RenderPass> render_pass;
-		uint32_t width;
-		uint32_t height;
-		uint32_t layer = 1;
+		class RendererComponent* renderer = nullptr;
+		uint32_t width = 0;
+		uint32_t height = 0;
+		uint32_t layer = 0;
 		uint32_t msaa_level = 0;
 		int mip_index = 0;
 		bool screen_fbo = false;
@@ -25,6 +26,8 @@ namespace Ak
 
 	class AK_API FrameBuffer
 	{
+		friend class FrameBufferLibrary;
+
 		public:
 			void init(FrameBufferDesc& desc);
 			void destroy() noexcept;
@@ -32,13 +35,12 @@ namespace Ak
 			inline VkFramebuffer operator()() noexcept { return _framebuffer; }
 			inline VkFramebuffer get() noexcept { return _framebuffer; }
 
-			inline uint32_t getWidth() const noexcept { return _width; }
-			inline uint32_t getHeight() const noexcept { return _height; }
+			inline uint32_t getWidth() const noexcept { return _desc.width; }
+			inline uint32_t getHeight() const noexcept { return _desc.height; }
 
 		private:
+			FrameBufferDesc _desc;
 			VkFramebuffer _framebuffer = VK_NULL_HANDLE;
-			uint32_t _width = 0;
-			uint32_t _height = 0;
 	};
 }
 

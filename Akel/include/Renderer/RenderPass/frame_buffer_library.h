@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/06/2023
-// Updated : 15/06/2023
+// Updated : 16/06/2023
 
 #ifndef __AK_FRAME_BUFFER_LIBRARY__
 #define __AK_FRAME_BUFFER_LIBRARY__

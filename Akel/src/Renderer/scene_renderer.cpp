@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 15/06/2023
+// Updated : 16/06/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -34,6 +34,9 @@ namespace Ak
 	void SceneRenderer::render(Scene* scene)
 	{
 		auto renderer = scene->_renderer;
+
+		if(!renderer->isRendering())
+			return;
 
 		if(_settings.geometries) // TODO : do not update command queues if scenes entities haven't been modified
 		{
