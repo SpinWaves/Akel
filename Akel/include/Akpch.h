@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 14/06/2023
+// Updated : 17/06/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -140,5 +140,6 @@
 
 constexpr const int MAX_FRAMES_IN_FLIGHT = 3;
 constexpr const int MAX_RENDER_TARGETS = 8;
+constexpr const int SINGLE_TIME_CMD_RESERVE = 8;
 
 #endif // __AK_PCH__

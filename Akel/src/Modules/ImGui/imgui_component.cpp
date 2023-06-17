@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 16/06/2023
+// Updated : 17/06/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -66,34 +66,11 @@ namespace Ak
 			return vkGetInstanceProcAddr(*(reinterpret_cast<VkInstance*>(vulkan_instance)), function_name);
 		}, &Render_Core::get().getInstance().get());
 
-		{
-			CmdPool pool;
-			pool.init();
-			CmdBuffer single_time_cmd;
-			single_time_cmd.init(&pool);
-			for(std::size_t i = 0; i < _renderer->getSwapChain().getImagesNumber(); i++)
-				_renderer->getSwapChain().getImage(i).transitionLayout(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, single_time_cmd);
-			pool.destroy();
-		}
-
 		RenderPassDesc rpdesc{};
 		rpdesc.clear = true;
 		rpdesc.attachements.emplace_back(&_renderer->getSwapChain().getImage(0), ImageType::color);
 		_render_pass = RenderPassesLibrary::get().getRenderPass(rpdesc);
-
-		FrameBufferDesc fbdesc{};
-		fbdesc.render_pass = _render_pass;
-		fbdesc.renderer = _renderer;
-		fbdesc.attachements.emplace_back();
-		for(std::size_t i = 0; i < _renderer->getSwapChain().getImagesNumber(); i++)
-		{
-			fbdesc.screen_fbo = true;
-			fbdesc.attachements[0].image = &_renderer->getSwapChain().getImage(i);
-			fbdesc.attachements[0].type = ImageType::color;
-			fbdesc.width = _renderer->getSwapChain().getImage(i).getWidth();
-			fbdesc.height = _renderer->getSwapChain().getImage(i).getHeight();
-			_frame_buffers.emplace_back(FrameBufferLibrary::get().getFrameBuffer(fbdesc));
-		}
+		createFrameBuffers();
 
 		ImGui_ImplSDL2_InitForVulkan(_renderer->getWindow()->getNativeWindow());
 		ImGui_ImplVulkan_InitInfo init_info{};
@@ -113,6 +90,24 @@ namespace Ak
 			generateFonts();
 
 		_componentsInit = true;
+	}
+
+	void ImGuiComponent::createFrameBuffers()
+	{
+		_frame_buffers.clear();
+		FrameBufferDesc fbdesc{};
+		fbdesc.render_pass = _render_pass;
+		fbdesc.renderer = _renderer;
+		fbdesc.attachements.emplace_back();
+		for(std::size_t i = 0; i < _renderer->getSwapChain().getImagesNumber(); i++)
+		{
+			fbdesc.screen_fbo = true;
+			fbdesc.attachements[0].image = &_renderer->getSwapChain().getImage(i);
+			fbdesc.attachements[0].type = ImageType::color;
+			fbdesc.width = _renderer->getSwapChain().getImage(i).getWidth();
+			fbdesc.height = _renderer->getSwapChain().getImage(i).getHeight();
+			_frame_buffers.emplace_back(FrameBufferLibrary::get().getFrameBuffer(fbdesc));
+		}
 	}
 
 	void ImGuiComponent::generateFonts()
@@ -185,6 +180,8 @@ namespace Ak
 	{
 		if(!_renderer->isRendering())
 			return;
+		if(_renderer->isFrameBufferResizeRequested())
+			createFrameBuffers();
 		std::shared_ptr<FrameBuffer> fb = _frame_buffers[_renderer->getSwapChainImageIndex()];
 		_render_pass->begin(_renderer->getActiveCmdBuffer(), { 0.f, 0.f, 0.f, 1.f }, *fb, fb->getWidth(), fb->getHeight());
 	}

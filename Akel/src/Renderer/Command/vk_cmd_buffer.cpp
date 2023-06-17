@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 16/06/2023
+// Updated : 17/06/2023
 
 #include <Renderer/Command/vk_cmd_buffer.h>
 #include <Renderer/Command/cmd_manager.h>
@@ -11,8 +11,9 @@
 
 namespace Ak
 {
-	void CmdBuffer::init(CmdManager& manager)
+	void CmdBuffer::init(CmdManager& manager, bool is_single_time)
 	{
+		_is_single_time = is_single_time;
 		_pool = &manager.getCmdPool();
 
 		VkCommandBufferAllocateInfo allocInfo{};
@@ -27,8 +28,9 @@ namespace Ak
 		_fence.init();
 	}
 
-	void CmdBuffer::init(CmdPool* pool)
+	void CmdBuffer::init(CmdPool* pool, bool is_single_time)
 	{
+		_is_single_time = is_single_time;
 		_pool = pool;
 
 		VkCommandBufferAllocateInfo allocInfo{};
@@ -59,6 +61,11 @@ namespace Ak
 
 	void CmdBuffer::submit(Semaphore& semaphores) noexcept
 	{
+		if(_is_single_time)
+		{
+			Core::log::report(ERROR, "Vulkan : single time command buffers can only be submitted in idle mode, (using `submitIdle()`)");
+			return;
+		}
 		VkSemaphore signalSemaphores[] = { semaphores.getRenderImageSemaphore() };
 		VkSemaphore waitSemaphores[] = { semaphores.getImageSemaphore() };
 		VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/02/2023
-// Updated : 10/06/2023
+// Updated : 17/06/2023
 
 #ifndef __AK_SCENE_RENDERER__
 #define __AK_SCENE_RENDERER__
@@ -31,7 +31,7 @@ namespace Ak
 			void render(Scene* scene);
 			void destroy();
 
-			void setRenderTarget(TextureID texture);
+			inline void setRenderTarget(TextureID texture) noexcept { _forward_data.render_texture = texture; }
 
 			~SceneRenderer() = default;
 

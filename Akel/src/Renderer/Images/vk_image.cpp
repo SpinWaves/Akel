@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 15/06/2023
+// Updated : 17/06/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -202,6 +202,9 @@ namespace Ak
 
 	void Image::transitionLayout(VkImageLayout new_layout, CmdBuffer& cmd)
 	{
+		if(new_layout == _layout)
+			return;
+
 		cmd.reset();
 		cmd.beginRecord();
 

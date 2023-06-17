@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 16/06/2023
+// Updated : 17/06/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -43,6 +43,7 @@ namespace Ak
 			inline SwapChain& getSwapChain() noexcept { return _swapchain; }
 			inline Semaphore& getSemaphore(int i) noexcept { return _semaphores[i]; }
 			inline CmdBuffer& getCmdBuffer(int i) noexcept { return _cmd.getCmdBuffer(i); }
+			inline CmdBuffer* getSingleTimeCmdBuffer() noexcept { return _cmd.getSingleTimeBuffer(); }
 			inline CmdBuffer& getActiveCmdBuffer() noexcept { return _cmd.getCmdBuffer(_active_image_index); }
 			inline uint32_t getActiveImageIndex() const noexcept { return _active_image_index; }
 			inline uint32_t getSwapChainImageIndex() const noexcept { return _swapchain_image_index; }
@@ -53,7 +54,7 @@ namespace Ak
 
 			inline void setMaxFPS(std::uint32_t max) noexcept { _fps.setMaxFPS(max); _max_fps = max; }
 			inline uint32_t getFPS() const noexcept { return _fps.getFPS(); }
-			inline bool isRendering() const noexcept { return _fps.makeRendering(); }
+			inline bool isRendering() const noexcept { return _rendering_began; }
 
 		private:
 			CounterFPS _fps;

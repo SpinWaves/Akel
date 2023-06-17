@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 16/06/2023
+// Updated : 17/06/2023
 
 #include <Renderer/rendererComponent.h>
 #include <Renderer/RenderPass/frame_buffer_library.h>
@@ -17,12 +17,12 @@ namespace Ak
     void RendererComponent::onAttach()
     {
         Render_Core::get().init();
-		
+
 		_surface.create(*this);
-		_swapchain.init(this);
 		_cmd.init();
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 			_semaphores[i].init();
+		_swapchain.init(this);
 
 		_is_init = true;
     }
@@ -41,11 +41,18 @@ namespace Ak
 		_cmd.getCmdBuffer(_active_image_index).waitForExecution();
 		_cmd.getCmdBuffer(_active_image_index).reset();
 
-		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphores[_active_image_index].getImageSemaphore(), VK_NULL_HANDLE, &_swapchain_image_index);
-
-		if(result == VK_ERROR_OUT_OF_DATE_KHR || _framebufferResize)
+		if(_framebufferResize)
 		{
 			_swapchain.recreate();
+			return false;
+		}
+
+		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphores[_active_image_index].getImageSemaphore(), VK_NULL_HANDLE, &_swapchain_image_index);
+
+		if(result == VK_ERROR_OUT_OF_DATE_KHR)
+		{
+			_swapchain.recreate();
+			_framebufferResize = true;
 			return false;
 		}
 		else if(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)

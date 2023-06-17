@@ -6,7 +6,7 @@
 /*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 10:47:24 by maldavid          #+#    #+#             */
-/*   Updated: 2023/06/16 11:32:45 by maldavid         ###   ########.fr       */
+/*   Updated: 2023/06/17 09:23:00 by maldavid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,23 +98,14 @@ namespace Ak
 
 	void GraphicPipeline::transitionAttachements()
 	{
-		if(!_single_time_cmd.isInit())
-			_single_time_cmd.init(&_pool);
-		if(_desc.swapchain)
-		{
-			for(uint32_t i = 0; i < _renderer->getSwapChain().getImagesNumber(); i++)
-				_renderer->getSwapChain().getImage(i).transitionLayout(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, _single_time_cmd);
-		}
 		if(_desc.depth != nullptr)
-			_desc.depth->transitionLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, _single_time_cmd);
+			_desc.depth->transitionLayout(VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, *_renderer->getSingleTimeCmdBuffer());
 	}
 
 	void GraphicPipeline::init(class RendererComponent* renderer, PipelineDesc& desc)
 	{
 		_renderer = renderer;
 		_desc = desc;
-
-		_pool.init();
 
 		std::vector<VkPipelineShaderStageCreateInfo> stages;
 		std::vector<VkDescriptorSetLayout> descriptor_layouts;
@@ -291,8 +282,6 @@ namespace Ak
 
 	void GraphicPipeline::destroy() noexcept
 	{
-		_single_time_cmd.destroy();
-		_pool.destroy();
 		Ak_assert(_graphicsPipeline != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");
 		vkDestroyPipeline(Render_Core::get().getDevice().get(), _graphicsPipeline, nullptr);
 		Ak_assert(_pipelineLayout != VK_NULL_HANDLE, "trying to destroy an uninit pipeline");

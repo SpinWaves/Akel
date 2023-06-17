@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 15/06/2023
+// Updated : 17/06/2023
 
 #ifndef __AK_FORWARD_DATA__
 #define __AK_FORWARD_DATA__
@@ -21,7 +21,7 @@ namespace Ak
 		std::vector<Shader::PushConstant> push_constants;
 		std::vector<ShaderID> shaders;
 		DepthImage depth;
-		TextureID renderTexture = nulltexture;
+		TextureID render_texture = nulltexture;
 	};
 }
 

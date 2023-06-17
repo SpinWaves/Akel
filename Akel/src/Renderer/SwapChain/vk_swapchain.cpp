@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 15/06/2023
+// Updated : 17/06/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -62,6 +62,7 @@ namespace Ak
 		for(int i = 0; i < imageCount; i++)
 		{
 			_images[i].create(tmp[i], surfaceFormat.format, extent.width, extent.height);
+			_images[i].transitionLayout(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, *_renderer->getSingleTimeCmdBuffer());
 			_images[i].createImageView(VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_COLOR_BIT);
 		}
 

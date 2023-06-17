@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/01/2023
-// Updated : 01/03/2023
+// Updated : 17/06/2023
 
 #ifndef __AK_VK_COMMAND_MANAGER__
 #define __AK_VK_COMMAND_MANAGER__
@@ -24,13 +24,16 @@ namespace Ak
 			void endRecord(int active_image_index);
 			void destroy() noexcept;
 
+			CmdBuffer* getSingleTimeBuffer() noexcept; // returns nullptr is no cmd is available
+
 			inline CmdPool& getCmdPool() noexcept { return _cmd_pool; }
 			inline CmdBuffer& getCmdBuffer(int i) noexcept { return _cmd_buffers[i]; }
-			
+
 			~CmdManager() = default;
 
 		private:
 			std::array<CmdBuffer, MAX_FRAMES_IN_FLIGHT> _cmd_buffers;
+			std::array<CmdBuffer, SINGLE_TIME_CMD_RESERVE> _single_times;
 			CmdPool _cmd_pool;
 	};
 }

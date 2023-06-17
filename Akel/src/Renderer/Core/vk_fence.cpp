@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 01/03/2023
-// Updated : 01/03/2023
+// Updated : 17/06/2023
 
 #include <Renderer/Core/vk_fence.h>
 #include <Renderer/Core/render_core.h>
@@ -25,6 +25,11 @@ namespace Ak
 	void Fence::wait() noexcept
 	{
 		vkWaitForFences(Render_Core::get().getDevice().get(), 1, &_fence, VK_TRUE, UINT64_MAX);
+	}
+
+	bool Fence::isReady() noexcept
+	{
+		return vkGetFenceStatus(Render_Core::get().getDevice().get(), _fence) == VK_SUCCESS;
 	}
 
 	void Fence::reset() noexcept
