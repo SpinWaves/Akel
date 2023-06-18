@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/08/2022
-// Updated : 05/06/2023
+// Updated : 18/06/2023
 
 #include <Akpch.h>
 #include <Core/log.h>
@@ -43,20 +43,31 @@ namespace AkImGui
 		}
 	}
 
+	ImImage LoadImageEmpy(uint32_t width, uint32_t height)
+	{
+		ImImage image;
+
+		std::shared_ptr<Ak::Texture> texture = std::make_shared<Ak::Texture>();
+		texture->create(nullptr, width, height, VK_FORMAT_R8G8B8A8_UNORM);
+		image._texture = Ak::TextureLibrary::get().addTextureToLibrary(texture);
+		image._set = ImGui_ImplVulkan_AddTexture(texture->getSampler(), texture->getImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+		return image;
+	}
+
 	ImImage LoadImage(std::filesystem::path file)
 	{
 		ImImage image;
 
 		if(!std::filesystem::exists(file))
 			Ak::Core::log::report(FATAL_ERROR, "ImGui : failed to load image");
-		image._texture = Ak::loadTextureFromFile(std::move(file));
-		image._set = ImGui_ImplVulkan_AddTexture(image._texture.getSampler(), image._texture.getImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+		image._texture = Ak::TextureLibrary::get().addTextureToLibrary(std::move(file));
+		std::shared_ptr<Ak::Texture> texture = Ak::TextureLibrary::get().getTexture(image._texture);
+		image._set = ImGui_ImplVulkan_AddTexture(texture->getSampler(), texture->getImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		return image;
 	}
 
 	void ImImage::destroy()
 	{
-		_texture.destroy();
 		ImGui_ImplVulkan_RemoveTexture(_set);
 	}
 

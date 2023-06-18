@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 28/03/2023
+// Updated : 18/06/2023
 
 #include <Renderer/Images/texture.h>
 #include <Renderer/Pipeline/vk_shader.h>
@@ -23,11 +23,14 @@ namespace Ak
 		Image::createImageView(VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_COLOR_BIT);
 		Image::createSampler();
 
-		Buffer staging_buffer;
-		std::size_t size = width * height * (format == VK_FORMAT_R32G32B32A32_SFLOAT ? 16 : 4);
-		staging_buffer.create(Buffer::kind::dynamic, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, pixels);
-		Image::copyBuffer(staging_buffer);
-		staging_buffer.destroy();
+		if(pixels != nullptr)
+		{
+			Buffer staging_buffer;
+			std::size_t size = width * height * (format == VK_FORMAT_R32G32B32A32_SFLOAT ? 16 : 4);
+			staging_buffer.create(Buffer::kind::dynamic, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, pixels);
+			Image::copyBuffer(staging_buffer);
+			staging_buffer.destroy();
+		}
 	}
 
 	Texture loadTextureFromFile(std::filesystem::path path)

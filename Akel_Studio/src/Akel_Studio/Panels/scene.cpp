@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 07/06/2023
+// Updated : 18/06/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -10,6 +10,10 @@ Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : P
 {
     _eltm = std::move(eltm);
 	_play = AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/play.png");
+
+	_scene_texture = AkImGui::LoadImageEmpty(1480, 720);
+	_scene_renderer.init({});
+	_scene_renderer.setRenderTarget(_scene_texture.getTextureID());
 }
 
 void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
@@ -46,8 +50,8 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
         }
 
 		int aspect_width = 0;
-		const int window_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
-		const int window_height = size.Y - size.Y/4 - 25;
+		const int window_width = size.X - (15 * size.X) / 100 - (19 * size.X) / 100;
+		const int window_height = size.Y - size.Y / 4 - 25;
 		float aspect = window_width / window_height;
 
 		switch(_aspect_checked)
@@ -87,9 +91,13 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 
 		ImGui::End();
     }
+	_scene_renderer.render(_scene);
+	ImGui::Image(_scene_texture.getImGuiID(), ImVec2(ImGui::GetWindowWidth() / 3, ImGui::GetWindowWidth() / 3));
 }
 
 void Scene::onQuit()
 {
+	_scene_renderer.destroy();
+	_scene_texture.destroy();
 	_play.destroy();
 }

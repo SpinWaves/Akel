@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 26/05/2023
+// Updated : 18/06/2023
 
 #ifndef __AK_STUDIO_SCENE__
 #define __AK_STUDIO_SCENE__
@@ -23,6 +23,9 @@ class Scene : public Panel
         ~Scene() = default;
 
     private:
+		Ak::SceneRenderer _scene_renderer;
+		Ak::Scene _scene;
+		AkImGui::ImImage _scene_texture;
 		AkImGui::ImImage _play;
         uint8_t _aspect_checked = 0;
 		bool _grid = true;

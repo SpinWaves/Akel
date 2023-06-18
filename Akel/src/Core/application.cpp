@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 03/06/2023
+// Updated : 18/06/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -133,8 +133,22 @@ namespace Ak
 
 	void Application::destroy()
 	{
-		for(auto component : _components)
-			component->onQuit();
+		// Renderers and ImGui needs to be destroyed after other components to avoid leaks or bugs
+		std::vector<RendererComponent*> renderers;
+		std::vector<ImGuiComponent*> imguis;
+		for(auto comp : _components)
+		{
+			if(comp->getName() == "__renderer_component")
+				renderers.push_back(static_cast<RendererComponent*>(comp));
+			else if(comp->getName() == "__imgui_component")
+				imguis.push_back(static_cast<ImGuiComponent*>(comp));
+			else
+				comp->onQuit();
+		}
+		for(auto comp : imguis)
+			comp->onQuit();
+		for(auto comp : renderers)
+			comp->onQuit();
 		_app_check = false;
 		SDL_Quit();
 	}
