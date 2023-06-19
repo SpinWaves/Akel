@@ -13,6 +13,7 @@ namespace AkImGui
 {
 	class AK_API ImImage
 	{
+		friend AK_API ImImage LoadImageEmpty(uint32_t width, uint32_t height);
 		friend AK_API ImImage LoadImage(std::filesystem::path file);
 
 		public:

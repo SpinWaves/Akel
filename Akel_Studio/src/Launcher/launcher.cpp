@@ -34,7 +34,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
 	renderer->setMaxFPS(120);
 
-	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, Ak::VFS::getMainDirPath() / "settings/akel_studio_launcher_imgui.ini", false);
+	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, std::filesystem::path(Ak::VFS::getMainDirPath() / "settings/akel_studio_launcher_imgui.ini").string(), false);
 
 	LauncherComponent* launcher = app->add_component<LauncherComponent>();
 	launcher->generateFontTextures(imgui);

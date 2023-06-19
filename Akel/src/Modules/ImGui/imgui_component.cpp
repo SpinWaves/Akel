@@ -94,6 +94,7 @@ namespace Ak
 
 	void ImGuiComponent::createFrameBuffers()
 	{
+		std::cout << "test" << std::endl;
 		_frame_buffers.clear();
 		FrameBufferDesc fbdesc{};
 		fbdesc.render_pass = _render_pass;

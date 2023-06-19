@@ -73,7 +73,7 @@ namespace Ak
 
 		if(project->project_file_name != "")
 			project->_project_file.setName(project->project_file_name);
-		project->_project_file.setDir(VFS::resolve(project->project_file_path));
+		project->_project_file.setDir(VFS::resolve(project->project_file_path.string()));
 		
 		project->_project_file.initProjFile(project->project_file_force_raw_json);
 

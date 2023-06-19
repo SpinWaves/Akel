@@ -104,7 +104,7 @@ CodeEditor::CodeEditor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& pr
 	_code.SetPalette(getPalette());
 
 	ImGuiIO& io = ImGui::GetIO();
-	_code_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/sono/Sono-Medium.ttf").c_str(), 13.0f);
+	_code_font = io.Fonts->AddFontFromFileTTF(std::string(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/sono/Sono-Medium.ttf").string()).c_str(), 13.0f);
 }
 
 void CodeEditor::onEvent(Ak::Input& input)
@@ -139,7 +139,7 @@ void CodeEditor::onUpdate(Ak::Vec2i& size)
 			{
 				if(ImGui::MenuItem(std::string(AKS_ICON_MD_FILE_OPEN" " + _eltm->getText("Code.open")).c_str()))
 				{
-					auto file = pfd::open_file(_eltm->getText("Code.load"), _project.getDir(), { "Script files (.lua, .eltm, .tm)", "*.lua *.eltm *.tm", "All files", "*"});
+					auto file = pfd::open_file(_eltm->getText("Code.load"), _project.getDir().string(), { "Script files (.lua, .eltm, .tm)", "*.lua *.eltm *.tm", "All files", "*"});
 					if(!file.result().empty())
 					{
 						std::filesystem::path path = file.result()[0];

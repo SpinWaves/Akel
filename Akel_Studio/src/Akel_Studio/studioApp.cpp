@@ -30,7 +30,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	Ak::WindowComponent* window = app->add_component<Ak::WindowComponent>();
 	Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
 
-	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, Ak::VFS::getMainDirPath() / "settings/akel_studio_imgui.ini", false);
+	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, std::filesystem::path(Ak::VFS::getMainDirPath() / "settings/akel_studio_imgui.ini").string(), false);
 
 	StudioComponent* studio = app->add_component<StudioComponent>(args);
 	studio->generateFontTextures(imgui);

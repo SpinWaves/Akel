@@ -27,7 +27,7 @@ class Browser : public Panel
         void dir(std::string directory);
 
         std::string _current_file;
-        std::string _parent = Ak::VFS::getMainDirPath();
+        std::string _parent = Ak::VFS::getMainDirPath().string();
         std::set<std::filesystem::directory_entry> _files;
 };
 

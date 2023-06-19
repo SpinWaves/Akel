@@ -57,7 +57,7 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 void StudioComponent::onAttach()
 {
 	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>();
-	_lang_eltm->load(Ak::VFS::getMainDirPath() / "resources/texts/langs.eltm");
+	_lang_eltm->load(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/texts/langs.eltm").string());
 
 	if(!Ak::getMainAppProjectFile().keyExists("language"))
 		Ak::getMainAppProjectFile().archive()["language"] = _lang_eltm->getText("English");
@@ -68,7 +68,7 @@ void StudioComponent::onAttach()
 	if(!Ak::getMainAppProjectFile().keyExists("scene_camera_sensy"))
 		Ak::getMainAppProjectFile().archive()["scene_camera_sensy"] = 0.7f;
 
-	_eltm->load(std::move(Ak::VFS::resolve(Ak::getMainAppProjectFile().archive()["language"])));
+	_eltm->load(std::filesystem::path(Ak::VFS::resolve(Ak::getMainAppProjectFile().archive()["language"])).string());
 
 	Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 	if(Ak::getMainAppProjectFile().isFirstTimeRunning())
@@ -222,13 +222,13 @@ void StudioComponent::onImGuiEvent(Ak::Input& input)
 void StudioComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 18.0f, true);
+	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").string().c_str(), 18.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").c_str(), 18.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").string().c_str(), 18.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }
@@ -287,7 +287,7 @@ void StudioComponent::drawMainMenuBar()
 		{
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_FILE_OPEN" " + _eltm->getText("MainMenuBar.e_load")).c_str()))
 			{
-				auto file = pfd::open_file(_eltm->getText("MainMenuBar.e_load"), Ak::VFS::getMainDirPath(), { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All files", "*"});	
+				auto file = pfd::open_file(_eltm->getText("MainMenuBar.e_load"), Ak::VFS::getMainDirPath().string(), { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All files", "*"});	
 				if(!file.result().empty())
 					_eltm_editor_input_buffer = file.result()[0];
 			}
@@ -365,7 +365,7 @@ void StudioComponent::draw_general_settings()
 		{
 			if(ImGui::Selectable(lang.c_str(), selected == lang))
 			{
-				if(!_eltm->reload(Ak::VFS::getMainDirPath() / path))
+				if(!_eltm->reload(std::filesystem::path(Ak::VFS::getMainDirPath() / path).string()))
 					Ak::Core::log::report(FATAL_ERROR, "unable to change language");
 				Ak::getMainAppProjectFile().archive()["language"] = Ak::VFS::getMainDirPath() / path;
 				selected = lang;

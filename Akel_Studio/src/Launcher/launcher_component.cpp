@@ -32,7 +32,7 @@ void launchAkelStudio()
 	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.c_str()), nullptr };
 	execve(path.c_str(), args, environ);
 #elif defined(AK_PLATFORM_WINDOWS)
-	std::string path = Ak::VFS::getMainDirPath() / "akelstudio_application.exe";
+	std::string path = std::filesystem::path(Ak::VFS::getMainDirPath() / "akelstudio_application.exe").string();
 	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.c_str()), nullptr };
 	_execve(path.c_str(), args, _environ);
 #else
@@ -47,8 +47,8 @@ void LauncherComponent::onAttach()
 	_logo = AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/logo.png");
 
 	ImGuiIO& io = ImGui::GetIO();
-	_tiny_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 15.0f);
-	_title_font = io.Fonts->AddFontFromFileTTF(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 45.0f);
+	_tiny_font = io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").string().c_str(), 15.0f);
+	_title_font = io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").string().c_str(), 45.0f);
 
 	std::filesystem::path project_list = Ak::VFS::getMainDirPath() / "settings/project_list.json";
 	if(std::filesystem::exists(project_list))
@@ -349,13 +349,13 @@ void LauncherComponent::drawSideBar()
 void LauncherComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").c_str(), 20.0f, true);
+	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").string().c_str(), 20.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::string(Ak::VFS::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").c_str(), 20.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").string().c_str(), 20.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }

@@ -17,7 +17,7 @@ void AudioManager::onUpdate(Ak::Maths::Vec2<int>& size)
 	{
 		if(ImGui::Button(std::string(AKS_ICON_MD_PLAY_CIRCLE" " + _eltm->getText("AudioManager.play")).c_str()))
 		{
-			auto file = pfd::open_file(_eltm->getText("AudioManager.load"), Ak::VFS::getMainDirPath(), {"Song files (.wav)", "*.wav", "All files", "*"});	
+			auto file = pfd::open_file(_eltm->getText("AudioManager.load"), Ak::VFS::getMainDirPath().string(), { "Song files (.wav)", "*.wav", "All files", "*" }, pfd::opt::none);
 			if(!file.result().empty())
 			{
 				if(_sound.isPlaying())

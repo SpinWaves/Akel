@@ -43,25 +43,25 @@ namespace AkImGui
 		}
 	}
 
-	ImImage LoadImageEmpy(uint32_t width, uint32_t height)
+	ImImage LoadImage(std::filesystem::path file)
+	{
+		ImImage image;
+
+		if(!std::filesystem::exists(file))
+			Ak::Core::log::report(FATAL_ERROR, "ImGui : failed to load image, %s", file.string().c_str());
+		image._texture = Ak::TextureLibrary::get().addTextureToLibrary(std::move(file));
+		std::shared_ptr<Ak::Texture> texture = Ak::TextureLibrary::get().getTexture(image._texture);
+		image._set = ImGui_ImplVulkan_AddTexture(texture->getSampler(), texture->getImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+		return image;
+	}
+
+	ImImage LoadImageEmpty(uint32_t width, uint32_t height)
 	{
 		ImImage image;
 
 		std::shared_ptr<Ak::Texture> texture = std::make_shared<Ak::Texture>();
 		texture->create(nullptr, width, height, VK_FORMAT_R8G8B8A8_UNORM);
 		image._texture = Ak::TextureLibrary::get().addTextureToLibrary(texture);
-		image._set = ImGui_ImplVulkan_AddTexture(texture->getSampler(), texture->getImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-		return image;
-	}
-
-	ImImage LoadImage(std::filesystem::path file)
-	{
-		ImImage image;
-
-		if(!std::filesystem::exists(file))
-			Ak::Core::log::report(FATAL_ERROR, "ImGui : failed to load image");
-		image._texture = Ak::TextureLibrary::get().addTextureToLibrary(std::move(file));
-		std::shared_ptr<Ak::Texture> texture = Ak::TextureLibrary::get().getTexture(image._texture);
 		image._set = ImGui_ImplVulkan_AddTexture(texture->getSampler(), texture->getImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		return image;
 	}

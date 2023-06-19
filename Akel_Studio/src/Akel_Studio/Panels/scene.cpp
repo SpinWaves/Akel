@@ -91,8 +91,8 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 
 		ImGui::End();
     }
-	_scene_renderer.render(_scene);
-	ImGui::Image(_scene_texture.getImGuiID(), ImVec2(ImGui::GetWindowWidth() / 3, ImGui::GetWindowWidth() / 3));
+//	_scene_renderer.render(_scene);
+//	ImGui::Image(_scene_texture.getImGuiID(), ImVec2(ImGui::GetWindowWidth() / 3, ImGui::GetWindowWidth() / 3));
 }
 
 void Scene::onQuit()

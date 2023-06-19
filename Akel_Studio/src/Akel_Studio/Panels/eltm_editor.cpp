@@ -99,7 +99,7 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
     if(*_save == 1)
         destination = _file;
     else if(*_save == 2)
-        destination = std::move(pfd::save_file("Save", Ak::VFS::getMainDirPath() / "New_File.eltm", { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All Files", "*" }, pfd::opt::force_overwrite).result());
+        destination = std::move(pfd::save_file("Save", std::filesystem::path(Ak::VFS::getMainDirPath() / "New_File.eltm").string(), { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All Files", "*" }, pfd::opt::force_overwrite).result());
 
     if(*_save != 0)
     {
