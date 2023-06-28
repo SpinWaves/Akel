@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 27/01/2023
+// Updated : 28/06/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -24,12 +24,14 @@ namespace Ak::Core
         _types[3] = "Virtual";
         _types[4] = "CPU";
 
+		Core::ProjectFile& project = getMainAppProjectFile();
+
 		if(Render_Core::get().is_init())
 		{
 			vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &_deviceCount, nullptr);
 			_devices.resize(_deviceCount);
 			vkEnumeratePhysicalDevices(Render_Core::get().getInstance().get(), &_deviceCount, _devices.data());
-			vkGetPhysicalDeviceProperties(_devices[0], &_deviceProperties);
+			vkGetPhysicalDeviceProperties(_devices[project.archive()["render_core"]["physical_device"]], &_deviceProperties);
 		}
 		else
 		{
@@ -44,7 +46,7 @@ namespace Ak::Core
 				vkEnumeratePhysicalDevices(_instance, &_deviceCount, nullptr);
 				_devices.resize(_deviceCount);
 				vkEnumeratePhysicalDevices(_instance, &_deviceCount, _devices.data());
-				vkGetPhysicalDeviceProperties(_devices[0], &_deviceProperties);
+				vkGetPhysicalDeviceProperties(_devices[project.archive()["render_core"]["physical_device"]], &_deviceProperties);
 			}
 		}
 

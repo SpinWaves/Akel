@@ -30,5 +30,14 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	Ak::LuaLoader lua(app, *app->getSceneManager());
 	spaceship.addAttribute<Ak::ScriptAttribute>(lua.loadScript(Ak::VFS::resolve("//Scripts/spaceship_script.lua")));
 
+	Ak::Core::GPU gpu;
+
+	std::cout << gpu.getNumberOfDevices() << std::endl;
+	std::cout << gpu.getModelName() << std::endl;
+	std::cout << gpu.getVendorName() << std::endl;
+	std::cout << gpu.getDeviceType() << std::endl;
+	std::cout << gpu.getVulkanVersion() << std::endl;
+	std::cout << gpu.getDriverVersion() << std::endl;
+
 	return app;
 }
