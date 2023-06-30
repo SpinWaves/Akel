@@ -6,7 +6,7 @@
 /*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 10:47:24 by maldavid          #+#    #+#             */
-/*   Updated: 2023/06/17 09:23:00 by maldavid         ###   ########.fr       */
+/*   Updated: 2023/06/30 18:19:17 by maldavid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,7 @@ namespace Ak
 		std::shared_ptr<FrameBuffer> fb;
 		if(_renderer->isFrameBufferResizeRequested())
 		{
+			std::cout << "pouic" << std::endl;
 			destroy();
 			init(_renderer, _desc);
 		}

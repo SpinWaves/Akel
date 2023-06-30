@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/03/2023
-// Updated : 02/03/2023
+// Updated : 30/06/2023
 
 #include <Utils/call_on_exit.h>
 
@@ -22,7 +22,6 @@ namespace Ak
 	{
 		if(functor)
 			(*functor)();
-
 		functor.reset();
 	}
 
