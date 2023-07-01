@@ -1,9 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 17/06/2023
+// Updated : 02/07/2023
 
+#include <Core/Event/event.h>
 #include <Platform/platform.h>
+#include <Renderer/renderer_events.h>
 #include <Renderer/rendererComponent.h>
 
 namespace Ak
@@ -38,7 +40,8 @@ namespace Ak
 				if((*it)->_window_id == _current_window)
 				{
 					(*it)->onQuit();
-					(*it)->_renderer->onQuit();
+					if((*it)->_renderer != -1)
+						EventBus::send("_renderer_component" + std::to_string((*it)->_renderer), RenderQuitEvent{});
 					_windows.erase(it);
 					break;
 				}
@@ -63,7 +66,8 @@ namespace Ak
 				if(win->_window_id == _current_window)
 				{
 					win->size.set(_event.window.data1, _event.window.data2);
-					win->_renderer->requireFrameBufferResize();
+					if(win->_renderer != -1)
+						EventBus::send("_renderer_component" + std::to_string(win->_renderer), ResizeEvent{});
 				}
 			}
 		}
@@ -75,7 +79,8 @@ namespace Ak
 				if(win->_window_id == _current_window)
 				{
 					win->minimize = true;
-					win->_renderer->requireFrameBufferResize();
+					if(win->_renderer != -1)
+						EventBus::send("_renderer_component" + std::to_string(win->_renderer), ResizeEvent{});
 				}
 			}
 		}
@@ -86,7 +91,8 @@ namespace Ak
 				if(win->_window_id == _current_window)
 				{
 					win->maximize = true;
-					win->_renderer->requireFrameBufferResize();
+					if(win->_renderer != -1)
+						EventBus::send("_renderer_component" + std::to_string(win->_renderer), ResizeEvent{});
 				}
 			}
 		}
@@ -98,7 +104,8 @@ namespace Ak
 				{
 					win->minimize = false;
 					win->maximize = false;
-					win->_renderer->requireFrameBufferResize();
+					if(win->_renderer != -1)
+						EventBus::send("_renderer_component" + std::to_string(win->_renderer), ResizeEvent{});
 				}
 			}
 		}

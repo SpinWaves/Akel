@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 17/06/2023
+// Updated : 01/07/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -103,6 +103,7 @@
 #include <array>
 #include <variant>
 #include <deque>
+#include <queue>
 #include <stack>
 
 // Streams

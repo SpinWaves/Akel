@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 06/06/2023
+// Updated : 01/07/2023
 
 #ifndef __AK_CORE__
 #define __AK_CORE__
@@ -21,5 +21,6 @@
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
+#include <Core/Event/event.h>
 
 #endif // __AK_CORE__

@@ -11,25 +11,21 @@
 
 namespace Ak
 {
-	template <typename F>
 	class AK_API EventListener
 	{
 		public:
 			EventListener() = delete;
-			EventListener(F&& functor);
+			EventListener(func::function<void(const BaseEvent&)> functor, std::string name);
 
 			inline const std::string& getName() const { return _name; }
-			inline void call(const BaseEvent& event) noexcept { _listen_functor(event); }
+			inline void call(const BaseEvent& event) const noexcept { _listen_functor(event); }
 
 			~EventListener() = default;
 
 		private:
-			F _listen_functor;
+			func::function<void(const BaseEvent&)> _listen_functor;
 			std::string _name;
 	};
-
-	template <typename F>
-	EventListener(F) -> EventListener<F>;
 }
 
 #endif

@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 31/05/2023
+// Updated : 02/07/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
+#include <Renderer/renderer_events.h>
 #include <Utils/logo_ico.h>
 
 namespace Ak
@@ -140,8 +141,8 @@ namespace Ak
 			maximize = false;
 		}
 		visible ? SDL_ShowWindow(_window) : SDL_HideWindow(_window);
-		if(_renderer != nullptr)
-			_renderer->requireFrameBufferResize();
+		if(_renderer != -1)
+			EventBus::send("_renderer_component" + std::to_string(_renderer), RenderQuitEvent{});
 	}
 
 	void WindowComponent::update()

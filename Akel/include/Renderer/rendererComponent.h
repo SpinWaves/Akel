@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 17/06/2023
+// Updated : 02/07/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -62,9 +62,11 @@ namespace Ak
 			Surface _surface;
 			SwapChain _swapchain;
 			std::array<Semaphore, MAX_FRAMES_IN_FLIGHT> _semaphores;
-			std::mutex _mutex;
+			std::queue<uint32_t> _events_queue;
 
 			WindowComponent* _window = nullptr;
+
+			static inline int32_t _id = 0;
 
 			uint32_t _active_image_index = 0;
 			uint32_t _swapchain_image_index = 0;

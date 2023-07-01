@@ -1,17 +1,21 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 17/06/2023
+// Updated : 02/07/2023
 
+#include <Renderer/renderer_events.h>
 #include <Renderer/rendererComponent.h>
 #include <Renderer/RenderPass/frame_buffer_library.h>
 
 namespace Ak
 {
-    RendererComponent::RendererComponent(WindowComponent* window) : Component("__renderer_component"), _window(window)
+    RendererComponent::RendererComponent(WindowComponent* window) : Component("__renderer_component" + std::to_string(_id)), _window(window)
 	{
-		_window->_renderer = this;
+		_window->_renderer = _id;
 		_fps.init();
+		func::function<void(const BaseEvent&)> functor = [this](const BaseEvent& event){ this->_events_queue.push(event.what()); };
+		EventBus::registerListener({ functor, "__renderer_component" + std::to_string(_id) });
+		_id++;
 	}
 
     void RendererComponent::onAttach()
@@ -29,26 +33,33 @@ namespace Ak
 
 	bool RendererComponent::beginFrame()
 	{
+		_rendering_began = false;
 		if(!_is_init)
 			return false;
-		_rendering_began = false;
 		_fps.setMaxFPS(_window->_window_has_focus ? _max_fps : 15);
 		_fps.update();
 		if(!_fps.makeRendering())
 			return false;
+		while(!_events_queue.empty())
+		{
+			if(_events_queue.front() == static_cast<uint32_t>(RenderEvents::resized))
+				_framebufferResize = true;
+			else if(_events_queue.front() == static_cast<uint32_t>(RenderEvents::quit))
+			{
+				onQuit();
+				return false;
+			}
+			_events_queue.pop();
+		}
 		auto device = Render_Core::get().getDevice().get();
-
 		_cmd.getCmdBuffer(_active_image_index).waitForExecution();
 		_cmd.getCmdBuffer(_active_image_index).reset();
-
 		if(_framebufferResize)
 		{
 			_swapchain.recreate();
 			return false;
 		}
-
 		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphores[_active_image_index].getImageSemaphore(), VK_NULL_HANDLE, &_swapchain_image_index);
-
 		if(result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
 			_swapchain.recreate();
@@ -57,9 +68,7 @@ namespace Ak
 		}
 		else if(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to acquire swapchain image");
-
 		_cmd.getCmdBuffer(_active_image_index).beginRecord();
-
 		_rendering_began = true;
 		return true;
 	}
@@ -101,8 +110,6 @@ namespace Ak
     {
 		if(!_is_init)
 			return;
-
-        std::unique_lock<std::mutex> watchdog(_mutex, std::try_to_lock);
 
         vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 

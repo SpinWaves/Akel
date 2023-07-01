@@ -12,8 +12,8 @@ namespace Ak
 	{
 		public:
 			BaseEvent() = default;
-			uint32_t what() const = 0;
-			virtual BaseEvent() = default;
+			virtual uint32_t what() const = 0;
+			virtual ~BaseEvent() = default;
 	};
 }
 
