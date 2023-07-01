@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 30/06/2023
-// Updated : 30/06/2023
+// Updated : 01/07/2023
 
 #ifndef __AK_EVENT_LISTENER__
 #define __AK_EVENT_LISTENER__
@@ -12,7 +12,7 @@
 namespace Ak
 {
 	template <typename F>
-	class EventListener
+	class AK_API EventListener
 	{
 		public:
 			EventListener() = delete;
