@@ -1,19 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vk_graphic_pipeline.cpp                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/15 10:47:24 by maldavid          #+#    #+#             */
-/*   Updated: 2023/06/30 18:19:17 by maldavid         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 15/06/2023
+// Updated : 02/07/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -238,7 +226,7 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create a graphics pipeline");
 	}
 
-	void GraphicPipeline::bindPipeline(CmdBuffer& commandBuffer) noexcept
+	bool GraphicPipeline::bindPipeline(CmdBuffer& commandBuffer) noexcept
 	{
 		std::shared_ptr<FrameBuffer> fb;
 		if(_renderer->isFrameBufferResizeRequested())
@@ -248,7 +236,7 @@ namespace Ak
 			init(_renderer, _desc);
 		}
 		if(!_renderer->isRendering())
-			return;
+			return false;
 		if(_desc.swapchain)
 			fb = _frame_buffers[_renderer->getSwapChainImageIndex()];
 		else
@@ -272,6 +260,7 @@ namespace Ak
 		vkCmdBindPipeline(commandBuffer.get(), getPipelineBindPoint(), getPipeline());
 
 		_render_pass->begin(commandBuffer, _desc.clear_color, *(fb.get()), fb->getWidth(), fb->getHeight());
+		return true;
 	}
 
 	void GraphicPipeline::endPipeline(CmdBuffer& commandBuffer) noexcept

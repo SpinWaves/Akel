@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2022
-// Updated : 26/03/2023
+// Updated : 07/07/2023
 
 #ifndef __AK_SCENE_MANAGER__
 #define __AK_SCENE_MANAGER__
@@ -22,7 +22,7 @@ namespace Ak
 
 			void onAttach() override;
 			void onRender() override;
-			void update() override;
+			void onUpdate(float delta) override;
 			void onEvent(Input& input) override;
 			void onQuit() override;
 
@@ -81,7 +81,6 @@ namespace Ak
 			Unique_ptr<SceneRenderer> _scene_renderer = nullptr;
 			class RendererComponent* _renderer = nullptr;
 			int32_t _current_scene_id = -1;
-			float _timestep = 0.0f;
 			bool _has_been_destroyed = false;
 	};
 }

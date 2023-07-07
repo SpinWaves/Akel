@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 15/05/2023
+// Updated : 06/07/2023
 
 #ifndef __AK_BASE_COMPONENT__
 #define __AK_BASE_COMPONENT__
@@ -18,7 +18,8 @@ namespace Ak
 			Component(std::string name);
 
 			virtual void onAttach();
-			virtual void update();
+			virtual void onUpdate(float delta);
+			virtual void onFixedUpdate();
 			virtual void onRender();
 			virtual void onImGuiRender();
 			virtual void onImGuiEvent(class Input& input);

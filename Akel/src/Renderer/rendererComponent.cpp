@@ -51,14 +51,14 @@ namespace Ak
 			}
 			_events_queue.pop();
 		}
-		auto device = Render_Core::get().getDevice().get();
-		_cmd.getCmdBuffer(_active_image_index).waitForExecution();
-		_cmd.getCmdBuffer(_active_image_index).reset();
 		if(_framebufferResize)
 		{
 			_swapchain.recreate();
 			return false;
 		}
+		auto device = Render_Core::get().getDevice().get();
+		_cmd.getCmdBuffer(_active_image_index).waitForExecution();
+		_cmd.getCmdBuffer(_active_image_index).reset();
 		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphores[_active_image_index].getImageSemaphore(), VK_NULL_HANDLE, &_swapchain_image_index);
 		if(result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
@@ -79,7 +79,7 @@ namespace Ak
 			return;
 		if(_framebufferResize)
 			_framebufferResize = false;
-		if(!_fps.makeRendering() || !_rendering_began)
+		if(!_rendering_began)
 			return;
 
 		_cmd.getCmdBuffer(_active_image_index).endRecord();

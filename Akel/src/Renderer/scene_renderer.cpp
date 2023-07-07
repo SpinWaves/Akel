@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 17/06/2023
+// Updated : 02/07/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -129,7 +129,8 @@ namespace Ak
 		mat.proj[1][1] *= -1;
 		matrices_uniform_buffer.getBuffer()->setData(sizeof(mat), &mat);
 
-		pipeline->bindPipeline(renderer->getActiveCmdBuffer());
+		if(!pipeline->bindPipeline(renderer->getActiveCmdBuffer()))
+			return;
 		for(RenderCommandData& command : _forward_data.command_queue)
 		{
 			auto material = MaterialLibrary::get().getMaterial(command.material);

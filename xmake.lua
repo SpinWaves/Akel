@@ -11,6 +11,7 @@ add_requires("nzsl")
 
 add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.89-docking", "imguizmo_sdl_vk", "libsdl", "openal-soft", "sol2", "nlohmann_json", "kuba-zip")
 add_requires("volk", { configs = { header_only = true}})
+add_requireconfs("nzsl.fmt", { configs = { header_only = true } })
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")

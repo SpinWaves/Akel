@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 01/07/2023
+// Updated : 06/07/2023
 
 #ifndef __AK_WINDOW__
 #define __AK_WINDOW__
@@ -27,7 +27,7 @@ namespace Ak
             WindowComponent();
 
 			void onAttach() override;
-            void update() override;
+            void onFixedUpdate() override;
 			void onQuit() override;
             void fetchSettings();
 

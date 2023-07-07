@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 02/07/2023
+// Updated : 07/07/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -145,7 +145,7 @@ namespace Ak
 			EventBus::send("_renderer_component" + std::to_string(_renderer), RenderQuitEvent{});
 	}
 
-	void WindowComponent::update()
+	void WindowComponent::onFixedUpdate()
 	{
 		if(_window == nullptr)
 			return;
