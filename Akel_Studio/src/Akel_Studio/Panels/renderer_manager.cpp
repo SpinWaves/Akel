@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 15/06/2023
+// Updated : 09/07/2023
 
 #include <Panels/renderer_manager.h>
 #include <Fonts/material_font.h>
@@ -71,7 +71,7 @@ void RendererManager::render_sets()
 			}
 		}
 
-		Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component"));
+		Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component0"));
 		//static ImVec4 color = ImVec4(renderer->getClearValue().color.float32[0], renderer->getClearValue().color.float32[1], renderer->getClearValue().color.float32[2], renderer->getClearValue().color.float32[3]);
 		static ImVec4 color = ImVec4(0.f, 0.f, 0.f, 1.f);
 		ImGui::ColorEdit4("##picker", (float*)&color, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
@@ -83,8 +83,8 @@ void RendererManager::render_sets()
 		ImGui::SameLine();
 		ImGui::Text(_eltm->getText("RendererManager.bg_color").c_str());
 
-			if(ImGui::Button(std::string(AKS_ICON_MD_REFRESH" " + _eltm->getText("RendererManager.reload")).c_str()))
-			renderer->requireFrameBufferResize();
+		if(ImGui::Button(std::string(AKS_ICON_MD_REFRESH" " + _eltm->getText("RendererManager.reload")).c_str()))
+			Ak::EventBus::send("__renderer_component0", Ak::ResizeEvent{});
 
 		bool vsync_save = renderer->getWindow()->vsync;
 		ImGui::Checkbox("Vsync", &renderer->getWindow()->vsync);

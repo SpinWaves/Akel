@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 07/07/2023
+// Updated : 09/07/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -142,7 +142,7 @@ namespace Ak
 		}
 		visible ? SDL_ShowWindow(_window) : SDL_HideWindow(_window);
 		if(_renderer != -1)
-			EventBus::send("_renderer_component" + std::to_string(_renderer), RenderQuitEvent{});
+			EventBus::send("__renderer_component" + std::to_string(_renderer), ResizeEvent{});
 	}
 
 	void WindowComponent::onFixedUpdate()

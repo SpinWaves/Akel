@@ -61,7 +61,7 @@ namespace Ak
 				if(ImGuiComponent::getNumComp())
 				{
 					for(auto component : _components)
-						futures.emplace_back(std::async(&Component::onImGuiEvent, component, std::ref(_in)));
+						component->onImGuiEvent(_in);
 				}
 				_in.update();
 			}
@@ -98,19 +98,20 @@ namespace Ak
 			if(ImGuiComponent::getNumComp())
 			{
 				for(auto& renderer : renderers)
+				{
 					renderer.first->beginFrame();
-				ImGui_ImplVulkan_NewFrame();
-				ImGui_ImplSDL2_NewFrame();
-				ImGui::NewFrame();
+					if(renderer.second != nullptr)
+						renderer.second->beginFrame();
+				}
 				for(auto component : _components)
 				{
 					component->onRender();
 					component->onImGuiRender();
 				}
-				ImGui::Render();
 				for(auto& renderer : renderers)
 				{
-					renderer.second->renderFrame();
+					if(renderer.second != nullptr)
+						renderer.second->renderFrame();
 					renderer.first->endFrame();
 				}
 			}

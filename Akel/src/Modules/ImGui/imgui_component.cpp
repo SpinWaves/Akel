@@ -98,16 +98,44 @@ namespace Ak
 		FrameBufferDesc fbdesc{};
 		fbdesc.render_pass = _render_pass;
 		fbdesc.renderer = _renderer;
+		fbdesc.screen_fbo = true;
 		fbdesc.attachements.emplace_back();
 		for(std::size_t i = 0; i < _renderer->getSwapChain().getImagesNumber(); i++)
 		{
-			fbdesc.screen_fbo = true;
 			fbdesc.attachements[0].image = &_renderer->getSwapChain().getImage(i);
 			fbdesc.attachements[0].type = ImageType::color;
 			fbdesc.width = _renderer->getSwapChain().getImage(i).getWidth();
 			fbdesc.height = _renderer->getSwapChain().getImage(i).getHeight();
 			_frame_buffers.emplace_back(FrameBufferLibrary::get().getFrameBuffer(fbdesc));
 		}
+	}
+
+	void ImGuiComponent::beginFrame()
+	{
+		if(_renderer->isFrameBufferResizeRequested())
+			createFrameBuffers();
+		if(!_renderer->isRendering() || _frame_begin)
+			return;
+		ImGui_ImplVulkan_NewFrame();
+		ImGui_ImplSDL2_NewFrame();
+		ImGui::NewFrame();
+		_frame_begin = true;
+	}
+
+	void ImGuiComponent::renderFrame()
+	{
+		if(!_renderer->isRendering())
+			return;
+		std::shared_ptr<FrameBuffer> fb = _frame_buffers[_renderer->getSwapChainImageIndex()];
+		ImGui::Render();
+		ImDrawData* draw_data = ImGui::GetDrawData();
+		if(draw_data->DisplaySize.x >= 0.0f && draw_data->DisplaySize.y >= 0.0f)
+		{
+			_render_pass->begin(_renderer->getActiveCmdBuffer(), { 0.f, 0.f, 0.f, 1.f }, *fb, fb->getWidth(), fb->getHeight());
+			ImGui_ImplVulkan_RenderDrawData(draw_data, _renderer->getActiveCmdBuffer().get());
+			_render_pass->end(_renderer->getActiveCmdBuffer());
+		}
+		_frame_begin = false;
 	}
 
 	void ImGuiComponent::generateFonts()
@@ -174,22 +202,6 @@ namespace Ak
 
 		vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		ImGui_ImplVulkan_DestroyFontUploadObjects();
-	}
-
-	void ImGuiComponent::renderFrame()
-	{
-		if(_renderer->isFrameBufferResizeRequested())
-			createFrameBuffers();
-		if(!_renderer->isRendering())
-			return;
-		std::shared_ptr<FrameBuffer> fb = _frame_buffers[_renderer->getSwapChainImageIndex()];
-		ImDrawData* draw_data = ImGui::GetDrawData();
-		if(draw_data->DisplaySize.x >= 0.0f && draw_data->DisplaySize.y >= 0.0f)
-		{
-			_render_pass->begin(_renderer->getActiveCmdBuffer(), { 0.f, 0.f, 0.f, 1.f }, *fb, fb->getWidth(), fb->getHeight());
-			ImGui_ImplVulkan_RenderDrawData(draw_data, _renderer->getActiveCmdBuffer().get());
-			_render_pass->end(_renderer->getActiveCmdBuffer());
-		}
 	}
 
 	ImGuiComponent::~ImGuiComponent()

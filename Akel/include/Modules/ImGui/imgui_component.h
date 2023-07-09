@@ -33,6 +33,7 @@ namespace Ak
 
 		private:
 			void SetDarkThemeColors();
+			void beginFrame();
 			void renderFrame();
 			void createFrameBuffers();
 
@@ -42,6 +43,7 @@ namespace Ak
 			std::shared_ptr<RenderPass> _render_pass;
 			class RendererComponent* _renderer = nullptr;
 			static inline bool _componentsInit = false;
+			static inline bool _frame_begin = false;
 			bool _generate_font_on_attach = true;
 	};
 }
