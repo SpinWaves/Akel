@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 02/07/2023
+// Updated : 09/07/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -231,7 +231,6 @@ namespace Ak
 		std::shared_ptr<FrameBuffer> fb;
 		if(_renderer->isFrameBufferResizeRequested())
 		{
-			std::cout << "pouic" << std::endl;
 			destroy();
 			init(_renderer, _desc);
 		}

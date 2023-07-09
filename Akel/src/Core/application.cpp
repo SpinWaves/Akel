@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 07/07/2023
+// Updated : 09/07/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -79,7 +79,6 @@ namespace Ak
 
 	void Application::render()
 	{
-		bool imgui_begin = false;
 		std::unordered_map<RendererComponent*, ImGuiComponent*> renderers;
 		for(auto comp : _components)
 		{
@@ -98,34 +97,21 @@ namespace Ak
 		{
 			if(ImGuiComponent::getNumComp())
 			{
-				imgui_begin = false;
 				for(auto& renderer : renderers)
-				{
-					if(renderer.first->beginFrame())
-					{
-						renderer.second->begin();
-						imgui_begin = true;
-					}
-				}
-				if(imgui_begin)
-				{
-					ImGui_ImplVulkan_NewFrame();
-					ImGui_ImplSDL2_NewFrame();
-					ImGui::NewFrame();
-				}
+					renderer.first->beginFrame();
+				ImGui_ImplVulkan_NewFrame();
+				ImGui_ImplSDL2_NewFrame();
+				ImGui::NewFrame();
 				for(auto component : _components)
 				{
 					component->onRender();
-					if(imgui_begin)
-						component->onImGuiRender();
+					component->onImGuiRender();
 				}
-				if(imgui_begin)
-					ImGui::Render();
+				ImGui::Render();
 				for(auto& renderer : renderers)
 				{
 					renderer.second->renderFrame();
-					if(imgui_begin)
-						renderer.first->endFrame();
+					renderer.first->endFrame();
 				}
 			}
 			else

@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   scene_renderer.cpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/08 21:23:08 by maldavid          #+#    #+#             */
+/*   Updated: 2023/07/09 01:11:05 by maldavid         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 02/07/2023
+// Updated : 08/07/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -35,15 +47,19 @@ namespace Ak
 	{
 		auto renderer = scene->_renderer;
 
-		if(!renderer->isRendering())
-			return;
-
 		if(_settings.geometries) // TODO : do not update command queues if scenes entities haven't been modified
 		{
 			if(_scene_cache != scene)
 			{
 				_forward_data.shaders.clear();
 				_forward_data.shaders = scene->_forward_shaders;
+				if(_forward_data.depth() != VK_NULL_HANDLE)
+					_forward_data.depth.destroy();
+				_forward_data.depth.create(*scene->_renderer);
+			}
+
+			if(scene->_renderer->isFrameBufferResizeRequested())
+			{
 				if(_forward_data.depth() != VK_NULL_HANDLE)
 					_forward_data.depth.destroy();
 				_forward_data.depth.create(*scene->_renderer);
@@ -76,13 +92,13 @@ namespace Ak
 		PipelineDesc pipeline_desc;
 		pipeline_desc.shaders = _forward_data.shaders;
 		pipeline_desc.clear_target = true;
-		pipeline_desc.clear_color = { 0.f, 0.f, 0.f, 1.f };
+		pipeline_desc.clear_color = { 1.f, 0.f, 0.f, 1.f };
 		pipeline_desc.swapchain = true;
 		pipeline_desc.depth = &_forward_data.depth;
 		pipeline_desc.render_targets[0] = _forward_data.render_texture;
 
 		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
-		if(pipeline == nullptr)
+		if(pipeline == nullptr || !pipeline->bindPipeline(renderer->getActiveCmdBuffer()))
 			return;
 
 		// caches
@@ -121,7 +137,7 @@ namespace Ak
 		}
 
 		if(fragment_shader == nullshader)
-			Core::log::report(FATAL_ERROR, "Scene Renderer : no fragment shader given");
+			Core::log::report(FATAL_ERROR, "Scene Renderer : no fragment shader given (wtf)");
 
 		MatricesBuffer mat;
 		mat.proj = scene->_camera->getProj();
@@ -129,8 +145,6 @@ namespace Ak
 		mat.proj[1][1] *= -1;
 		matrices_uniform_buffer.getBuffer()->setData(sizeof(mat), &mat);
 
-		if(!pipeline->bindPipeline(renderer->getActiveCmdBuffer()))
-			return;
 		for(RenderCommandData& command : _forward_data.command_queue)
 		{
 			auto material = MaterialLibrary::get().getMaterial(command.material);

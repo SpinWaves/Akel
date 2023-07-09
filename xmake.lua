@@ -1,17 +1,17 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 05/06/2023
+-- Updated : 08/07/2023
 
 -- Globals settings
 add_repositories("local-repo libs")
 
 add_repositories("nazara-repo https://github.com/NazaraEngine/xmake-repo")
+add_requireconfs("nzsl.fmt", { configs = { header_only = true } })
 add_requires("nzsl")
 
 add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.89-docking", "imguizmo_sdl_vk", "libsdl", "openal-soft", "sol2", "nlohmann_json", "kuba-zip")
 add_requires("volk", { configs = { header_only = true}})
-add_requireconfs("nzsl.fmt", { configs = { header_only = true } })
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")

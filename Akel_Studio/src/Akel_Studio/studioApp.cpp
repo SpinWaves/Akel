@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 07/06/2023
+// Updated : 09/07/2023
 
 #include <AkSpch.h>
 #include <Akel_main.h>
@@ -29,6 +29,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 
 	Ak::WindowComponent* window = app->add_component<Ak::WindowComponent>();
 	Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
+	renderer->setMaxFPS(200);
 
 	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, std::filesystem::path(Ak::VFS::getMainDirPath() / "settings/akel_studio_imgui.ini").string(), false);
 
