@@ -6,7 +6,7 @@
 /*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 21:23:08 by maldavid          #+#    #+#             */
-/*   Updated: 2023/07/09 01:11:05 by maldavid         ###   ########.fr       */
+/*   Updated: 2023/07/10 15:37:47 by maldavid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ namespace Ak
 		PipelineDesc pipeline_desc;
 		pipeline_desc.shaders = _forward_data.shaders;
 		pipeline_desc.clear_target = true;
-		pipeline_desc.clear_color = { 1.f, 0.f, 0.f, 1.f };
+		pipeline_desc.clear_color = { 0.f, 0.f, 0.f, 1.f };
 		pipeline_desc.swapchain = true;
 		pipeline_desc.depth = &_forward_data.depth;
 		pipeline_desc.render_targets[0] = _forward_data.render_texture;
