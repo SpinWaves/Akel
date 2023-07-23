@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 07/06/2023
+// Updated : 24/07/2023
 
 #include "launcher_component.h"
 
@@ -72,7 +72,7 @@ void LauncherComponent::onAttach()
 	SDL_SetWindowHitTest(window->getNativeWindow(), hitTestCallback, &_new_project_window);
 }
 
-void LauncherComponent::onImGuiRender()
+void LauncherComponent::onRender()
 {
 	static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 	if(ImGui::Begin("main", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking))

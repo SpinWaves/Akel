@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 10/07/2023
+// Updated : 24/07/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -124,7 +124,7 @@ namespace Ak
 
 	void ImGuiComponent::renderFrame()
 	{
-		if(!_renderer->isRendering() || !_frame_begin)
+		if(!_frame_begin)
 			return;
 		std::shared_ptr<FrameBuffer> fb = _frame_buffers[_renderer->getSwapChainImageIndex()];
 		ImGui::Render();

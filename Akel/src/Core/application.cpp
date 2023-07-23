@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 09/07/2023
+// Updated : 24/07/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -39,42 +39,45 @@ namespace Ak
 	void Application::run()
 	{
 		std::thread rendering_thread(&Application::render, this);
-		while(!_in.isEnded()) // Main update loop
-			update();
+		update();
 		_stop_rendering = true;
 		rendering_thread.join();
 	}
 
 	void Application::update()
 	{
-		static float old_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
+		float old_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
 		std::vector<std::future<void>> futures;
 
-		float curent_timestep = (static_cast<float>(SDL_GetTicks64()) / 1000.0f) - old_timestep;
-		old_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
-		_ticks.update();
-		if(_ticks.makeUpdate()) // updates
+		while(!_in.isEnded()) // Main update loop
 		{
-			_in.reset();
-			while(SDL_PollEvent(_in.getNativeEvent()))
+			float curent_timestep = (static_cast<float>(SDL_GetTicks64()) / 1000.0f) - old_timestep;
+			old_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
+			_ticks.update();
+			if(_ticks.makeUpdate()) // updates
 			{
-				if(ImGuiComponent::getNumComp())
+				_in.reset();
+				while(SDL_PollEvent(_in.getNativeEvent()))
 				{
-					for(auto component : _components)
-						component->onImGuiEvent(_in);
+					if(ImGuiComponent::getNumComp())
+					{
+						for(auto component : _components)
+							component->onImGuiEvent(_in);
+					}
+					_in.update();
 				}
-				_in.update();
+				for(auto component : _components)
+				{
+					futures.emplace_back(std::async(&Component::onEvent, component, std::ref(_in)));
+					futures.emplace_back(std::async(&Component::onFixedUpdate, component));
+				}
 			}
 			for(auto component : _components)
-			{
-				futures.emplace_back(std::async(&Component::onEvent, component, std::ref(_in)));
-				futures.emplace_back(std::async(&Component::onFixedUpdate, component));
-			}
+				futures.emplace_back(std::async(&Component::onUpdate, component, curent_timestep));
+			for(auto& future : futures)
+				future.wait();
+			futures.clear();
 		}
-		for(auto component : _components)
-			futures.emplace_back(std::async(&Component::onUpdate, component, curent_timestep));
-		for(auto& future : futures)
-			future.wait();
 	}
 
 	void Application::render()
@@ -95,34 +98,19 @@ namespace Ak
 
 		while(!_stop_rendering) // Main rendering loop
 		{
-			if(ImGuiComponent::getNumComp())
+			for(auto& renderer : renderers)
 			{
-				for(auto& renderer : renderers)
-				{
-					renderer.first->beginFrame();
-					if(renderer.second != nullptr)
-						renderer.second->beginFrame();
-				}
-				for(auto component : _components)
-				{
-					component->onRender();
-					component->onImGuiRender();
-				}
-				for(auto& renderer : renderers)
-				{
-					if(renderer.second != nullptr)
-						renderer.second->renderFrame();
-					renderer.first->endFrame();
-				}
+				renderer.first->beginFrame();
+				if(renderer.second != nullptr)
+					renderer.second->beginFrame();
 			}
-			else
+			for(auto component : _components)
+				component->onRender();
+			for(auto& renderer : renderers)
 			{
-				for(auto& renderer : renderers)
-					renderer.first->beginFrame();
-				for(auto component : _components)
-					component->onRender();
-				for(auto& renderer : renderers)
-					renderer.first->endFrame();
+				if(renderer.second != nullptr)
+					renderer.second->renderFrame();
+				renderer.first->endFrame();
 			}
 		}
 	}

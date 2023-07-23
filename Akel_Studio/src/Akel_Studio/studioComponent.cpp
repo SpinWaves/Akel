@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 09/07/2023
+// Updated : 24/07/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -106,7 +106,7 @@ void StudioComponent::onAttach()
 
 static bool realquit = false;
 
-void StudioComponent::onImGuiRender()
+void StudioComponent::onRender()
 {
 	//ImGuizmo::BeginFrame();
 	//ImGuizmo::Enable(true);
