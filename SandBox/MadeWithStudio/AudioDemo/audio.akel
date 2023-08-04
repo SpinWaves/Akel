@@ -45,7 +45,7 @@
             "x": 1920,
             "y": 1080
         },
-        "maximize": false,
+        "maximize": true,
         "minSize": {
             "x": 0,
             "y": 0
@@ -53,13 +53,13 @@
         "minimize": false,
         "opacity": 1.0,
         "pos": {
-            "x": 328,
-            "y": 319
+            "x": 0,
+            "y": 153
         },
         "resizable": true,
         "size": {
-            "x": 1280,
-            "y": 750
+            "x": 1920,
+            "y": 1023
         },
         "title": "Audio using Akel Engine",
         "visible": true,
