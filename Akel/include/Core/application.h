@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 03/06/2023
+// Updated : 05/08/2023
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -26,6 +26,9 @@ namespace Ak
 
 	class AK_API Application : public ComponentStack, public non_copyable
 	{
+		friend void pauseRenderingThread() noexcept;
+		friend void resumeRenderingThread() noexcept;
+
 		public:
 			Application();
 			void run();
@@ -42,10 +45,13 @@ namespace Ak
 			Input _in;
 			CounterTicks _ticks;
 			std::atomic<bool> _stop_rendering = false;
+			std::mutex _pause_rendering;
 			inline static bool _app_check = false;
 	};
 
 	ComponentStack* getMainAppComponentStack();
+	void pauseRenderingThread() noexcept;
+	void resumeRenderingThread() noexcept;
 }
 
 #endif // __AK_APPLICATION__

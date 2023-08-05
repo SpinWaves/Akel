@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 24/07/2023
+// Updated : 05/08/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -54,9 +54,10 @@ namespace Ak
 			float curent_timestep = (static_cast<float>(SDL_GetTicks64()) / 1000.0f) - old_timestep;
 			old_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
 			_ticks.update();
-			if(_ticks.makeUpdate()) // updates
+			if(_ticks.makeUpdate()) // fixed updates
 			{
 				_in.reset();
+				_pause_rendering.lock();
 				while(SDL_PollEvent(_in.getNativeEvent()))
 				{
 					if(ImGuiComponent::getNumComp())
@@ -66,6 +67,7 @@ namespace Ak
 					}
 					_in.update();
 				}
+				_pause_rendering.unlock();
 				for(auto component : _components)
 				{
 					futures.emplace_back(std::async(&Component::onEvent, component, std::ref(_in)));
@@ -98,6 +100,7 @@ namespace Ak
 
 		while(!_stop_rendering) // Main rendering loop
 		{
+			_pause_rendering.lock();
 			for(auto& renderer : renderers)
 			{
 				renderer.first->beginFrame();
@@ -112,6 +115,7 @@ namespace Ak
 					renderer.second->renderFrame();
 				renderer.first->endFrame();
 			}
+			_pause_rendering.unlock();
 		}
 	}
 
@@ -144,5 +148,15 @@ namespace Ak
 
 	Application::~Application()
 	{
+	}
+
+	void pauseRenderingThread() noexcept
+	{
+		__main_app->_pause_rendering.lock();
+	}
+
+	void resumeRenderingThread() noexcept
+	{
+		__main_app->_pause_rendering.unlock();
 	}
 }

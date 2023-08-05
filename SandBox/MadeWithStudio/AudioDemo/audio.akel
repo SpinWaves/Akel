@@ -45,7 +45,7 @@
             "x": 1920,
             "y": 1080
         },
-        "maximize": true,
+        "maximize": false,
         "minSize": {
             "x": 0,
             "y": 0
@@ -53,8 +53,8 @@
         "minimize": false,
         "opacity": 1.0,
         "pos": {
-            "x": 0,
-            "y": 153
+            "x": 48,
+            "y": 241
         },
         "resizable": true,
         "size": {

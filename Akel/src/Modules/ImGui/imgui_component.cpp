@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 04/08/2023
+// Updated : 05/08/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -117,7 +117,6 @@ namespace Ak
 			createFrameBuffers();
 		if(!_renderer->isRendering() || _frame_begin)
 			return;
-
 		ImGui_ImplVulkan_NewFrame();
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
