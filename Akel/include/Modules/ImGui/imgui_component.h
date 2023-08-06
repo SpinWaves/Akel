@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 05/08/2023
+// Updated : 06/08/2023
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -21,7 +21,6 @@ namespace Ak
 			ImGuiComponent(class RendererComponent* renderer, std::string file_path = "default", bool generate_font = true);
 
 			void onAttach() override;
-			void onImGuiEvent(class Input& input) override;
 
 			void addFontFromFile(const char* file, float size, bool def = false);
 			void addFontFromRawTTF(uint32_t* data, size_t data_size, ImFontConfig conf, ImWchar* ranges, float size, bool def = false);
@@ -32,7 +31,7 @@ namespace Ak
 			~ImGuiComponent();
 
 		private:
-			void SetDarkThemeColors();
+			void setDarkThemeColors();
 			void beginFrame();
 			void renderFrame();
 			void createFrameBuffers();

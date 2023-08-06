@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 24/07/2023
+// Updated : 06/08/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -194,7 +194,7 @@ void StudioComponent::onFixedUpdate()
 	scene->hangUpRun();
 }
 
-void StudioComponent::onImGuiEvent(Ak::Input& input)
+void StudioComponent::onEvent(Ak::Input& input)
 {
 	_running = _running == true ? !input.isEnded() : _running;
 	if(!_running && !Ak::getMainAppProjectFile().archive()["on_quit_window"])

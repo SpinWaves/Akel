@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 05/08/2023
+// Updated : 06/08/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -34,7 +34,7 @@ namespace Ak
 			ImGui::SaveIniSettingsToDisk(_settingsFilePath.c_str());
 		}
 
-		SetDarkThemeColors();
+		setDarkThemeColors();
 
 		if(descriptorPool == VK_NULL_HANDLE)
 		{
@@ -156,11 +156,6 @@ namespace Ak
 		ImGui_ImplVulkan_DestroyFontUploadObjects();
 	}
 
-	void ImGuiComponent::onImGuiEvent(Input& input)
-	{
-		ImGui_ImplSDL2_ProcessEvent(input.getNativeEvent());
-	}
-
 	void ImGuiComponent::addFontFromFile(const char* file, float size, bool def)
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -214,7 +209,7 @@ namespace Ak
 		vkDestroyDescriptorPool(Render_Core::get().getDevice().get(), descriptorPool, nullptr);
 	}
 
-	void ImGuiComponent::SetDarkThemeColors()
+	void ImGuiComponent::setDarkThemeColors()
 	{
 		ImGuiStyle* style = &ImGui::GetStyle();
 		ImVec4* colors = style->Colors;
