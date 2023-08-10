@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 06/08/2023
+// Updated : 10/08/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -39,7 +39,6 @@ namespace Ak
 	void Application::run()
 	{
 		float old_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
-		std::vector<std::future<void>> futures;
 		std::unordered_map<RendererComponent*, ImGuiComponent*> renderers;
 		for(auto comp : _components)
 		{
@@ -68,15 +67,12 @@ namespace Ak
 				}
 				for(auto component : _components)
 				{
-					futures.emplace_back(std::async(&Component::onEvent, component, std::ref(_in)));
-					futures.emplace_back(std::async(&Component::onFixedUpdate, component));
+					component->onEvent(_in);
+					component->onFixedUpdate();
 				}
 			}
 			for(auto component : _components)
-				futures.emplace_back(std::async(&Component::onUpdate, component, curent_timestep));
-			for(auto& future : futures)
-				future.wait();
-			futures.clear();
+				component->onUpdate(curent_timestep);
 
 			if(renderers.empty())
 				continue;
