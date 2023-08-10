@@ -113,9 +113,11 @@ namespace Ak
 
 	void ImGuiComponent::beginFrame()
 	{
+		if(_frame_begin)
+			return;
 		if(_renderer->isFrameBufferResizeRequested())
 			createFrameBuffers();
-		if(!_renderer->isRendering() || _frame_begin)
+		if(!_renderer->isRendering())
 			return;
 		ImGui_ImplVulkan_NewFrame();
 		ImGui_ImplSDL2_NewFrame();

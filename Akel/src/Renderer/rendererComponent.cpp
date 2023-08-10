@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 09/07/2023
+// Updated : 10/08/2023
 
 #include <Renderer/renderer_events.h>
 #include <Renderer/rendererComponent.h>
@@ -52,10 +52,7 @@ namespace Ak
 			_events_queue.pop();
 		}
 		if(_framebufferResize)
-		{
 			_swapchain.recreate();
-			return false;
-		}
 		auto device = Render_Core::get().getDevice().get();
 		_cmd.getCmdBuffer(_active_image_index).waitForExecution();
 		_cmd.getCmdBuffer(_active_image_index).reset();

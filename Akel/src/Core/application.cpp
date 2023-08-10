@@ -20,7 +20,10 @@ namespace Ak
 	const char* CommandLineArgs::operator[](int index) const noexcept
 	{
 		if(index >= count)
-			Core::log::report(FATAL_ERROR, "Command Line Args : index out of bounds");
+		{
+			Core::log::report(ERROR, "Command Line Args : index out of bounds");
+			return nullptr;
+		}
 		return args[index];
 	}
 
