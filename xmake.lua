@@ -4,14 +4,14 @@
 -- Updated : 08/07/2023
 
 -- Globals settings
-add_repositories("local-repo libs")
-
 add_repositories("nazara-repo https://github.com/NazaraEngine/xmake-repo")
 add_requireconfs("nzsl.fmt", { configs = { header_only = true } })
 add_requires("nzsl")
 
-add_requires("entt", "spirv-reflect", "imgui_sdl_vk v1.89-docking", "imguizmo_sdl_vk", "libsdl", "openal-soft", "sol2", "nlohmann_json", "kuba-zip")
-add_requires("volk", { configs = { header_only = true}})
+add_requires("entt", "spirv-reflect", "libsdl", "openal-soft", "sol2", "nlohmann_json", "kuba-zip")
+add_requires("volk", { configs = { header_only = true }})
+add_requires("imgui v1.89.8-docking", { configs = { vulkan = true, sdl2_no_renderer = true }})
+add_requireconfs("imgui", { configs = { cxflags = "-D IMGUI_IMPL_VULKAN_NO_PROTOTYPES" }})
 
 add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
@@ -43,7 +43,7 @@ target("Akel")
 
 	add_packages("spirv-reflect", { public = true })
 	add_packages("libsdl",		  { public = true })
-	add_packages("imgui_sdl_vk",  { public = true })
+	add_packages("imgui",         { public = true })
 	add_packages("sol2",  		  { public = true })
 	add_packages("nlohmann_json", { public = true })
 	add_packages("entt", 	      { public = true })

@@ -53,13 +53,13 @@
         "minimize": false,
         "opacity": 1.0,
         "pos": {
-            "x": 48,
-            "y": 241
+            "x": 620,
+            "y": 431
         },
         "resizable": true,
         "size": {
-            "x": 1920,
-            "y": 1023
+            "x": 794,
+            "y": 522
         },
         "title": "Audio using Akel Engine",
         "visible": true,

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 10/07/2023
+// Updated : 16/08/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -45,8 +45,8 @@
 // ImGui
 #include <imgui.h>
 #include <imgui_internal.h>
-#include <imgui_impl_sdl.h>
-#include <imgui_impl_vulkan.h>
+#include <backends/imgui_impl_sdl2.h>
+#include <backends/imgui_impl_vulkan.h>
 
 // Lua
 #define SOL_ALL_SAFETIES_ON 1

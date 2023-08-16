@@ -16,9 +16,9 @@ class TitleComponent : public Ak::Component
 
 Ak::AkelInstance Akel_init()
 {
-    Ak::AkelInstance instance;
-        instance.project_file_name = "audio";
-    return instance;
+	Ak::AkelInstance instance;
+		instance.project_file_name = "audio";
+	return instance;
 }
 
 Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
@@ -26,6 +26,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Audio using Akel Engine");
 	app->add_component<Ak::AudioComponent>();
 	app->add_component<TitleComponent>();
+	app->add_component<Ak::ImGuiRenderStats>(app->getRenderer());
 
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main_scene");
 	scene->addCamera<Ak::Cam::FirstPerson3D>(-5.0f, 1.0f, 0.0f);
@@ -43,15 +44,6 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 
 	Ak::LuaLoader lua(app, *app->getSceneManager());
 	spaceship.addAttribute<Ak::ScriptAttribute>(lua.loadScript(Ak::VFS::resolve("//Scripts/spaceship_script.lua")));
-
-	Ak::Core::GPU gpu;
-
-	std::cout << gpu.getNumberOfDevices() << std::endl;
-	std::cout << gpu.getModelName() << std::endl;
-	std::cout << gpu.getVendorName() << std::endl;
-	std::cout << gpu.getDeviceType() << std::endl;
-	std::cout << gpu.getVulkanVersion() << std::endl;
-	std::cout << gpu.getDriverVersion() << std::endl;
 
 	return app;
 }

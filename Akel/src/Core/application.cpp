@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 10/08/2023
+// Updated : 16/08/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -41,7 +41,47 @@ namespace Ak
 
 	void Application::run()
 	{
+		std::thread rendering_thread(&Application::render, this);
+		update();
+		_stop_rendering = true;
+		rendering_thread.join();
+	}
+
+	void Application::update()
+	{
 		float old_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
+		std::vector<std::future<void>> futures;
+
+		while(!_in.isEnded()) // Main update loop
+		{
+			float curent_timestep = (static_cast<float>(SDL_GetTicks64()) / 1000.0f) - old_timestep;
+			old_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
+			_ticks.update();
+			if(_ticks.makeUpdate()) // updates
+			{
+				_in.reset();
+				while(SDL_PollEvent(_in.getNativeEvent()))
+				{
+					if(ImGuiComponent::getNumComp())
+						ImGui_ImplSDL2_ProcessEvent(_in.getNativeEvent());
+					_in.update();
+				}
+				for(auto component : _components)
+				{
+					futures.emplace_back(std::async(&Component::onEvent, component, std::ref(_in)));
+					futures.emplace_back(std::async(&Component::onFixedUpdate, component));
+				}
+			}
+			for(auto component : _components)
+				futures.emplace_back(std::async(&Component::onUpdate, component, curent_timestep));
+			for(auto& future : futures)
+				future.wait();
+			futures.clear();
+		}
+	}
+
+	void Application::render()
+	{
 		std::unordered_map<RendererComponent*, ImGuiComponent*> renderers;
 		for(auto comp : _components)
 		{
@@ -53,41 +93,23 @@ namespace Ak
 				renderers[imgui->_renderer] = imgui;
 			}
 		}
+		if(renderers.empty())
+			return;
 
-		while(!_in.isEnded()) // Main loop
+		while(!_stop_rendering) // Main rendering loop
 		{
-			float curent_timestep = (static_cast<float>(SDL_GetTicks64()) / 1000.0f) - old_timestep;
-			old_timestep = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
-			_ticks.update();
-			if(_ticks.makeUpdate()) // fixed updates
-			{
-				_in.reset();
-				while(SDL_PollEvent(_in.getNativeEvent()))
-				{
-					if(ImGuiComponent::getNumComp())
-						ImGui_ImplSDL2_ProcessEvent(_in.getNativeEvent());
-					_in.update();
-				}
-				for(auto component : _components)
-				{
-					component->onEvent(_in);
-					component->onFixedUpdate();
-				}
-			}
-			for(auto component : _components)
-				component->onUpdate(curent_timestep);
-
-			if(renderers.empty())
-				continue;
-
+			bool res = true;
 			for(auto& renderer : renderers)
 			{
-				renderer.first->beginFrame();
-				if(renderer.second != nullptr)
+				res = renderer.first->beginFrame();
+				if(res && renderer.second != nullptr)
 					renderer.second->beginFrame();
 			}
-			for(auto component : _components)
-				component->onRender();
+			if(res)
+			{
+				for(auto component : _components)
+					component->onRender();
+			}
 			for(auto& renderer : renderers)
 			{
 				if(renderer.second != nullptr)

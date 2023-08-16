@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 06/08/2023
+// Updated : 16/08/2023
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -35,8 +35,13 @@ namespace Ak
 			~Application() = default;
 
 		private:
+			void render();
+			void update();
+
+		private:
 			Input _in;
 			CounterTicks _ticks;
+			std::atomic<bool> _stop_rendering = false;
 			inline static bool _app_check = false;
 	};
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 06/08/2023
+// Updated : 16/08/2023
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -36,11 +36,13 @@ namespace Ak
 			void renderFrame();
 			void createFrameBuffers();
 
+		protected:
+			class RendererComponent* _renderer = nullptr;
+
 		private:
 			std::string _settingsFilePath;
 			std::vector<std::shared_ptr<FrameBuffer>> _frame_buffers;
 			std::shared_ptr<RenderPass> _render_pass;
-			class RendererComponent* _renderer = nullptr;
 			static inline bool _componentsInit = false;
 			static inline bool _frame_begin = false;
 			bool _generate_font_on_attach = true;

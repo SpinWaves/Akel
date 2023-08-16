@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 10/08/2023
+// Updated : 14/08/2023
 
 #include <Renderer/renderer_events.h>
 #include <Renderer/rendererComponent.h>
@@ -103,12 +103,12 @@ namespace Ak
 		_active_image_index = (_active_image_index + 1) % MAX_FRAMES_IN_FLIGHT;
 	}
 
-    void RendererComponent::onQuit()
-    {
+	void RendererComponent::onQuit()
+	{
 		if(!_is_init)
 			return;
 
-        vkDeviceWaitIdle(Render_Core::get().getDevice().get());
+		vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 
 		_cmd.destroy();
 
@@ -117,5 +117,5 @@ namespace Ak
 			_semaphores[i].destroy();
 		_surface.destroy();
 		_is_init = false;
-    }
+	}
 }
