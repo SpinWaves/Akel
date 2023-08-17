@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/06/2023
-// Updated : 09/06/2023
+// Updated : 17/08/2023
 
 #ifndef __AK_VIRTUAL_FILE_SYSTEM__
 #define __AK_VIRTUAL_FILE_SYSTEM__
@@ -26,10 +26,13 @@ namespace Ak
 	{
 		friend int ::main(int, char**);
 		friend bool initAkel(AkelInstance* project);
+
 		public:
 			VFS() = delete;
 
 			static std::filesystem::path resolve(const std::string& file);
+			inline static void resetMainPath() { _main_path = _save_main_path; }
+			inline static void replaceMainPath(const std::filesystem::path& path) { _main_path = path; }
 			inline static const std::filesystem::path& getMainDirPath() { return _main_path; }
 			static const std::filesystem::path& getLogDirPath();
 			static void mountFolder(const std::string& virtual_path, const std::filesystem::path& physical_path, bool replace = false);
@@ -55,12 +58,14 @@ namespace Ak
 			{
 				_main_path = path;
 				_main_path.remove_filename();
+				_save_main_path = _main_path;
 			}
 			static void initResSystem();
 
 		private:
 			inline static std::map<std::string, std::vector<std::filesystem::path>, std::less<void>> _mounts;
 			inline static std::filesystem::path _main_path;
+			inline static std::filesystem::path _save_main_path;
 	};
 }
 

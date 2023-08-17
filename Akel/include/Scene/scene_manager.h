@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/11/2022
-// Updated : 07/07/2023
+// Updated : 17/08/2023
 
 #ifndef __AK_SCENE_MANAGER__
 #define __AK_SCENE_MANAGER__
@@ -73,6 +73,7 @@ namespace Ak
 			}
 
 			inline Scene* getCurrentScene() noexcept { return _scenes[_current_scene_id]; }
+			inline void setRenderTarget(TextureID texture) noexcept { _scene_renderer->setRenderTarget(texture); }
 
 			~SceneManager() = default;
 

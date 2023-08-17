@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/06/2023
-// Updated : 09/07/2023
+// Updated : 17/08/2023
 
 #include <Renderer/RenderPass/frame_buffer_library.h>
 #include <Renderer/renderer.h>
@@ -32,5 +32,6 @@ namespace Ak
 	{
 		for(auto [hash, fb] : _cache)
 			fb->destroy();
+		_cache.clear();
 	}
 }

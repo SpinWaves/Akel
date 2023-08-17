@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/06/2023
-// Updated : 16/06/2023
+// Updated : 17/08/2023
 
 #include <Utils/hash.h>
 #include <Renderer/RenderPass/render_pass_library.h>
@@ -27,5 +27,6 @@ namespace Ak
 	{
 		for(const auto& [hash, render_pass] : _cache)
 			render_pass->destroy();
+		_cache.clear();
 	}
 }

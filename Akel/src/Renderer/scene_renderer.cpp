@@ -6,7 +6,7 @@
 /*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 21:23:08 by maldavid          #+#    #+#             */
-/*   Updated: 2023/07/10 15:37:47 by maldavid         ###   ########.fr       */
+/*   Updated: 2023/08/17 15:53:33 by maldavid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,20 @@ namespace Ak
 				_forward_data.shaders = scene->_forward_shaders;
 				if(_forward_data.depth() != VK_NULL_HANDLE)
 					_forward_data.depth.destroy();
-				_forward_data.depth.create(*scene->_renderer);
+				if(_forward_data.render_texture != nulltexture)
+				{
+					std::shared_ptr<Texture> tex = TextureLibrary::get().getTexture(_forward_data.render_texture);
+					_forward_data.depth.create(*scene->_renderer, tex->getWidth(), tex->getHeight());
+				}
+				else
+					_forward_data.depth.create(*scene->_renderer, renderer->getSwapChain().getExtent().width, renderer->getSwapChain().getExtent().height);
 			}
 
-			if(scene->_renderer->isFrameBufferResizeRequested())
+			if(scene->_renderer->isFrameBufferResizeRequested() && _forward_data.render_texture != nulltexture)
 			{
 				if(_forward_data.depth() != VK_NULL_HANDLE)
 					_forward_data.depth.destroy();
-				_forward_data.depth.create(*scene->_renderer);
+				_forward_data.depth.create(*scene->_renderer, renderer->getSwapChain().getExtent().width, renderer->getSwapChain().getExtent().height);
 			}
 
 			_forward_data.command_queue.clear();
@@ -167,6 +173,5 @@ namespace Ak
         vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		_forward_data.depth.destroy();
 		_pipelines_manager.clearCache();
-		TextureLibrary::get().clearLibrary();
 	}
 }

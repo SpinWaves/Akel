@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/12/2022
-// Updated : 15/06/2023
+// Updated : 17/08/2023
 
 #ifndef __AK_VK_IMAGE__
 #define __AK_VK_IMAGE__
@@ -31,14 +31,15 @@ namespace Ak
 		public:
 			Image() = default;
 
-			inline void create(VkImage image, VkFormat format, uint32_t width, uint32_t height) noexcept
+			inline void create(VkImage image, VkFormat format, uint32_t width, uint32_t height, VkImageLayout layout = VK_IMAGE_LAYOUT_UNDEFINED) noexcept
 			{
 				_image = image;
 				_format = format;
 				_width = width;
 				_height = height;
+				_layout = layout;
 			}
-			void create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties);
+			void create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImageLayout layout = VK_IMAGE_LAYOUT_UNDEFINED);
 			void copyBuffer(class Buffer& buffer);
 			void transitionLayout(VkImageLayout new_layout, class CmdBuffer& cmd);
 			void destroy() noexcept;

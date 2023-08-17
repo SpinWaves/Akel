@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 06/08/2023
+// Updated : 17/08/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -127,6 +127,7 @@ void StudioComponent::onRender()
         ImGui::OpenPopup(_eltm->getText("really").c_str());
 
 	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	ImGui::SetNextWindowSize(ImVec2(270, 100), ImGuiCond_Appearing);
 
 	if(ImGui::BeginPopupModal(_eltm->getText("really").c_str(), nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{

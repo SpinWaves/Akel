@@ -1,21 +1,20 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/01/2023
-// Updated : 15/06/2023
+// Updated : 17/08/2023
 
 #include <Renderer/Images/depth.h>
 #include <Renderer/rendererComponent.h>
 
 namespace Ak
 {
-	void DepthImage::create(RendererComponent& renderer)
+	void DepthImage::create(RendererComponent& renderer, uint32_t width, uint32_t height)
 	{
 		VkFormat format = findSupportedFormat({VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
             VK_IMAGE_TILING_OPTIMAL,
             VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
         );
-		Image::create(renderer.getSwapChain()._extent.width, renderer.getSwapChain()._extent.height, 
-				format, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+		Image::create(width, height, format, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 		Image::createImageView(VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_DEPTH_BIT);
 
 		CmdPool cmdpool;

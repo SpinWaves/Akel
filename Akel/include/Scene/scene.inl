@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2023
-// Updated : 17/02/2023
+// Updated : 17/08/2023
 
 namespace Ak
 {
@@ -22,6 +22,9 @@ namespace Ak
 	{
 		static_assert(std::is_base_of<Cam::BaseCamera, T>::value, "Scene camera must inherit from Ak::Cam::BaseCamera");
 		T* cam = memAlloc<T>(std::forward<Args>(args)...);
-		_camera = make_Unique_ptr<Cam::BaseCamera>(cam);
+		if(_camera)
+			_camera.reset(cam);
+		else
+			_camera = make_Unique_ptr<Cam::BaseCamera>(cam);
 	}
 }

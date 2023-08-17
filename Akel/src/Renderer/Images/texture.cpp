@@ -1,11 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 18/06/2023
+// Updated : 17/08/2023
 
 #include <Renderer/Images/texture.h>
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Core/render_core.h>
+#include <Renderer/Command/vk_cmd_pool.h>
+#include <Renderer/Command/vk_cmd_buffer.h>
 #include <Utils/assert.h>
 #define STBI_ASSERT(x) Ak_assert(x, "stb_image assertion failed")
 #define STB_IMAGE_IMPLEMENTATION
@@ -31,6 +33,13 @@ namespace Ak
 			Image::copyBuffer(staging_buffer);
 			staging_buffer.destroy();
 		}
+		CmdPool pool;
+		pool.init();
+		CmdBuffer cmd;
+		cmd.init(&pool);
+		transitionLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, cmd);
+		cmd.destroy();
+		pool.destroy();
 	}
 
 	Texture loadTextureFromFile(std::filesystem::path path)

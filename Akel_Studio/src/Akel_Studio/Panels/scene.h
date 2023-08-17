@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 18/06/2023
+// Updated : 17/08/2023
 
 #ifndef __AK_STUDIO_SCENE__
 #define __AK_STUDIO_SCENE__
@@ -18,15 +18,15 @@ class Scene : public Panel
 		void onQuit() override;
 
 		inline bool callRun() const noexcept { return _run; }
-		inline void hangUpRun() noexcept { _run = false; }
+		inline constexpr void hangUpRun() noexcept { _run = false; }
+		inline Ak::Scene* getScene() const noexcept { return _scene; }
 
         ~Scene() = default;
 
     private:
-		Ak::SceneRenderer _scene_renderer;
-		Ak::Scene _scene;
 		AkImGui::ImImage _scene_texture;
 		AkImGui::ImImage _play;
+		Ak::Scene* _scene = nullptr;
         uint8_t _aspect_checked = 0;
 		bool _grid = true;
 		bool _run = false;
