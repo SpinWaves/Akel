@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 17/06/2023
+// Updated : 19/08/2023
 
 #include <Renderer/Command/vk_cmd_buffer.h>
 #include <Renderer/Command/cmd_manager.h>

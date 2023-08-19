@@ -1,19 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scene_renderer.cpp                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: maldavid <kbz_8.dev@akel-engine.com>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/08 21:23:08 by maldavid          #+#    #+#             */
-/*   Updated: 2023/08/17 15:53:33 by maldavid         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 08/07/2023
+// Updated : 19/08/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -47,6 +35,8 @@ namespace Ak
 	{
 		auto renderer = scene->_renderer;
 
+		if(scene == nullptr)
+			return;
 		if(_settings.geometries) // TODO : do not update command queues if scenes entities haven't been modified
 		{
 			if(_scene_cache != scene)
