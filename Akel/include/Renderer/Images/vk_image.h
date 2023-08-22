@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/12/2022
-// Updated : 17/08/2023
+// Updated : 22/08/2023
 
 #ifndef __AK_VK_IMAGE__
 #define __AK_VK_IMAGE__
@@ -44,13 +44,13 @@ namespace Ak
 			void transitionLayout(VkImageLayout new_layout, class CmdBuffer& cmd);
 			void destroy() noexcept;
 
-			inline VkImage get() noexcept { return _image; }
-			inline VkImage operator()() noexcept { return _image; }
-			inline VkDeviceMemory getDeviceMemory() noexcept { return _memory; }
-			inline VkImageView getImageView() noexcept { return _image_view; }
-			inline VkFormat getFormat() noexcept { return _format; }
-			inline VkSampler getSampler() noexcept { return _sampler; }
-			inline VkImageLayout getLayout() noexcept { return _layout; }
+			inline VkImage get() const noexcept { return _image; }
+			inline VkImage operator()() const noexcept { return _image; }
+			inline VkDeviceMemory getDeviceMemory() const noexcept { return _memory; }
+			inline VkImageView getImageView() const noexcept { return _image_view; }
+			inline VkFormat getFormat() const noexcept { return _format; }
+			inline VkSampler getSampler() const noexcept { return _sampler; }
+			inline VkImageLayout getLayout() const noexcept { return _layout; }
 			inline uint32_t getWidth() const noexcept { return _width; }
 			inline uint32_t getHeight() const noexcept { return _height; }
 
@@ -59,6 +59,8 @@ namespace Ak
 		protected:
 			void createImageView(VkImageViewType type, VkImageAspectFlags aspectFlags) noexcept;
 			void createSampler() noexcept;
+			void destroyImageView() noexcept;
+			void destroySampler() noexcept;
 
 		private:
 			VkImage _image = VK_NULL_HANDLE;
@@ -69,6 +71,23 @@ namespace Ak
 			VkImageLayout _layout = VK_IMAGE_LAYOUT_UNDEFINED;
 			uint32_t _width = 0;
 			uint32_t _height = 0;
+	};
+}
+
+namespace std
+{
+	template <>
+	struct hash<Ak::Image>
+	{
+		size_t operator()(const Ak::Image& img) const noexcept
+		{
+			return	std::hash<VkImage>()(img.get()) +
+					std::hash<VkDeviceMemory>()(img.getDeviceMemory()) +
+					std::hash<int>()(img.getLayout()) +
+					std::hash<int>()(img.getFormat()) +
+					std::hash<uint32_t>()(img.getWidth()) +
+					std::hash<uint32_t>()(img.getHeight());
+		}
 	};
 }
 

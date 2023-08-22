@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/06/2023
-// Updated : 03/06/2023
+// Updated : 22/08/2023
 
 #include <Renderer/fps.h>
 
@@ -17,6 +17,7 @@ namespace Ak
 
 	void CounterFPS::update()
 	{
+		using namespace std::chrono_literals;
 		_fps_now = static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
 
 		if(SDL_GetTicks64() - _timer > 1000)
@@ -34,6 +35,9 @@ namespace Ak
 			_make_render = true;
 		}
 		else
+		{
 			_make_render = false;
+			std::this_thread::sleep_for(std::chrono::duration<double, std::nano>(_ns));
+		}
 	}
 }

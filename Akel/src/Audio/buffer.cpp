@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2023
-// Updated : 30/04/2023
+// Updated : 22/08/2023
 
 #define DR_FLAC_IMPLEMENTATION
 #include <dr/dr_flac.h>
@@ -38,9 +38,7 @@ namespace Ak
 		else
 			Core::log::report(ERROR, "Audio Buffer : unknown audio file format '%s'", file.string().c_str());
 
-	#ifdef AK_DEBUG
-		Core::log::report(MESSAGE, "Audio Buffer : loaded file '%s'", file.c_str());
-	#endif
+		Core::log::report(DEBUGLOG, "Audio Buffer : loaded file '%s'", file.c_str());
 	}
 
 	void AudioBuffer::loadMP3(std::filesystem::path file)

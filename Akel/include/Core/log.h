@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 07/06/2023
+// Updated : 22/08/2023
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -12,6 +12,7 @@
 
 enum LogType
 {
+	DEBUGLOG,
     MESSAGE,
     WARNING,
     STRONG_WARNING,

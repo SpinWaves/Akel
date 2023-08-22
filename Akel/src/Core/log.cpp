@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 15/05/2023
+// Updated : 22/08/2023
 
 #include <Core/core.h>
 #include <Platform/messageBox.h>
@@ -57,6 +57,10 @@ namespace Ak::Core
 
     void log::report(enum LogType type, std::string message, ...)
     {
+		#ifdef AK_RELEASE
+			if(type == DEBUGLOG)
+				return;
+		#endif
 		std::lock_guard<std::mutex> watchdog(mutex);
 
 		std::string buffer(message.length() + 1024, 0);
@@ -75,6 +79,7 @@ namespace Ak::Core
 		{
 			switch(type)
 			{
+				case DEBUGLOG: std::cout << blue << "[Akel log Debug] " << buffer << def << '\n'; _type = "Debug: "; break;
 				case MESSAGE: std::cout << blue << "[Akel log Message] " << buffer << def << '\n'; _type = "Message: "; break;
 				case WARNING:
 				{	

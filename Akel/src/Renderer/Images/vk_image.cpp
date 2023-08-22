@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 17/08/2023
+// Updated : 22/08/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -327,6 +327,18 @@ namespace Ak
 		cmdpool.destroy();
 
 		_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	}
+
+	void Image::destroyImageView() noexcept
+	{
+		Ak_assert(_image_view != VK_NULL_HANDLE, "trying to destroy an uninit image view");
+		vkDestroyImageView(Render_Core::get().getDevice().get(), _image_view, nullptr);
+	}
+
+	void Image::destroySampler() noexcept
+	{
+		Ak_assert(_sampler != VK_NULL_HANDLE, "trying to destroy an uninit image sampler");
+		vkDestroySampler(Render_Core::get().getDevice().get(), _sampler, nullptr);
 	}
 
 	void Image::destroy() noexcept

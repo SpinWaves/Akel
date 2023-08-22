@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 17/06/2023
+// Updated : 22/08/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -68,6 +68,7 @@ namespace Ak
 
 		_swapChainImageFormat = surfaceFormat.format;
 		_extent = extent;
+		Core::log::report(DEBUGLOG, "Vulkan : created new swapchain");
 	}
 
 	SwapChain::SwapChainSupportDetails SwapChain::querySwapChainSupport(VkPhysicalDevice device)
@@ -140,6 +141,8 @@ namespace Ak
 			return;
 		vkDeviceWaitIdle(Render_Core::get().getDevice().get());
 		vkDestroySwapchainKHR(Render_Core::get().getDevice().get(), _swapChain, nullptr);
+		for(Image& img : _images)
+			img.destroyImageView();
 		_swapChain = VK_NULL_HANDLE;
 	}
 }

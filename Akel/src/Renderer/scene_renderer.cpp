@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 19/08/2023
+// Updated : 22/08/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -54,7 +54,7 @@ namespace Ak
 					_forward_data.depth.create(*scene->_renderer, renderer->getSwapChain().getExtent().width, renderer->getSwapChain().getExtent().height);
 			}
 
-			if(scene->_renderer->isFrameBufferResizeRequested() && _forward_data.render_texture != nulltexture)
+			if(scene->_renderer->isFrameBufferResizeRequested() && _forward_data.render_texture == nulltexture)
 			{
 				if(_forward_data.depth() != VK_NULL_HANDLE)
 					_forward_data.depth.destroy();

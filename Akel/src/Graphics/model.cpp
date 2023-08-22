@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 28/03/2023
+// Updated : 22/08/2023
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
@@ -31,9 +31,7 @@ namespace Ak
 		else
 			Core::log::report(FATAL_ERROR, "Model : unsupported model file type '%s'", file_path.c_str());
 
-		#ifdef AK_DEBUG
-			Core::log::report(MESSAGE, "Model : loaded file '%s'", file_path.c_str());
-		#endif
+		Core::log::report(DEBUGLOG, "Model : loaded file '%s'", file_path.c_str());
 	}
 
 	void Model::loadOBJ()

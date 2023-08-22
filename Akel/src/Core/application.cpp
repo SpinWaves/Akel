@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 16/08/2023
+// Updated : 22/08/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -98,18 +98,14 @@ namespace Ak
 
 		while(!_stop_rendering) // Main rendering loop
 		{
-			bool res = true;
 			for(auto& renderer : renderers)
 			{
-				res = renderer.first->beginFrame();
-				if(res && renderer.second != nullptr)
-					renderer.second->beginFrame();
+				bool res = renderer.first->beginFrame();
+				if(renderer.second != nullptr)
+					renderer.second->beginFrame(res);
 			}
-			if(res)
-			{
-				for(auto component : _components)
-					component->onRender();
-			}
+			for(auto component : _components)
+				component->onRender();
 			for(auto& renderer : renderers)
 			{
 				if(renderer.second != nullptr)

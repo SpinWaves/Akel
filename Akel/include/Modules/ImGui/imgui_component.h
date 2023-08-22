@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 16/08/2023
+// Updated : 22/08/2023
 
 #ifndef __AK_IMGUI_COMPONENT__
 #define __AK_IMGUI_COMPONENT__
@@ -32,7 +32,7 @@ namespace Ak
 
 		private:
 			void setDarkThemeColors();
-			void beginFrame();
+			void beginFrame(bool run);
 			void renderFrame();
 			void createFrameBuffers();
 

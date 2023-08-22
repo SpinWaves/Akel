@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 09/07/2023
+// Updated : 22/08/2023
 
 #include <Panels/renderer_manager.h>
 #include <Fonts/material_font.h>
@@ -105,8 +105,6 @@ void RendererManager::render_stats()
 		ImGui::Text(_eltm->getText("RendererManager.model").c_str(), _gpu.getModelName().c_str());
 		ImGui::Text(_eltm->getText("RendererManager.vendor").c_str(), _gpu.getVendorName().c_str());
 		ImGui::Text(_eltm->getText("RendererManager.model_type").c_str(), _gpu.getDeviceType().c_str());
-		ImGui::Separator();
-		ImGui::Text("FPS : %.0f", ImGui::GetIO().Framerate);
 		ImGui::TreePop();
 	}
 }

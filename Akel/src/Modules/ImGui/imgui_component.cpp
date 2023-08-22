@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 16/08/2023
+// Updated : 22/08/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -66,10 +66,6 @@ namespace Ak
 			return vkGetInstanceProcAddr(*(reinterpret_cast<VkInstance*>(vulkan_instance)), function_name);
 		}, &Render_Core::get().getInstance().get());
 
-		RenderPassDesc rpdesc{};
-		rpdesc.clear = false;
-		rpdesc.attachements.emplace_back(&_renderer->getSwapChain().getImage(0), ImageType::color);
-		_render_pass = RenderPassesLibrary::get().getRenderPass(rpdesc);
 		createFrameBuffers();
 
 		ImGui_ImplSDL2_InitForVulkan(_renderer->getWindow()->getNativeWindow());
@@ -94,6 +90,10 @@ namespace Ak
 
 	void ImGuiComponent::createFrameBuffers()
 	{
+		RenderPassDesc rpdesc{};
+		rpdesc.clear = false;
+		rpdesc.attachements.emplace_back(&_renderer->getSwapChain().getImage(0), ImageType::color);
+		_render_pass = RenderPassesLibrary::get().getRenderPass(rpdesc);
 		_frame_buffers.clear();
 		FrameBufferDesc fbdesc{};
 		fbdesc.render_pass = _render_pass;
@@ -110,15 +110,15 @@ namespace Ak
 		}
 	}
 
-	void ImGuiComponent::beginFrame()
+	void ImGuiComponent::beginFrame(bool run)
 	{
 		if(_renderer->isFrameBufferResizeRequested())
 			createFrameBuffers();
-		if(_frame_begin == true)
-			return;
 		ImGui_ImplVulkan_NewFrame();
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
+		if(_frame_begin == true || !run)
+			return;
 		_frame_begin = true;
 	}
 

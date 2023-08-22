@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 16/06/2023
+// Updated : 22/08/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Utils/assert.h>
@@ -39,6 +39,7 @@ namespace Ak
 
 		if(vkCreateFramebuffer(Render_Core::get().getDevice().get(), &framebufferInfo, nullptr, &_framebuffer) != VK_SUCCESS)	
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create a framebuffer");
+		Core::log::report(DEBUGLOG, "Vulkan : created new framebuffer");
 	}
 
 	void FrameBuffer::destroy() noexcept

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 15/06/2023
+// Updated : 22/08/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/RenderPass/vk_render_pass.h>
@@ -115,6 +115,7 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create render pass");
 
 		_clears.resize(desc.attachements.size());
+		Core::log::report(DEBUGLOG, "Vulkan : created new renderpass");
 	}
 
 	void RenderPass::begin(CmdBuffer& cmd, std::array<float, 4> clears, FrameBuffer& fb, uint32_t width, uint32_t height)

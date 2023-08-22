@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/06/2023
-// Updated : 17/08/2023
+// Updated : 22/08/2023
 
 #include <Utils/hash.h>
 #include <Renderer/RenderPass/render_pass_library.h>
@@ -13,7 +13,7 @@ namespace Ak
 		std::size_t hash = 0;
 		hashCombine(hash, desc.clear);
 		for(RenderPassAttachement& attachement : desc.attachements)
-			hashCombine(hash, attachement.image, static_cast<int>(attachement.type));
+			hashCombine(hash, *attachement.image, static_cast<int>(attachement.type));
 		auto it = _cache.find(hash);
 		if(it != _cache.end())
 			return it->second;

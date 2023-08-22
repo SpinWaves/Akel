@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 08/03/2023
+// Updated : 22/08/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -314,6 +314,7 @@ namespace Ak
 			}
 		}
 		_is_init = true;
+		Core::log::report(DEBUGLOG, "Vulkan : compiled new shader");
 	}
 
 	void Shader::destroyModule() noexcept

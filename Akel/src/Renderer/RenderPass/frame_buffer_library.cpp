@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/06/2023
-// Updated : 17/08/2023
+// Updated : 22/08/2023
 
 #include <Renderer/RenderPass/frame_buffer_library.h>
 #include <Renderer/renderer.h>
@@ -18,7 +18,7 @@ namespace Ak
 		hashCombine(hash, desc.render_pass.lock());
 		hashCombine(hash, desc.renderer);
 		for(RenderPassAttachement& attachement : desc.attachements)
-			hashCombine(hash, attachement.image, static_cast<int>(attachement.type));
+			hashCombine(hash, *attachement.image, static_cast<int>(attachement.type));
 		auto it = _cache.find(hash);
 		if(it != _cache.end())
 			return it->second;
