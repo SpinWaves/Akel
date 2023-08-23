@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/11/2022
-// Updated : 28/03/2023
+// Updated : 23/08/2023
 
 #include <Modules/Scripting/Lua/lua_loader.h>
 #include <Modules/Scripting/Lua/lua_script.h>
@@ -290,20 +290,20 @@ namespace Ak
 		);
 
 		lua.set_function("getAttribute", [](std::string_view attribute) -> sol::object
-			{
-				if(__entity == nullptr)
-					return sol::lua_nil;
-	
-					TransformAttribute* trans = __entity->tryGetAttribute<TransformAttribute>();
-				if(attribute == "transform" && trans != nullptr)
-					return sol::make_object<std::reference_wrapper<TransformAttribute>>(*state, std::ref(*trans));
-
-				AudioAttribute* audio = __entity->tryGetAttribute<AudioAttribute>();
-				if(attribute == "audio" && audio != nullptr)
-					return sol::make_object<std::reference_wrapper<AudioAttribute>>(*state, std::ref(*audio));
-
+		{
+			if(__entity == nullptr)
 				return sol::lua_nil;
-			});
+
+			TransformAttribute* trans = __entity->tryGetAttribute<TransformAttribute>();
+			if(attribute == "transform" && trans != nullptr)
+				return sol::make_object<std::reference_wrapper<TransformAttribute>>(*state, std::ref(*trans));
+
+			AudioAttribute* audio = __entity->tryGetAttribute<AudioAttribute>();
+			if(attribute == "audio" && audio != nullptr)
+				return sol::make_object<std::reference_wrapper<AudioAttribute>>(*state, std::ref(*audio));
+
+			return sol::lua_nil;
+		});
 	}
 
 	void LuaLoader::bindSceneManager(SceneManager& manager)
@@ -311,8 +311,8 @@ namespace Ak
 		auto lua = (*state)["Ak"].get_or_create<sol::table>();
 
 		lua.set_function("switchToScene", [&](std::string scene) -> void
-			{
-				manager.switch_to_scene(std::move(scene));
-			});
+		{
+			manager.switch_to_scene(std::move(scene));
+		});
 	}
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 24/07/2023
+// Updated : 23/08/2023
 
 #include "launcher_component.h"
 
@@ -190,7 +190,7 @@ void LauncherComponent::drawMainContent()
 
 void LauncherComponent::drawSideBar()
 {
-	if(ImGui::BeginChild("side_content", ImVec2(0, 0), true, ImGuiWindowFlags_NoScrollbar))
+	if(ImGui::BeginChild("side_content", ImVec2(0, 0), true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		if(ImGui::Button(AKS_ICON_MD_CREATE_NEW_FOLDER " New Project", ImVec2(ImGui::GetWindowWidth() - 18, 0)))
 		{

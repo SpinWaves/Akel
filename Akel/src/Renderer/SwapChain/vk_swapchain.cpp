@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 22/08/2023
+// Updated : 23/08/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -18,7 +18,7 @@ namespace Ak
 
 		VkSurfaceFormatKHR surfaceFormat = renderer->getSurface().chooseSwapSurfaceFormat(_swapChainSupport.formats);
 		VkPresentModeKHR presentMode = chooseSwapPresentMode(_swapChainSupport.presentModes);
-		VkExtent2D extent = chooseSwapExtent(_swapChainSupport.capabilities);
+		_extent = chooseSwapExtent(_swapChainSupport.capabilities);
 
 		uint32_t imageCount = _swapChainSupport.capabilities.minImageCount + 1;
 		if(_swapChainSupport.capabilities.maxImageCount > 0 && imageCount > _swapChainSupport.capabilities.maxImageCount)
@@ -33,7 +33,7 @@ namespace Ak
 		createInfo.minImageCount = imageCount;
 		createInfo.imageFormat = surfaceFormat.format;
 		createInfo.imageColorSpace = surfaceFormat.colorSpace;
-		createInfo.imageExtent = extent;
+		createInfo.imageExtent = _extent;
 		createInfo.imageArrayLayers = 1;
 		createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 		createInfo.preTransform = _swapChainSupport.capabilities.currentTransform;
@@ -61,13 +61,12 @@ namespace Ak
 
 		for(int i = 0; i < imageCount; i++)
 		{
-			_images[i].create(tmp[i], surfaceFormat.format, extent.width, extent.height);
+			_images[i].create(tmp[i], surfaceFormat.format, _extent.width, _extent.height);
 			_images[i].transitionLayout(VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, *_renderer->getSingleTimeCmdBuffer());
 			_images[i].createImageView(VK_IMAGE_VIEW_TYPE_2D, VK_IMAGE_ASPECT_COLOR_BIT);
 		}
 
 		_swapChainImageFormat = surfaceFormat.format;
-		_extent = extent;
 		Core::log::report(DEBUGLOG, "Vulkan : created new swapchain");
 	}
 

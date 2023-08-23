@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 08/06/2023
+// Updated : 23/08/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
@@ -26,13 +26,13 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	window->pos = { AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER };
 	window->border = false;
 	window->resizable = false;
-	window->vsync = false;
+	window->vsync = true;
 	window->fetchSettings();
 
-	Ak::CounterTicks::setTicksGoal(60);
+	Ak::CounterTicks::setTicksGoal(30);
 
 	Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
-	renderer->setMaxFPS(120);
+	renderer->setMaxFPS(30);
 
 	Ak::ImGuiComponent* imgui = app->add_component<Ak::ImGuiComponent>(renderer, std::filesystem::path(Ak::VFS::getMainDirPath() / "settings/akel_studio_launcher_imgui.ini").string(), false);
 
