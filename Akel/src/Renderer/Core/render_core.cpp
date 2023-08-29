@@ -1,12 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 17/08/2023
+// Updated : 29/08/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Renderer/RenderPass/frame_buffer_library.h>
 #include <Renderer/RenderPass/render_pass_library.h>
 #include <Renderer/Images/texture_library.h>
+#include <Renderer/Pipeline/shaders_library.h>
+#include <Graphics/material_library.h>
 
 namespace Ak
 {
@@ -90,9 +92,11 @@ namespace Ak
 
         vkDeviceWaitIdle(_device());
 
+		MaterialLibrary::get().clearLibrary();
 		TextureLibrary::get().clearLibrary();
 		RenderPassesLibrary::get().clearCache();
 		FrameBufferLibrary::get().clearCache();
+		ShadersLibrary::get().clearLibrary();
 		_device.destroy();
 		_layers.destroy();
 		_instance.destroy();

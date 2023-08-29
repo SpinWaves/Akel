@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 09/06/2023
+// Updated : 24/08/2023
 
 #include <Core/profile.h>
 
@@ -14,7 +14,7 @@
 #elif defined(AK_PLATFORM_LINUX)
 	#define VK_USE_PLATFORM_XLIB_KHR
 #else
-	#error "Akel's renderer don't know how to run on this system"
+	#error "Akel's renderer doesn't know how to run on this system"
 #endif
 
 #include <volk.h>

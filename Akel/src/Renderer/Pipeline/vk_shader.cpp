@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 22/08/2023
+// Updated : 29/08/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -167,7 +167,7 @@ namespace Ak
 		return data;
 	}
 
-	Shader::Uniform::~Uniform()
+	void Shader::Uniform::destroy() noexcept
 	{
 		if(_buffer != nullptr)
 			memFree(_buffer);
@@ -327,7 +327,10 @@ namespace Ak
 	void Shader::destroy() noexcept
 	{
 		for(auto it = _uniforms.begin(); it != _uniforms.end(); ++it)
+		{
 			it->second.getBuffer()->destroy();
+			it->second.destroy();
+		}
 
 		for(auto layout : _layouts)
 			layout.destroy();

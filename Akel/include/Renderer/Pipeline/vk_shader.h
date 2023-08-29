@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 26/03/2023
+// Updated : 29/08/2023
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -48,8 +48,9 @@ namespace Ak
 					}
 
 					inline bool operator!=(const Uniform& rhs) const { return !operator==(rhs); }
+					void destroy() noexcept;
 
-					~Uniform();
+					~Uniform() = default;
 
 				private:
 					class UBO* _buffer = nullptr;
