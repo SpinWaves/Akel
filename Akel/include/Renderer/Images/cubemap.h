@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/02/2023
-// Updated : 29/03/2023
+// Updated : 05/09/2023
 
 #ifndef __AK_CUBEMAP__
 #define __AK_CUBEMAP__
@@ -11,7 +11,7 @@
 
 namespace Ak
 {
-	struct CubeMapParts
+	struct CubemapParts
 	{
 		std::filesystem::path top;
 		std::filesystem::path bottom;
@@ -21,19 +21,16 @@ namespace Ak
 		std::filesystem::path back;
 	};
 
-	using json = nlohmann::json;
-	class AK_API CubeMap : public Image
+	class AK_API Cubemap : public Image
 	{
 		public:
-			CubeMap(std::filesystem::path cube_map_file);
-			CubeMap(CubeMapParts parts, std::string name);
-
-		private:
-			void load() noexcept;
-
-			std::filesystem::path _file;
-			json _json;
+			Cubemap() = default;
+			void create(uint8_t* pixels, uint32_t width, uint32_t height, VkFormat format);
+			~Cubemap() = default;
 	};
+
+	Cubemap loadCubemapFromFile(const std::filesystem::path& file);
+	Cubemap loadCubemapFromFiles(CubemapParts parts);
 }
 
 #endif
