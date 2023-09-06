@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 28/03/2023
+// Updated : 06/09/2023
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -22,6 +22,7 @@ namespace Ak
     namespace RCore
     {
         void checkVk(VkResult result);
+		uint32_t formatSize(VkFormat format);
 		uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     }
 

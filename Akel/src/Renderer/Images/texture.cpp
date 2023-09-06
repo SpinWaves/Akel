@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 17/08/2023
+// Updated : 06/09/2023
 
 #include <Renderer/Images/texture.h>
 #include <Renderer/Pipeline/vk_shader.h>
@@ -28,7 +28,7 @@ namespace Ak
 		if(pixels != nullptr)
 		{
 			Buffer staging_buffer;
-			std::size_t size = width * height * (format == VK_FORMAT_R32G32B32A32_SFLOAT ? 16 : 4);
+			std::size_t size = width * height * RCore::formatSize(format);
 			staging_buffer.create(Buffer::kind::dynamic, size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, pixels);
 			Image::copyBuffer(staging_buffer);
 			staging_buffer.destroy();

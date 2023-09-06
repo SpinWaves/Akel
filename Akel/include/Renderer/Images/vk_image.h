@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/12/2022
-// Updated : 22/08/2023
+// Updated : 06/09/2023
 
 #ifndef __AK_VK_IMAGE__
 #define __AK_VK_IMAGE__
@@ -39,7 +39,7 @@ namespace Ak
 				_height = height;
 				_layout = layout;
 			}
-			void create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImageLayout layout = VK_IMAGE_LAYOUT_UNDEFINED);
+			void create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImageLayout layout = VK_IMAGE_LAYOUT_UNDEFINED, bool cube = false);
 			void copyBuffer(class Buffer& buffer);
 			void transitionLayout(VkImageLayout new_layout, class CmdBuffer& cmd);
 			void destroy() noexcept;
