@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/09/2023
-// Updated : 05/09/2023
+// Updated : 06/09/2023
 
 #ifndef __AK_CUBEMAP_LIBRARY__
 #define __AK_CUBEMAP_LIBRARY__
@@ -22,7 +22,6 @@ namespace Ak
 
 			std::shared_ptr<Cubemap> getCubemap(CubemapID id);
 			CubemapID addCubemapToLibrary(const std::filesystem::path& cubemap);
-			CubemapID addCubemapToLibrary(CubemapParts cubemap);
 			CubemapID addCubemapToLibrary(std::shared_ptr<Cubemap> cubemap);
 			void removeCubemapFromLibrary(CubemapID id);
 

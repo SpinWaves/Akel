@@ -8,10 +8,7 @@
 #include <Renderer/Core/render_core.h>
 #include <Renderer/Command/vk_cmd_pool.h>
 #include <Renderer/Command/vk_cmd_buffer.h>
-#include <Utils/assert.h>
-#define STBI_ASSERT(x) Ak_assert(x, "stb_image assertion failed")
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
+#include <Utils/load_image.h>
 
 namespace Ak
 {
@@ -45,27 +42,8 @@ namespace Ak
 	Texture loadTextureFromFile(std::filesystem::path path)
 	{
 		Texture texture;
-		int width;
-		int height;
-		int channels;
-		VkFormat format;
-		uint8_t* data = nullptr;
-		std::string filename = path.string();
-
-		if(!std::filesystem::exists(std::move(path)))
-			Core::log::report(FATAL_ERROR, "Trying to create a texture from unfound file '%s'", filename.c_str());
-		if(stbi_is_hdr(filename.c_str()))
-		{
-			data = (uint8_t*)stbi_loadf(filename.c_str(), &width, &height, &channels, 4);
-			format = VK_FORMAT_R32G32B32A32_SFLOAT;
-		}
-		else
-		{
-			data = stbi_load(filename.c_str(), &width, &height, &channels, 4);
-			format = VK_FORMAT_R8G8B8A8_UNORM;
-		}
-		texture.create(data, width, height, format);
-		stbi_image_free(data);
+		ImageData data = loadImageFromFile(std::move(path));
+		texture.create(data.pixels, data.width, data.height, bitsToFormat(data.bits_per_pixel));
 		return texture;
 	}
 }

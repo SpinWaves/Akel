@@ -14,6 +14,7 @@ namespace Ak
 	VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 	bool isDepthFormat(VkFormat format);
 	bool isStencilFormat(VkFormat format);
+	VkFormat bitsToFormat(uint32_t bits);
 
 	enum class ImageType
 	{
@@ -41,7 +42,7 @@ namespace Ak
 			}
 			void create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImageLayout layout = VK_IMAGE_LAYOUT_UNDEFINED, bool cube = false);
 			void copyBuffer(class Buffer& buffer);
-			void transitionLayout(VkImageLayout new_layout, class CmdBuffer& cmd);
+			void transitionLayout(VkImageLayout new_layout, class CmdBuffer& cmd, bool submit = true);
 			void destroy() noexcept;
 
 			inline VkImage get() const noexcept { return _image; }

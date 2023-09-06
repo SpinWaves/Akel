@@ -53,6 +53,25 @@ namespace Ak
 		return false;
 	}
 
+	VkFormat bitsToFormat(uint32_t bits)
+	{
+		switch(bits)
+		{
+			case 8:   return VK_FORMAT_R8_UNORM;
+			case 16:  return VK_FORMAT_R8G8_UNORM;
+			case 24:  return VK_FORMAT_R8G8B8_UNORM;
+			case 32:  return VK_FORMAT_R8G8B8A8_UNORM;
+			case 48:  return VK_FORMAT_R16G16B16_SFLOAT;
+			case 64:  return VK_FORMAT_R16G16B16A16_SFLOAT;
+			case 96:  return VK_FORMAT_R32G32B32_SFLOAT;
+			case 128: return VK_FORMAT_R32G32B32A32_SFLOAT;
+
+			default:
+				Ak_assert(false, "Vulkan Image : unsupported image bit-depth");
+				return RHIFormat::R8G8B8A8_Unorm;
+		}
+	}
+
 	VkPipelineStageFlags layoutToAccessMask(VkImageLayout layout, bool isDestination)
 	{
 		VkPipelineStageFlags accessMask = 0;
@@ -202,7 +221,7 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan Texture : unable to create image sampler");
 	}
 
-	void Image::transitionLayout(VkImageLayout new_layout, CmdBuffer& cmd)
+	void Image::transitionLayout(VkImageLayout new_layout, CmdBuffer& cmd, bool submit)
 	{
 		if(new_layout == _layout)
 			return;
@@ -246,7 +265,8 @@ namespace Ak
 		vkCmdPipelineBarrier(cmd.get(), sourceStage, destinationStage, 0, 0, nullptr, 0, nullptr, 1, &barrier);
 
 		cmd.endRecord();
-		cmd.submitIdle();
+		if(submit)
+			cmd.submitIdle();
 		_layout = new_layout;
 	}
 

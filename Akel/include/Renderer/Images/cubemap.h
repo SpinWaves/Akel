@@ -11,16 +11,6 @@
 
 namespace Ak
 {
-	struct CubemapParts
-	{
-		std::filesystem::path top;
-		std::filesystem::path bottom;
-		std::filesystem::path left;
-		std::filesystem::path right;
-		std::filesystem::path front;
-		std::filesystem::path back;
-	};
-
 	class AK_API Cubemap : public Image
 	{
 		public:
@@ -30,7 +20,6 @@ namespace Ak
 	};
 
 	Cubemap loadCubemapFromFile(const std::filesystem::path& file);
-	Cubemap loadCubemapFromFiles(CubemapParts parts);
 }
 
 #endif

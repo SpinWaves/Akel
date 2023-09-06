@@ -7,10 +7,11 @@
 #include <Renderer/Images/cubemap.h>
 #include <Core/log.h>
 #include <Renderer/Buffers/vk_buffer.h>
+#include <Utils/load_image.h>
 
 namespace Ak
 {
-	void Cubemap::create(uint8_t* pixels, size VkFormat format)
+	void Cubemap::create(uint8_t* pixels, uint32_t size, VkFormat format)
 	{
 		Image::create(size, size, format,
 					VK_IMAGE_TILING_OPTIMAL,
@@ -51,21 +52,29 @@ namespace Ak
 				offset += width * height * RCore::formatSize(format);
 			}
 
-			Image::copyBuffer(staging_buffer);
+			VkImageSubresourceRange subresourceRange = {};
+			subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+			subresourceRange.baseMipLevel = 0;
+			subresourceRange.levelCount = 1;
+			subresourceRange.layerCount = 1;
+
+			transitionLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, cmd, false);
+			vkCmdCopyBufferToImage(cmd.get(), staging_buffer.get(), Image::get(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, static_cast<uint32_t>(bufferCopyRegions.size()), bufferCopyRegions.data());
+			transitionLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, cmd);
+
 			staging_buffer.destroy();
 		}
-		transitionLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, cmd);
+		else
+			transitionLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, cmd);
 		cmd.destroy();
 		pool.destroy();
 	}
 
 	Cubemap loadCubemapFromFile(const std::filesystem::path& file)
 	{
-
-	}
-
-	Cubemap loadCubemapFromFiles(CubemapParts parts)
-	{
-
+		Cubemap cubemap;
+		ImageData data = loadImageFromFile(file);
+		cubemap.create();
+		return cubemap;
 	}
 }
