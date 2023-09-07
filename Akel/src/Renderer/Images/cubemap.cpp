@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/02/2023
-// Updated : 06/09/2023
+// Updated : 07/09/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Renderer/Images/cubemap.h>
@@ -11,9 +11,9 @@
 
 namespace Ak
 {
-	void Cubemap::create(uint8_t* pixels, uint32_t size, VkFormat format)
+	void Cubemap::create(uint8_t* pixels, uint32_t width, uint32_t height, VkFormat format)
 	{
-		Image::create(size, size, format,
+		Image::create(width, height, format,
 					VK_IMAGE_TILING_OPTIMAL,
 					VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, VK_IMAGE_LAYOUT_UNDEFINED, true);
@@ -28,7 +28,7 @@ namespace Ak
 
 		if(pixels != nullptr)
 		{
-			size_t data_size = size * size * RCore::formatSize(format) * 6;
+			size_t data_size = width * height * RCore::formatSize(format) * 6;
 			std::vector<uint8_t> data(data_size);
 			std::memcpy(data.data(), pixels, data_size);
 			Buffer staging_buffer;
@@ -43,8 +43,8 @@ namespace Ak
 				bufferCopyRegion.imageSubresource.mipLevel = 0;
 				bufferCopyRegion.imageSubresource.baseArrayLayer = face;
 				bufferCopyRegion.imageSubresource.layerCount = 1;
-				bufferCopyRegion.imageExtent.width = size;
-				bufferCopyRegion.imageExtent.height = size;
+				bufferCopyRegion.imageExtent.width = width;
+				bufferCopyRegion.imageExtent.height = height;
 				bufferCopyRegion.imageExtent.depth = 1;
 				bufferCopyRegion.bufferOffset = offset;
 				bufferCopyRegions.push_back(bufferCopyRegion);
@@ -74,7 +74,7 @@ namespace Ak
 	{
 		Cubemap cubemap;
 		ImageData data = loadImageFromFile(file);
-		cubemap.create();
+		//cubemap.create();
 		return cubemap;
 	}
 }

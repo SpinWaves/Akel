@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 17/08/2023
+// Updated : 07/09/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -57,7 +57,7 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 void StudioComponent::onAttach()
 {
 	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>();
-	_lang_eltm->load(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/texts/langs.eltm").string());
+	_lang_eltm->load(std::filesystem::path(Ak::VFS::resolve(":/resources/texts/langs.eltm")).string());
 
 	if(!Ak::getMainAppProjectFile().keyExists("language"))
 		Ak::getMainAppProjectFile().archive()["language"] = _lang_eltm->getText("English");
@@ -100,7 +100,7 @@ void StudioComponent::onAttach()
 	_stack->add_panel<Browser>(_eltm, _project);
 	_stack->add_panel<Console>(_eltm, _project);
 
-	_logo = AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/logo.png");
+	_logo = AkImGui::LoadImage(Ak::VFS::resolve(":/resources/assets/logo.png"));
    // ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
 }
 
@@ -188,7 +188,7 @@ void StudioComponent::onFixedUpdate()
 		_project.writeFile();
 		writeRuntimeSettings();
 		std::filesystem::remove(_project.getDir() / "AkelRuntime");
-		std::filesystem::copy(Ak::VFS::getMainDirPath() / "resources/runtime/AkelRuntime", _project.getDir());
+		std::filesystem::copy(Ak::VFS::resolve(":/resources/runtime/AkelRuntime"), _project.getDir());
 		std::system(std::string(_project.getDir().string() + "/AkelRuntime").c_str());
 		std::filesystem::remove(_project.getDir() / "AkelRuntime");
 	}
@@ -215,13 +215,13 @@ void StudioComponent::onEvent(Ak::Input& input)
 void StudioComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").string().c_str(), 18.0f, true);
+	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/opensans/OpenSans-Regular.ttf")).string().c_str(), 18.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").string().c_str(), 18.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/material_icons-regular.ttf")).string().c_str(), 18.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }
@@ -313,7 +313,7 @@ void StudioComponent::buildProject()
 	writeRuntimeSettings();
 	std::filesystem::remove(_project.getDir() / "AkelRuntime");
 	std::filesystem::remove(_project.getDir() / _runtime_settings["projectFileName"]);
-	std::filesystem::copy(Ak::VFS::getMainDirPath() / "resources/runtime/AkelRuntime", _project.getDir());
+	std::filesystem::copy(Ak::VFS::resolve(":/resources/runtime/AkelRuntime"), _project.getDir());
 	std::filesystem::rename(_project.getDir() / "AkelRuntime", _project.getDir() / _runtime_settings["projectFileName"]);
 	_build_timer = SDL_GetTicks64();
 }
@@ -360,7 +360,7 @@ void StudioComponent::draw_general_settings()
 			{
 				if(!_eltm->reload(std::filesystem::path(Ak::VFS::getMainDirPath() / path).string()))
 					Ak::Core::log::report(FATAL_ERROR, "unable to change language");
-				Ak::getMainAppProjectFile().archive()["language"] = Ak::VFS::getMainDirPath() / path;
+				Ak::getMainAppProjectFile().archive()["language"] = Ak::VFS::resolve(path);
 				selected = lang;
 				reload_docks = true;
 			}

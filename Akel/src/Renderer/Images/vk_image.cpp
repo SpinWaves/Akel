@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 06/09/2023
+// Updated : 07/09/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -68,7 +68,7 @@ namespace Ak
 
 			default:
 				Ak_assert(false, "Vulkan Image : unsupported image bit-depth");
-				return RHIFormat::R8G8B8A8_Unorm;
+				return VK_FORMAT_R8G8B8A8_UNORM;
 		}
 	}
 
@@ -149,6 +149,7 @@ namespace Ak
 		_height = height;
 		_format = format;
 
+		std::cout << &cube << std::endl;
 		VkImageCreateInfo imageInfo{};
 		imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 		imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -156,7 +157,7 @@ namespace Ak
 		imageInfo.extent.height = height;
 		imageInfo.extent.depth = 1;
 		imageInfo.mipLevels = 1;
-		imageInfo.arrayLayers = cube ? 6 : 1;
+		imageInfo.arrayLayers = (cube ? 6 : 1);
 		imageInfo.format = format;
 		imageInfo.tiling = tiling;
 		imageInfo.initialLayout = layout;
@@ -165,7 +166,6 @@ namespace Ak
 		imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		if(cube)
 			imageInfo.flags = VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
-
 		_layout = layout;
 
 		if(vkCreateImage(Render_Core::get().getDevice().get(), &imageInfo, nullptr, &_image) != VK_SUCCESS)

@@ -15,7 +15,7 @@ namespace Ak
 	{
 		public:
 			Cubemap() = default;
-			void create(uint8_t* pixels, uint32_t size, VkFormat format);
+			void create(uint8_t* pixels, uint32_t width, uint32_t height, VkFormat format);
 			~Cubemap() = default;
 	};
 
