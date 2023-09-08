@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 15/05/2023
+// Updated : 08/09/2023
 
 #include <Core/core.h>
 
@@ -22,10 +22,11 @@ namespace Ak
         _heapSize = Size;
         _heapEnd = (void*)(reinterpret_cast<uintptr_t>(_heap) + _heapSize);
 
-        _allocator_number = MemoryManager::accessToControlUnit()->jamStack.size();
+		auto control_unit = Core::memory::internal::getControlUnit();
+        _allocator_number = control_unit->jamStack.size();
         std::string key = "jamAllocator_size_" + std::to_string(_allocator_number);
         getMainAppProjectFile().archive()[std::move(key)] = Size;
-        MemoryManager::accessToControlUnit()->jamStack.push_back(weak_from_this());
+        control_unit->jamStack.push_back(weak_from_this());
     }
 
     void JamAllocator::increase_size(size_t Size)

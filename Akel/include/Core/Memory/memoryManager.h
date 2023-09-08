@@ -1,145 +1,42 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 15/05/2023
+// Updated : 08/09/2023
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
 
 #include <Akpch.h>
-#include <Core/projectFile.h>
 #include <Core/profile.h>
 
 namespace Ak
 {
-    class AK_API MemoryManager
-    {
-        private:
-            struct ControlUnit
-            {
-                std::vector<std::weak_ptr<JamAllocator>> jamStack;
-                std::vector<std::weak_ptr<FixedAllocator>> fixedStack;
-            };
+	namespace Core::memory::internal
+	{
+		void* alloc(size_t size, bool is_class);
+		std::shared_ptr<struct ControlUnit> getControlUnit();
+		void dealloc(void* ptr);
+	}
 
-        public:
-            MemoryManager() = delete;
+    template<typename T, typename ... Args>
+    inline T* memAlloc(Args&& ... args)
+	{
+		T* ptr = Core::memory::internal::alloc(sizeof(T), std::is_class<T>::value);
+        if constexpr(std::is_class<T>::value)
+            ::new ((void*)ptr) T(std::forward<Args>(args)...);
+		return ptr;
+	}
 
-            static void init();
-            static void end();
+    template<typename T>
+    inline T* memAllocSize(size_t size) { return Core::memory::internal::alloc(size, std::is_class<T>::value); }
 
-            inline static std::shared_ptr<ControlUnit>& accessToControlUnit() { return control_unit; }
-			inline static bool is_init() noexcept { return _is_init; }
-
-            template <class T = void, typename ... Args>
-            static T* alloc(Args&& ... args);
-            
-            template <class T = void>
-            static T* allocSize(size_t size);
-
-            template <class T = void>
-            static void free(T* ptr);
-
-            ~MemoryManager() = delete;
-
-        private:
-            inline static JamAllocator __jam;
-            inline static FixedAllocator __fixed1;
-            inline static FixedAllocator __fixed2;
-            inline static FixedAllocator __fixed3;
-            inline static std::shared_ptr<ControlUnit> control_unit;
-            inline static bool _is_init = false;
-    };
-
-    template <class T, typename ... Args>
-    T* MemoryManager::alloc(Args&& ... args)
-    {
-        if(__jam.isInit())
-        {
-		    if(getMainAppProjectFile().archive()["memory_manager_enable_fixed_allocator"])
-            {
-				if constexpr(!std::is_class<T>::value)
-				{
-					if constexpr(sizeof(T) <= 16)
-						return __fixed1.alloc<T>(std::forward<Args>(args)...);
-					else if constexpr(sizeof(T) <= 32)
-						return __fixed2.alloc<T>(std::forward<Args>(args)...);
-					else if constexpr(sizeof(T) <= 96)
-						return __fixed3.alloc<T>(std::forward<Args>(args)...);
-				}
-            }
-            return __jam.alloc<T>(std::forward<Args>(args)...);
-        }
-		return nullptr;
-    }
-
-    template <class T>
-    T* MemoryManager::allocSize(size_t size)
-    {
-        if(__jam.isInit())
-            return __jam.alloc<T>(size);
-		return nullptr;
-    }
-
-    template <class T>
-    void MemoryManager::free(T* ptr)
-    {
-		if(getMainAppProjectFile().archive()["memory_manager_enable_fixed_allocator"])
-		{
-			if(__fixed1.contains((void*)ptr))
-			{
-				__fixed1.free(ptr);
-				return;
-			}
-			if(__fixed2.contains((void*)ptr))
-			{
-				__fixed2.free(ptr);
-				return;
-			}
-			if(__fixed3.contains((void*)ptr))
-			{
-				__fixed3.free(ptr);
-				return;
-			}
-		}
-		if(__jam.contains((void*)ptr))
-		{
-			__jam.free(ptr);
-			return;
-		}
-        for(auto& elem : control_unit->jamStack)
-        {
-            if(!elem.expired())
-            {
-                if(elem.lock()->contains(ptr))
-                {
-                    elem.lock()->free(ptr);
-                    return;
-                }
-            }
-        }
-        for(auto& elem : control_unit->fixedStack)
-        {
-            if(!elem.expired())
-            {
-                if(elem.lock()->contains(ptr))
-                {
-                    elem.lock()->free(ptr);
-                    return;
-                }
-            }
-        }
-
-        ::delete ptr;
-    }
-
-    template <class T, typename ... Args>
-    inline T* memAlloc(Args&& ... args) { return MemoryManager::alloc<T>(std::forward<Args>(args)...); }
-
-    template <class T>
-    inline T* memAllocSize(size_t size) { return MemoryManager::allocSize<T>(size); }
-
-    template <class T>
-    inline void memFree(T* ptr) { MemoryManager::free(ptr); }
+    template<typename T>
+    inline void memFree(T* ptr)
+	{
+        if constexpr(std::is_class<T>::value)
+            ptr->~T();
+		Core::memory::internal::free(static_cast<void*>(ptr));
+	}
 }
 
 #endif // __AK_MEMORY_MANAGER__

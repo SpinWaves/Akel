@@ -8,7 +8,7 @@ add_repositories("nazara-repo https://github.com/NazaraEngine/xmake-repo")
 add_requireconfs("nzsl.fmt", { configs = { header_only = true } })
 add_requires("nzsl")
 
-add_requires("entt", "spirv-reflect", "libsdl", "openal-soft", "sol2", "nlohmann_json", "kuba-zip")
+add_requires("entt", "spirv-reflect", "libsdl", "openal-soft", "sol2", "nlohmann_json", "kuba-zip v0.2.6")
 add_requires("volk", { configs = { header_only = true }})
 add_requires("imgui v1.89.8-docking", { configs = { vulkan = true, sdl2_no_renderer = true }})
 add_requireconfs("imgui", { configs = { cxflags = "-D IMGUI_IMPL_VULKAN_NO_PROTOTYPES" }})

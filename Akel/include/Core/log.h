@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 22/08/2023
+// Updated : 08/09/2023
 
 #ifndef __AK_LOG__
 #define __AK_LOG__
@@ -22,37 +22,17 @@ enum LogType
 
 namespace Ak
 {
-	class VFS;
-
-    namespace Core
+    namespace Core::log
     {
-        class AK_API log
-        {
-			friend class Ak::VFS;
-            public:
-                log() = delete;
-                static void init(std::filesystem::path path);
-                static void report(enum LogType type, std::string message, ...);
-                static void report(std::string message, ...);
-                ~log() = delete;
-
-            private:
-				inline static const std::filesystem::path& getLogPath() { return _log_dir; };
-                static std::string getTime();
-
-			private:
-                inline static std::mutex mutex;
-				inline static std::filesystem::path _log_dir;
-                inline static std::ofstream _out;
-                inline static std::string _type;
-        };
+		void AK_API report(enum LogType type, std::string message, ...);
+		void AK_API report(std::string message, ...);
     }
 
-    void FatalError(std::string message, ...);
-    void Error(std::string message, ...);
-    void Warning(std::string message, ...);
-    void Strong_Warning(std::string message, ...);
-    void Message(std::string message, ...);
+    void AK_API FatalError(std::string message, ...);
+    void AK_API Error(std::string message, ...);
+    void AK_API Warning(std::string message, ...);
+    void AK_API Strong_Warning(std::string message, ...);
+    void AK_API Message(std::string message, ...);
 }
 
 #define AK_BEGIN_SESSION(name) Ak::Core::log::report("Begin " name " ----")

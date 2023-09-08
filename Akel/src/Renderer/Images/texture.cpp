@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 07/09/2023
+// Updated : 08/09/2023
 
 #include <Renderer/Images/texture.h>
 #include <Renderer/Pipeline/vk_shader.h>
@@ -41,10 +41,9 @@ namespace Ak
 
 	Texture loadTextureFromFile(std::filesystem::path path)
 	{
-		Texture texture;
 		ImageData data = loadImageFromFile(std::move(path));
-		texture.create(data.pixels, data.width, data.height, bitsToFormat(data.bits_per_pixel));
-		memFree(data.pixels);
+		Texture texture;
+		texture.create(data.pixels.data(), data.width, data.height, bitsToFormat(data.bits_per_pixel));
 		return texture;
 	}
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel   
 // Authors : @kbz_8              
 // Created : Invalid date        
-// Updated : 28/07/2023          
+// Updated : 08/09/2023
 
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
@@ -11,8 +11,8 @@
 #include <Core/vfs.h>
 #include <Core/instance.h>
 
-extern Ak::AkelInstance Akel_init();
-extern Ak::Application* Akel_mainApp(Ak::CommandLineArgs args);
+extern void Akel_init(Ak::AkelInstance& instance);
+extern void Akel_mainApp(Ak::Application& app, Ak::CommandLineArgs args);
 
 int main(int argc, char** argv)
 {
@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 	Ak::Core::log::init(argv[0]);
 
 	AK_BEGIN_SESSION("Startup");
-		Ak::AkelInstance project = std::move(Akel_init());
+		Ak::AkelInstance project = Akel_init();
 		if(!Ak::initAkel(&project))
 			Ak::Core::log::report(FATAL_ERROR, "Something went wrong with Akel initialisation");
 		auto app = Akel_mainApp({ argv, argc });
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 		Ak::memFree(app);
 		Ak::Render_Core::get().destroy();
 		project.writeProjectFile();
-		Ak::MemoryManager::end();
+		Ak::Core::memory::internal::end();
 	AK_END_SESSION();
 
 	if(project.at_akel_exit)

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/07/2021
-// Updated : 15/05/2023
+// Updated : 08/09/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -23,10 +23,11 @@ namespace Ak
         _heap_size = Size;
 		_bits.init(numBlocks);
 
-        _allocator_number = MemoryManager::accessToControlUnit()->fixedStack.size();
+		auto control_unit = Core::memory::internal::getControlUnit();
+        _allocator_number = control_unit->fixedStack.size();
         std::string key = "fixedAllocator_size_" + std::to_string(_allocator_number);
         getMainAppProjectFile().archive()[std::move(key)] = Size;
-        MemoryManager::accessToControlUnit()->fixedStack.emplace_back(weak_from_this());
+    	control_unit->fixedStack.emplace_back(weak_from_this());
     }
 
     void FixedAllocator::resize(size_t numBlocks)
