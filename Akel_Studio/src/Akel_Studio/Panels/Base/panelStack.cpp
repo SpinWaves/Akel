@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 15/11/2022
+// Updated : 09/09/2023
 
 #include <Panels/Base/panelStack.h>
 
@@ -54,7 +54,7 @@ PanelStack::~PanelStack()
 	for(auto elem : _panels)
 	{
 		isCustomAlloc = false;
-		for(auto& jam : Ak::MemoryManager::accessToControlUnit()->jamStack)
+		for(auto& jam : Ak::Core::memory::internal::getControlUnit()->jamStack)
 		{
 			if(!jam.expired())
 			{
@@ -68,7 +68,7 @@ PanelStack::~PanelStack()
 		}
 		if(!isCustomAlloc)
 		{
-			for(auto& fixed : Ak::MemoryManager::accessToControlUnit()->fixedStack)
+			for(auto& fixed : Ak::Core::memory::internal::getControlUnit()->fixedStack)
 			{
 				if(!fixed.expired())
 				{

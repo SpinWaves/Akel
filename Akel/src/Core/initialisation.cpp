@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 24/08/2023
+// Updated : 09/09/2023
 
 #include <Core/profile.h>
 
@@ -29,6 +29,10 @@ namespace Ak
 	namespace Core
 	{
 		void initCpuInfo();
+		namespace memory::internal
+		{
+			void init();
+		}
 	}
 	
 	extern Core::ProjectFile* __main_app_project_file;
@@ -83,7 +87,7 @@ namespace Ak
 		project->_project_file.archive()["memory_manager_enable_fixed_allocator"] = project->memory_manager_enable_fixed_allocator;
 		project->_project_file.archive()["use_default_resource_system"] = project->use_default_resource_system;
 
-		MemoryManager::init();
+		Core::memory::internal::init();
 
 		if(project->use_default_resource_system)
 			VFS::initResSystem();

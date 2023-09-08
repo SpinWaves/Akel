@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 07/07/2023
+// Updated : 08/09/2023
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -53,7 +53,7 @@ namespace Ak
 		for(auto elem : _components)
 		{
 			isCustomAlloc = false;
-			for(auto& jam : MemoryManager::accessToControlUnit()->jamStack)
+			for(auto& jam : Core::memory::internal::getControlUnit()->jamStack)
 			{
 				if(!jam.expired())
 				{
@@ -67,7 +67,7 @@ namespace Ak
 			}
 			if(!isCustomAlloc)
 			{
-				for(auto& fixed : MemoryManager::accessToControlUnit()->fixedStack)
+				for(auto& fixed : Core::memory::internal::getControlUnit()->fixedStack)
 				{
 					if(!fixed.expired())
 					{

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/06/2023
-// Updated : 17/08/2023
+// Updated : 09/09/2023
 
 #ifndef __AK_VIRTUAL_FILE_SYSTEM__
 #define __AK_VIRTUAL_FILE_SYSTEM__
@@ -24,7 +24,7 @@ namespace Ak
 
 	class AK_API VFS
 	{
-		friend int ::main(int, char**);
+		friend class Engine;
 		friend bool initAkel(AkelInstance* project);
 
 		public:

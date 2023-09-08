@@ -1,21 +1,15 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 08/09/2023
+// Updated : 09/09/2023
 
 #include <Utils/utils.h>
 #include <Core/projectFile.h>
 #include <Core/core.h>
 #include <Core/Event/event.h>
 
-namespace Ak::memory::internal
+namespace Ak::Core::memory::internal
 {
-	struct ControlUnit
-	{
-		std::vector<std::weak_ptr<JamAllocator>> jamStack;
-		std::vector<std::weak_ptr<FixedAllocator>> fixedStack;
-	};
-
 	static JamAllocator jam;
 	static FixedAllocator fixed1;
 	static FixedAllocator fixed2;
@@ -42,14 +36,14 @@ namespace Ak::memory::internal
 				if(!is_class)
 				{
 					if(size <= FIXED_SIZE_1)
-						return fixed1.alloc<char>(std::forward<Args>(args)...);
+						return fixed1.alloc<char>();
 					else if(size <= FIXED_SIZE_2)
-						return fixed2.alloc<char>(std::forward<Args>(args)...);
+						return fixed2.alloc<char>();
 					else if(size <= FIXED_SIZE_3)
-						return fixed3.alloc<char>(std::forward<Args>(args)...);
+						return fixed3.alloc<char>();
 				}
 			}
-			return jam.alloc<char>(std::forward<Args>(args)...);
+			return jam.alloc<char>();
 		}
 		Core::log::report(ERROR, "Memory manager : cannot allocate pointer");
 		return nullptr;
@@ -77,7 +71,7 @@ namespace Ak::memory::internal
 		}
 		if(jam.contains(ptr))
 		{
-			__jam.free(ptr);
+			jam.free(ptr);
 			return;
 		}
 		for(auto& elem : control_unit->jamStack)
@@ -168,7 +162,7 @@ namespace Ak::memory::internal
 		is_init = true;
 	}
 
-	void MemoryManager::end()
+	void end()
 	{
 		std::lock_guard<std::mutex> watchdog(mutex);
 		if(!is_init)

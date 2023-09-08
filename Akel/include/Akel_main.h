@@ -6,42 +6,15 @@
 #ifndef __AK_MAIN__
 #define __AK_MAIN__
 
-#include <Core/application.h>
 #include <Akpch.h>
-#include <Core/vfs.h>
-#include <Core/instance.h>
-
-extern void Akel_init(Ak::AkelInstance& instance);
-extern void Akel_mainApp(Ak::Application& app, Ak::CommandLineArgs args);
+#include <Core/engine.h>
 
 int main(int argc, char** argv)
 {
-	Ak::VFS::init(argv[0]);
-	Ak::Core::log::init(argv[0]);
-
-	AK_BEGIN_SESSION("Startup");
-		Ak::AkelInstance project = Akel_init();
-		if(!Ak::initAkel(&project))
-			Ak::Core::log::report(FATAL_ERROR, "Something went wrong with Akel initialisation");
-		auto app = Akel_mainApp({ argv, argc });
-	AK_END_SESSION();
-
-	AK_BEGIN_SESSION("Runtime");
-		app->run();
-	AK_END_SESSION();
-
-	AK_BEGIN_SESSION("Shutdown");
-		app->destroy();
-		Ak::memFree(app);
-		Ak::Render_Core::get().destroy();
-		project.writeProjectFile();
-		Ak::Core::memory::internal::end();
-	AK_END_SESSION();
-
-	if(project.at_akel_exit)
-		project.at_akel_exit();
-	std::cout << Ak::bg_green << "Akel successfully finished" << Ak::bg_def << std::endl;
-
+	Ak::Engine engine;
+	engine.init(argc, argv);
+	engine.run();
+	engine.destroy();
 	return 0;
 }
 

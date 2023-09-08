@@ -1,14 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 15/05/2023
-// Updated : 06/06/2023
+// Updated : 08/09/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
 
 using json = nlohmann::json;
 
-Ak::AkelInstance Akel_init()
+void Akel_init(Ak::AkelInstance& instance)
 {
 	std::filesystem::path path(Ak::VFS::getMainDirPath() / "settings.akrt");
 	if(!std::filesystem::exists(path))
@@ -31,35 +31,31 @@ Ak::AkelInstance Akel_init()
 
 	json settings = json::from_msgpack(std::move(data));
 
-    Ak::AkelInstance instance;
-		instance.project_file_path = Ak::VFS::resolve(settings["projectFilePath"]);
-		instance.project_file_name = settings["projectFileName"];
-		instance.memory_manager_enable_fixed_allocator = settings["memManagerEnableFixedAllocator"];
-		instance.vk_enable_message_validation_layer = settings["vkEnableMessageValidationLayers"];
-		instance.use_system_dialog_boxes = settings["useSystemDialogBoxes"];
-		instance.enable_warning_console_message = settings["enableWarningConsoleMessage"];
-		instance.vk_force_disable_validation_layers = settings["vkForceDisableValidationLayers"];
-		instance.use_default_resource_system = settings["useDefaultResourceSystem"];
-    return instance;
+	instance.project_file_path = Ak::VFS::resolve(settings["projectFilePath"]);
+	instance.project_file_name = settings["projectFileName"];
+	instance.memory_manager_enable_fixed_allocator = settings["memManagerEnableFixedAllocator"];
+	instance.vk_enable_message_validation_layer = settings["vkEnableMessageValidationLayers"];
+	instance.use_system_dialog_boxes = settings["useSystemDialogBoxes"];
+	instance.enable_warning_console_message = settings["enableWarningConsoleMessage"];
+	instance.vk_force_disable_validation_layers = settings["vkForceDisableValidationLayers"];
+	instance.use_default_resource_system = settings["useDefaultResourceSystem"];
 }
 
-Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
+void Akel_mainApp(Ak::Application& app, Ak::CommandLineArgs args)
 {
-	Ak::Application* app = Ak::memAlloc<Ak::Application>();
-
 	Ak::Core::ProjectFile& project = Ak::getMainAppProjectFile();
 
 	if(project.keyExists("__window_component") && project.archive()["__window_component"] == true)
 	{
-		Ak::WindowComponent* window = app->add_component<Ak::WindowComponent>();
+		Ak::WindowComponent* window = app.add_component<Ak::WindowComponent>();
 		if(project.keyExists("__renderer_component") && project.archive()["__renderer_component"] == true)
 		{
-			Ak::RendererComponent* renderer = app->add_component<Ak::RendererComponent>(window);
+			Ak::RendererComponent* renderer = app.add_component<Ak::RendererComponent>(window);
 			if(project.keyExists("__imgui_component") && project.archive()["__imgui_component"] == true)
-				app->add_component<Ak::ImGuiComponent>(renderer);
+				app.add_component<Ak::ImGuiComponent>(renderer);
 			if(project.keyExists("__scenes_manager_component") && project.archive()["__scenes_manager_component"] == true)
 			{
-				Ak::SceneManager* manager = app->add_component<Ak::SceneManager>(renderer);
+				Ak::SceneManager* manager = app.add_component<Ak::SceneManager>(renderer);
 				if(project.keyExists("scenes"))
 				{
 					for(const auto& object : project.archive()["scenes"])
@@ -75,9 +71,7 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 		}
 	}
 	if(project.keyExists("__audio_component") && project.archive()["__audio_component"] == true)
-		app->add_component<Ak::AudioComponent>();
+		app.add_component<Ak::AudioComponent>();
 	if(project.keyExists("__animator_component") && project.archive()["__animator_component"] == true)
-		app->add_component<Ak::AnimatorComponent>();
-
-	return app;
+		app.add_component<Ak::AnimatorComponent>();
 }

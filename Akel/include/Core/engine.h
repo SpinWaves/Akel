@@ -1,12 +1,15 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/09/2023
-// Updated : 08/09/2023
+// Updated : 09/09/2023
 
 #ifndef __AK_ENGINE__
 #define __AK_ENGINE__
 
 #include <Akpch.h>
+#include <Core/application.h>
+#include <Core/instance.h>
+#include <Core/Memory/uniquePtrWrapper.h>
 
 namespace Ak
 {
@@ -20,8 +23,11 @@ namespace Ak
 			~Engine() = default;
 
 		private:
-			Application _app;
+			void fatalErrorEventHandle();
+
+		private:
 			AkelInstance _instance;
+			Unique_ptr<Application> _app;
 	};
 }
 

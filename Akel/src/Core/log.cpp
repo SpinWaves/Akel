@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 08/09/2023
+// Updated : 09/09/2023
 
 #include <Core/core.h>
 #include <Platform/messageBox.h>
@@ -14,10 +14,27 @@ namespace Ak::Core::log
 		static std::mutex mutex;
 		static std::filesystem::path log_dir;
 
+		const std::filesystem::path& getLogPath() { return log_dir; }
+
+		std::string getCurrentFileName()
+		{
+			__time time = Time::getCurrentTime();
+			std::string copy = internal::log_dir.string();
+			copy.append("session-");
+			copy.append(std::to_string(time.day));
+			copy.append("-");
+			copy.append(std::to_string(time.month));
+			copy.append("-");
+			copy.append(std::to_string(time.year));
+			copy.append(".akel.log");
+			
+			return copy;
+		}
+
 		bool isOlderThan(const std::filesystem::path& path, int hrs)
 		{
-			auto now = std::filsystem::file_time_type::clock::now();
-			return std::chrono::duration_cast<hours>(now - std::filesystem::last_write_time(path)).count() > hrs ;
+			auto now = std::filesystem::file_time_type::clock::now();
+			return std::chrono::duration_cast<std::chrono::hours>(now - std::filesystem::last_write_time(path)).count() > hrs ;
 		}
 
 		std::vector<std::filesystem::path> filesOlderThan(std::filesystem::path dir, int hrs)
@@ -47,7 +64,7 @@ namespace Ak::Core::log
 
 			removeFilesOlderThan(log_dir, 10);
 
-			out.open(getCurrentFileName(), std::ios::app);
+			std::ofstream out(getCurrentFileName(), std::ios::app);
 			if(out.is_open())
 			{
 				out << "==== New Session ====" << std::endl;
@@ -84,33 +101,33 @@ namespace Ak::Core::log
 				messageBox(type, "Akel logs recieved a report", buffer, false);
 		#endif
 
-		std::string type;
-		std::ofstream out(getTime().c_str(), std::ios::app);
-        if(_out.is_open())
+		std::string stype;
+		std::ofstream out(internal::getCurrentFileName(), std::ios::app);
+        if(out.is_open())
 		{
 			switch(type)
 			{
-				case DEBUGLOG: std::cout << blue << "[Akel log Debug] " << buffer << def << '\n'; type = "Debug: "; break;
-				case MESSAGE: std::cout << blue << "[Akel log Message] " << buffer << def << '\n'; type = "Message: "; break;
+				case DEBUGLOG: std::cout << blue << "[Akel log Debug] " << buffer << def << '\n'; stype = "Debug: "; break;
+				case MESSAGE: std::cout << blue << "[Akel log Message] " << buffer << def << '\n'; stype = "Message: "; break;
 				case WARNING:
 				{	
 					if(getMainAppProjectFile().archive()["enable_warning_console_message"])
 						std::cout << magenta << "[Akel log Warning] " << buffer << def << '\n';
-					type = "Warning: ";
+					stype = "Warning: ";
 					break;
 				}
-				case STRONG_WARNING: std::cout << yellow << "[Akel log Strong Warning] " << buffer << def << '\n'; _type = "Strong Warning: "; break;
-				case ERROR: std::cerr << red << "[Akel log Error] " << buffer << def << '\n'; _type = "Error: "; break;
-				case FATAL_ERROR: std::cerr << red << "[Akel log Fatal Error] " << buffer << def << '\n'; _type = "Fatal Error: "; break;
+				case STRONG_WARNING: std::cout << yellow << "[Akel log Strong Warning] " << buffer << def << '\n'; stype = "Strong Warning: "; break;
+				case ERROR: std::cerr << red << "[Akel log Error] " << buffer << def << '\n'; stype = "Error: "; break;
+				case FATAL_ERROR: std::cerr << red << "[Akel log Fatal Error] " << buffer << def << '\n'; stype = "Fatal Error: "; break;
 
 				default: break;
 			}
-            out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << _type << buffer << std::endl;
+            out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << stype << buffer << std::endl;
 		}
         if(type == FATAL_ERROR)
         {
 	        std::cout << bg_red << "FATAL ERROR: emergency abortion program" << bg_def << std::endl;
-			EventBus::send("__internal_memory_manager", internal::FatalErrorEvent);
+			EventBus::send("__engine", internal::FatalErrorEvent{});
         }
 		out.close();
 	}
@@ -125,27 +142,12 @@ namespace Ak::Core::log
 		vsprintf(buffer.data(), message.c_str(), args);
 		va_end(args);
 
-		std::ofstream out(getTime().c_str(), std::ios::app);
+		std::ofstream out(internal::getCurrentFileName(), std::ios::app);
         if(out.is_open())
 		{
             out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << buffer << std::endl;
 			out.close();
 		}
-    }
-
-    std::string getCurrentFileName()
-    {
-		__time time = Time::getCurrentTime();
-		std::string copy = internal::log_dir.string();
-		copy.append("session-");
-        copy.append(std::to_string(time.day));
-		copy.append("-");
-        copy.append(std::to_string(time.month));
-		copy.append("-");
-        copy.append(std::to_string(time.year));
-        copy.append(".akel.log");
-        
-		return copy;
     }
 }
 

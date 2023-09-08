@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 08/09/2023
+// Updated : 09/09/2023
 
 #ifndef __AK_MEMORY_MANAGER__
 #define __AK_MEMORY_MANAGER__
@@ -13,29 +13,34 @@ namespace Ak
 {
 	namespace Core::memory::internal
 	{
-		void* alloc(size_t size, bool is_class);
-		std::shared_ptr<struct ControlUnit> getControlUnit();
-		void dealloc(void* ptr);
+		struct AK_API ControlUnit
+		{
+			std::vector<std::weak_ptr<JamAllocator>> jamStack;
+			std::vector<std::weak_ptr<FixedAllocator>> fixedStack;
+		};
+		void* AK_API alloc(size_t size, bool is_class);
+		std::shared_ptr<ControlUnit> AK_API getControlUnit();
+		void AK_API dealloc(void* ptr);
 	}
 
     template<typename T, typename ... Args>
-    inline T* memAlloc(Args&& ... args)
+    inline T* AK_API memAlloc(Args&& ... args)
 	{
-		T* ptr = Core::memory::internal::alloc(sizeof(T), std::is_class<T>::value);
+		T* ptr = static_cast<T*>(Core::memory::internal::alloc(sizeof(T), std::is_class<T>::value));
         if constexpr(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
 		return ptr;
 	}
 
     template<typename T>
-    inline T* memAllocSize(size_t size) { return Core::memory::internal::alloc(size, std::is_class<T>::value); }
+    inline T* AK_API memAllocSize(size_t size) { return static_cast<T*>(Core::memory::internal::alloc(size, std::is_class<T>::value)); }
 
     template<typename T>
-    inline void memFree(T* ptr)
+    inline void AK_API memFree(T* ptr)
 	{
         if constexpr(std::is_class<T>::value)
             ptr->~T();
-		Core::memory::internal::free(static_cast<void*>(ptr));
+		Core::memory::internal::dealloc(static_cast<void*>(ptr));
 	}
 }
 
