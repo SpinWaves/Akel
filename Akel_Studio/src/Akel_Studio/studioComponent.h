@@ -40,7 +40,7 @@ class StudioComponent : public Ak::Component
 		AkImGui::ImImage _logo;
 		std::string _eltm_editor_input_buffer;
 		std::shared_ptr<Ak::ELTM> _eltm;
-		Ak::Unique_ptr<PanelStack> _stack;
+		Ak::UniquePtr<PanelStack> _stack;
 		uint64_t _build_timer = 0;
 		uint8_t _eltm_editor_save = 0;
 		bool _running = true;

@@ -25,6 +25,6 @@ namespace Ak
 		if(_camera)
 			_camera.reset(cam);
 		else
-			_camera = make_Unique_ptr<Cam::BaseCamera>(cam);
+			_camera = makeUniquePtr<Cam::BaseCamera>(cam);
 	}
 }

@@ -12,7 +12,7 @@ namespace Ak
 
 	void AudioComponent::onAttach()
 	{
-		_al = create_Unique_ptr<OpenAL>();
+		_al = createUniquePtr<OpenAL>();
 		_al->initOAL();
 	}
 

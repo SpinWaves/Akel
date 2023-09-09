@@ -8,7 +8,7 @@
 
 #include <Akpch.h>
 #include <Scene/scene.h>
-#include <Core/Memory/uniquePtrWrapper.h>
+#include <Core/Memory/akel_unique_ptr.h>
 
 namespace Ak
 {
@@ -28,8 +28,8 @@ namespace Ak
 			~ShaderLoader() = default;
 
 		private:
-			Unique_ptr<NzslLoader> _nzsl_loader = nullptr;
-			Unique_ptr<KilaLoader> _kila_loader = nullptr;
+			UniquePtr<NzslLoader> _nzsl_loader = nullptr;
+			UniquePtr<KilaLoader> _kila_loader = nullptr;
 	};
 
 	class NzslLoader

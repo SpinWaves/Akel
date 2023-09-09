@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 08/09/2023
+// Updated : 09/09/2023
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -49,38 +49,35 @@ namespace Ak
 
 	ComponentStack::~ComponentStack()
 	{
-		bool isCustomAlloc = false;
-		for(auto elem : _components)
+		for(Component* elem : _components)
 		{
-			isCustomAlloc = false;
+			bool has_been_freed = false;
 			for(auto& jam : Core::memory::internal::getControlUnit()->jamStack)
 			{
-				if(!jam.expired())
+				if(jam.expired())
+					continue;
+				if(jam.lock()->contains(elem))
 				{
-					if(jam.lock()->contains(elem))
+					jam.lock()->free(elem);
+					has_been_freed = true;
+					break;
+				}
+			}
+			if(!has_been_freed)
+			{
+				for(auto& fixed : Core::memory::internal::getControlUnit()->fixedStack)
+				{
+					if(fixed.expired())
+						continue;
+					if(fixed.lock()->contains(elem))
 					{
-						jam.lock()->free(elem);
-						isCustomAlloc = true;
+						fixed.lock()->free(elem);
+						has_been_freed = true;
 						break;
 					}
 				}
 			}
-			if(!isCustomAlloc)
-			{
-				for(auto& fixed : Core::memory::internal::getControlUnit()->fixedStack)
-				{
-					if(!fixed.expired())
-					{
-						if(fixed.lock()->contains(elem))
-						{
-							fixed.lock()->free(elem);
-							isCustomAlloc = true;
-							break;
-						}
-					}
-				}
-			}
-			if(!isCustomAlloc)
+			if(!has_been_freed)
 			{
 				Core::log::report(STRONG_WARNING, "Component Stack: unable to free a component \"%s\" address(%p), unable to find its allocator", elem->getName().c_str(), elem);
 				elem->~Component();

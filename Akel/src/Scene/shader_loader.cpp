@@ -10,8 +10,8 @@ namespace Ak
 {
 	void ShaderLoader::init()
 	{
-		_nzsl_loader = create_Unique_ptr<NzslLoader>();
-		_kila_loader = create_Unique_ptr<KilaLoader>();
+		_nzsl_loader = createUniquePtr<NzslLoader>();
+		_kila_loader = createUniquePtr<KilaLoader>();
 	}
 
 	std::vector<uint32_t> ShaderLoader::loadShader(shaderlang lang, std::filesystem::path path)

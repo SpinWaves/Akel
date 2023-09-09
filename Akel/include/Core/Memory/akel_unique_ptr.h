@@ -3,44 +3,42 @@
 // Created : 09/09/2021
 // Updated : 09/09/2023
 
-#ifndef __AK_Unique_ptrRAPPER__
-#define __AK_Unique_ptrRAPPER__
+#ifndef __AK_UNIQUE_PTR__
+#define __AK_UNIQUE_PTR__
 
-#include <Core/projectFile.h>
 #include <Core/profile.h>
 
 namespace Ak
 {
-    void Message(std::string message, ...);
     template <typename T>
     void memFree(T*);
     template <typename T, typename ... Args>
     T* memAlloc(Args&& ... args);
 
     template <typename T>
-    class AK_API Unique_ptr
+    class AK_API UniquePtr
     {
         public:
-            constexpr Unique_ptr() noexcept {}
-            constexpr Unique_ptr(std::nullptr_t) noexcept {}
-            explicit Unique_ptr(T* ptr) noexcept
+            constexpr UniquePtr() noexcept {}
+            constexpr UniquePtr(std::nullptr_t) noexcept {}
+            explicit UniquePtr(T* ptr) noexcept
             {
                 if(_ptr != nullptr)
                     memFree(_ptr);
                 _ptr = ptr;
             }
-            Unique_ptr(Unique_ptr&& ptr) noexcept
+            UniquePtr(UniquePtr&& ptr) noexcept
             {
                 if(_ptr != nullptr)
                     memFree(_ptr);
                 _ptr = ptr._ptr;
                 ptr._ptr = nullptr;
             }
-            Unique_ptr(const Unique_ptr& ptr) = delete;
+            UniquePtr(const UniquePtr& ptr) = delete;
 
             inline T* get() noexcept { return _ptr; }
 
-            inline void swap(const Unique_ptr<T>& ptr) noexcept
+            inline void swap(const UniquePtr<T>& ptr) noexcept
             {
                 T* temp = _ptr;
                 _ptr = ptr._ptr;
@@ -63,19 +61,19 @@ namespace Ak
 
             inline explicit operator bool() const noexcept { return _ptr != nullptr; }
 
-            inline Unique_ptr& operator=(Unique_ptr&& ptr) noexcept
+            inline UniquePtr& operator=(UniquePtr&& ptr) noexcept
             {
                 reset(ptr.release());
                 return *this;
             }
 
-            inline Unique_ptr& operator=(std::nullptr_t) noexcept { reset(nullptr); }
-            inline Unique_ptr& operator=(const Unique_ptr&) = delete;
+            inline UniquePtr& operator=(std::nullptr_t) noexcept { reset(nullptr); }
+            inline UniquePtr& operator=(const UniquePtr&) = delete;
 
             inline T* operator->() const noexcept { return _ptr; }
             inline T& operator*() const noexcept { return *_ptr; }
 
-            ~Unique_ptr()
+            ~UniquePtr()
             {
                 if(_ptr != nullptr)
                     memFree(_ptr);
@@ -86,10 +84,10 @@ namespace Ak
     };
 
     template <typename T>
-    inline Unique_ptr<T> make_Unique_ptr(T* ptr) noexcept { return Unique_ptr<T>(ptr); }
+    inline UniquePtr<T> makeUniquePtr(T* ptr) noexcept { return UniquePtr<T>(ptr); }
 
     template <typename T = void, typename ... Args>
-    inline Unique_ptr<T> create_Unique_ptr(Args&& ... args) noexcept { return make_Unique_ptr<T>(memAlloc<T>(std::forward<Args>(args)...)); }
+    inline UniquePtr<T> createUniquePtr(Args&& ... args) noexcept { return makeUniquePtr<T>(memAlloc<T>(std::forward<Args>(args)...)); }
 }
 
-#endif // __AK_Unique_ptrRAPPER__
+#endif

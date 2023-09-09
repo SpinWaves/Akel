@@ -7,7 +7,6 @@
 #define __AK_MEMORY_MANAGER__
 
 #include <Akpch.h>
-#include <Core/profile.h>
 
 namespace Ak
 {
@@ -23,23 +22,26 @@ namespace Ak
 		void AK_API dealloc(void* ptr);
 	}
 
-    template<typename T, typename ... Args>
-    inline T* AK_API memAlloc(Args&& ... args)
+	template<typename T, typename ... Args>
+	inline T* AK_API memAlloc(Args&& ... args)
 	{
 		T* ptr = static_cast<T*>(Core::memory::internal::alloc(sizeof(T), std::is_class<T>::value));
-        if constexpr(std::is_class<T>::value)
-            ::new ((void*)ptr) T(std::forward<Args>(args)...);
+		if constexpr(std::is_class<T>::value)
+			::new ((void*)ptr) T(std::forward<Args>(args)...);
 		return ptr;
 	}
 
-    template<typename T>
-    inline T* AK_API memAllocSize(size_t size) { return static_cast<T*>(Core::memory::internal::alloc(size, std::is_class<T>::value)); }
-
-    template<typename T>
-    inline void AK_API memFree(T* ptr)
+	template<typename T = void>
+	inline T* AK_API memAllocSize(size_t size)
 	{
-        if constexpr(std::is_class<T>::value)
-            ptr->~T();
+		return static_cast<T*>(Core::memory::internal::alloc(size, true /* Just to make sure it will be allocated in jam allocator */ ));
+	}
+
+	template<typename T>
+	inline void AK_API memFree(T* ptr)
+	{
+		if constexpr(std::is_class<T>::value)
+			ptr->~T();
 		Core::memory::internal::dealloc(static_cast<void*>(ptr));
 	}
 }

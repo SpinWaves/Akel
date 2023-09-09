@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 09/06/2023
+// Updated : 09/09/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -19,8 +19,8 @@
 namespace Ak
 {
 	Scene::Scene(fString name) :
-		_name(std::move(name)), _entity_manager(create_Unique_ptr<EntityManager>(this)),
-		_loader(create_Unique_ptr<ShaderLoader>()), _camera(nullptr)
+		_name(std::move(name)), _entity_manager(createUniquePtr<EntityManager>(this)),
+		_loader(createUniquePtr<ShaderLoader>()), _camera(nullptr)
 	{
 		_loader->init();
 		if(getMainAppProjectFile().archive()["use_default_resource_system"] == true)

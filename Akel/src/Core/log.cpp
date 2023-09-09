@@ -19,7 +19,7 @@ namespace Ak::Core::log
 		std::string getCurrentFileName()
 		{
 			__time time = Time::getCurrentTime();
-			std::string copy = internal::log_dir.string();
+			std::string copy = log_dir.string();
 			copy.append("session-");
 			copy.append(std::to_string(time.day));
 			copy.append("-");
@@ -81,8 +81,8 @@ namespace Ak::Core::log
 		};
 	}
 
-    void report(enum LogType type, std::string message, ...)
-    {
+	void report(enum LogType type, std::string message, ...)
+	{
 		#ifdef AK_RELEASE
 			if(type == DEBUGLOG)
 				return;
@@ -103,7 +103,7 @@ namespace Ak::Core::log
 
 		std::string stype;
 		std::ofstream out(internal::getCurrentFileName(), std::ios::app);
-        if(out.is_open())
+		if(out.is_open())
 		{
 			switch(type)
 			{
@@ -122,18 +122,18 @@ namespace Ak::Core::log
 
 				default: break;
 			}
-            out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << stype << buffer << std::endl;
+			out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << stype << buffer << std::endl;
 		}
-        if(type == FATAL_ERROR)
-        {
-	        std::cout << bg_red << "FATAL ERROR: emergency abortion program" << bg_def << std::endl;
+		if(type == FATAL_ERROR)
+		{
+			std::cout << bg_red << "FATAL ERROR: emergency abortion program" << bg_def << std::endl;
 			EventBus::send("__engine", internal::FatalErrorEvent{});
-        }
+		}
 		out.close();
 	}
 
-    void report(std::string message, ...)
-    {
+	void report(std::string message, ...)
+	{
 		std::lock_guard<std::mutex> watchdog(internal::mutex);
 
 		std::string buffer(message.length() + 1024, 0);
@@ -143,17 +143,17 @@ namespace Ak::Core::log
 		va_end(args);
 
 		std::ofstream out(internal::getCurrentFileName(), std::ios::app);
-        if(out.is_open())
+		if(out.is_open())
 		{
-            out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << buffer << std::endl;
+			out << (int)Time::getCurrentTime().hour << ":" << (int)Time::getCurrentTime().min << " ---- " << buffer << std::endl;
 			out.close();
 		}
-    }
+	}
 }
 
 namespace Ak
 {
-    void FatalError(std::string message, ...)
+	void FatalError(std::string message, ...)
 	{
 		std::string buffer(message.length() + 1024, 0);
 		va_list args;
@@ -163,7 +163,8 @@ namespace Ak
 
 		Core::log::report(FATAL_ERROR, buffer);
 	}
-    void Error(std::string message, ...)
+
+	void Error(std::string message, ...)
 	{
 		std::string buffer(message.length() + 1024, 0);
 		va_list args;
@@ -173,7 +174,8 @@ namespace Ak
 
 		Core::log::report(ERROR, buffer);
 	}
-    void Warning(std::string message, ...)
+
+	void Warning(std::string message, ...)
 	{
 		std::string buffer(message.length() + 1024, 0);
 		va_list args;
@@ -183,7 +185,8 @@ namespace Ak
 
 		Core::log::report(WARNING, buffer);
 	}
-    void Strong_Warning(std::string message, ...)
+
+	void Strong_Warning(std::string message, ...)
 	{
 		std::string buffer(message.length() + 1024, 0);
 		va_list args;
@@ -193,7 +196,8 @@ namespace Ak
 
 		Core::log::report(STRONG_WARNING, buffer);
 	}
-    void Message(std::string message, ...)
+
+	void Message(std::string message, ...)
 	{
 		std::string buffer(message.length() + 1024, 0);
 		va_list args;

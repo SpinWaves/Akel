@@ -8,7 +8,7 @@
 
 #include <Graphics/model.h>
 #include <Core/log.h>
-#include <Core/Memory/sharedPtrWrapper.h>
+#include <Core/Memory/akel_shared_ptr.h>
 
 namespace Ak
 {

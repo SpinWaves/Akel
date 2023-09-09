@@ -28,7 +28,7 @@ class ELTM_editor : public Panel
 
         std::string _file;
         std::string* _input_buffer = nullptr;
-        Ak::Unique_ptr<Ak::ELTM> _loader;
+        Ak::UniquePtr<Ak::ELTM> _loader;
         uint8_t* _save = nullptr;
         bool _is_open = false;
 };

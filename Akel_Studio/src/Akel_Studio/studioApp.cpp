@@ -1,26 +1,26 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 08/09/2023
+// Updated : 09/09/2023
 
 #include <AkSpch.h>
 #include <Akel_main.h>
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
 
-void Akel_init(Ak::AkelInstance& project)
+void Akel_InstanceSetup(Ak::AkelInstance& project)
 {
 	project.project_file_path = Ak::VFS::getMainDirPath() / "settings";
 	project.project_file_name = "akel_studio";
 	project.use_default_resource_system = false;
 }
 
-void Akel_mainApp(Ak::Application& app, Ak::CommandLineArgs args)
+void Akel_AppSetup(Ak::Application& app, Ak::CommandLineArgs args)
 {
 	if(args.count != 2)
 		Ak::FatalError("Akel Studio : wrong args number");
 
-	Ak::Core::printEngineHeader();
+	Ak::Core::printEngineHeader(); // just for style
 
 	app.add_component<Ak::AudioComponent>();
 

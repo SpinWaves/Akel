@@ -9,7 +9,7 @@
 #include <Akpch.h>
 #include <Core/application.h>
 #include <Core/instance.h>
-#include <Core/Memory/uniquePtrWrapper.h>
+#include <Core/Memory/akel_unique_ptr.h>
 
 namespace Ak
 {
@@ -27,7 +27,7 @@ namespace Ak
 
 		private:
 			AkelInstance _instance;
-			Unique_ptr<Application> _app;
+			UniquePtr<Application> _app;
 	};
 }
 

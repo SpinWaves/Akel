@@ -8,7 +8,7 @@
 
 #include "vk_pipeline.h"
 #include <Renderer/Images/texture.h>
-#include <Core/Memory/uniquePtrWrapper.h>
+#include <Core/Memory/akel_unique_ptr.h>
 #include <Renderer/Pipeline/shaders_library.h>
 #include <Renderer/RenderPass/vk_render_pass.h>
 #include <Renderer/Images/texture_library.h>

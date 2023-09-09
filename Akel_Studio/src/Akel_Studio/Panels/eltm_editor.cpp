@@ -10,7 +10,7 @@ ELTM_editor::ELTM_editor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& 
 {
     _eltm = std::move(eltm);
     _save = save;
-	_loader = Ak::create_Unique_ptr<Ak::ELTM>();
+	_loader = Ak::createUniquePtr<Ak::ELTM>();
     _input_buffer = input_buffer;
 }
 

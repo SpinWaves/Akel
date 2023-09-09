@@ -10,7 +10,7 @@
 namespace Ak
 {
 	SceneManager::SceneManager(class RendererComponent* renderer)
-	: Component("__scenes_manager_component"), _renderer(renderer), _scene_renderer(create_Unique_ptr<SceneRenderer>())
+	: Component("__scenes_manager_component"), _renderer(renderer), _scene_renderer(createUniquePtr<SceneRenderer>())
 	{}
 
 	void SceneManager::onAttach()

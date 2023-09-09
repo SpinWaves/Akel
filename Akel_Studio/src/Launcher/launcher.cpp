@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 08/09/2023
+// Updated : 09/09/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
 #include "launcher_component.h"
 
-void Akel_init(Ak::AkelInstance& project)
+void Akel_InstanceSetup(Ak::AkelInstance& project)
 {
 	project.project_file_path = Ak::VFS::getMainDirPath() / "settings";
 	project.project_file_name = "akel_studio_launcher";
@@ -15,7 +15,7 @@ void Akel_init(Ak::AkelInstance& project)
 	project.at_akel_exit = launchAkelStudio;
 }
 
-void Akel_mainApp(Ak::Application& app, Ak::CommandLineArgs args)
+void Akel_AppSetup(Ak::Application& app, Ak::CommandLineArgs args)
 {
 	Ak::WindowComponent* window = app.add_component<Ak::WindowComponent>();
 	window->title = "Akel Studio Launcher";

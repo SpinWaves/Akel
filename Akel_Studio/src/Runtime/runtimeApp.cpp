@@ -1,14 +1,14 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 15/05/2023
-// Updated : 08/09/2023
+// Updated : 09/09/2023
 
 #include <Akel.h>
 #include <Akel_main.h>
 
 using json = nlohmann::json;
 
-void Akel_init(Ak::AkelInstance& instance)
+void Akel_InstanceSetup(Ak::AkelInstance& instance)
 {
 	std::filesystem::path path(Ak::VFS::getMainDirPath() / "settings.akrt");
 	if(!std::filesystem::exists(path))
@@ -41,7 +41,7 @@ void Akel_init(Ak::AkelInstance& instance)
 	instance.use_default_resource_system = settings["useDefaultResourceSystem"];
 }
 
-void Akel_mainApp(Ak::Application& app, Ak::CommandLineArgs args)
+void Akel_AppSetup(Ak::Application& app, Ak::CommandLineArgs args)
 {
 	Ak::Core::ProjectFile& project = Ak::getMainAppProjectFile();
 

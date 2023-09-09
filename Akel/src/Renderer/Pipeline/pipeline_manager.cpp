@@ -6,7 +6,7 @@
 #include <Utils/hash.h>
 #include <Renderer/rendererComponent.h>
 #include <Renderer/Pipeline/pipelines_manager.h>
-#include <Core/Memory/sharedPtrWrapper.h>
+#include <Core/Memory/akel_shared_ptr.h>
 
 namespace Ak
 {

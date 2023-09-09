@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 07/09/2023
+// Updated : 09/09/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
 #include <Third_party/imspinner.h>
 
-Ak::Unique_ptr<Ak::ELTM> _lang_eltm(nullptr);
+Ak::UniquePtr<Ak::ELTM> _lang_eltm(nullptr);
 
 StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("studio_component"), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>())
 {
@@ -56,7 +56,7 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 
 void StudioComponent::onAttach()
 {
-	_lang_eltm = Ak::create_Unique_ptr<Ak::ELTM>();
+	_lang_eltm = Ak::createUniquePtr<Ak::ELTM>();
 	_lang_eltm->load(std::filesystem::path(Ak::VFS::resolve(":/resources/texts/langs.eltm")).string());
 
 	if(!Ak::getMainAppProjectFile().keyExists("language"))
@@ -81,7 +81,7 @@ void StudioComponent::onAttach()
 
 	_project.initProjFile(true);
 
-	_stack = Ak::create_Unique_ptr<PanelStack>();
+	_stack = Ak::createUniquePtr<PanelStack>();
 
 	_stack->add_panel<Docks>(_eltm, _project);
 	_stack->add_panel<Scene>(_eltm, _project);

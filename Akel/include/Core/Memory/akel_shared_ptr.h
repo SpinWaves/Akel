@@ -1,10 +1,10 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 24/07/2021
-// Updated : 30/03/2022
+// Updated : 09/09/2023
 
-#ifndef __AK_SHARED_PTR_WRAPPER__
-#define __AK_SHARED_PTR_WRAPPER__
+#ifndef __AK_SHARED_PTR__
+#define __AK_SHARED_PTR__
 
 #include <Akpch.h>
 #include <Core/Memory/fixedAllocator.h>
@@ -45,4 +45,4 @@ namespace Ak
     inline std::shared_ptr<T> create_shared_ptr_w(Args&& ... args) noexcept { return make_shared_ptr_w<T>(memAlloc<T>(std::forward<Args>(args)...)); }
 }
 
-#endif // __AK_SHARED_PTR_WRAPPER__
+#endif

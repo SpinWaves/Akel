@@ -8,8 +8,8 @@
 #include <Renderer/Core/render_core.h>
 #include <Core/Memory/memoryManager.h>
 
-extern void Akel_init(Ak::AkelInstance& instance); // defined in user application
-extern void Akel_mainApp(Ak::Application& app, Ak::CommandLineArgs args); // same
+extern void Akel_InstanceSetup(Ak::AkelInstance& instance); // defined in user application
+extern void Akel_AppSetup(Ak::Application& app, Ak::CommandLineArgs args); // same
 
 namespace Ak
 {
@@ -44,11 +44,11 @@ namespace Ak
 					fatalErrorEventHandle();
 			};
 			EventBus::registerListener({ functor, "__engine" });
-			Akel_init(_instance);
+			Akel_InstanceSetup(_instance);
 			if(!initAkel(&_instance))
 				Core::log::report(FATAL_ERROR, "Something went wrong with Akel initialisation");
-			_app = create_Unique_ptr<Application>();
-			Akel_mainApp(*_app, { av, ac });
+			_app = createUniquePtr<Application>();
+			Akel_AppSetup(*_app, { av, ac });
 		AK_END_SESSION();
 	}
 
@@ -63,7 +63,7 @@ namespace Ak
 	{
 		AK_BEGIN_SESSION("Shutdown");
 			_app->destroy();
-			_app.reset();
+			_app.reset(nullptr);
 			Render_Core::get().destroy();
 			_instance.writeProjectFile();
 			Core::memory::internal::end();

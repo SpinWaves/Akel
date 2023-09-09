@@ -79,7 +79,7 @@ namespace Ak
 
 		private:
 			std::vector<class Scene*> _scenes;
-			Unique_ptr<SceneRenderer> _scene_renderer = nullptr;
+			UniquePtr<SceneRenderer> _scene_renderer = nullptr;
 			class RendererComponent* _renderer = nullptr;
 			int32_t _current_scene_id = -1;
 			bool _has_been_destroyed = false;

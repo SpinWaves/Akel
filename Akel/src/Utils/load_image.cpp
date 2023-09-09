@@ -6,7 +6,7 @@
 #include <Core/vfs.h>
 #include <Core/log.h>
 #include <Utils/load_image.h>
-#include <Core/Memory/sharedPtrWrapper.h>
+#include <Core/Memory/akel_shared_ptr.h>
 #include <Utils/assert.h>
 #define STBI_ASSERT(x) Ak_assert(x, "stb_image assertion failed")
 #define STB_IMAGE_IMPLEMENTATION

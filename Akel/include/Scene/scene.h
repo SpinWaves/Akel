@@ -8,8 +8,8 @@
 
 #include <Akpch.h>
 #include <Utils/fStrings.h>
-#include <Core/Memory/uniquePtrWrapper.h>
-#include <Core/Memory/sharedPtrWrapper.h>
+#include <Core/Memory/akel_unique_ptr.h>
+#include <Core/Memory/akel_shared_ptr.h>
 #include <Renderer/Pipeline/shaders_library.h>
 #include <Platform/input.h>
 
@@ -70,9 +70,9 @@ namespace Ak
 			std::vector<ShaderID> _forward_shaders;
 			std::filesystem::path _filepath;
 			class RendererComponent* _renderer = nullptr;
-			Unique_ptr<Cam::BaseCamera> _camera;
-			Unique_ptr<class ShaderLoader> _loader;
-			Unique_ptr<class EntityManager> _entity_manager;
+			UniquePtr<Cam::BaseCamera> _camera;
+			UniquePtr<class ShaderLoader> _loader;
+			UniquePtr<class EntityManager> _entity_manager;
 			fString _name;
 			uint32_t _id = -1;
 			uint32_t _entity_count = 0;

@@ -8,7 +8,7 @@
 
 #include <Akpch.h>
 #include <Audio/openAL.h>
-#include <Core/Memory/uniquePtrWrapper.h>
+#include <Core/Memory/akel_unique_ptr.h>
 #include <Core/Components/baseComponent.h>
 #include <Core/profile.h>
 
@@ -25,7 +25,7 @@ namespace Ak
             ~AudioComponent() = default;
 
         private:
-            Unique_ptr<OpenAL> _al;
+            UniquePtr<OpenAL> _al;
     };
 }
 
