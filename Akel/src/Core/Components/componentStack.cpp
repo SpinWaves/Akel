@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 09/09/2023
+// Updated : 10/09/2023
 
 #include <Core/Components/components.h>
 #include <Core/Memory/memory.h>
@@ -47,7 +47,7 @@ namespace Ak
 		return nullptr;
 	}
 
-	ComponentStack::~ComponentStack()
+	void ComponentStack::destroy()
 	{
 		for(Component* elem : _components)
 		{

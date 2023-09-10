@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/09/2023
-// Updated : 09/09/2023
+// Updated : 10/09/2023
 
 #ifndef __AK_ENGINE__
 #define __AK_ENGINE__
@@ -26,8 +26,8 @@ namespace Ak
 			void fatalErrorEventHandle();
 
 		private:
+			Application _app;
 			AkelInstance _instance;
-			UniquePtr<Application> _app;
 	};
 }
 

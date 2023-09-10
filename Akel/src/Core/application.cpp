@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 22/08/2023
+// Updated : 10/09/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -27,7 +27,7 @@ namespace Ak
 		return args[index];
 	}
 
-	Application::Application() : ComponentStack(), non_copyable(), _in(), _ticks()
+	void Application::init()
 	{
 		if(_app_check)
 			Core::log::report(FATAL_ERROR, "you can only declare one application");
@@ -133,6 +133,7 @@ namespace Ak
 			comp->onQuit();
 		for(auto comp : renderers)
 			comp->onQuit();
+		ComponentStack::destroy();
 		_app_check = false;
 		SDL_Quit();
 	}

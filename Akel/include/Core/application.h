@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/06/2021
-// Updated : 09/09/2023
+// Updated : 10/09/2023
 
 #ifndef __AK_APPLICATION__
 #define __AK_APPLICATION__
@@ -27,11 +27,12 @@ namespace Ak
 	class AK_API Application : public ComponentStack, public non_copyable
 	{
 		public:
-			Application();
+			Application() = default;
+			void init();
 			void run();
-			inline const Input& getInput() const noexcept { return _in; }
 			void end();
 			void destroy();
+			inline const Input& getInput() const noexcept { return _in; }
 			~Application() = default;
 
 		private:

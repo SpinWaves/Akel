@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/09/2023
-// Updated : 09/09/2023
+// Updated : 10/09/2023
 
 #include <Core/engine.h>
 #include <Core/vfs.h>
@@ -47,23 +47,22 @@ namespace Ak
 			Akel_InstanceSetup(_instance);
 			if(!initAkel(&_instance))
 				Core::log::report(FATAL_ERROR, "Something went wrong with Akel initialisation");
-			_app = createUniquePtr<Application>();
-			Akel_AppSetup(*_app, { av, ac });
+			_app.init();
+			Akel_AppSetup(_app, { av, ac });
 		AK_END_SESSION();
 	}
 
 	void Engine::run()
 	{
 		AK_BEGIN_SESSION("Runtime");
-			_app->run();
+			_app.run();
 		AK_END_SESSION();
 	}
 
 	void Engine::destroy()
 	{
 		AK_BEGIN_SESSION("Shutdown");
-			_app->destroy();
-			_app.reset(nullptr);
+			_app.destroy();
 			Render_Core::get().destroy();
 			_instance.writeProjectFile();
 			Core::memory::internal::end();
@@ -77,7 +76,6 @@ namespace Ak
 	void Engine::fatalErrorEventHandle()
 	{
 		EventBus::send("__internal_memory_manager", internal::FatalErrorEvent{});
-		Render_Core::get().destroy();
 		std::exit(0);
 	}
 }
