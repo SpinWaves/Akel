@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/03/2022
-// Updated : 21/12/2022
+// Updated : 11/09/2023
 
 #include <Utils/plainApplication.h>
 #include <Renderer/rendererComponent.h>
@@ -9,15 +9,15 @@
 
 namespace Ak
 {
-	PlainApplication::PlainApplication(const char* name) : Application()
+	PlainApplication::PlainApplication(Application& app, const char* name) : _app(app)
 	{
-		_window = add_component<Ak::WindowComponent>();
+		_window = _app.add_component<Ak::WindowComponent>();
 		if(name != nullptr)
 			_window->title = name;
 		_window->fetchSettings();
 
-		_renderer = add_component<RendererComponent>(_window);
-		_scene_manager = add_component<Ak::SceneManager>(_renderer);
+		_renderer = _app.add_component<RendererComponent>(_window);
+		_scene_manager = _app.add_component<Ak::SceneManager>(_renderer);
 	}
 
 	void PlainApplication::add_scene(class Scene* scene) noexcept

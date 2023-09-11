@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 09/09/2023
+// Updated : 11/09/2023
 
 #include <Core/core.h>
 #include <Platform/messageBox.h>
@@ -88,7 +88,7 @@ namespace Ak::Core::log
 				return;
 		#endif
 
-		std::lock_guard<std::mutex> watchdog(internal::mutex);
+		std::unique_lock<std::mutex> watchdog(internal::mutex);
 
 		std::string buffer(message.length() + 1024, 0);
 		va_list args;
@@ -127,6 +127,7 @@ namespace Ak::Core::log
 		if(type == FATAL_ERROR)
 		{
 			std::cout << bg_red << "FATAL ERROR: emergency abortion program" << bg_def << std::endl;
+			watchdog.unlock();
 			EventBus::send("__engine", internal::FatalErrorEvent{});
 		}
 		out.close();
@@ -134,7 +135,7 @@ namespace Ak::Core::log
 
 	void report(std::string message, ...)
 	{
-		std::lock_guard<std::mutex> watchdog(internal::mutex);
+		std::unique_lock<std::mutex> watchdog(internal::mutex);
 
 		std::string buffer(message.length() + 1024, 0);
 		va_list args;

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 18/07/2021
-// Updated : 27/01/2023
+// Updated : 11/09/2023
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
@@ -26,8 +26,11 @@ namespace Ak
 			inline bool canAlloc() { return _bits.getFirstTrueBit() != (size_t)-1; }
 			inline constexpr bool is_init() noexcept { return _heap != nullptr; }
 
-			template <class T = void, typename ... Args>
+			template<typename T = void, typename ... Args>
 			T* alloc(Args&& ... args);
+
+			template<typename T = void>
+			T* alloc(size_t size);
 
 			template <class T = void>
 			void free(T* ptr);

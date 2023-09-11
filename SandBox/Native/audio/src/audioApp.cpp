@@ -14,23 +14,21 @@ class TitleComponent : public Ak::Component
 		}
 };
 
-Ak::AkelInstance Akel_init()
+void Akel_InstanceSetup(Ak::AkelInstance& instance)
 {
-	Ak::AkelInstance instance;
-		instance.project_file_name = "audio";
-	return instance;
+	instance.project_file_name = "audio";
 }
 
-Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
+void Akel_AppSetup(Ak::Application& app, Ak::CommandLineArgs args)
 {
-	Ak::PlainApplication* app = Ak::memAlloc<Ak::PlainApplication>("Audio using Akel Engine");
-	app->add_component<Ak::AudioComponent>();
-	app->add_component<TitleComponent>();
-	app->add_component<Ak::ImGuiRenderStats>(app->getRenderer());
+	Ak::PlainApplication papp(app, "Audio using Akel Engine");
+	papp.add_component<Ak::AudioComponent>();
+	papp.add_component<TitleComponent>();
+	papp.add_component<Ak::ImGuiRenderStats>(papp.getRenderer());
 
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main_scene");
 	scene->addCamera<Ak::Cam::FirstPerson3D>(-5.0f, 1.0f, 0.0f);
-	app->add_scene(scene);
+	papp.add_scene(scene);
 
 	// Setting up Spaceship model and material
 	Ak::MaterialDesc spaceship_material_desc;
@@ -42,8 +40,6 @@ Ak::Application* Akel_mainApp(Ak::CommandLineArgs args)
 	spaceship.addAttribute<Ak::AudioAttribute>(Ak::VFS::resolve("//Sounds/engine.ogg"));
 	spaceship.addAttribute<Ak::ModelAttribute>(Ak::VFS::resolve("//Meshes/spaceship.obj"), spaceship_material);
 
-	Ak::LuaLoader lua(app, *app->getSceneManager());
+	Ak::LuaLoader lua(&app, *papp.getSceneManager());
 	spaceship.addAttribute<Ak::ScriptAttribute>(lua.loadScript(Ak::VFS::resolve("//Scripts/spaceship_script.lua")));
-
-	return app;
 }

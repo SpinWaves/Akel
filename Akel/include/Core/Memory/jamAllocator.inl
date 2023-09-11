@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/07/2021
-// Updated : 19/11/2022
+// Updated : 11/09/2023
 
 #include <Maths/maths.h>
 
@@ -16,8 +16,11 @@ namespace Ak
 		T* ptr = reinterpret_cast<T*>(internal_allocation(sizeof(T)));
 		void* tmp = ptr;
 		std::size_t s = std::numeric_limits<std::size_t>::max();
-		std::align(alignof(T), sizeof(T), tmp, s);
-		_memUsed += reinterpret_cast<T*>(tmp) - ptr;
+		if constexpr(!std::is_void<T>::value)
+		{
+			std::align(alignof(T), sizeof(T), tmp, s);
+			_memUsed += reinterpret_cast<uintptr_t>(tmp) - reinterpret_cast<uintptr_t>(ptr);
+		}
         if constexpr(std::is_class<T>::value)
             ::new ((void*)ptr) T(std::forward<Args>(args)...);
     	return ptr;
@@ -29,8 +32,11 @@ namespace Ak
 		T* ptr = reinterpret_cast<T*>(internal_allocation(size));
 		void* tmp = ptr;
 		std::size_t s = std::numeric_limits<std::size_t>::max();
-		std::align(alignof(T), size * sizeof(T), tmp, s);
-		_memUsed += reinterpret_cast<T*>(tmp) - ptr;
+		if constexpr(!std::is_void<T>::value)
+		{
+			std::align(alignof(T), sizeof(T), tmp, s);
+			_memUsed += reinterpret_cast<uintptr_t>(tmp) - reinterpret_cast<uintptr_t>(ptr);
+		}
 		return ptr;
     }
 

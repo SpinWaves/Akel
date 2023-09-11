@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 09/09/2023
+// Updated : 11/09/2023
 
 #include <Utils/utils.h>
 #include <Core/projectFile.h>
@@ -36,14 +36,14 @@ namespace Ak::Core::memory::internal
 				if(!is_class)
 				{
 					if(size <= FIXED_SIZE_1)
-						return fixed1.alloc<char>();
+						return fixed1.alloc<void>(size);
 					else if(size <= FIXED_SIZE_2)
-						return fixed2.alloc<char>();
+						return fixed2.alloc<void>(size);
 					else if(size <= FIXED_SIZE_3)
-						return fixed3.alloc<char>();
+						return fixed3.alloc<void>(size);
 				}
 			}
-			return jam.alloc<char>();
+			return jam.alloc<void>(size);
 		}
 		Core::log::report(ERROR, "Memory manager : cannot allocate pointer");
 		return nullptr;

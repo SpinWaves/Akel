@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/07/2021
-// Updated : 08/09/2023
+// Updated : 11/09/2023
 
 #include <Core/core.h>
 
@@ -9,13 +9,10 @@ namespace Ak
 {
     void JamAllocator::init(size_t Size)
     {
+        std::unique_lock<std::mutex> watchdog(_general_mutex);
         if(_heap != nullptr)
             return;
-
-        std::unique_lock<std::mutex> watchdog(_general_mutex, std::try_to_lock);
-
         _heap = std::malloc(Size);
-
         if(!_heap)
             Core::log::report(FATAL_ERROR, "JamAllocator : unable to allocate memory space for an allocator");
 
@@ -37,7 +34,7 @@ namespace Ak
             return;
         }
 
-        std::unique_lock<std::mutex> watchdog(_general_mutex, std::try_to_lock);
+        std::unique_lock<std::mutex> watchdog(_general_mutex);
 
         if(Size > _heapSize)
         {
@@ -54,7 +51,7 @@ namespace Ak
         if(_heap == nullptr)
             return;
 
-        std::unique_lock<std::mutex> watchdog(_general_mutex, std::try_to_lock);
+        std::unique_lock<std::mutex> watchdog(_general_mutex);
 
         std::free(_heap);
         _heap = nullptr;
@@ -83,7 +80,7 @@ namespace Ak
 
         void* ptr = nullptr;
 
-        std::unique_lock<std::mutex> watchdog(_alloc_mutex, std::try_to_lock);
+        std::unique_lock<std::mutex> watchdog(_alloc_mutex);
 
         if(!_freeSpaces.empty())
         {
@@ -116,7 +113,7 @@ namespace Ak
 
 	void JamAllocator::internal_free(void* ptr)
 	{
-        std::unique_lock<std::mutex> watchdog(_free_mutex, std::try_to_lock);
+        std::unique_lock<std::mutex> watchdog(_free_mutex);
         uint32_t cache;
         uint32_t better_flag = -1;
 		JamAllocator::flag flag;
