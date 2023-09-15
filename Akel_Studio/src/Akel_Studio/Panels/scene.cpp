@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 17/08/2023
+// Updated : 15/09/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -12,7 +12,7 @@ Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : P
     _eltm = std::move(eltm);
 	_play = AkImGui::LoadImage(Ak::VFS::getMainDirPath() / "resources/assets/play.png");
 
-	_scene_texture = AkImGui::LoadImageEmpty(1480, 720);
+	_scene_texture = AkImGui::LoadImageEmpty(1250, 720);
 	Ak::SceneManager* manager = static_cast<Ak::SceneManager*>(Ak::getMainAppComponentStack()->get_component("__scenes_manager_component"));
 	manager->setRenderTarget(_scene_texture.getTextureID());
 	if(_project.keyExists("scenes"))

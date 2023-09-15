@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 11/09/2023
+// Updated : 13/09/2023
 
 #include <Utils/utils.h>
 #include <Core/projectFile.h>
@@ -25,78 +25,6 @@ namespace Ak::Core::memory::internal
 	std::shared_ptr<ControlUnit> getControlUnit()
 	{
 		return control_unit;
-	}
-
-	void* alloc(size_t size, bool is_class)
-	{
-		if(is_init)
-		{
-			if(getMainAppProjectFile().archive()["memory_manager_enable_fixed_allocator"])
-			{
-				if(!is_class)
-				{
-					if(size <= FIXED_SIZE_1)
-						return fixed1.alloc<void>(size);
-					else if(size <= FIXED_SIZE_2)
-						return fixed2.alloc<void>(size);
-					else if(size <= FIXED_SIZE_3)
-						return fixed3.alloc<void>(size);
-				}
-			}
-			return jam.alloc<void>(size);
-		}
-		Core::log::report(ERROR, "Memory manager : cannot allocate pointer");
-		return nullptr;
-	}
-
-	void dealloc(void* ptr)
-	{
-		if(getMainAppProjectFile().archive()["memory_manager_enable_fixed_allocator"])
-		{
-			if(fixed1.contains(ptr))
-			{
-				fixed1.free(ptr);
-				return;
-			}
-			if(fixed2.contains(ptr))
-			{
-				fixed2.free(ptr);
-				return;
-			}
-			if(fixed3.contains(ptr))
-			{
-				fixed3.free(ptr);
-				return;
-			}
-		}
-		if(jam.contains(ptr))
-		{
-			jam.free(ptr);
-			return;
-		}
-		for(auto& elem : control_unit->jamStack)
-		{
-			if(!elem.expired())
-			{
-				if(elem.lock()->contains(ptr))
-				{
-					elem.lock()->free(ptr);
-					return;
-				}
-			}
-		}
-		for(auto& elem : control_unit->fixedStack)
-		{
-			if(!elem.expired())
-			{
-				if(elem.lock()->contains(ptr))
-				{
-					elem.lock()->free(ptr);
-					return;
-				}
-			}
-		}
-		Core::log::report(STRONG_WARNING, "Memory manager : cannot find memory allocator for a pointer '%p'", ptr);
 	}
 
 	void fatalErrorEventHandle()
@@ -160,6 +88,75 @@ namespace Ak::Core::memory::internal
 		jam.init(4096 * 4096);
 		jam.autoIncreaseSize(true);
 		is_init = true;
+	}
+
+	void* alloc(size_t size, bool is_class)
+	{
+		if(!is_init)
+			init();
+		if(getMainAppProjectFile().archive()["memory_manager_enable_fixed_allocator"])
+		{
+			if(!is_class)
+			{
+				if(size <= FIXED_SIZE_1)
+					return fixed1.alloc<void>(size);
+				else if(size <= FIXED_SIZE_2)
+					return fixed2.alloc<void>(size);
+				else if(size <= FIXED_SIZE_3)
+					return fixed3.alloc<void>(size);
+			}
+		}
+		return jam.alloc<void>(size);
+	}
+
+	void dealloc(void* ptr)
+	{
+		if(getMainAppProjectFile().archive()["memory_manager_enable_fixed_allocator"])
+		{
+			if(fixed1.contains(ptr))
+			{
+				fixed1.free(ptr);
+				return;
+			}
+			if(fixed2.contains(ptr))
+			{
+				fixed2.free(ptr);
+				return;
+			}
+			if(fixed3.contains(ptr))
+			{
+				fixed3.free(ptr);
+				return;
+			}
+		}
+		if(jam.contains(ptr))
+		{
+			jam.free(ptr);
+			return;
+		}
+		for(auto& elem : control_unit->jamStack)
+		{
+			if(!elem.expired())
+			{
+				if(elem.lock()->contains(ptr))
+				{
+					elem.lock()->free(ptr);
+					return;
+				}
+			}
+		}
+		for(auto& elem : control_unit->fixedStack)
+		{
+			if(!elem.expired())
+			{
+				if(elem.lock()->contains(ptr))
+				{
+					elem.lock()->free(ptr);
+					return;
+				}
+			}
+		}
+		Core::log::report(STRONG_WARNING, "Memory manager : cannot find memory allocator for a pointer '%p'", ptr);
 	}
 
 	void end()

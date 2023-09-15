@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 10/07/2023
+// Updated : 15/09/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -26,7 +26,7 @@ namespace Ak
 
     WindowComponent::WindowComponent() : Component("__window_component")
 	{
-		size.set(1280, 750);
+		size.set(1250, 720);
 		pos.set(AK_WINDOW_POS_CENTER, AK_WINDOW_POS_CENTER);
 		minSize.set(0, 0);
 		maxSize.set(AK_WINDOW_MAX_SIZE, AK_WINDOW_MAX_SIZE);
@@ -160,6 +160,5 @@ namespace Ak
 			SDL_DestroyWindow(_window);
 			_window = nullptr;
 		}
-		fetchSettings();
 	}
 }

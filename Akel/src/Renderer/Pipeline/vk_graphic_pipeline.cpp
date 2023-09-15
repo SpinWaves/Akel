@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 23/08/2023
+// Updated : 15/09/2023
 
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
 #include <Renderer/Core/render_core.h>
@@ -212,7 +212,7 @@ namespace Ak
 	bool GraphicPipeline::bindPipeline(CmdBuffer& commandBuffer) noexcept
 	{
 		std::shared_ptr<FrameBuffer> fb;
-		if(_renderer->isFrameBufferResizeRequested())
+		if(_renderer->isFrameBufferResizeRequested() && _desc.swapchain)
 		{
 			destroy();
 			init(_renderer, _desc);

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 22/08/2023
+// Updated : 15/09/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -89,7 +89,7 @@ namespace Ak
 		pipeline_desc.shaders = _forward_data.shaders;
 		pipeline_desc.clear_target = true;
 		pipeline_desc.clear_color = { 0.f, 0.f, 0.f, 1.f };
-		pipeline_desc.swapchain = true;
+		pipeline_desc.swapchain = _forward_data.render_texture != nulltexture;
 		pipeline_desc.depth = &_forward_data.depth;
 		pipeline_desc.render_targets[0] = _forward_data.render_texture;
 
