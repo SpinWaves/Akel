@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 15/09/2023
+// Updated : 16/09/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -93,8 +93,11 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 		//		draw_list->AddRectFilled(ImVec2((15 * size.X)/100, 0), ImVec2(aspect_width, size.Y), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.180f, 0.180f, 0.180f, 1.000f))));
 		//		draw_list->AddRectFilled(ImVec2(size.X - (19 * size.X)/100, 0), ImVec2(size.X - (19 * size.X)/100 - aspect_width, size.Y), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.180f, 0.180f, 0.180f, 1.000f))));
 
-		draw_list->AddRectFilled(ImVec2(ImGui::GetWindowPos().x + window_width - 70, ImGui::GetWindowPos().y + 60), ImVec2(ImGui::GetWindowPos().x + window_width - 22.5, ImGui::GetWindowPos().y + 100), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.180f, 0.180f, 0.180f, 0.75f))), 5.0f);
 
+		ImGui::Image(_scene_texture.getImGuiID(), ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowWidth()));
+		EditorCamera3D::setHover(ImGui::IsItemHovered());
+
+		draw_list->AddRectFilled(ImVec2(ImGui::GetWindowPos().x + window_width - 70, ImGui::GetWindowPos().y + 60), ImVec2(ImGui::GetWindowPos().x + window_width - 22.5, ImGui::GetWindowPos().y + 100), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.180f, 0.180f, 0.180f, 0.75f))), 5.0f);
 		ImGui::SetCursorPos(ImVec2(window_width - 60, 67));
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 0.f));
@@ -103,9 +106,6 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 		if(ImGui::ImageButton("##play_button", _play.getImGuiID(), ImVec2(20, 20), ImVec2(0, 0), ImVec2(1, 1), ImVec4(0, 0, 0, 0), ImVec4(1, 1, 1, 1)))
 			_run = true;
 		ImGui::PopStyleColor(3);
-
-		ImGui::Image(_scene_texture.getImGuiID(), ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowWidth()));
-		EditorCamera3D::setHover(ImGui::IsItemHovered());
 
 		ImGui::End();
 	}

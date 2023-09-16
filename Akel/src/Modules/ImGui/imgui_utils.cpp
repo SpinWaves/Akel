@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/08/2022
-// Updated : 23/08/2023
+// Updated : 16/09/2023
 
 #include <Akpch.h>
 #include <Core/log.h>
@@ -62,7 +62,7 @@ namespace AkImGui
 		std::shared_ptr<Ak::Texture> texture = std::make_shared<Ak::Texture>();
 		texture->create(nullptr, width, height, VK_FORMAT_R8G8B8A8_UNORM);
 		image._texture = Ak::TextureLibrary::get().addTextureToLibrary(texture);
-		image._set = ImGui_ImplVulkan_AddTexture(texture->getSampler(), texture->getImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+		image._set = ImGui_ImplVulkan_AddTexture(texture->getSampler(), texture->getImageView(), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 		return image;
 	}
 

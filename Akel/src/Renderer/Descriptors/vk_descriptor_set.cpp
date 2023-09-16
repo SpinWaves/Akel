@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 03/03/2023
+// Updated : 16/09/2023
 
 #include <Renderer/Descriptors/vk_descriptor_set.h>
 #include <Renderer/Descriptors/vk_descriptor_set_layout.h>
