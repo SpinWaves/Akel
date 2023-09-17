@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 15/09/2023
+// Updated : 17/09/2023
 
 #include <Platform/platform.h>
 #include <Renderer/rendererComponent.h>
@@ -78,7 +78,6 @@ namespace Ak
 		visible =    project.archive()[std::string("window_component_" + std::to_string(_window_id))]["visible"];
 		vsync =      project.archive()[std::string("window_component_" + std::to_string(_window_id))]["vsync"];
 		maximize =   project.archive()[std::string("window_component_" + std::to_string(_window_id))]["maximize"];
-		minimize =   project.archive()[std::string("window_component_" + std::to_string(_window_id))]["minimize"];
 	}
 
 	void WindowComponent::serialize()
@@ -102,17 +101,16 @@ namespace Ak
 		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["visible"] = visible;
 		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["vsync"] = vsync;
 		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["maximize"] = maximize;
-		project.archive()[std::string("window_component_" + std::to_string(_window_id))]["minimize"] = minimize;
 	}
 
 	void WindowComponent::fetchSettings()
 	{
 		SDL_GetCurrentDisplayMode(0, &DM);
-		maxSize.X = maxSize.X == AK_WINDOW_MAX_SIZE ? DM.w : maxSize.X;
-		maxSize.Y = maxSize.Y == AK_WINDOW_MAX_SIZE ? DM.h : maxSize.Y;
+		maxSize.X = (maxSize.X == AK_WINDOW_MAX_SIZE) ? DM.w : maxSize.X;
+		maxSize.Y = (maxSize.Y == AK_WINDOW_MAX_SIZE) ? DM.h : maxSize.Y;
 
-		size.X = size.X == AK_WINDOW_MAX_SIZE ? DM.w : size.X;
-		size.Y = size.Y == AK_WINDOW_MAX_SIZE ? DM.h : size.Y;
+		size.X = (size.X == AK_WINDOW_MAX_SIZE) ? DM.w : size.X;
+		size.Y = (size.Y == AK_WINDOW_MAX_SIZE) ? DM.h : size.Y;
 /*
 		if(icon == "default_Akel_icon")
 			_icon = SDL_CreateRGBSurfaceFrom(static_cast<void*>(logo_icon_data), logo_size, logo_size, 32, 4 * logo_size, rmask, gmask, bmask, amask);
@@ -130,16 +128,18 @@ namespace Ak
 		SDL_SetWindowFullscreen(_window, fullscreen ? SDL_TRUE : SDL_FALSE);
 		SDL_SetWindowResizable(_window, resizable ? SDL_TRUE : SDL_FALSE);
 		SDL_SetWindowBordered(_window, border ? SDL_TRUE : SDL_FALSE);
-		if(maximize)
-		{
-			SDL_MaximizeWindow(_window);
-			minimize = false;
-		}
 		if(minimize)
 		{
 			SDL_MinimizeWindow(_window);
 			maximize = false;
 		}
+		else if(maximize)
+		{
+			SDL_MaximizeWindow(_window);
+			minimize = false;
+		}
+		else
+			SDL_RestoreWindow(_window);
 		visible ? SDL_ShowWindow(_window) : SDL_HideWindow(_window);
 	}
 
@@ -147,8 +147,14 @@ namespace Ak
 	{
 		if(_window == nullptr)
 			return;
+		uint32_t bits = SDL_GetWindowFlags(_window);
+		maximize = bits & SDL_WINDOW_MAXIMIZED;
+		minimize = bits & SDL_WINDOW_MINIMIZED;
+		resizable = bits & SDL_WINDOW_RESIZABLE;
+		fullscreen = bits & SDL_WINDOW_FULLSCREEN;
 		SDL_GetWindowPosition(_window, &pos.X, &pos.Y);
-		SDL_GetWindowSize(_window, &size.X, &size.Y);
+		if(!maximize)
+			SDL_GetWindowSize(_window, &size.X, &size.Y);
 	}
 
 	void WindowComponent::onQuit()

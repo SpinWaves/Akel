@@ -1,17 +1,15 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/10/2021
-// Updated : 07/06/2023
+// Updated : 17/09/2023
 
 #include <Panels/eltm_editor.h>
 #include <Fonts/material_font.h>
 
-ELTM_editor::ELTM_editor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project, std::string* input_buffer, uint8_t* save) : Panel("__eltm_editor", project)
+ELTM_editor::ELTM_editor(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__eltm_editor", project)
 {
     _eltm = std::move(eltm);
-    _save = save;
 	_loader = Ak::createUniquePtr<Ak::ELTM>();
-    _input_buffer = input_buffer;
 }
 
 const char* eltm_writter_formating(std::string text)
@@ -35,28 +33,48 @@ const char* eltm_writter_formating(std::string text)
 
 void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
 {
-    if(!_input_buffer->empty())
+	if(!_is_open)
+		return;
+	uint8_t save = 0;
+	if(ImGui::Begin(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getText("ELTM_Editor.name")).c_str(), &_is_open, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
     {
-        if(!_loader->reload(*_input_buffer))
-            Ak::Core::log::report(ERROR, "ELTM editor: Couldn't load %s", _input_buffer->c_str());
-		else
+		_input_buffer.clear();
+		if(ImGui::BeginMenuBar())
 		{
-			_file = *_input_buffer;
-			_texts.clear();
-			_modules.clear();
-
-            for(auto it = _loader->getTexts().begin(); it != _loader->getTexts().end(); ++it)
-				_texts[it->first] = it->second;
-
-            for(auto it = _loader->getModules().begin(); it != _loader->getModules().end(); ++it)
-                for(auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
-					_modules[it->first][it2->first] = it2->second;
+			if(ImGui::BeginMenu(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getText("MainMenuBar.file")).c_str()))
+			{
+				if(ImGui::MenuItem(std::string(AKS_ICON_MD_FILE_OPEN" " + _eltm->getText("MainMenuBar.e_load")).c_str()))
+				{
+					auto file = pfd::open_file(_eltm->getText("MainMenuBar.e_load"), Ak::VFS::getMainDirPath().string(), { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All files", "*"});	
+					if(!file.result().empty())
+						_input_buffer = file.result()[0];
+				}
+				if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE" " + _eltm->getText("MainMenuBar.e_save")).c_str()))
+					save = 1;
+				if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE_AS" " + _eltm->getText("MainMenuBar.e_save_as")).c_str()))
+					save = 2;
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
 		}
-    }
-    if(!_is_open)
-        return;
-	if(ImGui::Begin(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getText("ELTM_Editor.name")).c_str(), &_is_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize))
-    {
+		if(!_input_buffer.empty())
+		{
+			if(!_loader->reload(_input_buffer))
+				Ak::Core::log::report(ERROR, "ELTM editor: Couldn't load %s", _input_buffer.c_str());
+			else
+			{
+				_file = _input_buffer;
+				_texts.clear();
+				_modules.clear();
+
+				for(auto it = _loader->getTexts().begin(); it != _loader->getTexts().end(); ++it)
+					_texts[it->first] = it->second;
+
+				for(auto it = _loader->getModules().begin(); it != _loader->getModules().end(); ++it)
+					for(auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+						_modules[it->first][it2->first] = it2->second;
+			}
+		}
         ImGui::Text("File : %s", _file.c_str());
 
         editor();
@@ -96,12 +114,12 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
     }
 
     static std::string destination = "";
-    if(*_save == 1)
+    if(save == 1)
         destination = _file;
-    else if(*_save == 2)
+    else if(save == 2)
         destination = std::move(pfd::save_file("Save", std::filesystem::path(Ak::VFS::getMainDirPath() / "New_File.eltm").string(), { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All Files", "*" }, pfd::opt::force_overwrite).result());
 
-    if(*_save != 0)
+    if(save != 0)
     {
         std::ofstream out(destination.c_str(), std::ofstream::out);
         if(out.is_open())
@@ -121,7 +139,6 @@ void ELTM_editor::onUpdate(Ak::Maths::Vec2<int>& size)
             
             out.close();
         }
-        *_save = 0;
     }
 }
 

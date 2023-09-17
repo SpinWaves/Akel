@@ -1,13 +1,96 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 09/09/2023
+// Updated : 17/09/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
 #include <Third_party/imspinner.h>
 
+#ifdef AK_PLATFORM_OSX
+	constexpr const bool WINDOW_FRAME_BUTTONS_RIGHT = false;
+#else
+	constexpr const bool WINDOW_FRAME_BUTTONS_RIGHT = true;
+#endif
+
 Ak::UniquePtr<Ak::ELTM> _lang_eltm(nullptr);
+std::unordered_map<SDL_SystemCursor, SDL_Cursor*> cursors;
+
+constexpr const int RESIZE_MARGIN = 10;
+
+/*
+SDL_SYSTEM_CURSOR_ARROW
+SDL_SYSTEM_CURSOR_IBEAM
+SDL_SYSTEM_CURSOR_WAIT
+SDL_SYSTEM_CURSOR_CROSSHAIR
+SDL_SYSTEM_CURSOR_WAITARROW
+SDL_SYSTEM_CURSOR_SIZENWSE
+SDL_SYSTEM_CURSOR_SIZENESW
+SDL_SYSTEM_CURSOR_SIZEWE
+SDL_SYSTEM_CURSOR_SIZENS
+SDL_SYSTEM_CURSOR_SIZEALL
+SDL_SYSTEM_CURSOR_NO
+SDL_SYSTEM_CURSOR_HAND
+*/
+
+SDL_HitTestResult hitTestCallback(SDL_Window* win, const SDL_Point* area, void* data)
+{
+	int w;
+	int h;
+	SDL_GetWindowSize(win, &w, &h);
+	if(area->y < RESIZE_MARGIN && area->x > 275 && area->x < w - 95)
+	{
+		if(area->x < RESIZE_MARGIN)
+		{
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENWSE]);
+			return SDL_HITTEST_RESIZE_TOPLEFT;
+		}
+		if(area->x > w - RESIZE_MARGIN)
+		{
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENESW]);
+			return SDL_HITTEST_RESIZE_TOPRIGHT;
+		}
+		SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENS]);
+		return SDL_HITTEST_RESIZE_TOP;
+	}
+	if constexpr(WINDOW_FRAME_BUTTONS_RIGHT)
+	{
+		if(area->y < 25 && area->x > 275 && area->x < w - 95)
+			return SDL_HITTEST_DRAGGABLE;
+	}
+	else
+	{
+		if(area->y < 25 && area->x > 355 && area->x < w - 20)
+			return SDL_HITTEST_DRAGGABLE;
+	}
+	if(area->y > h - RESIZE_MARGIN)
+	{
+		if(area->x < RESIZE_MARGIN)
+		{
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENESW]);
+			return SDL_HITTEST_RESIZE_BOTTOMLEFT;
+		}
+		if(area->x > w - RESIZE_MARGIN)
+		{
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENWSE]);
+			return SDL_HITTEST_RESIZE_BOTTOMRIGHT;
+		}
+		SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENS]);
+		return SDL_HITTEST_RESIZE_BOTTOM;
+	}
+	if(area->x < RESIZE_MARGIN)
+	{
+		SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZEWE]);
+		return SDL_HITTEST_RESIZE_LEFT;
+	}
+	if(area->x > w - RESIZE_MARGIN)
+	{
+		SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZEWE]);
+		return SDL_HITTEST_RESIZE_RIGHT;
+	}
+	SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_ARROW]);
+	return SDL_HITTEST_NORMAL;
+}
 
 StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("studio_component"), _eltm(Ak::create_shared_ptr_w<Ak::ELTM>())
 {
@@ -51,7 +134,20 @@ StudioComponent::StudioComponent(Ak::CommandLineArgs args) : Ak::Component("stud
 		_runtime_settings["useDefaultResourceSystem"] = true;
 	}
 
-	Ak::CounterTicks::setTicksGoal(60);
+	Ak::CounterTicks::setTicksGoal(69);
+
+	cursors[SDL_SYSTEM_CURSOR_ARROW] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW);
+	cursors[SDL_SYSTEM_CURSOR_IBEAM] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_IBEAM);
+	cursors[SDL_SYSTEM_CURSOR_WAIT] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_WAIT);
+	cursors[SDL_SYSTEM_CURSOR_CROSSHAIR] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR);
+	cursors[SDL_SYSTEM_CURSOR_WAITARROW] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_WAITARROW);
+	cursors[SDL_SYSTEM_CURSOR_SIZENWSE] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENWSE);
+	cursors[SDL_SYSTEM_CURSOR_SIZENESW] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENESW);
+	cursors[SDL_SYSTEM_CURSOR_SIZEWE] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZENS);
+	cursors[SDL_SYSTEM_CURSOR_SIZENS] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
+	cursors[SDL_SYSTEM_CURSOR_SIZEALL] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_SIZEALL);
+	cursors[SDL_SYSTEM_CURSOR_NO] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_NO);
+	cursors[SDL_SYSTEM_CURSOR_HAND] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
 }
 
 void StudioComponent::onAttach()
@@ -71,13 +167,13 @@ void StudioComponent::onAttach()
 	_eltm->load(std::filesystem::path(Ak::VFS::resolve(Ak::getMainAppProjectFile().archive()["language"])).string());
 
 	Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
+	window->title = _eltm->getText("window_title");
+	window->resizable = true;
+	window->border = false;
 	if(Ak::getMainAppProjectFile().isFirstTimeRunning())
-	{
-		window->title = std::move(_eltm->getText("window_title"));
-		window->resizable = true;
 		window->maximize = true;
-		window->fetchSettings();
-	}
+	window->fetchSettings();
+	SDL_SetWindowHitTest(window->getNativeWindow(), hitTestCallback, nullptr);
 
 	_project.initProjFile(true);
 
@@ -86,7 +182,7 @@ void StudioComponent::onAttach()
 	_stack->add_panel<Docks>(_eltm, _project);
 	_stack->add_panel<Scene>(_eltm, _project);
 	_stack->add_panel<CodeEditor>(_eltm, _project);
-	_stack->add_panel<ELTM_editor>(_eltm, _project, &_eltm_editor_input_buffer, &_eltm_editor_save);
+	_stack->add_panel<ELTM_editor>(_eltm, _project);
 	_stack->add_panel<Components>(_eltm, _project);
 	_stack->add_panel<Entities>(_eltm, _project);
 	_stack->add_panel<RendererManager>(_eltm, _project);
@@ -197,6 +293,7 @@ void StudioComponent::onFixedUpdate()
 
 void StudioComponent::onEvent(Ak::Input& input)
 {
+	static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
 	_running = _running == true ? !input.isEnded() : _running;
 	if(!_running && !Ak::getMainAppProjectFile().archive()["on_quit_window"])
 		realquit = true;
@@ -208,20 +305,46 @@ void StudioComponent::onEvent(Ak::Input& input)
 
 	for(auto elem : _stack->_panels)
 		elem->onEvent(input);
-	
-	_eltm_editor_input_buffer.clear();
+
+	int x = input.getX();
+	int y = input.getY();
+
+	if(y < RESIZE_MARGIN)
+	{
+		if(x < RESIZE_MARGIN)
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENWSE]);
+		else if(x > window->size.X - RESIZE_MARGIN)
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENESW]);
+		else
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENS]);
+	}
+	else if(y > window->size.Y - RESIZE_MARGIN)
+	{
+		if(x < RESIZE_MARGIN)
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENESW]);
+		else if(x > window->size.X - RESIZE_MARGIN)
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENWSE]);
+		else
+			SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENS]);
+	}
+	else if(x < RESIZE_MARGIN)
+		SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZEWE]);
+	else if(x > window->size.X - RESIZE_MARGIN)
+		SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZEWE]);
+	else
+		SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_ARROW]);
 }
 
 void StudioComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/opensans/OpenSans-Regular.ttf")).string().c_str(), 18.0f, true);
+	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/opensans/OpenSans-Regular.ttf")).string().c_str(), 16.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/material_icons-regular.ttf")).string().c_str(), 18.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/material_icons-regular.ttf")).string().c_str(), 16.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }
@@ -252,8 +375,28 @@ void StudioComponent::writeRuntimeSettings()
 void StudioComponent::drawMainMenuBar()
 {
 	static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
+	ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 1.f));
+	ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.f, 0.f, 0.f, 1.f));
 	if(ImGui::BeginMainMenuBar())
 	{
+		if constexpr(WINDOW_FRAME_BUTTONS_RIGHT)
+			ImGui::Image(_logo.getImGuiID(), ImVec2(20, 20));
+		else
+		{
+			if(ImGui::Button(AKS_ICON_MD_CLOSE))
+				_running = false;
+			if(ImGui::Button(AKS_ICON_MD_REMOVE))
+			{
+				window->minimize = true;
+				window->fetchSettings();
+			}
+			if(ImGui::Button(window->maximize ? AKS_ICON_MD_FULLSCREEN_EXIT : AKS_ICON_MD_FULLSCREEN))
+			{
+				window->maximize = !window->maximize;
+				window->fetchSettings();
+			}
+		}
 		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_FOLDER" " + _eltm->getText("MainMenuBar.file")).c_str()))
 		{
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE" " + _eltm->getText("MainMenuBar.save")).c_str(), "Ctrl+S")) { /* Do stuff */ }
@@ -276,32 +419,43 @@ void StudioComponent::drawMainMenuBar()
 				_stack->get_panel("__eltm_editor")->onOpen();
 			ImGui::EndMenu();
 		}
-		if(_stack->get_panel("__eltm_editor")->isOpen() && ImGui::BeginMenu(std::string(AKS_ICON_MD_TYPE_SPECIMEN" " + _eltm->getText("MainMenuBar.eltm_editor")).c_str()))
-		{
-			if(ImGui::MenuItem(std::string(AKS_ICON_MD_FILE_OPEN" " + _eltm->getText("MainMenuBar.e_load")).c_str()))
-			{
-				auto file = pfd::open_file(_eltm->getText("MainMenuBar.e_load"), Ak::VFS::getMainDirPath().string(), { "ELTM files (.eltm .tm)", "*.eltm *.tm", "All files", "*"});	
-				if(!file.result().empty())
-					_eltm_editor_input_buffer = file.result()[0];
-			}
-			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE" " + _eltm->getText("MainMenuBar.e_save")).c_str()))
-				_eltm_editor_save = 1;
-			if(ImGui::MenuItem(std::string(AKS_ICON_MD_SAVE_AS" " + _eltm->getText("MainMenuBar.e_save_as")).c_str()))
-				_eltm_editor_save = 2;
-			ImGui::EndMenu();
-		}
 		if(ImGui::BeginMenu(std::string(AKS_ICON_MD_HELP" " + _eltm->getText("MainMenuBar.help")).c_str()))
 		{
 			if(ImGui::MenuItem(std::string(AKS_ICON_MD_INFO" " + _eltm->getText("MainMenuBar.about")).c_str()))
 				_showAbout = !_showAbout;
 			ImGui::EndMenu();
 		}
-		ImGui::SameLine(window->size.X - 100);
+		ImGui::SameLine(window->size.X / 2 - ImGui::CalcTextSize(_eltm->getText("window_title").c_str()).x / 2);
+		ImGui::TextUnformatted(_eltm->getText("window_title").c_str());
+		ImGui::SameLine(window->size.X - 200);
 		Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component0"));
 		ImGui::Text("%d FPS", renderer->getFPS());
 
+		if constexpr(WINDOW_FRAME_BUTTONS_RIGHT)
+		{
+			ImGui::SameLine(window->size.X - 100);
+			if(ImGui::Button(AKS_ICON_MD_REMOVE))
+			{
+				window->minimize = true;
+				window->fetchSettings();
+			}
+			if(ImGui::Button(window->maximize ? AKS_ICON_MD_FULLSCREEN_EXIT : AKS_ICON_MD_FULLSCREEN))
+			{
+				window->maximize = !window->maximize;
+				window->fetchSettings();
+			}
+			if(ImGui::Button(AKS_ICON_MD_CLOSE))
+				_running = false;
+		}
+		else
+		{
+			ImGui::SameLine(window->size.X - 30);
+			ImGui::Image(_logo.getImGuiID(), ImVec2(20, 20));
+		}
+
 		ImGui::EndMainMenuBar();
 	}
+	ImGui::PopStyleColor(3);
 }
 
 void StudioComponent::buildProject()
@@ -358,7 +512,7 @@ void StudioComponent::draw_general_settings()
 		{
 			if(ImGui::Selectable(lang.c_str(), selected == lang))
 			{
-				if(!_eltm->reload(std::filesystem::path(Ak::VFS::getMainDirPath() / path).string()))
+				if(!_eltm->reload(Ak::VFS::resolve(path).string()))
 					Ak::Core::log::report(FATAL_ERROR, "unable to change language");
 				Ak::getMainAppProjectFile().archive()["language"] = Ak::VFS::resolve(path);
 				selected = lang;
@@ -446,4 +600,10 @@ void StudioComponent::drawOptionsWindow()
 		}
 		ImGui::End();
 	}	
+}
+
+StudioComponent::~StudioComponent()
+{
+	for(auto it = cursors.begin(); it != cursors.end(); ++it)
+		SDL_FreeCursor(it->second);
 }

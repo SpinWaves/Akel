@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 23/08/2023
+// Updated : 17/09/2023
 
 #include "launcher_component.h"
 
@@ -36,7 +36,7 @@ void launchAkelStudio()
 	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.c_str()), nullptr };
 	_execve(path.c_str(), args, _environ);
 #else
-	#error "Akel Studio is only supported by Linux, MacOS_X and Windows"
+	#error "Akel Studio is only supported on Linux, MacOS_X and Windows"
 #endif
 }
 
@@ -349,13 +349,13 @@ void LauncherComponent::drawSideBar()
 void LauncherComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").string().c_str(), 20.0f, true);
+	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/opensans/OpenSans-Regular.ttf").string().c_str(), 18.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").string().c_str(), 20.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/fonts/material_icons-regular.ttf").string().c_str(), 18.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }
