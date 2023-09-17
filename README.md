@@ -42,7 +42,11 @@ Developed mainly on Linux, Akel is, however, cross-platform and can be used on W
 # Screenshots
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/assets/apollo_lem.gif" alt="drawing"/>
+    <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/screenshots/akel_studio.png" alt="drawing" width="500"/>
+</p>
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/screenshots/Screenshot_model_demo.png" alt="drawing"/>
 </p>
 
 # Coming soon...
