@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 17/08/2023
+// Updated : 18/09/2023
 
 #ifndef __AK_VK_CMD_BUFFER__
 #define __AK_VK_CMD_BUFFER__

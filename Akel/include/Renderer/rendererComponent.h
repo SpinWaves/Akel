@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 02/07/2023
+// Updated : 18/09/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -14,6 +14,7 @@
 #include "Pipeline/vk_shader.h"
 #include "Pipeline/vk_graphic_pipeline.h"
 #include <Renderer/Core/render_core.h>
+#include <Utils/Containers/safe_queue.h>
 
 #include <Renderer/Core/vk_fence.h>
 #include <Renderer/Core/vk_surface.h>
@@ -62,7 +63,7 @@ namespace Ak
 			Surface _surface;
 			SwapChain _swapchain;
 			std::array<Semaphore, MAX_FRAMES_IN_FLIGHT> _semaphores;
-			std::queue<uint32_t> _events_queue;
+			TSafeQueue<uint32_t> _events_queue;
 
 			WindowComponent* _window = nullptr;
 

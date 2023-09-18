@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 15/09/2023
+// Updated : 18/09/2023
 
 #include <Renderer/renderer_events.h>
 #include <Renderer/rendererComponent.h>
@@ -34,12 +34,16 @@ namespace Ak
 	bool RendererComponent::beginFrame()
 	{
 		_rendering_began = false;
+		std::cout << "pouic" << std::endl;
 		if(!_is_init)
 			return false;
+		std::cout << "pouic1" << std::endl;
 		_fps.setMaxFPS(_window->_window_has_focus ? _max_fps : 15);
 		_fps.update();
+		std::cout << "pouic2" << std::endl;
 		if(!_fps.makeRendering())
 			return false;
+		std::cout << "pouic3" << std::endl;
 		while(!_events_queue.empty())
 		{
 			if(_events_queue.front() == static_cast<uint32_t>(RenderEvents::resized))
@@ -51,11 +55,17 @@ namespace Ak
 			}
 			_events_queue.pop();
 		}
+		std::cout << "pouic4" << std::endl;
 		if(_framebufferResize)
+		{
 			_swapchain.recreate();
-		auto device = Render_Core::get().getDevice().get();
+			return false;
+		}
+		std::cout << "pouic5" << std::endl;
 		_cmd.getCmdBuffer(_active_image_index).waitForExecution();
 		_cmd.getCmdBuffer(_active_image_index).reset();
+		auto device = Render_Core::get().getDevice().get();
+		std::cout << "pouic6" << std::endl;
 		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphores[_active_image_index].getImageSemaphore(), VK_NULL_HANDLE, &_swapchain_image_index);
 		if(result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
@@ -65,7 +75,9 @@ namespace Ak
 		}
 		else if(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 			Core::log::report(FATAL_ERROR, "Vulkan error : failed to acquire swapchain image");
+		std::cout << "pouic7" << std::endl;
 		_cmd.getCmdBuffer(_active_image_index).beginRecord();
+		std::cout << "pouic8" << std::endl;
 		_rendering_began = true;
 		return true;
 	}
@@ -76,10 +88,13 @@ namespace Ak
 			return;
 		if(_framebufferResize)
 			_framebufferResize = false;
+		std::cout << _events_queue.empty() << std::endl;
 		if(!_rendering_began)
 			return;
 
 		_cmd.getCmdBuffer(_active_image_index).endRecord();
+		if(!_events_queue.empty())
+			return;
 		_cmd.getCmdBuffer(_active_image_index).submit(_semaphores[_active_image_index]);
 
 		VkSwapchainKHR swapchain = _swapchain();
