@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 01/03/2023
-// Updated : 17/06/2023
+// Updated : 21/09/2023
 
 #include <Renderer/Core/vk_fence.h>
 #include <Renderer/Core/render_core.h>

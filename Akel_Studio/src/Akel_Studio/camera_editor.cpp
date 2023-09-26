@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 17/08/2023
-// Updated : 17/08/2023
+// Updated : 26/09/2023
 
 #include <camera_editor.h>
 
@@ -28,7 +28,7 @@ void EditorCamera3D::onUpdate(float aspect)
 	update_view();
 	_target = _position + _direction;
 	_view = glm::lookAt(glm::vec3(_position.X, _position.Y, _position.Z), glm::vec3(_target.X, _target.Y, _target.Z), glm::vec3(0, 1, 0));
-	_proj = glm::perspective<float>(glm::radians(_fov), aspect, 0.1f, 1000.0f);
+	_proj = glm::perspective<float>(glm::radians(_fov), 16.0f / 9.0f, 0.1f, 1000.0f);
 
 	if(alcGetCurrentContext() != nullptr)
 	{

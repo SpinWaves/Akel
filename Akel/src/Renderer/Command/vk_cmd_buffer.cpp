@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 19/08/2023
+// Updated : 26/09/2023
 
 #include <Renderer/Command/vk_cmd_buffer.h>
 #include <Renderer/Command/cmd_manager.h>
@@ -102,6 +102,7 @@ namespace Ak
 		vkQueueSubmit(Render_Core::get().getQueue().getGraphic(), 1, &submitInfo, fence);
 		vkWaitForFences(device, 1, &fence, VK_TRUE, UINT64_MAX);
 		vkDestroyFence(device, fence, nullptr);
+		vkResetCommandBuffer(_cmd_buffer, 0);
 	}
 
 	void CmdBuffer::endRecord()

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/07/2021
-// Updated : 18/09/2023
+// Updated : 26/09/2023
 
 #include <Modules/ImGui/imgui.h>
 #include <Core/core.h>
@@ -115,17 +115,13 @@ namespace Ak
 
 	void ImGuiComponent::beginFrame(bool run)
 	{
-		std::cout << "test" << std::endl;
 		if(_renderer->isFrameBufferResizeRequested())
 			createFrameBuffers();
-		std::cout << "test1" << std::endl;
 		ImGui_ImplVulkan_NewFrame();
 		ImGui_ImplSDL2_NewFrame();
 		ImGui::NewFrame();
-		std::cout << "test2" << std::endl;
 		if(_frame_begin == true || !run)
 			return;
-		std::cout << "test3" << std::endl;
 		_frame_begin = true;
 	}
 

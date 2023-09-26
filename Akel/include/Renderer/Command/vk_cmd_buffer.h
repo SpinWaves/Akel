@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/04/2022
-// Updated : 18/09/2023
+// Updated : 26/09/2023
 
 #ifndef __AK_VK_CMD_BUFFER__
 #define __AK_VK_CMD_BUFFER__
@@ -22,8 +22,8 @@ namespace Ak
 			void submit(class Semaphore& semaphores) noexcept;
 			void submitIdle();
 			inline bool isReadyToBeUsed() noexcept { return _fence.isReady(); }
-			inline void waitForExecution() noexcept { _fence.waitAndReset(); }
-			inline void reset() noexcept { vkResetCommandBuffer(_cmd_buffer, 0); }
+			inline void waitForExecution() noexcept { _fence.wait(); }
+			inline void reset() noexcept { vkResetCommandBuffer(_cmd_buffer, 0); _fence.reset(); }
 			void endRecord();
 
 			inline bool isRecording() const noexcept { return _is_recording; }

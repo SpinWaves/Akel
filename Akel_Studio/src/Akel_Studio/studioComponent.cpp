@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 17/09/2023
+// Updated : 26/09/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -163,6 +163,8 @@ void StudioComponent::onAttach()
 		Ak::getMainAppProjectFile().archive()["cullmode"] = VK_CULL_MODE_BACK_BIT;
 	if(!Ak::getMainAppProjectFile().keyExists("scene_camera_sensy"))
 		Ak::getMainAppProjectFile().archive()["scene_camera_sensy"] = 0.7f;
+	if(!Ak::getMainAppProjectFile().keyExists("window_frame_buttons_right"))
+		Ak::getMainAppProjectFile().archive()["window_frame_buttons_right"] = WINDOW_FRAME_BUTTONS_RIGHT;
 
 	_eltm->load(std::filesystem::path(Ak::VFS::resolve(Ak::getMainAppProjectFile().archive()["language"])).string());
 
@@ -380,7 +382,7 @@ void StudioComponent::drawMainMenuBar()
 	ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.f, 0.f, 0.f, 1.f));
 	if(ImGui::BeginMainMenuBar())
 	{
-		if constexpr(WINDOW_FRAME_BUTTONS_RIGHT)
+		if(Ak::getMainAppProjectFile().archive()["window_frame_buttons_right"])
 			ImGui::Image(_logo.getImGuiID(), ImVec2(20, 20));
 		else
 		{
@@ -431,7 +433,7 @@ void StudioComponent::drawMainMenuBar()
 		Ak::RendererComponent* renderer = static_cast<Ak::RendererComponent*>(Ak::getMainAppComponentStack()->get_component("__renderer_component0"));
 		ImGui::Text("%d FPS", renderer->getFPS());
 
-		if constexpr(WINDOW_FRAME_BUTTONS_RIGHT)
+		if(Ak::getMainAppProjectFile().archive()["window_frame_buttons_right"])
 		{
 			ImGui::SameLine(window->size.X - 100);
 			if(ImGui::Button(AKS_ICON_MD_REMOVE))
@@ -529,6 +531,25 @@ void StudioComponent::draw_general_settings()
 	ImGui::Checkbox(_eltm->getText("Settings.onQuit").c_str(), &on_quit_window);
 	if(on_quit_window != Ak::getMainAppProjectFile().archive()["on_quit_window"])
 		Ak::getMainAppProjectFile().archive()["on_quit_window"] = on_quit_window;
+
+	ImGui::Text(std::string(AKS_ICON_MD_SMART_BUTTON" " + _eltm->getText("Settings.win_frame_but")).data());
+	ImGui::SameLine();
+	static std::string wfb_selected = _eltm->getText((Ak::getMainAppProjectFile().archive()["window_frame_buttons_right"] ? "Settings.win_frame_but_right" : "Settings.win_frame_but_left"));
+	if(ImGui::BeginCombo("##quoicoubeh", wfb_selected.c_str()))
+	{
+		if(ImGui::Selectable(_eltm->getText("Settings.win_frame_but_right").c_str(), selected == _eltm->getText("Settings.win_frame_but_right")))
+		{
+			Ak::getMainAppProjectFile().archive()["window_frame_buttons_right"] = true;
+			wfb_selected = _eltm->getText("Settings.win_frame_but_right");
+		}
+		if(ImGui::Selectable(_eltm->getText("Settings.win_frame_but_left").c_str(), selected == _eltm->getText("Settings.win_frame_but_left")))
+		{
+			Ak::getMainAppProjectFile().archive()["window_frame_buttons_right"] = false;
+			wfb_selected = _eltm->getText("Settings.win_frame_but_left");
+		}
+
+		ImGui::EndCombo();
+	}
 }
 
 void StudioComponent::draw_scene_settings()
