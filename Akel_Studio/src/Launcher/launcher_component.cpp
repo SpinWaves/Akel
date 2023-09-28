@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 22/02/2023
-// Updated : 17/09/2023
+// Updated : 28/09/2023
 
 #include "launcher_component.h"
 
@@ -87,7 +87,20 @@ void LauncherComponent::onRender()
 		ImGui::Text("Akel Studio");
 		ImGui::PopStyleColor();
 		ImGui::PopFont();
-		
+
+		ImGui::SameLine();
+		if(ImGui::BeginChild("##disclaimer", ImVec2(600, 60), false, ImGuiWindowFlags_NoBackground))
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.365f, 0.365f, 1.0f));
+			ImGui::Text(AKS_ICON_MD_REPORT " DISCLAIMER " AKS_ICON_MD_REPORT);
+			ImGui::PushFont(_tiny_font);
+			ImGui::Text("Akel Studio is currently at a very early stage and is not capable of doing very much\n"
+						"It is not meant to be used for now and is more a foretaste of what it will look like later on");
+			ImGui::PopFont();
+			ImGui::PopStyleColor();
+			ImGui::EndChild();
+		}
+
 		drawMainContent();
 		ImGui::SameLine();
 		drawSideBar();
@@ -239,8 +252,8 @@ void LauncherComponent::drawSideBar()
 		ImGui::Separator();
 
 		ImGui::PushFont(_tiny_font);
-			ImGui::Text("Akel Version " AK_VERSION_STR);
-			ImGui::Text("Akel Studio Version 0.0.1");
+			ImGui::Text("Akel v" AK_VERSION_STR);
+			ImGui::Text("Akel Studio v0.0.1 pre-alpha");
 		ImGui::PopFont();
 
 		ImGui::EndChild();
@@ -321,8 +334,6 @@ void LauncherComponent::drawSideBar()
 						_error_no_path = true;
 					else
 					{
-						std::ofstream project_file(_currently_creating->folder / (_currently_creating->title + ".akel"));
-						project_file << "{}" << std::endl;
 						if(_currently_creating->akel_filesystem)
 						{
 							std::filesystem::path res = _currently_creating->folder / "Resources";
@@ -333,9 +344,12 @@ void LauncherComponent::drawSideBar()
 							std::filesystem::create_directory(res / "Scenes");
 							std::filesystem::create_directory(res / "Sounds");
 						}
+						_currently_creating->folder /= (_currently_creating->title + ".akel");
+						std::ofstream project_file(_currently_creating->folder);
+						project_file << "{}" << std::endl;
 						_projects.insert(*_currently_creating);
-						_json[(_currently_creating->folder / (_currently_creating->title + ".akel")).string()]["title"] = _currently_creating->title;
-						_json[(_currently_creating->folder / (_currently_creating->title + ".akel")).string()]["icon"] = "default";
+						_json[_currently_creating->folder.string()]["title"] = _currently_creating->title;
+						_json[_currently_creating->folder.string()]["icon"] = "default";
 						_new_project_window = false;
 					}
 				}
