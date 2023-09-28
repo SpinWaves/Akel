@@ -4,7 +4,7 @@
 -- Updated : 08/07/2023
 
 -- Globals settings
-add_repositories("nazara-repo https://github.com/NazaraEngine/xmake-repo")
+add_repositories("nazara-engine-repo https://github.com/NazaraEngine/xmake-repo")
 add_requireconfs("nzsl.fmt", { configs = { header_only = true } })
 add_requires("nzsl")
 
@@ -87,7 +87,7 @@ target("akelstudio_application")
     add_files("Akel_Studio/src/Third_party/**.cpp")
 
 	set_objectdir("Akel_Studio/build/objects/$(os)_$(arch)")
-	set_targetdir("Akel_Studio/")
+	set_targetdir("Akel_Studio/resources/runtime/")
 
 	add_packages("imguizmo_sdl_vk")
 

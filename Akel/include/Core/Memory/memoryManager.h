@@ -19,13 +19,13 @@ namespace Ak
 			std::vector<std::weak_ptr<JamAllocator>> jamStack;
 			std::vector<std::weak_ptr<FixedAllocator>> fixedStack;
 		};
-		void* AK_API alloc(size_t size, bool is_class);
+		AK_API void* alloc(size_t size, bool is_class);
 		std::shared_ptr<ControlUnit> AK_API getControlUnit();
 		void AK_API dealloc(void* ptr);
 	}
 
 	template<typename T, typename ... Args>
-	inline T* AK_API memAlloc(Args&& ... args)
+	inline T* memAlloc(Args&& ... args)
 	{
 		T* ptr = static_cast<T*>(Core::memory::internal::alloc(sizeof(T), std::is_class<T>::value));
 		if constexpr(std::is_class<T>::value)
@@ -34,13 +34,13 @@ namespace Ak
 	}
 
 	template<typename T = void>
-	inline T* AK_API memAllocSize(size_t size)
+	inline T* memAllocSize(size_t size)
 	{
 		return static_cast<T*>(Core::memory::internal::alloc(size, true /* Just to make sure it will be allocated in jam allocator */ ));
 	}
 
 	template<typename T>
-	inline void AK_API memFree(T* ptr)
+	inline void memFree(T* ptr)
 	{
 		if constexpr(std::is_class<T>::value)
 			ptr->~T();

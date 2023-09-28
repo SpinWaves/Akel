@@ -13,7 +13,7 @@
     #define assert(con) (void)(0)
     #define Ak_assert(con, msg) (void)(0)
 #else
-    namespace Ak { void FatalError(std::string message, ...); }
+    namespace Ak { void AK_API FatalError(std::string message, ...); }
     #define Ak_assert(con, msg) \
 		if(bool(con)) {} \
 		else \

@@ -14,6 +14,7 @@ Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : P
 
 	if(_project.keyExists("scenes"))
 	{
+		std::filesystem::path main_save = Ak::VFS::getMainDirPath();
 		Ak::VFS::replaceMainPath(_project.getDir());
 		Ak::SceneManager* manager = static_cast<Ak::SceneManager*>(Ak::getMainAppComponentStack()->get_component("__scenes_manager_component"));
 		for(const auto& object : _project.archive()["scenes"])
@@ -25,7 +26,7 @@ Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : P
 			serializer.deserialize(Ak::VFS::resolve(object["file"]));
 			_scene->addCamera<EditorCamera3D>();
 		}
-		Ak::VFS::resetMainPath();
+		Ak::VFS::replaceMainPath(main_save);
 	}
 }
 

@@ -18,9 +18,12 @@ void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
 
 	if(ImGui::Begin(std::string(AKS_ICON_MD_FOLDER_OPEN" " + _eltm->getText("Browser.name")).c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
     {
+        std::cout << "pouic0" << std::endl;
 		browser();
+        std::cout << "pouic1" << std::endl;
         ImGui::SameLine(0);
         content();
+        std::cout << "pouic2" << std::endl;
 
 		ImGui::End();
     }
@@ -172,14 +175,14 @@ void Browser::dir(std::string directory)
     }
     for(const std::string& dire : dirs)
     {
-        if(ImGui::TreeNodeEx(std::string(AKS_ICON_MD_FOLDER" " + dire).c_str(), ImGuiTreeNodeFlags_SpanFullWidth | (!is_there_subdir(full_path + '/' + dire) ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow)))
+        if(ImGui::TreeNodeEx(std::string(AKS_ICON_MD_FOLDER" " + dire).c_str(), ImGuiTreeNodeFlags_SpanFullWidth | (!is_there_subdir(dire) ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow)))
         {
-            dir(std::move(std::string(full_path + "/" + dire)));
+            dir(std::move(std::string(dire)));
             ImGui::TreePop();
         }
         if(ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered(ImGuiHoveredFlags_None))
         {
-            _parent = full_path + "/" + dire + "/";
+            _parent = dire + "/";
             _files.clear();
         }
     }
@@ -188,18 +191,24 @@ void Browser::dir(std::string directory)
 bool Browser::is_there_subdir(std::string dir)
 {
     size_t found = 0;
+    std::cout << "poulet0 " << dir << std::endl;
     for(auto const& dir_entry : std::filesystem::directory_iterator(dir))
     {
+    std::cout << "poulet01" << std::endl;
         dir = dir_entry.path().string();
         if((found = dir.rfind("/")) != std::string::npos)
             dir.erase(dir.begin(), dir.begin() + found + 1);
         
+    std::cout << "poulet02" << std::endl;
         if(dir[0] == '.') // hidden files/dirs
             continue;
         
+    std::cout << "poulet03" << std::endl;
         if(dir_entry.is_directory())
             return true;
+    std::cout << "poulet04" << std::endl;
     }
+    std::cout << "poulet05" << std::endl;
     return false;
 }
 

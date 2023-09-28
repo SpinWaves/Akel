@@ -11,8 +11,8 @@
 
 namespace Ak
 {
-    void Error(std::string message, ...);
-    void Warning(std::string message, ...);
+    void AK_API Error(std::string message, ...);
+    void AK_API Warning(std::string message, ...);
 
     template <typename T>
     class AK_API BinarySearchTree

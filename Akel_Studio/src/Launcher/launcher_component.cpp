@@ -28,11 +28,11 @@ void launchAkelStudio()
 		return;
 	std::string project = akel_studio_project.string();
 #if defined(AK_PLATFORM_LINUX) || defined(AK_PLATFORM_OSX)
-	std::string path = Ak::VFS::getMainDirPath() / "akelstudio_application";
+	std::string path = Ak::VFS::getMainDirPath() / "resources/runtime/akelstudio_application";
 	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.c_str()), nullptr };
 	execve(path.c_str(), args, environ);
 #elif defined(AK_PLATFORM_WINDOWS)
-	std::string path = std::filesystem::path(Ak::VFS::getMainDirPath() / "akelstudio_application.exe").string();
+	std::string path = std::filesystem::path(Ak::VFS::getMainDirPath() / "resources/runtime/akelstudio_application.exe").string();
 	char* args[] = { const_cast<char*>(path.c_str()), const_cast<char*>(project.c_str()), nullptr };
 	_execve(path.c_str(), args, _environ);
 #else

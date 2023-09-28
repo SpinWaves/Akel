@@ -10,6 +10,7 @@
 
 void Akel_InstanceSetup(Ak::AkelInstance& project)
 {
+	Ak::VFS::replaceMainPath(Ak::VFS::getMainDirPath().parent_path().parent_path().parent_path());
 	project.project_file_path = Ak::VFS::getMainDirPath() / "settings";
 	project.project_file_name = "akel_studio";
 	project.use_default_resource_system = false;
