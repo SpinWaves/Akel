@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 26/09/2023
+// Updated : 11/10/2023
 
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
@@ -200,6 +200,9 @@ void StudioComponent::onAttach()
 
 	_logo = AkImGui::LoadImage(Ak::VFS::resolve(":/resources/assets/logo.png"));
    // ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
+
+	ImGuiStyle* style = &ImGui::GetStyle();
+	style->WindowPadding = ImVec2(3.f, 3.f);
 }
 
 static bool realquit = false;
@@ -340,13 +343,13 @@ void StudioComponent::onEvent(Ak::Input& input)
 void StudioComponent::generateFontTextures(Ak::ImGuiComponent* imgui)
 {
 	ImGuiIO& io = ImGui::GetIO();
-	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/opensans/OpenSans-Regular.ttf")).string().c_str(), 16.0f, true);
+	imgui->addFontFromFile(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/opensans/OpenSans-Regular.ttf")).string().c_str(), 15.0f, true);
 	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
 	ImFontConfig config;
 	config.MergeMode = true;
 	config.GlyphOffset.y = 4.0f;
 
-	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/material_icons-regular.ttf")).string().c_str(), 16.0f, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF(std::filesystem::path(Ak::VFS::resolve(":/resources/fonts/material_icons-regular.ttf")).string().c_str(), 15.0f, &config, icons_ranges);
 	io.Fonts->AddFontDefault();
 	imgui->generateFonts();
 }

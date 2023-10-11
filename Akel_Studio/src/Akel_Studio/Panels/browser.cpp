@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 17/05/2023
+// Updated : 11/10/2023
 
 #include <Panels/browser.h>
 #include <Fonts/material_font.h>
@@ -16,36 +16,31 @@ void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
 	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
 	_height = size.Y / 4;
 
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2.f, 1.f));
 	if(ImGui::Begin(std::string(AKS_ICON_MD_FOLDER_OPEN" " + _eltm->getText("Browser.name")).c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
     {
-        std::cout << "pouic0" << std::endl;
-		browser();
-        std::cout << "pouic1" << std::endl;
-        ImGui::SameLine(0);
-        content();
-        std::cout << "pouic2" << std::endl;
+		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 2.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_SeparatorTextPadding, ImVec2(4.f, 1.f));
+			browser();
+			ImGui::SameLine((15.1 * _width) / 100 + 5);
+			content();
+		ImGui::PopStyleVar(2);
 
 		ImGui::End();
     }
+	ImGui::PopStyleVar();
 }
 
 void Browser::browser()
 {
-    if(ImGui::BeginChild("Browser", ImVec2((15.1 * _width)/100, _height - 41), true, ImGuiWindowFlags_HorizontalScrollbar))
+    if(ImGui::BeginChild("Browser", ImVec2((15.1 * _width)/100, _height - 25), true, ImGuiWindowFlags_HorizontalScrollbar))
     {
 		ImGui::Text(std::string(AKS_ICON_MD_FOLDER_COPY" " + _eltm->getText("Browser.folders")).c_str());
-        ImGui::SameLine((15.1 * _width)/100 - 60);
-        if(ImGui::Button("   ../   "))
+        ImGui::SameLine((15.1 * _width) / 100 - 30);
+        if(ImGui::SmallButton(" ../ "))
         {
-            size_t found = 0;
-            if((found = _parent.rfind('/', _parent.length() - 2)) != std::string::npos)
-                _parent.erase(_parent.begin() + found + 1, _parent.end());
-            _files.clear(); 
         }
         ImGui::Separator();
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 2.0f);
-            dir(_parent);
-        ImGui::PopStyleVar();
 
 	    ImGui::EndChild();
     }
@@ -81,138 +76,68 @@ bool is_binaries(std::filesystem::path file)
 
 bool is_sound_file(std::filesystem::path file)
 {
-	return	file.extension().string() == ".mp3" || file.extension().string() == ".wav" || file.extension().string() == ".ogg" || file.extension().string() == ".flac" ||
-			file.extension().string() == ".m4a";
+	static const std::unordered_set<std::string> extensions{
+		".mp3",
+		".wav",
+		".ogg",
+		".flac",
+		".m4a",
+	};
+	return extensions.find(file.extension().string()) != extensions.end();
 }
 
 bool is_image_file(std::filesystem::path file)
 {
-	return	file.extension().string() == ".jpg" || file.extension().string() == ".jpeg" || file.extension().string() == ".gif" || file.extension().string() == ".png" ||
-			file.extension().string() == ".bmp" || file.extension().string() == ".xpm" || file.extension().string() == ".pcx" || file.extension().string() == ".pnm" ||
-			file.extension().string() == ".tga" || file.extension().string() == ".tiff" || file.extension().string() == ".tif" || file.extension().string() == ".lbm" ||
-			file.extension().string() == ".iff" || file.extension().string() == ".ico";
+	static const std::unordered_set<std::string> extensions{
+		".jpg",
+		".jpeg",
+		".gif",
+		".png",
+		".bmp",
+		".xpm",
+		".pcx",
+		".pnm",
+		".tga",
+		".tiff",
+		".tif",
+		".lbm",
+		".iff",
+		".ico",
+	};
+	return	extensions.find(file.extension().string()) != extensions.end();
 }
 
 bool is_script_file(std::filesystem::path file)
 {
-	return	file.extension().string() == ".lua" || file.extension().string() == ".ksl" || file.extension().string() == ".kila" || file.extension().string() == ".cpp" ||
-			file.extension().string() == ".cxx" || file.extension().string() == ".cc" || file.extension().string() == ".h" || file.extension().string() == ".hpp" ||
-			file.extension().string() == ".hxx" || file.extension().string() == ".spv" || file.extension().string() == ".glsl" || file.extension().string() == ".frag" ||
-			file.extension().string() == ".vert";
+	static const std::unordered_set<std::string> extensions{
+		".lua",
+		".ksl",
+		".kila",
+		".cpp",
+		".cxx",
+		".cc",
+		".h",
+		".hpp",
+		".hxx",
+		".spv",
+		".glsl",
+		".frag",
+		".vert",
+		".nzsl",
+	};
+	return	extensions.find(file.extension().string()) != extensions.end();
 }
 
 void Browser::content()
 {
-    size_t found = 0;
-    std::string filename;
     if(ImGui::BeginChild("Content", ImVec2((83 * _width)/100, _height - 41), true, ImGuiWindowFlags_HorizontalScrollbar))
     {
         ImGui::Text(std::string(AKS_ICON_MD_FILE_COPY" " + _eltm->getText("Browser.content")).c_str());
         ImGui::SameLine((83 * _width)/100 - 40);
-		if(ImGui::Button(AKS_ICON_MD_SETTINGS))
-			settings();
+		if(ImGui::SmallButton(AKS_ICON_MD_SETTINGS))
+		{}
 
         ImGui::Separator();
-        for(const std::filesystem::directory_entry& file : _files)
-        {
-            ImGui::Indent(5);
-            
-            filename = file.path().string();
-            if((found = filename.rfind("/")) != std::string::npos)
-                filename.erase(filename.begin(), filename.begin() + found + 1);
-
-			if(std::filesystem::is_regular_file(file))
-			{
-				if(is_binaries(file))
-					filename.insert(0, AKS_ICON_MD_TERMINAL" ");
-				else if(is_sound_file(file))
-					filename.insert(0, AKS_ICON_MD_AUDIO_FILE" ");
-				else if(is_image_file(file))
-					filename.insert(0, AKS_ICON_MD_IMAGE" ");
-				else if(is_script_file(file))
-					filename.insert(0, AKS_ICON_MD_CODE" ");
-				else if(file.path().extension().string() == ".eltm" || file.path().extension().string() == ".tm")
-					filename.insert(0, AKS_ICON_MD_TYPE_SPECIMEN" ");
-				else if(file.path().extension().string() == ".akel")
-					filename.insert(0, AKS_ICON_MD_SETTINGS_APPLICATIONS" ");
-				else if(file.path().filename().string() == "LICENSE")
-					filename.insert(0, AKS_ICON_MD_COPYRIGHT" ");
-				else
-					filename.insert(0, AKS_ICON_MD_DESCRIPTION" ");
-			}
-			else if(std::filesystem::is_symlink(file))
-				filename.insert(0, AKS_ICON_MD_LINK" ");
-            
-            if(ImGui::Selectable(filename.c_str(), _current_file == file.path().string()))
-                _current_file = file.path().string();
-            ImGui::SameLine(300);
-            ImGui::Text(getSize(file.file_size()).c_str());
-            ImGui::Unindent(5);
-        }
 	    ImGui::EndChild();
     }
-}
-
-void Browser::dir(std::string directory)
-{
-    std::string full_path = directory.c_str();
-    size_t found = 0;
-    std::set<std::string> dirs;
-
-    for(auto const& dir_entry : std::filesystem::directory_iterator(directory))
-    {
-        directory = dir_entry.path().string();
-        if((found = directory.rfind("/")) != std::string::npos)
-            directory.erase(directory.begin(), directory.begin() + found + 1);
-        
-        if(directory[0] == '.') // hidden files/dirs
-            continue;
-        
-        if(dir_entry.is_directory())
-            dirs.insert(directory);
-        else if(full_path == _parent)
-            _files.insert(dir_entry);
-    }
-    for(const std::string& dire : dirs)
-    {
-        if(ImGui::TreeNodeEx(std::string(AKS_ICON_MD_FOLDER" " + dire).c_str(), ImGuiTreeNodeFlags_SpanFullWidth | (!is_there_subdir(dire) ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow)))
-        {
-            dir(std::move(std::string(dire)));
-            ImGui::TreePop();
-        }
-        if(ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered(ImGuiHoveredFlags_None))
-        {
-            _parent = dire + "/";
-            _files.clear();
-        }
-    }
-}
-
-bool Browser::is_there_subdir(std::string dir)
-{
-    size_t found = 0;
-    std::cout << "poulet0 " << dir << std::endl;
-    for(auto const& dir_entry : std::filesystem::directory_iterator(dir))
-    {
-    std::cout << "poulet01" << std::endl;
-        dir = dir_entry.path().string();
-        if((found = dir.rfind("/")) != std::string::npos)
-            dir.erase(dir.begin(), dir.begin() + found + 1);
-        
-    std::cout << "poulet02" << std::endl;
-        if(dir[0] == '.') // hidden files/dirs
-            continue;
-        
-    std::cout << "poulet03" << std::endl;
-        if(dir_entry.is_directory())
-            return true;
-    std::cout << "poulet04" << std::endl;
-    }
-    std::cout << "poulet05" << std::endl;
-    return false;
-}
-
-void Browser::settings()
-{
-
 }

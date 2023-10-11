@@ -1,12 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 11/03/2022
-// Updated : 28/05/2023
+// Updated : 11/10/2023
 
 #include <Panels/docks.h>
 #include <Fonts/material_font.h>
 
 bool reload_docks = true;
+constexpr const int MENUBAR_Y_OFFSET = 20;
 
 Docks::Docks(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__docks", project)
 {
@@ -18,11 +19,11 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
 	_width = (15 * size.X)/100;
-    _height = size.Y - 22 - (50 * size.Y)/100;
+    _height = size.Y - MENUBAR_Y_OFFSET - (50 * size.Y)/100;
 
 	if(ImGui::Begin("ComponentsDockSpace", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking))
     {
-		ImGui::SetWindowPos(ImVec2(0, 22));
+		ImGui::SetWindowPos(ImVec2(0, MENUBAR_Y_OFFSET));
 		ImGui::SetWindowSize(ImVec2(_width, _height));
 
         ImGuiID dockspace_id = ImGui::GetID("MyComponentsDockSpace");
@@ -76,11 +77,11 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
     }
 
 	_width = (19 * size.X)/100;
-    _height = size.Y - 22 - (50 * size.Y)/100;
+    _height = size.Y - MENUBAR_Y_OFFSET - (50 * size.Y)/100;
 
 	if(ImGui::Begin("RendererDockSpace", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking))
     {
-		ImGui::SetWindowPos(ImVec2(size.X - _width, 22));
+		ImGui::SetWindowPos(ImVec2(size.X - _width, MENUBAR_Y_OFFSET));
 		ImGui::SetWindowSize(ImVec2(_width, _height));
 
         ImGuiID dockspace_id = ImGui::GetID("MyRendererDockSpace");
@@ -134,11 +135,11 @@ void Docks::onUpdate(Ak::Maths::Vec2<int>& size)
     }
 
 	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
-	_height = size.Y - size.Y/4 - 22;
+	_height = size.Y - size.Y/4 - MENUBAR_Y_OFFSET;
 
 	if(ImGui::Begin("SceneDockSpace", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBackground))
     {
-		ImGui::SetWindowPos(ImVec2((15 * size.X)/100 - 1, 22 - 1));
+		ImGui::SetWindowPos(ImVec2((15 * size.X)/100 - 1, MENUBAR_Y_OFFSET - 1));
 		ImGui::SetWindowSize(ImVec2(_width + 2, _height + 2));
 
         ImGuiID dockspace_id = ImGui::GetID("MySceneDockSpace");
