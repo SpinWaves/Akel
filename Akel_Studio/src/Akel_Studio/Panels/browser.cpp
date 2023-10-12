@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 11/10/2023
+// Updated : 12/10/2023
 
 #include <Panels/browser.h>
 #include <Fonts/material_font.h>
@@ -16,7 +16,7 @@ void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
 	_width = size.X - (15 * size.X)/100 - (19 * size.X)/100;
 	_height = size.Y / 4;
 
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2.f, 1.f));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2.f, 2.f));
 	if(ImGui::Begin(std::string(AKS_ICON_MD_FOLDER_OPEN" " + _eltm->getText("Browser.name")).c_str(), nullptr, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
     {
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 2.f);
@@ -33,38 +33,38 @@ void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
 
 void Browser::browser()
 {
-    if(ImGui::BeginChild("Browser", ImVec2((15.1 * _width)/100, _height - 25), true, ImGuiWindowFlags_HorizontalScrollbar))
-    {
+	if(ImGui::BeginChild("Browser", ImVec2((15.1 * _width)/100, _height - 27), true, ImGuiWindowFlags_HorizontalScrollbar))
+	{
 		ImGui::Text(std::string(AKS_ICON_MD_FOLDER_COPY" " + _eltm->getText("Browser.folders")).c_str());
-        ImGui::SameLine((15.1 * _width) / 100 - 30);
-        if(ImGui::SmallButton(" ../ "))
-        {
-        }
-        ImGui::Separator();
+		ImGui::SameLine((15.1 * _width) / 100 - 27);
+		if(ImGui::SmallButton(" ../ "))
+		{
+		}
+		ImGui::Separator();
 
-	    ImGui::EndChild();
-    }
+		ImGui::EndChild();
+	}
 }
 
 std::string Browser::getSize(std::uintmax_t size)
 {
-    double mantissa = size;
-    int i = 0;
-    for(; mantissa >= 1024.0; i++)
-        mantissa /= 1024.0;
+	double mantissa = size;
+	int i = 0;
+	for(; mantissa >= 1024.0; i++)
+		mantissa /= 1024.0;
 
-    mantissa = std::ceil(mantissa * 10.0) / 10.;
+	mantissa = std::ceil(mantissa * 10.0) / 10.;
 
-    std::ostringstream out;
-    out.precision(2);
-    out << std::fixed << mantissa;
-    std::string size_string = out.str();
-    
-    size_string.push_back(' ');
-    if(i != 0)
-        size_string.push_back("KMGTPE"[i - 1]);
-    size_string.append("bytes");
-    return size_string;
+	std::ostringstream out;
+	out.precision(2);
+	out << std::fixed << mantissa;
+	std::string size_string = out.str();
+
+	size_string.push_back(' ');
+	if(i != 0)
+		size_string.push_back("KMGTPE"[i - 1]);
+	size_string.append("bytes");
+	return size_string;
 }
 
 bool is_binaries(std::filesystem::path file)
@@ -130,10 +130,10 @@ bool is_script_file(std::filesystem::path file)
 
 void Browser::content()
 {
-    if(ImGui::BeginChild("Content", ImVec2((83 * _width)/100, _height - 41), true, ImGuiWindowFlags_HorizontalScrollbar))
+    if(ImGui::BeginChild("Content", ImVec2((84.25 * _width)/100, _height - 27), true, ImGuiWindowFlags_HorizontalScrollbar))
     {
         ImGui::Text(std::string(AKS_ICON_MD_FILE_COPY" " + _eltm->getText("Browser.content")).c_str());
-        ImGui::SameLine((83 * _width)/100 - 40);
+        ImGui::SameLine((84 * _width)/100 - 25);
 		if(ImGui::SmallButton(AKS_ICON_MD_SETTINGS))
 		{}
 
