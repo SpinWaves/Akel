@@ -9,8 +9,11 @@ end module
 
 begin module EntitiesManager
 	let name = "Inspecteur d'entitée"
-	let transform = "Transfomations"
+	let transform = "Transformations"
 		let pos = "Position"
 		let rot = "Rotation"
 		let sca = "Échelle"
+	let mesh = "Mesh"
+		let material = "Materiel"
+		let model = "Modele"
 end module
