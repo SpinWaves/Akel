@@ -11,7 +11,7 @@ begin module Settings
 		let win_frame_but_right = "Droite"
 		let win_frame_but_left = "Gauche"
 
-	let scene = "Editor's scene"
+	let scene = "Scene de l'editeur"
 		let camera = "Camera"
 			let sensitivity = "Sensibilité"
 

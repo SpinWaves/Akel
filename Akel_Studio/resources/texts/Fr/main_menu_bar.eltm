@@ -20,8 +20,7 @@ begin module MainMenuBar
 			let license = "Licence MIT X11"
 			let website = "Site Web"
 			let code = "Code source"
-			let about_text = 	"Akel Studio is the editor of Akel made with Akel and ImGui"
-								"Akel est un moteur de jeu crée pour le fun par un jeune homme français.
+			let about_text = "Akel est un moteur de jeu crée pour le fun par un jeune homme français.
 								\nIl est designé pour être très facile d'utilisation. N'êtant pas le plus
 								\npuissant, il va dans le sens de la simplicité d'utilisation, que ce soit
 								\nl'éditeur comme le code. Il est completement gratuit et open-source et

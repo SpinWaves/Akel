@@ -14,6 +14,6 @@ begin module EntitiesManager
 		let rot = "Rotation"
 		let sca = "Échelle"
 	let mesh = "Mesh"
-		let material = "Material"
-		let model = "Model"
+		let material = "Materiel"
+		let model = "Modele"
 end module
