@@ -7,7 +7,7 @@ begin module Settings
 	let general = "General"
 		let language = "Langage"
 		let onQuit = "Fenêtre de validation de fermeture"
-		let win_frame_but = "Window frame buttons position"
+		let win_frame_but = "Position du nombre d'IPS de la fenêtre"
 		let win_frame_but_right = "Droite"
 		let win_frame_but_left = "Gauche"
 
@@ -16,7 +16,7 @@ begin module Settings
 			let sensitivity = "Sensibilité"
 
 	let project = "Project"
-		let mem_man_en_fixed = "Memory manager enable fixed allocators use"
+		let mem_man_en_fixed = "Utilisation de la gestion de mémoire fixé"
 		let vk_en_msg_layers = "Activer la console de validation des layers Vulkan (Debug seulement)"
 		let use_sys_dial_boxes = "Utiliser les boites de dialogues systemes"
 		let vk_force_dis_layers = "Desactivation forcée des layers de validations vulkan (Debug seulement)"

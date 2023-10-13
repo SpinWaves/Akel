@@ -17,7 +17,7 @@ begin module Materials
 	let add = "Nouveau materiel"
 	let no_materials = "Il n'y a pas de materiaux"
 	let mat_name = "Nom"
-	let create = "Creer materiel"
+	let create = "Créer materiel"
 	let delete = "Supprimer"
 	let already_created = "Un materiel porte déja ce nom"
 	let rename = "Renommer"

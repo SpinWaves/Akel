@@ -9,7 +9,7 @@ begin module Components
 	let window = "Composants de fenêtre"
 	let renderer = "Composants de rendu"
 	let imgui = "Composant ImGUI"
-	let scenes = "Composant de scene"
+	let scenes = "Composant de scêne"
 	let audio = "Composant audio"
 	let animator = "Composant d'animation"
 end module
