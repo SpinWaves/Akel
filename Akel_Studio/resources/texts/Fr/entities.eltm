@@ -13,4 +13,7 @@ begin module EntitiesManager
 		let pos = "Position"
 		let rot = "Rotation"
 		let sca = "Échelle"
+	let mesh = "Mesh"
+		let material = "Material"
+		let model = "Model"
 end module

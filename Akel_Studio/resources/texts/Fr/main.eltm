@@ -14,8 +14,10 @@ import "materials.eltm"
 import "renderer_manager.eltm"
 import "scene.eltm"
 import "settings.eltm"
+import "components.eltm"
+import "code_editor.eltm"
 
-let window_title = "Akel Studio"
+let window_title = "Akel Studio pre-alpha dev"
 
 let yes = "Oui"
 let no = "Non"
@@ -24,3 +26,6 @@ let lang_name = "Français"
 
 let really = "Vraiment ?"
 let are_you_sure_quit = "Voulez vous vraiment quitter ?"
+
+let buildPopUpTitle = "Projet en construction"
+let buildPopUpText = "Votre projet est en cours de construction"
