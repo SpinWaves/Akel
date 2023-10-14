@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 11/09/2023
+// Updated : 14/10/2023
 
 #include <Core/Event/event.h>
 #include <Platform/platform.h>
@@ -12,7 +12,8 @@ namespace Ak
 {
 	Input::Input()
 	{
-		reset();
+		_keys.fill(static_cast<uint8_t>(action::up));
+		_mouse.fill(static_cast<uint8_t>(action::up));
 	}
 
 	void Input::reset() noexcept

@@ -1,13 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/11/2022
-// Updated : 17/05/2023
+// Updated : 13/10/2023
 
 begin module Components
 	let name = "Composants"
 	let add = "Ajouter"
-	let window = "Composants de fenêtre"
-	let renderer = "Composants de rendu"
+	let window = "Composant de fenêtre"
+	let renderer = "Composant de rendu"
 	let imgui = "Composant ImGUI"
 	let scenes = "Composant de scêne"
 	let audio = "Composant audio"

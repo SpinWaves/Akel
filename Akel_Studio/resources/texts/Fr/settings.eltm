@@ -1,13 +1,13 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 28/08/2022
-// Updated : 26/09/2023
+// Updated : 13/10/2023
 
 begin module Settings
 	let general = "General"
 		let language = "Langage"
 		let onQuit = "Fenêtre de validation de fermeture"
-		let win_frame_but = "Position du nombre d'IPS de la fenêtre"
+		let win_frame_but = "Position des boutons du cadre de la fenêtre"
 		let win_frame_but_right = "Droite"
 		let win_frame_but_left = "Gauche"
 
