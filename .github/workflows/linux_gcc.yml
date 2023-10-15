@@ -38,7 +38,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get -y install mesa-common-dev clang
+        sudo apt-get -y install mesa-common-dev build-essential
 
     # Force xmake to a specific folder (for cache)
     - name: Set xmake env
@@ -69,7 +69,7 @@ jobs:
 
     # Setup compilation mode and install project dependencies
     - name: Configure xmake and install dependencies
-      run: xmake config --arch=${{ matrix.arch }} --mode=${{ matrix.mode }} --toolchain=clang --yes
+      run: xmake config --arch=${{ matrix.arch }} --mode=${{ matrix.mode }} --toolchain=gcc --yes
 
     # Build the engine
     - name: Build Akel
