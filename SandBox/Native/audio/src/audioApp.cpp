@@ -24,7 +24,7 @@ void Akel_AppSetup(Ak::Application& app, Ak::CommandLineArgs args)
 	Ak::PlainApplication papp(app, "Audio using Akel Engine");
 	papp.add_component<Ak::AudioComponent>();
 	papp.add_component<TitleComponent>();
-	papp.add_component<Ak::ImGuiRenderStats>(papp.getRenderer());
+//	papp.add_component<Ak::ImGuiRenderStats>(papp.getRenderer());
 
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main_scene");
 	scene->addCamera<Ak::Cam::FirstPerson3D>(-5.0f, 1.0f, 0.0f);

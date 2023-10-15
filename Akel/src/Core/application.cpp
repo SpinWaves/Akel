@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 10/09/2023
+// Updated : 15/10/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -62,8 +62,8 @@ namespace Ak
 				_in.reset();
 				while(SDL_PollEvent(_in.getNativeEvent()))
 				{
-					if(ImGuiComponent::getNumComp())
-						ImGui_ImplSDL2_ProcessEvent(_in.getNativeEvent());
+				//	if(ImGuiComponent::getNumComp())
+				//		ImGui_ImplSDL2_ProcessEvent(_in.getNativeEvent());
 					_in.update();
 				}
 				for(auto component : _components)
@@ -82,16 +82,16 @@ namespace Ak
 
 	void Application::render()
 	{
-		std::unordered_map<RendererComponent*, ImGuiComponent*> renderers;
+		std::unordered_map<RendererComponent*, void*> renderers;
 		for(auto comp : _components)
 		{
 			if(comp->getName().compare(0, comp->getName().length() - 1, "__renderer_component") == 0)
 				renderers[static_cast<RendererComponent*>(comp)] = nullptr;
-			else if(comp->getName() == "__imgui_component")
+		/*	else if(comp->getName() == "__imgui_component")
 			{
 				ImGuiComponent* imgui = static_cast<ImGuiComponent*>(comp);
 				renderers[imgui->_renderer] = imgui;
-			}
+			}*/
 		}
 		if(renderers.empty())
 			return;
@@ -101,15 +101,15 @@ namespace Ak
 			for(auto& renderer : renderers)
 			{
 				bool res = renderer.first->beginFrame();
-				if(renderer.second != nullptr)
-					renderer.second->beginFrame(res);
+			//	if(renderer.second != nullptr)
+			//		renderer.second->beginFrame(res);
 			}
 			for(auto component : _components)
 				component->onRender();
 			for(auto& renderer : renderers)
 			{
-				if(renderer.second != nullptr)
-					renderer.second->renderFrame();
+			//	if(renderer.second != nullptr)
+			//		renderer.second->renderFrame();
 				renderer.first->endFrame();
 			}
 		}
@@ -119,18 +119,18 @@ namespace Ak
 	{
 		// Renderers and ImGui needs to be destroyed after other components to avoid leaks or bugs
 		std::vector<RendererComponent*> renderers;
-		std::vector<ImGuiComponent*> imguis;
+		//std::vector<ImGuiComponent*> imguis;
 		for(auto comp : _components)
 		{
 			if(comp->getName() == "__renderer_component")
 				renderers.push_back(static_cast<RendererComponent*>(comp));
-			else if(comp->getName() == "__imgui_component")
-				imguis.push_back(static_cast<ImGuiComponent*>(comp));
 			else
 				comp->onQuit();
+		//	else if(comp->getName() == "__imgui_component")
+		//		imguis.push_back(static_cast<ImGuiComponent*>(comp));
 		}
-		for(auto comp : imguis)
-			comp->onQuit();
+	//	for(auto comp : imguis)
+	//		comp->onQuit();
 		for(auto comp : renderers)
 			comp->onQuit();
 		ComponentStack::destroy();

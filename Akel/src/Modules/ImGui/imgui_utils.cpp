@@ -1,8 +1,8 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/08/2022
-// Updated : 16/09/2023
-
+// Updated : 15/10/2023
+/*
 #include <Akpch.h>
 #include <Core/log.h>
 #include <Modules/ImGui/imgui_utils.h>
@@ -169,3 +169,4 @@ namespace AkImGui
 		window->DrawList->PathStroke(color, false, thickness);
 	}
 }
+*/

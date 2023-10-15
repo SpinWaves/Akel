@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 17/09/2023
+// Updated : 15/10/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -40,10 +40,10 @@
 #include <pfd/portable-file-dialogs.h>
 
 // ImGui
-#include <imgui.h>
-#include <imgui_internal.h>
-#include <backends/imgui_impl_sdl2.h>
-#include <backends/imgui_impl_vulkan.h>
+//#include <imgui.h>
+//#include <imgui_internal.h>
+//#include <backends/imgui_impl_sdl2.h>
+//#include <backends/imgui_impl_vulkan.h>
 
 // Lua
 #define SOL_ALL_SAFETIES_ON 1
