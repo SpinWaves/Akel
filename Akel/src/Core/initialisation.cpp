@@ -55,7 +55,6 @@ namespace Ak
 			}
 			Core::log::report("architecture: 32bits");
 		#endif
-*/
 		if(std::strcmp(AK_arch, "x86") != 0)
 		{
 			Core::log::report(ERROR, "Akel can only run on x86 architecture, you are trying to run it on a " AK_arch " architecture");
@@ -63,6 +62,7 @@ namespace Ak
 		}
 		Core::log::report("arch: " AK_arch);
 
+*/
 		if(volkInitialize() != VK_SUCCESS)
 		{
 			Core::log::report(ERROR, "Vulkan is not supported");
