@@ -34,35 +34,11 @@ namespace Ak
 			void init();
 		}
 	}
-	
+
 	extern Core::ProjectFile* __main_app_project_file;
 
     bool initAkel(AkelInstance* project)
     {
-		/*
-		#if defined(AK_64BITS)
-			if(sizeof(void*) != 8)
-			{
-				Core::log::report(ERROR, "Conflict of system architecture detection");
-			    return false;
-			}
-			Core::log::report("architecture: 64bits");
-		#elif defined(AK_32BITS)
-			if(sizeof(void*) != 4)
-			{
-				Core::log::report(ERROR, "Conflict of system architecture detection");
-			    return false;
-			}
-			Core::log::report("architecture: 32bits");
-		#endif
-		if(std::strcmp(AK_arch, "x86") != 0)
-		{
-			Core::log::report(ERROR, "Akel can only run on x86 architecture, you are trying to run it on a " AK_arch " architecture");
-			return false;
-		}
-		Core::log::report("arch: " AK_arch);
-
-*/
 		if(volkInitialize() != VK_SUCCESS)
 		{
 			Core::log::report(ERROR, "Vulkan is not supported");

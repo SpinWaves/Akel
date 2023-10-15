@@ -11,37 +11,40 @@ namespace Ak::Core
 {
     CPUID::CPUID(unsigned funcId, unsigned subFuncId)
     {
-		/*
-        #if defined(__clang__) || defined(__GNUC__) || defined(__MINGW32__) || defined(__MINGW34__)
-            __asm__
-            (
-                "cpuid" 
-                :   "=a" (regs[0]), 
-                    "=b" (regs[1]), 
-                    "=c" (regs[2]), 
-                    "=d" (regs[3])
+		#if not defined(AK_PLATFORM_OSX)
+			#if defined(__clang__) || defined(__GNUC__) || defined(__MINGW32__) || defined(__MINGW34__)
+				__asm__
+				(
+					"cpuid" 
+					:   "=a" (regs[0]), 
+						"=b" (regs[1]), 
+						"=c" (regs[2]), 
+						"=d" (regs[3])
 
-                :   "a" (funcId), 
-                    "c" (subFuncId)
-            );
-        #elif !defined(AK_64BITS)   // MSVC or BORLANDC
-            __asm
-            {
-                mov eax, funcId;
-                mov ecx, subFuncId;
-                cpuid;
+					:   "a" (funcId), 
+						"c" (subFuncId)
+				);
+			#elif !defined(AK_64BITS)   // MSVC or BORLANDC
+				__asm
+				{
+					mov eax, funcId;
+					mov ecx, subFuncId;
+					cpuid;
 
-                mov regs[0], eax;
-                mov regs[1], ebx;
-                mov regs[2], ecx;
-                mov regs[3], edx;
-            }
-        #endif
-			*/
+					mov regs[0], eax;
+					mov regs[1], ebx;
+					mov regs[2], ecx;
+					mov regs[3], edx;
+				}
+			#endif
+		#endif
     }
 
     CPU::CPU()
     {
+		#ifdef AK_PLATFORM_OSX
+			return;
+		#endif
         CPUID cpuID0(0, 0);
         uint32_t HFS = cpuID0.EAX();
         _VendorId += std::string((const char*)&cpuID0.EBX(), 4);
