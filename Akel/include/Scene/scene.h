@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 04/06/2023
+// Updated : 14/10/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -15,10 +15,16 @@
 
 namespace Ak
 {
-	enum class shaderlang
+	enum class shaderlang : uint8_t
 	{
-		spirv,
-		nzsl
+		spirv = 0,
+		nzsl = 1,
+	};
+
+	enum class shaderType : uint8_t
+	{
+		vertex = 0,
+		fragment = 1,
 	};
 
 	namespace Cam
@@ -41,12 +47,12 @@ namespace Ak
 			void onEvent(Input& input);
 			void onQuit();
 
-			template <shaderlang lang>
+			template <shaderlang lang, shaderType type>
 			void loadCustomShader(std::filesystem::path path);
-			inline void loadCustomShader(std::vector<uint32_t> byte_code)
+			inline void loadCustomShader(shaderType type, std::vector<uint32_t> byte_code)
 			{
 				std::shared_ptr<Shader> shader = create_shared_ptr_w<Shader>(std::move(byte_code), _renderer);
-				_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(shader)));
+				_forward_shaders[static_cast<uint8_t>(type)] = ShadersLibrary::get().addShaderToLibrary(std::move(shader));
 			}
 
 			Entity createEntity();
@@ -64,10 +70,10 @@ namespace Ak
 			~Scene();
 
 		private:
-			void _loadCustomShader(shaderlang lang, std::filesystem::path path);
+			void _loadCustomShader(shaderType type, shaderlang lang, std::filesystem::path path);
 
 		private:
-			std::vector<ShaderID> _forward_shaders;
+			std::array<ShaderID, 2> _forward_shaders;
 			std::filesystem::path _filepath;
 			class RendererComponent* _renderer = nullptr;
 			UniquePtr<Cam::BaseCamera> _camera;

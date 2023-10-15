@@ -1,20 +1,20 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2023
-// Updated : 17/08/2023
+// Updated : 14/10/2023
 
 namespace Ak
 {
-	template <shaderlang lang>
+	template <shaderlang lang, shaderType type>
 	void Scene::loadCustomShader(std::filesystem::path path)
 	{
 		if(lang == shaderlang::spirv)
 		{
 			std::shared_ptr<Shader> shader = create_shared_ptr_w<Shader>(load_spirv_from_file(path.c_str()), _renderer);
-			_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(shader)));
+			_forward_shaders[static_cast<uint8_t>(type)] = ShadersLibrary::get().addShaderToLibrary(std::move(shader));
 		}
 		else
-			_loadCustomShader(lang, std::move(path));
+			_loadCustomShader(type, lang, std::move(path));
 	}
 
 	template <typename T, typename ... Args>

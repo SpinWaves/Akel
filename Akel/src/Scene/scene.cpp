@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 09/09/2023
+// Updated : 14/10/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -50,13 +50,18 @@ namespace Ak
 	{
 		_id = id;
 		_renderer = renderer;
-		if(_forward_shaders.empty())
+		std::cout << _forward_shaders[0] << "	" << _forward_shaders[1] << std::endl;
+		if(_forward_shaders[static_cast<uint8_t>(shaderType::vertex)] == nullshader)
 		{
 			std::shared_ptr<Shader> vshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{forward_vertex_shader}), _renderer);
-			_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(vshader)));
-			std::shared_ptr<Shader> fshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{forward_fragment_shader}), _renderer);
-			_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(fshader)));
+			_forward_shaders[static_cast<uint8_t>(shaderType::vertex)] = ShadersLibrary::get().addShaderToLibrary(std::move(vshader));
 		}
+		if(_forward_shaders[static_cast<uint8_t>(shaderType::fragment)] == nullshader)
+		{
+			std::shared_ptr<Shader> fshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{forward_fragment_shader}), _renderer);
+			_forward_shaders[static_cast<uint8_t>(shaderType::fragment)] = ShadersLibrary::get().addShaderToLibrary(std::move(fshader));
+		}
+		std::cout << _forward_shaders[0] << "	" << _forward_shaders[1] << std::endl;
 	}
 
 	void Scene::onUpdate(float timestep)
@@ -91,10 +96,10 @@ namespace Ak
 		_camera->onEvent(input);
 	}
 
-	void Scene::_loadCustomShader(shaderlang lang, std::filesystem::path path)
+	void Scene::_loadCustomShader(shaderType type, shaderlang lang, std::filesystem::path path)
 	{
 		std::shared_ptr<Shader> shader = create_shared_ptr_w<Shader>(_loader->loadShader(lang, std::move(path)), _renderer);
-		_forward_shaders.push_back(ShadersLibrary::get().addShaderToLibrary(std::move(shader)));
+		_forward_shaders[static_cast<uint8_t>(type)] = ShadersLibrary::get().addShaderToLibrary(std::move(shader));
 	}
 
 	void Scene::onQuit()

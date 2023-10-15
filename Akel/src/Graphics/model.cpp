@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 22/08/2023
+// Updated : 14/10/2023
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
@@ -49,6 +49,7 @@ namespace Ak
 			if(!err.empty())
 				Core::log::report(FATAL_ERROR, "Model : error while loading obj file : %s", err.c_str());
 		}
+		std::cout << materials.size() << std::endl;
 
 		//std::unordered_map<Vertex, uint32_t> unique_vertices;
 		std::vector<Vertex> vertices;

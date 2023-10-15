@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 16/09/2023
+// Updated : 14/10/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -42,7 +42,8 @@ namespace Ak
 			if(_scene_cache != scene)
 			{
 				_forward_data.shaders.clear();
-				_forward_data.shaders = scene->_forward_shaders;
+				for(ShaderID id : scene->_forward_shaders)
+					_forward_data.shaders.push_back(id);
 				if(_forward_data.depth() != VK_NULL_HANDLE)
 					_forward_data.depth.destroy();
 				if(_forward_data.render_texture != nulltexture)
@@ -92,6 +93,7 @@ namespace Ak
 		pipeline_desc.swapchain = (_forward_data.render_texture == nulltexture);
 		pipeline_desc.depth = &_forward_data.depth;
 		pipeline_desc.render_targets[0] = _forward_data.render_texture;
+		pipeline_desc.culling = VK_CULL_MODE_NONE;
 
 		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
 		if(pipeline == nullptr || !pipeline->bindPipeline(renderer->getActiveCmdBuffer()))

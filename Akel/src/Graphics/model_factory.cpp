@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/03/2023
-// Updated : 11/03/2023
+// Updated : 14/10/2023
 
 #include <Graphics/model_factory.h>
 #include <Maths/vec3.h>
@@ -16,30 +16,30 @@ namespace Ak
 		const Maths::Vec4f color(1.0f, 1.0f, 1.0f, 1.0f);
 
 		const std::vector<Vertex> vertexData = {
-			{{position.X, position.Y + scale.Y, position.Z + scale.Z}, 			color, {0.0f, 0.0f}},
-			{{position.X + scale.X, position.Y + scale.Y, position.Z + scale.Z},color, {1.0f, 0.0f}},
-			{{position.X + scale.X, position.Y, position.Z + scale.Z}, 			color, {1.0f, 1.0f}},
-			{{position.X, position.Y, position.Z + scale.Z}, 					color, {0.0f, 1.0f}},
-			{{position.X, position.Y + scale.Y, position.Z}, 					color, {1.0f, 0.0f}},
-			{{position.X + scale.X, position.Y + scale.Y, position.Z}, 			color, {1.0f, 1.0f}},
-			{{position.X + scale.X, position.Y, position.Z}, 					color, {0.0f, 1.0f}},
-			{{position.X, position.Y, position.Z,}, 							color, {0.0f, 0.0f}},
-			{{position.X, position.Y + scale.Y, position.Z}, 					color, {1.0f, 0.0f}},
-			{{position.X, position.Y + scale.Y, position.Z + scale.Z}, 			color, {1.0f, 1.0f}},
-			{{position.X, position.Y, position.Z + scale.Z}, 					color, {0.0f, 1.0f}},
-			{{position.X, position.Y, position.Z}, 								color, {0.0f, 0.0f}},
-			{{position.X + scale.X, position.Y + scale.Y, position.Z + scale.Z},color, {1.0f, 0.0f}},
-			{{position.X + scale.X, position.Y + scale.Y, position.Z}, 			color, {1.0f, 1.0f}},
-			{{position.X + scale.X, position.Y, position.Z}, 					color, {0.0f, 1.0f}},
-			{{position.X + scale.X, position.Y, position.Z + scale.Z}, 			color, {0.0f, 0.0f}},
-			{{position.X, position.Y + scale.Y, position.Z}, 					color, {0.0f, 0.0f}},
-			{{position.X + scale.X, position.Y + scale.Y, position.Z}, 			color, {1.0f, 0.0f}},
-			{{position.X + scale.X, position.Y + scale.Y, position.Z + scale.Z},color, {1.0f, 1.0f}},
-			{{position.X, position.Y + scale.Y, position.Z + scale.Z}, 			color, {0.0f, 1.0f}},
-			{{position.X, position.Y, position.Y + scale.Z}, 					color, {1.0f, 0.0f}},
-			{{position.X + scale.X, position.Y, position.Z + scale.Z}, 			color, {1.0f, 1.0f}},
-			{{position.X + scale.X, position.Y, position.Z}, 					color, {0.0f, 1.0f}},
-			{{position.X, position.Y, position.Z}, 								color, {0.0f, 0.0f}}
+			{{position.X, position.Y + scale.Y, position.Z + scale.Z}, 			 color, {0.0f, 0.0f}},
+			{{position.X + scale.X, position.Y + scale.Y, position.Z + scale.Z}, color, {1.0f, 0.0f}},
+			{{position.X + scale.X, position.Y, position.Z + scale.Z}, 			 color, {1.0f, 1.0f}},
+			{{position.X, position.Y, position.Z + scale.Z}, 					 color, {0.0f, 1.0f}},
+			{{position.X, position.Y + scale.Y, position.Z}, 					 color, {1.0f, 0.0f}},
+			{{position.X + scale.X, position.Y + scale.Y, position.Z}, 			 color, {1.0f, 1.0f}},
+			{{position.X + scale.X, position.Y, position.Z}, 					 color, {0.0f, 1.0f}},
+			{{position.X, position.Y, position.Z,}, 							 color, {0.0f, 0.0f}},
+			{{position.X, position.Y + scale.Y, position.Z}, 					 color, {1.0f, 0.0f}},
+			{{position.X, position.Y + scale.Y, position.Z + scale.Z}, 			 color, {1.0f, 1.0f}},
+			{{position.X, position.Y, position.Z + scale.Z}, 					 color, {0.0f, 1.0f}},
+			{{position.X, position.Y, position.Z}, 								 color, {0.0f, 0.0f}},
+			{{position.X + scale.X, position.Y + scale.Y, position.Z + scale.Z}, color, {1.0f, 0.0f}},
+			{{position.X + scale.X, position.Y + scale.Y, position.Z}, 			 color, {1.0f, 1.0f}},
+			{{position.X + scale.X, position.Y, position.Z}, 					 color, {0.0f, 1.0f}},
+			{{position.X + scale.X, position.Y, position.Z + scale.Z}, 			 color, {0.0f, 0.0f}},
+			{{position.X, position.Y + scale.Y, position.Z}, 					 color, {0.0f, 0.0f}},
+			{{position.X + scale.X, position.Y + scale.Y, position.Z}, 			 color, {1.0f, 0.0f}},
+			{{position.X + scale.X, position.Y + scale.Y, position.Z + scale.Z}, color, {1.0f, 1.0f}},
+			{{position.X, position.Y + scale.Y, position.Z + scale.Z}, 			 color, {0.0f, 1.0f}},
+			{{position.X, position.Y, position.Y + scale.Z}, 					 color, {1.0f, 0.0f}},
+			{{position.X + scale.X, position.Y, position.Z + scale.Z}, 			 color, {1.0f, 1.0f}},
+			{{position.X + scale.X, position.Y, position.Z}, 					 color, {0.0f, 1.0f}},
+			{{position.X, position.Y, position.Z}, 								 color, {0.0f, 0.0f}}
 		};
 
 		const std::vector<uint32_t> indexData = {
@@ -51,11 +51,26 @@ namespace Ak
 			20, 21, 22,  22, 23, 20  // bottom
 		};
 		Mesh mesh(std::move(vertexData), std::move(indexData));
-		return {std::move(mesh)};
+		return {mesh};
 	}
 
-	Model createQuad()
+	Model createQuad(Maths::Vec2f uv_scale)
 	{
-		return {};
+		const Maths::Vec3f position(0.0f, 0.0f, 0.0f);
+		const Maths::Vec3f scale(1.0f, 1.0f, 1.0f);
+		const Maths::Vec4f color(1.0f, 1.0f, 1.0f, 1.0f);
+
+		const std::vector<Vertex> vertexData = {
+			{{position.X, position.Y, position.Z},						 color, {0.0f, 0.0f}},
+			{{position.X + scale.X, position.Y, position.Z},			 color, {uv_scale.X, 0.0f}},
+			{{position.X + scale.X, position.Y, position.Z + scale.Z},	 color, {uv_scale.X, uv_scale.Y}},
+			{{position.X, position.Y, position.Z + scale.Z},			 color, {0.0f, uv_scale.Y}}
+		};
+
+		const std::vector<uint32_t> indexData = {
+			0, 1, 2, 2, 3, 0
+		};
+		Mesh mesh(std::move(vertexData), std::move(indexData));
+		return {mesh};
 	}
 }
