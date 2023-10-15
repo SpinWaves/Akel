@@ -1,4 +1,4 @@
-name: Linux build(clang)
+name: MacOS build
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [macOS-latest]
         arch: [x86_64]
         mode: [debug, release]
 
@@ -34,11 +34,6 @@ jobs:
       with:
         version: 1.3.204.1
         cache: true
-
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get -y install mesa-common-dev clang
 
     # Force xmake to a specific folder (for cache)
     - name: Set xmake env
@@ -78,3 +73,4 @@ jobs:
     # Build the editor
     - name: Build Akel Studio
       run: xmake build --yes Akel_Studio
+
