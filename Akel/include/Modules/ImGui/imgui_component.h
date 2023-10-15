@@ -10,7 +10,6 @@
 #include <Renderer/RenderPass/vk_render_pass.h>
 #include <Renderer/RenderPass/vk_framebuffer.h>
 
-/*
 namespace Ak
 {
 	class AK_API ImGuiComponent : public Component
@@ -48,5 +47,5 @@ namespace Ak
 			bool _generate_font_on_attach = true;
 	};
 }
-*/
+
 #endif // __AK_IMGUI_COMPONENT__

@@ -2,7 +2,7 @@
 // Authors : @kbz_8
 // Created : 17/08/2022
 // Updated : 15/10/2023
-/*
+
 #include <Akpch.h>
 #include <Core/log.h>
 #include <Modules/ImGui/imgui_utils.h>
@@ -169,4 +169,3 @@ namespace AkImGui
 		window->DrawList->PathStroke(color, false, thickness);
 	}
 }
-*/

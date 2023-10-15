@@ -8,7 +8,6 @@
 #include <Akpch.h>
 #include <Modules/ImGui/imgui_component.h>
 
-/*
 namespace Ak
 {
 	class AK_API ImGuiRenderStats : public ImGuiComponent
@@ -19,5 +18,5 @@ namespace Ak
 			virtual ~ImGuiRenderStats() = default;
 	};
 }
-*/
+
 #endif

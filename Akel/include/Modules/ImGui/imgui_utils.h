@@ -5,9 +5,10 @@
 
 #ifndef __AK_IMGUI_UTILS__
 #define __AK_IMGUI_UTILS__
+
 #include <Akpch.h>
 #include <Renderer/Images/texture_library.h>
-/*
+
 namespace AkImGui
 {
 	class AK_API ImImage
@@ -38,5 +39,5 @@ namespace AkImGui
 	AK_API bool InputTextMultiline(const char* label, std::string* str, const ImVec2& size = ImVec2(0, 0), ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);
 	AK_API bool InputTextWithHint(const char* label, const char* hint, std::string* str, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr);
 }
-*/
+
 #endif // __AK_IMGUI_UTILS__

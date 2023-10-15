@@ -40,10 +40,10 @@
 #include <pfd/portable-file-dialogs.h>
 
 // ImGui
-//#include <imgui.h>
-//#include <imgui_internal.h>
-//#include <backends/imgui_impl_sdl2.h>
-//#include <backends/imgui_impl_vulkan.h>
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <backends/imgui_impl_sdl2.h>
+#include <backends/imgui_impl_vulkan.h>
 
 // Lua
 #define SOL_ALL_SAFETIES_ON 1

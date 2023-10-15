@@ -2,7 +2,7 @@
 // Authors : @kbz_8
 // Created : 07/02/2023
 // Updated : 15/10/2023
-/*
+
 #include <Utils/imguiRenderStatistics.h>
 #include <Renderer/rendererComponent.h>
 #include <Core/gpu.h>
@@ -30,4 +30,3 @@ namespace Ak
 		}
 	}
 }
-*/
