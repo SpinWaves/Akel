@@ -1,4 +1,4 @@
-name: Linux build
+name: Windows Build
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest]
-        arch: [x86_64]
+        arch: [x64]
         mode: [debug, release]
 
     runs-on: ${{ matrix.os }}
