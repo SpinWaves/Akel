@@ -34,7 +34,7 @@ jobs:
         wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
         sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list http://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
         sudo apt-get update
-        sudo apt-get -y install mesa-common-dev clang vulkan-sdk
+        sudo apt-get -y install libjsoncpp1 qt5-default mesa-common-dev clang vulkan-sdk
 
     # Force xmake to a specific folder (for cache)
     - name: Set xmake env
