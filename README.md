@@ -1,8 +1,8 @@
 # Akel
 
-![linux clang workflow](https://github.com/SpinWaves/Akel/actions/workflows/linux_clang.yml/badge.svg)
-![linux gcc workflow](https://github.com/SpinWaves/Akel/actions/workflows/linux_gcc.yml/badge.svg)
-![windows workflow](https://github.com/SpinWaves/Akel/actions/workflows/windows.yml/badge.svg)
+[![linux clang workflow](https://github.com/SpinWaves/Akel/actions/workflows/linux_clang.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/linux_clang.yml)
+[![linux gcc workflow](https://github.com/SpinWaves/Akel/actions/workflows/linux_gcc.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/linux_gcc.yml)
+[![windows workflow](https://github.com/SpinWaves/Akel/actions/workflows/windows.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/windows.yml)
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/assets/logo.png" alt="drawing" width="500"/>
