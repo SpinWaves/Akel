@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/06/2021
-// Updated : 10/09/2023
+// Updated : 15/10/2023
 
 #include <Core/core.h>
 #include <Utils/utils.h>
@@ -128,6 +128,7 @@ namespace Ak
 				imguis.push_back(static_cast<ImGuiComponent*>(comp));
 			else
 				comp->onQuit();
+
 		}
 		for(auto comp : imguis)
 			comp->onQuit();

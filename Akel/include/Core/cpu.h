@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/04/2021
-// Updated : 27/01/2023
+// Updated : 15/10/2023
 
 #ifndef __AK_CPU__
 #define __AK_CPU__
@@ -57,20 +57,20 @@ namespace Ak::Core
 			constexpr static const uint32_t LVL_TYPE  = 0x0000FF00;
 			constexpr static const uint32_t LVL_CORES = 0x0000FFFF;
 
-            std::string _VendorId;
-            std::string _ModelName;
-            int _NumSMT;
-            int _NumCores;
-            int _NumLogCpus;
-            float _CPUMHz;
-            bool _IsHTT;
-            bool _IsSSE;
-            bool _IsSSE2;
-            bool _IsSSE3;
-            bool _IsSSE41;
-            bool _IsSSE42;
-            bool _IsAVX;
-            bool _IsAVX2;
+            std::string _VendorId = "Unknown";
+            std::string _ModelName = "Unknown";
+            int _NumSMT = 0;
+            int _NumCores = 0;
+            int _NumLogCpus = 0;
+            float _CPUMHz = 0;
+            bool _IsHTT = false;
+            bool _IsSSE = false;
+            bool _IsSSE2 = false;
+            bool _IsSSE3 = false;
+            bool _IsSSE41 = false;
+            bool _IsSSE42 = false;
+            bool _IsAVX = false;
+            bool _IsAVX2 = false;
     };
 }
 
