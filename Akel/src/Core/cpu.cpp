@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/04/2021
-// Updated : 05/02/2023
+// Updated : 15/10/2023
 
 #include <Core/core.h>
 
@@ -11,6 +11,7 @@ namespace Ak::Core
 {
     CPUID::CPUID(unsigned funcId, unsigned subFuncId)
     {
+		/*
         #if defined(__clang__) || defined(__GNUC__) || defined(__MINGW32__) || defined(__MINGW34__)
             __asm__
             (
@@ -36,6 +37,7 @@ namespace Ak::Core
                 mov regs[3], edx;
             }
         #endif
+			*/
     }
 
     CPU::CPU()
