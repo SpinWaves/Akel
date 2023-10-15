@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/10/2021
-// Updated : 09/09/2023
+// Updated : 15/10/2023
 
 #include <Core/profile.h>
 
@@ -39,6 +39,7 @@ namespace Ak
 
     bool initAkel(AkelInstance* project)
     {
+		/*
 		#if defined(AK_64BITS)
 			if(sizeof(void*) != 8)
 			{
@@ -54,7 +55,7 @@ namespace Ak
 			}
 			Core::log::report("architecture: 32bits");
 		#endif
-
+*/
 		if(std::strcmp(AK_arch, "x86") != 0)
 		{
 			Core::log::report(ERROR, "Akel can only run on x86 architecture, you are trying to run it on a " AK_arch " architecture");
