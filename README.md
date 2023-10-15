@@ -1,11 +1,12 @@
 # Akel
-<p align="center">
-    <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/assets/logo.png" alt="drawing" width="500"/>
-</p>
 
 ![linux clang workflow](https://github.com/SpinWaves/Akel/actions/workflows/linux_clang.yml/badge.svg)
 ![linux gcc workflow](https://github.com/SpinWaves/Akel/actions/workflows/linux_gcc.yml/badge.svg)
 ![windows workflow](https://github.com/SpinWaves/Akel/actions/workflows/windows.yml/badge.svg)
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/assets/logo.png" alt="drawing" width="500"/>
+</p>
 
 Akel is a game engine made for fun by a young french man.
 Currently at an early stage, it is still in development and needs more work to turn it into something.
