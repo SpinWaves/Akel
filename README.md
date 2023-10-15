@@ -3,6 +3,10 @@
     <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/assets/logo.png" alt="drawing" width="500"/>
 </p>
 
+https://github.com/SpinWaves/Akel/actions/workflows/linux_clang.yml/badge.svg
+https://github.com/SpinWaves/Akel/actions/workflows/linux_gcc.yml/badge.svg
+https://github.com/SpinWaves/Akel/actions/workflows/windows.yml/badge.svg
+
 Akel is a game engine made for fun by a young french man.
 Currently at an early stage, it is still in development and needs more work to turn it into something.
 An editor is in development, facilitating the creation of games. However, it will be necessary to wait for some time until this one is sufficiently developed (as well as the engine itself) to make games easily.
