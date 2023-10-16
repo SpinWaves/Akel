@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 16/05/2023
+// Updated : 16/10/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Core/core.h>
@@ -54,6 +54,7 @@ namespace Ak
 
 		if(vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create logcal device");
+		Core::log::report(DEBUGLOG, "Vulkan : created new logical device");
 	}
 
 	void Device::pickPhysicalDevice()
@@ -116,6 +117,7 @@ namespace Ak
 
 		if(_physicalDevice == VK_NULL_HANDLE)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to find a suitable GPU");
+		Core::log::report(DEBUGLOG, "Vulkan : picked a physical device");
 	}
 
 	bool Device::isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface)

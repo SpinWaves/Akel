@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 16/05/2023
+// Updated : 16/10/2023
 
 #include <Core/core.h>
 #include <Renderer/Core/vk_instance.h>
@@ -22,7 +22,11 @@ namespace Ak
 		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		appInfo.pEngineName = "Akel";
 		appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);
-		appInfo.apiVersion = VK_API_VERSION_1_3;
+		#ifdef VK_API_VERSION_1_3
+			appInfo.apiVersion = VK_API_VERSION_1_3;
+		#else
+			appInfo.apiVersion = VK_API_VERSION_1_2;
+		#endif
 
 		std::vector<const char*> extensions;
 		if(getMainAppProjectFile().archive()["render_core"].contains("instance_extensions"))
@@ -65,6 +69,7 @@ namespace Ak
 		VkResult res;
 		if((res = vkCreateInstance(&createInfo, nullptr, &_instance)) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create Vulkan instance : %s", RCore::verbaliseResultVk(res));
+		Core::log::report(DEBUGLOG, "Vulkan : created new instance");
 	}
 
 	std::vector<const char*> Instance::getRequiredExtensions()

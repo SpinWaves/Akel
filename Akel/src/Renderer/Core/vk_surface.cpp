@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2022
-// Updated : 27/01/2023
+// Updated : 16/10/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -14,6 +14,7 @@ namespace Ak
 	{
 		if(SDL_Vulkan_CreateSurface(renderer.getWindow()->getNativeWindow(), Render_Core::get().getInstance().get(), &_surface) != SDL_TRUE)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create a surface : %s", SDL_GetError());
+		Core::log::report(DEBUGLOG, "Vulkan : created new surface");
 	}
 
 	VkSurfaceFormatKHR Surface::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
