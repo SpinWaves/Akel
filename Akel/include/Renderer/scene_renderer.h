@@ -10,7 +10,7 @@
 #include <Renderer/render_command.h>
 #include <Scene/scene.h>
 #include <Renderer/Pipeline/pipelines_manager.h>
-#include <Renderer/forward_data.h>
+#include <Graphics/forward_pass.h>
 
 namespace Ak
 {
