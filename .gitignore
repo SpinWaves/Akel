@@ -1,5 +1,6 @@
 .xmake/
 .vs/
+.cache/
 build/
 *.akel
 *.swp
