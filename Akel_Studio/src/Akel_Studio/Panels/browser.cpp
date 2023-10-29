@@ -1,14 +1,95 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 12/10/2023
+// Updated : 29/10/2023
 
 #include <Panels/browser.h>
 #include <Fonts/material_font.h>
 
+bool is_binaries(const std::filesystem::path& file)
+{
+	return	(std::filesystem::status(file).permissions() & std::filesystem::perms::owner_exec) != std::filesystem::perms::none ||
+			(std::filesystem::status(file).permissions() & std::filesystem::perms::group_exec) != std::filesystem::perms::none ||
+			(std::filesystem::status(file).permissions() & std::filesystem::perms::others_exec) != std::filesystem::perms::none;
+}
+
+bool is_sound_file(const std::filesystem::path& file)
+{
+	static const std::unordered_set<std::string> extensions{
+		".mp3",
+		".wav",
+		".ogg",
+		".flac",
+		".m4a",
+	};
+	return extensions.find(file.extension().string()) != extensions.end();
+}
+
+bool is_image_file(const std::filesystem::path& file)
+{
+	static const std::unordered_set<std::string> extensions{
+		".jpg",
+		".jpeg",
+		".gif",
+		".png",
+		".bmp",
+		".xpm",
+		".pcx",
+		".pnm",
+		".tga",
+		".tiff",
+		".tif",
+		".lbm",
+		".iff",
+		".ico",
+	};
+	return	extensions.find(file.extension().string()) != extensions.end();
+}
+
+bool is_script_file(const std::filesystem::path& file)
+{
+	static const std::unordered_set<std::string> extensions{
+		".lua",
+		".ksl",
+		".kila",
+		".cpp",
+		".cxx",
+		".cc",
+		".h",
+		".hpp",
+		".hxx",
+		".spv",
+		".glsl",
+		".frag",
+		".vert",
+		".nzsl",
+	};
+	return	extensions.find(file.extension().string()) != extensions.end();
+}
+
+
+bool is_there_subdir(const std::filesystem::path& path)
+{
+	std::size_t found = 0;
+	for(auto const& dir_entry : std::filesystem::directory_iterator(path))
+	{
+		std::string sdir = dir_entry.path().string();
+		if((found = sdir.rfind("/")) != std::string::npos)
+			sdir.erase(sdir.begin(), sdir.begin() + found + 1);
+
+		if(sdir[0] == '.') // hidden files/dirs
+			continue;
+
+		if(dir_entry.is_directory())
+			return true;
+	}
+	return false;
+}
+
 Browser::Browser(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : Panel("__browser", project)
 {
     _eltm = std::move(eltm);
+	_current_path = project.getDir();
 }
 
 void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
@@ -36,13 +117,34 @@ void Browser::browser()
 	if(ImGui::BeginChild("Browser", ImVec2((15.1 * _width)/100, _height - 27), true, ImGuiWindowFlags_HorizontalScrollbar))
 	{
 		ImGui::Text(std::string(AKS_ICON_MD_FOLDER_COPY" " + _eltm->getText("Browser.folders")).c_str());
-		ImGui::SameLine((15.1 * _width) / 100 - 27);
+		ImGui::SameLine((15.1 * _width) / 100 - 40);
 		if(ImGui::SmallButton(" ../ "))
-		{
-		}
+			_current_path = _current_path.parent_path();
+		
 		ImGui::Separator();
 
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 2.0f);
+			diveInDirectory(_current_path);
+		ImGui::PopStyleVar();
+
 		ImGui::EndChild();
+	}
+}
+
+void Browser::diveInDirectory(const std::filesystem::path& path)
+{
+	for(const auto& dir_entry : std::filesystem::directory_iterator(path)) 
+	{
+		std::filesystem::path dir_path = dir_entry.path();
+		if(!std::filesystem::is_directory(dir_path) || dir_path.filename().string()[0] == '.')
+			continue;
+		if(ImGui::TreeNodeEx(std::string(AKS_ICON_MD_FOLDER" " + dir_path.filename().string()).c_str(), ImGuiTreeNodeFlags_SpanFullWidth | (!is_there_subdir(dir_path) ? ImGuiTreeNodeFlags_Leaf : ImGuiTreeNodeFlags_OpenOnArrow)))
+		{
+			diveInDirectory(dir_path);
+			ImGui::TreePop();
+		}
+		if(ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered(ImGuiHoveredFlags_None))
+			_current_path /= dir_path;
 	}
 }
 
@@ -67,76 +169,11 @@ std::string Browser::getSize(std::uintmax_t size)
 	return size_string;
 }
 
-bool is_binaries(std::filesystem::path file)
-{
-	return	(std::filesystem::status(file).permissions() & std::filesystem::perms::owner_exec) != std::filesystem::perms::none ||
-			(std::filesystem::status(file).permissions() & std::filesystem::perms::group_exec) != std::filesystem::perms::none ||
-			(std::filesystem::status(file).permissions() & std::filesystem::perms::others_exec) != std::filesystem::perms::none;
-}
-
-bool is_sound_file(std::filesystem::path file)
-{
-	static const std::unordered_set<std::string> extensions{
-		".mp3",
-		".wav",
-		".ogg",
-		".flac",
-		".m4a",
-	};
-	return extensions.find(file.extension().string()) != extensions.end();
-}
-
-bool is_image_file(std::filesystem::path file)
-{
-	static const std::unordered_set<std::string> extensions{
-		".jpg",
-		".jpeg",
-		".gif",
-		".png",
-		".bmp",
-		".xpm",
-		".pcx",
-		".pnm",
-		".tga",
-		".tiff",
-		".tif",
-		".lbm",
-		".iff",
-		".ico",
-	};
-	return	extensions.find(file.extension().string()) != extensions.end();
-}
-
-bool is_script_file(std::filesystem::path file)
-{
-	static const std::unordered_set<std::string> extensions{
-		".lua",
-		".ksl",
-		".kila",
-		".cpp",
-		".cxx",
-		".cc",
-		".h",
-		".hpp",
-		".hxx",
-		".spv",
-		".glsl",
-		".frag",
-		".vert",
-		".nzsl",
-	};
-	return	extensions.find(file.extension().string()) != extensions.end();
-}
-
 void Browser::content()
 {
     if(ImGui::BeginChild("Content", ImVec2((84.25 * _width)/100, _height - 27), true, ImGuiWindowFlags_HorizontalScrollbar))
     {
         ImGui::Text(std::string(AKS_ICON_MD_FILE_COPY" " + _eltm->getText("Browser.content")).c_str());
-        ImGui::SameLine((84 * _width)/100 - 25);
-		if(ImGui::SmallButton(AKS_ICON_MD_SETTINGS))
-		{}
-
         ImGui::Separator();
 	    ImGui::EndChild();
     }

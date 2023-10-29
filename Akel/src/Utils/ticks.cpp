@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/04/2021
-// Updated : 03/06/2023
+// Updated : 29/10/2023
 
 #include <Utils/ticks.h>
 
@@ -34,6 +34,9 @@ namespace Ak
 			_make_up = true;
 		}
 		else
+		{
 			_make_up = false;
+			std::this_thread::sleep_for(std::chrono::duration<double, std::nano>(_ns));
+		}
 	}
 }

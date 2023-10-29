@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 18/09/2023
+// Updated : 29/10/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -39,7 +39,7 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 		if(size != save_size)
 		{
 			_scene_texture.destroy();
-			_scene_texture = AkImGui::LoadImageEmpty(ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+			_scene_texture = AkImGui::LoadImageEmpty(size.X, size.Y);
 			manager->setRenderTarget(_scene_texture.getTextureID());
 			save_size = size;
 		}
@@ -104,7 +104,7 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 		ImGui::Image(_scene_texture.getImGuiID(), ImVec2(ImGui::GetWindowWidth(), ImGui::GetWindowWidth()));
 		EditorCamera3D::setHover(ImGui::IsItemHovered());
 
-		draw_list->AddRectFilled(ImVec2(ImGui::GetWindowPos().x + window_width - 70, ImGui::GetWindowPos().y + 60), ImVec2(ImGui::GetWindowPos().x + window_width - 22.5, ImGui::GetWindowPos().y + 100), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.180f, 0.180f, 0.180f, 1.f))), 5.0f);
+		draw_list->AddRectFilled(ImVec2(ImGui::GetWindowPos().x + window_width - 70, ImGui::GetWindowPos().y + 60), ImVec2(ImGui::GetWindowPos().x + window_width - 22.5, ImGui::GetWindowPos().y + 100), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.3f, 0.3f, 0.3f, 1.f))), 5.0f);
 		ImGui::SetCursorPos(ImVec2(window_width - 60, 67));
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.f, 0.f, 0.f, 0.f));
