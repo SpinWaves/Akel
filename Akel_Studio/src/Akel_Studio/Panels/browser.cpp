@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 29/10/2023
+// Updated : 30/10/2023
 
 #include <Panels/browser.h>
 #include <Fonts/material_font.h>
@@ -43,7 +43,7 @@ bool is_image_file(const std::filesystem::path& file)
 		".iff",
 		".ico",
 	};
-	return	extensions.find(file.extension().string()) != extensions.end();
+	return extensions.find(file.extension().string()) != extensions.end();
 }
 
 bool is_script_file(const std::filesystem::path& file)
@@ -64,7 +64,7 @@ bool is_script_file(const std::filesystem::path& file)
 		".vert",
 		".nzsl",
 	};
-	return	extensions.find(file.extension().string()) != extensions.end();
+	return extensions.find(file.extension().string()) != extensions.end();
 }
 
 
@@ -90,6 +90,10 @@ Browser::Browser(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project)
 {
     _eltm = std::move(eltm);
 	_current_path = project.getDir();
+
+	ImGuiIO& io = ImGui::GetIO();
+	static const ImWchar icons_ranges[] = { AKS_ICON_MIN_MD, AKS_ICON_MAX_16_MD, 0 };
+	_big_icons_font = io.Fonts->AddFontFromFileTTF(Ak::VFS::resolve(":/resources/fonts/material_icons-regular.ttf").string().c_str(), 60.0f, nullptr, icons_ranges);
 }
 
 void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
@@ -114,6 +118,7 @@ void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
 
 void Browser::browser()
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarSize, 10.0f);
 	if(ImGui::BeginChild("Browser", ImVec2((15.1 * _width)/100, _height - 27), true, ImGuiWindowFlags_HorizontalScrollbar))
 	{
 		ImGui::Text(std::string(AKS_ICON_MD_FOLDER_COPY" " + _eltm->getText("Browser.folders")).c_str());
@@ -129,6 +134,7 @@ void Browser::browser()
 
 		ImGui::EndChild();
 	}
+	ImGui::PopStyleVar();
 }
 
 void Browser::diveInDirectory(const std::filesystem::path& path)
@@ -148,33 +154,45 @@ void Browser::diveInDirectory(const std::filesystem::path& path)
 	}
 }
 
-std::string Browser::getSize(std::uintmax_t size)
-{
-	double mantissa = size;
-	int i = 0;
-	for(; mantissa >= 1024.0; i++)
-		mantissa /= 1024.0;
-
-	mantissa = std::ceil(mantissa * 10.0) / 10.;
-
-	std::ostringstream out;
-	out.precision(2);
-	out << std::fixed << mantissa;
-	std::string size_string = out.str();
-
-	size_string.push_back(' ');
-	if(i != 0)
-		size_string.push_back("KMGTPE"[i - 1]);
-	size_string.append("bytes");
-	return size_string;
-}
-
 void Browser::content()
 {
     if(ImGui::BeginChild("Content", ImVec2((84.25 * _width)/100, _height - 27), true, ImGuiWindowFlags_HorizontalScrollbar))
     {
         ImGui::Text(std::string(AKS_ICON_MD_FILE_COPY" " + _eltm->getText("Browser.content")).c_str());
-        ImGui::Separator();
+		ImGui::Separator();
+		for(const auto& dir_entry : std::filesystem::directory_iterator(_current_path)) 
+		{
+			std::filesystem::path dir_path = dir_entry.path();
+			if(!std::filesystem::is_directory(dir_path) && dir_path.filename().string()[0] != '.')
+			{
+				contentChild(dir_path);
+				ImGui::SameLine();
+			}
+		}
 	    ImGui::EndChild();
     }
+}
+
+void Browser::contentChild(const std::filesystem::path& path)
+{
+	if(ImGui::BeginChild(path.string().c_str(), ImVec2(75, 100), true))
+	{
+		ImDrawList* draw_list = ImGui::GetBackgroundDrawList();
+		draw_list->AddRectFilled(ImGui::GetWindowPos(), ImVec2(ImGui::GetWindowPos().x + 75, ImGui::GetWindowPos().y + 70), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.3f, 0.3f, 0.3f, 1.f))), 0.f);
+		ImGui::SetCursorPosX((ImGui::GetWindowSize().x - 60.f) * 0.5f);
+		ImGui::PushFont(_big_icons_font);
+		if(is_image_file(path))
+			ImGui::TextUnformatted(AKS_ICON_MD_IMAGE);
+		else if(is_sound_file(path))
+			ImGui::TextUnformatted(AKS_ICON_MD_AUDIO_FILE);
+		else if(is_binaries(path))
+			ImGui::TextUnformatted(AKS_ICON_MD_TERMINAL);
+		else if(is_script_file(path))
+			ImGui::TextUnformatted(AKS_ICON_MD_CODE);
+		else
+			ImGui::TextUnformatted(AKS_ICON_MD_INSERT_DRIVE_FILE);
+		ImGui::PopFont();
+		ImGui::TextUnformatted(path.filename().string().c_str());
+		ImGui::EndChild();
+	}
 }

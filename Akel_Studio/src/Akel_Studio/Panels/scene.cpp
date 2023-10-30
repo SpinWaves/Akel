@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 29/10/2023
+// Updated : 30/10/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -34,6 +34,7 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 {
 	static Ak::Vec2i save_size(-1, -1);
 	static Ak::SceneManager* manager = static_cast<Ak::SceneManager*>(Ak::getMainAppComponentStack()->get_component("__scenes_manager_component"));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 	if(ImGui::Begin(std::string(AKS_ICON_MD_SPORTS_ESPORTS" " + _eltm->getText("Scene.name")).c_str(), nullptr, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollbar))
 	{
 		if(size != save_size)
@@ -116,6 +117,7 @@ void Scene::onUpdate(Ak::Maths::Vec2<int>& size)
 
 		ImGui::End();
 	}
+	ImGui::PopStyleVar();
 }
 
 void Scene::onQuit()
