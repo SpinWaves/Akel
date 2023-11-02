@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 26/09/2023
+// Updated : 01/11/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -182,6 +182,7 @@ namespace Ak
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate memory for an image");
 
 		vkBindImageMemory(Render_Core::get().getDevice().get(), _image, _memory, 0);
+		Core::log::report(DEBUGLOG, "Vulkan : created new Image");
 	}
 
 	void Image::createImageView(VkImageViewType type, VkImageAspectFlags aspectFlags) noexcept
@@ -199,6 +200,7 @@ namespace Ak
 
 		if(vkCreateImageView(Render_Core::get().getDevice().get(), &viewInfo, nullptr, &_image_view) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create image view");
+		Core::log::report(DEBUGLOG, "Vulkan : created new ImageView");
 	}
 
 	void Image::createSampler() noexcept
@@ -218,6 +220,7 @@ namespace Ak
 
 		if(vkCreateSampler(Render_Core::get().getDevice().get(), &info, nullptr, &_sampler) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan Texture : unable to create image sampler");
+		Core::log::report(DEBUGLOG, "Vulkan : created new Sampler");
 	}
 
 	void Image::transitionLayout(VkImageLayout new_layout, CmdBuffer& cmd, bool submit)

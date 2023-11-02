@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 10/04/2022
-// Updated : 23/03/2023
+// Updated : 01/11/2023
 
 #include <Renderer/Buffers/vk_buffer.h>
 #include <Utils/assert.h>
@@ -36,6 +36,7 @@ namespace Ak
 		_mem_chunck.offset = 0;
 
 		createBuffer(_usage, _flags);
+		Core::log::report(DEBUGLOG, "Vulkan : created new buffer");
 
 		if(type == Buffer::kind::constant || data != nullptr)
 		{
@@ -137,6 +138,7 @@ namespace Ak
 		this->swap(newBuffer);
 
 		newBuffer.destroy();
+		Core::log::report(DEBUGLOG, "Vulkan : pushed buffer to GPU");
 	}
 
 	void Buffer::swap(Buffer& buffer)

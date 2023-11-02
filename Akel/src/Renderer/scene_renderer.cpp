@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 14/10/2023
+// Updated : 02/11/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -78,12 +78,16 @@ namespace Ak
 			}
 			forwardPass(scene);
 		}
+		if(_settings.skybox)
+			skyboxPass(scene);
 		if(_scene_cache != scene)
 			_scene_cache = scene;
 	}
 
 	void SceneRenderer::forwardPass(Scene* scene)
 	{
+		if(!scene->_camera)
+			return;
 		auto renderer = scene->_renderer;
 
 		PipelineDesc pipeline_desc;
@@ -100,10 +104,74 @@ namespace Ak
 			return;
 
 		// caches
-		static Shader::Uniform matrices_uniform_buffer;
+		static std::optional<Shader::Uniform> matrices_uniform_buffer;
 		static ShaderID fragment_shader = nullshader;
 
 		if(scene != _scene_cache && (_scene_cache == nullptr || !std::equal(scene->_forward_shaders.begin(), scene->_forward_shaders.end(), _scene_cache->_forward_shaders.begin())))
+		{
+			_forward_data.descriptor_sets.clear();
+			_forward_data.push_constants.clear();
+			for(ShaderID id : _forward_data.shaders)
+			{
+				auto shader = ShadersLibrary::get().getShader(id);
+				int material_set = -1;
+				if(shader->getType() == VK_SHADER_STAGE_FRAGMENT_BIT)
+				{
+					fragment_shader = id;
+					if(shader->getImageSamplers().count("u_albedo_map"))
+						material_set = shader->getImageSamplers()["u_albedo_map"].getSet();
+				}
+				int i = 0;
+				for(DescriptorSet& set : shader->getDescriptorSets())
+				{
+					if(i != material_set)
+						_forward_data.descriptor_sets.push_back(set.get());
+					i++;
+				}
+				matrices_uniform_buffer = shader->getUniform("matrices");
+				for(auto& [name, pc] : shader->getPushConstants())
+					_forward_data.push_constants.push_back(pc);
+			}
+		}
+
+		if(fragment_shader == nullshader)
+			Core::log::report(FATAL_ERROR, "Scene Renderer : no fragment shader given (wtf)");
+
+		MatricesBuffer mat;
+		mat.proj = scene->_camera->getProj();
+		mat.view = scene->_camera->getView();
+		mat.proj[1][1] *= -1;
+		matrices_uniform_buffer.getBuffer()->setData(sizeof(mat), &mat);
+
+		for(RenderCommandData& command : _forward_data.command_queue)
+		{
+			auto material = MaterialLibrary::get().getMaterial(command.material);
+			material->updateDescriptors(fragment_shader);
+			_forward_data.descriptor_sets.push_back(material->_set.get());
+			vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, _forward_data.descriptor_sets.size(), _forward_data.descriptor_sets.data(), 0, nullptr);
+
+			_forward_data.push_constants[0].setData(&command.transform);
+			for(auto& pc : _forward_data.push_constants)
+				pc.bind(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineLayout());
+	
+			command.mesh->draw(*renderer);
+			_forward_data.descriptor_sets.pop_back();
+		}
+		pipeline->endPipeline(renderer->getActiveCmdBuffer());
+	}
+
+	void SceneRenderer::skyboxPass(Scene* scene)
+	{
+		if(!scene->_camera || !scene->_skybox)
+            return;
+
+		auto renderer = scene->_renderer;
+
+		// caches
+		static Shader::Uniform matrices_uniform_buffer;
+		static ShaderID fragment_shader = nullshader;
+
+		if(scene != _scene_cache && (_scene_cache == nullptr || !std::equal(scene->_skybox_shaders.begin(), scene->_skybox_shaders.end(), _scene_cache->_skybox_shaders.begin())))
 		{
 			_forward_data.descriptor_sets.clear();
 			_forward_data.push_constants.clear();
@@ -136,28 +204,31 @@ namespace Ak
 
 		if(fragment_shader == nullshader)
 			Core::log::report(FATAL_ERROR, "Scene Renderer : no fragment shader given (wtf)");
+        m_SkyboxDescriptorSet->SetTexture("u_CubeMap", m_CubeMap, 0, TextureType::CUBE);
+        m_SkyboxDescriptorSet->Update();
 
-		MatricesBuffer mat;
-		mat.proj = scene->_camera->getProj();
-		mat.view = scene->_camera->getView();
-		mat.proj[1][1] *= -1;
-		matrices_uniform_buffer.getBuffer()->setData(sizeof(mat), &mat);
+		PipelineDesc pipeline_desc;
+		pipeline_desc.shaders = _forward_data.shaders;
+		pipeline_desc.clear_target = true;
+		pipeline_desc.clear_color = { 0.f, 0.f, 0.f, 1.f };
+		pipeline_desc.swapchain = (_forward_data.render_texture == nulltexture);
+		pipeline_desc.depth = &_forward_data.depth;
+		pipeline_desc.render_targets[0] = _forward_data.render_texture;
+		pipeline_desc.culling = VK_CULL_MODE_BACK_BIT;
 
-		for(RenderCommandData& command : _forward_data.command_queue)
-		{
-			auto material = MaterialLibrary::get().getMaterial(command.material);
-			material->updateDescriptors(fragment_shader);
-			_forward_data.descriptor_sets.push_back(material->_set.get());
-			vkCmdBindDescriptorSets(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, _forward_data.descriptor_sets.size(), _forward_data.descriptor_sets.data(), 0, nullptr);
+		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
+		if(pipeline == nullptr || !pipeline->bindPipeline(renderer->getActiveCmdBuffer()))
+			return;
 
-			_forward_data.push_constants[0].setData(&command.transform);
-			for(auto& pc : _forward_data.push_constants)
-				pc.bind(renderer->getActiveCmdBuffer().get(), pipeline->getPipelineLayout());
-	
-			command.mesh->draw(*renderer);
-			_forward_data.descriptor_sets.pop_back();
-		}
-		pipeline->endPipeline(renderer->getActiveCmdBuffer());
+        auto commandBuffer = Renderer::GetMainSwapChain()->GetCurrentCommandBuffer();
+        auto pipeline      = Graphics::Pipeline::Get(pipelineDesc);
+        pipeline->Bind(commandBuffer);
+
+        auto set = m_SkyboxDescriptorSet.get();
+        Renderer::BindDescriptorSets(pipeline.get(), commandBuffer, 0, &set, 1);
+        Renderer::DrawMesh(commandBuffer, pipeline.get(), m_ScreenQuad);
+
+        pipeline->End(commandBuffer);
 	}
 
 	void SceneRenderer::destroy()

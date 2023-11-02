@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 29/08/2023
+// Updated : 02/11/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -315,6 +315,16 @@ namespace Ak
 		}
 		_is_init = true;
 		Core::log::report(DEBUGLOG, "Vulkan : compiled new shader");
+	}
+
+	std::optional<DescriptorSet> Shader::getDescriptorSetContaining(const std::string& name)
+	{
+		if(_uniforms.count(name))
+			return _sets[_uniforms[name].getSet()];
+		if(_image_samplers.count(name))
+			return _sets[_image_samplers[name].getSet()];
+
+		return std::nullopt;
 	}
 
 	void Shader::destroyModule() noexcept

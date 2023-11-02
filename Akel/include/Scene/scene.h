@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 14/10/2023
+// Updated : 01/11/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -12,6 +12,7 @@
 #include <Core/Memory/akel_shared_ptr.h>
 #include <Renderer/Pipeline/shaders_library.h>
 #include <Platform/input.h>
+#include <Graphics/skybox.h>
 
 namespace Ak
 {
@@ -63,6 +64,8 @@ namespace Ak
 			template <typename T, typename ... Args>
 			void addCamera(Args&& ... args);
 
+			inline void setSkybox(const Skybox& skybox) { _skybox = skybox; }
+
 			inline const fString& getName() const noexcept { return _name; }
 			inline const std::filesystem::path& getFilePath() const { return _filepath; }
 			inline uint32_t getID() const noexcept { return _id; }
@@ -74,7 +77,9 @@ namespace Ak
 
 		private:
 			std::array<ShaderID, 2> _forward_shaders;
+			std::array<ShaderID, 2> _skybox_shaders;
 			std::filesystem::path _filepath;
+			Skybox _skybox;
 			class RendererComponent* _renderer = nullptr;
 			UniquePtr<Cam::BaseCamera> _camera;
 			UniquePtr<class ShaderLoader> _loader;

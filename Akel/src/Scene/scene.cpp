@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 05/12/2022
-// Updated : 14/10/2023
+// Updated : 02/11/2023
 
 #include <Scene/entity_manager.h>
 #include <Renderer/Images/texture.h>
@@ -62,6 +62,11 @@ namespace Ak
 			_forward_shaders[static_cast<uint8_t>(shaderType::fragment)] = ShadersLibrary::get().addShaderToLibrary(std::move(fshader));
 		}
 		std::cout << _forward_shaders[0] << "	" << _forward_shaders[1] << std::endl;
+
+		std::shared_ptr<Shader> vshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{skybox_vertex_shader}), _renderer);
+		_forward_shaders[static_cast<uint8_t>(shaderType::vertex)] = ShadersLibrary::get().addShaderToLibrary(std::move(vshader));
+		std::shared_ptr<Shader> fshader = create_shared_ptr_w<Shader>(_loader->loadShader(shaderlang::nzsl, std::string_view{skybox_fragment_shader}), _renderer);
+		_forward_shaders[static_cast<uint8_t>(shaderType::fragment)] = ShadersLibrary::get().addShaderToLibrary(std::move(fshader));
 	}
 
 	void Scene::onUpdate(float timestep)

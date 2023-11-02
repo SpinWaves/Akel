@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 14/02/2023
-// Updated : 17/06/2023
+// Updated : 01/11/2023
 
 #ifndef __AK_SCENE_RENDERER__
 #define __AK_SCENE_RENDERER__
@@ -37,7 +37,9 @@ namespace Ak
 
 		private:
 			void forwardPass(Scene* scene);
+			void skyboxPass(Scene* scene);
 
+		private:
 			PipelinesManager _pipelines_manager;
 			ForwardData _forward_data;
 			Scene* _scene_cache = nullptr;

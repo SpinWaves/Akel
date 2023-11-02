@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 10/03/2022
-// Updated : 30/10/2023
+// Updated : 31/10/2023
 
 #include <Panels/browser.h>
 #include <Fonts/material_font.h>
@@ -119,7 +119,7 @@ void Browser::onUpdate(Ak::Maths::Vec2<int>& size)
 void Browser::browser()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_ScrollbarSize, 10.0f);
-	if(ImGui::BeginChild("Browser", ImVec2((15.1 * _width)/100, _height - 27), true, ImGuiWindowFlags_HorizontalScrollbar))
+	if(ImGui::BeginChild("Browser", ImVec2((15.1 * _width)/100, _height - 27), false, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_NoBackground))
 	{
 		ImGui::Text(std::string(AKS_ICON_MD_FOLDER_COPY" " + _eltm->getText("Browser.folders")).c_str());
 		ImGui::SameLine((15.1 * _width) / 100 - 40);
@@ -156,6 +156,7 @@ void Browser::diveInDirectory(const std::filesystem::path& path)
 
 void Browser::content()
 {
+	ImDrawList* draw_list = ImGui::GetWindowDrawList();
     if(ImGui::BeginChild("Content", ImVec2((84.25 * _width)/100, _height - 27), true, ImGuiWindowFlags_HorizontalScrollbar))
     {
         ImGui::Text(std::string(AKS_ICON_MD_FILE_COPY" " + _eltm->getText("Browser.content")).c_str());
@@ -171,14 +172,13 @@ void Browser::content()
 		}
 	    ImGui::EndChild();
     }
+	draw_list->AddRectFilled(ImVec2(0, 0), ImVec2(70, 75), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(1.3f, 1.3f, 1.3f, 1.f))), 2.f);
 }
 
 void Browser::contentChild(const std::filesystem::path& path)
 {
 	if(ImGui::BeginChild(path.string().c_str(), ImVec2(75, 100), true))
 	{
-		ImDrawList* draw_list = ImGui::GetBackgroundDrawList();
-		draw_list->AddRectFilled(ImGui::GetWindowPos(), ImVec2(ImGui::GetWindowPos().x + 75, ImGui::GetWindowPos().y + 70), ImGui::GetColorU32(ImGui::ColorConvertFloat4ToU32(ImVec4(0.3f, 0.3f, 0.3f, 1.f))), 0.f);
 		ImGui::SetCursorPosX((ImGui::GetWindowSize().x - 60.f) * 0.5f);
 		ImGui::PushFont(_big_icons_font);
 		if(is_image_file(path))
