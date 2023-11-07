@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 02/11/2023
+// Updated : 06/11/2023
 
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Pipeline/vk_graphic_pipeline.h>
@@ -299,7 +299,8 @@ namespace Ak
 			for(int i = 0; i < _layouts.size(); i++)
 			{
 				_sets.emplace_back();
-				_sets.back().init(_renderer, &_layouts[i], &_desc_pool);
+				_sets.back().init(_renderer, &_layouts[i], &_desc_pool, i);
+				_vk_sets.push_back(_sets.back().get());
 				for(auto binding : _layouts[i].getBindings())
 				{
 					if(binding.second == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
@@ -307,7 +308,7 @@ namespace Ak
 						for(auto& [name, uniform] : _uniforms)
 						{
 							if(uniform.getBinding() == binding.first)
-								_sets.back().writeDescriptor(binding.first, uniform.getBuffer());
+								_sets.back().writeDescriptor(binding.first, *uniform.getBuffer());
 						}
 					}
 				}
@@ -320,10 +321,9 @@ namespace Ak
 	std::optional<DescriptorSet> Shader::getDescriptorSetContaining(const std::string& name)
 	{
 		if(_uniforms.count(name))
-			return _sets[_uniforms[name].getSet()];
+			return std::make_optional(_sets[_uniforms[name].getSet()]);
 		if(_image_samplers.count(name))
-			return _sets[_image_samplers[name].getSet()];
-
+			return std::make_optional(_sets[_image_samplers[name].getSet()]);
 		return std::nullopt;
 	}
 

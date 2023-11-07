@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 02/11/2023
+// Updated : 06/11/2023
 
 #ifndef __AK_RENDERER_COMPONENT__
 #define __AK_RENDERER_COMPONENT__
@@ -45,7 +45,7 @@ namespace Ak
 			inline Semaphore& getSemaphore(int i) noexcept { return _semaphores[i]; }
 			inline CmdBuffer& getCmdBuffer(int i) noexcept { return _cmd.getCmdBuffer(i); }
 			inline CmdBuffer* getSingleTimeCmdBuffer() noexcept { return _cmd.getSingleTimeBuffer(); }
-			inline CmdBuffer& getActiveCmdBuffer() const noexcept { return _cmd.getCmdBuffer(_active_image_index); }
+			inline CmdBuffer& getActiveCmdBuffer() noexcept { return _cmd.getCmdBuffer(_active_image_index); }
 			inline uint32_t getActiveImageIndex() const noexcept { return _active_image_index; }
 			inline uint32_t getSwapChainImageIndex() const noexcept { return _swapchain_image_index; }
 			inline bool isInit() const noexcept { return _is_init; }

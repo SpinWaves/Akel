@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/02/2023
-// Updated : 30/03/2023
+// Updated : 05/11/2023
 
 #ifndef __AK_MATERIAL_LIBRARY__
 #define __AK_MATERIAL_LIBRARY__
@@ -17,7 +17,7 @@ namespace Ak
 
 	class AK_API MaterialLibrary : public SelfInstance<MaterialLibrary>
 	{
-		friend class SceneRenderer;
+		friend class ForwardPass;
 
 		public:
 			MaterialLibrary() = default;

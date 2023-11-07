@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/10/2023
-// Updated : 02/11/2023
+// Updated : 06/11/2023
 
 #ifndef __AK_FORWARD_PASS__
 #define __AK_FORWARD_PASS__
@@ -19,17 +19,15 @@ namespace Ak
 {
 	struct CommonForwardData
 	{
-		std::vector<VkDescriptorSet> descriptor_sets;
 		std::vector<ShaderID> shaders;
 		DepthImage depth;
-		const Cam::BaseCamera& camera;
+		std::shared_ptr<Cam::BaseCamera> camera;
 		TextureID render_texture = nulltexture;
 	};
 
 	struct ForwardData : public CommonForwardData
 	{
 		CommandDataQueue command_queue;
-		std::vector<Shader::PushConstant> push_constants;
 	};
 
 	struct ForwardSkyboxData : public CommonForwardData
@@ -38,22 +36,22 @@ namespace Ak
 
 	struct ForwardPassDescription
 	{
-		ForwardData fdata;
-		ForwardSkyboxData skydata;
-		bool geometryPass = true;
-		bool skyboxPass = true;
+		ForwardData* fdata = nullptr;
+		ForwardSkyboxData* skydata = nullptr;
 	};
 
 	class AK_API ForwardPass
 	{
 		public:
-			ForwardPass() = default;
-			void process(const RendererComponent& renderer, const ForwardPassDescription& desc);
+			ForwardPass();
+			void init();
+			void process(RendererComponent& renderer, const ForwardPassDescription& desc, bool rebuildPass);
+			void destroy();
 			~ForwardPass() = default;
 
 		private:
-			void forwardPass(const RendererComponent& renderer, const ForwardData& data);
-			void skyboxPass(const RendererComponent& renderer, const ForwardSkyboxData& data);
+			void forwardPass(RendererComponent& renderer, const ForwardData& data, bool rebuildPass);
+			void skyboxPass(RendererComponent& renderer, const ForwardSkyboxData& data, bool rebuildPass);
 
 		private:
 			PipelinesManager _pipelines_manager;

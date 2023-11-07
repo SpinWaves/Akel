@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 01/11/2023
+// Updated : 06/11/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -64,6 +64,8 @@ namespace Ak
 			template <typename T, typename ... Args>
 			void addCamera(Args&& ... args);
 
+			std::shared_ptr<Cam::BaseCamera> getCamera() const { return _camera; }
+
 			inline void setSkybox(const Skybox& skybox) { _skybox = skybox; }
 
 			inline const fString& getName() const noexcept { return _name; }
@@ -81,7 +83,7 @@ namespace Ak
 			std::filesystem::path _filepath;
 			Skybox _skybox;
 			class RendererComponent* _renderer = nullptr;
-			UniquePtr<Cam::BaseCamera> _camera;
+			std::shared_ptr<Cam::BaseCamera> _camera;
 			UniquePtr<class ShaderLoader> _loader;
 			UniquePtr<class EntityManager> _entity_manager;
 			fString _name;

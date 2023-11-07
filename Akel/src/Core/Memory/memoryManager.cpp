@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/07/2021
-// Updated : 13/09/2023
+// Updated : 06/11/2023
 
 #include <Utils/utils.h>
 #include <Core/projectFile.h>
@@ -111,6 +111,8 @@ namespace Ak::Core::memory::internal
 
 	void dealloc(void* ptr)
 	{
+		if(ptr == nullptr)
+			return;
 		if(getMainAppProjectFile().archive()["memory_manager_enable_fixed_allocator"])
 		{
 			if(fixed1.contains(ptr))
