@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/02/2023
-// Updated : 01/11/2023
+// Updated : 19/11/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Renderer/Images/cubemap.h>
@@ -16,7 +16,7 @@ namespace Ak
 		Image::create(width, height, format,
 					VK_IMAGE_TILING_OPTIMAL,
 					VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, VK_IMAGE_LAYOUT_UNDEFINED, true);
+					VK_IMAGE_LAYOUT_UNDEFINED, true);
 
 		Image::createImageView(VK_IMAGE_VIEW_TYPE_CUBE, VK_IMAGE_ASPECT_COLOR_BIT);
 		Image::createSampler();

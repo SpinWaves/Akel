@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @maldavid
 // Created : 02/11/2023
-// Updated : 07/11/2023
+// Updated : 15/11/2023
 
 #include <Graphics/forward_pass.h>
 #include <Renderer/Images/texture_library.h>
@@ -116,7 +116,75 @@ namespace Ak
 
 	void ForwardPass::skyboxPass(RendererComponent& renderer, const ForwardSkyboxData& data, bool rebuildPass)
 	{
+		/*
+		if(!scene->_camera || !scene->_skybox)
+            return;
 
+		auto renderer = scene->_renderer;
+
+		// caches
+		static Shader::Uniform matrices_uniform_buffer;
+		static ShaderID fragment_shader = nullshader;
+
+		if(scene != _scene_cache && (_scene_cache == nullptr || !std::equal(scene->_skybox_shaders.begin(), scene->_skybox_shaders.end(), _scene_cache->_skybox_shaders.begin())))
+		{
+			_forward_data.descriptor_sets.clear();
+			_forward_data.push_constants.clear();
+			for(ShaderID id : _forward_data.shaders)
+			{
+				auto shader = ShadersLibrary::get().getShader(id);
+				int material_set = -1;
+				if(shader->getType() == VK_SHADER_STAGE_FRAGMENT_BIT)
+				{
+					fragment_shader = id;
+					if(shader->getImageSamplers().count("u_albedo_map"))
+						material_set = shader->getImageSamplers()["u_albedo_map"].getSet();
+				}
+				int i = 0;
+				for(DescriptorSet& set : shader->getDescriptorSets())
+				{
+					if(i != material_set)
+						_forward_data.descriptor_sets.push_back(set.get());
+					i++;
+				}
+				if(shader->getUniforms().size() > 0)
+				{
+					if(shader->getUniforms().count("matrices"))
+						matrices_uniform_buffer = shader->getUniforms()["matrices"];
+				}
+				for(auto& [name, pc] : shader->getPushConstants())
+					_forward_data.push_constants.push_back(pc);
+			}
+		}
+
+		if(fragment_shader == nullshader)
+			Core::log::report(FATAL_ERROR, "Scene Renderer : no fragment shader given (wtf)");
+        m_SkyboxDescriptorSet->SetTexture("u_CubeMap", m_CubeMap, 0, TextureType::CUBE);
+        m_SkyboxDescriptorSet->Update();
+
+		PipelineDesc pipeline_desc;
+		pipeline_desc.shaders = _forward_data.shaders;
+		pipeline_desc.clear_target = true;
+		pipeline_desc.clear_color = { 0.f, 0.f, 0.f, 1.f };
+		pipeline_desc.swapchain = (_forward_data.render_texture == nulltexture);
+		pipeline_desc.depth = &_forward_data.depth;
+		pipeline_desc.render_targets[0] = _forward_data.render_texture;
+		pipeline_desc.culling = VK_CULL_MODE_BACK_BIT;
+
+		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
+		if(pipeline == nullptr || !pipeline->bindPipeline(renderer->getActiveCmdBuffer()))
+			return;
+
+        auto commandBuffer = Renderer::GetMainSwapChain()->GetCurrentCommandBuffer();
+        auto pipeline      = Graphics::Pipeline::Get(pipelineDesc);
+        pipeline->Bind(commandBuffer);
+
+        auto set = m_SkyboxDescriptorSet.get();
+        Renderer::BindDescriptorSets(pipeline.get(), commandBuffer, 0, &set, 1);
+        Renderer::DrawMesh(commandBuffer, pipeline.get(), m_ScreenQuad);
+
+        pipeline->End(commandBuffer);
+		*/
 	}
 
 	void ForwardPass::destroy()

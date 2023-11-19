@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 28/03/2021
-// Updated : 24/10/2023
+// Updated : 15/11/2023
 
 #ifndef __AK_PCH__
 #define __AK_PCH__
@@ -23,6 +23,7 @@
 // Vulkan
 #include <volk.h>
 #include <SDL2/SDL_vulkan.h>
+#include <vk_mem_alloc.h>
 
 // Model loaders
 #include <tiny_obj_loader.h>

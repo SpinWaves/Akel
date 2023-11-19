@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/04/2022
-// Updated : 06/11/2023
+// Updated : 19/11/2023
 
 #include <Renderer/Buffers/vk_ubo.h>
 #include <Renderer/rendererComponent.h>
@@ -42,17 +42,12 @@ namespace Ak
 		return _buffers[_renderer->getActiveImageIndex()].getOffset();
 	}
 
-	VkDeviceMemory UBO::getDeviceMemory() const noexcept
-	{
-		return _buffers[_renderer->getActiveImageIndex()].getDeviceMemory();
-	}
-
-	const VkBuffer& UBO::operator()() const noexcept
+	VkBuffer UBO::operator()() const noexcept
 	{
 		return _buffers[_renderer->getActiveImageIndex()].get();
 	}
 
-	const VkBuffer& UBO::get() const noexcept
+	VkBuffer UBO::get() const noexcept
 	{
 		return _buffers[_renderer->getActiveImageIndex()].get();
 	}

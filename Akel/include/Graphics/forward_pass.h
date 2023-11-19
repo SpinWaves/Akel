@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/10/2023
-// Updated : 06/11/2023
+// Updated : 08/11/2023
 
 #ifndef __AK_FORWARD_PASS__
 #define __AK_FORWARD_PASS__
@@ -19,7 +19,6 @@ namespace Ak
 {
 	struct CommonForwardData
 	{
-		std::vector<ShaderID> shaders;
 		DepthImage depth;
 		std::shared_ptr<Cam::BaseCamera> camera;
 		TextureID render_texture = nulltexture;
@@ -27,11 +26,27 @@ namespace Ak
 
 	struct ForwardData : public CommonForwardData
 	{
+		std::vector<ShaderID> shaders;
 		CommandDataQueue command_queue;
+
+		inline void setCommonData(const CommonForwardData& data)
+		{
+			depth = data.depth;
+			camera = data.camera;
+			render_texture = data.render_texture;
+		}
 	};
 
 	struct ForwardSkyboxData : public CommonForwardData
 	{
+		std::vector<ShaderID> shaders;
+
+		inline void setCommonData(const CommonForwardData& data)
+		{
+			depth = data.depth;
+			camera = data.camera;
+			render_texture = data.render_texture;
+		}
 	};
 
 	struct ForwardPassDescription
