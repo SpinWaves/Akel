@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/04/2021
-// Updated : 11/09/2023
+// Updated : 21/11/2023
 
 #include <Core/core.h>
 #include <Platform/messageBox.h>
@@ -107,18 +107,18 @@ namespace Ak::Core::log
 		{
 			switch(type)
 			{
-				case DEBUGLOG: std::cout << blue << "[Akel log Debug] " << buffer << def << '\n'; stype = "Debug: "; break;
-				case MESSAGE: std::cout << blue << "[Akel log Message] " << buffer << def << '\n'; stype = "Message: "; break;
+				case DEBUGLOG: std::cout << blue << "[Akel log Debug] " << def << buffer << '\n'; stype = "Debug: "; break;
+				case MESSAGE: std::cout << blue << "[Akel log Message] " << def << buffer << '\n'; stype = "Message: "; break;
 				case WARNING:
 				{	
 					if(getMainAppProjectFile().archive()["enable_warning_console_message"])
-						std::cout << magenta << "[Akel log Warning] " << buffer << def << '\n';
+						std::cout << magenta << "[Akel log Warning] " << def << buffer << '\n';
 					stype = "Warning: ";
 					break;
 				}
-				case STRONG_WARNING: std::cout << yellow << "[Akel log Strong Warning] " << buffer << def << '\n'; stype = "Strong Warning: "; break;
-				case ERROR: std::cerr << red << "[Akel log Error] " << buffer << def << '\n'; stype = "Error: "; break;
-				case FATAL_ERROR: std::cerr << red << "[Akel log Fatal Error] " << buffer << def << '\n'; stype = "Fatal Error: "; break;
+				case STRONG_WARNING: std::cout << yellow << "[Akel log Strong Warning] " << def << buffer << '\n'; stype = "Strong Warning: "; break;
+				case ERROR: std::cerr << red << "[Akel log Error] " << def << buffer << '\n'; stype = "Error: "; break;
+				case FATAL_ERROR: std::cerr << red << "[Akel log Fatal Error] " << def << buffer << '\n'; stype = "Fatal Error: "; break;
 
 				default: break;
 			}

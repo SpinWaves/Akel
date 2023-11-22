@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 17/08/2023
+// Updated : 22/11/2023
 
 #ifndef __AK_STUDIO_SCENE__
 #define __AK_STUDIO_SCENE__
@@ -20,6 +20,8 @@ class Scene : public Panel
 		inline bool callRun() const noexcept { return _run; }
 		inline constexpr void hangUpRun() noexcept { _run = false; }
 		inline Ak::Scene* getScene() const noexcept { return _scene; }
+
+		void settingsPage();
 
         ~Scene() = default;
 

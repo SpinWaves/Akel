@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 12/03/2022
-// Updated : 30/10/2023
+// Updated : 22/11/2023
 
 #include <Panels/scene.h>
 #include <Fonts/material_font.h>
@@ -27,6 +27,23 @@ Scene::Scene(std::shared_ptr<Ak::ELTM> eltm, Ak::Core::ProjectFile& project) : P
 			_scene->addCamera<EditorCamera3D>();
 		}
 		Ak::VFS::replaceMainPath(main_save);
+	}
+}
+
+void Scene::settingsPage()
+{
+	ImGui::Text(std::string(AKS_ICON_MD_VIDEOCAM" " + _eltm->getText("Settings.camera")).data());
+
+	ImGui::Separator();
+
+	ImGui::Text(_eltm->getText("Settings.sensitivity").data());
+	ImGui::SameLine(0);
+	static float sensy = Ak::getMainAppProjectFile().archive()["scene_camera_sensy"];
+	ImGui::SliderFloat("##slider_camera_sensy", &sensy, 0.1f, 2.0f, "%.1f");
+	if(sensy != Ak::getMainAppProjectFile().archive()["scene_camera_sensy"])
+	{
+		Ak::getMainAppProjectFile().archive()["scene_camera_sensy"] = sensy;
+		static_cast<EditorCamera3D*>(_scene->getCamera().get())->setSensitivity(sensy);
 	}
 }
 

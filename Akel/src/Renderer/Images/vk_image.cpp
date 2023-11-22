@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 19/11/2023
+// Updated : 21/11/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -374,5 +374,6 @@ namespace Ak
 
 		Ak_assert(_image != VK_NULL_HANDLE, "trying to destroy an uninit vulkan image");
 		Render_Core::get().getAllocator().destroyImage(_allocation, _image);
+		_image = VK_NULL_HANDLE;
 	}
 }
