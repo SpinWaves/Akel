@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/03/2023
-// Updated : 14/10/2023
+// Updated : 02/12/2023
 
 #include <Graphics/model_factory.h>
 #include <Maths/vec3.h>
@@ -63,8 +63,8 @@ namespace Ak
 		const std::vector<Vertex> vertexData = {
 			{{position.X, position.Y, position.Z},						 color, {0.0f, 0.0f}},
 			{{position.X + scale.X, position.Y, position.Z},			 color, {uv_scale.X, 0.0f}},
-			{{position.X + scale.X, position.Y, position.Z + scale.Z},	 color, {uv_scale.X, uv_scale.Y}},
-			{{position.X, position.Y, position.Z + scale.Z},			 color, {0.0f, uv_scale.Y}}
+			{{position.X + scale.X, position.Y + scale.Y, position.Z},	 color, {uv_scale.X, uv_scale.Y}},
+			{{position.X, position.Y + scale.Y, position.Z},			 color, {0.0f, uv_scale.Y}}
 		};
 
 		const std::vector<uint32_t> indexData = {

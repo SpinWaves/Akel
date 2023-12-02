@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 23/08/2023
+// Updated : 02/12/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Platform/window.h>
@@ -130,7 +130,10 @@ namespace Ak
 
 	void SwapChain::recreate()
 	{
-		destroy();
+		vkDestroySwapchainKHR(Render_Core::get().getDevice().get(), _swapChain, nullptr);
+		for(Image& img : _images)
+			img.destroyImageView();
+		_swapChain = VK_NULL_HANDLE;
 		init(_renderer);
 	}
 

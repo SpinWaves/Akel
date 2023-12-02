@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 15/02/2023
-// Updated : 08/11/2023
+// Updated : 02/12/2023
 
 #include <Renderer/scene_renderer.h>
 #include <Renderer/rendererComponent.h>
@@ -93,6 +93,7 @@ namespace Ak
 				for(ShaderID id : scene->_skybox_shaders)
 					_skybox_data.shaders.push_back(id);
 			}
+			_skybox_data.cubemap = scene->getSkybox().getCubemapID();
 			forward_desc.skydata = &_skybox_data;
 		}
 

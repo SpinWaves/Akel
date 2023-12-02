@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 29/03/2023
-// Updated : 01/11/2023
+// Updated : 02/12/2023
 
 #ifndef __AK_SKYBOX__
 #define __AK_SKYBOX__
@@ -28,7 +28,7 @@ namespace Ak
 			Skybox(const SkyboxDesc& description);
 			Skybox(const std::filesystem::path& file);
 			inline operator bool() const noexcept { return _cubemap != nullcubemap; }
-			inline const CubemapID getCubemapID() const noexcept { return _cubemap; }
+			inline CubemapID getCubemapID() const noexcept { return _cubemap; }
 			~Skybox() = default;
 
 		private:

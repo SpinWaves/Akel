@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 17/10/2023
-// Updated : 08/11/2023
+// Updated : 02/12/2023
 
 #ifndef __AK_FORWARD_PASS__
 #define __AK_FORWARD_PASS__
@@ -10,6 +10,7 @@
 #include <Graphics/render_command.h>
 #include <Renderer/Images/depth.h>
 #include <Renderer/Images/texture.h>
+#include <Renderer/Images/cubemap_library.h>
 #include <Renderer/Pipeline/shaders_library.h>
 #include <Renderer/rendererComponent.h>
 #include <Scene/Cameras/base_camera.h>
@@ -40,6 +41,7 @@ namespace Ak
 	struct ForwardSkyboxData : public CommonForwardData
 	{
 		std::vector<ShaderID> shaders;
+		CubemapID cubemap = nullcubemap;
 
 		inline void setCommonData(const CommonForwardData& data)
 		{

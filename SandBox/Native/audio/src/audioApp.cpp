@@ -1,19 +1,6 @@
 #include <Akel.h>
 #include <Akel_main.h>
 
-class TitleComponent : public Ak::Component
-{
-	public:
-		TitleComponent() : Component("title_component") {}
-		void onFixedUpdate() override
-		{
-			static Ak::WindowComponent* window = Ak::getMainAppComponentStack()->get_component_as<Ak::WindowComponent*>("__window_component");
-			static Ak::RendererComponent* renderer = Ak::getMainAppComponentStack()->get_component_as<Ak::RendererComponent*>("__renderer_component0");
-			window->title = "Audio using Akel Engine, FPS : " + std::to_string(renderer->getFPS());
-			window->fetchSettings();
-		}
-};
-
 void Akel_InstanceSetup(Ak::AkelInstance& instance)
 {
 	instance.project_file_name = "audio";
@@ -23,7 +10,6 @@ void Akel_AppSetup(Ak::Application& app, Ak::CommandLineArgs args)
 {
 	Ak::PlainApplication papp(app, "Audio using Akel Engine");
 	papp.add_component<Ak::AudioComponent>();
-	papp.add_component<TitleComponent>();
 	papp.add_component<Ak::ImGuiRenderStats>(papp.getRenderer());
 
 	Ak::Scene* scene = Ak::memAlloc<Ak::Scene>("main_scene");

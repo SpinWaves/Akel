@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2023
-// Updated : 06/11/2023
+// Updated : 02/12/2023
 
 #include <Graphics/mesh.h>
 #include <Renderer/rendererComponent.h>
@@ -24,7 +24,7 @@ namespace Ak
 		_is_init = true;
 	}
 
-	void Mesh::draw(RendererComponent& renderer)
+	void Mesh::draw(RendererComponent& renderer) const
 	{
 		if(!_is_init)
 			return;

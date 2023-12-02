@@ -1,13 +1,18 @@
 // This file is a part of Akel
 // Authors : @maldavid
 // Created : 02/11/2023
-// Updated : 15/11/2023
+// Updated : 02/12/2023
 
+#include "Renderer/Descriptors/vk_descriptor_set.h"
+#include "Renderer/Images/cubemap.h"
+#include "Renderer/Images/cubemap_library.h"
+#include "Renderer/Images/vk_image.h"
 #include <Graphics/forward_pass.h>
 #include <Renderer/Images/texture_library.h>
 #include <Renderer/rendererComponent.h>
 #include <Renderer/Pipeline/vk_shader.h>
 #include <Renderer/Buffers/vk_ubo.h>
+#include <Graphics/model_factory.h>
 
 namespace Ak
 {
@@ -116,75 +121,59 @@ namespace Ak
 
 	void ForwardPass::skyboxPass(RendererComponent& renderer, const ForwardSkyboxData& data, bool rebuildPass)
 	{
-		/*
-		if(!scene->_camera || !scene->_skybox)
-            return;
-
-		auto renderer = scene->_renderer;
-
-		// caches
-		static Shader::Uniform matrices_uniform_buffer;
-		static ShaderID fragment_shader = nullshader;
-
-		if(scene != _scene_cache && (_scene_cache == nullptr || !std::equal(scene->_skybox_shaders.begin(), scene->_skybox_shaders.end(), _scene_cache->_skybox_shaders.begin())))
-		{
-			_forward_data.descriptor_sets.clear();
-			_forward_data.push_constants.clear();
-			for(ShaderID id : _forward_data.shaders)
-			{
-				auto shader = ShadersLibrary::get().getShader(id);
-				int material_set = -1;
-				if(shader->getType() == VK_SHADER_STAGE_FRAGMENT_BIT)
-				{
-					fragment_shader = id;
-					if(shader->getImageSamplers().count("u_albedo_map"))
-						material_set = shader->getImageSamplers()["u_albedo_map"].getSet();
-				}
-				int i = 0;
-				for(DescriptorSet& set : shader->getDescriptorSets())
-				{
-					if(i != material_set)
-						_forward_data.descriptor_sets.push_back(set.get());
-					i++;
-				}
-				if(shader->getUniforms().size() > 0)
-				{
-					if(shader->getUniforms().count("matrices"))
-						matrices_uniform_buffer = shader->getUniforms()["matrices"];
-				}
-				for(auto& [name, pc] : shader->getPushConstants())
-					_forward_data.push_constants.push_back(pc);
-			}
-		}
-
-		if(fragment_shader == nullshader)
-			Core::log::report(FATAL_ERROR, "Scene Renderer : no fragment shader given (wtf)");
-        m_SkyboxDescriptorSet->SetTexture("u_CubeMap", m_CubeMap, 0, TextureType::CUBE);
-        m_SkyboxDescriptorSet->Update();
-
-		PipelineDesc pipeline_desc;
-		pipeline_desc.shaders = _forward_data.shaders;
-		pipeline_desc.clear_target = true;
-		pipeline_desc.clear_color = { 0.f, 0.f, 0.f, 1.f };
-		pipeline_desc.swapchain = (_forward_data.render_texture == nulltexture);
-		pipeline_desc.depth = &_forward_data.depth;
-		pipeline_desc.render_targets[0] = _forward_data.render_texture;
-		pipeline_desc.culling = VK_CULL_MODE_BACK_BIT;
-
-		auto pipeline = _pipelines_manager.getPipeline(*renderer, pipeline_desc);
-		if(pipeline == nullptr || !pipeline->bindPipeline(renderer->getActiveCmdBuffer()))
+		if(data.cubemap == nullcubemap)
 			return;
 
-        auto commandBuffer = Renderer::GetMainSwapChain()->GetCurrentCommandBuffer();
-        auto pipeline      = Graphics::Pipeline::Get(pipelineDesc);
-        pipeline->Bind(commandBuffer);
+		PipelineDesc pipeline_desc;
+		pipeline_desc.shaders = data.shaders;
+		pipeline_desc.clear_target = false;
+		pipeline_desc.swapchain = (data.render_texture == nulltexture);
+		pipeline_desc.render_targets[0] = data.render_texture;
+		pipeline_desc.culling = VK_CULL_MODE_NONE;
 
-        auto set = m_SkyboxDescriptorSet.get();
-        Renderer::BindDescriptorSets(pipeline.get(), commandBuffer, 0, &set, 1);
-        Renderer::DrawMesh(commandBuffer, pipeline.get(), m_ScreenQuad);
+		auto pipeline = _pipelines_manager.getPipeline(renderer, pipeline_desc);
+		if(pipeline == nullptr || !pipeline->bindPipeline(renderer.getActiveCmdBuffer()))
+			return;
 
-        pipeline->End(commandBuffer);
-		*/
+		// caches
+		static std::optional<Shader::Uniform> matrices_uniform_buffer;
+		static std::optional<DescriptorSet> cube_sampler;
+		static std::vector<VkDescriptorSet> sets;
+		static std::shared_ptr<Cubemap> cubemap;
+		static const Model screen_quad = createQuad();
+
+		if(rebuildPass)
+		{
+			cubemap.reset();
+			for(ShaderID id : data.shaders)
+			{
+				auto shader = ShadersLibrary::get().getShader(id);
+				if(!matrices_uniform_buffer)
+					matrices_uniform_buffer = shader->getUniform("matrices");
+				if(!cube_sampler)
+					cube_sampler = shader->getDescriptorSetContaining("skybox");
+				for(const DescriptorSet& set : shader->getDescriptorSets())
+					sets.push_back(set.get());
+			}
+			if(!cube_sampler)
+				Core::log::report(FATAL_ERROR, "Forward Pass : did not found 'skybox' image sampler in the skybox shaders");
+			if(!cubemap)
+				cubemap = CubemapLibrary::get().getCubemap(data.cubemap);
+			cube_sampler->writeDescriptor(0, cubemap->getImageView(), cubemap->getSampler());
+		}
+		if(!matrices_uniform_buffer)
+			Core::log::report(FATAL_ERROR, "Forward Pass : did not found 'matrices' uniform buffer in the skybox shaders");
+
+		MatricesBuffer mat;
+		mat.proj = data.camera->getProj();
+		mat.view = data.camera->getView();
+		mat.proj[1][1] *= -1;
+		matrices_uniform_buffer->getBuffer()->setData(sizeof(mat), &mat);
+
+		vkCmdBindDescriptorSets(renderer.getActiveCmdBuffer().get(), pipeline->getPipelineBindPoint(), pipeline->getPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
+		screen_quad.getMesh().draw(renderer);
+
+		pipeline->endPipeline(renderer.getActiveCmdBuffer());
 	}
 
 	void ForwardPass::destroy()

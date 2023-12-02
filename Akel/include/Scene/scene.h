@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 16/11/2022
-// Updated : 06/11/2023
+// Updated : 02/12/2023
 
 #ifndef __AK_SCENE__
 #define __AK_SCENE__
@@ -67,6 +67,7 @@ namespace Ak
 			std::shared_ptr<Cam::BaseCamera> getCamera() const { return _camera; }
 
 			inline void setSkybox(const Skybox& skybox) { _skybox = skybox; }
+			inline const Skybox& getSkybox() const noexcept { return _skybox; }
 
 			inline const fString& getName() const noexcept { return _name; }
 			inline const std::filesystem::path& getFilePath() const { return _filepath; }

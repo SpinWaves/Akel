@@ -27,4 +27,8 @@ void Akel_AppSetup(Ak::Application& app, Ak::CommandLineArgs args)
 	Ak::Entity spaceship = scene->createEntity();
 	spaceship.addAttribute<Ak::TransformAttribute>(0.0f, 0.0f, 0.0f);
 	spaceship.addAttribute<Ak::ModelAttribute>(Ak::VFS::resolve("//Meshes/spaceship.obj"), spaceship_material);
+
+	Ak::Entity cube = scene->createEntity();
+	cube.addAttribute<Ak::TransformAttribute>(10.0f, 10.0f, 1.0f);
+	cube.addAttribute<Ak::ModelAttribute>(Ak::createQuad());
 }

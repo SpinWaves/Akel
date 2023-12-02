@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/09/2021
-// Updated : 26/09/2023
+// Updated : 02/12/2023
 
+#include "Akpch.h"
 #include <Renderer/renderer_events.h>
 #include <Renderer/rendererComponent.h>
 #include <Renderer/RenderPass/frame_buffer_library.h>
@@ -36,6 +37,7 @@ namespace Ak
 		_rendering_began = false;
 		if(!_is_init)
 			return false;
+		_cmd.getCmdBuffer(_active_image_index).waitForExecution();
 		_fps.setMaxFPS(_window->_window_has_focus ? _max_fps : 15);
 		_fps.update();
 		if(!_fps.makeRendering())
@@ -51,7 +53,6 @@ namespace Ak
 			}
 			_events_queue.pop();
 		}
-		_cmd.getCmdBuffer(_active_image_index).waitForExecution();
 		auto device = Render_Core::get().getDevice().get();
 		VkResult result = vkAcquireNextImageKHR(device, _swapchain(), UINT64_MAX, _semaphores[_active_image_index].getImageSemaphore(), VK_NULL_HANDLE, &_swapchain_image_index);
 		if(result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
