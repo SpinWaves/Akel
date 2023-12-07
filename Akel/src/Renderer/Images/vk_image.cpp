@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 22/12/2022
-// Updated : 26/09/2023
+// Updated : 21/11/2023
 
 #include <Renderer/Images/vk_image.h>
 #include <Renderer/Buffers/vk_buffer.h>
@@ -10,6 +10,7 @@
 #include <Renderer/Core/render_core.h>
 #include <Renderer/Command/vk_cmd_pool.h>
 #include <Renderer/Command/vk_cmd_buffer.h>
+#include <vulkan/vulkan_core.h>
 
 namespace Ak
 {
@@ -26,6 +27,7 @@ namespace Ak
 		}
 
 		Core::log::report(FATAL_ERROR, "Vulkan : failed to find image format");
+		return VK_FORMAT_R8G8B8A8_SRGB;
 	}
 
 	bool isDepthFormat(VkFormat format)
@@ -38,8 +40,9 @@ namespace Ak
 			case VK_FORMAT_D24_UNORM_S8_UINT:
 			case VK_FORMAT_D16_UNORM_S8_UINT:
 				return true;
+
+			default: return false;
 		}
-		return false;
 	}
 
 	bool isStencilFormat(VkFormat format)
@@ -49,8 +52,9 @@ namespace Ak
 			case VK_FORMAT_D32_SFLOAT_S8_UINT:
 			case VK_FORMAT_D24_UNORM_S8_UINT:
 				return true;
+
+			default: return false;
 		}
-		return false;
 	}
 
 	VkFormat bitsToFormat(uint32_t bits)
@@ -143,7 +147,7 @@ namespace Ak
 		return stages;
 	}
 
-	void Image::create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImageLayout layout, bool cube)
+	void Image::create(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkImageLayout layout, bool cube)
 	{
 		_width = width;
 		_height = height;
@@ -167,21 +171,18 @@ namespace Ak
 			imageInfo.flags = VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
 		_layout = layout;
 
-		if(vkCreateImage(Render_Core::get().getDevice().get(), &imageInfo, nullptr, &_image) != VK_SUCCESS)
-			Core::log::report(FATAL_ERROR, "Vulkan : failed to create an image");
+		VmaAllocationCreateInfo alloc_info{};
+		alloc_info.usage = VMA_MEMORY_USAGE_AUTO_PREFER_DEVICE;
+		/*
+		if(width * height * RCore::formatSize(format) > 4096 * 4096)
+		{
+			alloc_info.flags = VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT;
+			alloc_info.priority = 1.0f;
+		}
+		*/
 
-		VkMemoryRequirements memRequirements;
-		vkGetImageMemoryRequirements(Render_Core::get().getDevice().get(), _image, &memRequirements);
-
-		VkMemoryAllocateInfo allocInfo{};
-		allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-		allocInfo.allocationSize = memRequirements.size;
-		allocInfo.memoryTypeIndex = RCore::findMemoryType(memRequirements.memoryTypeBits, properties);
-
-		if(vkAllocateMemory(Render_Core::get().getDevice().get(), &allocInfo, nullptr, &_memory) != VK_SUCCESS)
-			Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate memory for an image");
-
-		vkBindImageMemory(Render_Core::get().getDevice().get(), _image, _memory, 0);
+		_allocation = Render_Core::get().getAllocator().createImage(&imageInfo, &alloc_info, _image, nullptr);
+		Core::log::report(DEBUGLOG, "Vulkan : created new Image");
 	}
 
 	void Image::createImageView(VkImageViewType type, VkImageAspectFlags aspectFlags) noexcept
@@ -199,6 +200,7 @@ namespace Ak
 
 		if(vkCreateImageView(Render_Core::get().getDevice().get(), &viewInfo, nullptr, &_image_view) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to create image view");
+		Core::log::report(DEBUGLOG, "Vulkan : created new ImageView");
 	}
 
 	void Image::createSampler() noexcept
@@ -218,6 +220,7 @@ namespace Ak
 
 		if(vkCreateSampler(Render_Core::get().getDevice().get(), &info, nullptr, &_sampler) != VK_SUCCESS)
 			Core::log::report(FATAL_ERROR, "Vulkan Texture : unable to create image sampler");
+		Core::log::report(DEBUGLOG, "Vulkan : created new Sampler");
 	}
 
 	void Image::transitionLayout(VkImageLayout new_layout, CmdBuffer& cmd, bool submit)
@@ -368,11 +371,9 @@ namespace Ak
 		
 		if(_image_view != VK_NULL_HANDLE)
 			vkDestroyImageView(Render_Core::get().getDevice().get(), _image_view, nullptr);
-		
-		Ak_assert(_memory != VK_NULL_HANDLE, "trying to destroy an uninit memory for an image");
-	    vkFreeMemory(Render_Core::get().getDevice().get(), _memory, nullptr);
 
 		Ak_assert(_image != VK_NULL_HANDLE, "trying to destroy an uninit vulkan image");
-		vkDestroyImage(Render_Core::get().getDevice().get(), _image, nullptr);
+		Render_Core::get().getAllocator().destroyImage(_allocation, _image);
+		_image = VK_NULL_HANDLE;
 	}
 }

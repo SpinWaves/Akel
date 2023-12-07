@@ -1,8 +1,9 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 06/07/2021
-// Updated : 11/10/2023
+// Updated : 22/11/2023
 
+#include "Panels/scene.h"
 #include <studioComponent.h>
 #include <Fonts/material_font.h>
 #include <Third_party/imspinner.h>
@@ -16,7 +17,7 @@
 Ak::UniquePtr<Ak::ELTM> _lang_eltm(nullptr);
 std::unordered_map<SDL_SystemCursor, SDL_Cursor*> cursors;
 
-constexpr const int RESIZE_MARGIN = 10;
+constexpr const int RESIZE_MARGIN = 5;
 
 /*
 SDL_SYSTEM_CURSOR_ARROW
@@ -53,7 +54,7 @@ SDL_HitTestResult hitTestCallback(SDL_Window* win, const SDL_Point* area, void* 
 		SDL_SetCursor(cursors[SDL_SYSTEM_CURSOR_SIZENS]);
 		return SDL_HITTEST_RESIZE_TOP;
 	}
-	if constexpr(WINDOW_FRAME_BUTTONS_RIGHT)
+	if(Ak::getMainAppProjectFile().archive()["window_frame_buttons_right"])
 	{
 		if(area->y < 25 && area->x > 275 && area->x < w - 95)
 			return SDL_HITTEST_DRAGGABLE;
@@ -555,20 +556,6 @@ void StudioComponent::draw_general_settings()
 	}
 }
 
-void StudioComponent::draw_scene_settings()
-{
-	ImGui::Text(std::string(AKS_ICON_MD_VIDEOCAM" " + _eltm->getText("Settings.camera")).data());
-
-	ImGui::Separator();
-
-	ImGui::Text(_eltm->getText("Settings.sensitivity").data());
-	ImGui::SameLine(0);
-	static float sensy = Ak::getMainAppProjectFile().archive()["scene_camera_sensy"];
-	ImGui::SliderFloat("##slider_camera_sensy", &sensy, 0.1f, 2.0f, "%.1f");
-	if(sensy != Ak::getMainAppProjectFile().archive()["scene_camera_sensy"])
-		Ak::getMainAppProjectFile().archive()["scene_camera_sensy"] = sensy;
-}
-
 void StudioComponent::draw_project_settings()
 {
 	static std::array<bool, 6> opts = {
@@ -616,7 +603,7 @@ void StudioComponent::drawOptionsWindow()
 			switch(selected)
 			{
 				case 0: draw_general_settings(); break;
-				case 1: draw_scene_settings(); break;
+				case 1: static_cast<Scene*>(_stack->get_panel("__scene"))->settingsPage(); break;
 				case 2: draw_project_settings(); break;
 				default : break;
 			}

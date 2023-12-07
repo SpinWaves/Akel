@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 17/08/2023
-// Updated : 17/10/2023
+// Updated : 22/11/2023
 
 #include <camera_editor.h>
 
@@ -45,13 +45,13 @@ void EditorCamera3D::onEvent(Ak::Input& input)
 	if(!_camera_in_action)
 	{
 		SDL_SetRelativeMouseMode(SDL_FALSE);
-		if(!input.getInMouse(AK_MOUSE_BUTTON_LEFT) || !_is_hover)
+		if(!input.getInMouse(AK_MOUSE_BUTTON_RIGHT) || !_is_hover)
 			return;
 		_camera_in_action = true;
 	}
 	else
 	{
-		if(!input.getInMouse(AK_MOUSE_BUTTON_LEFT))
+		if(!input.getInMouse(AK_MOUSE_BUTTON_RIGHT))
 		{
 			_camera_in_action = false;
 			return;

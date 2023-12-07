@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2022
-// Updated : 06/09/2023
+// Updated : 15/11/2023
 
 #ifndef __AK_RENDER_CORE__
 #define __AK_RENDER_CORE__
@@ -10,8 +10,8 @@
 #include <Core/core.h>
 #include <Core/profile.h>
 #include <Utils/selfInstance.h>
-#include "Memory/allocator_GPU.h"
 
+#include "memory.h"
 #include "vk_queues.h"
 #include "vk_device.h"
 #include "vk_instance.h"
@@ -46,23 +46,19 @@ namespace Ak
             void destroy();
 
 			inline bool is_init() noexcept { return _is_init; }
-            inline Instance&  getInstance() noexcept { return _instance; }
-            inline Device&    getDevice() noexcept { return _device; }
-            inline Queues&    getQueue() noexcept { return _queues; }
+            inline Instance& getInstance() noexcept { return _instance; }
+            inline Device& getDevice() noexcept { return _device; }
+            inline Queues& getQueue() noexcept { return _queues; }
             inline ValidationLayers& getLayers() noexcept { return _layers; }
+			inline GPUallocator& getAllocator() noexcept { return _allocator; }
 
-            inline GPU_Mem_Chunk allocChunk(VkMemoryRequirements requirements, VkMemoryPropertyFlags flags) { return _allocator.allocChunk(requirements, flags); }
-            inline void freeChunk(GPU_Mem_Chunk& chunk) { _allocator.freeChunk(chunk); }
-			//inline const VmaAllocator& getAllocator() const noexcept { return _allocator; }
-			
 			~Render_Core() = default;
 
         private:
             Device _device;
             Queues _queues;
             Instance _instance;
-            Allocator_GPU _allocator;
-			//VmaAllocator _allocator;
+            GPUallocator _allocator;
             ValidationLayers _layers;
 
             bool _is_init = false;

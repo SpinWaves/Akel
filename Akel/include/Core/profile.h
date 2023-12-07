@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 26/06/2021
-// Updated : 05/02/2023
+// Updated : 19/11/2023
 
 #ifndef __AK_PROFILE_CORE__
 #define __AK_PROFILE_CORE__
@@ -113,7 +113,7 @@
 #endif
 
 #if !defined(AK_32BITS) && !defined(AK_64BITS)
-	#error Akel can only run on 32bit or 64bit architectures
+	#error "Akel can only run on 32bit or 64bit architectures"
 #endif
 
 #ifdef AK_PLATFORM_WINDOWS
@@ -144,5 +144,49 @@
 		#define AK_API AK_IMPORT
 	#endif
 #endif
+
+// Try to identify the compiler
+#if defined(__BORLANDC__)
+	#define AK_COMPILER_BORDLAND
+#elif defined(__clang__)
+	#define AK_COMPILER_CLANG
+	#ifdef __MINGW32__
+		#define AK_COMPILER_MINGW
+		#ifdef __MINGW64_VERSION_MAJOR
+			#define AK_COMPILER_MINGW_W64
+		#endif
+	#endif
+#elif defined(__GNUC__) || defined(__MINGW32__)
+	#define AK_COMPILER_GCC
+	#ifdef __MINGW32__
+		#define AK_COMPILER_MINGW
+		#ifdef __MINGW64_VERSION_MAJOR
+			#define AK_COMPILER_MINGW_W64
+		#endif
+	#endif
+#elif defined(__INTEL_COMPILER) || defined(__ICL)
+	#define AK_COMPILER_INTEL
+#elif defined(_MSC_VER)
+	#define AK_COMPILER_MSVC
+#else
+	#define AK_COMPILER_UNKNOWN
+	#warning "This compiler is not fully supported"
+#endif
+
+// Checking common assumptions
+#include <climits>
+#include <cstdint>
+
+static_assert(CHAR_BIT == 8, "CHAR_BIT is expected to be 8");
+
+static_assert(sizeof(int8_t)  == 1, "int8_t is not of the correct size" );
+static_assert(sizeof(int16_t) == 2, "int16_t is not of the correct size");
+static_assert(sizeof(int32_t) == 4, "int32_t is not of the correct size");
+static_assert(sizeof(int64_t) == 8, "int64_t is not of the correct size");
+
+static_assert(sizeof(uint8_t)  == 1, "uint8_t is not of the correct size" );
+static_assert(sizeof(uint16_t) == 2, "uint16_t is not of the correct size");
+static_assert(sizeof(uint32_t) == 4, "uint32_t is not of the correct size");
+static_assert(sizeof(uint64_t) == 8, "uint64_t is not of the correct size");
 
 #endif // __AK_PROFILE_CORE__

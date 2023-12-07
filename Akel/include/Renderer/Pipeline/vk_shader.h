@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2022
-// Updated : 29/08/2023
+// Updated : 06/11/2023
 
 #ifndef __AK_VK_SHADER__
 #define __AK_VK_SHADER__
@@ -127,7 +127,7 @@ namespace Ak
 					inline int32_t getSize() const noexcept { return _size; }
 					inline VkShaderStageFlagBits getStageFlags() const noexcept { return _stage; }
 
-					inline void setData(void* data) noexcept { _data = data; }
+					inline void setData(const void* data) noexcept { _data = const_cast<void*>(data); }
 					inline void bind(VkCommandBuffer buffer, VkPipelineLayout layout) noexcept { vkCmdPushConstants(buffer, layout, _stage, _offset, _size, _data); }
 
 					~PushConstant() = default;
@@ -155,22 +155,26 @@ namespace Ak
 			inline std::vector<DescriptorSetLayout>& getDescriptorSetLayouts() { return _layouts; }
 			inline DescriptorSetLayout& getDescriptorSetLayout(int index) { return _layouts[index]; }
 
-			inline std::vector<DescriptorSet>& getDescriptorSets() { return _sets; }
+			inline const std::vector<DescriptorSet>& getDescriptorSets() const { return _sets; }
+			inline const std::vector<VkDescriptorSet>& getVkDescriptorSets() const { return _vk_sets; }
+			std::optional<DescriptorSet> getDescriptorSetContaining(const std::string& name);
 
-			inline std::optional<Uniform> getUniform(std::string name) { return _uniforms.count(name) ? std::make_optional(_uniforms[std::move(name)]) : std::nullopt; }
-			inline std::optional<VkVertexInputAttributeDescription> getAttribute(std::string name) { return _attributes.count(name) ? std::make_optional(_attributes[std::move(name)]) : std::nullopt; }
+			inline std::optional<Uniform> getUniform(const std::string& name) { return _uniforms.count(name) ? std::make_optional(_uniforms[name]) : std::nullopt; }
+			inline std::optional<ImageSampler> getImageSampler(const std::string& name) { return _image_samplers.count(name) ? std::make_optional(_image_samplers[name]) : std::nullopt; }
+			inline std::optional<PushConstant> getPushConstant(const std::string& name) { return _push_constants.count(name) ? std::make_optional(_push_constants[name]) : std::nullopt; }
+			inline std::optional<VkVertexInputAttributeDescription> getAttribute(const std::string& name) { return _attributes.count(name) ? std::make_optional(_attributes[name]) : std::nullopt; }
 
 			inline const fString& getEntryPointName() const noexcept { return _entry_point_name; }
-			inline const std::vector<uint32_t> getByteCode() const { return _byte_code; }
+			inline const std::vector<uint32_t>& getByteCode() const { return _byte_code; }
 
 			~Shader() = default;
 
 		private:
 			friend class PipelineDesc;
 			friend class GraphicPipeline;
-
 			void generate();
 
+		private:
 			std::unordered_map<std::string, Uniform> _uniforms;
 			std::unordered_map<std::string, ImageSampler> _image_samplers;
 			std::unordered_map<std::string, PushConstant> _push_constants;
@@ -179,6 +183,7 @@ namespace Ak
 			std::vector<VkDescriptorPoolSize> _desc_pool_sizes;
 			DescriptorPool _desc_pool;
 			std::vector<DescriptorSet> _sets;
+			std::vector<VkDescriptorSet> _vk_sets;
 			std::vector<DescriptorSetLayout> _layouts;
 
 			const std::vector<uint32_t> _byte_code;

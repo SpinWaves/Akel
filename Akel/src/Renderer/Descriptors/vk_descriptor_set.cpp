@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/04/2022
-// Updated : 16/09/2023
+// Updated : 06/11/2023
 
 #include <Renderer/Descriptors/vk_descriptor_set.h>
 #include <Renderer/Descriptors/vk_descriptor_set_layout.h>
@@ -14,8 +14,9 @@
 
 namespace Ak
 {
-    void DescriptorSet::init(RendererComponent* renderer, DescriptorSetLayout* layout, DescriptorPool* pool)
+    void DescriptorSet::init(RendererComponent* renderer, DescriptorSetLayout* layout, DescriptorPool* pool, int32_t index)
     {
+		_index = index;
 		_renderer = renderer;
 		_layout = layout;
 		_pool = pool;
@@ -35,16 +36,16 @@ namespace Ak
             Core::log::report(FATAL_ERROR, "Vulkan : failed to allocate descriptor set");
 	}
 
-	void DescriptorSet::writeDescriptor(int binding, UBO* ubo) noexcept
+	void DescriptorSet::writeDescriptor(int binding, const UBO& ubo) noexcept
 	{
         auto device = Render_Core::get().getDevice().get();
 
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 		{
 			VkDescriptorBufferInfo bufferInfo{};
-			bufferInfo.buffer = ubo->get(i);
-			bufferInfo.offset = ubo->getOffset(i);
-			bufferInfo.range = ubo->getSize(i);
+			bufferInfo.buffer = ubo.get(i);
+			bufferInfo.offset = ubo.getOffset(i);
+			bufferInfo.range = ubo.getSize(i);
 
 			VkWriteDescriptorSet descriptorWrite{};
 			descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -80,18 +81,18 @@ namespace Ak
 		vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
 	}
 
-	DescriptorSet DescriptorSet::duplicate()
+	DescriptorSet DescriptorSet::duplicate() const
 	{
 		DescriptorSet set;
-		set.init(_renderer, _layout, _pool);
+		set.init(_renderer, _layout, _pool, _index);
 		return set;
 	}
 
-	VkDescriptorSet& DescriptorSet::operator()() noexcept
+	const VkDescriptorSet& DescriptorSet::operator()() const noexcept
 	{
 		return _desc_set[_renderer->getActiveImageIndex()];
 	}
-	VkDescriptorSet& DescriptorSet::get() noexcept
+	const VkDescriptorSet& DescriptorSet::get() const noexcept
 	{
 		return _desc_set[_renderer->getActiveImageIndex()];
 	}

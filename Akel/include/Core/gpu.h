@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/04/2021
-// Updated : 27/01/2023
+// Updated : 21/11/2023
 
 #ifndef __AK_GPU__
 #define __AK_GPU__
@@ -48,7 +48,7 @@ namespace Ak::Core
             std::map<uint32_t, std::string> _vendors;
             std::array<std::string, 5> _types;
             uint32_t _deviceCount = 0;
-            uint32_t _instanceVersion = VK_API_VERSION_1_2;
+            uint32_t _instanceVersion = VK_API_VERSION_1_3;
     };
 }
 

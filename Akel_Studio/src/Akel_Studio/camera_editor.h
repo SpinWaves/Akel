@@ -1,7 +1,7 @@
 // This file is a part of Akel Studio
 // Authors : @kbz_8
 // Created : 17/08/2023
-// Updated : 17/08/2023
+// Updated : 22/11/2023
 
 #ifndef __AK_STUDIO_EDITOR_CAMERA_3D__
 #define __AK_STUDIO_EDITOR_CAMERA_3D__ 
@@ -20,6 +20,7 @@ class EditorCamera3D : public Ak::Cam::BaseCamera
 
 		inline std::string getCameraType() override { return "EditorCamera3D"; }
 		inline static void setHover(bool hover) noexcept { _is_hover = hover; }
+		inline void setSensitivity(float sensitivity) noexcept { _sensivity = sensitivity; }
 
 		~EditorCamera3D() = default;
 
@@ -38,7 +39,7 @@ class EditorCamera3D : public Ak::Cam::BaseCamera
 		double _phi = 0.0;
 
 		const float _speed = 0.3f;
-		const float _sensivity = 0.7f;
+		float _sensivity = 0.7f;
 		float _fov = 90.0f;
 
 		inline static bool _is_hover = false;

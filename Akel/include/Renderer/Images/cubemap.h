@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 09/02/2023
-// Updated : 06/09/2023
+// Updated : 01/11/2023
 
 #ifndef __AK_CUBEMAP__
 #define __AK_CUBEMAP__
@@ -15,7 +15,7 @@ namespace Ak
 	{
 		public:
 			Cubemap() = default;
-			void create(uint8_t* pixels, uint32_t width, uint32_t height, VkFormat format);
+			void create(uint8_t* pixels, uint32_t width, uint32_t height, VkFormat format, int nlayers);
 			~Cubemap() = default;
 	};
 

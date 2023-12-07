@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 25/03/2022
-// Updated : 06/09/2023
+// Updated : 19/11/2023
 
 #include <Renderer/Core/render_core.h>
 #include <Renderer/RenderPass/frame_buffer_library.h>
@@ -198,6 +198,7 @@ namespace Ak
 			}
 
 			Core::log::report(FATAL_ERROR, "Vulkan : failed to find suitable memory type");
+			return -1; // just for the warning
 		}
 	}
 
@@ -212,6 +213,7 @@ namespace Ak
 		_layers.init();
 		_device.init();
 		volkLoadDevice(_device.get());
+		_allocator.init();
 		_queues.init();
 		_is_init = true;
 	}
@@ -232,6 +234,7 @@ namespace Ak
 		RenderPassesLibrary::get().clearCache();
 		FrameBufferLibrary::get().clearCache();
 		ShadersLibrary::get().clearLibrary();
+		_allocator.destroy();
 		_device.destroy();
 		_layers.destroy();
 		_instance.destroy();
