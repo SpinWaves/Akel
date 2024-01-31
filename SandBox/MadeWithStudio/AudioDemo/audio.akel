@@ -15,6 +15,13 @@
     "jamAllocator_size_0": 16777216,
     "main_scene": "main_scene",
     "memory_manager_enable_fixed_allocator": true,
+    "render_core": {
+        "instance_extensions": [
+            "VK_EXT_debug_report",
+            "VK_KHR_surface",
+            "VK_KHR_xlib_surface"
+        ]
+    },
     "scenes": [
         {
             "file": ":/Resources/Scenes/main_scene.akscn",

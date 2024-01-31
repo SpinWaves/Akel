@@ -1,4 +1,0 @@
-function Vmain() -> vec4
-{
-	i : num = 4
-}

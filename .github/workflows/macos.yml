@@ -69,8 +69,3 @@ jobs:
     # Build the engine
     - name: Build Akel
       run: xmake --yes
-
-    # Build the editor
-    - name: Build Akel Studio
-      run: xmake build --yes Akel_Studio
-

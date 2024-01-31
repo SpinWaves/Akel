@@ -5,177 +5,249 @@
 
 -- Globals settings
 add_repositories("nazara-engine-repo https://github.com/NazaraEngine/xmake-repo")
-add_requireconfs("nzsl.fmt", { configs = { header_only = true } })
-add_requires("nzsl")
 
-add_requires("entt", "spirv-reflect", "libsdl", "openal-soft", "sol2", "nlohmann_json", "kuba-zip v0.2.6")
-add_requires("volk", { configs = { header_only = true }})
-add_requires("imgui v1.89.8-docking", { configs = { vulkan = true, sdl2_no_renderer = true }})
-add_requireconfs("imgui", { configs = { cxflags = "-D IMGUI_IMPL_VULKAN_NO_PROTOTYPES" }})
+-- add_requireconfs("imgui", { configs = { cxflags = "-D IMGUI_IMPL_VULKAN_NO_PROTOTYPES" }})
 
-add_rules("mode.debug", "mode.release")
 set_languages("cxx17")
 
-set_objectdir("build/objects/$(os)_$(arch)")
-set_targetdir("build/$(os)_$(arch)")
+add_rules("mode.debug", "mode.release")
+set_allowedplats("windows", "mingw", "linux", "macosx", "wasm")
+set_allowedmodes("debug", "release")
+set_defaultmode("release")
+
+set_project("AkelEngine")
+
+if is_mode("debug") then
+	add_defines("AK_DEBUG")
+elseif is_mode("release") then
+	add_defines("AK_RELEASE")
+end
+
+add_includedirs("Akel/Runtime/Includes")
+
+set_objectdir("build/Objs/$(os)_$(arch)")
+set_targetdir("build/Bin/$(os)_$(arch)")
+set_rundir("build/Bin/$(os)_$(arch)")
+set_dependir("build/.deps")
 
 set_optimize("fastest")
 
--- Lib Akel Build
-target("Akel")
-	set_default(true)
-	set_license("MIT")
-	set_kind("static")
-	add_files("Akel/src/**.cpp")
-	add_includedirs("Akel/include", "Akel/src", "Akel/third_party")
+local RendererBackcends = {
+	Vulkan = {
+		option = "vulkan",
+		deps = {"AkelRenderer"},
+		packages = {"vulkan-headers", "vulkan-memory-allocator", "volk"},
+		dir = "Drivers/",
+		custom = function()
+			add_defines("VK_NO_PROTOTYPES")
+			if is_plat("windows", "mingw") then
+				add_defines("VK_USE_PLATFORM_WIN32_KHR")
+			elseif is_plat("linux") then
+				add_defines("VK_USE_PLATFORM_XLIB_KHR")
+				add_defines("VK_USE_PLATFORM_WAYLAND_KHR")
+				add_packages("libxext", "wayland", { links = {} }) -- we only need X11 headers
+			elseif is_plat("macosx") then
+				add_defines("VK_USE_PLATFORM_METAL_EXT")
+			end
+		end
+	}
+}
 
+local modules = {
+	Audio = {
+		option = "audio",
+		deps = {"AkelCore"},
+		custom = function()
+			if is_plat("wasm") then
+				add_syslinks("openal")
+			else
+				add_packages("openal-soft", { links = {} })
+			end
+		end
+	},
+	Core = {
+		Custom = function ()
+			add_headerfiles("Akel/Runtime/Includes/Maths/**.h", "Akel/Runtime/Includes/Maths/**.inl")
+
+			if has_config("static") then
+				add_defines("NAZARA_PLUGINS_STATIC", { public = true })
+			end
+		end,
+		packages = {"entt"}
+	},
+	Graphics = {
+		deps = {"AkelRenderer"},
+		packages = {"entt"}
+	},
+	Platform = {
+		option = "platform",
+		deps = {"AkelUtils"},
+		packages = {},
+		custom = function()
+			add_packages("libsdl")
+			if is_plat("windows", "mingw") then
+				add_defines("SDL_VIDEO_DRIVER_WINDOWS=1")
+			elseif is_plat("linux") then
+				add_defines("SDL_VIDEO_DRIVER_X11=1")
+				add_defines("SDL_VIDEO_DRIVER_WAYLAND=1")
+				add_packages("libxext", "wayland", { links = {} }) -- we only need X11 headers
+			elseif is_plat("macosx") then
+				add_defines("SDL_VIDEO_DRIVER_COCOA=1")
+				add_packages("libx11", { links = {} }) -- we only need X11 headers
+			elseif is_plat("wasm") then
+				-- emscripten enables USE_SDL by default which will conflict with the sdl headers
+				add_cxflags("-sUSE_SDL=0")
+				add_ldflags("-sUSE_SDL=0", { public = true })
+			end
+		end
+	},
+	Renderer = {
+		option = "renderer",
+		deps = {"AkelPlatform"},
+		packages = {},
+		publicPackages = {"nzsl"},
+		custom = function ()
+			if has_config("static") then
+				for name, module in table.orderpairs(rendererBackends) do
+					if not module.Option or has_config(module.Option) then
+						ModuleTargetConfig(name, module)
+					end
+				end
+			end
+		end
+	},
+	Utils = {
+		option = "utils",
+		deps = {"AkelCore"},
+		packages = {}
+	}
+}
+
+for name, module in table.orderpairs(modules) do
+	if module.option then
+		option(module.option, { description = "Enables the " .. name .. " module", default = true, category = "Modules" })
+	end
+end
+
+if has_config("renderer") then
+	add_requires("nzsl >=2023.12.31", { debug = is_mode("debug"), configs = { symbols = not is_mode("release"), shared = not is_plat("wasm", "android") and not has_config("static") } })
+end
+
+if has_config("platform") then
+	add_requires("libsdl >=2.26.0")
+end
+
+if is_plat("linux") then
+	add_requires("libxext", "wayland", { configs = { asan = false } })
+end
+
+if is_plat("wasm") then
+	rendererBackends.Vulkan = nil
+end
+
+if has_config("vulkan") and not is_plat("wasm") then
+	add_requires("vulkan-headers", "vulkan-memory-allocator", "volk")
+end
+
+if is_plat("linux") then
+	add_requires("libxext", "wayland", { configs = { asan = false } })
+end
+
+if not has_config("static") then
+	-- Register renderer backends as separate modules
+	for name, module in pairs(rendererBackends) do
+		if (modules[name] ~= nil) then
+			os.raise("overriding module " .. name)
+		end
+
+		modules[name] = module
+	end
+end
+
+function ModuleTargetConfig(name, module)
+	add_defines("AK_" .. name:upper() .. "_BUILD")
 	if is_mode("debug") then
-		add_defines("AK_DEBUG")
-	elseif is_mode("release") then
-		add_defines("AK_RELEASE")
+		add_defines("AK_" .. name:upper() .. "_DEBUG")
 	end
 
-	set_pcxxheader("Akel/include/Akpch.h")
-
-	add_defines("AK_BUILD")
-	add_defines("AK_STATIC")
-	add_defines("SDL_MAIN_HANDLED")
-
-	add_packages("spirv-reflect", { public = true })
-	add_packages("libsdl",		  { public = true })
-	add_packages("imgui",         { public = true })
-	add_packages("sol2",  		  { public = true })
-	add_packages("nlohmann_json", { public = true })
-	add_packages("entt", 	      { public = true })
-	add_packages("volk",          { public = true })
-	add_packages("nzsl",          { public = true })
-	add_packages("openal-soft",   { public = true })
-	add_packages("kuba-zip",      { public = true })
-target_end() -- optional but I think the code is cleaner with this
-
--- Akel Studio Launcher Build
-target("Akel_Studio")
-	set_default(false)
-	set_license("MIT")
-    set_kind("binary")
-	add_includedirs("Akel/include", "Akel_Studio/src/Launcher", "Akel_Studio/src", "Akel/third_party")
-    add_deps("Akel")
-    add_deps("akelstudio_application")
-    add_deps("AkelRuntime")
-	
-    add_files("Akel_Studio/src/Launcher/**.cpp")
-
-	set_objectdir("Akel_Studio/build/objects/$(os)_$(arch)")
-	set_targetdir("Akel_Studio/")
-
-	if is_mode("debug") then
-		add_defines("AK_STUDIO_DEBUG")
-	elseif is_mode("release") then
-		add_defines("AK_STUDIO_RELEASE")
+	-- Add header and source files
+	for _, ext in ipairs({".h", ".hpp", ".inl"}) do
+		if module.dir then
+			add_headerfiles("Akel/Runtime/Includes/" .. module.dir .. name .. "/**" .. ext)
+			add_headerfiles("Akel/Runtime/Sources/" .. module.dir .. name .. "/**" .. ext, { prefixdir = "private", install = false })
+		else
+			add_headerfiles("Akel/Runtime/Includes/" .. name .. "/**" .. ext)
+			add_headerfiles("Akel/Runtime/Sources/" .. name .. "/**" .. ext, { prefixdir = "private", install = false })
+		end
 	end
-target_end()
 
--- Akel Studio Build
-target("akelstudio_application")
-	set_default(false)
-	set_license("MIT")
-    set_kind("binary")
-	add_includedirs("Akel/include", "Akel_Studio/src/Akel_Studio", "Akel_Studio/src", "Akel/third_party")
-    add_deps("Akel")
-	
-    add_files("Akel_Studio/src/Akel_Studio/**.cpp")
-    add_files("Akel_Studio/src/Third_party/**.cpp")
-
-	set_objectdir("Akel_Studio/build/objects/$(os)_$(arch)")
-	set_targetdir("Akel_Studio/resources/runtime/")
-
-	add_packages("imguizmo_sdl_vk")
-
-	set_pcxxheader("Akel_Studio/src/Akel_Studio/AkSpch.h")
-
-	if is_mode("debug") then
-		add_defines("AK_STUDIO_DEBUG")
-	elseif is_mode("release") then
-		add_defines("AK_STUDIO_RELEASE")
+	if module.dir then
+		remove_headerfiles("Akel/Runtime/Sources/" .. module.dir .. name .. "/Resources/**.h")
+	else
+		remove_headerfiles("Akel/Runtime/Sources/" .. name .. "/Resources/**.h")
 	end
-target_end()
 
--- Akel Runtime Build
-target("AkelRuntime")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	add_includedirs("Akel/include", "Akel/third_party")
-    add_files("Akel_Studio/src/Runtime/*.cpp")
-	set_targetdir("Akel_Studio/resources/runtime/")
-target_end()
+	-- Add extra files for projects
+	for _, ext in ipairs({".nzsl"}) do
+		if module.dir then
+			add_extrafiles("Akel/Runtime/Includes/" .. module.dir .. name .. "/**" .. ext)
+			add_extrafiles("Akel/Runtime/Sources" .. module.dir .. name .. "/**" .. ext)
+		else
+			add_extrafiles("Akel/Runtime/Includes/" .. name .. "/**" .. ext)
+			add_extrafiles("Akel/Runtime/Sources" .. name .. "/**" .. ext)
+		end
+	end
 
--- Cube Demo Build
-target("CubeDemo")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/Native/cube/src", "Akel/third_party")
-    add_files("SandBox/Native/cube/src/*.cpp")
-	set_targetdir("SandBox/Native/cube")
-target_end()
+	if module.dir then
+		add_files("Akel/Runtime/Sources/" .. module.dir .. name .. "/**.cpp")
+	else
+		add_files("Akel/Runtime/Sources/" .. name .. "/**.cpp")
+	end
 
--- Skybox Demo Build
-target("SkyDemo")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/Native/skybox/src", "Akel/third_party")
-    add_files("SandBox/Native/skybox/src/*.cpp")
-	set_targetdir("SandBox/Native/skybox")
-target_end()
+	if module.custom then
+		module.custom()
+	end
+end
 
--- Model Demo Build
-target("ModelDemo")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/Native/model/src", "Akel/third_party")
-    add_files("SandBox/Native/model/src/*.cpp")
-	set_targetdir("SandBox/Native/model")
-target_end()
+for name, module in pairs(modules) do
+	if module.option and not has_config(module.option) then
+		goto continue
+	end
 
--- Scripting Demo Build
-target("ScriptDemo")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/Native/script/src", "Akel/third_party")
-    add_files("SandBox/Native/script/src/*.cpp")
-	set_targetdir("SandBox/Native/script")
-target_end()
+	target("Akel" .. name, function ()
+		set_group("Modules")
 
--- Audio Demo Build
-target("AudioDemo")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/Native/audio/src", "Akel/third_party")
-    add_files("SandBox/Native/audio/src/*.cpp")
-	set_targetdir("SandBox/Native/audio")
-target_end()
+		-- handle shared/static kind
+		if is_plat("wasm") or has_config("static") then
+			set_kind("static")
+			add_defines("AK_STATIC", { public = true })
+		else
+			set_kind("shared")
+		end
+		
+		add_defines("AK_BUILD")
+		add_includedirs("Akel/Runtime/Sources")
+		add_includedirs("Akel/ThirdParty")
+		add_rpathdirs("$ORIGIN")
 
--- Sponza Demo Build
-target("SponzaDemo")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	add_includedirs("Akel/include", "SandBox/Native/sponza/src", "Akel/third_party")
-    add_files("SandBox/Native/sponza/src/*.cpp")
-	set_targetdir("SandBox/Native/sponza")
-target_end()
+		if module.deps then
+			add_deps(table.unpack(module.deps))
+		end
 
--- Kila tester Build
-target("Kila_tester")
-	set_default(false)
-    set_kind("binary")
-    add_deps("Akel")
-	set_targetdir("Tests/Kila/")
-	add_includedirs("Akel/include", "Tests/Kila", "Akel/third_party")
-    add_files("Tests/Kila/*.cpp")
-target_end()
+		if module.packages then
+			add_packages(table.unpack(module.packages))
+		end
+
+		if module.publicPackages then
+			for _, pkg in ipairs(module.publicPackages) do
+				add_packages(pkg, { public = true })
+			end
+		end
+
+		set_pcxxheader("Akel/Runtime/Includes/" .. name .. "/PreCompiled.h")
+
+		ModuleTargetConfig(name, module)
+	end)
+
+	::continue::
+end
