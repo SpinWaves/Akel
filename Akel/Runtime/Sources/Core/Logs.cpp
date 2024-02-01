@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 31/01/2024
+// Updated : 01/02/2024
 
 #include <Core/Logs.h>
 #include <Utils/Ansi.h>
@@ -20,11 +20,11 @@ namespace Ak::Logs
 	{
 		void report(std::uint8_t type, std::string message)
 		{
-			#ifndef AK_DEBUG
+			#ifndef AK_CORE_DEBUG
 				if(type == DEBUGLOG)
 					return;
-				if(type != WARNING)
-					MessageBox(type, "Akel logs recieved a report", buffer, false);
+			//	if(type != WARNING)
+			//		MessageBox(type, "Akel logs recieved a report", buffer, false);
 			#endif
 
 			switch(type)
