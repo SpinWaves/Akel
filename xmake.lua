@@ -33,7 +33,7 @@ set_dependir("build/.deps")
 
 set_optimize("fastest")
 
-local rendererBackends = {
+local renderer_backends = {
 	Vulkan = {
 		option = "vulkan",
 		deps = {"AkelRenderer"},
@@ -54,36 +54,12 @@ local rendererBackends = {
 	}
 }
 
-local modules = {
-	Audio = {
-		option = "audio",
-		deps = {"AkelCore"},
-		custom = function()
-			if is_plat("wasm") then
-				add_syslinks("openal")
-			else
-				add_packages("openal-soft", { links = {} })
-			end
-		end
-	},
-	Core = {
-		Custom = function ()
-			add_headerfiles("Akel/Runtime/Includes/Maths/**.h", "Akel/Runtime/Includes/Maths/**.inl")
-
-			if has_config("static") then
-				add_defines("NAZARA_PLUGINS_STATIC", { public = true })
-			end
-		end,
-		packages = {"entt"}
-	},
-	Graphics = {
-		deps = {"AkelRenderer"},
-		packages = {"entt"}
-	},
-	Platform = {
-		option = "platform",
-		deps = {"AkelUtils"},
-		packages = {},
+local user_interfaces = {
+	SDL2 = {
+		option = "sdl2",
+		deps = {"AkelPlatform"},
+		packages = {"libsdl >=2.26.0"},
+		dir = "Drivers/",
 		custom = function()
 			add_packages("libsdl")
 			if is_plat("windows", "mingw") then
@@ -101,6 +77,33 @@ local modules = {
 				add_ldflags("-sUSE_SDL=0", { public = true })
 			end
 		end
+	}
+}
+
+local modules = {
+	Audio = {
+		option = "audio",
+		deps = {"AkelCore"},
+		custom = function()
+			if is_plat("wasm") then
+				add_syslinks("openal")
+			else
+				add_packages("openal-soft", { links = {} })
+			end
+		end
+	},
+	Core = {
+		custom = function ()
+			add_headerfiles("Akel/Runtime/Includes/Maths/**.h", "Akel/Runtime/Includes/Maths/**.inl")
+		end
+	},
+	Graphics = {
+		deps = {"AkelRenderer"},
+		packages = {"entt"}
+	},
+	Platform = {
+		option = "platform",
+		deps = {"AkelUtils"}
 	},
 	Renderer = {
 		option = "renderer",
@@ -109,7 +112,7 @@ local modules = {
 		publicPackages = {"nzsl"},
 		custom = function ()
 			if has_config("static") then
-				for name, module in table.orderpairs(rendererBackends) do
+				for name, module in table.orderpairs(renderer_backends) do
 					if not module.Option or has_config(module.Option) then
 						ModuleTargetConfig(name, module)
 					end
@@ -119,8 +122,7 @@ local modules = {
 	},
 	Utils = {
 		option = "utils",
-		deps = {"AkelCore"},
-		packages = {}
+		deps = {"AkelCore"}
 	},
 	ELTM = {
 		option = "eltm",
@@ -130,12 +132,23 @@ local modules = {
 }
 
 if is_plat("wasm") then
-	rendererBackends.Vulkan = nil
+	renderer_backends.Vulkan = nil
 end
 
 if not has_config("static") then
 	-- Register renderer backends as separate modules
-	for name, module in pairs(rendererBackends) do
+	for name, module in pairs(renderer_backends) do
+		if (modules[name] ~= nil) then
+			os.raise("overriding module " .. name)
+		end
+
+		modules[name] = module
+	end
+end
+
+if not has_config("static") then
+	-- Register user interfaces backends as separate modules
+	for name, module in pairs(user_interfaces) do
 		if (modules[name] ~= nil) then
 			os.raise("overriding module " .. name)
 		end
@@ -150,11 +163,13 @@ for name, module in table.orderpairs(modules) do
 	end
 end
 
+add_requires("entt")
+
 if has_config("renderer") then
 	add_requires("nzsl >=2023.12.31", { debug = is_mode("debug"), configs = { symbols = not is_mode("release"), shared = not is_plat("wasm", "android") and not has_config("static") } })
 end
 
-if has_config("platform") then
+if has_config("sdl2") then
 	add_requires("libsdl >=2.26.0")
 end
 
@@ -169,7 +184,6 @@ end
 if is_plat("linux") then
 	add_requires("libxext", "wayland", { configs = { asan = false } })
 end
-
 
 function ModuleTargetConfig(name, module)
 	add_defines("AK_" .. name:upper() .. "_BUILD")
@@ -227,7 +241,7 @@ for name, module in pairs(modules) do
 		-- handle shared/static kind
 		if is_plat("wasm") or has_config("static") then
 			set_kind("static")
-			add_defines("AK_".. name .. "_STATIC", { public = true })
+			add_defines("AK_".. name:upper() .. "_STATIC", { public = true })
 		else
 			set_kind("shared")
 		end
