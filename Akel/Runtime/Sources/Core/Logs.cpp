@@ -28,7 +28,7 @@ namespace Ak
 		using namespace std::literals;
 
 		#ifndef AK_CORE_DEBUG
-			if(type == DEBUGLOG)
+			if(type == LogType::Debug)
 				return;
 		//	if(type != WARNING)
 		//		MessageBox(type, "Akel logs recieved a report", buffer, false);
