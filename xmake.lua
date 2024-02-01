@@ -24,6 +24,7 @@ elseif is_mode("release") then
 end
 
 add_includedirs("Akel/Runtime/Includes")
+add_sysincludedirs("Akel/ThirdParty")
 
 set_objectdir("build/Objs/$(os)_$(arch)")
 set_targetdir("build/Bin/$(os)_$(arch)")
@@ -32,7 +33,7 @@ set_dependir("build/.deps")
 
 set_optimize("fastest")
 
-local RendererBackcends = {
+local rendererBackends = {
 	Vulkan = {
 		option = "vulkan",
 		deps = {"AkelRenderer"},
@@ -120,8 +121,28 @@ local modules = {
 		option = "utils",
 		deps = {"AkelCore"},
 		packages = {}
+	},
+	ELTM = {
+		option = "eltm",
+		deps = {"AkelUtils"},
+		dir = "Plugins/"
 	}
 }
+
+if is_plat("wasm") then
+	rendererBackends.Vulkan = nil
+end
+
+if not has_config("static") then
+	-- Register renderer backends as separate modules
+	for name, module in pairs(rendererBackends) do
+		if (modules[name] ~= nil) then
+			os.raise("overriding module " .. name)
+		end
+
+		modules[name] = module
+	end
+end
 
 for name, module in table.orderpairs(modules) do
 	if module.option then
@@ -141,10 +162,6 @@ if is_plat("linux") then
 	add_requires("libxext", "wayland", { configs = { asan = false } })
 end
 
-if is_plat("wasm") then
-	rendererBackends.Vulkan = nil
-end
-
 if has_config("vulkan") and not is_plat("wasm") then
 	add_requires("vulkan-headers", "vulkan-memory-allocator", "volk")
 end
@@ -153,16 +170,6 @@ if is_plat("linux") then
 	add_requires("libxext", "wayland", { configs = { asan = false } })
 end
 
-if not has_config("static") then
-	-- Register renderer backends as separate modules
-	for name, module in pairs(rendererBackends) do
-		if (modules[name] ~= nil) then
-			os.raise("overriding module " .. name)
-		end
-
-		modules[name] = module
-	end
-end
 
 function ModuleTargetConfig(name, module)
 	add_defines("AK_" .. name:upper() .. "_BUILD")
@@ -220,14 +227,12 @@ for name, module in pairs(modules) do
 		-- handle shared/static kind
 		if is_plat("wasm") or has_config("static") then
 			set_kind("static")
-			add_defines("AK_STATIC", { public = true })
+			add_defines("AK_".. name .. "_STATIC", { public = true })
 		else
 			set_kind("shared")
 		end
-		
-		add_defines("AK_BUILD")
+
 		add_includedirs("Akel/Runtime/Sources")
-		add_includedirs("Akel/ThirdParty")
 		add_rpathdirs("$ORIGIN")
 
 		if module.deps then
@@ -244,7 +249,11 @@ for name, module in pairs(modules) do
 			end
 		end
 
-		set_pcxxheader("Akel/Runtime/Includes/" .. name .. "/PreCompiled.h")
+		if module.dir then
+			set_pcxxheader("Akel/Runtime/Includes/" .. module.dir .. name .. "/PreCompiled.h")
+		else
+			set_pcxxheader("Akel/Runtime/Includes/" .. name .. "/PreCompiled.h")
+		end
 
 		ModuleTargetConfig(name, module)
 	end)
