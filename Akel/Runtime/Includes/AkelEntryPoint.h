@@ -11,20 +11,9 @@
 
 extern void AkelSetupApplication(Ak::Application& app);
 
-#ifdef AK_PLAT_WINDOWS
-	int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-	{
-		char szFileName[MAX_PATH];
-		GetModuleFileName(NULL, szFileName, MAX_PATH);
-		char* argv[2] = { szFileName, NULL};
-
-		return 0;
-	}
-#else
-	int main(int argc, char** argv)
-	{
-		return 0;
-	}
-#endif
+int main(int argc, char** argv)
+{
+	return 0;
+}
 
 #endif

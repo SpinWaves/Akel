@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 13/05/2021
-// Updated : 01/02/2024
+// Updated : 02/02/2024
 
 #include <Plugins/ELTM/Errors.h>
 
@@ -46,7 +46,7 @@ namespace Ak
 		return ELTMerror(std::move(message), std::move(file), std::move(caller), line);
 	}
 
-	ELTMerror AlreadydeclaredError(std::string message, std::string file, std::size_t line)
+	ELTMerror AlreadyDeclaredError(std::string message, std::string file, std::size_t line)
 	{
 		message += " is already declared in this scope";
 		return ELTMerror(std::move(message), std::move(file), "", line);
