@@ -21,5 +21,6 @@
 #include <tuple>
 #include <type_traits>
 #include <sstream>
+#include <vector>
 
 #endif
