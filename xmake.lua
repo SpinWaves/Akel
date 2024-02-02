@@ -98,16 +98,16 @@ local modules = {
 		end
 	},
 	Graphics = {
-		deps = {"AkelRenderer"},
+		deps = {"AkelRenderer", "AkelCore"},
 		packages = {"entt"}
 	},
 	Platform = {
 		option = "platform",
-		deps = {"AkelUtils"}
+		deps = {"AkelUtils", "AkelCore"}
 	},
 	Renderer = {
 		option = "renderer",
-		deps = {"AkelPlatform"},
+		deps = {"AkelPlatform", "AkelCore"},
 		packages = {},
 		publicPackages = {"nzsl"},
 		custom = function ()
@@ -268,6 +268,10 @@ for name, module in pairs(modules) do
 		else
 			set_pcxxheader("Akel/Runtime/Includes/" .. name .. "/PreCompiled.h")
 		end
+
+		on_clean(function(target)
+			os.rm(target:targetfile())
+		end)
 
 		ModuleTargetConfig(name, module)
 	end)

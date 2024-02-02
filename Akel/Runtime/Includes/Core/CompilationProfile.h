@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 31/01/2024
+// Updated : 02/02/2024
 
 #ifndef __AK_CORE_COMPILATION_PROFILE__
 #define __AK_CORE_COMPILATION_PROFILE__
@@ -62,6 +62,24 @@
 	#define AK_FUNC_SIG __func__
 #else
 	#define AK_FUNC_SIG "Unknown function"
+#endif
+
+#if !defined(AK_NO_FORCEINLINE) && !defined(AK_FORCEINLINE)
+	#if defined(AK_COMPILER_CLANG) || defined(AK_COMPILER_GCC)
+		#define AK_FORCEINLINE __attribute__((always_inline)) inline
+	#elif defined(AK_COMPILER_MSVC)
+		#define AK_FORCEINLINE __forceinline
+	#else
+		#define AK_FORCEINLINE inline
+	#endif
+#endif
+
+#if !defined(AK_NO_WEAK) && !defined(AK_WEAK)
+	#if defined(AK_COMPILER_CLANG) || defined(AK_COMPILER_GCC)
+		#define AK_WEAK __attribute__((weak))
+	#else
+		#define AK_WEAK
+	#endif
 #endif
 
 // Checking common assumptions

@@ -1,7 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 01/02/2024
+// Updated : 02/02/2024
+
+#include <Core/Logs.h>
 
 namespace Ak
 {
@@ -16,10 +18,10 @@ namespace Ak
 	constexpr Vec2<T>::Vec2(const Vec2<U>& vec) : x(static_cast<T>(vec.x)), y(static_cast<T>(vec.y)) {}
 
 	template<typename T>
-	constexpr Vec2<T>::Vec2(const Vector3<T>& vec) : x(vec.x), y(vec.y) {}
+	constexpr Vec2<T>::Vec2(const Vec3<T>& vec) : x(vec.x), y(vec.y) {}
 
 	template<typename T>
-	constexpr Vec2<T>::Vec2(const Vector4<T>& vec) : x(vec.x), y(vec.y) {}
+	constexpr Vec2<T>::Vec2(const Vec4<T>& vec) : x(vec.x), y(vec.y) {}
 
 	template<typename T>
 	T Vec2<T>::AbsDotProduct(const Vec2& vec) const
@@ -71,6 +73,8 @@ namespace Ak
 	constexpr Vec2<T>& Vec2<T>::Maximize(const Vec2& vec)
 	{
 		if(vec.x > x)
+
+Reality check
 			x = vec.x;
 		if(vec.y > y)
 			y = vec.y;
@@ -117,14 +121,14 @@ namespace Ak
 	template<typename T>
 	constexpr T& Vec2<T>::operator[](std::size_t i)
 	{
-		NazaraAssert(i < 2, "index out of range");
+		Ak::Assert(i < 2, "index out of range");
 		return *(&x + i);
 	}
 
 	template<typename T>
 	constexpr T Vec2<T>::operator[](std::size_t i) const
 	{
-		NazaraAssert(i < 2, "index out of range");
+		Ak::Assert(i < 2, "index out of range");
 		return *(&x + i);
 	}
 

@@ -1,95 +1,115 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 14/05/2023
+// Updated : 02/02/2024
 
 #ifndef __AK_VEC4__
 #define __AK_VEC4__
 
-#include <Akpch.h>
-#include <Core/profile.h>
-
-namespace Ak::Maths
-{
-    template <class T>
-    struct Vec4
-	{
-		T X;
-		T Y;
-		T Z;
-		T W;
-
-		Vec4() = default;
-		Vec4(T x,T y,T z, T w);
-		Vec4(const Vec4& v);
-		Vec4(const Vec4& from, const Vec4& to);
-
-		Vec4& operator= (const Vec4& v);
-
-		bool operator== (const Vec4& v);
-		bool operator!= (const Vec4& v);
-
-		bool operator== (const T value);
-		bool operator!= (const T value);
-
-		Vec4& operator+= (const Vec4& v);
-		Vec4 operator+ (const Vec4& v) const;
-		Vec4 operator+ (const T value);
-
-		Vec4& operator-= (const Vec4& v);
-		Vec4 operator- (const Vec4& v) const;
-		Vec4 operator- (const T value);
-
-		Vec4& operator*= (const T a);
-		Vec4 operator* (const T a) const;
-		friend Vec4 operator* (const T a, const Vec4& v) { return Vec4<T>(v.X * a, v.Y * a, v.Z * a, v.W * a); }
-
-		Vec4& operator* (const Vec4&v);
-
-		Vec4& operator/= (const T a);
-		Vec4 operator/ (const T a) const;
-
-		bool operator< (const Vec4&v);
-		bool operator< (const T value);
-
-		bool operator> (const Vec4&v);
-		bool operator> (const T value);
-
-		bool operator<= (const Vec4&v);
-		bool operator<= (const T value);
-
-		bool operator>= (const Vec4&v);
-		bool operator>= (const T value);
-
-		Vec4 crossProduct(const Vec4& v)const;
-		double length()const;
-		void normalize();
-
-		Vec4 copy();
-
-		void set(T x, T y, T z, T w);
-
-		void negate();
-		void negatePrecisely(bool x, bool y, bool z, bool w);
-
-		double dot(Vec4 v);
-	};
-
-    using Vec4f = Vec4<float>;
-    using Vec4d = Vec4<double>;
-    using Vec4i = Vec4<int32_t>;
-    using Vec4ui = Vec4<uint32_t>;
-}
+#include <Maths/PreCompiled.h>
 
 namespace Ak
 {
-	using Vec4f = Maths::Vec4<float>;
-	using Vec4d = Maths::Vec4<double>;
-	using Vec4i = Maths::Vec4<int32_t>;
-	using Vec4ui = Maths::Vec4<uint32_t>;
+	template<typename T> class Vec2;
+	template<typename T> class Vec3;
+
+	template<typename T>
+	struct Vec4
+	{
+		T x;
+		T y;
+		T z;
+		T w;
+
+		constexpr Vec4() = default;
+		constexpr Vec4(T X, T Y, T Z, T W = 1.0);
+		constexpr Vec4(T X, T Y, const Vec2<T>& vec);
+		constexpr Vec4(T X, const Vec2<T>& vec, T W);
+		constexpr Vec4(T X, const Vec3<T>& vec);
+		constexpr explicit Vec4(T scale);
+		constexpr Vec4(const Vec2<T>& vec, T Z = 0.0, T W = 1.0);
+		constexpr Vec4(const Vec3<T>& vec, T W = 1.0);
+		template<typename U> constexpr explicit Vec4(const Vec4<U>& vec);
+		constexpr Vec4(const Vec4&) = default;
+		constexpr Vec4(Vec4&&) = default;
+
+		T AbsDotProduct(const Vec4& vec) const;
+		constexpr bool ApproxEqual(const Vec4& vec, T maxDifference = std::numeric_limits<T>::epsilon()) const;
+
+		constexpr T DotProduct(const Vec4& vec) const;
+
+		Vec4 GetNormal(T* length = nullptr) const;
+
+		constexpr Vec4& Maximize(const Vec4& vec);
+		constexpr Vec4& Minimize(const Vec4& vec);
+
+		Vec4& Normalize(T* length = nullptr);
+
+		std::string ToString() const;
+
+		constexpr Vec4& operator=(const Vec4&) = default;
+		constexpr Vec4& operator=(Vec4&&) = default;
+
+		constexpr T& operator[](std::size_t i);
+		constexpr const T& operator[](std::size_t i) const;
+
+		constexpr const Vec4& operator+() const;
+		constexpr Vec4 operator-() const;
+
+		constexpr Vec4 operator+(const Vec4& vec) const;
+		constexpr Vec4 operator-(const Vec4& vec) const;
+		constexpr Vec4 operator*(const Vec4& vec) const;
+		constexpr Vec4 operator*(T scale) const;
+		constexpr Vec4 operator/(const Vec4& vec) const;
+		constexpr Vec4 operator/(T scale) const;
+		constexpr Vec4 operator%(const Vec4& vec) const;
+		constexpr Vec4 operator%(T mod) const;
+
+		constexpr Vec4& operator+=(const Vec4& vec);
+		constexpr Vec4& operator-=(const Vec4& vec);
+		constexpr Vec4& operator*=(const Vec4& vec);
+		constexpr Vec4& operator*=(T scale);
+		constexpr Vec4& operator/=(const Vec4& vec);
+		constexpr Vec4& operator/=(T scale);
+		constexpr Vec4& operator%=(const Vec4& vec);
+		constexpr Vec4& operator%=(T mod);
+
+		constexpr bool operator==(const Vec4& vec) const;
+		constexpr bool operator!=(const Vec4& vec) const;
+		constexpr bool operator<(const Vec4& vec) const;
+		constexpr bool operator<=(const Vec4& vec) const;
+		constexpr bool operator>(const Vec4& vec) const;
+		constexpr bool operator>=(const Vec4& vec) const;
+
+		static constexpr Vec4 Apply(T(*func)(T), const Vec4& vec);
+		static constexpr bool ApproxEqual(const Vec4& lhs, const Vec4& rhs, T maxDifference = std::numeric_limits<T>::epsilon());
+		static constexpr T DotProduct(const Vec4& vec1, const Vec4& vec2);
+		static Vec4 Normalize(const Vec4& vec);
+		static constexpr Vec4 UnitX();
+		static constexpr Vec4 UnitY();
+		static constexpr Vec4 UnitZ();
+		static constexpr Vec4 Zero();
+
+		~Vec4() = default;
+	};
+
+	using Vec4d = Vec4<double>;
+	using Vec4f = Vec4<float>;
+	using Vec4i = Vec4<int>;
+	using Vec4ui = Vec4<unsigned int>;
+	using Vec4i32 = Vec4<std::int32_t>;
+	using Vec4i64 = Vec4<std::int64_t>;
+	using Vec4ui32 = Vec4<std::uint32_t>;
+	using Vec4ui64 = Vec4<std::uint64_t>;
+
+	template<typename T> std::ostream& operator<<(std::ostream& out, const Vec4<T>& vec);
+
+	template<typename T> constexpr Vec4<T> operator*(T scale, const Vec4<T>& vec);
+	template<typename T> constexpr Vec4<T> operator/(T scale, const Vec4<T>& vec);
+	template<typename T> constexpr Vec4<T> operator%(T mod, const Vec4<T>& vec);
 }
 
-#include <Maths/vec4.inl>
+#include <Maths/Vec4.inl>
 
 #endif // __AK_VEC4__
 

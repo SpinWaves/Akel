@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 01/02/2024
+// Updated : 02/02/2024
 
 #ifndef __AK_CORE_LOGS__
 #define __AK_CORE_LOGS__
@@ -36,6 +36,14 @@ namespace Ak
 
 			~Logs() = delete;
 	};
+
+	#ifdef AK_CORE_DEBUG
+		template<typename... Args>
+		void Assert(bool cond, std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args);
+	#else
+		template<typename... Args>
+		void Assert(bool cond, std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args) {}
+	#endif
 }
 
 #include <Core/Logs.inl>
