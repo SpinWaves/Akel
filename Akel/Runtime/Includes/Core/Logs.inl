@@ -87,7 +87,7 @@ namespace Ak
 		}
 	}
 
-	#ifdef AK_CORE_DEBUG
+	#if defined(AK_CORE_DEBUG) || defined(AK_FORCE_ENABLE_ASSERTS)
 		template<typename... Args>
 		void Assert(bool cond, std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args)
 		{

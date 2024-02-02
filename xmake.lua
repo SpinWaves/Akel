@@ -3,6 +3,9 @@
 -- Created : 02/10/2021
 -- Updated : 08/07/2023
 
+-- Credits to SirLynix (https://github.com/SirLynix) for this xmake.lua
+-- Took from https://github.com/NazaraEngine/NazaraEngine
+
 -- Globals settings
 add_repositories("nazara-engine-repo https://github.com/NazaraEngine/xmake-repo")
 
@@ -21,6 +24,8 @@ if is_mode("debug") then
 	add_defines("AK_DEBUG")
 elseif is_mode("release") then
 	add_defines("AK_RELEASE")
+	set_fpmodels("fast")
+	add_vectorexts("sse", "sse2", "sse3", "ssse3")
 end
 
 add_includedirs("Akel/Runtime/Includes")
@@ -93,7 +98,7 @@ local modules = {
 		end
 	},
 	Core = {
-		custom = function ()
+		custom = function()
 			add_headerfiles("Akel/Runtime/Includes/Maths/**.h", "Akel/Runtime/Includes/Maths/**.inl")
 		end
 	},
@@ -103,17 +108,26 @@ local modules = {
 	},
 	Platform = {
 		option = "platform",
-		deps = {"AkelUtils", "AkelCore"}
+		deps = {"AkelUtils", "AkelCore"},
+		custom = function()
+			if has_config("embed_userinterfaces", "static") then
+				for name, module in table.orderpairs(user_interfaces) do
+					if not module.option or has_config(module.option) then
+						ModuleTargetConfig(name, module)
+					end
+				end
+			end
+		end
 	},
 	Renderer = {
 		option = "renderer",
 		deps = {"AkelPlatform", "AkelCore"},
 		packages = {},
 		publicPackages = {"nzsl"},
-		custom = function ()
-			if has_config("static") then
+		custom = function()
+			if has_config("embed_rendererbackends", "static") then
 				for name, module in table.orderpairs(renderer_backends) do
-					if not module.Option or has_config(module.Option) then
+					if not module.option or has_config(module.option) then
 						ModuleTargetConfig(name, module)
 					end
 				end
@@ -135,7 +149,7 @@ if is_plat("wasm") then
 	renderer_backends.Vulkan = nil
 end
 
-if not has_config("static") then
+if not has_config("embed_rendererbackends", "static") then
 	-- Register renderer backends as separate modules
 	for name, module in pairs(renderer_backends) do
 		if (modules[name] ~= nil) then
@@ -146,7 +160,7 @@ if not has_config("static") then
 	end
 end
 
-if not has_config("static") then
+if not has_config("embed_userinterfaces", "static") then
 	-- Register user interfaces backends as separate modules
 	for name, module in pairs(user_interfaces) do
 		if (modules[name] ~= nil) then
@@ -162,6 +176,13 @@ for name, module in table.orderpairs(modules) do
 		option(module.option, { description = "Enables the " .. name .. " module", default = true, category = "Modules" })
 	end
 end
+
+add_rules("build.rendererplugins")
+add_rules("build.userinterfaces")
+
+option("static", { description = "Build the engine statically (implies embed_rendererbackends)", default = is_plat("wasm") or false })
+option("embed_rendererbackends", { description = "Embed renderer backend code into AkelRenderer instead of loading them dynamically", default = is_plat("wasm") or false })
+option("embed_userinterfaces", { description = "Embed user interfaces backend code into AkelPlatform instead of loading them dynamically", default = is_plat("wasm") or false })
 
 add_requires("entt")
 
@@ -219,6 +240,24 @@ function ModuleTargetConfig(name, module)
 		end
 	end
 
+	if module.packages then
+		add_packages(table.unpack(module.packages))
+	end
+
+	if module.publicPackages then
+		for _, pkg in ipairs(module.publicPackages) do
+			add_packages(pkg, { public = true })
+		end
+	end
+
+	if module.deps then
+		local moduleName = "Akel" .. name
+		table.remove_if(module.deps, function(dep) return dep == moduleName end)
+		if #module.deps > 0 then
+			add_deps(table.unpack(module.deps))
+		end
+	end
+
 	if module.dir then
 		add_files("Akel/Runtime/Sources/" .. module.dir .. name .. "/**.cpp")
 	else
@@ -235,7 +274,7 @@ for name, module in pairs(modules) do
 		goto continue
 	end
 
-	target("Akel" .. name, function ()
+	target("Akel" .. name, function()
 		set_group("Modules")
 
 		-- handle shared/static kind
@@ -249,20 +288,6 @@ for name, module in pairs(modules) do
 		add_includedirs("Akel/Runtime/Sources")
 		add_rpathdirs("$ORIGIN")
 
-		if module.deps then
-			add_deps(table.unpack(module.deps))
-		end
-
-		if module.packages then
-			add_packages(table.unpack(module.packages))
-		end
-
-		if module.publicPackages then
-			for _, pkg in ipairs(module.publicPackages) do
-				add_packages(pkg, { public = true })
-			end
-		end
-
 		if module.dir then
 			set_pcxxheader("Akel/Runtime/Includes/" .. module.dir .. name .. "/PreCompiled.h")
 		else
@@ -270,7 +295,18 @@ for name, module in pairs(modules) do
 		end
 
 		on_clean(function(target)
-			os.rm(target:targetfile())
+			if target:objectfiles() then
+				for _, file in ipairs(target:objectfiles()) do
+					if os.exists(file) then
+						print("Removing " .. file)
+						os.rm(file)
+					end
+				end
+			end
+			if target:targetfile() and os.exists(target:targetfile()) then
+				print("Removing " .. target:targetfile())
+				os.rm(target:targetfile())
+			end
 		end)
 
 		ModuleTargetConfig(name, module)
@@ -278,3 +314,41 @@ for name, module in pairs(modules) do
 
 	::continue::
 end
+
+rule("build.rendererplugins")
+	on_load(function(target)
+		if has_config("static") then
+			return
+		end
+
+		local deps = table.wrap(target:get("deps"))
+
+		if target:kind() == "binary" and (table.contains(deps, "AkelRenderer") or table.contains(deps, "AkelGraphics")) then
+			for name, _ in pairs(renderer_backends) do
+				local depName = "Akel" .. name
+				if not table.contains(deps, depName) then -- don't overwrite dependency
+					target:add("deps", depName, {inherit = false})
+				end
+			end
+		end
+	end)
+
+rule("build.userinterfaces")
+	on_load(function(target)
+		if has_config("static") then
+			return
+		end
+
+		local deps = table.wrap(target:get("deps"))
+
+		if target:kind() == "binary" and table.contains(deps, "AkelPlatform") then
+			for name, _ in pairs(user_interfaces) do
+				local depName = "Akel" .. name
+				if not table.contains(deps, depName) then -- don't overwrite dependency
+					target:add("deps", depName, {inherit = false})
+				end
+			end
+		end
+	end)
+
+includes("SandBox/Native/*.lua")
