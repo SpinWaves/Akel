@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 08/07/2023
+-- Updated : 03/01/2024
 
 -- Credits to SirLynix (https://github.com/SirLynix) for this xmake.lua
 -- Took from https://github.com/NazaraEngine/NazaraEngine
@@ -85,6 +85,22 @@ local user_interfaces = {
 	}
 }
 
+local os_interfaces = {
+	Unix = {
+		dir = "Drivers/",
+		enabled = is_plat("linux")
+	},
+	MacOS = {
+		dir = "Drivers/",
+		enabled = is_plat("macosx")
+	},
+	Windows = {
+		dir = "Drivers/",
+		enabled = is_plat("windows")
+	}
+	-- TODO : wasm
+}
+
 local modules = {
 	Audio = {
 		option = "audio",
@@ -100,6 +116,11 @@ local modules = {
 	Core = {
 		custom = function()
 			add_headerfiles("Akel/Runtime/Includes/Maths/**.h", "Akel/Runtime/Includes/Maths/**.inl")
+			for name, module in table.orderpairs(os_interfaces) do
+				if module.enabled then
+					ModuleTargetConfig(name, module)
+				end
+			end
 		end
 	},
 	Graphics = {
