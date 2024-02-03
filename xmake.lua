@@ -233,6 +233,10 @@ function ModuleTargetConfig(name, module)
 		add_defines("AK_" .. name:upper() .. "_DEBUG")
 	end
 
+	if is_plat("wasm") or has_config("static") then
+		add_defines("AK_".. name:upper() .. "_STATIC", { public = true })
+	end
+
 	-- Add header and source files
 	for _, ext in ipairs({".h", ".hpp", ".inl"}) do
 		if module.dir then
