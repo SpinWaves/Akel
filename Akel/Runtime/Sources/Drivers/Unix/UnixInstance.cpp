@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/02/2024
-// Updated : 03/02/2024
+// Updated : 04/02/2024
 
 #include <Drivers/Unix/UnixInstance.h>
 
@@ -17,7 +17,6 @@ namespace Ak
 
 	void UnixInstance::Shutdown()
 	{
-
 	}
 
 	std::filesystem::path UnixInstance::GetExecutablePath()
@@ -38,12 +37,14 @@ namespace Ak
 
 	std::filesystem::path UnixInstance::GetCurrentWorkingDirectoryPath()
 	{
-
+		return std::filesystem::current_path();
 	}
 
 	bool UnixInstance::OpenURL([[maybe_unused]] const std::string& url)
 	{
-
+		using namespace std::literals;
+		std::string command = "xdg-open"s + url;
+		return std::system(command.c_str()) == 0;
 	}
 
 	void UnixInstance::Delay(std::uint32_t us)
