@@ -8,5 +8,7 @@
 
 #include <Core/CompilationProfile.h>
 #include <Drivers/Unix/Unix.h>
+#include <ctime>
+#include <unistd.h>
 
 #endif

@@ -7,10 +7,31 @@
 #define __AK_DRIVERS_UNIX_INSTANCE__
 
 #include <Drivers/Unix/PreCompiled.h>
+#include <Core/OS/OSInstance.h>
 
 namespace Ak
 {
+	class AK_UNIX_API UnixInstance final : public OSInstance
+	{
+		public:
+			void Init(int ac, char** av);
+			void Shutdown() override;
 
+			std::filesystem::path GetExecutablePath() override;
+			std::filesystem::path GetCurrentWorkingDirectoryPath() override;
+			bool OpenURL([[maybe_unused]] const std::string& url) override;
+			void Delay(std::uint32_t us) override;
+
+			OSInstance& Get() override;
+
+		private:
+			UnixInstance() = default;
+			~UnixInstance() override = default;
+
+		private:
+			char** m_av = nullptr;
+			int m_ac;
+	};
 }
 
 #endif
