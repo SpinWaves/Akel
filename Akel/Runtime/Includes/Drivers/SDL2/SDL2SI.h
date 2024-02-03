@@ -3,8 +3,8 @@
 // Created : 03/02/2024
 // Updated : 03/02/2024
 
-#ifndef __AK_DRIVERS_SDL2_UI__
-#define __AK_DRIVERS_SDL2_UI__
+#ifndef __AK_DRIVERS_SDL2_SI__
+#define __AK_DRIVERS_SDL2_SI__
 
 #include <Drivers/SDL2/PreCompiled.h>
 

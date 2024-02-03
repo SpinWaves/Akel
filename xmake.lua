@@ -59,7 +59,7 @@ local renderer_backends = {
 	}
 }
 
-local user_interfaces = {
+local system_ineterfaces = {
 	SDL2 = {
 		option = "sdl2",
 		deps = {"AkelPlatform"},
@@ -131,8 +131,8 @@ local modules = {
 		option = "platform",
 		deps = {"AkelUtils", "AkelCore"},
 		custom = function()
-			if has_config("embed_userinterfaces", "static") then
-				for name, module in table.orderpairs(user_interfaces) do
+			if has_config("embed_systeminterfaces", "static") then
+				for name, module in table.orderpairs(system_ineterfaces) do
 					if not module.option or has_config(module.option) then
 						ModuleTargetConfig(name, module)
 					end
@@ -181,9 +181,9 @@ if not has_config("embed_rendererbackends", "static") then
 	end
 end
 
-if not has_config("embed_userinterfaces", "static") then
-	-- Register user interfaces backends as separate modules
-	for name, module in pairs(user_interfaces) do
+if not has_config("embed_systeminterfaces", "static") then
+	-- Register system interfaces backends as separate modules
+	for name, module in pairs(system_ineterfaces) do
 		if (modules[name] ~= nil) then
 			os.raise("overriding module " .. name)
 		end
@@ -199,11 +199,11 @@ for name, module in table.orderpairs(modules) do
 end
 
 add_rules("build.rendererplugins")
-add_rules("build.userinterfaces")
+add_rules("build.systeminterfaces")
 
 option("static", { description = "Build the engine statically (implies embed_rendererbackends)", default = is_plat("wasm") or false })
 option("embed_rendererbackends", { description = "Embed renderer backend code into AkelRenderer instead of loading them dynamically", default = is_plat("wasm") or false })
-option("embed_userinterfaces", { description = "Embed user interfaces backend code into AkelPlatform instead of loading them dynamically", default = is_plat("wasm") or false })
+option("embed_systeminterfaces", { description = "Embed system interfaces backend code into AkelPlatform instead of loading them dynamically", default = is_plat("wasm") or false })
 
 add_requires("entt")
 
@@ -358,7 +358,7 @@ rule("build.rendererplugins")
 		end
 	end)
 
-rule("build.userinterfaces")
+rule("build.systeminterfaces")
 	on_load(function(target)
 		if has_config("static") then
 			return
@@ -367,7 +367,7 @@ rule("build.userinterfaces")
 		local deps = table.wrap(target:get("deps"))
 
 		if target:kind() == "binary" and table.contains(deps, "AkelPlatform") then
-			for name, _ in pairs(user_interfaces) do
+			for name, _ in pairs(system_ineterfaces) do
 				local depName = "Akel" .. name
 				if not table.contains(deps, depName) then -- don't overwrite dependency
 					target:add("deps", depName, {inherit = false})
