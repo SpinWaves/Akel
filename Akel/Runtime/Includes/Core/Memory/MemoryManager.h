@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 31/01/2024
+// Updated : 04/02/2024
 
 #ifndef __AK_CORE_MEMORY_MANAGER__
 #define __AK_CORE_MEMORY_MANAGER__
@@ -19,7 +19,7 @@ namespace Ak
 			std::vector<std::weak_ptr<FixedAllocator>> fixed_stack;
 		};
 		AK_CORE_API void* Alloc(std::size_t size, bool is_class);
-		std::shared_ptr<ControlUnit> AK_API GetControlUnit();
+		AK_CORE_API std::shared_ptr<ControlUnit> GetControlUnit();
 		AK_CORE_API void Dealloc(void* ptr);
 	}
 

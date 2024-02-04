@@ -14,6 +14,8 @@ namespace Ak
 	class AK_WINDOWS_API WindowsInstance final : public OSInstance
 	{
 		public:
+			WindowsInstance() = default;
+
 			void Init() override;
 			void Shutdown() override;
 
@@ -24,10 +26,6 @@ namespace Ak
 
 			bool SetTitleBarColor(Vec4f color, bool dark = true) override;
 
-			OSInstance& Get() override;
-
-		private:
-			WindowsInstance() = default;
 			~WindowsInstance() = default;
 	};
 }

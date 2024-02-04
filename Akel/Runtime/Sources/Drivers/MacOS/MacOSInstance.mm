@@ -11,10 +11,12 @@ namespace Ak
 {
 	void MacOSInstance::Init()
 	{
+		OSInstance::SetInstance(this);
 	}
 
 	void MacOSInstance::Shutdown()
 	{
+		OSInstance::SetInstance(nullptr);
 	}
 
 	std::filesystem::path MacOSInstance::GetExecutablePath()
@@ -72,10 +74,4 @@ namespace Ak
 		#endif
 		return true;
     }
-
-	OSInstance& MacOSInstance::Get()
-	{
-		static MacOSInstance instance;
-		return instance;
-	}
 }

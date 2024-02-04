@@ -20,19 +20,15 @@ namespace Ak
 			virtual std::filesystem::path GetExecutablePath() = 0;
 			virtual std::filesystem::path GetCurrentWorkingDirectoryPath() = 0;
 			virtual bool OpenURL([[maybe_unused]] const std::string& url) { return false; }
-			virtual void Delay([[maybe_unused]] std::uint32_t us) {}
+			virtual void Delay(std::uint32_t us) {}
 
 			virtual bool SetTitleBarColor([[maybe_unused]] Vec4f color, [[maybe_unused]] bool dark = true) { return false; }
 
-			inline static OSInstance* Get() { return m_instance; }
+			virtual OSInstance& Get() = 0;
 
 		protected:
 			OSInstance() = default;
-			inline void SetInstance(OSInstance* instance) { m_instance = instance; }
 			virtual ~OSInstance() = default;
-
-		private:
-			inline static OSInstance* m_instance = nullptr;
 	};
 }
 

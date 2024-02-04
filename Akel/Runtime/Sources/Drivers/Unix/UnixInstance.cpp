@@ -13,10 +13,12 @@ namespace Ak
 	{
 		m_av = av;
 		m_ac = ac;
+		OSInstance::SetInstance(this);
 	}
 
 	void UnixInstance::Shutdown()
 	{
+		OSInstance::SetInstance(nullptr);
 	}
 
 	std::filesystem::path UnixInstance::GetExecutablePath()
@@ -56,11 +58,5 @@ namespace Ak
 			requested.tv_sec  = remaining.tv_sec;
 			requested.tv_nsec = remaining.tv_nsec;
 		}
-	}
-
-	OSInstance& UnixInstance::Get()
-	{
-		static UnixInstance instance;
-		return instance;
 	}
 }

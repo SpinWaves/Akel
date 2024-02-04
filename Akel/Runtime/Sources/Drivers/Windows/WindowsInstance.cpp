@@ -9,10 +9,12 @@ namespace Ak
 {
 	void WindowsInstance::Init()
 	{
+		OSInstance::SetInstance(this);
 	}
 
 	void WindowsInstance::Shutdown()
 	{
+		OSInstance::SetInstance(nullptr);
 	}
 
 	std::filesystem::path WindowsInstance::GetExecutablePath()
@@ -64,11 +66,5 @@ namespace Ak
 			return true
 		#endif
 		return false;
-	}
-
-	OSInstance& WindowsInstance::Get()
-	{
-		static WindowsInstance instance;
-		return instance;
 	}
 }
