@@ -92,7 +92,10 @@ local os_interfaces = {
 	},
 	MacOS = {
 		dir = "Drivers/",
-		enabled = is_plat("macosx")
+		enabled = is_plat("macosx"),
+		custom = function()
+			add_files("Akel/Runtime/Sources/Drivers/MacOS/**.mm")
+		end
 	},
 	Windows = {
 		dir = "Drivers/",
