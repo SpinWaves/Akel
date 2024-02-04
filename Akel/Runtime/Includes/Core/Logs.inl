@@ -1,14 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 01/02/2024
-// Updated : 02/02/2024
+// Updated : 04/02/2024
 
 #include <Core/Format.h>
 
 namespace Ak
 {
 	template<typename... Args>
-	void Debug(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args)
+	void Debug(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args)
 	{
 		using namespace std::literals;
 		try
@@ -24,7 +24,7 @@ namespace Ak
 	}
 
 	template<typename... Args>
-	void Error(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args)
+	void Error(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args)
 	{
 		using namespace std::literals;
 		try
@@ -40,7 +40,7 @@ namespace Ak
 	}
 
 	template<typename... Args>
-	void Warning(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args)
+	void Warning(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args)
 	{
 		using namespace std::literals;
 		try
@@ -56,7 +56,7 @@ namespace Ak
 	}
 
 	template<typename... Args>
-	void Message(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args)
+	void Message(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args)
 	{
 		using namespace std::literals;
 		try
@@ -72,7 +72,7 @@ namespace Ak
 	}
 
 	template<typename... Args>
-	void FatalError(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args)
+	void FatalError(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args)
 	{
 		using namespace std::literals;
 		try
@@ -89,7 +89,7 @@ namespace Ak
 
 	#if defined(AK_CORE_DEBUG) || defined(AK_FORCE_ENABLE_ASSERTS)
 		template<typename... Args>
-		void Assert(bool cond, std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args)
+		void Assert(bool cond, unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args)
 		{
 			using namespace std::literals;
 			if(cond)

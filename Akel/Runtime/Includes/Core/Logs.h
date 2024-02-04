@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 02/02/2024
+// Updated : 04/02/2024
 
 #ifndef __AK_CORE_LOGS__
 #define __AK_CORE_LOGS__
@@ -12,19 +12,19 @@
 namespace Ak
 {
 	template<typename... Args>
-	void Debug(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args);
+	void Debug(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
 
 	template<typename... Args>
-	void Error(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args);
+	void Error(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
 
 	template<typename... Args>
-	void Warning(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args);
+	void Warning(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
 
 	template<typename... Args>
-	void Message(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args);
+	void Message(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
 
 	template<typename... Args>
-	void FatalError(std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args);
+	void FatalError(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
 
 	class AK_CORE_API Logs
 	{
@@ -39,10 +39,10 @@ namespace Ak
 
 	#if defined(AK_CORE_DEBUG) || defined(AK_FORCE_ENABLE_ASSERTS)
 		template<typename... Args>
-		void Assert(bool cond, std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args);
+		void Assert(bool cond, unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
 	#else
 		template<typename... Args>
-		void Assert(bool cond, std::string message, unsigned int line, std::string_view file, std::string_view function, const Args&... args) {}
+		void Assert(bool cond, unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args) {}
 	#endif
 }
 
@@ -51,19 +51,22 @@ namespace Ak
 namespace Ak
 {
 	#undef  Debug
-	#define Debug(msg, ...) Debug(msg, __LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
+	#define Debug(...) Debug(__LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
 
 	#undef  Message
-	#define Message(msg, ...) Message(msg, __LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
+	#define Message(...) Message(__LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
 
 	#undef  Warning
-	#define Warning(msg, ...) Warning(msg, __LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
+	#define Warning(...) Warning(__LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
 
 	#undef  Error
-	#define Error(msg, ...) Error(msg, __LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
+	#define Error(...) Error(__LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
 
 	#undef  FatalError
-	#define FatalError(msg, ...) FatalError(msg, __LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
+	#define FatalError(...) FatalError(__LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
+
+	#undef  Assert
+	#define Assert(cond, ...) Assert(cond, __LINE__ - 1, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
 }
 
 #endif

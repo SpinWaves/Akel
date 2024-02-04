@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 02/02/2024
+// Updated : 04/02/2024
 
 #include <Core/Logs.h>
 
@@ -123,14 +123,14 @@ namespace Ak
 	template<typename T>
 	constexpr T& Vec4<T>::operator[](std::size_t i)
 	{
-		Ak::Assert(i < 4, "index out of range");
+		Assert(i < 4, "index out of range");
 		return *(&x + i);
 	}
 
 	template<typename T>
 	constexpr const T& Vec4<T>::operator[](std::size_t i) const
 	{
-		Ak::Assert(i < 4, "index out of range");
+		Assert(i < 4, "index out of range");
 		return *(&x + i);
 	}
 
