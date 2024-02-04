@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 04/02/2024
+// Updated : 05/02/2024
 
 #ifndef __AK_CORE_ENTRY_POINT__
 #define __AK_CORE_ENTRY_POINT__
@@ -18,7 +18,7 @@ extern void AkelSetupApplication(Ak::Application& app);
 	int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 	{
 		Ak::WindowsInstance os;
-		os.Init(ac, av);
+		os.Init();
 
 		os.Shutdown();
 		return 0;
@@ -44,7 +44,7 @@ extern void AkelSetupApplication(Ak::Application& app);
 	int main(int ac, char** av)
 	{
 		Ak::MacOSInstance os;
-		os.Init(ac, av);
+		os.Init();
 
 		os.Shutdown();
 		return 0;
