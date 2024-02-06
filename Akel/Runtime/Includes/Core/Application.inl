@@ -13,7 +13,7 @@ namespace Ak
 	template<typename T>
 	void Application::LoadEngineModule()
 	{
-		using ModuleLoaded = TypeList<>;
+		using ModuleLoaded = TypeList<>; // Doesnt work, FIX
 		static_assert(std::is_base_of_v<Module, T>, "invalid engine module");
 		if constexpr(ModuleLoaded::Has<T>)
 			return;
