@@ -1,32 +1,24 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 31/01/2024
+// Updated : 06/02/2024
 
 #ifndef __AK_CORE_MODULE__
 #define __AK_CORE_MODULE__
 
+#include <Utils/NonMovable.h>
+#include <Utils/NonCopyable.h>
 #include <Core/PreCompiled.h>
 
 namespace Ak
 {
-	template <typename T>
-	class AK_CORE_API Module
+	class Module : public NonCopyable, NonMovable
 	{
-		friend class CoreModule;
-
 		public:
-			Module(const Module&) = delete;
-			Module(Module&&) = delete;
-
-			Module& operator=(const Module&) = delete;
-			Module& operator=(Module&&) = delete;
-
-			static inline T* Get();
+			virtual ~Module();
 
 		protected:
-			Module(std::string name, T* ptr);
-			virtual ~Module();
+			Module(std::string name);
 
 		private:
 			std::string m_module_name;

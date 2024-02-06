@@ -4,5 +4,6 @@
 
 void AkelSetupApplication(Ak::Application& app)
 {
-
+	app.LoadEngineModule<Ak::CoreModule>();
+	app.LoadEngineModule<Ak::PlatformModule>();
 }

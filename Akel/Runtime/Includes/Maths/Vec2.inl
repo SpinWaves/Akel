@@ -1,8 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/06/2021
-// Updated : 02/02/2024
+// Updated : 05/02/2024
 
+#pragma once
+
+#include <Maths/Vec2.h>
 #include <Core/Logs.h>
 
 namespace Ak
@@ -73,8 +76,6 @@ namespace Ak
 	constexpr Vec2<T>& Vec2<T>::Maximize(const Vec2& vec)
 	{
 		if(vec.x > x)
-
-Reality check
 			x = vec.x;
 		if(vec.y > y)
 			y = vec.y;

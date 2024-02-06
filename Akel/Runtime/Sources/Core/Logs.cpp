@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 02/02/2024
+// Updated : 06/02/2024
 
 #include <Core/Logs.h>
 #include <Utils/Ansi.h>
@@ -35,7 +35,7 @@ namespace Ak
 		#endif
 
 		std::string code_infos;
-		if(!file.empty() && !function.empty())
+		if((type == LogType::Error || type == LogType::FatalError) && !file.empty() && !function.empty())
 		{
 			code_infos += "{in file '"s;
 			code_infos += file;
