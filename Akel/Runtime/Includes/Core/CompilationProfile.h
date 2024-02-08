@@ -1,10 +1,13 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 04/02/2024
+// Updated : 07/02/2024
 
 #ifndef __AK_CORE_COMPILATION_PROFILE__
 #define __AK_CORE_COMPILATION_PROFILE__
+
+#include <climits>
+#include <cstdint>
 
 // Try to identify the compiler
 #if defined(__BORLANDC__)
@@ -83,9 +86,21 @@
 	#endif
 #endif
 
+#if defined(__x86_64__) || defined(_M_X64) || defined(__ppc64__)
+	#define AK_64BITS
+#elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
+	#define AK_32BITS
+#elif UINTPTR_MAX == UINT32_MAX
+	#define AK_32BITS
+#elif UINTPTR_MAX == UINT64_MAX
+	#define AK_64BITS
+#endif
+
 // Checking common assumptions
-#include <climits>
-#include <cstdint>
+
+#if !defined(AK_32BITS) && !defined(AK_64BITS)
+	#error "Akel can only run on 32bit or 64bit architectures"
+#endif
 
 static_assert(CHAR_BIT == 8, "CHAR_BIT is expected to be 8");
 

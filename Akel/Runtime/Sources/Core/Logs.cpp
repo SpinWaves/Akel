@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 06/02/2024
+// Updated : 08/02/2024
 
 #include <Core/Logs.h>
 #include <Utils/Ansi.h>
@@ -57,7 +57,7 @@ namespace Ak
 		if(type == LogType::FatalError)
 		{
 			std::cout << Ansi::bg_red << "Fatal Error: emergency exit" << Ansi::bg_def << std::endl;
-			EventBus::Send("__core", Internal::FatalErrorEvent{});
+			EventBus::Send("__internal_memory_manager", Internal::FatalErrorEvent{});
 		}
 	}
 }

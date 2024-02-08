@@ -117,6 +117,7 @@ local modules = {
 		end
 	},
 	Core = {
+		deps = {"AkelUtils"},
 		custom = function()
 			add_headerfiles("Akel/Runtime/Includes/Maths/**.h", "Akel/Runtime/Includes/Maths/**.inl")
 			for name, module in table.orderpairs(os_interfaces) do
@@ -159,8 +160,7 @@ local modules = {
 		end
 	},
 	Utils = {
-		option = "utils",
-		deps = {"AkelCore"}
+		deps = {}
 	},
 	ELTM = {
 		option = "eltm",
@@ -168,6 +168,20 @@ local modules = {
 		dir = "Plugins/"
 	}
 }
+
+local sanitizers = {
+	asan = "address",
+	lsan = "leak",
+	tsan = "thread",
+}
+
+for opt, policy in table.orderpairs(sanitizers) do
+	option(opt, { description = "Enable " .. opt, default = false })
+
+	if has_config(opt) then
+		set_policy("build.sanitizer." .. policy, true)
+	end
+end
 
 if is_plat("wasm") then
 	renderer_backends.Vulkan = nil
@@ -280,7 +294,9 @@ function ModuleTargetConfig(name, module)
 
 	if module.deps then
 		local moduleName = "Akel" .. name
-		table.remove_if(module.deps, function(dep) return dep == moduleName end)
+		table.remove_if(module.deps, function(dep)
+			return module.deps[dep] == moduleName
+		end)
 		if #module.deps > 0 then
 			add_deps(table.unpack(module.deps))
 		end
@@ -308,7 +324,6 @@ for name, module in pairs(modules) do
 		-- handle shared/static kind
 		if is_plat("wasm") or has_config("static") then
 			set_kind("static")
-			add_defines("AK_".. name:upper() .. "_STATIC", { public = true })
 		else
 			set_kind("shared")
 		end

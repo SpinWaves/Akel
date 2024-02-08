@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 06/02/2024
+// Updated : 08/02/2024
 
 #ifndef __AK_PLATFORM_MODULE__
 #define __AK_PLATFORM_MODULE__
@@ -15,10 +15,11 @@ namespace Ak
 	class AK_PLATFORM_API PlatformModule : public Module
 	{
 		public:
-			using Dependencies = TypeList<>;
+			using Dependencies = TypeList<class CoreModule>;
 
 			PlatformModule();
 
+			static inline bool IsInit() noexcept { return s_instance != nullptr; }
 			static PlatformModule& Get();
 
 			~PlatformModule() override;

@@ -1,13 +1,19 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/02/2024
-// Updated : 06/02/2024
+// Updated : 08/02/2024
 
 #include <Core/CoreModule.h>
 #include <Core/Logs.h>
 
 namespace Ak
 {
+	namespace Core::Memory::Internal
+	{
+		void Init();
+		void Shutdown();
+	}
+
 	CoreModule* CoreModule::s_instance = nullptr;
 
 	CoreModule::CoreModule() : Module("CoreModule")
@@ -15,6 +21,7 @@ namespace Ak
 		if(s_instance != nullptr)
 			FatalError("only one instance of CoreModule can exist at a given time");
 		s_instance = this;
+		Core::Memory::Internal::Init();
 	}
 
 	CoreModule& CoreModule::Get()
@@ -25,6 +32,7 @@ namespace Ak
 
 	CoreModule::~CoreModule()
 	{
+		Core::Memory::Internal::Shutdown();
 		s_instance = nullptr;
 	}
 }

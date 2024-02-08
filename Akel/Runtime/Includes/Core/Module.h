@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 06/02/2024
+// Updated : 08/02/2024
 
 #ifndef __AK_CORE_MODULE__
 #define __AK_CORE_MODULE__
@@ -16,6 +16,8 @@ namespace Ak
 	{
 		public:
 			virtual ~Module();
+
+			inline const std::string& GetName() const { return m_module_name; }
 
 		protected:
 			Module(std::string name);
