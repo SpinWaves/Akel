@@ -16,11 +16,12 @@ namespace Ak
 		{
 			NoBorders = 0,
 			Fullscreen = 1 << 0, // Fullscreen at creation
-			Closable = 1 << 1,
-			Resizable = 1 << 2,
+			FullscreenDesktop = 1 << 1, // Fullscreen at desktop resolution at creation
+			Closable = 1 << 2,
+			Resizable = 1 << 3,
 		};
 	}
-	constexpr std::size_t WindowStyleCount = 4;
+	constexpr std::size_t WindowStyleCount = 5;
 }
 
 #endif

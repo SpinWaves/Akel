@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 07/02/2024
+// Updated : 08/02/2024
 
 #ifndef __AK_CORE_COMPILATION_PROFILE__
 #define __AK_CORE_COMPILATION_PROFILE__
@@ -95,6 +95,9 @@
 #elif UINTPTR_MAX == UINT64_MAX
 	#define AK_64BITS
 #endif
+
+#define AK_UNUSED_PARAM(x)
+#define AK_UNUSED(x) (void)(x)
 
 // Checking common assumptions
 

@@ -59,12 +59,11 @@ local renderer_backends = {
 	}
 }
 
-local system_ineterfaces = {
+local system_interfaces = {
 	SDL2 = {
-		option = "sdl2",
-		deps = {"AkelPlatform"},
-		packages = {"libsdl >=2.26.0"},
+		option = "SDL2_back",
 		dir = "Drivers/",
+		default = true,
 		custom = function()
 			add_packages("libsdl")
 			if is_plat("windows", "mingw") then
@@ -80,6 +79,20 @@ local system_ineterfaces = {
 				-- emscripten enables USE_SDL by default which will conflict with the sdl headers
 				add_cxflags("-sUSE_SDL=0")
 				add_ldflags("-sUSE_SDL=0", { public = true })
+			end
+		end
+	},
+	GLFW = {
+		option = "GLFW_back",
+		dir = "Drivers/",
+		default = false,
+		custom = function()
+			add_packages("glfw")
+			add_defines("GLFW_INCLUDE_NONE")
+			if is_plat("linux") then
+				add_packages("libxext", "wayland", { links = {} }) -- we only need X11 headers
+			elseif is_plat("macosx") then
+				add_packages("libx11", { links = {} }) -- we only need X11 headers
 			end
 		end
 	}
@@ -135,11 +148,9 @@ local modules = {
 		option = "platform",
 		deps = {"AkelUtils", "AkelCore"},
 		custom = function()
-			if has_config("embed_systeminterfaces", "static") then
-				for name, module in table.orderpairs(system_ineterfaces) do
-					if not module.option or has_config(module.option) then
-						ModuleTargetConfig(name, module)
-					end
+			for name, module in table.orderpairs(system_interfaces) do
+				if has_config(module.option) then
+					ModuleTargetConfig(name, module)
 				end
 			end
 		end
@@ -185,6 +196,7 @@ end
 
 if is_plat("wasm") then
 	renderer_backends.Vulkan = nil
+	system_interfaces.GLFW = nil
 end
 
 if not has_config("embed_rendererbackends", "static") then
@@ -198,16 +210,6 @@ if not has_config("embed_rendererbackends", "static") then
 	end
 end
 
-if not has_config("embed_systeminterfaces", "static") then
-	-- Register system interfaces backends as separate modules
-	for name, module in pairs(system_ineterfaces) do
-		if (modules[name] ~= nil) then
-			os.raise("overriding module " .. name)
-		end
-
-		modules[name] = module
-	end
-end
 
 for name, module in table.orderpairs(modules) do
 	if module.option then
@@ -215,12 +217,16 @@ for name, module in table.orderpairs(modules) do
 	end
 end
 
+for name, module in table.orderpairs(system_interfaces) do
+	if module.option then
+		option(module.option, { description = "Enables the " .. name .. " backend", default = module.default, category = "Backends" })
+	end
+end
+
 add_rules("build.rendererplugins")
-add_rules("build.systeminterfaces")
 
 option("static", { description = "Build the engine statically (implies embed_rendererbackends)", default = is_plat("wasm") or false })
 option("embed_rendererbackends", { description = "Embed renderer backend code into AkelRenderer instead of loading them dynamically", default = is_plat("wasm") or false })
-option("embed_systeminterfaces", { description = "Embed system interfaces backend code into AkelPlatform instead of loading them dynamically", default = is_plat("wasm") or false })
 
 add_requires("entt")
 
@@ -228,8 +234,14 @@ if has_config("renderer") then
 	add_requires("nzsl >=2023.12.31", { debug = is_mode("debug"), configs = { symbols = not is_mode("release"), shared = not is_plat("wasm", "android") and not has_config("static") } })
 end
 
-if has_config("sdl2") then
+if has_config("SDL2_back") then
 	add_requires("libsdl >=2.26.0")
+	add_defines("AK_USE_SDL2")
+end
+
+if has_config("GLFW_back") then
+	add_requires("glfw")
+	add_defines("AK_USE_GLFW")
 end
 
 if is_plat("linux") then
@@ -368,24 +380,6 @@ rule("build.rendererplugins")
 
 		if target:kind() == "binary" and (table.contains(deps, "AkelRenderer") or table.contains(deps, "AkelGraphics")) then
 			for name, _ in pairs(renderer_backends) do
-				local depName = "Akel" .. name
-				if not table.contains(deps, depName) then -- don't overwrite dependency
-					target:add("deps", depName, {inherit = false})
-				end
-			end
-		end
-	end)
-
-rule("build.systeminterfaces")
-	on_load(function(target)
-		if has_config("static") then
-			return
-		end
-
-		local deps = table.wrap(target:get("deps"))
-
-		if target:kind() == "binary" and table.contains(deps, "AkelPlatform") then
-			for name, _ in pairs(system_ineterfaces) do
 				local depName = "Akel" .. name
 				if not table.contains(deps, depName) then -- don't overwrite dependency
 					target:add("deps", depName, {inherit = false})
