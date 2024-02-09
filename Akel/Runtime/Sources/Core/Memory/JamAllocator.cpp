@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 07/02/2024
-// Updated : 07/02/2024
+// Updated : 09/02/2024
 
 #include <Core/Logs.h>
 #include <Core/Memory/JamAllocator.h>
@@ -22,7 +22,7 @@ namespace Ak
 		m_heap_end = (void*)(reinterpret_cast<std::uintptr_t>(m_heap) + m_heap_size);
 
 		auto control_unit = Core::Memory::Internal::GetControlUnit();
-		control_unit->jam_stack.push_back(weak_from_this());
+		control_unit->jam_stack.emplace_back(std::make_pair(this, true));
 	}
 
 	void JamAllocator::IncreaseSize(std::size_t size)
@@ -51,6 +51,12 @@ namespace Ak
 		m_heap = nullptr;
 		m_heap_end = nullptr;
 		m_heap_size = 0;
+		auto control_unit = Core::Memory::Internal::GetControlUnit();
+		auto it = std::find_if(control_unit->jam_stack.begin(), control_unit->jam_stack.end(), [this](auto& pair) { return pair.first == this; });
+		if(it == control_unit->jam_stack.end())
+			Error("JamAllocator : unable to find itself in the memory manager control unit, this should not happen");
+		else
+			it->second = false;
 	}
 
 	void* JamAllocator::InternalAlloc(std::size_t size)

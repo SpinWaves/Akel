@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 08/02/2024
+// Updated : 09/02/2024
 
 #include <Core/Memory/FixedAllocator.h>
 #include <Core/Memory/MemoryManager.h>
@@ -26,7 +26,7 @@ namespace Ak
 
 		auto control_unit = Core::Memory::Internal::GetControlUnit();
 		m_allocator_number = control_unit->fixed_stack.size();
-		control_unit->fixed_stack.emplace_back(weak_from_this());
+		control_unit->fixed_stack.emplace_back(std::make_pair(this, true));
 	}
 
 	void FixedAllocator::Resize(std::size_t num_blocks)
@@ -43,13 +43,18 @@ namespace Ak
 
 	void FixedAllocator::Destroy()
 	{
+		std::unique_lock<std::mutex> watchdog(m_mutex);
 		if(m_heap == nullptr)
 			return;
-
-		std::unique_lock<std::mutex> watchdog(m_mutex);
-
 		std::free(m_heap);
 		m_heap = nullptr;
+		m_heap_size = 0;
+		auto control_unit = Core::Memory::Internal::GetControlUnit();
+		auto it = std::find_if(control_unit->fixed_stack.begin(), control_unit->fixed_stack.end(), [this](auto& pair) { return pair.first == this; });
+		if(it == control_unit->fixed_stack.end())
+			Error("FixedAllocator : unable to find itself in the memory manager control unit, this should not happen");
+		else
+			it->second = false;
 	}
 
 	FixedAllocator::~FixedAllocator()

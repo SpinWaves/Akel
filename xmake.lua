@@ -289,6 +289,13 @@ function ModuleTargetConfig(name, module)
 		end
 	end
 
+	if module.dir then
+		set_pcxxheader("Akel/Runtime/Includes/" .. module.dir .. name .. "/PreCompiled.h")
+	else
+		set_pcxxheader("Akel/Runtime/Includes/" .. name .. "/PreCompiled.h")
+	end
+
+
 	if module.packages then
 		add_packages(table.unpack(module.packages))
 	end
@@ -337,12 +344,6 @@ for name, module in pairs(modules) do
 
 		add_includedirs("Akel/Runtime/Sources")
 		add_rpathdirs("$ORIGIN")
-
-		if module.dir then
-			set_pcxxheader("Akel/Runtime/Includes/" .. module.dir .. name .. "/PreCompiled.h")
-		else
-			set_pcxxheader("Akel/Runtime/Includes/" .. name .. "/PreCompiled.h")
-		end
 
 		on_clean(function(target)
 			if target:objectfiles() then

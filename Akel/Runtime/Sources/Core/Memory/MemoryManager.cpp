@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 08/02/2024
+// Updated : 09/02/2024
 
 #include <Core/Logs.h>
 #include <Core/PreCompiled.h>
@@ -41,21 +41,19 @@ namespace Ak::Core::Memory::Internal
 		int allocators_leaks = 0;
 		for(auto& elem : control_unit->jam_stack)
 		{
-			if(!elem.expired())
-			{
-				elem.lock()->Destroy();
-				if(elem.lock()->IsInit())
-					allocators_leaks++;
-			}
+			if(!elem.second)
+				continue;
+			elem.first->Destroy();
+			if(elem.first->IsInit())
+				allocators_leaks++;
 		}
 		for(auto& elem : control_unit->fixed_stack)
 		{
-			if(!elem.expired())
-			{
-				elem.lock()->Destroy();
-				if(elem.lock()->IsInit())
-					allocators_leaks++;
-			}
+			if(!elem.second)
+				continue;
+			elem.first->Destroy();
+			if(elem.first->IsInit())
+				allocators_leaks++;
 		}
 		if(allocators_leaks != 0)
 			Message("Memory manager : number of allacators not destroyed '%'", allocators_leaks);
@@ -138,21 +136,21 @@ namespace Ak::Core::Memory::Internal
 		}
 		for(auto& elem : control_unit->jam_stack)
 		{
-			if(elem.expired())
+			if(!elem.second)
 				continue;
-			if(elem.lock()->Contains(ptr))
+			if(elem.first->Contains(ptr))
 			{
-				elem.lock()->Free(ptr);
+				elem.first->Free(ptr);
 				return;
 			}
 		}
 		for(auto& elem : control_unit->fixed_stack)
 		{
-			if(elem.expired())
+			if(!elem.second)
 				continue;
-			if(elem.lock()->Contains(ptr))
+			if(elem.first->Contains(ptr))
 			{
-				elem.lock()->Free(ptr);
+				elem.first->Free(ptr);
 				return;
 			}
 		}

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 08/02/2024
+// Updated : 09/02/2024
 
 #include <Core/Logs.h>
 #include <Core/ComponentStack.h>
@@ -53,11 +53,11 @@ namespace Ak
 			bool has_been_freed = false;
 			for(auto& jam : Core::Memory::Internal::GetControlUnit()->jam_stack)
 			{
-				if(jam.expired())
+				if(!jam.second)
 					continue;
-				if(jam.lock()->Contains(elem))
+				if(jam.first->Contains(elem))
 				{
-					jam.lock()->Free(elem);
+					jam.first->Free(elem);
 					has_been_freed = true;
 					break;
 				}
@@ -66,11 +66,11 @@ namespace Ak
 			{
 				for(auto& fixed : Core::Memory::Internal::GetControlUnit()->fixed_stack)
 				{
-					if(fixed.expired())
+					if(!fixed.second)
 						continue;
-					if(fixed.lock()->Contains(elem))
+					if(fixed.first->Contains(elem))
 					{
-						fixed.lock()->Free(elem);
+						fixed.first->Free(elem);
 						has_been_freed = true;
 						break;
 					}
