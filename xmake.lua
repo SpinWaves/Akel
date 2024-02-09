@@ -61,11 +61,11 @@ local renderer_backends = {
 
 local system_interfaces = {
 	SDL2 = {
-		option = "SDL2_back",
+		option = "SDL2_backend",
 		dir = "Drivers/",
 		default = true,
+		publicPackages = {"libsdl"},
 		custom = function()
-			add_packages("libsdl")
 			if is_plat("windows", "mingw") then
 				add_defines("SDL_VIDEO_DRIVER_WINDOWS=1")
 			elseif is_plat("linux") then
@@ -83,11 +83,11 @@ local system_interfaces = {
 		end
 	},
 	GLFW = {
-		option = "GLFW_back",
+		option = "GLFW_backend",
 		dir = "Drivers/",
 		default = false,
+		publicPackages = {"glfw"},
 		custom = function()
-			add_packages("glfw")
 			add_defines("GLFW_INCLUDE_NONE")
 			if is_plat("linux") then
 				add_packages("libxext", "wayland", { links = {} }) -- we only need X11 headers
@@ -210,7 +210,6 @@ if not has_config("embed_rendererbackends", "static") then
 	end
 end
 
-
 for name, module in table.orderpairs(modules) do
 	if module.option then
 		option(module.option, { description = "Enables the " .. name .. " module", default = true, category = "Modules" })
@@ -219,7 +218,7 @@ end
 
 for name, module in table.orderpairs(system_interfaces) do
 	if module.option then
-		option(module.option, { description = "Enables the " .. name .. " backend", default = module.default, category = "Backends" })
+		option(module.option, { description = "Enables the " .. name .. " backend", default = module.default, category = "Modules" })
 	end
 end
 
@@ -234,12 +233,12 @@ if has_config("renderer") then
 	add_requires("nzsl >=2023.12.31", { debug = is_mode("debug"), configs = { symbols = not is_mode("release"), shared = not is_plat("wasm", "android") and not has_config("static") } })
 end
 
-if has_config("SDL2_back") then
+if has_config("SDL2_backend") then
 	add_requires("libsdl >=2.26.0")
 	add_defines("AK_USE_SDL2")
 end
 
-if has_config("GLFW_back") then
+if has_config("GLFW_backend") then
 	add_requires("glfw")
 	add_defines("AK_USE_GLFW")
 end
@@ -250,10 +249,6 @@ end
 
 if has_config("vulkan") and not is_plat("wasm") then
 	add_requires("vulkan-headers", "vulkan-memory-allocator", "volk")
-end
-
-if is_plat("linux") then
-	add_requires("libxext", "wayland", { configs = { asan = false } })
 end
 
 function ModuleTargetConfig(name, module)
