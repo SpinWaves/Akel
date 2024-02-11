@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 08/02/2024
+// Updated : 11/02/2024
 
 #include <Drivers/SDL2/SDL2Window.h>
 #include <Platform/Enums.h>
@@ -27,6 +27,7 @@ namespace Ak
 		if(!m_window)
 			FatalError("SDL2 : cannot create window; %", SDL_GetError());
 		SDL_GetWindowPosition(m_window, &m_pos.x, &m_pos.y);
+		Debug("SDL2 Window created");
 	}
 
 	void SDL2Window::UpdateWindowInfos() noexcept
@@ -89,6 +90,7 @@ namespace Ak
 		SDL_SetWindowMinimumSize(m_window, size.x, size.y);
 		m_min_size = size;
 	}
+
 	void SDL2Window::SetMinSize(std::uint32_t sizex, std::uint32_t sizey) noexcept
 	{
 		Assert(m_window == nullptr, "Trying to set the min size of an uninit window");
@@ -110,5 +112,6 @@ namespace Ak
 			SDL_DestroyWindow(m_window);
 			m_window = nullptr;
 		}
+		Debug("SDL2 Window destroyed");
 	}
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 02/02/2024
+// Updated : 11/02/2024
 
 #ifndef __AK_VEC4__
 #define __AK_VEC4__
@@ -16,10 +16,10 @@ namespace Ak
 	template<typename T>
 	struct Vec4
 	{
-		T x;
-		T y;
-		T z;
-		T w;
+		union { T x, r, s; };
+		union { T y, g, t; };
+		union { T z, b, p; };
+		union { T w, a, q; };
 
 		constexpr Vec4() = default;
 		constexpr Vec4(T X, T Y, T Z, T W = 1.0);

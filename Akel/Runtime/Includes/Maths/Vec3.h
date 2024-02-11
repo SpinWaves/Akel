@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 02/02/2024
+// Updated : 11/02/2024
 
 #ifndef __AK_VEC3__
 #define __AK_VEC3__
@@ -16,9 +16,9 @@ namespace Ak
 	template<typename T>
 	struct Vec3
 	{
-		T x;
-		T y;
-		T z;
+		union { T x, r, s; };
+		union { T y, g, t; };
+		union { T z, b, p; };
 
 		constexpr Vec3() = default;
 		constexpr Vec3(T X, T Y, T Z);

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/04/2021
-// Updated : 01/02/2024
+// Updated : 11/02/2024
 
 #ifndef __AK_VEC2__
 #define __AK_VEC2__
@@ -16,8 +16,8 @@ namespace Ak
 	template <typename T>
 	struct Vec2
 	{
-		T x;
-		T y;
+		union { T x, r, s; };
+		union { T y, g, t; };
 
 		constexpr Vec2() = default;
 		constexpr Vec2(T X, T Y);

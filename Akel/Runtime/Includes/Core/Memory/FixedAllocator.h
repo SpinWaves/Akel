@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 07/02/2024
-// Updated : 08/02/2024
+// Updated : 09/02/2024
 
 #ifndef __AK_FIXED_ALLOCATOR__
 #define __AK_FIXED_ALLOCATOR__
@@ -11,7 +11,7 @@
 
 namespace Ak
 {
-	class AK_CORE_API FixedAllocator : public std::enable_shared_from_this<FixedAllocator>
+	class AK_CORE_API FixedAllocator
     {
 		public:
 			FixedAllocator() = default;

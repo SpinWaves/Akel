@@ -1,7 +1,7 @@
 -- This file is a part of Akel
 -- Authors : @kbz_8
 -- Created : 02/10/2021
--- Updated : 03/01/2024
+-- Updated : 11/02/2024
 
 -- Credits to SirLynix (https://github.com/SirLynix) for this xmake.lua
 -- Took from https://github.com/NazaraEngine/NazaraEngine
@@ -64,7 +64,7 @@ local system_interfaces = {
 		option = "SDL2_backend",
 		dir = "Drivers/",
 		default = true,
-		publicPackages = {"libsdl"},
+		packages = {"libsdl"},
 		custom = function()
 			if is_plat("windows", "mingw") then
 				add_defines("SDL_VIDEO_DRIVER_WINDOWS=1")
@@ -86,7 +86,7 @@ local system_interfaces = {
 		option = "GLFW_backend",
 		dir = "Drivers/",
 		default = false,
-		publicPackages = {"glfw"},
+		packages = {"glfw"},
 		custom = function()
 			add_defines("GLFW_INCLUDE_NONE")
 			if is_plat("linux") then
@@ -196,7 +196,6 @@ end
 
 if is_plat("wasm") then
 	renderer_backends.Vulkan = nil
-	system_interfaces.GLFW = nil
 end
 
 if not has_config("embed_rendererbackends", "static") then
@@ -294,7 +293,6 @@ function ModuleTargetConfig(name, module)
 	else
 		set_pcxxheader("Akel/Runtime/Includes/" .. name .. "/PreCompiled.h")
 	end
-
 
 	if module.packages then
 		add_packages(table.unpack(module.packages))

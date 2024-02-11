@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 08/02/2024
+// Updated : 11/02/2024
 
 #ifndef __AK_CORE_COMPONENT_STACK__
 #define __AK_CORE_COMPONENT_STACK__
@@ -14,6 +14,12 @@ namespace Ak
 {
 	class AK_CORE_API ComponentStack
 	{
+		public:
+			using iterator = std::vector<ComponentBase*>::iterator;
+			using const_iterator = std::vector<ComponentBase*>::const_iterator;
+			using reverse_iterator = std::vector<ComponentBase*>::reverse_iterator;
+			using const_reverse_iterator = std::vector<ComponentBase*>::const_reverse_iterator;
+
 		public:
 			ComponentStack() = default;
 
@@ -31,6 +37,16 @@ namespace Ak
 			inline T GetComponentAs(const std::string& name);
 			template<typename T>
 			inline T GetComponentAs(std::size_t index);
+
+			inline iterator begin() { return m_components.begin(); }
+			inline iterator end() { return m_components.end(); }
+			inline reverse_iterator rbegin() { return m_components.rbegin(); }
+			inline reverse_iterator rend() { return m_components.rend(); }
+
+			inline const_iterator cbegin() { return m_components.cbegin(); }
+			inline const_iterator cend() { return m_components.cend(); }
+			inline const_reverse_iterator crbegin() { return m_components.crbegin(); }
+			inline const_reverse_iterator crend() { return m_components.crend(); }
 
 			void Destroy();
 

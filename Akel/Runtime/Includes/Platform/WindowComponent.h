@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 09/02/2024
+// Updated : 11/02/2024
 
 #ifndef __AK_PLATFORM_WINDOW_COMPONENT__
 #define __AK_PLATFORM_WINDOW_COMPONENT__
@@ -17,8 +17,8 @@ namespace Ak
 	class AK_PLATFORM_API WindowComponent : public ComponentBase
 	{
 		public:
-			WindowComponent(std::size_t width, std::size_t height, std::uint32_t style);
-			WindowComponent(std::size_t width, std::size_t height, const std::string& title, std::uint32_t style);
+			WindowComponent(std::size_t width, std::size_t height, std::uint32_t style = 0);
+			WindowComponent(std::size_t width, std::size_t height, const std::string& title, std::uint32_t style = 0);
 
 			void OnAttach() noexcept override;
 			AK_FORCEINLINE void OnFixedUpdate() noexcept override;

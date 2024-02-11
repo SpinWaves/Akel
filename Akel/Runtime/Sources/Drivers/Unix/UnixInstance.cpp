@@ -1,19 +1,28 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/02/2024
-// Updated : 04/02/2024
+// Updated : 11/02/2024
 
+#include <Core/Application.h>
 #include <Drivers/Unix/UnixInstance.h>
 
 namespace Ak
 {
 	constexpr const int UNIX_PATH_MAX = 1024;
 
+	void SignalsHandler([[maybe_unused]] int sig)
+	{
+		if(Application::IsInit())
+			Application::Get().Quit();
+	}
+
 	void UnixInstance::Init(int ac, char** av)
 	{
 		m_av = av;
 		m_ac = ac;
 		OSInstance::SetInstance(this);
+		signal(SIGINT, SignalsHandler);
+		signal(SIGQUIT, SignalsHandler);
 	}
 
 	void UnixInstance::Shutdown()
