@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 09/02/2024
+// Updated : 12/02/2024
 
 #include <Platform/WindowComponent.h>
 #include <Core/Memory/MemoryManager.h>
@@ -14,7 +14,7 @@
 
 namespace Ak
 {
-	WindowComponent::WindowComponent(std::size_t width, std::size_t height, std::uint32_t style) : ComponentBase("__WindowComponent")
+	WindowComponent::WindowComponent(std::size_t width, std::size_t height, WindowStyle style) : ComponentBase("__WindowComponent")
 	{
 		#if defined(AK_USE_SDL2)
 			m_backend_window = MemAlloc<SDL2Window>(width, height, "Akel Window", style);
@@ -23,7 +23,7 @@ namespace Ak
 		#endif
 	}
 
-	WindowComponent::WindowComponent(std::size_t width, std::size_t height, const std::string& title, std::uint32_t style) : ComponentBase("__WindowComponent")
+	WindowComponent::WindowComponent(std::size_t width, std::size_t height, const std::string& title, WindowStyle style) : ComponentBase("__WindowComponent")
 	{
 		#if defined(AK_USE_SDL2)
 			m_backend_window = MemAlloc<SDL2Window>(width, height, title, style);

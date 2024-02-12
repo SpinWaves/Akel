@@ -1,20 +1,20 @@
 // This file is a part of Akel
 // Authors : @kbz_8
-// Created : 08/02/2024
+// Created : 11/02/2024
 // Updated : 12/02/2024
 
-#ifndef __AK_SDL2_WINDOW__
-#define __AK_SDL2_WINDOW__
+#ifndef __AK_GLFW_WINDOW__
+#define __AK_GLFW_WINDOW__
 
-#include <Drivers/SDL2/PreCompiled.h>
+#include <Drivers/GLFW/PreCompiled.h>
 #include <Platform/SI/Window.h>
 
 namespace Ak
 {
-	class AK_SDL2_API SDL2Window : public SIWindow
+	class AK_GLFW_API GLFWWindow : public SIWindow
 	{
 		public:
-			SDL2Window(std::size_t width, std::size_t height, const std::string& title, WindowStyle style);
+			GLFWWindow(std::size_t width, std::size_t height, const std::string& title, WindowStyle style);
 
 			void CreateWindow() override;
 			void UpdateWindowInfos() noexcept override;
@@ -33,10 +33,10 @@ namespace Ak
 
 			void SetTitle(const std::string& title) override;
 
-			~SDL2Window();
+			~GLFWWindow();
 
 		private:
-			SDL_Window* m_window = nullptr;
+			GLFWwindow* m_window = nullptr;
 	};
 
 }

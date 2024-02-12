@@ -41,7 +41,7 @@ set_optimize("fastest")
 local renderer_backends = {
 	Vulkan = {
 		option = "vulkan",
-		deps = {"AkelRenderer"},
+		deps = {"AkelGraphics"},
 		packages = {"vulkan-headers", "vulkan-memory-allocator", "volk"},
 		dir = "Drivers/",
 		custom = function()
@@ -54,6 +54,23 @@ local renderer_backends = {
 				add_packages("libxext", "wayland", { links = {} }) -- we only need X11 headers
 			elseif is_plat("macosx") then
 				add_defines("VK_USE_PLATFORM_METAL_EXT")
+			end
+		end
+	}
+}
+
+local embedded_parts = {
+	Renderer = {
+		option = "renderer",
+		deps = {"AkelPlatform", "AkelCore"},
+		publicPackages = {"nzsl"},
+		custom = function()
+			if has_config("embed_rendererbackends", "static") then
+				for name, module in table.orderpairs(renderer_backends) do
+					if not module.option or has_config(module.option) then
+						ModuleTargetConfig(name, module)
+					end
+				end
 			end
 		end
 	}
@@ -141,8 +158,12 @@ local modules = {
 		end
 	},
 	Graphics = {
-		deps = {"AkelRenderer", "AkelCore"},
-		packages = {"entt"}
+		option = "graphics",
+		deps = {"AkelCore"},
+		packages = {"entt"},
+		custom = function()
+			ModuleTargetConfig("Renderer", embedded_parts.Renderer)
+		end
 	},
 	Platform = {
 		option = "platform",
@@ -151,21 +172,6 @@ local modules = {
 			for name, module in table.orderpairs(system_interfaces) do
 				if has_config(module.option) then
 					ModuleTargetConfig(name, module)
-				end
-			end
-		end
-	},
-	Renderer = {
-		option = "renderer",
-		deps = {"AkelPlatform", "AkelCore"},
-		packages = {},
-		publicPackages = {"nzsl"},
-		custom = function()
-			if has_config("embed_rendererbackends", "static") then
-				for name, module in table.orderpairs(renderer_backends) do
-					if not module.option or has_config(module.option) then
-						ModuleTargetConfig(name, module)
-					end
 				end
 			end
 		end
@@ -228,7 +234,7 @@ option("embed_rendererbackends", { description = "Embed renderer backend code in
 
 add_requires("entt")
 
-if has_config("renderer") then
+if has_config("graphics") then
 	add_requires("nzsl >=2023.12.31", { debug = is_mode("debug"), configs = { symbols = not is_mode("release"), shared = not is_plat("wasm", "android") and not has_config("static") } })
 end
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @maldavid
 // Created : 06/02/2024
-// Updated : 08/02/2024
+// Updated : 12/02/2024
 
 #ifndef __AK_PLATFORM_ENUMS__
 #define __AK_PLATFORM_ENUMS__
@@ -10,18 +10,17 @@
 
 namespace Ak
 {
-	namespace WindowStyle // not enum class to allow binary operations like Ak::WindowStyle::NoBorders | Ak::WindowStyle::Closable
+	enum WindowStyle_
 	{
-		enum : std::uint32_t
-		{
-			NoBorders = 0,
-			Fullscreen = 1 << 0, // Fullscreen at creation
-			FullscreenDesktop = 1 << 1, // Fullscreen at desktop resolution at creation
-			Closable = 1 << 2,
-			Resizable = 1 << 3,
-		};
-	}
-	constexpr std::size_t WindowStyleCount = 5;
+		WindowDefault = 0,
+		WindowNoBorders = 1 << 0,
+		WindowFullscreen = 1 << 1, // Fullscreen at creation
+		WindowFullscreenDesktop = 1 << 2, // Fullscreen at desktop resolution at creation
+		WindowClosable = 1 << 3,
+		WindowResizable = 1 << 4,
+	};
+	using WindowStyle = int;
+	constexpr std::size_t WindowStyleCount = 6;
 }
 
 #endif

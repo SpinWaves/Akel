@@ -1,26 +1,26 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 11/02/2024
+// Updated : 12/02/2024
 
 #include <Drivers/SDL2/SDL2Window.h>
-#include <Platform/Enums.h>
 #include <Core/Logs.h>
+#include <SDL2/SDL_video.h>
 
 namespace Ak
 {
-	SDL2Window::SDL2Window(std::size_t width, std::size_t height, const std::string& title, std::uint32_t style) : SIWindow(width, height, title, style) {}
+	SDL2Window::SDL2Window(std::size_t width, std::size_t height, const std::string& title, WindowStyle style) : SIWindow(width, height, title, style) {}
 
 	void SDL2Window::CreateWindow()
 	{
 		std::uint32_t flags = SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI;
-		if(m_style & WindowStyle::Resizable)
+		if(m_style & WindowResizable)
 			flags |= SDL_WINDOW_RESIZABLE;
-		if(m_style & WindowStyle::NoBorders)
+		if(m_style & WindowNoBorders)
 			flags |= SDL_WINDOW_BORDERLESS;
-		if(m_style & WindowStyle::Fullscreen)
+		if(m_style & WindowFullscreen)
 			flags |= SDL_WINDOW_FULLSCREEN;
-		if(m_style & WindowStyle::FullscreenDesktop)
+		if(m_style & WindowFullscreenDesktop)
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 		m_window = SDL_CreateWindow(m_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_size.x, m_size.y, flags);
@@ -35,8 +35,9 @@ namespace Ak
 		std::uint32_t bits = SDL_GetWindowFlags(m_window);
 		m_is_maximized = bits & SDL_WINDOW_MAXIMIZED;
 		m_is_minimized = bits & SDL_WINDOW_MINIMIZED;
-		m_style |= WindowStyle::Resizable * (bits & SDL_WINDOW_RESIZABLE ? 1 : 0);
-		m_style |= WindowStyle::Fullscreen * (bits & SDL_WINDOW_FULLSCREEN ? 1 : 0);
+		m_is_resizable = bits & SDL_WINDOW_RESIZABLE;
+		m_is_fullscreen = bits & SDL_WINDOW_FULLSCREEN;
+		m_is_fullscreen_desktop = bits & SDL_WINDOW_FULLSCREEN_DESKTOP;
 		if(!m_is_maximized)
 			SDL_GetWindowSize(m_window, &m_size.x, &m_size.y);
 		SDL_GetWindowPosition(m_window, &m_pos.x, &m_pos.y);

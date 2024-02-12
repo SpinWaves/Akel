@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 01/02/2024
-// Updated : 09/02/2024
+// Updated : 12/02/2024
 
 #ifndef __AK_PLATFORM_SI_WINDOW__
 #define __AK_PLATFORM_SI_WINDOW__
@@ -16,7 +16,7 @@ namespace Ak
 	class AK_PLATFORM_API SIWindow : public NonCopyable
 	{
 		public:
-			SIWindow(std::size_t width, std::size_t height, const std::string& title, std::uint32_t style);
+			SIWindow(std::size_t width, std::size_t height, const std::string& title, WindowStyle style);
 
 			virtual void CreateWindow() = 0;
 			virtual void UpdateWindowInfos() noexcept {}
@@ -46,9 +46,10 @@ namespace Ak
 
 			AK_FORCEINLINE bool IsMaximized() const noexcept { return m_is_maximized; }
 			AK_FORCEINLINE bool IsMinimized() const noexcept { return m_is_minimized; }
-			AK_FORCEINLINE bool IsFullScreen() const noexcept { return m_style & WindowStyle::Fullscreen || m_style & WindowStyle::FullscreenDesktop; }
-			AK_FORCEINLINE bool IsResizable() const noexcept { return m_style & WindowStyle::Resizable; }
-			AK_FORCEINLINE bool HasBorders() const noexcept { return !(m_style & WindowStyle::NoBorders); }
+			AK_FORCEINLINE bool IsFullScreen() const noexcept { return m_is_fullscreen; }
+			AK_FORCEINLINE bool IsFullScreenDesktop() const noexcept { return m_is_fullscreen_desktop; }
+			AK_FORCEINLINE bool IsResizable() const noexcept { return m_is_resizable; }
+			AK_FORCEINLINE bool HasBorders() const noexcept { return !(m_style & WindowNoBorders); }
 
 			virtual ~SIWindow();
 
@@ -58,9 +59,12 @@ namespace Ak
 			Vec2i m_size;
 			Vec2i m_max_size;
 			Vec2i m_min_size;
-			std::size_t m_style;
+			WindowStyle m_style;
 			bool m_is_maximized;
 			bool m_is_minimized;
+			bool m_is_fullscreen;
+			bool m_is_fullscreen_desktop;
+			bool m_is_resizable;
 	};
 }
 

@@ -1,13 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 08/02/2024
+// Updated : 11/02/2024
 
 #include <Drivers/GLFW/GLFWModule.h>
 #include <Core/Logs.h>
 
 namespace Ak
 {
+	static void GLFWErrorCallback(int error, const char* description)
+	{
+		Error("GLFW (%) : %", error, description);
+	}
+
 	GLFWModule* GLFWModule::s_instance = nullptr;
 
 	GLFWModule::GLFWModule() : Module("GLFWModule")
@@ -17,6 +22,7 @@ namespace Ak
 		if(!glfwInit())
 			FatalError("GLFW error : unable to init all subsystems");
 		s_instance = this;
+		glfwSetErrorCallback(GLFWErrorCallback);
 	}
 
 	GLFWModule& GLFWModule::Get()
