@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/02/2024
-// Updated : 04/02/2024
+// Updated : 13/02/2024
 
+#include <Drivers/Windows/WindowsLibLoader.h>
 #include <Drivers/Windows/WindowsInstance.h>
 
 namespace Ak
@@ -10,13 +11,17 @@ namespace Ak
 	void WindowsInstance::Init()
 	{
 		OSInstance::SetInstance(this);
+		OSInstance::SetLibLoader(new WindowsLibLoader);
 	}
 
 	void WindowsInstance::Shutdown()
 	{
 		OSInstance::SetInstance(nullptr);
+		delete &OSInstance::GetLibLoader();
+		OSInstance::SetLibLoader(nullptr);
 	}
 
+	[[nodiscard]]
 	std::filesystem::path WindowsInstance::GetExecutablePath()
 	{
 		WCHAR path[MAX_PATH];
@@ -28,6 +33,7 @@ namespace Ak
 		return converted_string;
 	}
 
+	[[nodiscard]]
 	std::filesystem::path WindowsInstance::GetCurrentWorkingDirectoryPath()
 	{
 		return std::filesystem::current_path();
@@ -37,7 +43,7 @@ namespace Ak
 	{
 		ShellExecuteA(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
 	}
-	
+
 	void WindowsInstance::Delay(std::uint32_t us)
 	{
 		HANDLE timer;
@@ -64,7 +70,8 @@ namespace Ak
 			DwmSetWindowAttribute(hwnd, 35 /*DWMWINDOWATTRIBUTE::DWMWA_CAPTION_COLOR*/, &CAPTION_COLOR, sizeof(CAPTION_COLOR));
 			SetWindowPos(hwnd, NULL, NULL, NULL, NULL, NULL, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOSIZE);
 			return true
+		#else
+			return false;
 		#endif
-		return false;
 	}
 }

@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/02/2024
-// Updated : 11/02/2024
+// Updated : 13/02/2024
 
+#include <Drivers/Unix/UnixLibLoader.h>
 #include <Core/Application.h>
 #include <Drivers/Unix/UnixInstance.h>
 
@@ -23,13 +24,17 @@ namespace Ak
 		OSInstance::SetInstance(this);
 		signal(SIGINT, SignalsHandler);
 		signal(SIGQUIT, SignalsHandler);
+		OSInstance::SetLibLoader(new UnixLibLoader);
 	}
 
 	void UnixInstance::Shutdown()
 	{
 		OSInstance::SetInstance(nullptr);
+		delete &OSInstance::GetLibLoader();
+		OSInstance::SetLibLoader(nullptr);
 	}
 
+	[[nodiscard]]
 	std::filesystem::path UnixInstance::GetExecutablePath()
 	{
 		std::string path(UNIX_PATH_MAX, 0);
@@ -46,6 +51,7 @@ namespace Ak
 		return {};
 	}
 
+	[[nodiscard]]
 	std::filesystem::path UnixInstance::GetCurrentWorkingDirectoryPath()
 	{
 		return std::filesystem::current_path();

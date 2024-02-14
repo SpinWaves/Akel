@@ -1,11 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 04/02/2024
+// Updated : 13/02/2024
 
 #ifndef __AK_CORE_OS_INSTANCE__
 #define __AK_CORE_OS_INSTANCE__
 
+#include "Core/OS/LibLoader.h"
 #include <Core/PreCompiled.h>
 #include <Maths/Vec4.h>
 
@@ -24,15 +25,18 @@ namespace Ak
 
 			virtual bool SetTitleBarColor([[maybe_unused]] Vec4f color, [[maybe_unused]] bool dark = true) { return false; }
 
-			inline static OSInstance* Get() { return m_instance; }
+			inline static OSInstance& Get() noexcept { return *s_instance; }
+			inline static LibLoader& GetLibLoader() noexcept { return *s_lib_loader; }
 
 		protected:
 			OSInstance() = default;
-			inline void SetInstance(OSInstance* instance) { m_instance = instance; }
+			inline void SetInstance(OSInstance* instance) { s_instance = instance; }
+			inline void SetLibLoader(LibLoader* instance) { s_lib_loader = instance; }
 			virtual ~OSInstance() = default;
 
 		private:
-			inline static OSInstance* m_instance = nullptr;
+			inline static OSInstance* s_instance = nullptr;
+			inline static LibLoader* s_lib_loader = nullptr;
 	};
 }
 

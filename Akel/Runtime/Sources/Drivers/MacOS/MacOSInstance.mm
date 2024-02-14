@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/02/2024
-// Updated : 04/02/2024
+// Updated : 13/02/2024
 
+#include <Drivers/MacOS/MacOSLibLoader.h>
 #include <Drivers/MacOS/MacOSInstance.h>
 
 #import <Cocoa/Cocoa.h>
@@ -12,13 +13,17 @@ namespace Ak
 	void MacOSInstance::Init()
 	{
 		OSInstance::SetInstance(this);
+		OSInstance::SetLibLoader(new MacOSLibLoader);
 	}
 
 	void MacOSInstance::Shutdown()
 	{
 		OSInstance::SetInstance(nullptr);
+		delete &OSInstance::GetLibLoader();
+		OSInstance::SetLibLoader(nullptr);
 	}
 
+	[[nodiscard]]
 	std::filesystem::path MacOSInstance::GetExecutablePath()
 	{
 		std::uint32_t size = 0;
@@ -35,6 +40,7 @@ namespace Ak
 		return std::filesystem::path{buffer.data()};
 	}
 
+	[[nodiscard]]
 	std::filesystem::path MacOSInstance::GetCurrentWorkingDirectoryPath()
 	{
 		return std::filesystem::current_path();
