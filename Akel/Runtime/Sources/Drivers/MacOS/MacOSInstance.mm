@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/02/2024
-// Updated : 13/02/2024
+// Updated : 18/02/2024
 
+#include <Core/CLI.h>
 #include <Drivers/MacOS/MacOSLibLoader.h>
 #include <Drivers/MacOS/MacOSInstance.h>
 
@@ -10,10 +11,11 @@
 
 namespace Ak
 {
-	void MacOSInstance::Init()
+	void MacOSInstance::Init(int ac, char** av)
 	{
 		OSInstance::SetInstance(this);
 		OSInstance::SetLibLoader(new MacOSLibLoader);
+		CommandLineInterface::Get().Feed(ac, av);
 	}
 
 	void MacOSInstance::Shutdown()

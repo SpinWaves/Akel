@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/02/2024
-// Updated : 13/02/2024
+// Updated : 18/02/2024
 
 #ifndef __AK_DRIVERS_MACOS_INSTANCE__
 #define __AK_DRIVERS_MACOS_INSTANCE__
@@ -16,7 +16,7 @@ namespace Ak
 		public:
 			MacOSInstance() = default;
 
-			void Init() override;
+			void Init(int ac, char** av);
 			void Shutdown() override;
 
 			[[nodiscard]]

@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/02/2024
-// Updated : 13/02/2024
+// Updated : 18/02/2024
 
+#include <Core/CLI.h>
 #include <Drivers/Unix/UnixLibLoader.h>
 #include <Core/Application.h>
 #include <Drivers/Unix/UnixInstance.h>
@@ -25,6 +26,7 @@ namespace Ak
 		signal(SIGINT, SignalsHandler);
 		signal(SIGQUIT, SignalsHandler);
 		OSInstance::SetLibLoader(new UnixLibLoader);
+		CommandLineInterface::Get().Feed(ac, av);
 	}
 
 	void UnixInstance::Shutdown()

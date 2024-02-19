@@ -159,11 +159,8 @@ local modules = {
 	},
 	Graphics = {
 		option = "graphics",
-		deps = {"AkelCore"},
-		packages = {"entt"},
-		custom = function()
-			ModuleTargetConfig("Renderer", embedded_parts.Renderer)
-		end
+		deps = {"AkelCore", "AkelPlatform"},
+		packages = {"entt"}
 	},
 	Platform = {
 		option = "platform",

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @maldavid
 // Created : 06/02/2024
-// Updated : 12/02/2024
+// Updated : 19/02/2024
 
 #ifndef __AK_PLATFORM_ENUMS__
 #define __AK_PLATFORM_ENUMS__
@@ -10,7 +10,7 @@
 
 namespace Ak
 {
-	enum WindowStyle_
+	enum WindowStyleBits
 	{
 		WindowDefault = 0,
 		WindowNoBorders = 1 << 0,

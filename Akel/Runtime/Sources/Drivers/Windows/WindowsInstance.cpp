@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 03/02/2024
-// Updated : 13/02/2024
+// Updated : 18/02/2024
 
+#include <Core/CLI.h>
 #include <Drivers/Windows/WindowsLibLoader.h>
 #include <Drivers/Windows/WindowsInstance.h>
 
@@ -12,6 +13,7 @@ namespace Ak
 	{
 		OSInstance::SetInstance(this);
 		OSInstance::SetLibLoader(new WindowsLibLoader);
+		CommandLineInterface::Get().Feed(__argc, __argv);
 	}
 
 	void WindowsInstance::Shutdown()

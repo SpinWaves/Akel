@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 09/02/2024
+// Updated : 18/02/2024
 
 #ifndef __AK_CORE_ENTRY_POINT__
 #define __AK_CORE_ENTRY_POINT__
@@ -58,7 +58,7 @@ extern void AkelSetupApplication(Ak::Application& app);
 	int main(int ac, char** av)
 	{
 		Ak::MacOSInstance os;
-		os.Init();
+		os.Init(ac, av);
 
 		Ak::Application app;
 		AkelSetupApplication(app);
