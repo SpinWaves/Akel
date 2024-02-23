@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 08/02/2024
+// Updated : 23/02/2024
 
 #ifndef __AK_CORE_COMPILATION_PROFILE__
 #define __AK_CORE_COMPILATION_PROFILE__
@@ -66,6 +66,25 @@
 	#define AK_FUNC_SIG __func__
 #else
 	#define AK_FUNC_SIG "Unknown function"
+#endif
+
+#ifdef AK_PLAT_WINDOWS
+	#ifdef AK_COMPILER_MSVC
+		#define AK_EXPORT_API __declspec(dllexport)
+		#define AK_IMPORT_API __declspec(dllimport)
+	#elif defined(AK_COMPILER_GCC)
+		#define AK_EXPORT_API __attribute__((dllexport))
+		#define AK_IMPORT_API __attribute__((dllimport))
+	#else
+		#define AK_EXPORT_API
+		#define AK_IMPORT_API
+	#endif
+#elif defined(AK_COMPILER_GCC)
+	#define AK_EXPORT_API __attribute__((visibility("default")))
+	#define AK_IMPORT_API __attribute__((visibility("default")))
+#else
+	#define AK_EXPORT_API
+	#define AK_IMPORT_API
 #endif
 
 #if !defined(AK_NO_FORCEINLINE) && !defined(AK_FORCEINLINE)

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 01/02/2024
-// Updated : 19/02/2024
+// Updated : 23/02/2024
 
 #pragma once
 #include <Core/Format.h>
@@ -9,7 +9,7 @@
 namespace Ak
 {
 	template<typename... Args>
-	void Debug(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args)
+	void DebugLog(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args)
 	{
 		using namespace std::literals;
 		try

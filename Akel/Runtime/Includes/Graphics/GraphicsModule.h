@@ -1,11 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 19/02/2024
+// Updated : 23/02/2024
 
 #ifndef __AK_GRAPHICS_MODULE__
 #define __AK_GRAPHICS_MODULE__
 
+#include <Graphics/RHI/RHIRenderer.h>
 #include <Graphics/PreCompiled.h>
 #include <Core/Module.h>
 #include <Utils/TypeList.h>
@@ -23,10 +24,16 @@ namespace Ak
 			static inline bool IsInit() noexcept { return s_instance != nullptr; }
 			static GraphicsModule& Get();
 
+			inline RHIRenderer& GetRenderer() noexcept { return *m_renderer; }
+
 			~GraphicsModule() override;
 
 		private:
+			void LoadDriver();
+
+		private:
 			static GraphicsModule* s_instance;
+			RHIRenderer* m_renderer = nullptr;
 	};
 }
 

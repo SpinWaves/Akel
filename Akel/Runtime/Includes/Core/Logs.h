@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 06/02/2024
+// Updated : 23/02/2024
 
 #ifndef __AK_CORE_LOGS__
 #define __AK_CORE_LOGS__
@@ -12,7 +12,7 @@
 namespace Ak
 {
 	template<typename... Args>
-	void Debug(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
+	void DebugLog(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
 
 	template<typename... Args>
 	void Error(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
@@ -50,8 +50,8 @@ namespace Ak
 
 namespace Ak
 {
-	#undef  Debug
-	#define Debug(...) Debug(__LINE__, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
+	#undef  DebugLog
+	#define DebugLog(...) DebugLog(__LINE__, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
 
 	#undef  Message
 	#define Message(...) Message(__LINE__, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
