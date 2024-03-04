@@ -26,7 +26,11 @@ namespace Ak
 
 	void GraphicsModule::LoadDriver()
 	{
-		
+		#ifdef AK_EMBEDDED_RENDERER_DRIVERS
+
+		#else
+
+		#endif
 	}
 
 	GraphicsModule::~GraphicsModule()

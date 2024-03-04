@@ -1,10 +1,11 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/02/2024
-// Updated : 23/02/2024
+// Updated : 04/03/2024
 
 #include <Drivers/Vulkan/PreCompiled.h>
 #include <Drivers/Vulkan/VulkanAPIHandle.h>
+#include <Drivers/Vulkan/VulkanRenderer.h>
 #include <Core/Logs.h>
 
 namespace Ak
@@ -27,11 +28,9 @@ namespace Ak
 			extensions.push_back(VK_KHR_XLIB_SURFACE_EXTENSION_NAME);
 		#endif
 
-	/*
 		#ifdef VK_USE_PLATFORM_WAYLAND_KHR
 			extensions.push_back(VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);
 		#endif
-	*/
 
 		#ifdef VK_USE_PLATFORM_WIN32_KHR
 			extensions.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
@@ -71,7 +70,7 @@ namespace Ak
 
 		VkResult res;
 		if((res = vkCreateInstance(&create_info, nullptr, &m_instance)) != VK_SUCCESS)
-			FatalError("Vulkan : failed to create Vulkan instance, %"/*, VerbaliseResultVk(res)*/);
+			FatalError("Vulkan : failed to create Vulkan instance, %", VerbaliseVkResult(res));
 		volkLoadInstance(m_instance);
 		DebugLog("Vulkan : created new instance");
 	}

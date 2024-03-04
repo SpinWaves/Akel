@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 23/02/2024
+// Updated : 04/03/2024
 
 #ifndef __AK_CORE_LOGS__
 #define __AK_CORE_LOGS__
@@ -25,6 +25,9 @@ namespace Ak
 
 	template<typename... Args>
 	void FatalError(unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
+
+	template<typename... Args>
+	void Verify(bool cond, unsigned int line, std::string_view file, std::string_view function, std::string message, const Args&... args);
 
 	class AK_CORE_API Logs
 	{
@@ -64,6 +67,9 @@ namespace Ak
 
 	#undef  FatalError
 	#define FatalError(...) FatalError(__LINE__, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
+
+	#undef  Verify
+	#define Verify(cond, ...) Verify(cond, __LINE__, __FILE__, AK_FUNC_SIG, __VA_ARGS__)
 
 	#undef  Assert
 	#define Assert(cond, ...) Assert(cond, __LINE__, __FILE__, AK_FUNC_SIG, __VA_ARGS__)

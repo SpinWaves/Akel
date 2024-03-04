@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 12/02/2024
+// Updated : 04/03/2024
 
 #include <Drivers/SDL2/SDL2Window.h>
 #include <Core/Logs.h>
@@ -27,7 +27,7 @@ namespace Ak
 		if(!m_window)
 			FatalError("SDL2 : cannot create window; %", SDL_GetError());
 		SDL_GetWindowPosition(m_window, &m_pos.x, &m_pos.y);
-		Debug("SDL2 Window created");
+		DebugLog("SDL2 Window created");
 	}
 
 	void SDL2Window::UpdateWindowInfos() noexcept
@@ -113,6 +113,6 @@ namespace Ak
 			SDL_DestroyWindow(m_window);
 			m_window = nullptr;
 		}
-		Debug("SDL2 Window destroyed");
+		DebugLog("SDL2 Window destroyed");
 	}
 }

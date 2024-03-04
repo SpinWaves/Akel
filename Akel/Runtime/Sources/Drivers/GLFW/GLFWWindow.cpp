@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 11/02/2024
-// Updated : 12/02/2024
+// Updated : 04/03/2024
 
 #include <Drivers/GLFW/GLFWWindow.h>
 #include <Platform/Enums.h>
@@ -16,7 +16,7 @@ namespace Ak
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 		if(m_window)
-			Debug("GLFW Window created");
+			DebugLog("GLFW Window created");
 	}
 
 	void GLFWWindow::UpdateWindowInfos() noexcept
@@ -75,6 +75,6 @@ namespace Ak
 			glfwDestroyWindow(m_window);
 			m_window = nullptr;
 		}
-		Debug("GLFW Window destroyed");
+		DebugLog("GLFW Window destroyed");
 	}
 }

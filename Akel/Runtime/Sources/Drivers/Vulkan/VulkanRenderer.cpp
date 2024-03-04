@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2024
-// Updated : 23/02/2024
+// Updated : 04/03/2024
 
 #include <Drivers/Vulkan/VulkanRenderer.h>
 #include <Core/Memory/MemoryManager.h>
@@ -17,13 +17,7 @@
 
 namespace Ak
 {
-	VulkanRenderer::VulkanRenderer() : RHIRenderer()
-	{
-		if(volkInitialize() != VK_SUCCESS)
-			FatalError("Vulkan loader : cannot load %, are you sure Vulkan is installed on your system ?", VULKAN_LIB_NAME);
-	}
-
-	const char* VulkanRenderer::VerbaliseVkResult(VkResult result) const noexcept
+	const char* VerbaliseVkResult(VkResult result) noexcept
 	{
 		switch(result)
 		{
@@ -56,8 +50,18 @@ namespace Ak
 		return nullptr; // just to avoid warnings
 	}
 
+	VulkanRenderer::VulkanRenderer() : RHIRenderer()
+	{
+		if(volkInitialize() != VK_SUCCESS)
+			FatalError("Vulkan loader : cannot load %, are you sure Vulkan is installed on your system ?", VULKAN_LIB_NAME);
+		m_api_handle = MakeUnique<VulkanAPIHandle>();
+		m_device = MakeUnique<VulkanDevice>();
+	}
+
 	VulkanRenderer::~VulkanRenderer()
 	{
+		m_device.Reset();
+		m_api_handle.Reset();
 		volkFinalize();
 	}
 }

@@ -6,7 +6,6 @@
 -- Credits to SirLynix (https://github.com/SirLynix) for this xmake.lua
 -- Took from https://github.com/NazaraEngine/NazaraEngine
 
--- Globals settings
 add_repositories("nazara-engine-repo https://github.com/NazaraEngine/xmake-repo")
 
 -- add_requireconfs("imgui", { configs = { cxflags = "-D IMGUI_IMPL_VULKAN_NO_PROTOTYPES" }})
@@ -54,23 +53,6 @@ local renderer_backends = {
 				add_packages("libxext", "wayland", { links = {} }) -- we only need X11 headers
 			elseif is_plat("macosx") then
 				add_defines("VK_USE_PLATFORM_METAL_EXT")
-			end
-		end
-	}
-}
-
-local embedded_parts = {
-	Renderer = {
-		option = "renderer",
-		deps = {"AkelPlatform", "AkelCore"},
-		publicPackages = {"nzsl"},
-		custom = function()
-			if has_config("embed_rendererbackends", "static") then
-				for name, module in table.orderpairs(renderer_backends) do
-					if not module.option or has_config(module.option) then
-						ModuleTargetConfig(name, module)
-					end
-				end
 			end
 		end
 	}
@@ -160,7 +142,18 @@ local modules = {
 	Graphics = {
 		option = "graphics",
 		deps = {"AkelCore", "AkelPlatform"},
-		packages = {"entt"}
+		publicPackages = {"nzsl"},
+		packages = {"entt"},
+		custom = function()
+			if has_config("embed_rendererbackends", "static") then
+				add_defines("AK_EMBEDDED_RENDERER_DRIVERS")
+				for name, module in table.orderpairs(renderer_backends) do
+					if not module.option or has_config(module.option) then
+						ModuleTargetConfig(name, module)
+					end
+				end
+			end
+		end
 	},
 	Platform = {
 		option = "platform",
@@ -375,7 +368,7 @@ rule("build.rendererplugins")
 
 		local deps = table.wrap(target:get("deps"))
 
-		if target:kind() == "binary" and (table.contains(deps, "AkelRenderer") or table.contains(deps, "AkelGraphics")) then
+		if target:kind() == "binary" and table.contains(deps, "AkelGraphics") then
 			for name, _ in pairs(renderer_backends) do
 				local depName = "Akel" .. name
 				if not table.contains(deps, depName) then -- don't overwrite dependency
