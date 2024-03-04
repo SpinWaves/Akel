@@ -167,7 +167,7 @@ local modules = {
 		end
 	},
 	Utils = {
-		deps = {}
+		deps = {"AkelCore"}
 	},
 	ELTM = {
 		option = "eltm",
