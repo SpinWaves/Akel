@@ -26,6 +26,8 @@ namespace Ak
 			~VulkanDevice() override;
 
 		private:
+			VkDevice m_device = VK_NULL_HANDLE;
+			VkPhysicalDevice m_physical_device = VK_NULL_HANDLE;
 	};
 }
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2024
-// Updated : 23/02/2024
+// Updated : 04/03/2024
 
 #ifndef __AK_RHI_RENDERER__
 #define __AK_RHI_RENDERER__
@@ -15,7 +15,6 @@ namespace Ak
 		public:
 			RHIRenderer() = default;
 
-			virtual class RHIAPIHandle& GetAPIHandle() = 0;
 			virtual class RHIDevice& GetDevice() = 0;
 
 			virtual ~RHIRenderer() = default;

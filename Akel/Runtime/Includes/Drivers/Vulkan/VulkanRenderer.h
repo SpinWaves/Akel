@@ -8,7 +8,7 @@
 
 #include <Drivers/Vulkan/PreCompiled.h>
 #include <Graphics/RHI/RHIRenderer.h>
-#include <Drivers/Vulkan/VulkanAPIHandle.h>
+#include <Drivers/Vulkan/VulkanInstance.h>
 #include <Drivers/Vulkan/VulkanDevice.h>
 #include <Core/Memory/UniquePtr.h>
 
@@ -22,15 +22,17 @@ namespace Ak
 		public:
 			VulkanRenderer();
 
-			inline VulkanAPIHandle& GetAPIHandle() override { return *m_api_handle; }
-			inline VulkanDevice& GetDevice() override { return *m_device; }
+			inline VulkanDevice& GetDevice() override;
+			inline static VulkanInstance& GetInstance();
 
 			~VulkanRenderer() override;
 
 		private:
-			UniquePtr<VulkanAPIHandle> m_api_handle;
+			static UniquePtr<VulkanInstance> m_instance;
 			UniquePtr<VulkanDevice> m_device;
 	};
 }
+
+#include <Drivers/Vulkan/VulkanRenderer.inl>
 
 #endif

@@ -4,13 +4,13 @@
 // Updated : 04/03/2024
 
 #include <Drivers/Vulkan/PreCompiled.h>
-#include <Drivers/Vulkan/VulkanAPIHandle.h>
+#include <Drivers/Vulkan/VulkanInstance.h>
 #include <Drivers/Vulkan/VulkanRenderer.h>
 #include <Core/Logs.h>
 
 namespace Ak
 {
-	VulkanAPIHandle::VulkanAPIHandle() : RHIAPIHandle()
+	VulkanInstance::VulkanInstance()
 	{
 		VkApplicationInfo app_info{};
 		app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -75,7 +75,7 @@ namespace Ak
 		DebugLog("Vulkan : created new instance");
 	}
 
-	VulkanAPIHandle::~VulkanAPIHandle()
+	VulkanInstance::~VulkanInstance()
 	{
 		vkDestroyInstance(m_instance, nullptr);
 		m_instance = VK_NULL_HANDLE;

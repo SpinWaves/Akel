@@ -54,21 +54,21 @@ namespace Ak
 	{
 		if(volkInitialize() != VK_SUCCESS)
 			FatalError("Vulkan loader : cannot load %, are you sure Vulkan is installed on your system ?", VULKAN_LIB_NAME);
-		m_api_handle = MakeUnique<VulkanAPIHandle>();
+		m_instance = MakeUnique<VulkanInstance>();
 		m_device = MakeUnique<VulkanDevice>();
 	}
 
 	VulkanRenderer::~VulkanRenderer()
 	{
 		m_device.Reset();
-		m_api_handle.Reset();
+		m_instance.Reset();
 		volkFinalize();
 	}
 }
 
 extern "C"
 {
-	AK_EXPORT_API Ak::RHIRenderer* LoadRenderer()
+	AK_EXPORT_API Ak::RHIRenderer* AkelLoadRendererDriver()
 	{
 		return Ak::MemAlloc<Ak::VulkanRenderer>();
 	}
