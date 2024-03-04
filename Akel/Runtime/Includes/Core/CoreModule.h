@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 11/02/2024
+// Updated : 04/03/2024
 
 #ifndef __AK_CORE_COREMODULE__
 #define __AK_CORE_COREMODULE__
@@ -11,14 +11,12 @@
 #include <Core/Ticks.h>
 #include <Utils/TypeList.h>
 
-#include <Utils/UtilsModule.h>
-
 namespace Ak
 {
 	class AK_CORE_API CoreModule : public Module
 	{
 		public:
-			using Dependencies = TypeList<UtilsModule>;
+			using Dependencies = TypeList<>;
 
 			CoreModule();
 

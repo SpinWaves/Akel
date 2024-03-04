@@ -129,7 +129,7 @@ local modules = {
 		end
 	},
 	Core = {
-		deps = {"AkelUtils"},
+		deps = {},
 		custom = function()
 			add_headerfiles("Akel/Runtime/Includes/Maths/**.h", "Akel/Runtime/Includes/Maths/**.inl")
 			for name, module in table.orderpairs(os_interfaces) do
@@ -157,7 +157,7 @@ local modules = {
 	},
 	Platform = {
 		option = "platform",
-		deps = {"AkelUtils", "AkelCore"},
+		deps = {"AkelCore"},
 		custom = function()
 			for name, module in table.orderpairs(system_interfaces) do
 				if has_config(module.option) then
@@ -166,12 +166,9 @@ local modules = {
 			end
 		end
 	},
-	Utils = {
-		deps = {"AkelCore"}
-	},
 	ELTM = {
 		option = "eltm",
-		deps = {"AkelUtils"},
+		deps = {},
 		dir = "Plugins/"
 	}
 }

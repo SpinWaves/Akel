@@ -1,10 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
-// Created : 07/02/2024
-// Updated : 08/02/2024
+// Created : 04/03/2024
+// Updated : 04/03/2024
+
+#pragma once
+#include <Utils/BitsArray.h>
 
 #include <Core/Logs.h>
-#include <Utils/BitsArray.h>
 
 namespace Ak
 {
