@@ -16,7 +16,7 @@
 #include <string>
 #include <function/function.h>
 #include <fstream>
-#include <toml++/toml.hpp>
+#include <toml++/toml.h>
 #include <cassert>
 #include <ostream>
 #include <string_view>
