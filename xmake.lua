@@ -129,6 +129,7 @@ local modules = {
 		end
 	},
 	Core = {
+		publicPackages = {"toml++"},
 		deps = {},
 		custom = function()
 			add_headerfiles("Akel/Runtime/Includes/Maths/**.h", "Akel/Runtime/Includes/Maths/**.inl")

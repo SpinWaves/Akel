@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 23/02/2024
+// Updated : 11/03/2024
 
 #ifndef __AK_GRAPHICS_MODULE__
 #define __AK_GRAPHICS_MODULE__
@@ -30,6 +30,7 @@ namespace Ak
 
 		private:
 			void LoadDriver();
+			int ScoreDriver(RendererDrivers driver);
 
 		private:
 			static GraphicsModule* s_instance;

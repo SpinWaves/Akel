@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 04/03/2024
+// Updated : 19/03/2024
 
 #ifndef __AK_CORE_PRE_COMPILED_HEADER__
 #define __AK_CORE_PRE_COMPILED_HEADER__
@@ -15,6 +15,8 @@
 #include <cstdarg>
 #include <string>
 #include <function/function.h>
+#include <fstream>
+#include <toml++/toml.hpp>
 #include <cassert>
 #include <ostream>
 #include <string_view>

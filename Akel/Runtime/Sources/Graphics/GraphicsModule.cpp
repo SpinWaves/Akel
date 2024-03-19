@@ -1,11 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 23/02/2024
+// Updated : 11/03/2024
 
+#include <Graphics/Enums.h>
 #include <Core/Application.h>
 #include <Graphics/GraphicsModule.h>
+#include <Core/CLI.h>
 #include <Core/Logs.h>
+#include <Utils/ConstMap.h>
 
 namespace Ak
 {
@@ -20,17 +23,50 @@ namespace Ak
 
 	GraphicsModule& GraphicsModule::Get()
 	{
-		Assert(s_instance != nullptr, "GraphicsModule has not been instanciated");
+		Verify(s_instance != nullptr, "GraphicsModule has not been instanciated");
 		return *s_instance;
 	}
 
 	void GraphicsModule::LoadDriver()
 	{
+		using DriverLoader = func::function<RHIRenderer*(void)>;
+
+		std::multimap<int, RendererDrivers> drivers_scores;
+
+		RendererDrivers choosen = RendererDrivers::Vulkan;
+
+		for(std::size_t i = 0; i < RendererDriversCount; i++)
+			drivers_scores.insert(std::make_pair(ScoreDriver(static_cast<RendererDrivers>(i)), static_cast<RendererDrivers>(i)));
+
 		#ifdef AK_EMBEDDED_RENDERER_DRIVERS
-
+			
 		#else
-
+			
 		#endif
+	}
+
+	int GraphicsModule::ScoreDriver(RendererDrivers driver)
+	{
+		int score = -1;
+
+		static ConstMap<std::string, RendererDrivers> cli_options = {
+			{ "vulkan", RendererDrivers::Vulkan },
+		};
+
+		static std::optional<std::string> driver_option = CommandLineInterface::Get().GetOption("rdr-driver");
+		if(driver_option.has_value())
+		{
+			if(!cli_options.Has(*driver_option))
+				Error("GraphicsModule : invalid rdr-driver option '%'", *driver_option);
+			else
+			{
+				auto it = cli_options.Find(*driver_option);
+				if(it->second != driver)
+					return -1;
+			}
+		}
+
+		return score;
 	}
 
 	GraphicsModule::~GraphicsModule()

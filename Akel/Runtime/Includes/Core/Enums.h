@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 08/02/2024
+// Updated : 18/03/2024
 
 #ifndef __AK_CORE_ENUMS__
 #define __AK_CORE_ENUMS__
@@ -31,7 +31,7 @@ namespace Ak
 
 		EndEnum
 	};
-	constexpr std::size_t ProcCapsCount = static_cast<std::size_t>(ProcCaps::EndEnum) + 1;
+	constexpr std::size_t ProcCapsCount = static_cast<std::size_t>(ProcCaps::EndEnum);
 
 	enum class ProcVendor
 	{
@@ -67,7 +67,7 @@ namespace Ak
 
 		EndEnum
 	};
-	constexpr std::size_t ProcVendorCount = static_cast<std::size_t>(ProcVendor::EndEnum) + 2;
+	constexpr std::size_t ProcVendorCount = static_cast<std::size_t>(ProcVendor::EndEnum) + 1;
 
 	enum class LogType
 	{
@@ -79,8 +79,17 @@ namespace Ak
 
 		EndEnum
 	};
+	constexpr std::size_t LogTypeCount = static_cast<std::size_t>(LogType::EndEnum);
 
-	constexpr std::size_t LogTypeCount = static_cast<std::size_t>(LogType::EndEnum) + 1;
+	enum FileModeBits
+	{
+		FileModeNone = 0,
+		FileModeOverride = 1 << 0,
+		FileModeAppend = 1 << 1,
+		FileModeBinary = 1 << 2,
+	};
+	using FileMode = int;
+	constexpr std::size_t FileModeCount = 4;
 }
 
 #endif
