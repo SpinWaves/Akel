@@ -220,7 +220,7 @@ add_rules("build.rendererplugins")
 option("static", { description = "Build the engine statically (implies embed_rendererbackends)", default = is_plat("wasm") or false })
 option("embed_rendererbackends", { description = "Embed renderer backend code into AkelRenderer instead of loading them dynamically", default = is_plat("wasm") or false })
 
-add_requires("entt")
+add_requires("entt", "toml++")
 
 if has_config("graphics") then
 	add_requires("nzsl >=2023.12.31", { debug = is_mode("debug"), configs = { symbols = not is_mode("release"), shared = not is_plat("wasm", "android") and not has_config("static") } })
