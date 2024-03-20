@@ -2,6 +2,7 @@
 .vs/
 .cache/
 build/
+Build/
 *.akel
 *.swp
 *.ini
