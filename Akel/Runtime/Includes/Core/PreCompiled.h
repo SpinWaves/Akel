@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 20/03/2024
+// Updated : 23/03/2024
 
 #ifndef __AK_CORE_PRE_COMPILED_HEADER__
 #define __AK_CORE_PRE_COMPILED_HEADER__
@@ -32,6 +32,7 @@
 #include <thread>
 #include <optional>
 #include <unordered_set>
+#include <variant>
 #include <unordered_map>
 
 #if !__has_include(<filesystem>)
@@ -49,5 +50,6 @@
 #include <Core/Memory/MemoryManager.h>
 #include <Core/Memory/UniquePtr.h>
 #include <Core/Memory/SharedPtr.h>
+#include <Core/Memory/WeakPtr.h>
 
 #endif

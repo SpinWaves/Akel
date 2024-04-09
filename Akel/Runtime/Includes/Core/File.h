@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 18/03/2024
-// Updated : 19/03/2024
+// Updated : 09/04/2024
 
 #ifndef __AK_CORE_FILE__
 #define __AK_CORE_FILE__
@@ -14,10 +14,10 @@ namespace Ak
 	class AK_CORE_API File
 	{
 		public:
-			File() = default;
+			File(const std::filesystem::path& filepaht);
 			File(const std::filesystem::path& filepath, std::uint32_t flags);
 
-			bool Open(const std::filesystem::path& filepath, std::uint32_t flags);
+			bool Open(std::uint32_t flags);
 			void Close();
 
 			template <typename T>
@@ -33,8 +33,8 @@ namespace Ak
 			~File() = default;
 
 		private:
-			std::filesystem::path m_filepath;
 			std::fstream m_stream;
+			std::filesystem::path m_filepath;
 	};
 }
 

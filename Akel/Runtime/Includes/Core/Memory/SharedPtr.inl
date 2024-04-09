@@ -1,13 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/03/2024
-// Updated : 04/03/2024
+// Updated : 09/04/2024
 
 #pragma once
 #include <Core/Memory/SharedPtr.h>
 
 #include <Core/Memory/MemoryManager.h>
-#include <utility>
 
 namespace Ak
 {
@@ -31,6 +30,13 @@ namespace Ak
 	{
 		ptr.m_ptr = nullptr;
 		ptr.m_ref = nullptr;
+	}
+
+	template <typename T>
+	SharedPtr<T>::SharedPtr(const WeakPtr<T>& weak) noexcept : m_ptr(weak.m_ptr), m_ref(weak.m_ref)
+	{
+		if(m_ref)
+			m_ref->count++;
 	}
 
 	template <typename T>
@@ -85,8 +91,11 @@ namespace Ak
 		m_ptr = nullptr;
 		if(m_ref)
 			m_ref->count--;
-		if(m_ref->count == 0)
+		if(m_ref->count <= 0 && m_ref->weaks <= 0)
+		{
 			MemFree(m_ref->ptr);
+			m_ref = nullptr;
+		}
 	}
 
 	template <typename T>
@@ -100,5 +109,36 @@ namespace Ak
 	{
 		if(m_ptr)
 			Reset();
+	}
+
+	template <typename T, typename ... Args>
+	std::enable_if_t<!std::is_array<T>::value, SharedPtr<T>> MakeShared(Args&& ... args) noexcept
+	{
+		// TODO : do memory contiguous pointer and ref counter allocations
+		return SharedPtr<T>(MemAlloc<T>(std::forward<Args>(args)...));
+	}
+
+	template <typename T>
+	SharedPtr<T> EnableSharedFromThis<T>::SharedFromThis()
+	{
+		return SharedPtr<T>(m_weak_this);
+	}
+	
+	template <typename T>
+	SharedPtr<const T> EnableSharedFromThis<T>::SharedFromThis() const
+	{
+		return SharedPtr<const T>(m_weak_this);
+	}
+
+	template <typename T>
+	WeakPtr<T> EnableSharedFromThis<T>::WeakFromThis()
+	{
+		return m_weak_this;
+	}
+
+	template <typename T>
+	WeakPtr<const T> EnableSharedFromThis<T>::WeakFromThis() const
+	{
+		return m_weak_this;
 	}
 }

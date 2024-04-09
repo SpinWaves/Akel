@@ -1,7 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/03/2024
-// Updated : 04/03/2024
+// Updated : 21/03/2024
+
+#pragma once
 
 #ifndef __AK_CORE_UNIQUE_PTR__
 #define __AK_CORE_UNIQUE_PTR__

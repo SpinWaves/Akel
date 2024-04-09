@@ -1,7 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/03/2024
-// Updated : 04/03/2024
+// Updated : 09/04/2024
+
+#pragma once
 
 #ifndef __AK_CORE_SHARED_PTR__
 #define __AK_CORE_SHARED_PTR__
@@ -11,13 +13,17 @@
 namespace Ak
 {
 	template <typename T>
+	class WeakPtr;
+
+	template <typename T>
 	class SharedPtr
 	{
 		public:
 			explicit SharedPtr(T* ptr = nullptr) noexcept;
-			SharedPtr(std::nullptr_t) = default;
+			SharedPtr(std::nullptr_t) noexcept : m_ref(nullptr), m_ptr(nullptr) {}
 			SharedPtr(const SharedPtr& ptr) noexcept;
 			SharedPtr(SharedPtr&& ptr) noexcept;
+			explicit SharedPtr(const WeakPtr<T>& weak) noexcept;
 
 			inline SharedPtr operator=(SharedPtr ptr) noexcept;
 			inline SharedPtr operator=(T* ptr) noexcept;
@@ -34,12 +40,13 @@ namespace Ak
 			inline void Swap(const SharedPtr& ptr) noexcept;
 
 			~SharedPtr() noexcept;
-		
+
 		private:
 			struct RefCounter
 			{
-				T* ptr;
-				std::uint32_t count;
+				T* ptr = nullptr;
+				std::uint32_t count = 0;
+				std::uint32_t weaks = 0;
 			};
 
 		private:
@@ -48,7 +55,25 @@ namespace Ak
 	};
 
 	template <typename T, typename ... Args>
-	inline SharedPtr<T> MakeShared(Args&& ... args) noexcept;
+	inline std::enable_if_t<!std::is_array<T>::value, SharedPtr<T>> MakeShared(Args&& ... args) noexcept;
+
+	template <typename T>
+	class EnableSharedFromThis
+	{
+		public:
+			EnableSharedFromThis() = default;
+
+			inline SharedPtr<T> SharedFromThis();
+			inline SharedPtr<const T> SharedFromThis() const;
+
+			inline WeakPtr<T> WeakFromThis();
+			inline WeakPtr<const T> WeakFromThis() const;
+
+			~EnableSharedFromThis() = default;
+
+		private:
+			mutable WeakPtr<T> m_weak_this;
+	};
 }
 
 #include <Core/Memory/SharedPtr.inl>

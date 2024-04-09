@@ -1,7 +1,7 @@
 // This file is a part of Akel
-// Authors : @maldavid
+// Authors : @kbz_8
 // Created : 20/03/2024
-// Updated : 20/03/2024
+// Updated : 08/04/2024
 
 #ifndef __AK_CORE_VIRTUAL_PATH__
 #define __AK_CORE_VIRTUAL_PATH__
@@ -19,8 +19,6 @@ namespace Ak
 			std::string GetExtension() const;
 			std::string GetFilename() const;
 			std::string GetStem() const;
-
-			bool IsDirectory() const;
 
 			VirtualPath GetParentPath() const;
 
