@@ -55,6 +55,12 @@ local renderer_backends = {
 				add_defines("VK_USE_PLATFORM_METAL_EXT")
 			end
 		end
+	},
+	WebGPU = {
+		option = "webgpu",
+		deps = {"AkelGraphics"},
+		packages = {"wgpu-native"},
+		dir = "Drivers/"
 	}
 }
 
@@ -242,6 +248,10 @@ end
 
 if has_config("vulkan") and not is_plat("wasm") then
 	add_requires("vulkan-headers", "vulkan-memory-allocator", "volk")
+end
+
+if has_config("webgpu") then
+	add_requires("wgpu-natives")
 end
 
 function ModuleTargetConfig(name, module)

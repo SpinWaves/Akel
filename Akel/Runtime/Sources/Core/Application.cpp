@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 06/02/2024
-// Updated : 11/02/2024
+// Updated : 10/04/2024
 
 #include <Platform/PlatformModule.h>
 #include <Core/CoreModule.h>
@@ -11,7 +11,7 @@ namespace Ak
 {
 	Application* Application::s_instance = nullptr;
 
-	Application::Application()
+	Application::Application(const EngineConfig& config) : m_engine_config(config)
 	{
 		s_instance = this;
 		LoadEngineModule<CoreModule>();

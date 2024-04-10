@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2024
-// Updated : 11/03/2024
+// Updated : 10/04/2024
 
 #ifndef __AK_GRAPHICS_ENUMS__
 #define __AK_GRAPHICS_ENUMS__
@@ -13,6 +13,7 @@ namespace Ak
 	enum class RendererDrivers
 	{
 		Vulkan = 0,
+		None = 1,
 
 		EndEnum
 	};

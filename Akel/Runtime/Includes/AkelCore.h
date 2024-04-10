@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 02/02/2024
+// Updated : 10/04/2024
 
 #ifndef __AKEL_CORE__
 #define __AKEL_CORE__
@@ -17,6 +17,7 @@
 #include <Core/HardwareInfo.h>
 #include <Core/Logs.h>
 #include <Core/Module.h>
+#include <Core/EngineConfig.h>
 #include <Core/Singleton.h>
 #include <Core/CompilationProfile.h>
 

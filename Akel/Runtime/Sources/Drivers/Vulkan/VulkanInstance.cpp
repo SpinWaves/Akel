@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/02/2024
-// Updated : 04/03/2024
+// Updated : 10/04/2024
 
 #include <Drivers/Vulkan/PreCompiled.h>
 #include <Drivers/Vulkan/VulkanInstance.h>
@@ -58,19 +58,19 @@ namespace Ak
 		if constexpr(VULKAN_DEBUG)
 		{
 			/*
-			if(Render_Core::get().getLayers().checkValidationLayerSupport())
+			if(RenderCore::Get().GetLayers().CheckValidationLayerSupport())
 			{
-				create_nfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-				create_nfo.ppEnabledLayerNames = validationLayers.data();
-				Render_Core::get().getLayers().populateDebugMessengerCreateInfo(debugCreateInfo);
-				create_nfo.pNext = static_cast<VkDebugUtilsMessengerCreateInfoEXT*>(&debugCreateInfo);
+				create_info.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+				create_info.ppEnabledLayerNames = validationLayers.data();
+				RenderCore::Get().GetLayers().PopulateDebugMessengerCreateInfo(debugCreateInfo);
+				create_info.pNext = static_cast<VkDebugUtilsMessengerCreateInfoEXT*>(&debugCreateInfo);
 			}
 			*/
 		}
 
 		VkResult res;
 		if((res = vkCreateInstance(&create_info, nullptr, &m_instance)) != VK_SUCCESS)
-			FatalError("Vulkan : failed to create Vulkan instance, %", VerbaliseVkResult(res));
+				FatalError("Vulkan : failed to create Vulkan instance, %", VerbaliseVkResult(res));
 		volkLoadInstance(m_instance);
 		DebugLog("Vulkan : created new instance");
 	}

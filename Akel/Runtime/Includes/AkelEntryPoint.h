@@ -1,15 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 18/02/2024
+// Updated : 10/04/2024
 
 #ifndef __AK_CORE_ENTRY_POINT__
 #define __AK_CORE_ENTRY_POINT__
 
 #include <Core/CompilationProfile.h>
 #include <Core/Application.h>
+#include <Core/EngineConfig.h>
 
+// Setup functions defined by the user
 extern void AkelSetupApplication(Ak::Application& app);
+extern void AkelSetupEngineConfig(Ak::EngineConfig& config);
 
 #if defined(AK_PLAT_WINDOWS)
 
@@ -20,7 +23,10 @@ extern void AkelSetupApplication(Ak::Application& app);
 		Ak::WindowsInstance os;
 		os.Init();
 
-		Ak::Application app;
+		Ak::EngineConfig config;
+		AkelSetupEngineConfig(config);
+
+		Ak::Application app(config);
 		AkelSetupApplication(app);
 
 		app.Run();
@@ -40,7 +46,10 @@ extern void AkelSetupApplication(Ak::Application& app);
 		Ak::UnixInstance os;
 		os.Init(ac, av);
 
-		Ak::Application app;
+		Ak::EngineConfig config;
+		AkelSetupEngineConfig(config);
+
+		Ak::Application app(config);
 		AkelSetupApplication(app);
 
 		app.Run();
@@ -60,7 +69,10 @@ extern void AkelSetupApplication(Ak::Application& app);
 		Ak::MacOSInstance os;
 		os.Init(ac, av);
 
-		Ak::Application app;
+		Ak::EngineConfig config;
+		AkelSetupEngineConfig(config);
+
+		Ak::Application app(config);
 		AkelSetupApplication(app);
 
 		app.Run();

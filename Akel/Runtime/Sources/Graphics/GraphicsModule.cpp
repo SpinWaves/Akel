@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 11/03/2024
+// Updated : 10/04/2024
 
 #include <Graphics/Enums.h>
 #include <Core/Application.h>
@@ -51,6 +51,7 @@ namespace Ak
 
 		static ConstMap<std::string, RendererDrivers> cli_options = {
 			{ "vulkan", RendererDrivers::Vulkan },
+			{ "none", RendererDrivers::None },
 		};
 
 		static std::optional<std::string> driver_option = CommandLineInterface::Get().GetOption("rdr-driver");
@@ -65,6 +66,21 @@ namespace Ak
 					return -1;
 			}
 		}
+
+		static ConstMap<RendererDrivers, int> api_scores = {
+			{ RendererDrivers::Vulkan, 500 },
+			{ RendererDrivers::None, -1 },
+		};
+
+		score = api_scores.Find(driver)->second;
+
+		if(!Application::IsInit())
+			FatalError("GraphicsModule : cannot select renderer driver, Application is not init (wtf what did u do ?)");
+
+		RendererDrivers preffered = Application::Get().GetEngineConfig().preffered_render_api;
+
+		if(driver == preffered)
+			score = std::numeric_limits<int>::max();
 
 		return score;
 	}

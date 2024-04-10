@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 20/03/2024
+// Updated : 09/04/2024
 
 #ifndef __AK_CORE_COREMODULE__
 #define __AK_CORE_COREMODULE__
@@ -34,7 +34,7 @@ namespace Ak
 			static CoreModule* s_instance;
 			Ticks m_ticks;
 			VirtualFileSystem m_filesystem;
-			//ConfigurationFile m_engine_config_file;
+			ConfigurationFile m_engine_config_file;
 	};
 
 	AK_FORCEINLINE VirtualFileSystem& GetVFS() { return CoreModule::Get().GetVirtualFileSystem(); }
