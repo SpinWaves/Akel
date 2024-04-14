@@ -234,12 +234,12 @@ end
 
 if has_config("SDL2_backend") then
 	add_requires("libsdl >=2.26.0")
-	add_defines("AK_USE_SDL2")
+	add_defines("AK_SDL2_DRIVER")
 end
 
 if has_config("GLFW_backend") then
 	add_requires("glfw")
-	add_defines("AK_USE_GLFW")
+	add_defines("AK_GLFW_DRIVER")
 end
 
 if is_plat("linux") then
@@ -251,7 +251,7 @@ if has_config("vulkan") and not is_plat("wasm") then
 end
 
 if has_config("webgpu") then
-	add_requires("wgpu-natives")
+	add_requires("wgpu-native")
 end
 
 function ModuleTargetConfig(name, module)
