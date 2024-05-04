@@ -1,19 +1,18 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 09/02/2024
+// Updated : 04/05/2024
 
-#ifndef __AK_CORE_MEMORY_MANAGER__
-#define __AK_CORE_MEMORY_MANAGER__
+#pragma once
 
 #include <Core/Core.h>
 #include <Core/PreCompiled.h>
 
-#include <Core/Memory/JamAllocator.h>
-#include <Core/Memory/FixedAllocator.h>
-
 namespace Ak
 {
+	class JamAllocator;
+	class FixedAllocator;
+
 	namespace Core::Memory::Internal
 	{
 		struct AK_CORE_API ControlUnit
@@ -37,5 +36,3 @@ namespace Ak
 }
 
 #include <Core/Memory/MemoryManager.inl>
-
-#endif

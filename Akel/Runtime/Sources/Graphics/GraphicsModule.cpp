@@ -1,8 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 10/04/2024
+// Updated : 04/05/2024
 
+#include <Core/OS/OSInstance.h>
 #include <Graphics/Enums.h>
 #include <Core/Application.h>
 #include <Graphics/GraphicsModule.h>
@@ -19,6 +20,7 @@ namespace Ak
 		if(s_instance != nullptr)
 			FatalError("only one instance of GraphicsModule can exist at a given time");
 		s_instance = this;
+		LoadDriver();
 	}
 
 	GraphicsModule& GraphicsModule::Get()
@@ -29,20 +31,69 @@ namespace Ak
 
 	void GraphicsModule::LoadDriver()
 	{
-		using DriverLoader = func::function<RHIRenderer*(void)>;
+		using DriverLoaderFunctor = RHIRenderer* (*)(void);
 
-		std::multimap<int, RendererDrivers> drivers_scores;
-
-		RendererDrivers choosen = RendererDrivers::Vulkan;
+		std::multimap<int, RendererDrivers, std::greater<int>> drivers_scores;
 
 		for(std::size_t i = 0; i < RendererDriversCount; i++)
 			drivers_scores.insert(std::make_pair(ScoreDriver(static_cast<RendererDrivers>(i)), static_cast<RendererDrivers>(i)));
 
-		#ifdef AK_EMBEDDED_RENDERER_DRIVERS
-			
-		#else
-			
+		if(drivers_scores.upper_bound(0) == drivers_scores.end())
+			FatalError("GraphicsModule : failed to find a suitable render driver");
+
+		#ifndef AK_EMBEDDED_RENDERER_DRIVERS
+			ConstMap<RendererDrivers, std::filesystem::path> drivers_paths = {
+				{ RendererDrivers::Vulkan, AK_LIB_PREFIX "AkelVulkan" AK_LIB_EXTENSION },
+				{ RendererDrivers::WebGPU, AK_LIB_PREFIX "AkelWebGPU" AK_LIB_EXTENSION },
+			};
 		#endif
+
+		for(auto& [score, driver] : drivers_scores)
+		{
+			if(score < 1)
+				continue;
+
+			#ifndef AK_EMBEDDED_RENDERER_DRIVERS
+				LibLoader& loader = OSInstance::GetLibLoader();
+				LibModule module = loader.Load(drivers_paths.Find(driver)->second);
+				if(module == NullModule)
+				{
+					Warning("GraphicsModule : cannot load %, falling back...", drivers_paths.Find(driver)->second);
+					continue;
+				}
+
+				DriverLoaderFunctor loader_function = reinterpret_cast<DriverLoaderFunctor>(loader.GetSymbol(module, "AkelLoadRendererDriver"));
+				if(!loader_function)
+				{
+					Warning("GraphicsModule : cannot load %, no loading symbol found, falling back...", drivers_paths.Find(driver)->second);
+					loader.UnloadLib(module);
+					continue;
+				}
+
+				RHIRenderer* renderer = loader_function();
+			#else
+				RHIRenderer* renderer = nullptr;
+			#endif
+
+			if(renderer == nullptr)
+			{
+				Warning("GraphicsModule : cannot load %, error while loading the renderer, falling back...", drivers_paths.Find(driver)->second);
+					loader.UnloadLib(module);
+				continue;
+			}
+
+			#ifndef AK_EMBEDDED_RENDERER_DRIVERS
+				DebugLog("GraphicsModule : loaded %", drivers_paths.Find(driver)->second);
+			#endif
+
+			m_chosen_driver = driver;
+			m_renderer = renderer;
+			m_driver_lib = module;
+			break;
+		}
+
+		if(m_renderer == nullptr)
+			FatalError("GraphicsModule : failed to load any renderer driver");
 	}
 
 	int GraphicsModule::ScoreDriver(RendererDrivers driver)
@@ -51,6 +102,8 @@ namespace Ak
 
 		static ConstMap<std::string, RendererDrivers> cli_options = {
 			{ "vulkan", RendererDrivers::Vulkan },
+			{ "webgpu", RendererDrivers::WebGPU },
+			{ "auto", RendererDrivers::Auto },
 			{ "none", RendererDrivers::None },
 		};
 
@@ -69,6 +122,8 @@ namespace Ak
 
 		static ConstMap<RendererDrivers, int> api_scores = {
 			{ RendererDrivers::Vulkan, 500 },
+			{ RendererDrivers::WebGPU, 100 },
+			{ RendererDrivers::Auto, 0 },
 			{ RendererDrivers::None, -1 },
 		};
 
@@ -87,6 +142,7 @@ namespace Ak
 
 	GraphicsModule::~GraphicsModule()
 	{
+		OSInstance::GetLibLoader().UnloadLib(m_driver_lib);
 		s_instance = nullptr;
 	}
 }

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2024
-// Updated : 04/03/2024
+// Updated : 04/05/2024
 
 #include <Drivers/Vulkan/VulkanRenderer.h>
 #include <Core/Memory/MemoryManager.h>
@@ -54,14 +54,14 @@ namespace Ak
 	{
 		if(volkInitialize() != VK_SUCCESS)
 			FatalError("Vulkan loader : cannot load %, are you sure Vulkan is installed on your system ?", VULKAN_LIB_NAME);
-		m_instance = MakeUnique<VulkanInstance>();
-		m_device = MakeUnique<VulkanDevice>();
+	//	p_instance = MakeUnique<VulkanInstance>();
+	//	p_device = MakeUnique<VulkanDevice>();
 	}
 
 	VulkanRenderer::~VulkanRenderer()
 	{
-		m_device.Reset();
-		m_instance.Reset();
+	//	p_device.Reset();
+	//	p_instance.Reset();
 		volkFinalize();
 	}
 }

@@ -1,12 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 04/03/2024
-// Updated : 09/04/2024
+// Updated : 04/05/2024
 
 #pragma once
-
-#ifndef __AK_CORE_SHARED_PTR__
-#define __AK_CORE_SHARED_PTR__
 
 #include <Core/PreCompiled.h>
 
@@ -77,5 +74,3 @@ namespace Ak
 }
 
 #include <Core/Memory/SharedPtr.inl>
-
-#endif

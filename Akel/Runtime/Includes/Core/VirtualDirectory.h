@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 20/03/2024
-// Updated : 09/04/2024
+// Updated : 04/05/2024
 
 #ifndef __AK_CORE_VIRTUAL_DIRECTORY__
 #define __AK_CORE_VIRTUAL_DIRECTORY__
@@ -27,6 +27,8 @@ namespace Ak
 	{
 		std::string name;
 		std::variant<FileEntry, DirectoryEntry> entry;
+
+		Entry(const std::string& n, std::variant<FileEntry, DirectoryEntry> e) : name(n), entry(e) {}
 	};
 
 	class AK_CORE_API VirtualDirectory : public NonCopyable, EnableSharedFromThis<VirtualDirectory>

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2024
-// Updated : 10/04/2024
+// Updated : 04/05/2024
 
 #ifndef __AK_VULKAN_RENDERER__
 #define __AK_VULKAN_RENDERER__
@@ -23,12 +23,12 @@ namespace Ak
 			VulkanRenderer();
 
 			inline VulkanDevice& GetDevice() override;
-			inline static VulkanInstance& GetInstance();
+			//inline static VulkanInstance& GetInstance();
 
 			~VulkanRenderer() override;
 
 		private:
-			static UniquePtr<VulkanInstance> p_instance;
+			//static UniquePtr<VulkanInstance> p_instance;
 			UniquePtr<VulkanDevice> p_device;
 	};
 

@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 23/03/2024
-// Updated : 09/04/2024
+// Updated : 04/05/2024
 
 #include <Core/VirtualDirectory.h>
 
@@ -64,5 +64,9 @@ namespace Ak
 	void VirtualDirectory::ReleaseFromParent() noexcept
 	{
 		m_parent.Reset();
+	}
+
+	VirtualDirectory::~VirtualDirectory()
+	{
 	}
 }

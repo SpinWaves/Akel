@@ -3,8 +3,7 @@
 // Created : 07/02/2024
 // Updated : 09/02/2024
 
-#ifndef __AK_JAM_ALLOCATOR__
-#define __AK_JAM_ALLOCATOR__
+#pragma once
 
 #include <Core/PreCompiled.h>
 
@@ -62,5 +61,3 @@ namespace Ak
 }
 
 #include <Core/Memory/JamAllocator.inl>
-
-#endif

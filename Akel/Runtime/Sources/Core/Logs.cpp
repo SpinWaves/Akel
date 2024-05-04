@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 31/01/2024
-// Updated : 23/02/2024
+// Updated : 04/05/2024
 
 #include <Core/Logs.h>
 #include <Utils/Ansi.h>
@@ -35,14 +35,16 @@ namespace Ak
 		#endif
 
 		std::string code_infos;
-		if((type == LogType::Error || type == LogType::FatalError) && !file.empty() && !function.empty())
-		{
-			code_infos += "{in file '"s;
-			code_infos += file;
-			code_infos += "', line "s + std::to_string(line) + ", in function '"s;
-			code_infos += function;
-			code_infos += "'} "s;
-		}
+		#ifdef AK_CORE_DEBUG
+			if((type == LogType::Error || type == LogType::FatalError) && !file.empty() && !function.empty())
+			{
+				code_infos += "{in file '"s;
+				code_infos += file;
+				code_infos += "', line "s + std::to_string(line) + ", in function '"s;
+				code_infos += function;
+				code_infos += "'} "s;
+			}
+		#endif
 
 		switch(type)
 		{

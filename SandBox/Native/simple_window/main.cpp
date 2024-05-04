@@ -2,6 +2,10 @@
 #include <AkelPlatform.h>
 #include <AkelEntryPoint.h>
 
+void AkelSetupEngineConfig(Ak::EngineConfig& config)
+{
+}
+
 void AkelSetupApplication(Ak::Application& app)
 {
 	app.LoadEngineModule<Ak::PlatformModule>();

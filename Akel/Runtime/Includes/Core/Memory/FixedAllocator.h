@@ -3,8 +3,7 @@
 // Created : 07/02/2024
 // Updated : 09/02/2024
 
-#ifndef __AK_FIXED_ALLOCATOR__
-#define __AK_FIXED_ALLOCATOR__
+#pragma once
 
 #include <Core/PreCompiled.h>
 #include <Utils/BitsArray.h>
@@ -50,5 +49,3 @@ namespace Ak
 }
 
 #include <Core/Memory/FixedAllocator.inl>
-
-#endif

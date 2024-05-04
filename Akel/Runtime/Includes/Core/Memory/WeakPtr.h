@@ -1,10 +1,9 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 21/03/2024
-// Updated : 22/03/2024
+// Updated : 04/05/2024
 
-#ifndef __AK_CORE_WEAK_PTR__
-#define __AK_CORE_WEAK_PTR__
+#pragma once
 
 #include <Core/PreCompiled.h>
 
@@ -47,6 +46,4 @@ namespace Ak
 	};
 }
 
-#include <Core/Memory/WeakPtr.h>
-
-#endif
+#include <Core/Memory/WeakPtr.inl>

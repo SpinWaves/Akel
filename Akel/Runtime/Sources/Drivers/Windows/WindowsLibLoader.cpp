@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @maldavid
 // Created : 12/02/2024
-// Updated : 13/02/2024
+// Updated : 04/05/2024
 
 #include <Drivers/Windows/WindowsLibLoader.h>
 #include <Core/Logs.h>
@@ -20,9 +20,9 @@ __declspec(dllimport) int __stdcall FreeLibrary(HMODULE);
 namespace Ak
 {
 	[[nodiscard]]
-	LibFunc WindowsLibLoader::GetSymbol(const char* symbol) const
+	LibFunc WindowsLibLoader::GetSymbol(LibModule module, const char* symbol) const
 	{
-		LibFunc func = reinterpret_cast<LibFunc>(::GetProcAddress(m_handle, symbol));
+		LibFunc func = reinterpret_cast<LibFunc>(::GetProcAddress(module, symbol));
 		if(func == nullptr)
 		{
 			Error("Windows Library loader : could not load '%' symbol", symbol);
@@ -32,35 +32,27 @@ namespace Ak
 	}
 
 	[[nodiscard]]
-	bool WindowsLibLoader::Load(const std::filesystem::path& path)
+	LibModule WindowsLibLoader::Load(const std::filesystem::path& path)
 	{
+		LibModule module;
 		if(!std::filesystem::exists(path))
 		{
 			Error("Windows Library loader : invalid library file; %", path);
-			return false;
+			return NullModule;
 		}
 
-		if(m_handle != nullptr)
-		{
-			Warning("Windows Library loader : overriding '%' by '%'", GetCurrentlyLoadedLib(), path);
-			UnloadCurrentLib();
-		}
-
-		m_handle = ::LoadLibraryA(path.string().data());
-		if(m_handle == nullptr)
+		module = ::LoadLibraryA(path.string().data());
+		if(module == NullModule)
 		{
 			Error("Windows Library loader : could not load '%'", path);
-			return false;
+			return NullModule;
 		}
-		return true;
+		return module;
 	}
 
-	void WindowsLibLoader::UnloadCurrentLib()
+	void WindowsLibLoader::UnloadLib(LibModule module)
 	{
-		if(m_handle != nullptr)
-		{
-			::FreeLibrary(m_handle);
-			m_handle = nullptr;
-		}
+		if(module != NullModule)
+			::FreeLibrary(module);
 	}
 }

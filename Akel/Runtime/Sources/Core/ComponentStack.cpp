@@ -1,10 +1,12 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 08/02/2024
-// Updated : 09/02/2024
+// Updated : 04/05/2024
 
 #include <Core/Logs.h>
 #include <Core/ComponentStack.h>
+#include <Core/Memory/JamAllocator.h>
+#include <Core/Memory/FixedAllocator.h>
 
 namespace Ak
 {

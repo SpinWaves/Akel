@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 19/03/2024
-// Updated : 20/03/2024
+// Updated : 04/05/2024
 
 #ifndef __AK_CORE_VIRTUAL_FILE_SYSTEM__
 #define __AK_CORE_VIRTUAL_FILE_SYSTEM__
@@ -22,7 +22,7 @@ namespace Ak
 			bool MountVirtualDirectory(const std::filesystem::path& real_directory, const VirtualPath& virtual_directory);
 
 		private:
-			VirtualFileSystem() = default;
+			VirtualFileSystem();
 			~VirtualFileSystem() = default;
 
 		private:

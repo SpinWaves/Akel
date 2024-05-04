@@ -1,7 +1,7 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 02/02/2024
-// Updated : 14/04/2024
+// Updated : 04/05/2024
 
 #include <Core/Application.h>
 #include <Platform/PlatformModule.h>
@@ -58,9 +58,9 @@ namespace Ak
 		UniquePtr<SIWindow> window;
 
 		#if defined(AK_SDL2_DRIVER)
-			window = MakeUnique<SDL2Window>(1, 1, "Dummy", WindowDummy);
+			window = UniquePtr<SIWindow>(MemAlloc<SDL2Window>(1, 1, "Dummy", WindowDummy));
 		#elif defined(AK_GLFW_DRIVER)
-			window = MakeUnique<GLFWWindow>(1, 1, "Dummy", WindowDummy);
+			window = UniquePtr<SIWindow>(MemAlloc<GLFWWindow>(1, 1, "Dummy", WindowDummy));
 		#endif
 
 		window->CreateWindow();
