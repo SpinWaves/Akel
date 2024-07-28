@@ -1,11 +1,14 @@
 // This file is a part of Akel
 // Authors : @kbz_8
 // Created : 12/02/2024
-// Updated : 04/05/2024
+// Updated : 28/07/2024
 
 #include <Drivers/Vulkan/VulkanRenderer.h>
 #include <Core/Memory/MemoryManager.h>
 #include <Core/Logs.h>
+
+#define KVF_IMPLEMENTATION
+#include <kvf.h>
 
 #if defined(AK_PLAT_WINDOWS)
 	constexpr const char* VULKAN_LIB_NAME = "vulkan-1.dll";
@@ -17,6 +20,24 @@
 
 namespace Ak
 {
+	namespace Internal
+	{
+		void ErrorCallback(const char* message) noexcept
+		{
+			FatalError(message);
+		}
+
+		void ValidationErrorCallback(const char* message) noexcept
+		{
+			Error(message);
+		}
+
+		void ValidationWarningCallback(const char* message) noexcept
+		{
+			Warning(message);
+		}
+	}
+
 	const char* VerbaliseVkResult(VkResult result) noexcept
 	{
 		switch(result)
@@ -54,6 +75,9 @@ namespace Ak
 	{
 		if(volkInitialize() != VK_SUCCESS)
 			FatalError("Vulkan loader : cannot load %, are you sure Vulkan is installed on your system ?", VULKAN_LIB_NAME);
+		kvfSetErrorCallback(&Internal::ErrorCallback);
+		kvfSetValidationErrorCallback(&Internal::ValidationErrorCallback);
+		kvfSetValidationWarningCallback(&Internal::ValidationWarningCallback);
 	//	p_instance = MakeUnique<VulkanInstance>();
 	//	p_device = MakeUnique<VulkanDevice>();
 	}

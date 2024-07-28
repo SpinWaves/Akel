@@ -6,6 +6,7 @@
 -- Credits to SirLynix (https://github.com/SirLynix) for this xmake.lua
 -- Took from https://github.com/NazaraEngine/NazaraEngine
 
+add_repositories("local-repo Xmake")
 add_repositories("nazara-engine-repo https://github.com/NazaraEngine/xmake-repo")
 
 -- add_requireconfs("imgui", { configs = { cxflags = "-D IMGUI_IMPL_VULKAN_NO_PROTOTYPES" }})
@@ -41,7 +42,7 @@ local renderer_backends = {
 	Vulkan = {
 		option = "vulkan",
 		deps = {"AkelGraphics"},
-		packages = {"vulkan-headers", "vulkan-memory-allocator", "volk"},
+		packages = {"vulkan-headers", "vulkan-memory-allocator", "volk", "kvf"},
 		dir = "Drivers/",
 		custom = function()
 			add_defines("VK_NO_PROTOTYPES")
@@ -247,7 +248,7 @@ if is_plat("linux") then
 end
 
 if has_config("vulkan") and not is_plat("wasm") then
-	add_requires("vulkan-headers", "vulkan-memory-allocator", "volk")
+	add_requires("vulkan-headers", "vulkan-memory-allocator", "volk", "kvf")
 end
 
 if has_config("webgpu") then
