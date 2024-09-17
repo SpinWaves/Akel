@@ -56,21 +56,9 @@ namespace Ak
 		VkDebugUtilsMessengerCreateInfoEXT debug_create_info;
 		if constexpr(VULKAN_DEBUG)
 		{
-			/*
-			if(RenderCore::Get().GetLayers().CheckValidationLayerSupport())
-			{
-				create_info.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
-				create_info.ppEnabledLayerNames = validationLayers.data();
-				RenderCore::Get().GetLayers().PopulateDebugMessengerCreateInfo(debugCreateInfo);
-				create_info.pNext = static_cast<VkDebugUtilsMessengerCreateInfoEXT*>(&debugCreateInfo);
-			}
-			*/
 		}
 
 		VkResult res;
-		if((res = vkCreateInstance(&create_info, nullptr, &m_instance)) != VK_SUCCESS)
-				FatalError("Vulkan : failed to create Vulkan instance, %", VerbaliseVkResult(res));
-		volkLoadInstance(m_instance);
 		DebugLog("Vulkan : created new instance");
 	}
 

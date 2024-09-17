@@ -13,7 +13,7 @@
 
 namespace Ak
 {
-	#define AK_VULKAN_GLOBAL_FUNCTION(fn) PFN_##fn fn;
+	#define AK_VULKAN_GLOBAL_FUNCTION(fn) extern PFN_##fn fn;
 		#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
 	#undef AK_VULKAN_GLOBAL_FUNCTION
 

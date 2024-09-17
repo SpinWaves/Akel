@@ -6,9 +6,6 @@
 #include <Core/Memory/MemoryManager.h>
 #include <Core/Logs.h>
 
-#define KVF_IMPLEMENTATION
-#include <kvf.h>
-
 #if defined(AK_PLAT_WINDOWS)
 	constexpr const char* VULKAN_LIB_NAME = "vulkan-1.dll";
 #elif defined(AK_PLAT_MACOS)
@@ -72,11 +69,6 @@ namespace Ak
 
 	VulkanRenderer::VulkanRenderer() : RHIRenderer()
 	{
-		if(volkInitialize() != VK_SUCCESS)
-			FatalError("Vulkan loader : cannot load %, are you sure Vulkan is installed on your system ?", VULKAN_LIB_NAME);
-		kvfSetErrorCallback(&Internal::ErrorCallback);
-		kvfSetValidationErrorCallback(&Internal::ValidationErrorCallback);
-		kvfSetValidationWarningCallback(&Internal::ValidationWarningCallback);
 	//	p_instance = MakeUnique<VulkanInstance>();
 	//	p_device = MakeUnique<VulkanDevice>();
 	}
@@ -85,9 +77,13 @@ namespace Ak
 	{
 	//	p_device.Reset();
 	//	p_instance.Reset();
-		volkFinalize();
 	}
 }
+
+#define AK_VULKAN_GLOBAL_FUNCTION(fn) PFN_##fn fn;
+	#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
+#undef AK_VULKAN_GLOBAL_FUNCTION
+
 
 extern "C"
 {
