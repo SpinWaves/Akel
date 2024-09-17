@@ -97,46 +97,5 @@ jobs:
         key: assets-${{ hashFiles('assets/examples_version.txt', 'assets/unittests_version.txt') }}
 
     # Build the engine
-    - name: Build Nazara
+    - name: Build Akel
       run: xmake --yes
-
-    - name: Save downloaded assets
-      if: ${{ !steps.restore-assets.outputs.cache-hit }}
-      uses: actions/cache/save@v4
-      with:
-        path: assets
-        key: ${{ steps.restore-assets.outputs.cache-primary-key }}
-
-    # Run unit tests
-    - name: Run unit tests
-      if: matrix.confs.mode != 'releasedbg'
-      run: xmake run UnitTests
-
-    # Install the result files
-    - name: Install Nazara
-      if: ${{ (github.ref == 'refs/heads/main') && github.event_name == 'push' && matrix.confs.archive }}
-      run: xmake install -vo package
-
-    - name: "Set PACKAGE_NAME variable"
-      if: ${{ (github.ref == 'refs/heads/main') && github.event_name == 'push' && matrix.confs.archive }}
-      run: echo "PACKAGE_NAME=linux_${{ matrix.arch }}_${{ matrix.confs.mode }}_${{ matrix.kind }}.tar.gz" >> $GITHUB_ENV
-      shell: bash
-
-    - name: Archive result
-      uses: ihiroky/archive-action@v1
-      if: ${{ (github.ref == 'refs/heads/main') && github.event_name == 'push' && matrix.confs.archive }}
-      with:
-        root_dir: package
-        file_path: ${{ env.PACKAGE_NAME }}
-        verbose: true
-
-    # Nightly tags (for commits to main branch)
-    - name: Upload binaries to release (main)
-      uses: svenstaro/upload-release-action@v2
-      if: ${{ (github.ref == 'refs/heads/main') && github.event_name == 'push' && matrix.confs.archive }}
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ env.PACKAGE_NAME }}
-        asset_name: ${{ env.PACKAGE_NAME }}
-        tag: "0.0.0-nightly"
-        overwrite: true
