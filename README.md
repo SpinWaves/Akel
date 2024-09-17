@@ -16,7 +16,7 @@ An editor is in development, facilitating the creation of games. However, it wil
 Akel is designed to be easy to use. Not being the most powerful, it goes the way of simplicity both on the editor side and on the engine side.
 
 # Getting started
-Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows and MacOS. It is compiled using [xmake](https://xmake.io/#/). A compiler that supports C++17 is required. Dependencies (SDL2, ImGui, ...) are provided by xmake (you may install Vulkan SDK yourself for debuging).
+Developed mainly on Linux, Akel is, however, cross-platform and can be used on Windows and MacOS. It is compiled using [xmake](https://xmake.io/#/). A compiler that supports C++20 is required. Dependencies (SDL2, ImGui, ...) are provided by xmake (you may install Vulkan SDK yourself for debuging).
 
 * Start by clonning the repo `git clone https://github.com/SpinWaves/Akel`
 * [Install xmake](https://xmake.io/#/guide/installation)

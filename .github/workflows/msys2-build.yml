@@ -19,7 +19,7 @@ jobs:
         msystem: [mingw64]
         os: [windows-latest]
         arch: [x86_64]
-        mode: [debug, releasedbg]
+        mode: [debug, release]
         kind: [shared, static]
 
     runs-on: ${{ matrix.os }}

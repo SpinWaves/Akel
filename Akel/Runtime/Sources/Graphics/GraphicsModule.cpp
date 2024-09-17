@@ -106,7 +106,7 @@ namespace Ak
 			{ "none", RendererDrivers::None },
 		};
 
-		static std::optional<std::string> driver_option = CommandLineInterface::Get().GetOption("rdr-driver");
+		static std::optional<std::string> driver_option = CommandLineInterface::Get().GetOption("renderer-backend");
 		if(driver_option.has_value())
 		{
 			if(!cli_options.Has(*driver_option))

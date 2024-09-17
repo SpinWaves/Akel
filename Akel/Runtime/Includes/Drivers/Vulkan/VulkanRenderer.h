@@ -13,6 +13,10 @@
 
 namespace Ak
 {
+	#define AK_VULKAN_GLOBAL_FUNCTION(fn) PFN_##fn fn;
+		#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
+	#undef AK_VULKAN_GLOBAL_FUNCTION
+
 	[[nodiscard]]
 	const char* VerbaliseVkResult(VkResult result) noexcept;
 
@@ -22,12 +26,17 @@ namespace Ak
 			VulkanRenderer();
 
 			inline VulkanDevice& GetDevice() override;
-			//inline static VulkanInstance& GetInstance();
+			inline VulkanInstance& GetInstance();
+
+			inline static bool IsInit() noexcept;
+			inline static VulkanRenderer& Get() noexcept;
 
 			~VulkanRenderer() override;
 
 		private:
-			//static UniquePtr<VulkanInstance> p_instance;
+			static VulkanRenderer* s_instance;
+
+			UniquePtr<VulkanInstance> p_instance;
 			UniquePtr<VulkanDevice> p_device;
 	};
 

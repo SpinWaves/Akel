@@ -22,6 +22,10 @@ namespace Ak
 
 			void WaitForIdle() override;
 
+			#define AK_VULKAN_DEVICE_FUNCTION(fn) PFN_##fn fn;
+				#include <Drivers/Vulkan/VulkanDevicePrototypes.h>
+			#undef AK_VULKAN_DEVICE_FUNCTION
+
 			~VulkanDevice() override;
 
 		private:
