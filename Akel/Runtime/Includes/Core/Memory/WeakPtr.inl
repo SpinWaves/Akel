@@ -75,7 +75,7 @@ namespace Ak
 	}
 
 	template <typename T>
-	WeakPtr<T>::~WeakPtr<T>()
+	WeakPtr<T>::~WeakPtr()
 	{
 		DecrementWeakCount();
 	}
