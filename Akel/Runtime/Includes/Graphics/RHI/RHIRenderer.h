@@ -1,7 +1,6 @@
+// Copyright (C) 2024 kbz_8 ( contact@kbz8.me )
 // This file is a part of Akel
-// Authors : @kbz_8
-// Created : 12/02/2024
-// Updated : 04/03/2024
+// For conditions of distribution and use, see copyright notice in LICENSE
 
 #ifndef __AK_RHI_RENDERER__
 #define __AK_RHI_RENDERER__

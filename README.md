@@ -1,9 +1,10 @@
 # Akel
 
-[![linux clang workflow](https://github.com/SpinWaves/Akel/actions/workflows/linux_clang.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/linux_clang.yml)
-[![linux gcc workflow](https://github.com/SpinWaves/Akel/actions/workflows/linux_gcc.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/linux_gcc.yml)
-[![windows workflow](https://github.com/SpinWaves/Akel/actions/workflows/windows.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/windows.yml)
-[![macos workflow](https://github.com/SpinWaves/Akel/actions/workflows/macos.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/macos.yml)
+[![linux workflow](https://github.com/SpinWaves/Akel/actions/workflows/linux-build.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/linux-build.yml)
+[![windows workflow](https://github.com/SpinWaves/Akel/actions/workflows/windows-build.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/windows-build.yml)
+[![macos workflow](https://github.com/SpinWaves/Akel/actions/workflows/macos-build.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/macos-build.yml)
+[![wasm workflow](https://github.com/SpinWaves/Akel/actions/workflows/wasm-build.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/wasm-build.yml)
+[![minGW workflow](https://github.com/SpinWaves/Akel/actions/workflows/msys2-build.yml/badge.svg)](https://github.com/SpinWaves/Akel/actions/workflows/msys2-build.yml)
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/SpinWaves/Akel/main/Resources/assets/logo.png" alt="drawing" width="500"/>

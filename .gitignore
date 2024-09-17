@@ -17,3 +17,4 @@ Akel_Studio/akelstudio_application.*
 Akel_Studio/akelstudio_application
 Akel_Studio/.akel_logs/
 .gdb_history
+compile_commands.json

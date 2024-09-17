@@ -1,7 +1,6 @@
+// Copyright (C) 2024 kbz_8 ( contact@kbz8.me )
 // This file is a part of Akel
-// Authors : @kbz_8
-// Created : 22/03/2024
-// Updated : 22/03/2024
+// For conditions of distribution and use, see copyright notice in LICENSE
 
 #pragma once
 #include <Core/Memory/WeakPtr.h>

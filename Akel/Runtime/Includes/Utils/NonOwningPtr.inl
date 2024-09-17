@@ -1,7 +1,6 @@
+// Copyright (C) 2024 kbz_8 ( contact@kbz8.me )
 // This file is a part of Akel
-// Authors : @kbz_8
-// Created : 19/02/2024
-// Updated : 19/02/2024
+// For conditions of distribution and use, see copyright notice in LICENSE
 
 #pragma once
 #include <Utils/NonOwningPtr.h>
@@ -21,6 +20,7 @@ namespace Ak
 	NonOwningPtr<T>& NonOwningPtr<T>::operator=(T* ptr)
 	{
 		m_ptr = ptr;
+		return *this;
 	}
 	
 	template<typename T>
@@ -28,12 +28,14 @@ namespace Ak
 	{
 		m_ptr = ptr.m_ptr;
 		ptr.m_ptr = nullptr;
+		return *this;
 	}
 
 	template<typename T>
 	NonOwningPtr<T>::operator bool() const noexcept
 	{
 		return m_ptr != nullptr;
+		return *this;
 	}
 
 	template<typename T>

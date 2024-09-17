@@ -1,17 +1,15 @@
+-- Copyright (C) 2024 kbz_8 ( contact@kbz8.me )
 -- This file is a part of Akel
--- Authors : @kbz_8
--- Created : 02/10/2021
--- Updated : 11/02/2024
+-- For conditions of distribution and use, see copyright notice in LICENSE
 
 -- Credits to SirLynix (https://github.com/SirLynix) for this xmake.lua
 -- Took from https://github.com/NazaraEngine/NazaraEngine
 
-add_repositories("local-repo Xmake")
 add_repositories("nazara-engine-repo https://github.com/NazaraEngine/xmake-repo")
 
 -- add_requireconfs("imgui", { configs = { cxflags = "-D IMGUI_IMPL_VULKAN_NO_PROTOTYPES" }})
 
-set_languages("cxx17")
+set_languages("cxx20")
 
 add_rules("mode.debug", "mode.release")
 set_allowedplats("windows", "mingw", "linux", "macosx", "wasm")
@@ -42,7 +40,7 @@ local renderer_backends = {
 	Vulkan = {
 		option = "vulkan",
 		deps = {"AkelGraphics"},
-		packages = {"vulkan-headers", "vulkan-memory-allocator", "volk", "kvf"},
+		packages = {"vulkan-headers", "vulkan-memory-allocator"},
 		dir = "Drivers/",
 		custom = function()
 			add_defines("VK_NO_PROTOTYPES")
@@ -248,7 +246,7 @@ if is_plat("linux") then
 end
 
 if has_config("vulkan") and not is_plat("wasm") then
-	add_requires("vulkan-headers", "vulkan-memory-allocator", "volk", "kvf")
+	add_requires("vulkan-headers", "vulkan-memory-allocator")
 end
 
 if has_config("webgpu") then

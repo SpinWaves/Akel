@@ -1,7 +1,6 @@
+// Copyright (C) 2024 kbz_8 ( contact@kbz8.me )
 // This file is a part of Akel
-// Authors : @kbz_8
-// Created : 13/05/2021
-// Updated : 01/02/2024
+// For conditions of distribution and use, see copyright notice in LICENSE
 
 #ifndef __AK_ELTM_ERRORS__
 #define __AK_ELTM_ERRORS__

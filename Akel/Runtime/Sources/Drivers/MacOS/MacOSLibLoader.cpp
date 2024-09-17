@@ -1,7 +1,6 @@
+// Copyright (C) 2024 kbz_8 ( contact@kbz8.me )
 // This file is a part of Akel
-// Authors : @maldavid
-// Created : 12/02/2024
-// Updated : 04/05/2024
+// For conditions of distribution and use, see copyright notice in LICENSE
 
 #include <Drivers/MacOS/MacOSLibLoader.h>
 #include <Core/Logs.h>

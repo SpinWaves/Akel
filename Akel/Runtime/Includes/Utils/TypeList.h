@@ -1,7 +1,6 @@
+// Copyright (C) 2024 kbz_8 ( contact@kbz8.me )
 // This file is a part of Akel
-// Authors : @kbz_8
-// Created : 05/02/2024
-// Updated : 06/02/2024
+// For conditions of distribution and use, see copyright notice in LICENSE
 
 #ifndef __AK_TYPE_LIST__
 #define __AK_TYPE_LIST__
