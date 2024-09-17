@@ -153,8 +153,16 @@ local modules = {
 		custom = function()
 			if has_config("embed_rendererbackends", "static") then
 				add_defines("AK_EMBEDDED_RENDERER_DRIVERS")
-				for name, module in table.orderpairs(renderer_backends) do
-					if not module.option or has_config(module.option) then
+				for name, module in table.orderpairs(rendererBackends) do
+					if not module.Option or has_config(module.Option) then
+						if module.Deps then
+							module = table.clone(module, 1) -- shallow clone
+							module.Deps = table.remove_if(table.clone(module.Deps), function (idx, dep) return dep == "NazaraRenderer" end)
+							if #module.Deps == 0 then 
+								module.Deps = nil 
+							end
+						end
+
 						ModuleTargetConfig(name, module)
 					end
 				end
@@ -308,13 +316,7 @@ function ModuleTargetConfig(name, module)
 	end
 
 	if module.deps then
-		local moduleName = "Akel" .. name
-		table.remove_if(module.deps, function(dep)
-			return module.deps[dep] == moduleName
-		end)
-		if #module.deps > 0 then
-			add_deps(table.unpack(module.deps))
-		end
+		add_deps(table.unpack(module.deps))
 	end
 
 	if module.dir then

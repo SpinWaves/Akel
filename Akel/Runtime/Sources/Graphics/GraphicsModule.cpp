@@ -70,16 +70,16 @@ namespace Ak
 				}
 
 				RHIRenderer* renderer = loader_function();
+				if(renderer == nullptr)
+				{
+					Warning("GraphicsModule : cannot load %, error while loading the renderer, falling back...", drivers_paths.Find(driver)->second);
+						loader.UnloadLib(module);
+					continue;
+				}
+				m_driver_lib = module;
 			#else
 				RHIRenderer* renderer = nullptr;
 			#endif
-
-			if(renderer == nullptr)
-			{
-				Warning("GraphicsModule : cannot load %, error while loading the renderer, falling back...", drivers_paths.Find(driver)->second);
-					loader.UnloadLib(module);
-				continue;
-			}
 
 			#ifndef AK_EMBEDDED_RENDERER_DRIVERS
 				DebugLog("GraphicsModule : loaded %", drivers_paths.Find(driver)->second);
@@ -87,7 +87,6 @@ namespace Ak
 
 			m_chosen_driver = driver;
 			m_renderer = renderer;
-			m_driver_lib = module;
 			break;
 		}
 
