@@ -17,7 +17,8 @@ namespace Ak
 		public:
 			WebGPURenderer();
 
-			inline WebGPUDevice& GetDevice() override;
+			std::uint32_t LoadNewDevice(const PhysicalDeviceMinimalSpecs& specs) noexcept override;
+			inline WebGPUDevice& GetDevice(std::uint32_t index) override;
 			inline static WebGPUInstance& GetInstance();
 
 			~WebGPURenderer() override;

@@ -21,7 +21,7 @@ namespace Ak
 
 		EndEnum
 	};
-	constexpr std::size_t BufferTypeCount = static_cast<std::size_t>(BufferType::EndEnum) + 1;
+	constexpr std::size_t BufferTypeCount = static_cast<std::size_t>(BufferType::EndEnum);
 
 	enum BufferUsageBits
 	{
@@ -35,18 +35,6 @@ namespace Ak
 	constexpr std::size_t BufferUsageCount = 6;
 	using BufferUsage = std::uint32_t;
 
-	enum class PhysicalDeviceType
-	{
-		Discret = 0,
-		CPU,
-		Virtual,
-		Integrated,
-		Unknown,
-
-		EndEnum
-	};
-	constexpr std::size_t PhysicalDeviceTypeCount = static_cast<std::size_t>(PhysicalDeviceType::EndEnum) + 1;
-
 	enum class CullMode
 	{
 		None = 0,
@@ -56,7 +44,37 @@ namespace Ak
 
 		EndEnum
 	};
-	constexpr std::size_t CullModeCount = static_cast<std::size_t>(CullMode::EndEnum) + 1;
+	constexpr std::size_t CullModeCount = static_cast<std::size_t>(CullMode::EndEnum);
+
+	enum class PhysicalDeviceType
+	{
+		Any = 0,
+		Other,
+		CPU,
+		Virtual,
+		Integrated,
+		Discrete,
+
+		EndEnum
+	};
+	constexpr std::size_t PhysicalDeviceTypeCount = static_cast<std::size_t>(PhysicalDeviceType::EndEnum);
+
+	enum PhysicalDeviceVendorBits
+	{
+		PhysicalDeviceVendorAny = 1 << 0,
+		PhysicalDeviceVendorAmd = 1 << 1,
+		PhysicalDeviceVendorMesa = 1 << 2,
+		PhysicalDeviceVendorImgTec = 1 << 3,
+		PhysicalDeviceVendorNvidia = 1 << 4,
+		PhysicalDeviceVendorArm = 1 << 5,
+		PhysicalDeviceVendorBroadcom = 1 << 6,
+		PhysicalDeviceVendorQualcomm = 1 << 7,
+		PhysicalDeviceVendorIntel = 1 << 8,
+		PhysicalDeviceVendorSamsungAMD = 1 << 9,
+		PhysicalDeviceVendorMicrosoft = 1 << 10,
+	};
+	constexpr std::size_t PhysicalDeviceVendorsCount = 11;
+	using PhysicalDeviceVendors = std::uint32_t;
 
 	enum class RenderMode
 	{
@@ -66,7 +84,7 @@ namespace Ak
 
 		EndEnum
 	};
-	constexpr std::size_t RenderModeCount = static_cast<std::size_t>(RenderMode::EndEnum) + 1;
+	constexpr std::size_t RenderModeCount = static_cast<std::size_t>(RenderMode::EndEnum);
 
 	enum class TextureFormat
 	{
@@ -109,7 +127,7 @@ namespace Ak
 
 		EndEnum
 	};
-	constexpr std::size_t TextureFormatCount = static_cast<std::size_t>(TextureFormat::EndEnum) + 1;
+	constexpr std::size_t TextureFormatCount = static_cast<std::size_t>(TextureFormat::EndEnum);
 
 	enum class TextureType
 	{
@@ -121,7 +139,7 @@ namespace Ak
 
 		EndEnum
 	};
-	constexpr std::size_t TextureTypeCount = static_cast<std::size_t>(TextureType::EndEnum) + 1;
+	constexpr std::size_t TextureTypeCount = static_cast<std::size_t>(TextureType::EndEnum);
 
 	enum TextureFlagsBits
 	{

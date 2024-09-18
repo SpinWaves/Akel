@@ -6,14 +6,19 @@
 #define __AK_VULKAN_DEVICE__
 
 #include <Drivers/Vulkan/PreCompiled.h>
+#include <Drivers/Vulkan/Enums.h>
 #include <Graphics/RHI/RHIDevice.h>
+#include <Graphics/RHI/Defs.h>
 
 namespace Ak
 {
+	[[nodiscard]]
+	std::vector<VulkanPhysicalDeviceVendorID> ConvertPhysicalDeviceVendorsToVulkanPhysicalDeviceVendorIDs(PhysicalDeviceVendors vendors) noexcept;
+
 	class AK_VULKAN_API VulkanDevice : public RHIDevice
 	{
 		public:
-			VulkanDevice(class VulkanInstance& instance);
+			VulkanDevice(const PhysicalDeviceMinimalSpecs& specs);
 
 			NonOwningPtr<class RHIBuffer> CreateBuffer(BufferDescription description) override;
 			NonOwningPtr<class RHITexture> CreateTexture(TextureDescription description) override;
@@ -32,8 +37,13 @@ namespace Ak
 			~VulkanDevice() override;
 
 		private:
+			VkPhysicalDevice ChoosePhysicalDevice(const PhysicalDeviceMinimalSpecs& specs) noexcept;
+
+		private:
 			VkDevice m_device = VK_NULL_HANDLE;
 			VkPhysicalDevice m_physical_device = VK_NULL_HANDLE;
+			VkPhysicalDeviceProperties m_properties;
+			VkPhysicalDeviceMemoryProperties m_memory_properties;
 	};
 }
 

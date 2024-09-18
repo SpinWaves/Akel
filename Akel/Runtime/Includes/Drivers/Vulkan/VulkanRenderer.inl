@@ -10,9 +10,16 @@
 
 namespace Ak
 {
-	VulkanDevice& VulkanRenderer::GetDevice()
+	VulkanDevice& VulkanRenderer::GetDevice(std::uint32_t index)
 	{
-		return *p_device;
+		try
+		{
+			return m_devices.at(index);
+		}
+		catch(...)
+		{
+			FatalError("Vulkan Renderer : invalid device index");
+		}
 	}
 
 	VulkanInstance& VulkanRenderer::GetInstance()

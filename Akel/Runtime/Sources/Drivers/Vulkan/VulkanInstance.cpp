@@ -15,7 +15,7 @@ namespace Ak
 		app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		app_info.pEngineName = "Akel";
 		app_info.engineVersion = VK_MAKE_VERSION(0, 0, 1);
-		app_info.apiVersion = VK_API_VERSION_1_3;
+		app_info.apiVersion = VK_API_VERSION_1_0;
 
 		std::vector<const char*> extensions;
 		extensions.push_back(VK_KHR_SURFACE_EXTENSION_NAME);

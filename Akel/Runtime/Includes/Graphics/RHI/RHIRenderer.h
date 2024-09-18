@@ -6,6 +6,8 @@
 #define __AK_RHI_RENDERER__
 
 #include <Graphics/PreCompiled.h>
+#include <Graphics/RHI/Defs.h>
+#include <Utils/Result.h>
 
 namespace Ak
 {
@@ -14,7 +16,8 @@ namespace Ak
 		public:
 			RHIRenderer() = default;
 
-			virtual class RHIDevice& GetDevice() = 0;
+			virtual std::uint32_t LoadNewDevice(const PhysicalDeviceMinimalSpecs& specs) noexcept = 0;
+			virtual class RHIDevice& GetDevice(std::uint32_t index) = 0;
 
 			virtual ~RHIRenderer() = default;
 	};

@@ -18,5 +18,6 @@
 #include <cstddef>
 #include <limits>
 #include <memory>
+#include <variant>
 
 #endif

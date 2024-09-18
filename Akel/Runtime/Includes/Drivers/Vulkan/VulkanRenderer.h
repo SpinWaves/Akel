@@ -23,7 +23,8 @@ namespace Ak
 		public:
 			VulkanRenderer();
 
-			inline VulkanDevice& GetDevice() override;
+			std::uint32_t LoadNewDevice(const PhysicalDeviceMinimalSpecs& specs) noexcept override;
+			inline VulkanDevice& GetDevice(std::uint32_t index) override;
 			inline VulkanInstance& GetInstance();
 
 			inline static bool IsInit() noexcept;
@@ -36,7 +37,7 @@ namespace Ak
 
 			VulkanLoader m_loader;
 			UniquePtr<VulkanInstance> p_instance;
-			UniquePtr<VulkanDevice> p_device;
+			std::vector<VulkanDevice> m_devices;
 	};
 
 	inline bool IsVulkanSupported() noexcept;

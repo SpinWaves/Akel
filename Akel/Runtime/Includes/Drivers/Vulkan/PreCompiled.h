@@ -48,7 +48,9 @@
 	#include <vulkan/vulkan_xlib.h>
 #endif
 
+#include <array>
 #include <vector>
+#include <algorithm>
 
 #ifdef AK_VULKAN_DEBUG
 	constexpr bool VULKAN_DEBUG = true;

@@ -92,6 +92,8 @@ namespace Ak
 
 		if(m_renderer == nullptr)
 			FatalError("GraphicsModule : failed to load any renderer driver");
+
+		m_renderer->LoadNewDevice({});
 	}
 
 	int GraphicsModule::ScoreDriver(RendererDrivers driver)

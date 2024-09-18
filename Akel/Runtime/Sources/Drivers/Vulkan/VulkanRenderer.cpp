@@ -2,6 +2,7 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
+#include "Utils/Result.h"
 #include <Drivers/Vulkan/VulkanRenderer.h>
 #include <Core/Memory/MemoryManager.h>
 #include <Core/Logs.h>
@@ -75,16 +76,25 @@ namespace Ak
 			Warning("Vulkan check failed : %", VerbaliseVkResult(result));
 	}
 
-	VulkanRenderer::VulkanRenderer() : RHIRenderer(), m_loader()
+	VulkanRenderer* VulkanRenderer::s_instance = nullptr;
+
+	VulkanRenderer::VulkanRenderer() : m_loader()
 	{
 		p_instance = MakeUnique<VulkanInstance>();
-		p_device = MakeUnique<VulkanDevice>(*p_instance);
+		s_instance = this;
+	}
+
+	std::uint32_t VulkanRenderer::LoadNewDevice(const PhysicalDeviceMinimalSpecs& specs) noexcept
+	{
+		m_devices.emplace_back(specs);
+		return static_cast<std::uint32_t>(m_devices.size() - 1);
 	}
 
 	VulkanRenderer::~VulkanRenderer()
 	{
-		p_device.Reset();
+		m_devices.clear();
 		p_instance.Reset();
+		s_instance = nullptr;
 	}
 }
 

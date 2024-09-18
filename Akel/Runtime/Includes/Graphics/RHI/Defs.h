@@ -60,6 +60,13 @@ namespace Ak
 	struct FrameBufferDescription
 	{
 	};
+
+	struct PhysicalDeviceMinimalSpecs
+	{
+		PhysicalDeviceType type = PhysicalDeviceType::Any;
+		PhysicalDeviceVendors vendors = PhysicalDeviceVendorAny;
+		std::size_t memory = 128; // Mo
+	};
 }
 
 #endif

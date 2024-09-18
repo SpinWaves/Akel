@@ -9,7 +9,7 @@
 
 namespace Ak
 {
-	WebGPUDevice& WebGPURenderer::GetDevice()
+	WebGPUDevice& WebGPURenderer::GetDevice(std::uint32_t index)
 	{
 		return *p_device;
 	}
