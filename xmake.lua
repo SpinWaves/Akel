@@ -232,6 +232,7 @@ add_rules("build.rendererplugins")
 
 option("static", { description = "Build the engine statically (implies embed_rendererbackends)", default = is_plat("wasm") or false })
 option("embed_rendererbackends", { description = "Embed renderer backend code into AkelRenderer instead of loading them dynamically", default = is_plat("wasm") or false })
+option("unitybuild", { description = "Build the engine using unity build", default = false })
 
 add_requires("entt", "toml++")
 
@@ -347,6 +348,10 @@ for name, module in pairs(modules) do
 
 		add_includedirs("Akel/Runtime/Sources")
 		add_rpathdirs("$ORIGIN")
+
+		if has_config("unitybuild") then
+			add_rules("c++.unity_build", { batchsize = 6 })
+		end
 
 		on_clean(function(target)
 			if target:objectfiles() then
