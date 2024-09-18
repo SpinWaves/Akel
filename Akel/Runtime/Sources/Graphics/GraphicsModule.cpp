@@ -140,6 +140,7 @@ namespace Ak
 
 	GraphicsModule::~GraphicsModule()
 	{
+		MemFree(m_renderer);
 		OSInstance::GetLibLoader().UnloadLib(m_driver_lib);
 		s_instance = nullptr;
 	}

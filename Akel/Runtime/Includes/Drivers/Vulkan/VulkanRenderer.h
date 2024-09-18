@@ -9,16 +9,14 @@
 #include <Graphics/RHI/RHIRenderer.h>
 #include <Drivers/Vulkan/VulkanInstance.h>
 #include <Drivers/Vulkan/VulkanDevice.h>
+#include <Drivers/Vulkan/VulkanLoader.h>
 #include <Core/Memory/UniquePtr.h>
 
 namespace Ak
 {
-	#define AK_VULKAN_GLOBAL_FUNCTION(fn) extern PFN_##fn fn;
-		#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
-	#undef AK_VULKAN_GLOBAL_FUNCTION
-
 	[[nodiscard]]
 	const char* VerbaliseVkResult(VkResult result) noexcept;
+	void CheckVk(VkResult result) noexcept;
 
 	class AK_VULKAN_API VulkanRenderer : public RHIRenderer
 	{
@@ -36,11 +34,16 @@ namespace Ak
 		private:
 			static VulkanRenderer* s_instance;
 
+			VulkanLoader m_loader;
 			UniquePtr<VulkanInstance> p_instance;
 			UniquePtr<VulkanDevice> p_device;
 	};
 
 	inline bool IsVulkanSupported() noexcept;
+
+	#define AK_VULKAN_GLOBAL_FUNCTION(fn) extern PFN_##fn fn;
+		#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
+	#undef AK_VULKAN_GLOBAL_FUNCTION
 }
 
 #include <Drivers/Vulkan/VulkanRenderer.inl>

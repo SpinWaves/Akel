@@ -3,10 +3,11 @@
 // For conditions of distribution and use, see copyright notice in LICENSE
 
 #include <Drivers/Vulkan/VulkanDevice.h>
+#include <Drivers/Vulkan/VulkanInstance.h>
 
 namespace Ak
 {
-	VulkanDevice::VulkanDevice()
+	VulkanDevice::VulkanDevice(VulkanInstance& instance)
 	{
 
 	}

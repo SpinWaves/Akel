@@ -16,7 +16,11 @@ namespace Ak
 
 			inline bool IsInit() const noexcept { return m_instance != VK_NULL_HANDLE; }
 			inline VkInstance Get() const noexcept { return m_instance; }
-			inline VkInstance operator()() const noexcept { return m_instance; }
+			inline operator VkInstance() const noexcept { return m_instance; }
+
+			#define AK_VULKAN_INSTANCE_FUNCTION(fn) PFN_##fn fn = nullptr;
+				#include <Drivers/Vulkan/VulkanInstancePrototypes.h>
+			#undef AK_VULKAN_INSTANCE_FUNCTION
 
 			~VulkanInstance();
 

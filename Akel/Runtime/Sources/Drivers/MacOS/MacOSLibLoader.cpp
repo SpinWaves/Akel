@@ -25,12 +25,6 @@ namespace Ak
 	LibModule MacOSLibLoader::Load(const std::filesystem::path& path)
 	{
 		LibModule module;
-		if(!std::filesystem::exists(path))
-		{
-			Error("MacOS Library loader : invalid library file; %", path);
-			return NullModule;
-		}
-
 		module = dlopen(path.string().data(), RTLD_LAZY | RTLD_GLOBAL);
 		if(module == NullModule)
 		{

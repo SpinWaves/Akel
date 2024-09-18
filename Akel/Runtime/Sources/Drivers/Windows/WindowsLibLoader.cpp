@@ -34,12 +34,6 @@ namespace Ak
 	LibModule WindowsLibLoader::Load(const std::filesystem::path& path)
 	{
 		LibModule module;
-		if(!std::filesystem::exists(path))
-		{
-			Error("Windows Library loader : invalid library file; %", path);
-			return NullModule;
-		}
-
 		module = ::LoadLibraryA(path.string().data());
 		if(module == NullModule)
 		{

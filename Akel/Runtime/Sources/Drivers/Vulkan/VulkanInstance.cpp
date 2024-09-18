@@ -58,8 +58,13 @@ namespace Ak
 		{
 		}
 
-		VkResult res;
+		CheckVk(vkCreateInstance(&create_info, nullptr, &m_instance));
 		DebugLog("Vulkan : created new instance");
+
+		#define AK_VULKAN_INSTANCE_FUNCTION(fn) fn = reinterpret_cast<PFN_##fn>(vkGetInstanceProcAddr(m_instance, #fn));
+			#include <Drivers/Vulkan/VulkanInstancePrototypes.h>
+		#undef AK_VULKAN_INSTANCE_FUNCTION
+		DebugLog("Vulkan loader : loaded instance functions");
 	}
 
 	VulkanInstance::~VulkanInstance()

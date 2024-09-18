@@ -67,23 +67,26 @@ namespace Ak
 		return nullptr; // just to avoid warnings
 	}
 
-	VulkanRenderer::VulkanRenderer() : RHIRenderer()
+	void CheckVk(VkResult result) noexcept
 	{
-	//	p_instance = MakeUnique<VulkanInstance>();
-	//	p_device = MakeUnique<VulkanDevice>();
+		if(result < VK_SUCCESS)
+			FatalError("Vulkan check failed : %", VerbaliseVkResult(result));
+		else if(result > VK_SUCCESS)
+			Warning("Vulkan check failed : %", VerbaliseVkResult(result));
+	}
+
+	VulkanRenderer::VulkanRenderer() : RHIRenderer(), m_loader()
+	{
+		p_instance = MakeUnique<VulkanInstance>();
+		p_device = MakeUnique<VulkanDevice>(*p_instance);
 	}
 
 	VulkanRenderer::~VulkanRenderer()
 	{
-	//	p_device.Reset();
-	//	p_instance.Reset();
+		p_device.Reset();
+		p_instance.Reset();
 	}
 }
-
-#define AK_VULKAN_GLOBAL_FUNCTION(fn) PFN_##fn fn;
-	#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
-#undef AK_VULKAN_GLOBAL_FUNCTION
-
 
 extern "C"
 {

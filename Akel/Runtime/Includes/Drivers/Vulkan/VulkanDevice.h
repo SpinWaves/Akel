@@ -13,7 +13,7 @@ namespace Ak
 	class AK_VULKAN_API VulkanDevice : public RHIDevice
 	{
 		public:
-			VulkanDevice();
+			VulkanDevice(class VulkanInstance& instance);
 
 			NonOwningPtr<class RHIBuffer> CreateBuffer(BufferDescription description) override;
 			NonOwningPtr<class RHITexture> CreateTexture(TextureDescription description) override;
@@ -22,7 +22,10 @@ namespace Ak
 
 			void WaitForIdle() override;
 
-			#define AK_VULKAN_DEVICE_FUNCTION(fn) PFN_##fn fn;
+			inline operator VkDevice() const noexcept { return m_device; }
+			inline VkPhysicalDevice GetPhysicalDevice() const noexcept { return m_physical_device; }
+
+			#define AK_VULKAN_DEVICE_FUNCTION(fn) PFN_##fn fn = nullptr;
 				#include <Drivers/Vulkan/VulkanDevicePrototypes.h>
 			#undef AK_VULKAN_DEVICE_FUNCTION
 
