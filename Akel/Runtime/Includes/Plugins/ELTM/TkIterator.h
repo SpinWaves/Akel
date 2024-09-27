@@ -2,6 +2,9 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
+#ifndef __AK_ELTM_TOKEN_ITERATOR__
+#define __AK_ELTM_TOKEN_ITERATOR__
+
 #include <Plugins/ELTM/ELTM.h>
 #include <Plugins/ELTM/Token.h>
 
@@ -28,3 +31,5 @@ namespace Ak
 			func::function<Token()> m_get_next_token;
 	};
 }
+
+#endif
