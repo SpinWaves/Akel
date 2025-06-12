@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_PLATFORM_MODULE__
-#define __AK_PLATFORM_MODULE__
+#ifndef AK_PLATFORM_MODULE_H
+#define AK_PLATFORM_MODULE_H
 
 #include <Platform/SI/Window.h>
 #include <Platform/SI/Input.h>
@@ -28,6 +28,8 @@ namespace Ak
 			UniquePtr<SIWindow> CreateDummyWindow();
 
 			inline Inputs& GetInputs() noexcept { return *m_backend_inputs; }
+
+			static std::string GetEngineModuleVersion();
 
 			~PlatformModule() override;
 

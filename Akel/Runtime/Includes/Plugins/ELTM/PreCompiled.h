@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_ELTM_PRE_COMPILED_HEADER__
-#define __AK_ELTM_PRE_COMPILED_HEADER__
+#ifndef AK_ELTM_PRE_COMPILED_HEADER_H
+#define AK_ELTM_PRE_COMPILED_HEADER_H
 
 #include <Core/CompilationProfile.h>
 #include <Plugins/ELTM/ELTM.h>

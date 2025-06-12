@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_VULKAN_ENUMS__
-#define __AK_VULKAN_ENUMS__
+#ifndef AK_VULKAN_ENUMS_H
+#define AK_VULKAN_ENUMS_H
 
 #include <Drivers/Vulkan/PreCompiled.h>
 

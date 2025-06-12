@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_FILE__
-#define __AK_CORE_FILE__
+#ifndef AK_CORE_FILE_H
+#define AK_CORE_FILE_H
 
 #include <Core/PreCompiled.h>
 #include <Core/Enums.h>

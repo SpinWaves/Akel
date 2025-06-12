@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_ELTM_TOKEN__
-#define __AK_ELTM_TOKEN__
+#ifndef AK_ELTM_TOKEN_H
+#define AK_ELTM_TOKEN_H
 
 #include <Plugins/ELTM/PreCompiled.h>
 #include <Plugins/ELTM/StreamStack.h>
@@ -80,5 +80,5 @@ namespace std
 	}
 }
 
-#endif // __AK_ELTM_TOKEN__
+#endif // AK_ELTM_TOKEN_H
 

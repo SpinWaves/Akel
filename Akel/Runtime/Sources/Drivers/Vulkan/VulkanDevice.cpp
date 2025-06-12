@@ -41,7 +41,7 @@ namespace Ak
 	VulkanDevice::VulkanDevice(const PhysicalDeviceMinimalSpecs& specs) : RHIDevice()
 	{
 		VkPhysicalDevice physical_device = ChoosePhysicalDevice(specs);
-		Verify(physical_device != VK_NULL_HANDLE, "Vulkan : could not find a physical device matching given minimal specs");
+		Verify(physical_device != VK_NULL_HANDLE, "Vulkan: could not find a physical device matching given minimal specs");
 
 		VulkanInstance& instance = VulkanRenderer::Get().GetInstance();
 
@@ -49,7 +49,7 @@ namespace Ak
 		instance.vkGetPhysicalDeviceProperties(m_physical_device, &m_properties);
 		instance.vkGetPhysicalDeviceMemoryProperties(m_physical_device, &m_memory_properties);
 
-		DebugLog("Vulkan : device created from %", m_properties.deviceName);
+		DebugLog("Vulkan: device created from %", m_properties.deviceName);
 	}
 
 	NonOwningPtr<class RHIBuffer> VulkanDevice::CreateBuffer(BufferDescription description)
@@ -180,6 +180,6 @@ namespace Ak
 	VulkanDevice::~VulkanDevice()
 	{
 		vkDestroyDevice(m_device, nullptr);
-		DebugLog("Vulkan : device destroyed");
+		DebugLog("Vulkan: device destroyed");
 	}
 }

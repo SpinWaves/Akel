@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_PLATFORM_SI_INPUTS__
-#define __AK_PLATFORM_SI_INPUTS__
+#ifndef AK_PLATFORM_SI_INPUTS_H
+#define AK_PLATFORM_SI_INPUTS_H
 
 #include <Utils/NonCopyable.h>
 #include <Utils/NonMovable.h>

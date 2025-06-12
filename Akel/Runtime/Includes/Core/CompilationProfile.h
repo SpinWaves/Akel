@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_COMPILATION_PROFILE__
-#define __AK_CORE_COMPILATION_PROFILE__
+#ifndef AK_CORE_COMPILATION_PROFILE_H
+#define AK_CORE_COMPILATION_PROFILE_H
 
 #include <climits>
 #include <cstdint>

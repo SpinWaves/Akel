@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_STREAM_STACK__
-#define __AK_STREAM_STACK__
+#ifndef AK_STREAM_STACK_H
+#define AK_STREAM_STACK_H
 
 #include <Plugins/ELTM/PreCompiled.h>
 
@@ -30,4 +30,4 @@ namespace Ak
 	};
 }
 
-#endif // __AK_STREAM_STACK__
+#endif // AK_STREAM_STACK_H

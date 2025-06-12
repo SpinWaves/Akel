@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_ENGINE_CONFIG__
-#define __AK_CORE_ENGINE_CONFIG__
+#ifndef AK_CORE_ENGINE_CONFIG_H
+#define AK_CORE_ENGINE_CONFIG_H
 
 #include <Core/PreCompiled.h>
 #include <Graphics/Enums.h>

@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_VEC3__
-#define __AK_VEC3__
+#ifndef AK_VEC3_H
+#define AK_VEC3_H
 
 #include <Maths/PreCompiled.h>
 
@@ -15,9 +15,9 @@ namespace Ak
 	template<typename T>
 	struct Vec3
 	{
-		union { T x, r, s; };
-		union { T y, g, t; };
-		union { T z, b, p; };
+		T x;
+		T y;
+		T z;
 
 		constexpr Vec3() = default;
 		constexpr Vec3(T X, T Y, T Z);
@@ -128,4 +128,4 @@ namespace Ak
 
 #include <Maths/Vec3.inl>
 
-#endif // __AK_VEC3__
+#endif // AK_VEC3_H

@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_DRIVERS_GLFW_SI__
-#define __AK_DRIVERS_GLFW_SI__
+#ifndef AK_DRIVERS_GLFW_SI_H
+#define AK_DRIVERS_GLFW_SI_H
 
 #include <Drivers/GLFW/PreCompiled.h>
 #include <Core/Module.h>
@@ -20,6 +20,8 @@ namespace Ak
 
 			static inline bool IsInit() noexcept { return s_instance != nullptr; }
 			static GLFWModule& Get();
+
+			static std::string GetEngineModuleVersion();
 
 			~GLFWModule() override;
 

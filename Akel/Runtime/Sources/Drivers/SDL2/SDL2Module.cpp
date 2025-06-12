@@ -4,6 +4,7 @@
 
 #include <Drivers/SDL2/SDL2Module.h>
 #include <Core/Logs.h>
+#include <Config.h>
 
 namespace Ak
 {
@@ -21,6 +22,11 @@ namespace Ak
 		//SDL_SetHint(SDL_HINT_VIDEODRIVER, "wayland,x11");
 	}
 
+	std::string SDL2Module::GetEngineModuleVersion()
+	{
+		return AKEL_VERSION;
+	}
+
 	SDL2Module& SDL2Module::Get()
 	{
 		Assert(s_instance != nullptr, "SDL2Module has not been instanciated");
@@ -29,6 +35,7 @@ namespace Ak
 
 	SDL2Module::~SDL2Module()
 	{
+		Module::~Module();
 		SDL_QuitSubSystem(SDL_INIT_VIDEO);
 		SDL_QuitSubSystem(SDL_INIT_TIMER);
 		SDL_QuitSubSystem(SDL_INIT_EVENTS);

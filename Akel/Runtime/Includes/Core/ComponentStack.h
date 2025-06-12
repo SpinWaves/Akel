@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_COMPONENT_STACK__
-#define __AK_CORE_COMPONENT_STACK__
+#ifndef AK_CORE_COMPONENT_STACK_H
+#define AK_CORE_COMPONENT_STACK_H
 
 #include <Core/PreCompiled.h>
 #include <Core/ComponentBase.h>

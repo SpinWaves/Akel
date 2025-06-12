@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_PLATFORM_SI_WINDOW_BACKEND__
-#define __AK_PLATFORM_SI_WINDOW_BACKEND__
+#ifndef AK_PLATFORM_SI_WINDOW_BACKEND_H
+#define AK_PLATFORM_SI_WINDOW_BACKEND_H
 
 #include <Platform/Enums.h>
 

@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_DRIVERS_MACOS_PRE_COMPILED_HEADER__
-#define __AK_DRIVERS_MACOS_PRE_COMPILED_HEADER__
+#ifndef AK_DRIVERS_MACOS_PRE_COMPILED_HEADER_H
+#define AK_DRIVERS_MACOS_PRE_COMPILED_HEADER_H
 
 #include <Core/CompilationProfile.h>
 #include <Drivers/MacOS/MacOS.h>

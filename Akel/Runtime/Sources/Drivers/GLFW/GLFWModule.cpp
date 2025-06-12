@@ -4,6 +4,7 @@
 
 #include <Drivers/GLFW/GLFWModule.h>
 #include <Core/Logs.h>
+#include <Config.h>
 
 namespace Ak
 {
@@ -24,6 +25,11 @@ namespace Ak
 		glfwSetErrorCallback(GLFWErrorCallback);
 	}
 
+	std::string GLFWModule::GetEngineModuleVersion()
+	{
+		return AKEL_VERSION;
+	}
+
 	GLFWModule& GLFWModule::Get()
 	{
 		Assert(s_instance != nullptr, "GLFWModule has not been instanciated");
@@ -32,6 +38,7 @@ namespace Ak
 
 	GLFWModule::~GLFWModule()
 	{
+		Module::~Module();
 		glfwTerminate();
 		s_instance = nullptr;
 	}

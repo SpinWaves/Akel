@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_UTILS_NON_COPYABLE__
-#define __AK_UTILS_NON_COPYABLE__
+#ifndef AK_UTILS_NON_COPYABLE_H
+#define AK_UTILS_NON_COPYABLE_H
 
 namespace Ak
 {

@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_AUDIO__
-#define __AK_AUDIO__
+#ifndef AK_AUDIO_H
+#define AK_AUDIO_H
 
 #include <Core/CompilationProfile.h>
 

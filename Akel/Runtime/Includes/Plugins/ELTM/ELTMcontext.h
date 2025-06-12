@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_ELTM_CONTEXT__
-#define __AK_ELTM_CONTEXT__
+#ifndef AK_ELTM_CONTEXT_H
+#define AK_ELTM_CONTEXT_H
 
 #include <Plugins/ELTM/PreCompiled.h>
 #include <Plugins/ELTM/Token.h>
@@ -49,4 +49,4 @@ namespace Ak
 	#define GetText(ID) GetText(ID, __LINE__ - 1, __FILE__, AK_FUNC_SIG)
 }
 
-#endif // __AK_ELTM_CONTEXT__
+#endif // AK_ELTM_CONTEXT_H

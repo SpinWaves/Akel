@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_MODULE__
-#define __AK_CORE_MODULE__
+#ifndef AK_CORE_MODULE_H
+#define AK_CORE_MODULE_H
 
 #include <Utils/NonMovable.h>
 #include <Utils/NonCopyable.h>

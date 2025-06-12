@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_COREMODULE__
-#define __AK_CORE_COREMODULE__
+#ifndef AK_CORE_COREMODULE_H
+#define AK_CORE_COREMODULE_H
 
 #include <Core/PreCompiled.h>
 #include <Core/Module.h>
@@ -26,6 +26,8 @@ namespace Ak
 
 			inline Ticks& GetTicksReference() { return m_ticks; }
 			inline VirtualFileSystem& GetVirtualFileSystem() { return m_filesystem; }
+
+			static std::string GetEngineModuleVersion();
 
 			~CoreModule() override;
 

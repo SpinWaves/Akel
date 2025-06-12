@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_VULKAN__
-#define __AK_VULKAN__
+#ifndef AK_VULKAN_H
+#define AK_VULKAN_H
 
 #include <Core/CompilationProfile.h>
 

@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_WINDOWS_LIB_LOADER__
-#define __AK_WINDOWS_LIB_LOADER__
+#ifndef AK_WINDOWS_LIB_LOADER_H
+#define AK_WINDOWS_LIB_LOADER_H
 
 #include <Drivers/Windows/PreCompiled.h>
 #include <Core/OS/LibLoader.h>

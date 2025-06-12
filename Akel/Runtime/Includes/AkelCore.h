@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AKEL_CORE__
-#define __AKEL_CORE__
+#ifndef AKEL_CORE_H
+#define AKEL_CORE_H
 
 #include <Core/Application.h>
 #include <Core/Core.h>

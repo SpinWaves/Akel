@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_DRIVER_WEBGPU_SURFACE_HELPER__
-#define __AK_DRIVER_WEBGPU_SURFACE_HELPER__
+#ifndef AK_DRIVER_WEBGPU_SURFACE_HELPER_H
+#define AK_DRIVER_WEBGPU_SURFACE_HELPER_H
 
 #include <Drivers/WebGPU/PreCompiled.h>
 #include <Platform/SI/WindowBackend.h>

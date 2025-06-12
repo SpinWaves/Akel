@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_AUDIO_MODULE__
-#define __AK_AUDIO_MODULE__
+#ifndef AK_AUDIO_MODULE_H
+#define AK_AUDIO_MODULE_H
 
 #include <Audio/PreCompiled.h>
 

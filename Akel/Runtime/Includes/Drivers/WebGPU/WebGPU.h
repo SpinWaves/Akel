@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_WEBGPU__
-#define __AK_WEBGPU__
+#ifndef AK_WEBGPU_H
+#define AK_WEBGPU_H
 
 #include <Core/CompilationProfile.h>
 

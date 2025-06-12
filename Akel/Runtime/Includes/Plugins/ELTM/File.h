@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_ELTM_FILE__
-#define __AK_ELTM_FILE__
+#ifndef AK_ELTM_FILE_H
+#define AK_ELTM_FILE_H
 
 #include <Plugins/ELTM/PreCompiled.h>
 
@@ -28,5 +28,5 @@ namespace Ak
 	};
 }
 
-#endif // __AK_ELTM_FILE__
+#endif // AK_ELTM_FILE_H
 

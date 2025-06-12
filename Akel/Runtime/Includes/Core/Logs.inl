@@ -21,7 +21,7 @@ namespace Ak
 		}
 		catch(const std::exception& e)
 		{
-			Logs::Report(LogType::Error, "formatter exception catched in the log printer : "s + e.what());
+			Logs::Report(LogType::Error, "formatter exception catched in the log printer: "s + e.what());
 		}
 	}
 
@@ -37,7 +37,7 @@ namespace Ak
 		}
 		catch(const std::exception& e)
 		{
-			Logs::Report(LogType::Error, "formatter exception catched in the log printer : "s + e.what());
+			Logs::Report(LogType::Error, "formatter exception catched in the log printer: "s + e.what());
 		}
 	}
 
@@ -53,7 +53,7 @@ namespace Ak
 		}
 		catch(const std::exception& e)
 		{
-			Logs::Report(LogType::Error, "formatter exception catched in the log printer : "s + e.what());
+			Logs::Report(LogType::Error, "formatter exception catched in the log printer: "s + e.what());
 		}
 	}
 
@@ -69,7 +69,7 @@ namespace Ak
 		}
 		catch(const std::exception& e)
 		{
-			Logs::Report(LogType::Error, "formatter exception catched in the log printer : "s + e.what());
+			Logs::Report(LogType::Error, "formatter exception catched in the log printer: "s + e.what());
 		}
 	}
 
@@ -85,7 +85,7 @@ namespace Ak
 		}
 		catch(const std::exception& e)
 		{
-			Logs::Report(LogType::Error, "formatter exception catched in the log printer : "s + e.what());
+			Logs::Report(LogType::Error, "formatter exception catched in the log printer: "s + e.what());
 		}
 	}
 
@@ -98,12 +98,13 @@ namespace Ak
 		try
 		{
 			std::stringstream ss;
-			ss << Format("Verification failed : %", message, args...);
+			ss << Format("Verification failed: ");
+			ss << Format(message, args...);
 			Logs::Report(LogType::FatalError, line, file, function, ss.str());
 		}
 		catch(const std::exception& e)
 		{
-			Logs::Report(LogType::Error, "formatter exception catched in the log printer : "s + e.what());
+			Logs::Report(LogType::Error, "formatter exception catched in the log printer: "s + e.what());
 		}
 	}
 
@@ -117,12 +118,13 @@ namespace Ak
 			try
 			{
 				std::stringstream ss;
-				ss << Format("Assertion failed : %", message, args...);
+				ss << Format("Assertion failed: ");
+				ss << Format(message, args...);
 				Logs::Report(LogType::FatalError, line, file, function, ss.str());
 			}
 			catch(const std::exception& e)
 			{
-				Logs::Report(LogType::Error, "formatter exception catched in the log printer : "s + e.what());
+				Logs::Report(LogType::Error, "formatter exception catched in the log printer: "s + e.what());
 			}
 		}
 	#endif

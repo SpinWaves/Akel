@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_SDL2__
-#define __AK_SDL2__
+#ifndef AK_SDL2_H
+#define AK_SDL2_H
 
 #include <Core/CompilationProfile.h>
 

@@ -2,6 +2,7 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
+#include "Core/Module.h"
 #include <Core/OS/OSInstance.h>
 #include <Graphics/Enums.h>
 #include <Core/Application.h>
@@ -9,6 +10,7 @@
 #include <Core/CLI.h>
 #include <Core/Logs.h>
 #include <Utils/ConstMap.h>
+#include <Config.h>
 
 namespace Ak
 {
@@ -28,6 +30,11 @@ namespace Ak
 		return *s_instance;
 	}
 
+	std::string GraphicsModule::GetEngineModuleVersion()
+	{
+		return AKEL_VERSION;
+	}
+
 	void GraphicsModule::LoadDriver()
 	{
 		using DriverLoaderFunctor = RHIRenderer* (*)(void);
@@ -38,7 +45,7 @@ namespace Ak
 			drivers_scores.insert(std::make_pair(ScoreDriver(static_cast<RendererDrivers>(i)), static_cast<RendererDrivers>(i)));
 
 		if(drivers_scores.upper_bound(0) == drivers_scores.end())
-			FatalError("GraphicsModule : failed to find a suitable render driver");
+			FatalError("GraphicsModule: failed to find a suitable render driver");
 
 		#ifndef AK_EMBEDDED_RENDERER_DRIVERS
 			ConstMap<RendererDrivers, std::filesystem::path> drivers_paths = {
@@ -57,14 +64,14 @@ namespace Ak
 				LibModule module = loader.Load(drivers_paths.Find(driver)->second);
 				if(module == NullModule)
 				{
-					Warning("GraphicsModule : cannot load %, falling back...", drivers_paths.Find(driver)->second);
+					Warning("GraphicsModule: cannot load %, falling back...", drivers_paths.Find(driver)->second);
 					continue;
 				}
 
 				DriverLoaderFunctor loader_function = reinterpret_cast<DriverLoaderFunctor>(loader.GetSymbol(module, "AkelLoadRendererDriver"));
 				if(!loader_function)
 				{
-					Warning("GraphicsModule : cannot load %, no loading symbol found, falling back...", drivers_paths.Find(driver)->second);
+					Warning("GraphicsModule: cannot load %, no loading symbol found, falling back...", drivers_paths.Find(driver)->second);
 					loader.UnloadLib(module);
 					continue;
 				}
@@ -72,8 +79,8 @@ namespace Ak
 				RHIRenderer* renderer = loader_function();
 				if(renderer == nullptr)
 				{
-					Warning("GraphicsModule : cannot load %, error while loading the renderer, falling back...", drivers_paths.Find(driver)->second);
-						loader.UnloadLib(module);
+					Warning("GraphicsModule: cannot load %, error while loading the renderer, falling back...", drivers_paths.Find(driver)->second);
+					loader.UnloadLib(module);
 					continue;
 				}
 				m_driver_lib = module;
@@ -82,7 +89,7 @@ namespace Ak
 			#endif
 
 			#ifndef AK_EMBEDDED_RENDERER_DRIVERS
-				DebugLog("GraphicsModule : loaded %", drivers_paths.Find(driver)->second);
+				DebugLog("GraphicsModule: loaded %", drivers_paths.Find(driver)->second);
 			#endif
 
 			m_chosen_driver = driver;
@@ -91,7 +98,7 @@ namespace Ak
 		}
 
 		if(m_renderer == nullptr)
-			FatalError("GraphicsModule : failed to load any renderer driver");
+			FatalError("GraphicsModule: failed to load any renderer driver");
 
 		m_renderer->LoadNewDevice({});
 	}
@@ -111,7 +118,7 @@ namespace Ak
 		if(driver_option.has_value())
 		{
 			if(!cli_options.Has(*driver_option))
-				Error("GraphicsModule : invalid rdr-driver option '%'", *driver_option);
+				Error("GraphicsModule: invalid rdr-driver option '%'", *driver_option);
 			else
 			{
 				auto it = cli_options.Find(*driver_option);
@@ -123,14 +130,14 @@ namespace Ak
 		static ConstMap<RendererDrivers, int> api_scores = {
 			{ RendererDrivers::Vulkan, 500 },
 			{ RendererDrivers::WebGPU, 100 },
-			{ RendererDrivers::Auto, 0 },
-			{ RendererDrivers::None, -1 },
+			{ RendererDrivers::Auto,     0 },
+			{ RendererDrivers::None,    -1 },
 		};
 
 		score = api_scores.Find(driver)->second;
 
 		if(!Application::IsInit())
-			FatalError("GraphicsModule : cannot select renderer driver, Application is not init (wtf what did u do ?)");
+			FatalError("GraphicsModule: cannot select renderer driver, Application is not init (wtf what did u do ?)");
 
 		RendererDrivers preffered = Application::Get().GetEngineConfig().preffered_render_api;
 
@@ -142,6 +149,7 @@ namespace Ak
 
 	GraphicsModule::~GraphicsModule()
 	{
+		Module::~Module();
 		MemFree(m_renderer);
 		OSInstance::GetLibLoader().UnloadLib(m_driver_lib);
 		s_instance = nullptr;

@@ -14,6 +14,6 @@ namespace Ak
 
 	Module::~Module()
 	{
-		DebugLog("Shutdown %",  m_module_name);
+		DebugLog("Shuting down %...",  m_module_name);
 	}
 }

@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_APPLICATION__
-#define __AK_CORE_APPLICATION__
+#ifndef AK_CORE_APPLICATION_H
+#define AK_CORE_APPLICATION_H
 
 #include <Core/PreCompiled.h>
 #include <Utils/TypeList.h>
@@ -28,6 +28,7 @@ namespace Ak
 			static Application& Get();
 
 			inline const EngineConfig& GetEngineConfig() const noexcept { return m_engine_config; }
+			AK_FORCEINLINE std::string_view GetEngineVersion() const { return m_engine_version; }
 
 			AK_FORCEINLINE constexpr void Quit() noexcept;
 
@@ -36,6 +37,7 @@ namespace Ak
 		private:
 			static Application* s_instance;
 			EngineConfig m_engine_config;
+			std::string m_engine_version;
 			std::vector<Module*> m_modules;
 			bool m_running = false;
 	};

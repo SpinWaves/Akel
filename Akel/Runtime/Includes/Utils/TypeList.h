@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_TYPE_LIST__
-#define __AK_TYPE_LIST__
+#ifndef AK_TYPE_LIST_H
+#define AK_TYPE_LIST_H
 
 #include <Utils/PreCompiled.h>
 

@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_ELTM_ERRORS__
-#define __AK_ELTM_ERRORS__
+#ifndef AK_ELTM_ERRORS_H
+#define AK_ELTM_ERRORS_H
 
 #include <Plugins/ELTM/PreCompiled.h>
 #include <Utils/Ansi.h>

@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_RHI_DEFS__
-#define __AK_RHI_DEFS__
+#ifndef AK_RHI_DEFS_H
+#define AK_RHI_DEFS_H
 
 #include <Maths/Vec4.h>
 #include <Utils/NonOwningPtr.h>

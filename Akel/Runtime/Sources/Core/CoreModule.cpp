@@ -4,6 +4,7 @@
 
 #include <Core/CoreModule.h>
 #include <Core/Logs.h>
+#include <Config.h>
 
 namespace Ak
 {
@@ -24,6 +25,11 @@ namespace Ak
 		m_ticks.Init();
 	}
 
+	std::string CoreModule::GetEngineModuleVersion()
+	{
+		return AKEL_VERSION;
+	}
+
 	CoreModule& CoreModule::Get()
 	{
 		Verify(s_instance != nullptr, "CoreModule has not been instanciated");
@@ -32,6 +38,7 @@ namespace Ak
 
 	CoreModule::~CoreModule()
 	{
+		Module::~Module();
 		Core::Memory::Internal::Shutdown();
 		s_instance = nullptr;
 	}

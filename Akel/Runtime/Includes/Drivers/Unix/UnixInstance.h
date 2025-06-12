@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_DRIVERS_UNIX_INSTANCE__
-#define __AK_DRIVERS_UNIX_INSTANCE__
+#ifndef AK_DRIVERS_UNIX_INSTANCE_H
+#define AK_DRIVERS_UNIX_INSTANCE_H
 
 #include <Drivers/Unix/PreCompiled.h>
 #include <Core/OS/OSInstance.h>

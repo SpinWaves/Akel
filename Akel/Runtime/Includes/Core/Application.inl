@@ -16,12 +16,13 @@ namespace Ak
 	void Application::LoadEngineModule(Args&&... args)
 	{
 		static_assert(std::is_base_of_v<Module, T>, "invalid engine module");
-		if(T::IsInit())
-			return;
-		m_modules.push_back(new T(std::forward<Args>(args)...));
 		T::Dependencies::ForEach([this](auto t)
 		{
 			this->LoadEngineModule<typename decltype(t)::type>();
 		});
+		if(T::IsInit())
+			return;
+		Verify(T::GetEngineModuleVersion() == m_engine_version, "Conflict detected in engine versions when loading an engine module (% - %)", T::GetEngineModuleVersion(), m_engine_version);
+		m_modules.push_back(new T(std::forward<Args>(args)...));
 	}
 }

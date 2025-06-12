@@ -2,10 +2,9 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_PLATFORM_WINDOW_COMPONENT__
-#define __AK_PLATFORM_WINDOW_COMPONENT__
+#ifndef AK_PLATFORM_WINDOW_COMPONENT_H
+#define AK_PLATFORM_WINDOW_COMPONENT_H
 
-#include "Core/CompilationProfile.h"
 #include <Platform/PreCompiled.h>
 #include <Core/ComponentBase.h>
 #include <Maths/Vec2.h>

@@ -5,12 +5,13 @@
 #include <Platform/PlatformModule.h>
 #include <Core/CoreModule.h>
 #include <Core/Application.h>
+#include <Config.h>
 
 namespace Ak
 {
 	Application* Application::s_instance = nullptr;
 
-	Application::Application(const EngineConfig& config) : m_engine_config(config)
+	Application::Application(const EngineConfig& config) : m_engine_config(config), m_engine_version(AKEL_VERSION)
 	{
 		s_instance = this;
 		LoadEngineModule<CoreModule>();

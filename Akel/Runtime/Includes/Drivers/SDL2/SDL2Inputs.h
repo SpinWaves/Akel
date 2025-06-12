@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_SDL2_INPUTS__
-#define __AK_SDL2_INPUTS__
+#ifndef AK_SDL2_INPUTS_H
+#define AK_SDL2_INPUTS_H
 
 #include <Drivers/SDL2/PreCompiled.h>
 #include <Platform/SI/Input.h>

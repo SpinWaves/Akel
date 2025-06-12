@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_GLFW__
-#define __AK_GLFW__
+#ifndef AK_GLFW_H
+#define AK_GLFW_H
 
 #include <Core/CompilationProfile.h>
 

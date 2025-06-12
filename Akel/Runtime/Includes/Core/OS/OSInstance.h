@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_OS_INSTANCE__
-#define __AK_CORE_OS_INSTANCE__
+#ifndef AK_CORE_OS_INSTANCE_H
+#define AK_CORE_OS_INSTANCE_H
 
 #include <Core/OS/LibLoader.h>
 #include <Core/PreCompiled.h>

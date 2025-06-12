@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_UTILS_CALL_ON_EXIT__
-#define __AK_UTILS_CALL_ON_EXIT__
+#ifndef AK_UTILS_CALL_ON_EXIT_H
+#define AK_UTILS_CALL_ON_EXIT_H
 
 #include <Utils/PreCompiled.h>
 

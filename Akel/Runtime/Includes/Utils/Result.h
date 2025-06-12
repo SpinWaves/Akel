@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_UTILS_RESULT__
-#define __AK_UTILS_RESULT__
+#ifndef AK_UTILS_RESULT_H
+#define AK_UTILS_RESULT_H
 
 #include <Utils/PreCompiled.h>
 

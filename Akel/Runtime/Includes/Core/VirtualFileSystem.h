@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_VIRTUAL_FILE_SYSTEM__
-#define __AK_CORE_VIRTUAL_FILE_SYSTEM__
+#ifndef AK_CORE_VIRTUAL_FILE_SYSTEM_H
+#define AK_CORE_VIRTUAL_FILE_SYSTEM_H
 
 #include <Core/PreCompiled.h>
 #include <Core/File.h>

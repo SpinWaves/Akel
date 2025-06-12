@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_SDL2_WINDOW__
-#define __AK_SDL2_WINDOW__
+#ifndef AK_SDL2_WINDOW_H
+#define AK_SDL2_WINDOW_H
 
 #include <Drivers/SDL2/PreCompiled.h>
 #include <Platform/SI/Window.h>

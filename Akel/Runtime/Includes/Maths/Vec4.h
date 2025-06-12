@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_VEC4__
-#define __AK_VEC4__
+#ifndef AK_VEC4_H
+#define AK_VEC4_H
 
 #include <Maths/PreCompiled.h>
 
@@ -15,10 +15,10 @@ namespace Ak
 	template<typename T>
 	struct Vec4
 	{
-		union { T x, r, s; };
-		union { T y, g, t; };
-		union { T z, b, p; };
-		union { T w, a, q; };
+		T x;
+		T y;
+		T z;
+		T w;
 
 		constexpr Vec4() = default;
 		constexpr Vec4(T X, T Y, T Z, T W = 1.0);
@@ -110,5 +110,5 @@ namespace Ak
 
 #include <Maths/Vec4.inl>
 
-#endif // __AK_VEC4__
+#endif // AK_VEC4_H
 

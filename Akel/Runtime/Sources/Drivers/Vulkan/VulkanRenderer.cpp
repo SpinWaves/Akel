@@ -71,17 +71,17 @@ namespace Ak
 	void CheckVk(VkResult result) noexcept
 	{
 		if(result < VK_SUCCESS)
-			FatalError("Vulkan check failed : %", VerbaliseVkResult(result));
+			FatalError("Vulkan check failed: %", VerbaliseVkResult(result));
 		else if(result > VK_SUCCESS)
-			Warning("Vulkan check failed : %", VerbaliseVkResult(result));
+			Warning("Vulkan check failed: %", VerbaliseVkResult(result));
 	}
 
 	VulkanRenderer* VulkanRenderer::s_instance = nullptr;
 
-	VulkanRenderer::VulkanRenderer() : m_loader()
+	VulkanRenderer::VulkanRenderer() : m_loader(*this)
 	{
-		p_instance = MakeUnique<VulkanInstance>();
 		s_instance = this;
+		p_instance = MakeUnique<VulkanInstance>();
 	}
 
 	std::uint32_t VulkanRenderer::LoadNewDevice(const PhysicalDeviceMinimalSpecs& specs) noexcept

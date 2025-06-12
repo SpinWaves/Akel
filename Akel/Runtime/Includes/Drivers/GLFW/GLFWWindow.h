@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_GLFW_WINDOW__
-#define __AK_GLFW_WINDOW__
+#ifndef AK_GLFW_WINDOW_H
+#define AK_GLFW_WINDOW_H
 
 #include <Drivers/GLFW/PreCompiled.h>
 #include <Platform/SI/Window.h>

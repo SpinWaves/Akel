@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_MACOS__
-#define __AK_MACOS__
+#ifndef AK_MACOS_H
+#define AK_MACOS_H
 
 #include <Core/CompilationProfile.h>
 

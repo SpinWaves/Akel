@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_WINDOWS__
-#define __AK_WINDOWS__
+#ifndef AK_WINDOWS_H
+#define AK_WINDOWS_H
 
 #include <Core/CompilationProfile.h>
 

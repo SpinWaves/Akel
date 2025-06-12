@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_MACOS_LIB_LOADER__
-#define __AK_MACOS_LIB_LOADER__
+#ifndef AK_MACOS_LIB_LOADER_H
+#define AK_MACOS_LIB_LOADER_H
 
 #include <Drivers/MacOS/PreCompiled.h>
 #include <Core/OS/LibLoader.h>

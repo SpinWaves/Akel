@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_GRAPHICS_MODULE__
-#define __AK_GRAPHICS_MODULE__
+#ifndef AK_GRAPHICS_MODULE_H
+#define AK_GRAPHICS_MODULE_H
 
 #include <Core/OS/LibLoader.h>
 #include <Graphics/RHI/RHIRenderer.h>
@@ -17,7 +17,7 @@ namespace Ak
 	class AK_GRAPHICS_API GraphicsModule : public Module
 	{
 		public:
-			using Dependencies = TypeList<>;
+			using Dependencies = TypeList<class CoreModule, class PlatformModule>;
 
 			GraphicsModule();
 
@@ -26,6 +26,8 @@ namespace Ak
 
 			inline RHIRenderer& GetRenderer() noexcept { return *m_renderer; }
 			inline RendererDrivers GetChosenRendererDrivers() const noexcept { return m_chosen_driver; }
+
+			static std::string GetEngineModuleVersion();
 
 			~GraphicsModule() override;
 

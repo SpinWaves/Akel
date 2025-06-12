@@ -1,15 +1,15 @@
--- Copyright (C) 2024 kbz_8 ( contact@kbz8.me )
+-- Copyright (C) 2025 kbz_8 ( contact@kbz8.me )
 -- This file is a part of Akel
 -- For conditions of distribution and use, see copyright notice in LICENSE
 
 -- Credits to SirLynix (https://github.com/SirLynix) for this xmake.lua
 -- Took from https://github.com/NazaraEngine/NazaraEngine
 
-add_repositories("nazara-engine-repo https://github.com/NazaraEngine/xmake-repo")
-
 -- add_requireconfs("imgui", { configs = { cxflags = "-D IMGUI_IMPL_VULKAN_NO_PROTOTYPES" }})
 
-set_languages("cxx20")
+set_version("0.0.1beta")
+
+set_languages("cxx23")
 
 add_rules("mode.debug", "mode.release")
 set_allowedplats("windows", "mingw", "linux", "macosx", "wasm")
@@ -34,7 +34,8 @@ set_targetdir("build/Bin/$(os)_$(arch)")
 set_rundir("build/Bin/$(os)_$(arch)")
 set_dependir("build/.deps")
 
-set_optimize("fastest")
+set_configdir("Akel/BuildTime/")
+add_configfiles("Akel/BuildTime/Config.h.in")
 
 local renderer_backends = {
 	Vulkan = {
@@ -68,7 +69,7 @@ local system_interfaces = {
 		option = "SDL2_backend",
 		dir = "Drivers/",
 		default = true,
-		packages = {"libsdl"},
+		packages = {"libsdl2"},
 		custom = function()
 			if is_plat("windows", "mingw") then
 				add_defines("SDL_VIDEO_DRIVER_WINDOWS=1")
@@ -237,11 +238,11 @@ option("unitybuild", { description = "Build the engine using unity build", defau
 add_requires("entt", "toml++")
 
 if has_config("graphics") then
-	add_requires("nzsl >=2023.12.31", { debug = is_mode("debug"), configs = { symbols = not is_mode("release"), shared = not is_plat("wasm", "android") and not has_config("static") } })
+	add_requires("nzsl", { debug = is_mode("debug"), configs = { symbols = not is_mode("release"), shared = not is_plat("wasm", "android") and not has_config("static") } })
 end
 
 if has_config("SDL2_backend") then
-	add_requires("libsdl >=2.26.0")
+	add_requires("libsdl2 >=2.26.0")
 	add_defines("AK_SDL2_DRIVER")
 end
 
@@ -347,6 +348,7 @@ for name, module in pairs(modules) do
 		end
 
 		add_includedirs("Akel/Runtime/Sources")
+		add_includedirs("Akel/BuildTime")
 		add_rpathdirs("$ORIGIN")
 
 		if has_config("unitybuild") then

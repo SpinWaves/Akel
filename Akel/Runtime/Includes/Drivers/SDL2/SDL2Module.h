@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_DRIVERS_SDL2_MODULE__
-#define __AK_DRIVERS_SDL2_MODULE__
+#ifndef AK_DRIVERS_SDL2_MODULE_H
+#define AK_DRIVERS_SDL2_MODULE_H
 
 #include <Drivers/SDL2/PreCompiled.h>
 #include <Core/Module.h>
@@ -20,6 +20,8 @@ namespace Ak
 
 			static inline bool IsInit() noexcept { return s_instance != nullptr; }
 			static SDL2Module& Get();
+
+			static std::string GetEngineModuleVersion();
 
 			~SDL2Module() override;
 

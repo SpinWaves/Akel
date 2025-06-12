@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_VEC2__
-#define __AK_VEC2__
+#ifndef AK_VEC2_H
+#define AK_VEC2_H
 
 #include <Maths/PreCompiled.h>
 
@@ -15,8 +15,8 @@ namespace Ak
 	template <typename T>
 	struct Vec2
 	{
-		union { T x, r, s; };
-		union { T y, g, t; };
+		T x;
+		T y;
 
 		constexpr Vec2() = default;
 		constexpr Vec2(T X, T Y);
@@ -112,4 +112,4 @@ namespace Ak
 
 #include <Maths/Vec2.inl>
 
-#endif // __AK_VEC2__
+#endif // AK_VEC2_H

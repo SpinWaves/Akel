@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_VULKAN_RENDERER__
-#define __AK_VULKAN_RENDERER__
+#ifndef AK_VULKAN_RENDERER_H
+#define AK_VULKAN_RENDERER_H
 
 #include <Drivers/Vulkan/PreCompiled.h>
 #include <Graphics/RHI/RHIRenderer.h>
@@ -32,6 +32,10 @@ namespace Ak
 
 			~VulkanRenderer() override;
 
+			#define AK_VULKAN_GLOBAL_FUNCTION(fn) PFN_##fn fn = nullptr;
+				#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
+			#undef AK_VULKAN_GLOBAL_FUNCTION
+
 		private:
 			static VulkanRenderer* s_instance;
 
@@ -41,10 +45,6 @@ namespace Ak
 	};
 
 	inline bool IsVulkanSupported() noexcept;
-
-	#define AK_VULKAN_GLOBAL_FUNCTION(fn) extern PFN_##fn fn;
-		#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
-	#undef AK_VULKAN_GLOBAL_FUNCTION
 }
 
 #include <Drivers/Vulkan/VulkanRenderer.inl>

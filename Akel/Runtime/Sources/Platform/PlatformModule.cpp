@@ -6,6 +6,7 @@
 #include <Platform/PlatformModule.h>
 #include <Core/Logs.h>
 #include <Core/Memory/MemoryManager.h>
+#include <Config.h>
 
 #if (defined(AK_SDL2_DRIVER) + defined(AK_GLFW_DRIVER)) == 0
 	#error "No backend enabled for the system interface (SDL2, GLFW, ...)"
@@ -42,6 +43,11 @@ namespace Ak
 		#endif
 	}
 
+	std::string PlatformModule::GetEngineModuleVersion()
+	{
+		return AKEL_VERSION;
+	}
+
 	void PlatformModule::Update()
 	{
 		m_backend_inputs->Update();
@@ -75,6 +81,7 @@ namespace Ak
 
 	PlatformModule::~PlatformModule()
 	{
+		Module::~Module();
 		MemFree(m_backend_inputs);
 		s_instance = nullptr;
 	}

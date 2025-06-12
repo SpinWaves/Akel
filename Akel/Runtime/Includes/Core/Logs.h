@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef __AK_CORE_LOGS__
-#define __AK_CORE_LOGS__
+#ifndef AK_CORE_LOGS_H
+#define AK_CORE_LOGS_H
 
 #include <Core/PreCompiled.h>
 #include <Core/Enums.h>

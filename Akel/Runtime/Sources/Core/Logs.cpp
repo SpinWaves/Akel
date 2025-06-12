@@ -47,14 +47,18 @@ namespace Ak
 
 		switch(type)
 		{
-			case LogType::Debug: std::cout << Ansi::blue << "[Akel Debug] " << Ansi::def << code_infos << message << '\n'; break;
-			case LogType::Message: std::cout << Ansi::blue << "[Akel Message] " << Ansi::def << code_infos << message << '\n'; break;
-			case LogType::Warning: std::cout << Ansi::magenta << "[Akel Warning] " << Ansi::def << code_infos << message << '\n'; break;
-			case LogType::Error: std::cerr << Ansi::red << "[Akel Error] " << Ansi::def << code_infos << message << '\n'; break;
-			case LogType::FatalError: std::cerr << Ansi::red << "[Akel Fatal Error] " << Ansi::def << code_infos << message << '\n'; break;
+			case LogType::Debug:      std::cout << Ansi::blue    << "[Akel Debug]       "; break;
+			case LogType::Message:    std::cout << Ansi::blue    << "[Akel Message]     "; break;
+			case LogType::Warning:    std::cout << Ansi::magenta << "[Akel Warning]     "; break;
+			case LogType::Error:      std::cerr << Ansi::red     << "[Akel Error]       "; break;
+			case LogType::FatalError: std::cerr << Ansi::red     << "[Akel Fatal Error] "; break;
 
 			default: break;
 		}
+
+		const std::chrono::zoned_time current_time{ std::chrono::current_zone(), std::chrono::floor<std::chrono::milliseconds>(std::chrono::system_clock::now()) };
+		std::cout << Ansi::yellow << std::format("[{0:%H:%M:%S}] ", current_time) << Ansi::def << code_infos << message << std::endl;
+
 		if(type == LogType::FatalError)
 		{
 			std::cout << Ansi::bg_red << "Fatal Error: emergency exit" << Ansi::bg_def << std::endl;

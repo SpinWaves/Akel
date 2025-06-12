@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_RHI_RENDERER__
-#define __AK_RHI_RENDERER__
+#ifndef AK_RHI_RENDERER_H
+#define AK_RHI_RENDERER_H
 
 #include <Graphics/PreCompiled.h>
 #include <Graphics/RHI/Defs.h>

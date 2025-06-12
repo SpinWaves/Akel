@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_CORE_OS_LIB_LOADER__
-#define __AK_CORE_OS_LIB_LOADER__
+#ifndef AK_CORE_OS_LIB_LOADER_H
+#define AK_CORE_OS_LIB_LOADER_H
 
 #include <Core/PreCompiled.h>
 #include <Utils/NonCopyable.h>

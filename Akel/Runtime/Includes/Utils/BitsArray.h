@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_UTILS_BITS_ARRAY__
-#define __AK_UTILS_BITS_ARRAY__
+#ifndef AK_UTILS_BITS_ARRAY_H
+#define AK_UTILS_BITS_ARRAY_H
 
 #include <Utils/PreCompiled.h>
 #include <Utils/NonCopyable.h>

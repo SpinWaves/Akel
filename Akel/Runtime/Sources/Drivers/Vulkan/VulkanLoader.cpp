@@ -9,7 +9,7 @@
 
 namespace Ak
 {
-	VulkanLoader::VulkanLoader()
+	VulkanLoader::VulkanLoader(VulkanRenderer& renderer)
 	{
 		#if defined(MLX_PLAT_WINDOWS)
 			std::array libnames{
@@ -36,8 +36,8 @@ namespace Ak
 			m_vulkan_lib = OSInstance::GetLibLoader().Load(libname);
 			if(m_vulkan_lib != NullModule)
 			{
-				vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(OSInstance::GetLibLoader().GetSymbol(m_vulkan_lib, "vkGetInstanceProcAddr"));
-				if(vkGetInstanceProcAddr == nullptr)
+				renderer.vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(OSInstance::GetLibLoader().GetSymbol(m_vulkan_lib, "vkGetInstanceProcAddr"));
+				if(renderer.vkGetInstanceProcAddr == nullptr)
 				{
 					OSInstance::GetLibLoader().UnloadLib(m_vulkan_lib);
 					m_vulkan_lib = NullModule;
@@ -47,26 +47,22 @@ namespace Ak
 			}
 		}
 		if(m_vulkan_lib == NullModule)
-			FatalError("Vulkan loader : failed to load libvulkan");
-		DebugLog("Vulkan loader : loaded vulkan lib");
-		LoadGlobal();
+			FatalError("Vulkan loader: failed to load libvulkan");
+		DebugLog("Vulkan loader: loaded vulkan lib");
+		LoadGlobal(renderer);
 	}
 
-	void VulkanLoader::LoadGlobal()
+	void VulkanLoader::LoadGlobal(VulkanRenderer& renderer)
 	{
-		#define AK_VULKAN_GLOBAL_FUNCTION(fn) fn = reinterpret_cast<PFN_##fn>(vkGetInstanceProcAddr(nullptr, #fn));
+		#define AK_VULKAN_GLOBAL_FUNCTION(fn) renderer.fn = reinterpret_cast<PFN_##fn>(renderer.vkGetInstanceProcAddr(nullptr, #fn));
 			#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
 		#undef AK_VULKAN_GLOBAL_FUNCTION
-		DebugLog("Vulkan loader : loaded global functions");
+		DebugLog("Vulkan loader: loaded global functions");
 	}
 
 	VulkanLoader::~VulkanLoader()
 	{
 		OSInstance::GetLibLoader().UnloadLib(m_vulkan_lib);
-		DebugLog("Vulkan loader : unloaded vulkan lib");
+		DebugLog("Vulkan loader: unloaded vulkan lib");
 	}
-
-	#define AK_VULKAN_GLOBAL_FUNCTION(fn) PFN_##fn fn = nullptr;
-		#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
-	#undef AK_VULKAN_GLOBAL_FUNCTION
 }

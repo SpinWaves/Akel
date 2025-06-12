@@ -6,6 +6,7 @@
 #include <Drivers/Vulkan/VulkanInstance.h>
 #include <Drivers/Vulkan/VulkanRenderer.h>
 #include <Core/Logs.h>
+#include <Config.h>
 
 namespace Ak
 {
@@ -14,7 +15,7 @@ namespace Ak
 		VkApplicationInfo app_info{};
 		app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 		app_info.pEngineName = "Akel";
-		app_info.engineVersion = VK_MAKE_VERSION(0, 0, 1);
+		app_info.engineVersion = VK_MAKE_VERSION(AKEL_VERSION_MAJOR, AKEL_VERSION_MINOR, AKEL_VERSION_PATCH);
 		app_info.apiVersion = VK_API_VERSION_1_0;
 
 		std::vector<const char*> extensions;
@@ -58,19 +59,19 @@ namespace Ak
 		{
 		}
 
-		CheckVk(vkCreateInstance(&create_info, nullptr, &m_instance));
-		DebugLog("Vulkan : created new instance");
+		CheckVk(VulkanRenderer::Get().vkCreateInstance(&create_info, nullptr, &m_instance));
+		DebugLog("Vulkan: created new instance");
 
-		#define AK_VULKAN_INSTANCE_FUNCTION(fn) fn = reinterpret_cast<PFN_##fn>(vkGetInstanceProcAddr(m_instance, #fn));
+		#define AK_VULKAN_INSTANCE_FUNCTION(fn) fn = reinterpret_cast<PFN_##fn>(VulkanRenderer::Get().vkGetInstanceProcAddr(m_instance, #fn));
 			#include <Drivers/Vulkan/VulkanInstancePrototypes.h>
 		#undef AK_VULKAN_INSTANCE_FUNCTION
-		DebugLog("Vulkan loader : loaded instance functions");
+		DebugLog("Vulkan loader: loaded instance functions");
 	}
 
 	VulkanInstance::~VulkanInstance()
 	{
 		vkDestroyInstance(m_instance, nullptr);
 		m_instance = VK_NULL_HANDLE;
-		DebugLog("Vulkan : destroyed an instance");
+		DebugLog("Vulkan: destroyed an instance");
 	}
 }

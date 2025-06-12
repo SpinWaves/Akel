@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef __AK_GRAPHICS__
-#define __AK_GRAPHICS__
+#ifndef AK_GRAPHICS_H
+#define AK_GRAPHICS_H
 
 #include <Core/CompilationProfile.h>
 
