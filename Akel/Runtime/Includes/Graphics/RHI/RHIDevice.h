@@ -12,7 +12,7 @@
 
 namespace Ak
 {
-	class RHIDevice
+	class AK_GRAPHICS_API RHIDevice
 	{
 		public:
 			RHIDevice() = default;
@@ -21,6 +21,7 @@ namespace Ak
 			virtual NonOwningPtr<class RHITexture> CreateTexture(TextureDescription description) = 0;
 			virtual NonOwningPtr<class RHIRenderSurface> CreateRenderSurface() noexcept = 0;
 			virtual NonOwningPtr<class RHIGraphicPipeline> CreateGraphicPipeline() noexcept = 0;
+			virtual NonOwningPtr<class RHICommandBuffer> CreateCommandBuffer(const class RHICommandEncoder& encoder) noexcept = 0;
 
 			virtual void WaitForIdle() = 0;
 

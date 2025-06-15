@@ -9,6 +9,7 @@ Build/
 *.exe
 *.lib
 *.exp
+Akel/BuildTime/Config.h
 Akel_Studio/settings/
 Akel_Studio/build/
 Akel_Studio/Akel_Studio.*
