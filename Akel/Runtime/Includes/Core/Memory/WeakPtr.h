@@ -29,19 +29,11 @@ namespace Ak
 			~WeakPtr();
 
 		private:
-			struct RefCounter
-			{
-				T* ptr = nullptr;
-				std::uint32_t count = 0;
-				std::uint32_t weaks = 0;
-			};
-
-		private:
 			inline void DecrementWeakCount() noexcept;
 
 		private:
-			RefCounter* m_ref = nullptr;
-			T* m_ptr = nullptr;
+			RefCounter* p_ref = nullptr;
+			T* p_ptr = nullptr;
 	};
 }
 

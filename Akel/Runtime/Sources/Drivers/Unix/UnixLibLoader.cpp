@@ -13,7 +13,7 @@ namespace Ak
 		void* ptr = dlsym(module, symbol);
 		if(ptr == nullptr)
 		{
-			Error("Unix Library loader : could not load '%' symbol", symbol);
+			Error("Unix Library loader: could not load '%' symbol", symbol);
 			return nullptr;
 		}
 		LibFunc func;
@@ -29,7 +29,7 @@ namespace Ak
 		module = dlopen(path.string().data(), RTLD_LAZY | RTLD_GLOBAL);
 		if(module == NullModule)
 		{
-			Error("Unix Library loader : could not load %; %", path, dlerror());
+			Error("Unix Library loader: could not load %; %", path, dlerror());
 			return NullModule;
 		}
 		return module;

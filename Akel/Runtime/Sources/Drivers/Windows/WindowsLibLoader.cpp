@@ -24,7 +24,7 @@ namespace Ak
 		LibFunc func = reinterpret_cast<LibFunc>(::GetProcAddress(module, symbol));
 		if(func == nullptr)
 		{
-			Error("Windows Library loader : could not load '%' symbol", symbol);
+			Error("Windows Library loader: could not load '%' symbol", symbol);
 			return nullptr;
 		}
 		return func;
@@ -37,7 +37,7 @@ namespace Ak
 		module = ::LoadLibraryA(path.string().data());
 		if(module == NullModule)
 		{
-			Error("Windows Library loader : could not load '%'", path);
+			Error("Windows Library loader: could not load '%'", path);
 			return NullModule;
 		}
 		return module;

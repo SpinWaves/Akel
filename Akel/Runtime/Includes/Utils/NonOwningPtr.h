@@ -19,6 +19,9 @@ namespace Ak
 			NonOwningPtr& operator=(const NonOwningPtr&) = default;
 			NonOwningPtr& operator=(NonOwningPtr&& ptr) noexcept;
 
+			
+
+
 			inline operator bool() const noexcept;
 
 			inline T* Get() const noexcept;

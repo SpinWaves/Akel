@@ -8,10 +8,10 @@
 namespace Ak
 {
 	template <typename T>
-	WeakPtr<T>::WeakPtr(const WeakPtr<T>& rhs) noexcept : m_ref(rhs.m_ref), m_ptr(rhs.m_ptr)
+	WeakPtr<T>::WeakPtr(const WeakPtr<T>& rhs) noexcept : p_ref(rhs.p_ref), p_ptr(rhs.p_ptr)
 	{
-		if(m_ref)
-			m_ref->weaks++;
+		if(p_ref)
+			p_ref->weaks++;
 	}
 
 	template <typename T>
@@ -22,37 +22,37 @@ namespace Ak
 	}
 
 	template <typename T>
-	WeakPtr<T>::WeakPtr(const SharedPtr<T>& shared) noexcept : m_ref(shared.m_ref), m_ptr(shared.m_ptr)
+	WeakPtr<T>::WeakPtr(const SharedPtr<T>& shared) noexcept : p_ref(shared.p_ref), p_ptr(shared.p_ptr)
 	{
-		if(m_ref)
-			m_ref->weaks++;
+		if(p_ref)
+			p_ref->weaks++;
 	}
 
 	template <typename T>
 	void WeakPtr<T>::Reset() noexcept
 	{
 		DecrementWeakCount();
-		m_ref = nullptr;
-		m_ptr = nullptr;
+		p_ref = nullptr;
+		p_ptr = nullptr;
 	}
 
 	template <typename T>
 	void WeakPtr<T>::Swap(WeakPtr<T>& rhs) noexcept
 	{
-		std::swap(m_ref, rhs.m_ref);
-		std::swap(m_ptr, rhs.m_ptr);
+		std::swap(p_ref, rhs.p_ref);
+		std::swap(p_ptr, rhs.p_ptr);
 	}
 
 	template <typename T>
 	std::size_t WeakPtr<T>::UseCount() const noexcept
 	{
-		return (m_ref ? m_ref->weaks : 0);
+		return (p_ref ? p_ref->weaks : 0);
 	}
 
 	template <typename T>
 	bool WeakPtr<T>::Expired() const noexcept
 	{
-		return !m_ref || m_ref->count <= 0;;
+		return !p_ref || p_ref->count <= 0;;
 	}
 
 	template <typename T>
@@ -64,13 +64,13 @@ namespace Ak
 	template <typename T>
 	void WeakPtr<T>::DecrementWeakCount() noexcept
 	{
-		if(m_ref == nullptr)
+		if(p_ref == nullptr)
 			return;
-		m_ref->weaks--;
-		if(m_ref->count <= 0 && m_ref->weaks <= 0)
+		p_ref->weaks--;
+		if(p_ref->count <= 0 && p_ref->weaks <= 0)
 		{
-			MemFree(m_ref);
-			m_ref = nullptr;
+			MemFree(p_ref);
+			p_ref = nullptr;
 		}
 	}
 

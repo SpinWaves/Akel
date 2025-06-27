@@ -2,7 +2,6 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#include "Core/Module.h"
 #include <Core/OS/OSInstance.h>
 #include <Graphics/Enums.h>
 #include <Core/Application.h>
@@ -37,7 +36,7 @@ namespace Ak
 
 	void GraphicsModule::LoadDriver()
 	{
-		using DriverLoaderFunctor = RHIRenderer* (*)(void);
+		using DriverLoaderFunctor = RHIInstance* (*)(void);
 
 		std::multimap<int, RendererDrivers, std::greater<int>> drivers_scores;
 
@@ -68,7 +67,7 @@ namespace Ak
 					continue;
 				}
 
-				DriverLoaderFunctor loader_function = reinterpret_cast<DriverLoaderFunctor>(loader.GetSymbol(module, "AkelLoadRendererDriver"));
+				DriverLoaderFunctor loader_function = reinterpret_cast<DriverLoaderFunctor>(loader.GetSymbol(module, "AkelLoadInstance"));
 				if(!loader_function)
 				{
 					Warning("GraphicsModule: cannot load %, no loading symbol found, falling back...", drivers_paths.Find(driver)->second);
@@ -76,8 +75,8 @@ namespace Ak
 					continue;
 				}
 
-				RHIRenderer* renderer = loader_function();
-				if(renderer == nullptr)
+				UniquePtr<RHIInstance> instance(loader_function());
+				if(!instance)
 				{
 					Warning("GraphicsModule: cannot load %, error while loading the renderer, falling back...", drivers_paths.Find(driver)->second);
 					loader.UnloadLib(module);
@@ -85,7 +84,7 @@ namespace Ak
 				}
 				m_driver_lib = module;
 			#else
-				RHIRenderer* renderer = nullptr;
+				UniquePtr<RHIInstance> instance = nullptr;
 			#endif
 
 			#ifndef AK_EMBEDDED_RENDERER_DRIVERS
@@ -93,14 +92,12 @@ namespace Ak
 			#endif
 
 			m_chosen_driver = driver;
-			m_renderer = renderer;
+			p_renderer = MakeUnique<RenderCore>(std::move(instance));
 			break;
 		}
 
-		if(m_renderer == nullptr)
+		if(!p_renderer)
 			FatalError("GraphicsModule: failed to load any renderer driver");
-
-		m_renderer->LoadNewDevice({});
 	}
 
 	int GraphicsModule::ScoreDriver(RendererDrivers driver)
@@ -150,7 +147,7 @@ namespace Ak
 	GraphicsModule::~GraphicsModule()
 	{
 		Module::~Module();
-		MemFree(m_renderer);
+		p_renderer.Reset();
 		OSInstance::GetLibLoader().UnloadLib(m_driver_lib);
 		s_instance = nullptr;
 	}

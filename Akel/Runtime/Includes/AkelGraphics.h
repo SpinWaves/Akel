@@ -6,7 +6,7 @@
 #define AKEL_GRAPHICS_H
 
 #include <Graphics/GraphicsModule.h>
-#include <Graphics/RenderingSurfaceComponent.h>
+#include <Graphics/Renderer/RenderingSurfaceComponent.h>
 #include <Graphics/Enums.h>
 
 #endif

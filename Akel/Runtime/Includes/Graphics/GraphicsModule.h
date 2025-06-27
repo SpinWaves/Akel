@@ -6,11 +6,11 @@
 #define AK_GRAPHICS_MODULE_H
 
 #include <Core/OS/LibLoader.h>
-#include <Graphics/RHI/RHIRenderer.h>
 #include <Graphics/PreCompiled.h>
 #include <Core/Module.h>
 #include <Utils/TypeList.h>
 #include <Graphics/Enums.h>
+#include <Graphics/Renderer/RenderCore.h>
 
 namespace Ak
 {
@@ -24,7 +24,7 @@ namespace Ak
 			static inline bool IsInit() noexcept { return s_instance != nullptr; }
 			static GraphicsModule& Get();
 
-			inline RHIRenderer& GetRenderer() noexcept { return *m_renderer; }
+			inline RenderCore& GetRenderCore() noexcept { return *p_renderer; }
 			inline RendererDrivers GetChosenRendererDrivers() const noexcept { return m_chosen_driver; }
 
 			static std::string GetEngineModuleVersion();
@@ -37,7 +37,7 @@ namespace Ak
 
 		private:
 			static GraphicsModule* s_instance;
-			RHIRenderer* m_renderer = nullptr;
+			UniquePtr<RenderCore> p_renderer;
 			RendererDrivers m_chosen_driver = RendererDrivers::None;
 			LibModule m_driver_lib = NullModule;
 	};

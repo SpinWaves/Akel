@@ -158,7 +158,6 @@ local modules = {
 					if not module.Option or has_config(module.Option) then
 						if module.Deps then
 							module = table.clone(module, 1) -- shallow clone
-							module.Deps = table.remove_if(table.clone(module.Deps), function (idx, dep) return dep == "NazaraRenderer" end)
 							if #module.Deps == 0 then 
 								module.Deps = nil 
 							end
@@ -385,10 +384,12 @@ rule("build.rendererplugins")
 		local deps = table.wrap(target:get("deps"))
 
 		if target:kind() == "binary" and table.contains(deps, "AkelGraphics") then
-			for name, _ in pairs(renderer_backends) do
-				local depName = "Akel" .. name
-				if not table.contains(deps, depName) then -- don't overwrite dependency
-					target:add("deps", depName, {inherit = false})
+			for name, module in pairs(renderer_backends) do
+				if has_config(module.option) then
+					local depName = "Akel" .. name
+					if not table.contains(deps, depName) then -- don't overwrite dependency
+						target:add("deps", depName, {inherit = false})
+					end
 				end
 			end
 		end

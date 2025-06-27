@@ -12,4 +12,11 @@
 #include <vector>
 #include <map>
 
+// Akel core includes
+#include <Core/Logs.h>
+#include <Core/Memory/MemoryManager.h>
+#include <Core/Memory/UniquePtr.h>
+#include <Core/Memory/SharedPtr.h>
+#include <Core/Memory/WeakPtr.h>
+
 #endif

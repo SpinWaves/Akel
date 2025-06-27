@@ -13,6 +13,36 @@
 
 namespace Ak
 {
+	enum class AdapterType
+	{
+		Any = 0,
+		Other,
+		CPU,
+		Virtual,
+		Integrated,
+		Discrete,
+
+		EndEnum
+	};
+	constexpr std::size_t AdapterTypeCount = static_cast<std::size_t>(AdapterType::EndEnum);
+
+	enum AdapterVendorBits
+	{
+		AdapterVendorAny = 1 << 0,
+		AdapterVendorAmd = 1 << 1,
+		AdapterVendorMesa = 1 << 2,
+		AdapterVendorImgTec = 1 << 3,
+		AdapterVendorNvidia = 1 << 4,
+		AdapterVendorArm = 1 << 5,
+		AdapterVendorBroadcom = 1 << 6,
+		AdapterVendorQualcomm = 1 << 7,
+		AdapterVendorIntel = 1 << 8,
+		AdapterVendorSamsungAMD = 1 << 9,
+		AdapterVendorMicrosoft = 1 << 10,
+	};
+	constexpr std::size_t AdapterVendorsCount = 11;
+	using AdapterVendors = std::uint32_t;
+
 	enum class BufferType
 	{
 		Constant = 0,
@@ -45,36 +75,6 @@ namespace Ak
 		EndEnum
 	};
 	constexpr std::size_t CullModeCount = static_cast<std::size_t>(CullMode::EndEnum);
-
-	enum class PhysicalDeviceType
-	{
-		Any = 0,
-		Other,
-		CPU,
-		Virtual,
-		Integrated,
-		Discrete,
-
-		EndEnum
-	};
-	constexpr std::size_t PhysicalDeviceTypeCount = static_cast<std::size_t>(PhysicalDeviceType::EndEnum);
-
-	enum PhysicalDeviceVendorBits
-	{
-		PhysicalDeviceVendorAny = 1 << 0,
-		PhysicalDeviceVendorAmd = 1 << 1,
-		PhysicalDeviceVendorMesa = 1 << 2,
-		PhysicalDeviceVendorImgTec = 1 << 3,
-		PhysicalDeviceVendorNvidia = 1 << 4,
-		PhysicalDeviceVendorArm = 1 << 5,
-		PhysicalDeviceVendorBroadcom = 1 << 6,
-		PhysicalDeviceVendorQualcomm = 1 << 7,
-		PhysicalDeviceVendorIntel = 1 << 8,
-		PhysicalDeviceVendorSamsungAMD = 1 << 9,
-		PhysicalDeviceVendorMicrosoft = 1 << 10,
-	};
-	constexpr std::size_t PhysicalDeviceVendorsCount = 11;
-	using PhysicalDeviceVendors = std::uint32_t;
 
 	enum class RenderMode
 	{

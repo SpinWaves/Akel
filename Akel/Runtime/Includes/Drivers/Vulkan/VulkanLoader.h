@@ -13,11 +13,11 @@ namespace Ak
 	class AK_VULKAN_API VulkanLoader
 	{
 		public:
-			VulkanLoader(class VulkanRenderer& renderer);
+			VulkanLoader(class VulkanInstance& instance);
 			~VulkanLoader();
 
 		private:
-			void LoadGlobal(class VulkanRenderer& renderer);
+			void LoadGlobal(class VulkanInstance& instance);
 
 		private:
 			LibModule m_vulkan_lib = NullModule;

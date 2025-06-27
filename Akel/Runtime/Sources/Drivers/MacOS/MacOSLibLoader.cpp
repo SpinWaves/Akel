@@ -13,7 +13,7 @@ namespace Ak
 		void* ptr = dlsym(module, symbol);
 		if(ptr == nullptr)
 		{
-			Error("MacOS Library loader : could not load '%' symbol", symbol);
+			Error("MacOS Library loader: could not load '%' symbol", symbol);
 			return nullptr;
 		}
 		LibFunc func;
@@ -28,7 +28,7 @@ namespace Ak
 		module = dlopen(path.string().data(), RTLD_LAZY | RTLD_GLOBAL);
 		if(module == NullModule)
 		{
-			Error("MacOS Library loader : could not load %", path);
+			Error("MacOS Library loader: could not load %", path);
 			return NullModule;
 		}
 		return module;

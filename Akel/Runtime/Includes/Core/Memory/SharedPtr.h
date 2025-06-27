@@ -8,21 +8,43 @@
 
 namespace Ak
 {
+	struct RefCounter
+	{
+		std::uint32_t count = 0;
+		std::uint32_t weaks = 0;
+	};
+
 	template <typename T>
 	class WeakPtr;
 
+	class SharedPtrBase
+	{
+		protected:
+			SharedPtrBase() = default;
+			SharedPtrBase(RefCounter* ref) : p_ref(ref) {}
+			SharedPtrBase(const SharedPtrBase& other) : p_ref(other.p_ref) {}
+
+			RefCounter* p_ref = nullptr;
+	};
+
 	template <typename T>
-	class SharedPtr
+	class SharedPtr : public SharedPtrBase
 	{
 		public:
-			explicit SharedPtr(T* ptr = nullptr) noexcept;
-			SharedPtr(std::nullptr_t) noexcept : m_ref(nullptr), m_ptr(nullptr) {}
-			SharedPtr(const SharedPtr& ptr) noexcept;
-			SharedPtr(SharedPtr&& ptr) noexcept;
-			explicit SharedPtr(const WeakPtr<T>& weak) noexcept;
+			template <typename Y>
+			explicit SharedPtr(Y* ptr = nullptr) noexcept;
+			SharedPtr(std::nullptr_t) noexcept : p_ptr(nullptr) {}
+			template <typename Y>
+			SharedPtr(const SharedPtr<Y>& ptr) noexcept;
+			template <typename Y>
+			SharedPtr(SharedPtr<Y>&& ptr) noexcept;
+			template <typename Y>
+			explicit SharedPtr(const WeakPtr<Y>& weak) noexcept;
 
-			inline SharedPtr operator=(SharedPtr ptr) noexcept;
-			inline SharedPtr operator=(T* ptr) noexcept;
+			template <typename Y>
+			inline SharedPtr operator=(SharedPtr<Y> ptr) noexcept;
+			template <typename Y>
+			inline SharedPtr operator=(Y* ptr) noexcept;
 
 			inline T& operator*() const noexcept;
 			inline T* operator->() const noexcept;
@@ -33,21 +55,12 @@ namespace Ak
 			inline void Reset() noexcept;
 			inline T* Get() const noexcept;
 
-			inline void Swap(const SharedPtr& ptr) noexcept;
+			inline void Swap(SharedPtr& ptr) noexcept;
 
 			~SharedPtr() noexcept;
 
 		private:
-			struct RefCounter
-			{
-				T* ptr = nullptr;
-				std::uint32_t count = 0;
-				std::uint32_t weaks = 0;
-			};
-
-		private:
-			RefCounter* m_ref = nullptr;
-			T* m_ptr = nullptr;
+			T* p_ptr = nullptr;
 	};
 
 	template <typename T, typename ... Args>

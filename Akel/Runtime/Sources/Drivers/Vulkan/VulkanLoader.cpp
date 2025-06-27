@@ -4,12 +4,11 @@
 
 #include <Drivers/Vulkan/VulkanLoader.h>
 #include <Drivers/Vulkan/VulkanInstance.h>
-#include <Drivers/Vulkan/VulkanRenderer.h>
 #include <Core/OS/OSInstance.h>
 
 namespace Ak
 {
-	VulkanLoader::VulkanLoader(VulkanRenderer& renderer)
+	VulkanLoader::VulkanLoader(VulkanInstance& instance)
 	{
 		#if defined(MLX_PLAT_WINDOWS)
 			std::array libnames{
@@ -36,8 +35,8 @@ namespace Ak
 			m_vulkan_lib = OSInstance::GetLibLoader().Load(libname);
 			if(m_vulkan_lib != NullModule)
 			{
-				renderer.vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(OSInstance::GetLibLoader().GetSymbol(m_vulkan_lib, "vkGetInstanceProcAddr"));
-				if(renderer.vkGetInstanceProcAddr == nullptr)
+				instance.vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(OSInstance::GetLibLoader().GetSymbol(m_vulkan_lib, "vkGetInstanceProcAddr"));
+				if(instance.vkGetInstanceProcAddr == nullptr)
 				{
 					OSInstance::GetLibLoader().UnloadLib(m_vulkan_lib);
 					m_vulkan_lib = NullModule;
@@ -49,12 +48,12 @@ namespace Ak
 		if(m_vulkan_lib == NullModule)
 			FatalError("Vulkan loader: failed to load libvulkan");
 		DebugLog("Vulkan loader: loaded vulkan lib");
-		LoadGlobal(renderer);
+		LoadGlobal(instance);
 	}
 
-	void VulkanLoader::LoadGlobal(VulkanRenderer& renderer)
+	void VulkanLoader::LoadGlobal(VulkanInstance& instance)
 	{
-		#define AK_VULKAN_GLOBAL_FUNCTION(fn) renderer.fn = reinterpret_cast<PFN_##fn>(renderer.vkGetInstanceProcAddr(nullptr, #fn));
+		#define AK_VULKAN_GLOBAL_FUNCTION(fn) instance.fn = reinterpret_cast<PFN_##fn>(instance.vkGetInstanceProcAddr(nullptr, #fn));
 			#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
 		#undef AK_VULKAN_GLOBAL_FUNCTION
 		DebugLog("Vulkan loader: loaded global functions");

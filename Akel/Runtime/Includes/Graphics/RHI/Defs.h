@@ -12,9 +12,16 @@
 
 namespace Ak
 {
+	struct AdapterMinimalSpecs
+	{
+		AdapterType type = AdapterType::Any;
+		AdapterVendors vendors = AdapterVendorAny;
+		std::size_t memory = 128; // Mo
+	};
+
 	using DeviceSize = std::uint64_t;
 
-	constexpr std::size_t MacRenderTargets = 8;
+	constexpr std::size_t MAX_RENDER_TARGETS = 8;
 
 	struct BufferDescription
 	{
@@ -38,15 +45,16 @@ namespace Ak
 
 	struct GraphicPipelineDescription
 	{
-		std::vector<NonOwningPtr<class RHIShader>> shaders;
-		std::array<NonOwningPtr<class RHITexture>, MacRenderTargets> render_targets;
+		std::array<NonOwningPtr<class RHITexture>, MAX_RENDER_TARGETS> render_targets;
+		NonOwningPtr<class RHIShader> vertex_shader;
+		NonOwningPtr<class RHIShader> fragment_shader;
 		Vec4f clear_color;
-		const char* debug_name = nullptr;
+		std::string_view debug_name;
 		NonOwningPtr<class RHITexture> depth_target;
 		CullMode cull_mode = CullMode::Back;
 		RenderMode render_mode = RenderMode::Fill;
 		std::size_t line_width = 1;
-		bool clear_target = false;
+		bool clear_targets = false;
 	};
 
 	struct ShaderDescription
@@ -59,13 +67,6 @@ namespace Ak
 
 	struct FrameBufferDescription
 	{
-	};
-
-	struct PhysicalDeviceMinimalSpecs
-	{
-		PhysicalDeviceType type = PhysicalDeviceType::Any;
-		PhysicalDeviceVendors vendors = PhysicalDeviceVendorAny;
-		std::size_t memory = 128; // Mo
 	};
 }
 

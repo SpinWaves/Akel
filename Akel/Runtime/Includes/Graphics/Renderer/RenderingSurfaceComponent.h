@@ -2,8 +2,8 @@
 // This file is a part of Akel
 // For conditions of distribution and use, see copyright notice in LICENSE
 
-#ifndef AK_GRAPHICS_RENDERING_SURFACE_H
-#define AK_GRAPHICS_RENDERING_SURFACE_H
+#ifndef AK_RENDERER_RENDERING_SURFACE_H
+#define AK_RENDERER_RENDERING_SURFACE_H
 
 #include <Graphics/PreCompiled.h>
 #include <Core/ComponentBase.h>

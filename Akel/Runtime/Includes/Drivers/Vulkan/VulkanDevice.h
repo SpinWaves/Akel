@@ -12,23 +12,21 @@
 
 namespace Ak
 {
-	[[nodiscard]]
-	std::vector<VulkanPhysicalDeviceVendorID> ConvertPhysicalDeviceVendorsToVulkanPhysicalDeviceVendorIDs(PhysicalDeviceVendors vendors) noexcept;
-
 	class AK_VULKAN_API VulkanDevice : public RHIDevice
 	{
 		public:
-			VulkanDevice(const PhysicalDeviceMinimalSpecs& specs);
+			VulkanDevice(class RHIInstance& instance, SharedPtr<class RHIAdapter> adapter);
 
-			NonOwningPtr<class RHIBuffer> CreateBuffer(BufferDescription description) override;
-			NonOwningPtr<class RHITexture> CreateTexture(TextureDescription description) override;
-			NonOwningPtr<class RHIRenderSurface> CreateRenderSurface() noexcept override;
-			NonOwningPtr<class RHIGraphicPipeline> CreateGraphicPipeline() noexcept override;
+			SharedPtr<class RHIBuffer> CreateBuffer(BufferDescription description) override;
+			SharedPtr<class RHITexture> CreateTexture(TextureDescription description) override;
+			SharedPtr<class RHISurface> CreateSurface() noexcept override;
+			SharedPtr<class RHIGraphicPipeline> CreateGraphicPipeline(GraphicPipelineDescription description) noexcept override;
+			SharedPtr<class RHICommandEncoder> CreateCommandBuffer() noexcept override;
+			SharedPtr<class RHICommandBuffer> CreateCommandBuffer(class RHICommandEncoder& encoder) noexcept override;
 
 			void WaitForIdle() override;
 
 			inline operator VkDevice() const noexcept { return m_device; }
-			inline VkPhysicalDevice GetPhysicalDevice() const noexcept { return m_physical_device; }
 
 			#define AK_VULKAN_DEVICE_FUNCTION(fn) PFN_##fn fn = nullptr;
 				#include <Drivers/Vulkan/VulkanDevicePrototypes.h>
@@ -37,13 +35,7 @@ namespace Ak
 			~VulkanDevice() override;
 
 		private:
-			VkPhysicalDevice ChoosePhysicalDevice(const PhysicalDeviceMinimalSpecs& specs) noexcept;
-
-		private:
 			VkDevice m_device = VK_NULL_HANDLE;
-			VkPhysicalDevice m_physical_device = VK_NULL_HANDLE;
-			VkPhysicalDeviceProperties m_properties;
-			VkPhysicalDeviceMemoryProperties m_memory_properties;
 	};
 }
 

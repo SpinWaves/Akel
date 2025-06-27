@@ -10,43 +10,46 @@
 namespace Ak
 {
 	template <typename T>
-	SharedPtr<T>::SharedPtr(T* ptr) noexcept : m_ptr(ptr), m_ref(MemAlloc<RefCounter>())
+	template <typename Y>
+	SharedPtr<T>::SharedPtr(Y* ptr) noexcept : SharedPtrBase(MemAlloc<RefCounter>()), p_ptr(ptr)
 	{
-		m_ref->ptr = ptr;
 		if(ptr)
-			m_ref->count++;
+			p_ref->count++;
 	}
 
 	template <typename T>
-	SharedPtr<T>::SharedPtr(const SharedPtr& ptr) noexcept : m_ref(ptr.m_ref), m_ptr(ptr.m_ptr)
+	template <typename Y>
+	SharedPtr<T>::SharedPtr(const SharedPtr<Y>& ptr) noexcept : SharedPtrBase(ptr), p_ptr(ptr.Get())
 	{
-		if(m_ref)
-			m_ref->count++;
+		if(p_ref)
+			p_ref->count++;
 	}
 
 	template <typename T>
-	SharedPtr<T>::SharedPtr(SharedPtr&& ptr) noexcept : m_ptr(ptr.m_ptr), m_ref(ptr.m_ref)
+	template <typename Y>
+	SharedPtr<T>::SharedPtr(SharedPtr<Y>&& ptr) noexcept : SharedPtrBase(ptr), p_ptr(ptr.Get())
 	{
-		ptr.m_ptr = nullptr;
-		ptr.m_ref = nullptr;
 	}
 
 	template <typename T>
-	SharedPtr<T>::SharedPtr(const WeakPtr<T>& weak) noexcept : m_ptr(weak.m_ptr), m_ref(weak.m_ref)
+	template <typename Y>
+	SharedPtr<T>::SharedPtr(const WeakPtr<Y>& weak) noexcept : SharedPtrBase(weak.p_ref), p_ptr(weak.p_ptr)
 	{
-		if(m_ref)
-			m_ref->count++;
+		if(p_ref)
+			p_ref->count++;
 	}
 
 	template <typename T>
-	SharedPtr<T> SharedPtr<T>::operator=(SharedPtr ptr) noexcept
+	template <typename Y>
+	SharedPtr<T> SharedPtr<T>::operator=(SharedPtr<Y> ptr) noexcept
 	{
 		ptr.Swap(*this);
 		return *this;
 	}
 
 	template <typename T>
-	SharedPtr<T> SharedPtr<T>::operator=(T* ptr) noexcept
+	template <typename Y>
+	SharedPtr<T> SharedPtr<T>::operator=(Y* ptr) noexcept
 	{
 		SharedPtr<T> tmp(ptr);
 		tmp.Swap(*this);
@@ -54,66 +57,65 @@ namespace Ak
 	}
 
 	template <typename T>
-	void SharedPtr<T>::Swap(const SharedPtr<T>& ptr) noexcept
+	void SharedPtr<T>::Swap(SharedPtr<T>& ptr) noexcept
 	{
-		std::swap(m_ptr, ptr.m_ptr);
-		std::swap(m_ref, ptr.m_ref);
+		std::swap(p_ptr, ptr.p_ptr);
+		std::swap(p_ref, ptr.p_ref);
 	}
 
 	template <typename T>
 	T& SharedPtr<T>::operator*() const noexcept
 	{
-		return *m_ptr;
+		return *p_ptr;
 	}
 
 	template <typename T>
 	T* SharedPtr<T>::operator->() const noexcept
 	{
-		return m_ptr;
+		return p_ptr;
 	}
 
 	template <typename T>
 	SharedPtr<T>::operator bool() const noexcept
 	{
-		return m_ptr != nullptr;
+		return p_ptr != nullptr;
 	}
 
 	template <typename T>
 	std::size_t SharedPtr<T>::UseCount() const noexcept
 	{
-		return (m_ref) ? m_ref->count : 0;
+		return (p_ref) ? p_ref->count : 0;
 	}
 
 	template <typename T>
 	void SharedPtr<T>::Reset() noexcept
 	{
-		m_ptr = nullptr;
-		if(m_ref)
-			m_ref->count--;
-		if(m_ref->count <= 0 && m_ref->weaks <= 0)
+		if(p_ref)
+			p_ref->count--;
+		if(p_ref->count <= 0 && p_ref->weaks <= 0)
 		{
-			MemFree(m_ref->ptr);
-			m_ref = nullptr;
+			MemFree(p_ptr);
+			p_ref = nullptr;
 		}
+		p_ptr = nullptr;
 	}
 
 	template <typename T>
 	T* SharedPtr<T>::Get() const noexcept
 	{
-		return m_ptr;
+		return p_ptr;
 	}
 
 	template <typename T>
 	SharedPtr<T>::~SharedPtr() noexcept
 	{
-		if(m_ptr)
+		if(p_ptr)
 			Reset();
 	}
 
 	template <typename T, typename ... Args>
 	std::enable_if_t<!std::is_array<T>::value, SharedPtr<T>> MakeShared(Args&& ... args) noexcept
 	{
-		// TODO : do memory contiguous pointer and ref counter allocations
 		return SharedPtr<T>(MemAlloc<T>(std::forward<Args>(args)...));
 	}
 
