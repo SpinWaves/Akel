@@ -17,6 +17,10 @@ namespace Ak
 		public:
 			RenderCore(UniquePtr<RHIInstance> instance);
 
+			inline RHIInstance& GetInstance() const noexcept { return *p_instance; }
+			inline RHIDevice& GetDevice() const noexcept { return *p_device; }
+			inline RHIAdapter& GetAdapter() const noexcept { return *p_adapter; }
+
 			~RenderCore();
 
 		private:

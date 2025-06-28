@@ -6,11 +6,15 @@
 #include <Platform/WindowComponent.h>
 #include <Graphics/GraphicsModule.h>
 #include <Graphics/RHI/RHIDevice.h>
+#include <Graphics/Renderer/RenderCore.h>
+#include <Graphics/GraphicsModule.h>
 
 namespace Ak
 {
-	RenderingSurfaceComponent::RenderingSurfaceComponent(WindowComponent& window, std::uint32_t device) : ComponentBase("__RenderingSurface"), m_window(window), m_device(device)
+	RenderingSurfaceComponent::RenderingSurfaceComponent(WindowComponent& window) : ComponentBase("__RenderingSurface"), m_window(window)
 	{
+		p_surface = GraphicsModule::Get().GetRenderCore().GetDevice().CreateSurface(m_window);
+		p_swapchain = GraphicsModule::Get().GetRenderCore().GetDevice().CreateSwapchain(p_surface, Vec2ui(window.GetSize()), false, true);
 	}
 
 	void RenderingSurfaceComponent::OnAttach() noexcept

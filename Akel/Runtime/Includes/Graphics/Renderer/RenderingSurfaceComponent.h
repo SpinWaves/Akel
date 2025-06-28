@@ -14,7 +14,7 @@ namespace Ak
 	class AK_GRAPHICS_API RenderingSurfaceComponent : public ComponentBase
 	{
 		public:
-			RenderingSurfaceComponent(class WindowComponent& window, std::uint32_t device = 0);
+			RenderingSurfaceComponent(class WindowComponent& window);
 
 			void OnAttach() noexcept override;
 			void OnQuit() noexcept override;
@@ -22,9 +22,9 @@ namespace Ak
 			~RenderingSurfaceComponent() = default;
 
 		private:
-			NonOwningPtr<class RHIRenderSurface> p_rendering_surface = nullptr;
+			SharedPtr<class RHISurface> p_surface = nullptr;
+			SharedPtr<class RHISwapchain> p_swapchain = nullptr;
 			class WindowComponent& m_window;
-			std::uint32_t m_device;
 	};
 }
 

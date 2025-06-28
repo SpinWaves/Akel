@@ -9,6 +9,7 @@
 #include <Graphics/RHI/RHIAdapter.h>
 #include <Graphics/RHI/Enums.h>
 #include <Graphics/RHI/Defs.h>
+#include <Maths/Vec2.h>
 
 namespace Ak
 {
@@ -19,7 +20,8 @@ namespace Ak
 
 			virtual SharedPtr<class RHIBuffer> CreateBuffer(BufferDescription description) = 0;
 			virtual SharedPtr<class RHITexture> CreateTexture(TextureDescription description) = 0;
-			virtual SharedPtr<class RHISurface> CreateSurface() noexcept = 0;
+			virtual SharedPtr<class RHISurface> CreateSurface(class WindowComponent& window) noexcept = 0;
+			virtual SharedPtr<class RHISwapchain> CreateSwapchain(SharedPtr<class RHISurface> surface, Vec2ui extent, bool vsync, bool priorise_srgb) noexcept = 0;
 			virtual SharedPtr<class RHIGraphicPipeline> CreateGraphicPipeline(GraphicPipelineDescription description) noexcept = 0;
 			virtual SharedPtr<class RHICommandEncoder> CreateCommandBuffer() noexcept = 0;
 			virtual SharedPtr<class RHICommandBuffer> CreateCommandBuffer(class RHICommandEncoder& encoder) noexcept = 0;
