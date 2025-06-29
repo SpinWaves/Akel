@@ -20,7 +20,6 @@ namespace Ak
 
 			virtual SharedPtr<class RHIBuffer> CreateBuffer(BufferDescription description) = 0;
 			virtual SharedPtr<class RHITexture> CreateTexture(TextureDescription description) = 0;
-			virtual SharedPtr<class RHISurface> CreateSurface(class WindowComponent& window) noexcept = 0;
 			virtual SharedPtr<class RHISwapchain> CreateSwapchain(SharedPtr<class RHISurface> surface, Vec2ui extent, bool vsync, bool priorise_srgb) noexcept = 0;
 			virtual SharedPtr<class RHIGraphicPipeline> CreateGraphicPipeline(GraphicPipelineDescription description) noexcept = 0;
 			virtual SharedPtr<class RHICommandEncoder> CreateCommandBuffer() noexcept = 0;

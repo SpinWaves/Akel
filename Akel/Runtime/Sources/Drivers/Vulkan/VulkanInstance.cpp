@@ -5,6 +5,7 @@
 #include <Drivers/Vulkan/PreCompiled.h>
 #include <Drivers/Vulkan/VulkanInstance.h>
 #include <Drivers/Vulkan/VulkanAdapter.h>
+#include <Drivers/Vulkan/VulkanSurface.h>
 #include <Core/Logs.h>
 #include <Config.h>
 
@@ -231,6 +232,11 @@ namespace Ak
 		}
 
 		return nullptr;
+	}
+
+	SharedPtr<class RHISurface> VulkanInstance::CreateSurface(class WindowComponent& window) noexcept
+	{
+		return MakeShared<VulkanSurface>(*this, window);
 	}
 
 	VulkanInstance::~VulkanInstance()

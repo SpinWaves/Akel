@@ -12,11 +12,9 @@ namespace Ak
 	class AK_GRAPHICS_API RHISurface
 	{
 		public:
-			RHISurface(class WindowComponent& window) {}
+			RHISurface(const class WindowComponent& window) {}
 
 			virtual ~RHISurface() = default;
-
-		private:
 	};
 }
 

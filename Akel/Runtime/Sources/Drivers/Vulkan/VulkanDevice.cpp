@@ -5,10 +5,12 @@
 #include <Drivers/Vulkan/Enums.h>
 #include <Drivers/Vulkan/VulkanDevice.h>
 #include <Drivers/Vulkan/VulkanInstance.h>
+#include <Drivers/Vulkan/VulkanSwapchain.h>
+#include <Drivers/Vulkan/VulkanAdapter.h>
 
 namespace Ak
 {
-	VulkanDevice::VulkanDevice(class RHIInstance& instance, SharedPtr<class RHIAdapter> adapter) : RHIDevice(instance, adapter)
+	VulkanDevice::VulkanDevice(VulkanInstance& instance, SharedPtr<VulkanAdapter> adapter) : RHIDevice(instance, adapter), p_adapter(adapter), m_instance(instance)
 	{
 	}
 
@@ -22,9 +24,9 @@ namespace Ak
 		return nullptr;
 	}
 
-	SharedPtr<class RHISurface> VulkanDevice::CreateSurface() noexcept
+	SharedPtr<class RHISwapchain> VulkanDevice::CreateSwapchain(SharedPtr<class RHISurface> surface, Vec2ui extent, bool vsync, bool priorise_srgb) noexcept
 	{
-		return nullptr;
+		return MakeShared<VulkanSwapchain>(*this, surface, extent, vsync, priorise_srgb);
 	}
 
 	SharedPtr<class RHIGraphicPipeline> VulkanDevice::CreateGraphicPipeline(GraphicPipelineDescription description) noexcept

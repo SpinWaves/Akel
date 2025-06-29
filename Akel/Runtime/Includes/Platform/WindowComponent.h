@@ -9,6 +9,7 @@
 #include <Core/ComponentBase.h>
 #include <Maths/Vec2.h>
 #include <Platform/SI/Window.h>
+#include <Utils/NonOwningPtr.h>
 
 namespace Ak
 {
@@ -38,11 +39,12 @@ namespace Ak
 			AK_FORCEINLINE const Vec2i& GetSize() const noexcept;
 			AK_FORCEINLINE const Vec2i& GetMinSize() const noexcept;
 			AK_FORCEINLINE const Vec2i& GetMaxSize() const noexcept;
+			AK_FORCEINLINE NonOwningPtr<SIWindow> GetRawWindow() const noexcept { return p_backend_window.Get(); }
 
 			~WindowComponent() = default;
 
 		private:
-			SIWindow* m_backend_window = nullptr;
+			UniquePtr<SIWindow> p_backend_window = nullptr;
 	};
 }
 

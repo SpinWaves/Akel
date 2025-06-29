@@ -16,54 +16,53 @@ namespace Ak
 	constexpr UniquePtr<T>::UniquePtr(std::nullptr_t) noexcept {}
 	
 	template <typename T>
-	UniquePtr<T>::UniquePtr(T* ptr) noexcept
+	template <typename Y>
+	UniquePtr<T>::UniquePtr(Y* ptr) noexcept
 	{
-		if(m_ptr != nullptr)
-			MemFree(m_ptr);
-		m_ptr = ptr;
+		if(p_ptr != nullptr)
+			MemFree(p_ptr);
+		p_ptr = ptr;
 	}
 
 	template <typename T>
-	UniquePtr<T>::UniquePtr(UniquePtr&& ptr) noexcept
+	template <typename Y>
+	UniquePtr<T>::UniquePtr(UniquePtr<Y>&& ptr) noexcept
 	{
-		if(m_ptr != nullptr)
-			MemFree(m_ptr);
-		m_ptr = ptr.m_ptr;
-		ptr.m_ptr = nullptr;
+		Reset(ptr.Release());
 	}
 
 	template <typename T>
 	T* UniquePtr<T>::Get() const noexcept
 	{
-		return m_ptr;
+		return p_ptr;
 	}
 
 	template <typename T>
 	void UniquePtr<T>::Swap(const UniquePtr<T>& ptr) noexcept
 	{
-		std::swap(m_ptr, ptr.m_ptr);
+		std::swap(p_ptr, ptr.p_ptr);
 	}
 
 	template <typename T>
 	void UniquePtr<T>::Reset(T* ptr) noexcept
 	{
-		if(m_ptr != nullptr)
-			MemFree(m_ptr);
-		m_ptr = ptr;
+		if(p_ptr != nullptr)
+			MemFree(p_ptr);
+		p_ptr = ptr;
 	}
 
 	template <typename T>
 	T* UniquePtr<T>::Release() noexcept
 	{
-		T* temp = m_ptr;
-		m_ptr = nullptr;
+		T* temp = p_ptr;
+		p_ptr = nullptr;
 		return temp;
 	}
 
 	template <typename T>
 	UniquePtr<T>::operator bool() const noexcept
 	{
-		return m_ptr != nullptr;
+		return p_ptr != nullptr;
 	}
 
 	template <typename T>
@@ -82,20 +81,20 @@ namespace Ak
 	template <typename T>
 	T* UniquePtr<T>::operator->() const noexcept
 	{
-		return m_ptr;
+		return p_ptr;
 	}
 	
 	template <typename T>
 	T& UniquePtr<T>::operator*() const noexcept
 	{
-		return *m_ptr;
+		return *p_ptr;
 	}
 
 	template <typename T>
 	UniquePtr<T>::~UniquePtr()
 	{
-		if(m_ptr != nullptr)
-			MemFree(m_ptr);
+		if(p_ptr != nullptr)
+			MemFree(p_ptr);
 	}
 
 	template <typename T, typename ... Args>

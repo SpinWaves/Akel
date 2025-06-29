@@ -16,6 +16,7 @@ namespace Ak
 			RHIInstance() = default;
 
 			virtual SharedPtr<class RHIAdapter> PickAdapter(AdapterMinimalSpecs specs) = 0;
+			virtual SharedPtr<class RHISurface> CreateSurface(class WindowComponent& window) noexcept = 0;
 
 			virtual ~RHIInstance() = default;
 	};

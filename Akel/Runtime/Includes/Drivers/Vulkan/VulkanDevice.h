@@ -15,18 +15,20 @@ namespace Ak
 	class AK_VULKAN_API VulkanDevice : public RHIDevice
 	{
 		public:
-			VulkanDevice(class RHIInstance& instance, SharedPtr<class RHIAdapter> adapter);
+			VulkanDevice(class VulkanInstance& instance, SharedPtr<class VulkanAdapter> adapter);
 
 			SharedPtr<class RHIBuffer> CreateBuffer(BufferDescription description) override;
 			SharedPtr<class RHITexture> CreateTexture(TextureDescription description) override;
-			SharedPtr<class RHISurface> CreateSurface() noexcept override;
+			SharedPtr<class RHISwapchain> CreateSwapchain(SharedPtr<class RHISurface> surface, Vec2ui extent, bool vsync, bool priorise_srgb) noexcept override;
 			SharedPtr<class RHIGraphicPipeline> CreateGraphicPipeline(GraphicPipelineDescription description) noexcept override;
 			SharedPtr<class RHICommandEncoder> CreateCommandBuffer() noexcept override;
 			SharedPtr<class RHICommandBuffer> CreateCommandBuffer(class RHICommandEncoder& encoder) noexcept override;
 
 			void WaitForIdle() override;
 
-			inline operator VkDevice() const noexcept { return m_device; }
+			inline VkDevice Get() const noexcept { return m_device; }
+			inline class VulkanInstance& GetInstance() const noexcept { return m_instance; }
+			inline SharedPtr<class VulkanAdapter> GetAdapter() const noexcept { return p_adapter; }
 
 			#define AK_VULKAN_DEVICE_FUNCTION(fn) PFN_##fn fn = nullptr;
 				#include <Drivers/Vulkan/VulkanDevicePrototypes.h>
@@ -35,6 +37,8 @@ namespace Ak
 			~VulkanDevice() override;
 
 		private:
+			SharedPtr<class VulkanAdapter> p_adapter;
+			class VulkanInstance& m_instance;
 			VkDevice m_device = VK_NULL_HANDLE;
 	};
 }

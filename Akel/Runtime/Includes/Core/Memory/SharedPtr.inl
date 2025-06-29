@@ -92,7 +92,7 @@ namespace Ak
 	{
 		if(p_ref)
 			p_ref->count--;
-		if(p_ref->count <= 0 && p_ref->weaks <= 0)
+		if(p_ref->count <= 0)
 		{
 			MemFree(p_ptr);
 			p_ref = nullptr;

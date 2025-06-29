@@ -14,9 +14,12 @@ namespace Ak
 		public:
 			constexpr UniquePtr() noexcept;
 			constexpr UniquePtr(std::nullptr_t) noexcept;
-			explicit UniquePtr(T* ptr) noexcept;
-			UniquePtr(UniquePtr&& ptr) noexcept;
-			UniquePtr(const UniquePtr& ptr) = delete;
+			template <typename Y>
+			explicit UniquePtr(Y* ptr) noexcept;
+			template <typename Y>
+			UniquePtr(UniquePtr<Y>&& ptr) noexcept;
+			template <typename Y>
+			UniquePtr(const UniquePtr<Y>& ptr) = delete;
 
 			inline T* Get() const noexcept;
 
@@ -38,7 +41,7 @@ namespace Ak
 			~UniquePtr();
 
 		private:
-			T* m_ptr = nullptr;
+			T* p_ptr = nullptr;
 	};
 
 	template <typename T, typename ... Args>

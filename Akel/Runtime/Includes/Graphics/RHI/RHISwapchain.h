@@ -13,11 +13,8 @@ namespace Ak
 	class AK_GRAPHICS_API RHISwapchain
 	{
 		public:
-			RHISwapchain(class RHIAdapter& adapter, class RHISurface& surface, Vec2ui extent, bool vsync, bool priorise_srgb) {}
-
+			RHISwapchain() = default;
 			virtual ~RHISwapchain() = default;
-
-		private:
 	};
 }
 

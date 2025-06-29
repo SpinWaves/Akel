@@ -25,6 +25,7 @@ namespace Ak
 			inline operator VkInstance() const noexcept { return m_instance; }
 
 			SharedPtr<class RHIAdapter> PickAdapter(AdapterMinimalSpecs specs) override;
+			SharedPtr<class RHISurface> CreateSurface(class WindowComponent& window) noexcept override;
 
 			#define AK_VULKAN_GLOBAL_FUNCTION(fn) PFN_##fn fn = nullptr;
 				#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>

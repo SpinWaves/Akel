@@ -21,8 +21,16 @@ namespace Ak
 	{
 		protected:
 			SharedPtrBase() = default;
-			SharedPtrBase(RefCounter* ref) : p_ref(ref) {}
-			SharedPtrBase(const SharedPtrBase& other) : p_ref(other.p_ref) {}
+			SharedPtrBase(RefCounter* ref) : p_ref(ref)
+			{
+				if(p_ref)
+					p_ref->count++;
+			}
+			SharedPtrBase(const SharedPtrBase& other) : p_ref(other.p_ref)
+			{
+				if(p_ref)
+					p_ref->count++;
+			}
 
 			RefCounter* p_ref = nullptr;
 	};
