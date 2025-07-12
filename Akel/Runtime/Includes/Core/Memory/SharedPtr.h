@@ -19,6 +19,9 @@ namespace Ak
 
 	class SharedPtrBase
 	{
+		template <typename T>
+		friend class WeakPtr;
+
 		protected:
 			SharedPtrBase() = default;
 			SharedPtrBase(RefCounter* ref) : p_ref(ref)
@@ -38,6 +41,8 @@ namespace Ak
 	template <typename T>
 	class SharedPtr : public SharedPtrBase
 	{
+		friend class WeakPtr<T>;
+
 		public:
 			template <typename Y>
 			explicit SharedPtr(Y* ptr = nullptr) noexcept;
@@ -77,9 +82,9 @@ namespace Ak
 	template <typename T>
 	class EnableSharedFromThis
 	{
-		public:
-			EnableSharedFromThis() = default;
+		friend class SharedPtr<T>;
 
+		public:
 			inline SharedPtr<T> SharedFromThis();
 			inline SharedPtr<const T> SharedFromThis() const;
 
@@ -87,6 +92,15 @@ namespace Ak
 			inline WeakPtr<const T> WeakFromThis() const;
 
 			~EnableSharedFromThis() = default;
+
+		protected:
+			constexpr EnableSharedFromThis() = default;
+			EnableSharedFromThis(const EnableSharedFromThis&) = default;
+
+			EnableSharedFromThis& operator=(const EnableSharedFromThis&) noexcept;
+
+		private:
+			void AcceptOwner(const SharedPtr<T>& ptr) const;
 
 		private:
 			mutable WeakPtr<T> m_weak_this;

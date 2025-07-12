@@ -22,7 +22,7 @@ namespace Ak
 			virtual SharedPtr<class RHITexture> CreateTexture(TextureDescription description) = 0;
 			virtual SharedPtr<class RHISwapchain> CreateSwapchain(SharedPtr<class RHISurface> surface, Vec2ui extent, bool vsync, bool priorise_srgb) noexcept = 0;
 			virtual SharedPtr<class RHIGraphicPipeline> CreateGraphicPipeline(GraphicPipelineDescription description) noexcept = 0;
-			virtual SharedPtr<class RHICommandEncoder> CreateCommandBuffer() noexcept = 0;
+			virtual SharedPtr<class RHICommandEncoder> CreateCommandEncoder() noexcept = 0;
 			virtual SharedPtr<class RHICommandBuffer> CreateCommandBuffer(class RHICommandEncoder& encoder) noexcept = 0;
 
 			virtual void WaitForIdle() = 0;

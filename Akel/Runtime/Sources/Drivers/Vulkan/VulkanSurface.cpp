@@ -12,12 +12,12 @@
 
 namespace Ak
 {
-	VulkanSurface::VulkanSurface(VulkanInstance& instance, const WindowComponent& window) : RHISurface(window), m_instance(instance)
+	VulkanSurface::VulkanSurface(VulkanInstance& instance, NonOwningPtr<class SIWindow> window) : RHISurface(window), m_instance(instance)
 	{
 		#ifndef VK_KHR_surface
 			FatalError("Vulkan: surfaces support is not present");
 		#else
-			WindowBackend raw_window = window.GetRawWindow()->GetWindowBackend();
+			WindowBackend raw_window = window->GetWindowBackend();
 
 			switch(raw_window.backend_in_use)
 			{

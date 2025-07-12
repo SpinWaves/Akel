@@ -48,6 +48,6 @@ namespace Ak
 
 	SharedPtr<RHIDevice> VulkanAdapter::CreateDevice()
 	{
-		return nullptr;
+		return MakeShared<VulkanDevice>(m_instance, SharedFromThis());
 	}
 }

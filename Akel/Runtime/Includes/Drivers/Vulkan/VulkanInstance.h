@@ -27,6 +27,8 @@ namespace Ak
 			SharedPtr<class RHIAdapter> PickAdapter(AdapterMinimalSpecs specs) override;
 			SharedPtr<class RHISurface> CreateSurface(class WindowComponent& window) noexcept override;
 
+			AK_FORCEINLINE VulkanLoader& GetLoader() noexcept { return m_loader; }
+
 			#define AK_VULKAN_GLOBAL_FUNCTION(fn) PFN_##fn fn = nullptr;
 				#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
 			#undef AK_VULKAN_GLOBAL_FUNCTION

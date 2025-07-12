@@ -20,11 +20,12 @@ namespace Ak
 	void RenderingSurfaceComponent::OnAttach() noexcept
 	{
 		p_surface = GraphicsModule::Get().GetRenderCore().GetInstance().CreateSurface(m_window);
-		//p_swapchain = GraphicsModule::Get().GetRenderCore().GetDevice().CreateSwapchain(p_surface, Vec2ui(window.GetSize()), false, true);
+		p_swapchain = GraphicsModule::Get().GetRenderCore().GetDevice().CreateSwapchain(p_surface, Vec2ui(m_window.GetSize()), false, true);
 	}
 
 	void RenderingSurfaceComponent::OnQuit() noexcept
 	{
 		p_surface.Reset();
+		p_swapchain.Reset();
 	}
 }

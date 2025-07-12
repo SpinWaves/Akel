@@ -29,6 +29,8 @@ namespace Ak
 
 		private:
 			SwapchainSupportDetails QuerySwapchainSupport(SharedPtr<class VulkanSurface> surface);
+			VkSurfaceFormatKHR ChooseSurfaceFormat(SwapchainSupportDetails& details, bool priorise_srgb);
+			VkPresentModeKHR ChoosePresentMode(SwapchainSupportDetails& details, bool try_vsync);
 
 		private:
 			class VulkanDevice& m_device;

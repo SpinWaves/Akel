@@ -15,11 +15,14 @@ namespace Ak
 	{
 		if(ptr)
 			p_ref->count++;
+
+		if constexpr(std::is_base_of_v<EnableSharedFromThis<T>, T>)
+			ptr->AcceptOwner(*this);
 	}
 
 	template <typename T>
 	template <typename Y>
-	SharedPtr<T>::SharedPtr(const SharedPtr<Y>& ptr) noexcept : SharedPtrBase(ptr), p_ptr(ptr.Get())
+	SharedPtr<T>::SharedPtr(const SharedPtr<Y>& ptr) noexcept : SharedPtrBase(ptr), p_ptr(reinterpret_cast<T*>(ptr.Get()))
 	{
 		if(p_ref)
 			p_ref->count++;
@@ -116,7 +119,14 @@ namespace Ak
 	template <typename T, typename ... Args>
 	std::enable_if_t<!std::is_array<T>::value, SharedPtr<T>> MakeShared(Args&& ... args) noexcept
 	{
-		return SharedPtr<T>(MemAlloc<T>(std::forward<Args>(args)...));
+		SharedPtr<T> ptr(MemAlloc<T>(std::forward<Args>(args)...));
+		return ptr;
+	}
+
+	template <typename T>
+	EnableSharedFromThis<T>& EnableSharedFromThis<T>::operator=(const EnableSharedFromThis<T>&) noexcept
+	{
+		return *this;
 	}
 
 	template <typename T>
@@ -141,5 +151,12 @@ namespace Ak
 	WeakPtr<const T> EnableSharedFromThis<T>::WeakFromThis() const
 	{
 		return m_weak_this;
+	}
+
+	template <typename T>
+	void EnableSharedFromThis<T>::AcceptOwner(const SharedPtr<T>& ptr) const
+	{
+		if(m_weak_this.Expired())
+			m_weak_this = ptr;
 	}
 }

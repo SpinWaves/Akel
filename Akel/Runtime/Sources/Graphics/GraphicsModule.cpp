@@ -134,7 +134,7 @@ namespace Ak
 		score = api_scores.Find(driver)->second;
 
 		if(!Application::IsInit())
-			FatalError("GraphicsModule: cannot select renderer driver, Application is not init (wtf what did u do ?)");
+			FatalError("GraphicsModule: cannot select renderer driver, Application is not init (wtf have u done ?)");
 
 		RendererDrivers preffered = Application::Get().GetEngineConfig().preffered_render_api;
 

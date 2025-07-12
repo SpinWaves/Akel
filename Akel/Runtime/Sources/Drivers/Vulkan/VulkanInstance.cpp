@@ -6,6 +6,7 @@
 #include <Drivers/Vulkan/VulkanInstance.h>
 #include <Drivers/Vulkan/VulkanAdapter.h>
 #include <Drivers/Vulkan/VulkanSurface.h>
+#include <Platform/WindowComponent.h>
 #include <Core/Logs.h>
 #include <Config.h>
 
@@ -104,6 +105,7 @@ namespace Ak
 
 		#ifdef VK_USE_PLATFORM_METAL_EXT
 			extensions.push_back(VK_EXT_METAL_SURFACE_EXTENSION_NAME);
+			extensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
 		#endif
 
 		if constexpr(VULKAN_DEBUG)
@@ -128,10 +130,7 @@ namespace Ak
 		CheckVk(vkCreateInstance(&create_info, nullptr, &m_instance));
 		DebugLog("Vulkan: created new instance");
 
-		#define AK_VULKAN_INSTANCE_FUNCTION(fn) fn = reinterpret_cast<PFN_##fn>(vkGetInstanceProcAddr(m_instance, #fn));
-			#include <Drivers/Vulkan/VulkanInstancePrototypes.h>
-		#undef AK_VULKAN_INSTANCE_FUNCTION
-		DebugLog("Vulkan loader: loaded instance functions");
+		m_loader.LoadInstance(*this);
 	}
 
 	SharedPtr<RHIAdapter> VulkanInstance::PickAdapter(AdapterMinimalSpecs specs)
@@ -234,9 +233,9 @@ namespace Ak
 		return nullptr;
 	}
 
-	SharedPtr<class RHISurface> VulkanInstance::CreateSurface(class WindowComponent& window) noexcept
+	SharedPtr<class RHISurface> VulkanInstance::CreateSurface(WindowComponent& window) noexcept
 	{
-		return MakeShared<VulkanSurface>(*this, window);
+		return MakeShared<VulkanSurface>(*this, window.GetRawWindow());
 	}
 
 	VulkanInstance::~VulkanInstance()

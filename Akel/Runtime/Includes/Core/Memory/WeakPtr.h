@@ -22,6 +22,9 @@ namespace Ak
 			inline void Reset() noexcept;
 			inline void Swap(WeakPtr& rhs) noexcept;
 
+			inline WeakPtr& operator=(const SharedPtr<T>& ptr) noexcept;
+			inline WeakPtr& operator=(const WeakPtr<T>& ptr) noexcept;
+
 			inline std::size_t UseCount() const noexcept;
 			inline bool Expired() const noexcept;
 			inline SharedPtr<T> Lock() const noexcept;

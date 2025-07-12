@@ -86,6 +86,16 @@ namespace Ak
 	};
 	constexpr std::size_t RenderModeCount = static_cast<std::size_t>(RenderMode::EndEnum);
 
+	enum TextureFlagsBits
+	{
+		TextureFlagSampled = 1 << 0,
+		TextureFlagStorage = 1 << 1,
+		TextureFlagRenderTarget = 1 << 2,
+		TextureFlagDepthStencil = 1 << 3,
+	};
+	constexpr std::size_t TextureFlagsCount = 4;
+	using TextureFlags = std::uint32_t;
+
 	enum class TextureFormat
 	{
 		None = 0,
@@ -140,15 +150,6 @@ namespace Ak
 		EndEnum
 	};
 	constexpr std::size_t TextureTypeCount = static_cast<std::size_t>(TextureType::EndEnum);
-
-	enum TextureFlagsBits
-	{
-		TextureFlagSampled = 1 << 0,
-		TextureFlagStorage = 1 << 1,
-		TextureFlagDepthStencil = 1 << 2,
-	};
-	constexpr std::size_t TextureFlagsCount = 3;
-	using TextureFlags = std::uint32_t;
 }
 
 #endif

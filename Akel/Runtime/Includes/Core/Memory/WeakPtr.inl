@@ -44,6 +44,20 @@ namespace Ak
 	}
 
 	template <typename T>
+	WeakPtr<T>& WeakPtr<T>::operator=(const SharedPtr<T>& ptr) noexcept
+	{
+		WeakPtr{ptr}.Swap(*this);
+		return *this;
+	}
+
+	template <typename T>
+	WeakPtr<T>& WeakPtr<T>::operator=(const WeakPtr<T>& ptr) noexcept
+	{
+		WeakPtr{ptr}.Swap(*this);
+		return *this;
+	}
+
+	template <typename T>
 	std::size_t WeakPtr<T>::UseCount() const noexcept
 	{
 		return (p_ref ? p_ref->weaks : 0);

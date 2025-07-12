@@ -30,7 +30,7 @@ namespace Ak
 		Entry(const std::string& n, std::variant<FileEntry, DirectoryEntry> e) : name(n), entry(e) {}
 	};
 
-	class AK_CORE_API VirtualDirectory : public NonCopyable, EnableSharedFromThis<VirtualDirectory>
+	class AK_CORE_API VirtualDirectory : public NonCopyable, public EnableSharedFromThis<VirtualDirectory>
 	{
 		public:
 			VirtualDirectory(const WeakPtr<VirtualDirectory>& parent, const std::string& name);

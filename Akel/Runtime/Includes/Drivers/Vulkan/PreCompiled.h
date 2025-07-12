@@ -51,6 +51,7 @@
 #include <array>
 #include <vector>
 #include <algorithm>
+#include <set>
 
 #ifdef AK_VULKAN_DEBUG
 	constexpr bool VULKAN_DEBUG = true;

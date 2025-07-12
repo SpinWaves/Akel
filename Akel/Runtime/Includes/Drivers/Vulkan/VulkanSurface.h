@@ -51,7 +51,7 @@ namespace Ak
 	class AK_VULKAN_API VulkanSurface : public RHISurface
 	{
 		public:
-			VulkanSurface(class VulkanInstance& instance, const class WindowComponent& window);
+			VulkanSurface(class VulkanInstance& instance, NonOwningPtr<class SIWindow> window);
 
 			AK_FORCEINLINE VkSurfaceKHR Get() const noexcept { return m_surface; }
 

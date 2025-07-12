@@ -4,6 +4,7 @@
 
 #include <Drivers/Vulkan/VulkanLoader.h>
 #include <Drivers/Vulkan/VulkanInstance.h>
+#include <Drivers/Vulkan/VulkanDevice.h>
 #include <Core/OS/OSInstance.h>
 
 namespace Ak
@@ -51,12 +52,44 @@ namespace Ak
 		LoadGlobal(instance);
 	}
 
+	static inline PFN_vkVoidFunction vkGetInstanceProcAddrStub(VulkanInstance& instance, const char* name, bool nullinstance)
+	{
+		PFN_vkVoidFunction function = instance.vkGetInstanceProcAddr(nullinstance ? nullptr : instance.Get(), name);
+		if(!function)
+			FatalError("Vulkan Loader: could not load '%'", name);
+		return function;
+	}
+
+	static inline PFN_vkVoidFunction vkGetDeviceProcAddrStub(VulkanDevice& device, const char* name)
+	{
+		PFN_vkVoidFunction function = device.GetInstance().vkGetDeviceProcAddr(device.Get(), name);
+		if(!function)
+			FatalError("Vulkan Loader: could not load '%'", name);
+		return function;
+	}
+
 	void VulkanLoader::LoadGlobal(VulkanInstance& instance)
 	{
-		#define AK_VULKAN_GLOBAL_FUNCTION(fn) instance.fn = reinterpret_cast<PFN_##fn>(instance.vkGetInstanceProcAddr(nullptr, #fn));
+		#define AK_VULKAN_GLOBAL_FUNCTION(fn) instance.fn = reinterpret_cast<PFN_##fn>(vkGetInstanceProcAddrStub(instance, #fn, true));
 			#include <Drivers/Vulkan/VulkanGlobalPrototypes.h>
 		#undef AK_VULKAN_GLOBAL_FUNCTION
 		DebugLog("Vulkan loader: loaded global functions");
+	}
+
+	void VulkanLoader::LoadInstance(VulkanInstance& instance)
+	{
+		#define AK_VULKAN_INSTANCE_FUNCTION(fn) instance.fn = reinterpret_cast<PFN_##fn>(vkGetInstanceProcAddrStub(instance, #fn, false));
+			#include <Drivers/Vulkan/VulkanInstancePrototypes.h>
+		#undef AK_VULKAN_INSTANCE_FUNCTION
+		DebugLog("Vulkan loader: loaded instance functions");
+	}
+
+	void VulkanLoader::LoadDevice(VulkanDevice& device)
+	{
+		#define AK_VULKAN_DEVICE_FUNCTION(fn) device.fn = reinterpret_cast<PFN_##fn>(vkGetDeviceProcAddrStub(device, #fn));
+			#include <Drivers/Vulkan/VulkanDevicePrototypes.h>
+		#undef AK_VULKAN_DEVIC_FUNCTION
+		DebugLog("Vulkan loader: loaded device functions");
 	}
 
 	VulkanLoader::~VulkanLoader()

@@ -14,12 +14,16 @@ namespace Ak
 {
 	[[nodiscard]] std::vector<VulkanPhysicalDeviceVendorID> ConvertAdapterVendorsToVulkanPhysicalDeviceVendorIDs(AdapterVendors vendors) noexcept;
 
-	class AK_VULKAN_API VulkanAdapter : public RHIAdapter
+	class AK_VULKAN_API VulkanAdapter : public RHIAdapter, public EnableSharedFromThis<VulkanAdapter>
 	{
 		public:
 			VulkanAdapter(class VulkanInstance& instance, VkPhysicalDevice device);
 
 			SharedPtr<class RHIDevice> CreateDevice() override;
+
+			AK_FORCEINLINE VkPhysicalDevice Get() const noexcept { return m_device; }
+			AK_FORCEINLINE VkPhysicalDeviceProperties GetProperties() const noexcept { return m_properties; }
+			AK_FORCEINLINE VkPhysicalDeviceMemoryProperties GetMemoryProperties() const noexcept { return m_memory_properties; }
 
 			~VulkanAdapter() override = default;
 

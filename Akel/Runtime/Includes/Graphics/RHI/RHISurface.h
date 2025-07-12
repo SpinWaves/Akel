@@ -6,13 +6,14 @@
 #define AK_RHI_SURFACE_H
 
 #include <Graphics/PreCompiled.h>
+#include <Utils/NonOwningPtr.h>
 
 namespace Ak
 {
 	class AK_GRAPHICS_API RHISurface
 	{
 		public:
-			RHISurface(const class WindowComponent& window) {}
+			RHISurface(NonOwningPtr<class SIWindow> window) {}
 
 			virtual ~RHISurface() = default;
 	};

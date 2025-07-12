@@ -14,6 +14,10 @@ namespace Ak
 	{
 		public:
 			VulkanLoader(class VulkanInstance& instance);
+
+			void LoadInstance(class VulkanInstance& instance);
+			void LoadDevice(class VulkanDevice& device);
+
 			~VulkanLoader();
 
 		private:
