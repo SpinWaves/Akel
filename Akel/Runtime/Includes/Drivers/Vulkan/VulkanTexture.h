@@ -13,8 +13,8 @@ namespace Ak
 	class AK_VULKAN_API VulkanTexture : public RHITexture
 	{
 		public:
-			VulkanTexture(SharedPtr<class VulkanDevice> device, TextureType type, TextureFormat format, TextureFlags flags, Vec2ui size, std::uint32_t depth, std::uint8_t level_count);
-			VulkanTexture(SharedPtr<class VulkanDevice> device, VkImage image, TextureType type, TextureFormat format, TextureFlags flags, Vec2ui size, std::uint32_t depth, std::uint8_t level_count);
+			VulkanTexture(SharedPtr<class VulkanDevice> device, TextureDimension dims, TextureFormat format, TextureUsage usage, Vec2ui size, std::uint32_t depth, std::uint8_t level_count);
+			VulkanTexture(SharedPtr<class VulkanDevice> device, VkImage image, TextureDimension dims, TextureFormat format, TextureUsage usage, Vec2ui size, std::uint32_t depth, std::uint8_t level_count);
 
 			void CreateImageView(std::uint32_t layer_count);
 

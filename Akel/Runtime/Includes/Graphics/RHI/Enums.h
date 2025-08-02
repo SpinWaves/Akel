@@ -86,16 +86,6 @@ namespace Ak
 	};
 	constexpr std::size_t RenderModeCount = static_cast<std::size_t>(RenderMode::EndEnum);
 
-	enum TextureFlagsBits
-	{
-		TextureFlagSampled = 1 << 0,
-		TextureFlagStorage = 1 << 1,
-		TextureFlagRenderTarget = 1 << 2,
-		TextureFlagDepthStencil = 1 << 3,
-	};
-	constexpr std::size_t TextureFlagsCount = 4;
-	using TextureFlags = std::uint32_t;
-
 	enum class TextureFormat
 	{
 		None = 0,
@@ -139,17 +129,27 @@ namespace Ak
 	};
 	constexpr std::size_t TextureFormatCount = static_cast<std::size_t>(TextureFormat::EndEnum);
 
-	enum class TextureType
+	enum TextureUsageBits
 	{
-		Color = 0,
-		Depth,
-		DepthArray,
-		Cube,
-		Other,
+		TextureUsageSampled = 1 << 0,
+		TextureUsageStorageRaad = 1 << 1,
+		TextureUsageStorageWrite = 1 << 2,
+		TextureUsageColorTarget = 1 << 3,
+		TextureUsageDepthStencil = 1 << 4,
+	};
+	constexpr std::size_t TextureFlagsCount = 5;
+	using TextureUsage = std::uint32_t;
+
+	enum class TextureDimension
+	{
+		Two = 0,
+		TwoArray,
+		Three,
+		Cubemap,
 
 		EndEnum
 	};
-	constexpr std::size_t TextureTypeCount = static_cast<std::size_t>(TextureType::EndEnum);
+	constexpr std::size_t TextureDimensionCount = static_cast<std::size_t>(TextureDimension::EndEnum);
 }
 
 #endif
