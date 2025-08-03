@@ -137,7 +137,7 @@ namespace Ak
 		TextureUsageColorTarget = 1 << 3,
 		TextureUsageDepthStencil = 1 << 4,
 	};
-	constexpr std::size_t TextureFlagsCount = 5;
+	constexpr std::size_t TextureUsageCount = 5;
 	using TextureUsage = std::uint32_t;
 
 	enum class TextureDimension

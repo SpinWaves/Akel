@@ -37,10 +37,10 @@ namespace Ak
 		const void* initial_data = nullptr;
 		const char* debug_name = nullptr;
 		TextureFormat format;
-		TextureType type;
+		TextureDimension dims;
+		TextureUsage usage;
 		std::size_t width;
 		std::size_t height;
-		TextureFlags flags;
 	};
 
 	struct GraphicPipelineDescription

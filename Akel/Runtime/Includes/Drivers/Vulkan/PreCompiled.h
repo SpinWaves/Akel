@@ -52,6 +52,14 @@
 #include <vector>
 #include <algorithm>
 #include <set>
+#include <mutex>
+
+// Akel core includes
+#include <Core/Logs.h>
+#include <Core/Memory/MemoryManager.h>
+#include <Core/Memory/UniquePtr.h>
+#include <Core/Memory/SharedPtr.h>
+#include <Core/Memory/WeakPtr.h>
 
 #ifdef AK_VULKAN_DEBUG
 	constexpr bool VULKAN_DEBUG = true;
