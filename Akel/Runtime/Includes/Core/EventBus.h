@@ -6,7 +6,6 @@
 #define AK_CORE_EVENT_BUS_H
 
 #include <Core/PreCompiled.h>
-#include <Core/EventBase.h>
 #include <Core/EventListener.h>
 
 namespace Ak
@@ -15,7 +14,7 @@ namespace Ak
 	{
 		public:
 			EventBus() = delete;
-			static void Send(const std::string& listener_name, const EventBase& event);
+			static void Send(const std::string& listener_name, Event event);
 			inline static void RegisterListener(const EventListener& listener) { s_listeners.push_back(listener); }
 			~EventBus() = delete;
 

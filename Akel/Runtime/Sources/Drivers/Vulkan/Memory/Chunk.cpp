@@ -3,37 +3,31 @@
 // For conditions of distribution and use, see copyright notice in LICENSE
 
 #include <Drivers/Vulkan/Memory/Chunk.h>
+#include <Drivers/Vulkan/VulkanInstance.h>
+#include <Drivers/Vulkan/VulkanAdapter.h>
+#include <Drivers/Vulkan/VulkanDevice.h>
 #include <Core/EventBus.h>
 
 namespace Ak
 {
-	namespace Internal
+	MemoryChunk::MemoryChunk(VulkanDevice& device, VkDeviceSize size, std::int32_t memory_type_index, bool is_dedicated, std::uint32_t& vram_usage, std::uint32_t& vram_host_visible_usage)
+		: m_device(device), m_size(size), m_memory_type_index(memory_type_index), m_is_dedicated(is_dedicated)
 	{
-		struct MemoryChunkAllocFailedEvent : public EventBase
-		{
-			Event What() const override { return Event::MemoryChunkAllocationFailed; }
-		};
-	}
-
-	MemoryChunk::MemoryChunk(VkDevice device, VkPhysicalDevice physical, VkDeviceSize size, std::int32_t memory_type_index, bool is_dedicated, std::uint32_t& vram_usage, std::uint32_t& vram_host_visible_usage)
-		: m_device(device), m_physical(physical), m_size(size), m_memory_type_index(memory_type_index), m_is_dedicated(is_dedicated)
-	{
-		Verify(device != VK_NULL_HANDLE, "Memory Chunk : invalid device");
 		VkMemoryAllocateInfo alloc_info{};
 		alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 		alloc_info.allocationSize = size;
 		alloc_info.memoryTypeIndex = m_memory_type_index;
-		if(RenderCore::Get().vkAllocateMemory(m_device, &alloc_info, nullptr, &m_memory) != VK_SUCCESS)
+		if(m_device.vkAllocateMemory(m_device.Get(), &alloc_info, nullptr, &m_memory) != VK_SUCCESS)
 		{
-			EventBus::Send("__ScopDeviceAllocator", Internal::MemoryChunkAllocFailedEvent{});
+			EventBus::Send("AkelVulkanDeviceAllocator" + std::to_string(reinterpret_cast<std::uintptr_t>(&m_device.GetAllocator())), Event::GPUMemoryAllocationFailed);
 			return;
 		}
 
 		VkPhysicalDeviceMemoryProperties properties;
-		RenderCore::Get().vkGetPhysicalDeviceMemoryProperties(m_physical, &properties);
+		m_device.GetInstance().vkGetPhysicalDeviceMemoryProperties(m_device.GetAdapter()->Get(), &properties);
 		if((properties.memoryTypes[m_memory_type_index].propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
 		{
-			if(RenderCore::Get().vkMapMemory(m_device, m_memory, 0, VK_WHOLE_SIZE, 0, &p_map) != VK_SUCCESS)
+			if(m_device.vkMapMemory(m_device.Get(), m_memory, 0, VK_WHOLE_SIZE, 0, &p_map) != VK_SUCCESS)
 				FatalError("Vulkan: failed to map a host visible chunk");
 			vram_host_visible_usage += size;
 		}
@@ -105,6 +99,6 @@ namespace Ak
 
 	MemoryChunk::~MemoryChunk()
 	{
-		RenderCore::Get().vkFreeMemory(m_device, m_memory, nullptr);
+		m_device.vkFreeMemory(m_device.Get(), m_memory, nullptr);
 	}
 }

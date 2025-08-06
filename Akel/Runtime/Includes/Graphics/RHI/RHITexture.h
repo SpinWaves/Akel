@@ -7,6 +7,7 @@
 
 #include <Graphics/PreCompiled.h>
 #include <Graphics/RHI/Enums.h>
+#include <Graphics/RHI/Defs.h>
 #include <Maths/Vec2.h>
 
 namespace Ak
@@ -14,7 +15,7 @@ namespace Ak
 	class AK_GRAPHICS_API RHITexture
 	{
 		public:
-			RHITexture(TextureDimension dims, TextureFormat format, TextureUsage usage, Vec2ui size, std::uint32_t depth, std::uint8_t level_count);
+			RHITexture(const TextureDescription& description);
 
 			AK_FORCEINLINE TextureDimension GetDimensions() const noexcept { return m_dims; }
 			AK_FORCEINLINE TextureFormat GetFormat() const noexcept { return m_format; }

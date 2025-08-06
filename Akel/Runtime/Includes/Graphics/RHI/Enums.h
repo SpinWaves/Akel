@@ -132,7 +132,7 @@ namespace Ak
 	enum TextureUsageBits
 	{
 		TextureUsageSampled = 1 << 0,
-		TextureUsageStorageRaad = 1 << 1,
+		TextureUsageStorageRead = 1 << 1,
 		TextureUsageStorageWrite = 1 << 2,
 		TextureUsageColorTarget = 1 << 3,
 		TextureUsageDepthStencil = 1 << 4,

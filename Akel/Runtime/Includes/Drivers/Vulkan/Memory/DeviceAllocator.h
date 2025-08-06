@@ -17,10 +17,8 @@ namespace Ak
 	class DeviceAllocator
 	{
 		public:
-			DeviceAllocator() = default;
+			DeviceAllocator(class VulkanDevice& device);
 
-			void AttachToDevice(VkDevice device, VkPhysicalDevice physical) noexcept;
-			inline void DetachFromDevice() noexcept { m_chunks.clear(); m_device = VK_NULL_HANDLE; m_physical = VK_NULL_HANDLE; }
 			[[nodiscard]] inline std::size_t GetAllocationsCount() const noexcept { return m_allocations_count; }
 
 			[[nodiscard]] MemoryBlock Allocate(VkDeviceSize size, VkDeviceSize alignment, std::int32_t memory_type_index, bool dedicated_chunk = false);
@@ -28,6 +26,8 @@ namespace Ak
 
 			[[nodiscard]] inline std::uint32_t GetVramUsage() const noexcept { return m_vram_usage; }
 			[[nodiscard]] inline std::uint32_t GetVramHostVisibleUsage() const noexcept { return m_vram_host_visible_usage; }
+
+			[[nodiscard]] std::optional<std::uint32_t> FindMemoryType(std::uint32_t filter, VkMemoryPropertyFlags properties, bool issue_error = true) const;
 
 			~DeviceAllocator() = default;
 
@@ -37,8 +37,7 @@ namespace Ak
 		private:
 			std::vector<UniquePtr<MemoryChunk>> m_chunks;
 			VkPhysicalDeviceMemoryProperties m_mem_props;
-			VkDevice m_device = VK_NULL_HANDLE;
-			VkPhysicalDevice m_physical = VK_NULL_HANDLE;
+			class VulkanDevice& m_device;
 			std::size_t m_allocations_count = 0;
 			std::mutex m_alloc_mutex;
 			std::mutex m_dealloc_mutex;

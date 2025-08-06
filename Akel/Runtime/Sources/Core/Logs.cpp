@@ -4,19 +4,10 @@
 
 #include <Core/Logs.h>
 #include <Utils/Ansi.h>
-#include <Core/EventBase.h>
 #include <Core/EventBus.h>
 
 namespace Ak
 {
-	namespace Internal
-	{
-		struct FatalErrorEvent : public EventBase
-		{
-			std::uint32_t What() const override { return 167; }
-		};
-	}
-
 	void Logs::Report(LogType type, std::string message)
 	{
 		Report(type, 0, {}, {}, std::move(message));
@@ -62,7 +53,7 @@ namespace Ak
 		if(type == LogType::FatalError)
 		{
 			std::cout << Ansi::bg_red << "Fatal Error: emergency exit" << Ansi::bg_def << std::endl;
-			EventBus::Send("__internal_memory_manager", Internal::FatalErrorEvent{});
+			EventBus::Send("AkelInternalMemoryManager", Event::FatalError);
 		}
 	}
 }

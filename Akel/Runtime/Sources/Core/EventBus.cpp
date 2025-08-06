@@ -7,7 +7,7 @@
 
 namespace Ak
 {
-	void EventBus::Send(const std::string& listener_name, const EventBase& event)
+	void EventBus::Send(const std::string& listener_name, Event event)
 	{
 		for(const EventListener& listener : s_listeners)
 		{

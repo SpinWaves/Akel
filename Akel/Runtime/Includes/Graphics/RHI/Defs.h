@@ -9,6 +9,7 @@
 #include <Utils/NonOwningPtr.h>
 #include <Graphics/PreCompiled.h>
 #include <Graphics/RHI/Enums.h>
+#include <Maths/Vec2.h>
 
 namespace Ak
 {
@@ -16,7 +17,7 @@ namespace Ak
 	{
 		AdapterType type = AdapterType::Any;
 		AdapterVendors vendors = AdapterVendorAny;
-		std::size_t memory = 128; // Mo
+		std::size_t memory = 128; // MB
 	};
 
 	using DeviceSize = std::uint64_t;
@@ -25,8 +26,6 @@ namespace Ak
 
 	struct BufferDescription
 	{
-		const void* initial_data = nullptr;
-		const char* debug_name = nullptr;
 		DeviceSize size;
 		BufferUsage usage;
 		BufferType type;
@@ -34,13 +33,12 @@ namespace Ak
 
 	struct TextureDescription
 	{
-		const void* initial_data = nullptr;
-		const char* debug_name = nullptr;
+		TextureDimension dimension;
 		TextureFormat format;
-		TextureDimension dims;
 		TextureUsage usage;
-		std::size_t width;
-		std::size_t height;
+		Vec2ui size;
+		std::uint32_t depth;
+		std::uint8_t level_count;
 	};
 
 	struct GraphicPipelineDescription

@@ -12,7 +12,7 @@ namespace Ak
 	class AK_VULKAN_API MemoryChunk
 	{
 		public:
-			MemoryChunk(VkDevice device, VkPhysicalDevice physical, VkDeviceSize size, std::int32_t memory_type_index, bool is_dedicated, std::uint32_t& vram_usage, std::uint32_t& vram_host_visible_usage);
+			MemoryChunk(class VulkanDevice& device, VkDeviceSize size, std::int32_t memory_type_index, bool is_dedicated, std::uint32_t& vram_usage, std::uint32_t& vram_host_visible_usage);
 
 			[[nodiscard]] std::optional<MemoryBlock> Allocate(VkDeviceSize size, VkDeviceSize alignment);
 			void Deallocate(const MemoryBlock& block);
@@ -26,8 +26,7 @@ namespace Ak
 
 		protected:
 			std::vector<MemoryBlock> m_blocks;
-			VkDevice m_device = VK_NULL_HANDLE;
-			VkPhysicalDevice m_physical = VK_NULL_HANDLE;
+			class VulkanDevice& m_device;
 			VkDeviceMemory m_memory = VK_NULL_HANDLE;
 			void* p_map = nullptr;
 			VkDeviceSize m_size = 0;

@@ -7,6 +7,7 @@
 
 #include <Drivers/Vulkan/PreCompiled.h>
 #include <Drivers/Vulkan/Enums.h>
+#include <Drivers/Vulkan/Memory/DeviceAllocator.h>
 #include <Graphics/RHI/RHIDevice.h>
 #include <Graphics/RHI/Defs.h>
 
@@ -17,10 +18,10 @@ namespace Ak
 		public:
 			VulkanDevice(class VulkanInstance& instance, SharedPtr<class VulkanAdapter> adapter);
 
-			SharedPtr<class RHIBuffer> CreateBuffer(BufferDescription description) override;
-			SharedPtr<class RHITexture> CreateTexture(TextureDescription description) override;
+			SharedPtr<class RHIBuffer> CreateBuffer(const BufferDescription& description) override;
+			SharedPtr<class RHITexture> CreateTexture(const TextureDescription& description) override;
 			SharedPtr<class RHISwapchain> CreateSwapchain(SharedPtr<class RHISurface> surface, Vec2ui extent, bool vsync, bool priorise_srgb) noexcept override;
-			SharedPtr<class RHIGraphicPipeline> CreateGraphicPipeline(GraphicPipelineDescription description) noexcept override;
+			SharedPtr<class RHIGraphicPipeline> CreateGraphicPipeline(const GraphicPipelineDescription& description) noexcept override;
 			SharedPtr<class RHICommandEncoder> CreateCommandEncoder() noexcept override;
 			SharedPtr<class RHICommandBuffer> CreateCommandBuffer(class RHICommandEncoder& encoder) noexcept override;
 
@@ -38,6 +39,7 @@ namespace Ak
 
 			AK_FORCEINLINE VkDevice Get() const noexcept { return m_device; }
 			AK_FORCEINLINE class VulkanInstance& GetInstance() const noexcept { return m_instance; }
+			AK_FORCEINLINE DeviceAllocator& GetAllocator() noexcept { return m_allocator; }
 			inline SharedPtr<class VulkanAdapter> GetAdapter() const noexcept { return p_adapter; }
 
 			#define AK_VULKAN_DEVICE_FUNCTION(fn) PFN_##fn fn = nullptr;
@@ -50,6 +52,7 @@ namespace Ak
 			bool FindQueueFamilies();
 
 		private:
+			DeviceAllocator m_allocator;
 			SharedPtr<class VulkanAdapter> p_adapter;
 			class VulkanInstance& m_instance;
 			VkDevice m_device = VK_NULL_HANDLE;

@@ -6,7 +6,7 @@
 
 namespace Ak
 {
-	EventListener::EventListener(func::function<void(const EventBase&)> functor, std::string name)
+	EventListener::EventListener(func::function<void(Event)> functor, std::string name)
 	: m_listen_functor(std::move(functor)), m_name(std::move(name))
 	{}
 }

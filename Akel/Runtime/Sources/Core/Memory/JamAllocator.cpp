@@ -6,6 +6,7 @@
 #include <Core/Memory/JamAllocator.h>
 #include <Core/Logs.h>
 #include <Core/Memory/MemoryManager.h>
+#include <Core/EventBus.h>
 
 namespace Ak
 {
@@ -16,7 +17,7 @@ namespace Ak
 			return;
 		m_heap = std::malloc(size);
 		if(!m_heap)
-			FatalError("JamAllocator : unable to allocate memory space for an allocator");
+			EventBus::Send("AkelInternalMemoryManager", Event::CPUMemoryAllocationFailed);
 
 		m_heap_size = size;
 		m_heap_end = (void*)(reinterpret_cast<std::uintptr_t>(m_heap) + m_heap_size);
@@ -29,7 +30,7 @@ namespace Ak
 	{
 		if(size < m_heap_size)
 		{
-			Warning("JamAllocator : Akel's JamAllocators cannot reduce their size");
+			Warning("JamAllocator: JamAllocators cannot reduce their size");
 			return;
 		}
 
@@ -105,7 +106,7 @@ namespace Ak
 		watchdog.unlock();
 
 		if(ptr == nullptr)
-			Error("JamAllocator : unable to allocate % bytes", size);
+			Error("JamAllocator: unable to allocate % bytes", size);
 
 		return ptr;
 	}
@@ -135,7 +136,7 @@ namespace Ak
 
 		if(iterator == m_used_spaces.end())
 		{
-			Error("JamAllocator : unable to find the flag of %", ptr);
+			Error("JamAllocator: unable to find the flag of %", ptr);
 			watchdog.unlock();
 			return;
 		}

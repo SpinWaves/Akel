@@ -18,10 +18,10 @@ namespace Ak
 		public:
 			RHIDevice(class RHIInstance& instance, SharedPtr<RHIAdapter> adapter) : p_adapter(adapter) {}
 
-			virtual SharedPtr<class RHIBuffer> CreateBuffer(BufferDescription description) = 0;
-			virtual SharedPtr<class RHITexture> CreateTexture(TextureDescription description) = 0;
+			virtual SharedPtr<class RHIBuffer> CreateBuffer(const BufferDescription& description) = 0;
+			virtual SharedPtr<class RHITexture> CreateTexture(const TextureDescription& description) = 0;
 			virtual SharedPtr<class RHISwapchain> CreateSwapchain(SharedPtr<class RHISurface> surface, Vec2ui extent, bool vsync, bool priorise_srgb) noexcept = 0;
-			virtual SharedPtr<class RHIGraphicPipeline> CreateGraphicPipeline(GraphicPipelineDescription description) noexcept = 0;
+			virtual SharedPtr<class RHIGraphicPipeline> CreateGraphicPipeline(const GraphicPipelineDescription& description) noexcept = 0;
 			virtual SharedPtr<class RHICommandEncoder> CreateCommandEncoder() noexcept = 0;
 			virtual SharedPtr<class RHICommandBuffer> CreateCommandBuffer(class RHICommandEncoder& encoder) noexcept = 0;
 

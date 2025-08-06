@@ -12,7 +12,7 @@
 
 namespace Ak
 {
-	VulkanDevice::VulkanDevice(VulkanInstance& instance, SharedPtr<VulkanAdapter> adapter) : RHIDevice(instance, adapter), p_adapter(adapter), m_instance(instance)
+	VulkanDevice::VulkanDevice(VulkanInstance& instance, SharedPtr<VulkanAdapter> adapter) : RHIDevice(instance, adapter), m_allocator(*this), p_adapter(adapter), m_instance(instance)
 	{
 		if(!FindQueueFamilies())
 			FatalError("Vulkan: could not find all needed family queues");
@@ -74,12 +74,12 @@ namespace Ak
 		DebugLog("Vulkan: created device from adapter %", p_adapter->GetProperties().deviceName);
 	}
 
-	SharedPtr<class RHIBuffer> VulkanDevice::CreateBuffer(BufferDescription description)
+	SharedPtr<class RHIBuffer> VulkanDevice::CreateBuffer(const BufferDescription& description)
 	{
 		return nullptr;
 	}
 
-	SharedPtr<class RHITexture> VulkanDevice::CreateTexture(TextureDescription description)
+	SharedPtr<class RHITexture> VulkanDevice::CreateTexture(const TextureDescription& description)
 	{
 		return nullptr;
 	}
@@ -89,7 +89,7 @@ namespace Ak
 		return MakeShared<VulkanSwapchain>(*this, surface, extent, vsync, priorise_srgb);
 	}
 
-	SharedPtr<class RHIGraphicPipeline> VulkanDevice::CreateGraphicPipeline(GraphicPipelineDescription description) noexcept
+	SharedPtr<class RHIGraphicPipeline> VulkanDevice::CreateGraphicPipeline(const GraphicPipelineDescription& description) noexcept
 	{
 		return nullptr;
 	}

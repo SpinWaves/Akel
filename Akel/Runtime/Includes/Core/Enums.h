@@ -9,6 +9,39 @@
 
 namespace Ak
 {
+	enum class Event
+	{
+		GPUMemoryAllocationFailed = 0,
+		CPUMemoryAllocationFailed,
+		Quit,
+		FatalError,
+
+		EndEnum
+	};
+	constexpr std::size_t EventCount = static_cast<std::size_t>(Event::EndEnum);
+
+	enum FileModeBits
+	{
+		FileModeNone = 0,
+		FileModeOverride = 1 << 0,
+		FileModeAppend = 1 << 1,
+		FileModeBinary = 1 << 2,
+	};
+	using FileMode = int;
+	constexpr std::size_t FileModeCount = 4;
+
+	enum class LogType
+	{
+		Debug = 0,
+		Message,
+		Warning,
+		Error,
+		FatalError,
+
+		EndEnum
+	};
+	constexpr std::size_t LogTypeCount = static_cast<std::size_t>(LogType::EndEnum);
+
 	enum class ProcCaps
 	{
 		x64 = 0,
@@ -67,28 +100,6 @@ namespace Ak
 		EndEnum
 	};
 	constexpr std::size_t ProcVendorCount = static_cast<std::size_t>(ProcVendor::EndEnum) + 1;
-
-	enum class LogType
-	{
-		Debug = 0,
-		Message,
-		Warning,
-		Error,
-		FatalError,
-
-		EndEnum
-	};
-	constexpr std::size_t LogTypeCount = static_cast<std::size_t>(LogType::EndEnum);
-
-	enum FileModeBits
-	{
-		FileModeNone = 0,
-		FileModeOverride = 1 << 0,
-		FileModeAppend = 1 << 1,
-		FileModeBinary = 1 << 2,
-	};
-	using FileMode = int;
-	constexpr std::size_t FileModeCount = 4;
 }
 
 #endif

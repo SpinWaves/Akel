@@ -6,8 +6,8 @@
 
 namespace Ak
 {
-	RHITexture::RHITexture(TextureType type, TextureFormat format, TextureFlags flags, Vec2ui size, std::uint32_t depth, std::uint8_t level_count)
-		: m_type(type), m_format(format), m_size(size), m_flags(flags), m_depth(depth), m_level_count(level_count)
+	RHITexture::RHITexture(const TextureDescription& description)
+		: m_dims(description.dimension), m_format(description.format), m_size(description.size), m_usage(description.usage), m_depth(description.depth), m_level_count(description.level_count)
 	{
 	}
 }

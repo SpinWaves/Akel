@@ -5,6 +5,7 @@
 #include <Core/Memory/FixedAllocator.h>
 #include <Core/Memory/MemoryManager.h>
 #include <Core/Logs.h>
+#include <Core/EventBus.h>
 
 namespace Ak
 {
@@ -17,7 +18,9 @@ namespace Ak
 
 		std::unique_lock<std::mutex> watchdog(m_mutex);
 
-		m_heap = std::malloc(size); // Main allocation
+		m_heap = std::malloc(size);
+		if(!m_heap)
+			EventBus::Send("AkelInternalMemoryManager", Event::CPUMemoryAllocationFailed);
 
 		m_block_size = block_size;
 		m_heap_size = size;
@@ -51,7 +54,7 @@ namespace Ak
 		auto control_unit = Core::Memory::Internal::GetControlUnit();
 		auto it = std::find_if(control_unit->fixed_stack.begin(), control_unit->fixed_stack.end(), [this](auto& pair) { return pair.first == this; });
 		if(it == control_unit->fixed_stack.end())
-			Error("FixedAllocator : unable to find itself in the memory manager control unit, this should not happen");
+			Error("FixedAllocator: unable to find itself in the memory manager control unit, this should not happen");
 		else
 			it->second = false;
 	}

@@ -8,7 +8,6 @@
 #include <Core/PreCompiled.h>
 #include <Core/Memory/MemoryManager.h>
 #include <Core/EventListener.h>
-#include <Core/EventBase.h>
 #include <Core/EventBus.h>
 
 namespace Ak::Core::Memory::Internal
@@ -34,7 +33,7 @@ namespace Ak::Core::Memory::Internal
 	{
 		if(!is_init || !control_unit)
 		{
-			Error("Memory manager : cannot free all instanciated allocators, memory manager is not init or has been shutdown");
+			Error("Memory manager: cannot free all instanciated allocators, memory manager is not init or has been shutdown");
 			return;
 		}
 
@@ -57,9 +56,9 @@ namespace Ak::Core::Memory::Internal
 				allocators_leaks++;
 		}
 		if(allocators_leaks != 0)
-			Message("Memory manager : number of allacators not destroyed '%'", allocators_leaks);
+			Message("Memory manager: number of allacators not destroyed '%'", allocators_leaks);
 		else
-			Message("Memory manager : all allocators have been correctly freed, program failed successfully");
+			Message("Memory manager: all allocators have been correctly freed, program failed successfully");
 		std::exit(0); // ugly, mem manager should not have power to exit the program
 	}
 
@@ -70,12 +69,16 @@ namespace Ak::Core::Memory::Internal
 			return;
 		control_unit = std::make_shared<ControlUnit>();
 
-		func::function<void(const EventBase&)> functor = [=](const EventBase& event)
+		func::function<void(Event)> functor = [=](Event event)
 		{
-			if(event.What() == 167)
+			bool is_fatal = (event == Event::FatalError);
+			if(event == Event::CPUMemoryAllocationFailed)
+				FatalError("Memory manager: a CPU allocation failed");
+
+			if(is_fatal)
 				FatalErrorEventHandle();
 		};
-		EventBus::RegisterListener({ functor, "__internal_memory_manager" });
+		EventBus::RegisterListener({ functor, "AkelInternalMemoryManager" });
 
 		{
 			fixed1.Init(FIXED_SIZE_1, 1000);
@@ -155,7 +158,7 @@ namespace Ak::Core::Memory::Internal
 				return;
 			}
 		}
-		Warning("Memory manager : cannot find memory allocator for a pointer '%'", ptr);
+		Warning("Memory manager: cannot find memory allocator for a pointer '%'", ptr);
 	}
 
 	void Shutdown()

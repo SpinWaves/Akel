@@ -78,15 +78,62 @@ namespace Ak
 		}
 	}
 
-	VulkanTexture::VulkanTexture(SharedPtr<class VulkanDevice> device, TextureDimension dims, TextureFormat format, TextureUsage usage, Vec2ui size, std::uint32_t depth, std::uint8_t level_count)
-		: RHITexture(dims, format, usage, size, depth, level_count), p_device(device)
+	VulkanTexture::VulkanTexture(SharedPtr<class VulkanDevice> device, const TextureDescription& description)
+		: RHITexture(description), p_device(device)
 	{
-		
+		CreateImage();
 	}
 
-	VulkanTexture::VulkanTexture(SharedPtr<class VulkanDevice> device, VkImage image, TextureDimension dims, TextureFormat format, TextureUsage usage, Vec2ui size, std::uint32_t depth, std::uint8_t level_count)
-		: RHITexture(dims, format, usage, size, depth, level_count), p_device(device), m_image(image)
+	VulkanTexture::VulkanTexture(SharedPtr<class VulkanDevice> device, VkImage image, const TextureDescription& description)
+		: RHITexture(description), p_device(device), m_image(image)
 	{
+	}
+
+	void VulkanTexture::CreateImage()
+	{
+		std::uint32_t layer_count = (m_dims == TextureDimension::Three) ? 1 : m_depth;
+		std::uint32_t depth = (m_dims == TextureDimension::Three) ? m_depth : 1;
+
+		VkImageCreateFlags flags = 0;
+		if(m_dims == TextureDimension::Cubemap)
+			flags |= VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
+		else if(m_dims == TextureDimension::Three)
+			flags |= VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT;
+
+		VkImageUsageFlags usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+		if(m_usage & (TextureUsageSampled | TextureUsageStorageRead))
+			usage |= VK_IMAGE_USAGE_SAMPLED_BIT;
+		if(m_usage & TextureUsageColorTarget)
+			usage |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+		if(m_usage & TextureUsageDepthStencil)
+			usage |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+		if(m_usage & TextureUsageStorageWrite)
+			usage |= VK_IMAGE_USAGE_STORAGE_BIT;
+
+		VkImageCreateInfo image_create_info{};
+		image_create_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+		image_create_info.imageType = m_dims == TextureDimension::Three ? VK_IMAGE_TYPE_3D : VK_IMAGE_TYPE_2D;
+		image_create_info.extent.width = m_size.x;
+		image_create_info.extent.height = m_size.y;
+		image_create_info.extent.depth = depth;
+		image_create_info.mipLevels = 1;
+		image_create_info.arrayLayers = layer_count;
+		image_create_info.format = TextureFormatToVkFormat[static_cast<std::uint32_t>(m_format)];
+		image_create_info.tiling = VK_IMAGE_TILING_OPTIMAL;
+		image_create_info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		image_create_info.usage = usage;
+		image_create_info.samples = VK_SAMPLE_COUNT_1_BIT;
+		image_create_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		image_create_info.flags = flags;
+		CheckVk(p_device->vkCreateImage(p_device->Get(), &image_create_info, nullptr, &m_image));
+
+		VkMemoryRequirements mem_requirements;
+		p_device->vkGetImageMemoryRequirements(p_device->Get(), m_image, &mem_requirements);
+
+		// There is no defined case where we want texture to be stored outside of VRAM
+		VkMemoryPropertyFlags properties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+		m_memory = p_device->GetAllocator().Allocate(mem_requirements.size, mem_requirements.alignment, *p_device->GetAllocator().FindMemoryType(mem_requirements.memoryTypeBits, properties, true));
+		p_device->vkBindImageMemory(p_device->Get(), m_image, m_memory.memory, m_memory.offset);
 	}
 
 	void VulkanTexture::CreateImageView(std::uint32_t layer_count)
@@ -119,5 +166,13 @@ namespace Ak
 		create_info.subresourceRange.baseArrayLayer = 0;
 		create_info.subresourceRange.layerCount = layer_count;
 		CheckVk(p_device->vkCreateImageView(p_device->Get(), &create_info, nullptr, &m_image_view));
+	}
+
+	VulkanTexture::~VulkanTexture()
+	{
+		if(m_image_view != VK_NULL_HANDLE)
+			p_device->vkDestroyImageView(p_device->Get(), m_image_view, nullptr);
+		if(m_image != VK_NULL_HANDLE)
+			p_device->vkDestroyImage(p_device->Get(), m_image, nullptr);
 	}
 }

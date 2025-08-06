@@ -7,20 +7,25 @@
 
 #include <Drivers/Vulkan/PreCompiled.h>
 #include <Graphics/RHI/RHITexture.h>
+#include <Drivers/Vulkan/Memory/Block.h>
 
 namespace Ak
 {
 	class AK_VULKAN_API VulkanTexture : public RHITexture
 	{
 		public:
-			VulkanTexture(SharedPtr<class VulkanDevice> device, TextureDimension dims, TextureFormat format, TextureUsage usage, Vec2ui size, std::uint32_t depth, std::uint8_t level_count);
-			VulkanTexture(SharedPtr<class VulkanDevice> device, VkImage image, TextureDimension dims, TextureFormat format, TextureUsage usage, Vec2ui size, std::uint32_t depth, std::uint8_t level_count);
+			VulkanTexture(SharedPtr<class VulkanDevice> device, const TextureDescription& description);
+			VulkanTexture(SharedPtr<class VulkanDevice> device, VkImage image, const TextureDescription& description);
 
 			void CreateImageView(std::uint32_t layer_count);
 
 			~VulkanTexture() override;
 
 		private:
+			void CreateImage();
+
+		private:
+			MemoryBlock m_memory;
 			SharedPtr<class VulkanDevice> p_device;
 			VkImage m_image = VK_NULL_HANDLE;
 			VkImageView m_image_view = VK_NULL_HANDLE;
