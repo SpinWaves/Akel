@@ -15,8 +15,7 @@ namespace Ak
 		public:
 			RHICommandEncoder(class RHIDevice& device) : m_device(device) {}
 
-			virtual void Draw(std::uint32_t vertex_count, std::uint32_t instance_count = 1, std::uint32_t first_vertex = 0, std::uint32_t first_instance = 0) = 0;
-			virtual void DrawIndexed(std::uint32_t index_count, std::uint32_t instance_count = 1, std::uint32_t first_index = 0, std::uint32_t vertex_offset = 0, std::uint32_t first_instance = 0) = 0;
+			virtual UniquePtr<class RHIRenderPass> BeginRenderPass() = 0;
 
 			virtual ~RHICommandEncoder() = default;
 

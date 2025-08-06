@@ -29,6 +29,38 @@ namespace Ak
 		Mesa = 0x10005,
 	};
 	constexpr std::size_t VulkanPhysicalDeviceVendorIDCount = 16;
+
+	enum class VulkanBufferMode : std::uint32_t
+	{
+		CopySrc = 0,
+		CopyDst,
+		VertexRead,
+		IndexRead,
+		Indirect,
+		GraphicsStorageRead,
+		ComputeStorageRead,
+		ComputeStorageReadWrite,
+
+		EndEnum,
+	};
+	constexpr std::size_t VulkanBufferModeCount = static_cast<std::uint32_t>(VulkanBufferMode::EndEnum);
+
+	enum class VulkanTextureMode : std::uint32_t
+	{
+		Uninitialized = 0,
+		CopySrc,
+		CopyDst,
+		Sampler,
+		GraphicsStorageRead,
+		ComputeStorageRead,
+		ComputeStorageReadWrite,
+		ColorAttachement,
+		DepthStencilAttachement,
+		Present,
+
+		EndEnum,
+	};
+	constexpr std::size_t VulkanTextureModeCount = static_cast<std::uint32_t>(VulkanTextureMode::EndEnum);
 }
 
 #endif
